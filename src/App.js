@@ -7,6 +7,7 @@ import { lightTheme, darkTheme } from "styles/theme";
 import { SearchProvider } from "contexts/search/search.provider";
 
 import "@redq/reuse-modal/lib/index.css";
+import BaseRouter from "routers/router";
 
 export default function App() {
   const location = useLocation();
@@ -21,7 +22,7 @@ export default function App() {
   return (
     <OriginalThemeProvider theme={themeMode}>
       <SearchProvider query={query}>
-        <h1>Hello, Welcome to the Database</h1>
+        <BaseRouter />
         <GlobalStyle />
       </SearchProvider>
     </OriginalThemeProvider>
