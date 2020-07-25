@@ -1,6 +1,29 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "scope": "/",
+  "orientation": "portrait-primary",
+  "name": "The Database",
+  "short_name": "TheDB",
+  "theme_color": "#5918e6",
+  "background_color": "#5918e6",
+  "lang": "en-US",
+  "dir": "auto",
+  "description": "The Database - Jobs Need People",
+  "serviceworker": {
+    "src": "serviceWorker.js",
+    "scope": "/"
+  },
+  "categories": [
+    "jobs",
+    "resume",
+    "employment",
+    "hiring",
+    "job seeking",
+    "gigs",
+    "employers",
+    "hr"
+  ],
   "icons": [
     {
       "src": "favicon.ico",
