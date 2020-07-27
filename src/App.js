@@ -1,11 +1,30 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
+import { ThemeProvider as OriginalThemeProvider } from "styled-components";
+import { useDarkMode } from "helpers/useDarkMode";
+import { GlobalStyle } from "styles/global-styles";
+import { lightTheme, darkTheme } from "styles/theme";
+import { SearchProvider } from "contexts/search/search.provider";
 
-function App() {
+import "@redq/reuse-modal/lib/index.css";
+import BaseRouter from "routers/router";
+
+export default function App() {
+  const location = useLocation();
+  const [theme, componentMounted] = useDarkMode();
+  const themeMode = theme === "light" ? lightTheme : darkTheme;
+  if (!componentMounted) {
+    return <div />;
+  }
+
+  const query = location.search;
+
   return (
-    <div className="App">
-      <header className="App-header">Hello, This Is The Database</header>
-    </div>
+    <OriginalThemeProvider theme={themeMode}>
+      <SearchProvider query={query}>
+        <BaseRouter />
+        <GlobalStyle />
+      </SearchProvider>
+    </OriginalThemeProvider>
   );
 }
-
-export default App;
