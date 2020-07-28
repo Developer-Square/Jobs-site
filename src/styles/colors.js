@@ -1,7 +1,7 @@
 const colors = {
   transparent: "transparent", // 0
   white: "#ffffff", // 2
-  darkBold: "#03002C", // 3
+  darkBold: "#5918e6", // 3
   darkMedium: "#424561", // 3
   darkRegular: "#77798C", // 3
   darkLight: "#C2C3CC", // 3
@@ -11,7 +11,7 @@ const colors = {
   labelColor: "#909090", // 4
   inactiveButton: "#b7dbdd", // 6
   borderColor: "#f1f1f1", // 7
-  primary: "#03002C", // 8
+  primary: "#5918e6", // 8
   primaryHover: "#e3d0b6", // 9
   secondary: "#ff5b60", // 10
   secondaryHover: "#FF282F", // 11

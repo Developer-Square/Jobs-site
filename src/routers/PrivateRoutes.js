@@ -11,10 +11,10 @@ class PrivateRoutes extends Component {
 
   componentDidMount() {
     /*
-      TODO: Replace hardcoded roles with redux,
-       localStorage, or get from server.
+      TODO: Replace hardcoded roles with API,
+      contextAPI, localStorage, or get from server.
      */
-    let roles = JSON.parse(localStorage.getItem("kiu_auth_roles"));
+    let roles = JSON.parse(localStorage.getItem("thedatabase_auth_roles"));
     if (roles) {
       roles = ["common", ...roles];
 

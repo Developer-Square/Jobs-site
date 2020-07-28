@@ -1,13 +1,9 @@
-import {
-  createGlobalStyle
-} from "styled-components";
-import {
-  NAV_BAR_HEIGHT
-} from "./styleConstants";
+import { createGlobalStyle } from "styled-components";
+import { NAV_BAR_HEIGHT } from "./styleConstants";
 
 const TIMEOUT = 400;
 
-export const GlobalStyle = createGlobalStyle `
+export const GlobalStyle = createGlobalStyle`
   html,
   *,
   *::after,

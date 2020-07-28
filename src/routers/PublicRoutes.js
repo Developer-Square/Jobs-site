@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
 import { Route, Switch } from "react-router-dom";
 import LandingPage from "pages/LandingPage";
-import NotFound from "components/NotFound";
+import NotFound from "pages/NotFound";
 
-const PublicRoutes = ({ match }) => (
+const PublicRoutes = ({ deviceType }) => (
   <Fragment>
     <Switch>
-      <Route exact path={`/`} component={LandingPage} />
-      <Route component={NotFound} />
+      <Route exact path={`/`} component={LandingPage} deviceType={deviceType} />
+      <Route component={NotFound} deviceType={deviceType} />
     </Switch>
   </Fragment>
 );

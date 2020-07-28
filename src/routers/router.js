@@ -1,30 +1,21 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import * as ROUTES from "constants/routes.constants";
-import Dashboard from "pages/Dashboard/Dashboard";
-import NotFound from "components/NotFound";
 import PublicRoutes from "./PublicRoutes";
 import PrivateRoutes from "./PrivateRoutes";
-import LandingPage from "pages/LandingPage";
 
 const authentication = () =>
-  JSON.parse(localStorage.getItem("kiu_auth_roles")) ? (
+  JSON.parse(localStorage.getItem("thedatabase_auth_roles")) ? (
     <Redirect to="/app" />
   ) : (
     <PublicRoutes />
   );
 
-function BaseRouter() {
+function BaseRouter({ deviceType }) {
   return (
     <>
       <Switch>
-        <Route path={`/`} component={LandingPage} />
-        <Route path={`${ROUTES.DASHBOARD}`} component={Dashboard} />
-        <Route component={NotFound} />
-      </Switch>
-      <Switch>
-        <Route path="/app" component={PrivateRoutes} />
-        <Route path="" render={authentication} />
+        <Route path="/app" component={PrivateRoutes} deviceType={deviceType} />
+        <Route path="" render={authentication} deviceType={deviceType} />
       </Switch>
     </>
   );
