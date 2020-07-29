@@ -1,28 +1,52 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 import { ThemeProvider as OriginalThemeProvider } from "styled-components";
 import { useDarkMode } from "helpers/useDarkMode";
 import { GlobalStyle } from "styles/global-styles";
 import { lightTheme, darkTheme } from "styles/theme";
+import { useDeviceType } from "helpers/useDeviceType";
+import { AuthProvider } from "contexts/auth/auth.provider";
+import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
+import { HeaderProvider } from "contexts/header/header.provider";
+import { Modal } from "@redq/reuse-modal";
 
+import AppLayout from "containers/LayoutContainer/AppLayout";
+
+// External CSS import here
+import "rc-drawer/assets/index.css";
+import "rc-table/assets/index.css";
+import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
+
 import BaseRouter from "routers/router";
+import { useRouterQuery } from "helpers/useRouterQuery";
 
 export default function App() {
-  const location = useLocation();
+  const queryParams = useRouterQuery();
   const [theme, componentMounted] = useDarkMode();
+  const userAgent = navigator.userAgent;
+  const deviceType = useDeviceType(userAgent);
   const themeMode = theme === "light" ? lightTheme : darkTheme;
   if (!componentMounted) {
     return <div />;
   }
 
-  const query = location.search;
+  const query = queryParams.get("text") ? queryParams.get("text") : "";
 
   return (
     <OriginalThemeProvider theme={themeMode}>
       <SearchProvider query={query}>
-        <BaseRouter />
+        <HeaderProvider>
+          <StickyProvider>
+            <AuthProvider>
+              <AppLayout deviceType={deviceType}>
+                <Modal>
+                  <BaseRouter deviceType={deviceType} />
+                </Modal>
+              </AppLayout>
+            </AuthProvider>
+          </StickyProvider>
+        </HeaderProvider>
         <GlobalStyle />
       </SearchProvider>
     </OriginalThemeProvider>
