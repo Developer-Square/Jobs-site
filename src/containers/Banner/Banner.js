@@ -59,7 +59,7 @@ const Banner = ({ imageUrl }) => {
   return (
     <BannerWrapper
       style={{
-        backgroundImage: `url(${imageUrl})`,
+        backgroundImage: `linear-gradient(      to right,      #e6c018,      #e6c018    ),url(${imageUrl})`,
       }}
     >
       <BannerComponent>

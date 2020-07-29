@@ -21,11 +21,10 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Poppins", sans-serif;
     padding-top: 0;/*${NAV_BAR_HEIGHT};*/
     transition: all 0.25s linear;
-    background: #eaeaea;
+    background-color: #f7f7f7;
     color: ${(p) => p.theme.text};
 
     text-transform: none;
-    font-size: 14px;
     font-weight: 400;
     line-height: 27px;
     text-align: left;
@@ -84,7 +83,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
 }
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
