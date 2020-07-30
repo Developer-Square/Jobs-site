@@ -147,20 +147,18 @@ export const TopRightWrapper = styled.div`
         flex: auto;
         flex-grow: 0;
         svg {
-           {
-            font-size: 24px;
-            color: #fff;
-            position: absolute;
-            left: 0;
-            top: 4px;
-            height: 44px;
-            width: 44px;
-            line-height: 44px;
-            border-radius: 3px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(11, 11, 11, 0.15);
-            transition: 0.3s;
-          }
+          font-size: 24px;
+          color: #fff;
+          position: absolute;
+          left: 0;
+          top: 4px;
+          height: 44px;
+          width: 44px;
+          line-height: 44px;
+          border-radius: 3px;
+          text-align: center;
+          box-shadow: 0 4px 12px rgba(11, 11, 11, 0.15);
+          transition: 0.3s;
         }
         &:last-child {
           margin-right: 0;
