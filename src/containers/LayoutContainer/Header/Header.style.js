@@ -192,7 +192,6 @@ export const HeaderRightSide = styled.div`
     a {
       font-family: "Lato", sans-serif;
       font-size: ${themeGet("fontSizes.2", "15")}px;
-      font-weight: ${themeGet("fontWeights.6", "700")};
       color: ${themeGet("colors.darkBold", "#0D1136")};
       line-height: 1.2em;
       display: block;

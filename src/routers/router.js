@@ -3,19 +3,19 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import PublicRoutes from "./PublicRoutes";
 import PrivateRoutes from "./PrivateRoutes";
 
-const authentication = () =>
-  JSON.parse(localStorage.getItem("thedatabase_auth_roles")) ? (
-    <Redirect to="/app" />
-  ) : (
-    <PublicRoutes />
-  );
-
 function BaseRouter({ deviceType }) {
+  console.log("device t", deviceType);
+  const authentication = (deviceType) =>
+    JSON.parse(localStorage.getItem("thedatabase_auth_roles")) ? (
+      <Redirect to="/app" deviceType={deviceType} />
+    ) : (
+      <PublicRoutes deviceType={deviceType} />
+    );
   return (
     <>
       <Switch>
         <Route path="/app" component={PrivateRoutes} deviceType={deviceType} />
-        <Route path="" render={authentication} deviceType={deviceType} />
+        <Route path="" render={authentication} />
       </Switch>
     </>
   );

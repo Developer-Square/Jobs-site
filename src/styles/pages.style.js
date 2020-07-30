@@ -6,17 +6,20 @@ export const MobileCarouselDropdown = styled.div`
     display: none;
   }
 `;
-
+const MainContentArea = styled.main`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #f7f7f7;
+  padding-right: 0;
+  transition: padding-right 0.35s ease-in-out;
+  padding-top: 0 !important;
+`;
 const Container = styled.div`
   position: relative;
   width: 1200px;
   margin: 0 auto;
   padding: 0;
-
-  @media (max-width: 767px) {
-    width: 100%;
-    padding: 0 15px;
-  }
 
   @media only screen and (max-width: 1289px) and (min-width: 960px) {
     position: relative;
@@ -24,8 +27,13 @@ const Container = styled.div`
     margin: 0 auto;
     padding: 0;
   }
+
   @media only screen and (max-width: 990px) and (min-width: 768px) {
     width: 768px;
+  }
+  @media (max-width: 767px) {
+    width: 100%;
+    padding: 0 15px;
   }
 `;
 
@@ -85,12 +93,12 @@ const CategoryBox = styled(Link)`
   @media (max-width: 1289px) {
     width: calc(33% - 20px);
   }
+  @media (max-width: 768px) {
+    width: calc(50% - 20px);
+  }
   @media (max-width: 480px) {
     width: calc(100% - 20px);
     margin-right: 0;
-  }
-  @media (max-width: 768px) {
-    width: calc(50% - 20px);
   }
   &:hover {
     background: #8661d8;
@@ -187,8 +195,8 @@ const JobsRightCol = styled.div`
   }
   div {
     box-sizing: border-box;
-    padding-left: 15px;
-    padding-right: 15px;
+    /* padding-left: 15px;
+    padding-right: 15px; */
     width: 100%;
     &:before {
       content: " ";
@@ -207,6 +215,9 @@ const JobSpotlight = styled.div`
   position: relative;
   display: block;
   margin-top: 22px;
+  ul {
+    display: flex;
+  }
   /* div {
     height: 540px;
   } */
@@ -342,6 +353,20 @@ const TypeList = styled.div`
   transform: translateY(-50%);
   text-align: right;
   max-width: 220px;
+  @media (max-width: 992px) {
+    position: relative;
+    right: 0;
+    top: 0;
+    transform: translateY(0);
+    text-align: left;
+    max-width: 100%;
+    display: inline-flex;
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+  @media (max-width: 768px) {
+    zoom: 0.85;
+  }
   .full-time {
     color: #186fc9;
     border: 1px solid #186fc9;
@@ -402,7 +427,6 @@ const UserComments = styled.div`
   }
 
   div {
-    padding-top: 35px;
     div {
       h3 {
         text-align: center;
@@ -430,6 +454,9 @@ const Comments = styled.div`
   width: 100%;
   margin-top: 20px !important;
   display: block;
+  ul {
+    display: flex;
+  }
 `;
 const Comment = styled.div`
   @media (max-width: 1289px) {
@@ -562,8 +589,68 @@ const P = styled.p`
   margin: 18px 0px 3px;
 `;
 
+const BannerSection = styled.div``;
+
+const ArticleWrapper = styled.div`
+  display: flex;
+  @media (min-width: 768px) {
+    width: 33.33333333%;
+    float: left;
+  }
+`;
+const Article = styled.article`
+  border: none;
+  margin-bottom: 15px;
+  padding-bottom: 32px;
+  display: block;
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 100%;
+`;
+const Figure = styled.div`
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 30px;
+  display: block;
+  svg {
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: -46px;
+    color: #fff;
+    font-size: 14px;
+    width: 46px;
+    height: 46px;
+    background-color: #fff;
+    border-radius: 0;
+    opacity: 0;
+    z-index: 99;
+    visibility: hidden;
+  }
+  &:hover svg {
+    display: inline-block;
+    opacity: 1;
+    visibility: visible;
+    bottom: 30px;
+  }
+`;
+const ArticleSection = styled.div`
+  p {
+    margin-top: 15px;
+    margin: 0 0 15px 0;
+  }
+`;
+
 export {
   Container,
+  MainContentArea,
+  ArticleWrapper,
+  Article,
+  ArticleSection,
+  Figure,
+  BannerSection,
   RowWrapper,
   CategoriesContainer,
   SpotlightCard,
