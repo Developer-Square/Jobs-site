@@ -6,7 +6,9 @@ import NotFound from "pages/NotFound";
 const PublicRoutes = ({ deviceType }) => (
   <Fragment>
     <Switch>
-      <Route exact path={`/`} component={LandingPage} deviceType={deviceType} />
+      <Route exact path={`/`}>
+        <LandingPage deviceType={deviceType} />
+      </Route>
       <Route component={NotFound} deviceType={deviceType} />
     </Switch>
   </Fragment>

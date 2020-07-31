@@ -25,7 +25,7 @@ export const RightMenu = ({ onLogout, avatar, isAuthenticated, onJoin }) => {
           onClick={onJoin}
           size="small"
           title="Join"
-          style={{ fontSize: 15, color: "#fff" }}
+          style={{ fontSize: 15, color: "#5918e6", backgroundColor: "#e6c018" }}
         />
       ) : (
         <Popover

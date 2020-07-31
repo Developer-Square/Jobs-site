@@ -14,8 +14,7 @@ export const RightMenuBox = styled.div`
     a {
       font-family: "Lato", sans-serif;
       font-size: ${themeGet("fontSizes.2", "15")}px;
-      font-weight: ${themeGet("fontWeights.6", "700")};
-      color: ${themeGet("colors.darkBold", "#0D1136")};
+      color: #e6c018;
       line-height: 1.2em;
       display: block;
       transition: 0.15s ease-in-out;

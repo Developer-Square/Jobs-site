@@ -7,6 +7,7 @@ import {
   Container,
   RowWrapper,
   CategoriesContainer,
+  MainContentArea,
   CategoryBox,
   BoxCounter,
   BoxContent,
@@ -18,7 +19,7 @@ import {
   ListSpan,
   BoxIcon,
   Center,
-  JobsRow,
+  // JobsRow,
   TypeList,
   RightWrapper,
   JobSpotlight,
@@ -30,9 +31,14 @@ import {
   TestimonialAuthor,
   TestimonialBox,
   Testimonial,
+  // BannerSection,
   UserComments,
   Comments,
   Comment,
+  ArticleWrapper,
+  Article,
+  ArticleSection,
+  Figure,
   P,
   H3,
   H4,
@@ -47,10 +53,12 @@ import ImageWrapper from "components/Image/Image";
 import { CURRENCY } from "constants/constants";
 import { GiftBox, LockIcon, SearchIcon } from "components/AllSvgIcon";
 import Footer from "containers/Footer/Footer";
-// import CustomCarousel from "components/Carousel/Carousel";
+import CustomCarousel from "components/Carousel/Carousel";
+import { ArrowNext } from "components/AllSvgIcon";
 
 function LandingPage({ deviceType }) {
   const history = useHistory;
+  console.log(deviceType);
   const categories = [
     {
       id: 1,
@@ -107,7 +115,7 @@ function LandingPage({ deviceType }) {
       rateHigh: 2000,
       location: "Nairobi, Kenya",
       description:
-        "The Dishwasher is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
+        "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
       companyLogo:
         "https://thedatabase.co.ke/static/assets/img/brand/dblogo.png",
       categories: [
@@ -128,7 +136,174 @@ function LandingPage({ deviceType }) {
         },
       ],
     },
+    // {
+    //   id: 2,
+    //   name: "The Database",
+    //   post: "Manager",
+    //   maxPrice: 40000,
+    //   minPrice: 50000,
+    //   rateLow: 1000,
+    //   rateHigh: 2000,
+    //   location: "Nairobi, Kenya",
+    //   description:
+    //     "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
+    //   companyLogo:
+    //     "https://thedatabase.co.ke/static/assets/img/brand/dblogo.png",
+    //   categories: [
+    //     {
+    //       id: 1,
+    //       title: "Internship",
+    //       slug: "internship",
+    //     },
+    //     {
+    //       id: 2,
+    //       title: "Temporary",
+    //       slug: "temporary",
+    //     },
+    //     {
+    //       id: 3,
+    //       title: "Full Time",
+    //       slug: "full-time",
+    //     },
+    //   ],
+    // },
   ];
+  const comments = [
+    {
+      id: 1,
+      name: "Someone You Know",
+      imageUrl:
+        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png",
+      comment:
+        "Nam eu eleifend nulla. Duis consectetur sit amet risus sit amet   venenatis. Pellentesque pulvinar ante a tincidunt placerat. Donec   dapibus efficitur arcu, a rhoncus lectus egestas elementum.",
+      position: "Hr Specialist",
+    },
+    {
+      id: 2,
+      name: "Someone Else",
+      imageUrl:
+        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png",
+      comment:
+        "Nam eu eleifend nulla. Duis consectetur sit amet risus sit amet   venenatis. Pellentesque pulvinar ante a tincidunt placerat. Donec   dapibus efficitur arcu, a rhoncus lectus egestas elementum.",
+      position: "Hr Specialist",
+    },
+    {
+      id: 3,
+      name: "Someone Famous",
+      imageUrl:
+        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png",
+      comment:
+        "Nam eu eleifend nulla. Duis consectetur sit amet risus sit amet   venenatis. Pellentesque pulvinar ante a tincidunt placerat. Donec   dapibus efficitur arcu, a rhoncus lectus egestas elementum.",
+      position: "Hr Specialist",
+    },
+  ];
+  const articles = [
+    {
+      id: 1,
+      title: "First Article",
+      imgUrl:
+        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-02-498x315.jpg",
+      content:
+        "Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C",
+      slug: "first-article",
+    },
+    {
+      id: 2,
+      title: "Second Article",
+      imgUrl:
+        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-03-498x315.jpg",
+      content:
+        "Objectively innovate empowered manufactured products whereas parallel platforms. Holisticly predominate",
+      slug: "second-article",
+    },
+    {
+      id: 3,
+      title: "Third Article",
+      imgUrl:
+        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-01-498x315.jpg",
+      content: "One morning, when Gregor Samsa woke from troubled dreams, he",
+      slug: "third-article",
+    },
+  ];
+  const spotlightContent = jobs.map((job, index) => (
+    <SpotlightCard key={index}>
+      <Link to="/jobs">
+        <H4>{job.post}</H4>
+        <br />
+        {job.categories.length > 1 ? (
+          <TypeList
+            style={{
+              position: `inherit`,
+              top: `0`,
+              maxWidth: `100%`,
+            }}
+          >
+            {job.categories.map((category, index) => (
+              <ListSpan key={index} className={category.slug}>
+                {category.title}
+              </ListSpan>
+            ))}
+          </TypeList>
+        ) : (
+          <TypeList>
+            <ListSpan className={`${job.categories[0].slug}`}>
+              {job.categories[0].title}
+            </ListSpan>
+          </TypeList>
+        )}
+      </Link>
+      <SpotlightName>
+        <GiftBox />
+        {job.name}
+      </SpotlightName>
+      <br />
+      <SpotlightLocation>
+        {" "}
+        <SearchIcon />
+        {job.location}
+      </SpotlightLocation>
+      <br />
+      <SpotlightRate>
+        <LockIcon />
+        {CURRENCY}
+        {job.rateLow} - {CURRENCY}
+        {job.rateHigh} / hour
+      </SpotlightRate>
+      <br />
+      <SpotlightSalary>
+        <LockIcon />
+        {CURRENCY}
+        {job.maxPrice} - {CURRENCY}
+        {job.maxPrice}
+      </SpotlightSalary>
+      <P>{job.description}</P>
+      <Center>
+        <Button
+          onClick={() => history.push("/jobs")}
+          size="small"
+          title="Apply For this job"
+          style={{ fontSize: 15, color: "#e6c018" }}
+        />
+      </Center>
+    </SpotlightCard>
+  ));
+  const userComment = comments.map((comment, index) => (
+    <Comment key={index}>
+      <TestimonialBox>
+        <Testimonial>
+          <p>{comment.comment}</p>
+        </Testimonial>
+      </TestimonialBox>
+      <TestimonialAuthor>
+        <ImageWrapper url={comment.imageUrl} alt={"company logo"} />
+        <h4>
+          {comment.name}
+          <span>{comment.position}</span>
+        </h4>
+      </TestimonialAuthor>
+    </Comment>
+  ));
+
   return (
     <>
       <SEO
@@ -136,37 +311,37 @@ function LandingPage({ deviceType }) {
         description="jobs gigs resume job-search Details"
       />
       <Banner imageUrl={BannerImg} />
-      <Container>
-        <RowWrapper>
-          {data ? (
-            <>
-              <H3>Popular Categories</H3>
-              <CategoriesContainer>
-                {data.map((category, index) => (
-                  <CategoryBox to={`${JOBS}`} key={index}>
-                    <BoxIcon>
-                      <EllipsisIcon />
-                    </BoxIcon>
-                    <BoxCounter>{category.counter}</BoxCounter>
-                    <BoxContent>{category.name}</BoxContent>
-                  </CategoryBox>
-                ))}
-              </CategoriesContainer>
-              <Center>
-                <Button
-                  onClick={() => history.push("/jobs")}
-                  size="small"
-                  title="Browse All Categories"
-                  style={{ fontSize: 15, color: "#e6c018" }}
-                />
-              </Center>
-            </>
-          ) : null}
-          <Br />
-        </RowWrapper>
-        <JobsRow>
-          <JobsLeftCol>
-            <div>
+      <MainContentArea>
+        <Container>
+          <RowWrapper>
+            {data ? (
+              <>
+                <H3>Popular Categories</H3>
+                <CategoriesContainer>
+                  {data.map((category, index) => (
+                    <CategoryBox to={`${JOBS}`} key={index}>
+                      <BoxIcon>
+                        <EllipsisIcon />
+                      </BoxIcon>
+                      <BoxCounter>{category.counter}</BoxCounter>
+                      <BoxContent>{category.name}</BoxContent>
+                    </CategoryBox>
+                  ))}
+                </CategoriesContainer>
+                <Center>
+                  <Button
+                    onClick={() => history.push("/jobs")}
+                    size="small"
+                    title="Browse All Categories"
+                    style={{ fontSize: 15, color: "#e6c018" }}
+                  />
+                </Center>
+              </>
+            ) : null}
+            <Br />
+          </RowWrapper>
+          <RowWrapper>
+            <JobsLeftCol>
               <H3>Recent Jobs</H3>
               <LeftContent>
                 {jobs ? (
@@ -232,171 +407,84 @@ function LandingPage({ deviceType }) {
                   style={{ fontSize: 15, color: "#e6c018" }}
                 />
               </Center>
-            </div>
-          </JobsLeftCol>
-          <JobsRightCol>
-            <div>
+            </JobsLeftCol>
+            <JobsRightCol>
               <RightWrapper>
                 <H3>Job SpotLight</H3>
                 <JobSpotlight>
                   {jobs ? (
                     <div>
-                      {/* <CustomCarousel /> */}
-                      {jobs.map((job) => (
-                        <SpotlightCard>
-                          <Link to="/jobs">
-                            <H4>{job.post}</H4>
-                            {job.categories.length > 1 ? (
-                              <TypeList
-                                style={{
-                                  position: `inherit`,
-                                  top: `0`,
-                                  maxWidth: `100%`,
-                                }}
-                              >
-                                {job.categories.map((category) => (
-                                  <ListSpan className={category.slug}>
-                                    {category.title}
-                                  </ListSpan>
-                                ))}
-                              </TypeList>
-                            ) : (
-                              <TypeList>
-                                <ListSpan
-                                  className={`${job.categories[0].slug}`}
-                                >
-                                  {job.categories[0].title}
-                                </ListSpan>
-                              </TypeList>
-                            )}
-                          </Link>
-                          <SpotlightName>
-                            <GiftBox />
-                            {job.name}
-                          </SpotlightName>
-                          <br />
-                          <SpotlightLocation>
-                            {" "}
-                            <SearchIcon />
-                            {job.location}
-                          </SpotlightLocation>
-                          <br />
-                          <SpotlightRate>
-                            <LockIcon />
-                            {CURRENCY}
-                            {job.rateLow} - {CURRENCY}
-                            {job.rateHigh} / hour
-                          </SpotlightRate>
-                          <br />
-                          <SpotlightSalary>
-                            <LockIcon />
-                            {CURRENCY}
-                            {job.maxPrice} - {CURRENCY}
-                            {job.maxPrice}
-                          </SpotlightSalary>
-                          <P>{job.description}</P>
-                          <Center>
-                            <Button
-                              onClick={() => history.push("/jobs")}
-                              size="small"
-                              title="Apply For this job"
-                              style={{ fontSize: 15, color: "#e6c018" }}
-                            />
-                          </Center>
-                        </SpotlightCard>
-                      ))}
+                      {/* <CustomCarousel
+                        deviceType={deviceType}
+                        content={spotlightContent}
+                        perView={1}
+                      /> */}
+                      {spotlightContent}
                     </div>
                   ) : null}
                 </JobSpotlight>
               </RightWrapper>
-            </div>
-          </JobsRightCol>
-          <Br />
-        </JobsRow>
-        <UserComments>
-          <div>
+            </JobsRightCol>
+            <Br />
+          </RowWrapper>
+
+          <UserComments>
             <div>
-              <h3>
-                What Our Users Say
-                <span>
-                  We collect reviews from our users so you can get an honest
-                  opinion of what an experience with our website are really
-                  like!
-                </span>
-              </h3>
-              <Comments>
-                <Comment>
-                  <TestimonialBox>
-                    <Testimonial>
-                      <p>
-                        Nam eu eleifend nulla. Duis consectetur sit amet risus
-                        sit amet venenatis. Pellentesque pulvinar ante a
-                        tincidunt placerat. Donec dapibus efficitur arcu, a
-                        rhoncus lectus egestas elementum.
-                      </p>
-                    </Testimonial>
-                  </TestimonialBox>
-                  <TestimonialAuthor>
-                    <ImageWrapper
-                      url={`https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png`}
-                      alt={"company logo"}
-                    />
-                    <h4>
-                      Mr. or Mrs. Somebody
-                      <span>HR Specialist</span>
-                    </h4>
-                  </TestimonialAuthor>
-                </Comment>
-                <Comment>
-                  <TestimonialBox>
-                    <Testimonial>
-                      <p>
-                        Nam eu eleifend nulla. Duis consectetur sit amet risus
-                        sit amet venenatis. Pellentesque pulvinar ante a
-                        tincidunt placerat. Donec dapibus efficitur arcu, a
-                        rhoncus lectus egestas elementum.
-                      </p>
-                    </Testimonial>
-                  </TestimonialBox>
-                  <TestimonialAuthor>
-                    <ImageWrapper
-                      url={`https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png`}
-                      alt={"company logo"}
-                    />
-                    <h4>
-                      Mr. or Mrs. Somebody
-                      <span>HR Specialist</span>
-                    </h4>
-                  </TestimonialAuthor>
-                </Comment>
-                <Comment>
-                  <TestimonialBox>
-                    <Testimonial>
-                      <p>
-                        Nam eu eleifend nulla. Duis consectetur sit amet risus
-                        sit amet venenatis. Pellentesque pulvinar ante a
-                        tincidunt placerat. Donec dapibus efficitur arcu, a
-                        rhoncus lectus egestas elementum.
-                      </p>
-                    </Testimonial>
-                  </TestimonialBox>
-                  <TestimonialAuthor>
-                    <ImageWrapper
-                      url={`https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png`}
-                      alt={"company logo"}
-                    />
-                    <h4>
-                      Mr. or Mrs. Somebody
-                      <span>HR Specialist</span>
-                    </h4>
-                  </TestimonialAuthor>
-                </Comment>
-              </Comments>
+              <div>
+                <h3>
+                  What Our Users Say
+                  <span>
+                    We collect reviews from our users so you can get an honest
+                    opinion of what an experience with our website are really
+                    like!
+                  </span>
+                </h3>
+                <Comments>
+                  <CustomCarousel
+                    deviceType={deviceType}
+                    content={userComment}
+                    perView={3}
+                    itemClass={{ display: "flex" }}
+                  />
+                  {/* {userComment} */}
+                </Comments>
+              </div>
             </div>
-          </div>
-          <Br />
-        </UserComments>
-      </Container>
+            <Br />
+          </UserComments>
+          <RowWrapper>
+            <H3>Recent Posts</H3>
+            {articles ? (
+              <ArticleWrapper>
+                {articles.map((article, index) => (
+                  <Article key={index}>
+                    <Figure>
+                      <Link to={article.slug}>
+                        <ImageWrapper
+                          url={article.imgUrl}
+                          alt={`article image`}
+                        />
+                      </Link>
+                      <ArrowNext />
+                    </Figure>
+                    <ArticleSection>
+                      <Link to={article.slug}>{article.title}</Link>
+                      <p>{article.content}</p>
+                    </ArticleSection>
+                    <Button
+                      onClick={() => history.push(`/blog/${article.slug}`)}
+                      size="small"
+                      title="Read More ..."
+                      style={{ fontSize: 15, color: "#e6c018" }}
+                    />
+                  </Article>
+                ))}
+              </ArticleWrapper>
+            ) : null}
+          </RowWrapper>
+        </Container>
+        <Footer />
+      </MainContentArea>
     </>
   );
 }

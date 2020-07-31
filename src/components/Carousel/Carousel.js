@@ -103,20 +103,6 @@ const ButtonGroup = ({ next, previous }) => {
   );
 };
 
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
 export default function CustomCarousel({
   data,
   deviceType: { mobile, tablet, desktop },
@@ -127,8 +113,27 @@ export default function CustomCarousel({
   customRightArrow,
   itemClass,
   isRtl,
+  content,
+  perView,
   ...props
 }) {
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: perView,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+  };
   let deviceType = "desktop";
   if (mobile) {
     deviceType = "mobile";
@@ -156,29 +161,7 @@ export default function CustomCarousel({
         {...props}
         // use dir ltr when rtl true
       >
-        {data.map((item, index) => {
-          if (component) return component(item);
-          return (
-            <div style={{ padding: "0 15px", overflow: "hidden" }} key={index}>
-              <a
-                href={item.link}
-                style={{ display: "flex", cursor: "pointer" }}
-              >
-                <img
-                  key={item.id}
-                  src={item.imgSrc}
-                  alt={item.alt}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    display: "block",
-                    position: "relative",
-                  }}
-                />
-              </a>
-            </div>
-          );
-        })}
+        {content}
       </Carousel>
     </div>
   );

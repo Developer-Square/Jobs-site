@@ -59,20 +59,18 @@ const Banner = ({ imageUrl }) => {
   return (
     <BannerWrapper
       style={{
-        backgroundImage: `linear-gradient(      to right,      #e6c018,      #e6c018    ),url(${imageUrl})`,
+        backgroundImage: `linear-gradient(to right,#5918e6b8, #5918e6b8),url(${imageUrl})`,
       }}
     >
       <BannerComponent>
         <BannerHeading>The Database - Jobs Need People</BannerHeading>
         <BannerSubHeading>
           Stay on top of shifting job markets by using a platform that gives you
-          flexibility. Get or Post a Gig, Employ or Meet Dream Employers on
-          TheDB.
+          flexibility.
         </BannerSubHeading>
         <BannerSubHeading>
           Get or Post a Gig, Employ or Meet Dream Employers on TheDB.
         </BannerSubHeading>
-
         <SearchBox
           style={{
             width: 700,
