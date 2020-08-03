@@ -319,7 +319,7 @@ function LandingPage({ deviceType }) {
                 <H3>Popular Categories</H3>
                 <CategoriesContainer>
                   {data.map((category, index) => (
-                    <CategoryBox to={`${JOBS}`} key={index}>
+                    <CategoryBox key={index} to={`${JOBS}`}>
                       <BoxIcon>
                         <EllipsisIcon />
                       </BoxIcon>
@@ -346,8 +346,8 @@ function LandingPage({ deviceType }) {
               <LeftContent>
                 {jobs ? (
                   <ul>
-                    {jobs.map((job) => (
-                      <li>
+                    {jobs.map((job, index) => (
+                      <li key={index}>
                         <a href="jobs">
                           <ListingLogo>
                             <ImageWrapper
@@ -360,8 +360,11 @@ function LandingPage({ deviceType }) {
                               {job.post}
                               {job.categories.length > 1 ? (
                                 <TypeList>
-                                  {job.categories.map((category) => (
-                                    <ListSpan className={category.slug}>
+                                  {job.categories.map((category, index) => (
+                                    <ListSpan
+                                      key={index}
+                                      className={category.slug}
+                                    >
                                       {category.title}
                                     </ListSpan>
                                   ))}

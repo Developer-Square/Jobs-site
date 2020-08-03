@@ -33,44 +33,7 @@ const FormInput = styled.div`
   > input[type="text"],
   > input[type="email"],
   > input[type="password"] {
-    width: 100%;
-    border: 0;
-    color: #fff;
-    padding: 10px 0px;
-    background: transparent;
-    border-bottom: 1px solid #fff;
 
-    &:focus {
-      /* // removing default focus style */
-      outline: 0;
-      color: #fff;
-      border-bottom: 2px solid #fff;
-      /* // adding new one */
-      background: transparent;
-    }
-    /* &:valid {
-        background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/check.svg);
-        background-size: 20px;
-        background-repeat: no-repeat;
-        background-position: 20px 20px;
-        & + label {
-          opacity: 0;
-        }
-      }
-
-    &:invalid:not(:focus):not(:placeholder-shown) {
-        background: palevioletred;
-        & + label {
-          opacity: 0;
-        }
-      }
-
-      &:invalid:focus:not(:placeholder-shown) {
-        & ~ .requirements {
-          max-height: 200px;
-          padding: 0 30px 20px 50px;
-        }
-      } */
     }
   }
   > div {

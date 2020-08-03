@@ -4,7 +4,7 @@ import decode from "jwt-decode";
 import { millisecondsToDaysHoursMinutesSeconds } from "helpers";
 
 const checkAuth = () => {
-  const payload = JSON.parse(localStorage.getItem("thedatabase_auth_payload"));
+  const payload = localStorage.getItem("thedb_auth_payload");
   if (payload === undefined || payload === null) {
     return false;
   }

@@ -197,7 +197,7 @@ const JobsRightCol = styled.div`
     box-sizing: border-box;
     /* padding-left: 15px;
     padding-right: 15px; */
-    width: 100%;
+    /* width: 100%; */
     &:before {
       content: " ";
       display: table;

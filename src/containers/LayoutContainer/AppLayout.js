@@ -11,7 +11,7 @@ const Layout = ({
   className,
   children,
   deviceType: { mobile, tablet, desktop },
-  token
+  token,
 }) => {
   const isSticky = useStickyState("isSticky");
   const location = useLocation();

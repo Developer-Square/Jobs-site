@@ -8,10 +8,6 @@ import { AuthProvider } from "contexts/auth/auth.provider";
 import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
-import { Modal } from "@redq/reuse-modal";
-
-import AppLayout from "containers/LayoutContainer/AppLayout";
-
 // External CSS import here
 import "rc-drawer/assets/index.css";
 import "rc-table/assets/index.css";
@@ -39,11 +35,7 @@ export default function App() {
         <HeaderProvider>
           <StickyProvider>
             <AuthProvider>
-              <AppLayout deviceType={deviceType}>
-                <Modal>
-                  <BaseRouter deviceType={deviceType} />
-                </Modal>
-              </AppLayout>
+              <BaseRouter deviceType={deviceType} />
             </AuthProvider>
           </StickyProvider>
         </HeaderProvider>

@@ -4,6 +4,9 @@ const isBrowser = typeof window !== "undefined";
 const INITIAL_STATE = {
   isAuthenticated: isBrowser && !!localStorage.getItem("access_token"),
   currentForm: "signIn",
+  profile: localStorage.getItem("thedb_auth_profile")
+    ? localStorage.getItem("thedb_auth_profile")
+    : {},
 };
 
 function reducer(state, action) {
@@ -15,10 +18,21 @@ function reducer(state, action) {
         ...state,
         currentForm: "signIn",
       };
+    case "UPDATE":
+      return {
+        ...state,
+        profile: action.payload.profile,
+      };
     case "SIGNIN_SUCCESS":
       return {
         ...state,
         isAuthenticated: true,
+      };
+    case "LOGIN_SUCCESS":
+      return {
+        ...state,
+        isAuthenticated: true,
+        currentForm: "loginSuccess",
       };
     case "SIGN_OUT":
       return {
@@ -29,6 +43,22 @@ function reducer(state, action) {
       return {
         ...state,
         currentForm: "signUp",
+      };
+    case "EMAILCONFIRM":
+      return {
+        ...state,
+        currentForm: "emailConfirm",
+        isAuthenticated: true,
+      };
+    case "SIGNUP_SUCCESS":
+      return {
+        ...state,
+        isAuthenticated: true,
+      };
+    case "SIGNUP_FAILED":
+      return {
+        ...state,
+        isAuthenticated: false,
       };
     case "FORGOTPASS":
       return {

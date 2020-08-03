@@ -1,11 +1,12 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Switch } from "react-router-dom";
 import { uniqBy } from "lodash";
 import { rolesConfig } from "constants/roles.constants";
 import * as Routes from "./PrivateRoutes.config";
 import Navigation from "containers/Navigation/Navigation";
 import PrivateRoute from "./PrivateRoute";
-
+import { Modal } from "@redq/reuse-modal";
+import DashboardLayout from "containers/LayoutContainer/DashboardLayout";
 class PrivateRoutes extends Component {
   state = { allowedRoutes: [] };
 
@@ -14,13 +15,15 @@ class PrivateRoutes extends Component {
       TODO: Replace hardcoded roles with API,
       contextAPI, localStorage, or get from server.
      */
-    let roles = JSON.parse(localStorage.getItem("thedatabase_auth_roles"));
+    let roles = localStorage.getItem("thedb_auth_roles");
     if (roles) {
-      roles = ["common", ...roles];
-
+      roles = ["common", roles];
+      console.log("roles", roles);
       let allowedRoutes = roles.reduce((acc, role) => {
-        return [...acc, ...rolesConfig[role].routes];
+        console.log("role", role);
+        return [acc, rolesConfig[role].routes];
       }, []);
+      console.log("allowed routes", allowedRoutes);
 
       // For removing duplicate entries, compare with 'url'.
       allowedRoutes = uniqBy(allowedRoutes, "url");
@@ -32,23 +35,25 @@ class PrivateRoutes extends Component {
 
   render() {
     return (
-      <Fragment>
-        <Navigation
-          routes={this.state.allowedRoutes}
-          path={this.props.match.path}
-        />
-        <Switch>
-          {this.state.allowedRoutes.map((route) => (
-            <PrivateRoute
-              exact
-              key={route.url}
-              component={Routes[route.component]}
-              path={`${this.props.match.path}${route.url}`}
-            />
-          ))}
-          {/* <Route component={NotFound} /> */}
-        </Switch>
-      </Fragment>
+      <DashboardLayout>
+        <Modal>
+          <Navigation
+            routes={this.state.allowedRoutes}
+            path={this.props.match.path}
+          />
+          <Switch>
+            {this.state.allowedRoutes.map((route) => (
+              <PrivateRoute
+                exact
+                key={route.url}
+                component={Routes[route.component]}
+                path={`${this.props.match.path}${route.url}`}
+              />
+            ))}
+            {/* <Route component={NotFound} /> */}
+          </Switch>
+        </Modal>
+      </DashboardLayout>
     );
   }
 }

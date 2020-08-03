@@ -69,9 +69,10 @@ const MobileDrawer = () => {
   const history = useHistory();
   const { state, dispatch } = useContext(DrawerContext);
   const {
-    authState: { isAuthenticated },
+    authState: { isAuthenticated, profile },
     authDispatch,
   } = useContext(AuthContext);
+  console.log("profile", profile);
   // Toggle drawer
   const toggleHandler = React.useCallback(() => {
     dispatch({
@@ -145,8 +146,8 @@ const MobileDrawer = () => {
                   <img src={UserImage} alt="user_avatar" />
                 </UserAvatar>
                 <UserDetails>
-                  <h3>Msichana na Kijana</h3>
-                  <span>+254 720 000 000</span>
+                  <h3>{profile.full_name}</h3>
+                  <span>{profile.email}</span>
                 </UserDetails>
               </LoginView>
             ) : (
