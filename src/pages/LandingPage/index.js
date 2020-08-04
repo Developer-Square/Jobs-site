@@ -2,22 +2,21 @@ import React from "react";
 import { SEO } from "components/seo";
 
 import Banner from "containers/Banner/Banner";
+import Card from "containers/Card/Card";
+import Team from "containers/Team/Team";
 import BannerImg from "image/hands.jpg";
 import {
   Container,
   RowWrapper,
-  CategoriesContainer,
+  RowContent,
+  ReviewContent,
   MainContentArea,
-  CategoryBox,
-  BoxCounter,
-  BoxContent,
   JobsLeftCol,
   JobsRightCol,
   ListingLogo,
   ListingTitle,
   ListingIcons,
   ListSpan,
-  BoxIcon,
   Center,
   // JobsRow,
   TypeList,
@@ -44,66 +43,72 @@ import {
   H4,
   Br,
 } from "styles/pages.style";
-import { JOBS } from "constants/routes.constants";
-import { EllipsisIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 import { useHistory, Link } from "react-router-dom";
 import { LeftContent } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
 import { CURRENCY } from "constants/constants";
 import { GiftBox, LockIcon, SearchIcon } from "components/AllSvgIcon";
-import Footer from "containers/Footer/Footer";
+import FooterContainer from "../../containers/Footer/Footer";
 import CustomCarousel from "components/Carousel/Carousel";
 import { ArrowNext } from "components/AllSvgIcon";
 
 function LandingPage({ deviceType }) {
   const history = useHistory;
   console.log(deviceType);
-  const categories = [
-    {
-      id: 1,
-      counter: 6,
-      name: "Telecommunications",
-      slug: "telecommunications",
-    },
-    {
-      id: 2,
-      counter: 1,
-      name: "Accounting/Finance",
-      slug: "accounting-finance",
-    },
-    {
-      id: 3,
-      counter: 2,
-      name: "Automotive Jobs",
-      slug: "automotive",
-    },
-    {
-      id: 4,
-      counter: 9,
-      name: "Healthcare",
-      slug: "healthcare",
-    },
-    {
-      id: 5,
-      counter: 6,
-      name: "Education Facilities",
-      slug: "educatin-facilities",
-    },
-    {
-      id: 6,
-      counter: 26,
-      name: "All Gigs",
-      slug: "gigs",
-    },
-    {
-      id: 7,
-      counter: 64,
-      name: "All Jobs",
-      slug: "jobs",
-    },
-  ];
-  const data = categories;
+  // const categories = [
+  //   {
+  //     id: 1,
+  //     counter: 6,
+  //     name: "CV",
+  //     slug: "cv",
+  //     imageurl:
+  //       "https://images.unsplash.com/photo-1593642703055-4b72c180d9b5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60",
+  //   },
+  //   {
+  //     id: 2,
+  //     counter: 1,
+  //     name: "Blog",
+  //     slug: "blog",
+  //   },
+  //   {
+  //     id: 3,
+  //     counter: 2,
+  //     name: "Automotive Jobs",
+  //     slug: "automotive",
+  //   },
+  //   {
+  //     id: 4,
+  //     counter: 9,
+  //     name: "Healthcare",
+  //     slug: "healthcare",
+  //   },
+  //   {
+  //     id: 5,
+  //     counter: 6,
+  //     name: "Education Facilities",
+  //     slug: "educatin-facilities",
+  //   },
+  //   {
+  //     id: 6,
+  //     counter: 26,
+  //     name: "All Gigs",
+  //     slug: "gigs",
+  //   },
+  //   {
+  //     id: 7,
+  //     counter: 64,
+  //     name: "All Jobs",
+  //     slug: "jobs",
+  //   },
+  //   {
+  //     id: 7,
+  //     counter: 64,
+  //     name: "All Jobs",
+  //     slug: "jobs",
+  //   },
+  // ];
+  // const data = categories;
   const jobs = [
     {
       id: 1,
@@ -141,10 +146,10 @@ function LandingPage({ deviceType }) {
     //   name: "The Database",
     //   post: "Manager",
     //   maxPrice: 40000,
-    //   minPrice: 50000,
+    //   minPrice: 10000,
     //   rateLow: 1000,
     //   rateHigh: 2000,
-    //   location: "Nairobi, Kenya",
+    //   location: "Mombasa, Kenya",
     //   description:
     //     "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
     //   companyLogo:
@@ -200,29 +205,29 @@ function LandingPage({ deviceType }) {
   const articles = [
     {
       id: 1,
-      title: "First Article",
+      title: "Jobs",
       imgUrl:
         "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-02-498x315.jpg",
       content:
         "Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C",
-      slug: "first-article",
+      slug: "jobs",
     },
     {
       id: 2,
-      title: "Second Article",
+      title: "Gigs",
       imgUrl:
         "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-03-498x315.jpg",
       content:
         "Objectively innovate empowered manufactured products whereas parallel platforms. Holisticly predominate",
-      slug: "second-article",
+      slug: "gigs",
     },
     {
       id: 3,
-      title: "Third Article",
+      title: "Intern Volunteer",
       imgUrl:
         "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-01-498x315.jpg",
       content: "One morning, when Gregor Samsa woke from troubled dreams, he",
-      slug: "third-article",
+      slug: "intern volunteer",
     },
   ];
   const spotlightContent = jobs.map((job, index) => (
@@ -304,6 +309,59 @@ function LandingPage({ deviceType }) {
     </Comment>
   ));
 
+  const contents = [
+    {
+      id: 1,
+      title: "CV",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    },
+    {
+      id: 2,
+      title: "Blogs",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    },
+    {
+      id: 3,
+      title: "Intern Volunteer",
+      description:
+        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    },
+  ];
+
+  const reviews = [
+    {
+      id: 1,
+      title: "CEO & Co Founder - The Database",
+      review:
+        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    },
+    {
+      id: 2,
+      title: "HR Manager - The Database",
+      review:
+        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    },
+    {
+      id: 3,
+      title: "Lead Engineer - The Database",
+      review:
+        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    },
+    {
+      id: 4,
+      title: "System Analyst - The Database",
+      review:
+        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    },
+    {
+      id: 5,
+      title: "Market Consultant - The Database",
+      review:
+        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    },
+  ];
   return (
     <>
       <SEO
@@ -314,32 +372,40 @@ function LandingPage({ deviceType }) {
       <MainContentArea>
         <Container>
           <RowWrapper>
-            {data ? (
-              <>
-                <H3>Popular Categories</H3>
-                <CategoriesContainer>
-                  {data.map((category, index) => (
-                    <CategoryBox to={`${JOBS}`} key={index}>
-                      <BoxIcon>
-                        <EllipsisIcon />
-                      </BoxIcon>
-                      <BoxCounter>{category.counter}</BoxCounter>
-                      <BoxContent>{category.name}</BoxContent>
-                    </CategoryBox>
-                  ))}
-                </CategoriesContainer>
-                <Center>
-                  <Button
-                    onClick={() => history.push("/jobs")}
-                    size="small"
-                    title="Browse All Categories"
-                    style={{ fontSize: 15, color: "#e6c018" }}
-                  />
-                </Center>
-              </>
+            <H3>Recent Posts</H3>
+            {articles ? (
+              <ArticleWrapper>
+                {articles.map((article, index) => (
+                  <Article key={index}>
+                    <Figure>
+                      <Link to={article.slug}>
+                        <ImageWrapper
+                          url={article.imgUrl}
+                          alt={`article image`}
+                        />
+                      </Link>
+                      <ArrowNext />
+                    </Figure>
+                    <ArticleSection>
+                      <Link to={article.slug}>{article.title}</Link>
+                      <p>{article.content}</p>
+                    </ArticleSection>
+                    <Button
+                      onClick={() => history.push(`/blog/${article.slug}`)}
+                      size="small"
+                      title="Read More ..."
+                      style={{ fontSize: 15, color: "#e6c018" }}
+                    />
+                  </Article>
+                ))}
+              </ArticleWrapper>
             ) : null}
-            <Br />
           </RowWrapper>
+        </Container>
+
+        {/* AD BANNER SECTION. */}
+
+        <Container>
           <RowWrapper>
             <JobsLeftCol>
               <H3>Recent Jobs</H3>
@@ -427,7 +493,21 @@ function LandingPage({ deviceType }) {
             </JobsRightCol>
             <Br />
           </RowWrapper>
+        </Container>
+        <Container>
+          <RowContent>
+            {contents.map((content, index) => (
+              <Card
+                key={index}
+                title={content.title}
+                description={content.description}
+              />
+            ))}
+          </RowContent>
+        </Container>
 
+        {/* AD BANNER SECTION */}
+        <Container>
           <UserComments>
             <div>
               <div>
@@ -452,39 +532,26 @@ function LandingPage({ deviceType }) {
             </div>
             <Br />
           </UserComments>
-          <RowWrapper>
-            <H3>Recent Posts</H3>
-            {articles ? (
-              <ArticleWrapper>
-                {articles.map((article, index) => (
-                  <Article key={index}>
-                    <Figure>
-                      <Link to={article.slug}>
-                        <ImageWrapper
-                          url={article.imgUrl}
-                          alt={`article image`}
-                        />
-                      </Link>
-                      <ArrowNext />
-                    </Figure>
-                    <ArticleSection>
-                      <Link to={article.slug}>{article.title}</Link>
-                      <p>{article.content}</p>
-                    </ArticleSection>
-                    <Button
-                      onClick={() => history.push(`/blog/${article.slug}`)}
-                      size="small"
-                      title="Read More ..."
-                      style={{ fontSize: 15, color: "#e6c018" }}
-                    />
-                  </Article>
-                ))}
-              </ArticleWrapper>
-            ) : null}
-          </RowWrapper>
         </Container>
-        <Footer />
+        <Container>
+          <h3
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+              fontSize: "28px",
+            }}
+          >
+            Meet the Team
+          </h3>
+          <ReviewContent>
+            {reviews.map((review, index) => (
+              <Team key={index} title={review.title} review={review.review} />
+            ))}
+          </ReviewContent>
+        </Container>
       </MainContentArea>
+      <FooterContainer />
     </>
   );
 }
