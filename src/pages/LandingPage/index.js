@@ -343,7 +343,7 @@ function LandingPage({ deviceType }) {
       name: "Mang'are Adrian",
       imageUrl: UserImage,
       comment:
-        "I praise You, Father, Lord of heaven and earth, because You have hidden these things from the wise and learned, and revealed them to little children.",
+        "'I praise You, Father, Lord of heaven and earth, because You have hidden these things from the wise and learned, and revealed them to little children.' - Jesus",
       position: "CTO and Student at Strathmore",
     },
     // {
