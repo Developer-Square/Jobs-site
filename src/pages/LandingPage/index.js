@@ -53,6 +53,9 @@ import FooterContainer from "../../containers/Footer/Footer";
 // import CustomCarousel from "components/Carousel/Carousel";
 import { ArrowNext } from "components/AllSvgIcon";
 import UserImage from "image/user.jpg";
+import Image1 from "image/1.jpeg";
+import Image2 from "image/2.jpeg";
+import Image3 from "image/3.jpeg";
 
 function LandingPage({ deviceType }) {
   const history = useHistory;
@@ -235,8 +238,7 @@ function LandingPage({ deviceType }) {
     {
       id: 1,
       title: "Jobs",
-      imgUrl:
-        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-02-498x315.jpg",
+      imgUrl: Image1,
       content:
         "Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C",
       slug: "jobs",
@@ -244,8 +246,7 @@ function LandingPage({ deviceType }) {
     {
       id: 2,
       title: "Gigs",
-      imgUrl:
-        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-03-498x315.jpg",
+      imgUrl: Image2,
       content:
         "Objectively innovate empowered manufactured products whereas parallel platforms. Holisticly predominate",
       slug: "gigs",
@@ -253,8 +254,7 @@ function LandingPage({ deviceType }) {
     {
       id: 3,
       title: "Intern Volunteer",
-      imgUrl:
-        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/blog-post-01-498x315.jpg",
+      imgUrl: Image3,
       content: "One morning, when Gregor Samsa woke from troubled dreams, he",
       slug: "intern volunteer",
     },
@@ -411,6 +411,7 @@ function LandingPage({ deviceType }) {
                         <ImageWrapper
                           url={article.imgUrl}
                           alt={`article image`}
+                          style={{ height: "400px" }}
                         />
                       </Link>
                       <ArrowNext />
