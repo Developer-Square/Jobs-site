@@ -369,7 +369,7 @@ function LandingPage({ deviceType }) {
       title: "Jobs",
       imgUrl: Image1,
       content:
-        "From full-time opportunities to part-time jobs, TheDatabase got you",
+        "From full-time opportunities to part-time jobs, TheDatabase has listings from top employers for you. Create your profile, tell us what you can do! Jobs need people!",
       slug: "jobs",
     },
     {
@@ -377,7 +377,7 @@ function LandingPage({ deviceType }) {
       title: "Gigs",
       imgUrl: Image2,
       content:
-        "Gigs are short term employment contracts that expire when the contractee accomplishes the task. Give or Get them at TheDatabase!",
+        "Gigs last the duration of a project/task or as long as the organization or individual has that specific need e.g. filing tax returns, laundry, etc. Give or Get them at TheDatabase!",
       slug: "gigs",
     },
     {
@@ -385,7 +385,7 @@ function LandingPage({ deviceType }) {
       title: "Internships",
       imgUrl: Image3,
       content:
-        "Comrade, Covid-19 has given you the opportunity to gain valuable working experience as schools remain closed. Capitilize on it at TheDatabase",
+        "Comrade, Covid-19 has given you the opportunity to gain valuable working experience as schools remain closed. Capitilize on this opportunity at TheDatabase",
       slug: "intern volunteer",
     },
   ];
