@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 import {
   SidebarWrapper,
   NavLink,
@@ -7,10 +7,16 @@ import {
   Svg,
   LogoutBtn,
 } from "./Sidebar.style";
-import { DASHBOARD, PROFILE_PAGE } from "constants/routes.constants";
+import {
+  DASHBOARD,
+  PROFILE_PAGE,
+  JOBS,
+  GIGS,
+} from "constants/routes.constants";
 import { AuthContext } from "contexts/auth/auth.context";
 
 import { DashboardIcon, SettingIcon, LogoutIcon } from "components/AllSvgIcon";
+import { CategoryIcon } from "components/AllSvgIcon";
 
 const sidebarMenus = [
   {
@@ -26,10 +32,35 @@ const sidebarMenus = [
     exact: false,
     icon: <SettingIcon />,
   },
+  {
+    name: "Jobs",
+    path: JOBS,
+    exact: true,
+    icon: <CategoryIcon />,
+  },
+
+  {
+    name: "Gigs",
+    path: GIGS,
+    exact: false,
+    icon: <CategoryIcon />,
+  },
 ];
 
 export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
-  const { signout } = useContext(AuthContext);
+  const history = useHistory();
+  const { authState: authDispatch } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("thedb_auth_profile");
+      localStorage.removeItem("thedb_auth_payload");
+      localStorage.removeItem("thedb_auth_roles");
+      authDispatch({ type: "SIGN_OUT" });
+      history.push("/");
+    }
+  };
   return (
     <SidebarWrapper ref={refs} style={style}>
       <MenuWrapper>
@@ -53,7 +84,7 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
 
       <LogoutBtn
         onClick={() => {
-          signout();
+          handleLogout();
         }}
       >
         <Svg>

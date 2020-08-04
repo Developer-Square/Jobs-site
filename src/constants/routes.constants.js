@@ -1,5 +1,5 @@
 export const DASHBOARD = "/dashboard";
-export const PROFILE_PAGE = "/profile";
+export const PROFILE_PAGE = "/dashboard/profile";
 export const CONTACT = "/contact-us";
 export const HOME = "/home";
 
@@ -15,7 +15,7 @@ export const PAGES = "/";
 export const APP = "/apps";
 export const AUTH = "/auth";
 
-export const JOBS = "/jobs";
-export const GIGS = "/gigs";
+export const JOBS = "/dashboard/jobs";
+export const GIGS = "/dashboard/gigs";
 export const HELP_PAGE = "/help";
 export const TERMS_CONDITIONS = "/terms-and-conditions";

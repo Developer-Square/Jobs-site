@@ -1,36 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { CardWrapper, FormWrapper } from "./Dashboard.style";
+import { CardWrapper, FormWrapper } from "./Gigs.style";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
-import {
-  Wrapper,
-  Container,
-  Heading,
-  LinkButton,
-  Offer,
-} from "./Dashboard.style";
-import { openModal } from "@redq/reuse-modal";
 
-const MessageBanner = () => (
-  <Wrapper>
-    <Container style={{ paddingBottom: 30 }}>
-      <Heading>Job Added Successful</Heading>
-
-      <Offer style={{ padding: "20px 0 0" }}>
-        <LinkButton to="/dashboard/jobs">View Job</LinkButton>
-      </Offer>
-    </Container>
-  </Wrapper>
-);
-
-const Dashboard = () => {
+const Gigs = () => {
   const [indusrty, setIndustry] = useState([
-    { value: "", key: "Select Industry Type" },
+    { value: "Select Industry Type", key: "" },
     { key: "telecommumication", value: 1 },
     { key: "Accounting", value: 2 },
   ]);
@@ -105,23 +85,6 @@ const Dashboard = () => {
     // courseDate: Yup.date().required("Required").nullable(),
   });
 
-  const successBanner = () => {
-    openModal({
-      show: true,
-      overlayClassName: "quick-view-overlay",
-      closeOnClickOutside: true,
-      component: MessageBanner,
-      closeComponent: "",
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: "quick-view-modal",
-        width: 458,
-        height: "auto",
-      },
-    });
-  };
-
   const onSubmit = async (values, { setErrors, setSubmitting }) => {
     console.log("val8es fdsf ", values);
     setSubmitting(true);
@@ -131,7 +94,6 @@ const Dashboard = () => {
       .then((res) => {
         setSubmitting(false);
         console.log("res", res.data);
-        successBanner();
       })
       .catch((err) => {
         setSubmitting(false);
@@ -142,7 +104,7 @@ const Dashboard = () => {
   };
   return (
     <CardWrapper>
-      <h4>Job Listing</h4>
+      <h4>Gigs Listing</h4>
       <FormWrapper>
         <Formik
           initialValues={initialValues}
@@ -215,4 +177,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Gigs;

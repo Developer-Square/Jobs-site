@@ -3,7 +3,8 @@ import useComponentSize from "helpers/useComponentSize";
 import Sidebar from "./Dashboard/Sidebar/Sidebar";
 import Topbar from "./Dashboard/Topbar/Topbar";
 import DrawerItems from "containers/DrawerItems/DrawerItems";
-import { DrawerProvider } from "contexts/DrawerContext";
+import { DrawerProvider } from "contexts/drawer/drawer.provider";
+
 import {
   LayoutWrapper,
   ContentWrapper,

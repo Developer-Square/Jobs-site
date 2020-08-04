@@ -8,7 +8,7 @@ export const LOGOUT = "/logout";
 export const ORDERS = "/orders";
 export const CUSTOMERS = "/customers";
 export const COUPONS = "/coupons";
-export const SETTINGS = "/settings";
+export const SETTINGS = "/dashboard/profile";
 export const STUFF_MEMBERS = "/staff-members";
 export const SITE_SETTINGS = "/site-settings";
 // **************** ROUTE CONSTANT END **************************

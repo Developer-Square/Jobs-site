@@ -39,7 +39,7 @@ export const TopbarWrapper = styled.div`
   }
 
   @media only screen and (max-width: 1440px) {
-    padding: 20px 45px;
+    padding: 15px 15px;
   }
 `;
 
@@ -59,11 +59,39 @@ export const LogoImage = styled.img`
   display: block;
   backface-visibility: hidden;
   max-width: 150px;
+  max-height: 50px;
 `;
 
 export const TopbarRightSide = styled.div`
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+
+  .menu-icon {
+    min-width: 14px;
+    margin-right: 7px;
+  }
+  .user-pages-dropdown {
+    .popover-handler {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: block;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+
+    .popover-content {
+      width: 300px;
+      .inner-wrap {
+        margin: 0px;
+      }
+    }
+  }
 `;
 
 export const ProfileImg = styled.div`
@@ -90,7 +118,7 @@ export const UserDropdowItem = styled.div`
 export const NavLink = styled(RRNavLink)`
   font-size: 16px;
   font-weight: 700;
-  color: black;
+  color: #5918e6;
   line-height: 1.2em;
   text-decoration: none;
   display: flex;
@@ -102,14 +130,14 @@ export const NavLink = styled(RRNavLink)`
   cursor: pointer;
 
   &:hover {
-    color: black;
+    color: #8452f1;
   }
 `;
 
 export const LogoutBtn = styled.button`
   font-size: 16px;
   font-weight: 700;
-  color: black;
+  color: #5918e6;
   background-color: transparent;
   line-height: 1.2em;
   text-decoration: none;
@@ -121,13 +149,13 @@ export const LogoutBtn = styled.button`
   outline: 0;
   transition: 0.15s ease-in-out;
   cursor: pointer;
-  :hover {
-    color: black;
+  &:hover {
+    color: #8452f1;
   }
 `;
 
 export const CloseButton = styled.button`
-  color: black;
+  color: #5918e6;
   background-color: transparent;
   outline: 0;
   border: none;

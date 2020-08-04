@@ -3,6 +3,22 @@ import _ from "lodash";
 import CryptoJS from "crypto-js";
 import AES from "crypto-js/aes";
 
+export const tokenConfig = (getState) => {
+  // const token = getState().auth.token;
+  const token = localStorage.getItem("access_token");
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (token) {
+    config.headers["Authorization"] = `Token ${token}`;
+  }
+
+  return config;
+};
+
 export const useTimer = (seconds) => {
   const [counter, setCounter] = useState(seconds);
   // Third Attempts

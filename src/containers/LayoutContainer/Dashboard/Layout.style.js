@@ -16,7 +16,7 @@ export const ContentWrapper = styled.div`
 export const ContentInnerWrapper = styled.div`
   width: 100%;
   height: auto;
-  padding: 45px 30px;
+  padding: 0px 30px;
   overflow: hidden;
   overflow-y: auto;
 

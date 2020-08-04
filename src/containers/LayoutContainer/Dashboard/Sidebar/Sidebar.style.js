@@ -10,7 +10,7 @@ export const SidebarWrapper = styled.div`
   flex-direction: column;
 
   @media only screen and (max-width: 767px) {
-    // width: 'calc(100% - 65px)';
+    /* width: "calc(100% - 65px)"; */
     width: auto;
     padding: 0;
     height: 100%;
@@ -28,7 +28,7 @@ export const MenuWrapper = styled.div`
 
   @media only screen and (max-width: 767px) {
     padding: 20px 0;
-    // alignItems: 'flex-start';
+    /* alignItems: 'flex-start'; */
   }
 `;
 

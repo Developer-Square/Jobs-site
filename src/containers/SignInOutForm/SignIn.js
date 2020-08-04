@@ -24,6 +24,7 @@ import {
   addToLocalStorageArray,
 } from "helpers";
 import { BASE_URL } from "constants/constants";
+import { tokenConfig } from "helpers";
 
 export default function SignInModal() {
   const emailNotLongEnough = "email must be at least 3 characters";
@@ -97,7 +98,9 @@ export default function SignInModal() {
             roles = "admin";
             addToLocalStorageArray("thedb_auth_roles", roles);
             // eslint-disable-next-line no-unused-vars
+
             var payload = {};
+
             let extraPayloadData = {
               token: res.data.token,
             };
@@ -125,6 +128,19 @@ export default function SignInModal() {
 
               // closeModal();
             }
+            // CHECK TOKEN & LOAD USER
+            axios
+              .get(`${BASE_URL}/accounts/profile/`, tokenConfig())
+              .then((res) => {
+                let auth_profile = res.data;
+                addObjectToLocalStorageObject(
+                  "thedb_auth_profile",
+                  auth_profile
+                );
+              })
+              .catch((err) => {
+                console.log("error in getting profile", err.response.data);
+              });
             // if ((res.status = 200)) {
             //   dispatch(createMessage({ success: "Registration successful" }));
             // }

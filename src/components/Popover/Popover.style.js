@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const PopoverWrapper = styled.div`
   position: relative;
@@ -14,14 +14,15 @@ const PopoverWrapper = styled.div`
     top: calc(100% + 15px);
     display: block;
     min-width: 200px;
-    padding: 15px 20px;
+    /* padding: 15px 20px; */
     position: absolute;
     border-radius: 6px;
     background-color: #ffffff;
     box-shadow: 0 3px 20px rgba(142, 142, 142, 0.14);
     z-index: 99;
+    width: 300px;
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       width: 0;
       height: 0;
