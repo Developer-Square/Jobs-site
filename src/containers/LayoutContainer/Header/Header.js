@@ -76,7 +76,7 @@ const Header = ({ className }) => {
   return (
     <HeaderWrapper className={className}>
       <LeftMenu logo={LogoImage} />
-      {showSearch && (
+      {!showSearch && (
         <SearchBox
           className="headerSearch"
           handleSearch={(value) => onSearch(value)}

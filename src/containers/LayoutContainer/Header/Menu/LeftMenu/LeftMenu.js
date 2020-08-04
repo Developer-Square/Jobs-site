@@ -1,19 +1,31 @@
 import React from "react";
 import { LeftMenuBox } from "./LeftMenu.style";
+import { Link } from "react-router-dom";
+import Logoimage from "image/db.png";
+import styled from "styled-components";
 
-import { useHistory } from "react-router-dom";
+export const Logo = styled.div`
+  margin-right: auto;
 
-import Logo from "components/Logo/Logo";
-
+  @media only screen and (max-width: 1199px) {
+    display: none;
+  }
+`;
+export const LogoImage = styled.img`
+  display: block;
+  backface-visibility: hidden;
+  max-width: 150px;
+  max-height: 50px;
+`;
 export const LeftMenu = ({ logo }) => {
-  const history = useHistory();
+  // const history = useHistory();
   return (
     <LeftMenuBox>
-      <Logo
-        imageUrl={logo}
-        alt={"TheDatabase Logo"}
-        onClick={() => history.push("/")}
-      />
+      <Logo>
+        <Link to="/">
+          <LogoImage src={Logoimage} alt="TheDB" />
+        </Link>
+      </Logo>
     </LeftMenuBox>
   );
 };

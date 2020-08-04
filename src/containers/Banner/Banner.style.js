@@ -27,11 +27,13 @@ const BannerWrapper = styled.div`
 
   @media (max-width: 990px) {
     min-height: 260px;
+    height: 100vh;
     padding-top: 50px;
   }
 
   @media (max-width: 767px) {
     min-height: 160px;
+    height: 100vh;
     padding-top: 45px;
   }
 `;

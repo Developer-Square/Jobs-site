@@ -25,9 +25,12 @@ export const AuthorizedMenu = ({ onLogout }) => {
           label={item.label}
         />
       ))}
-      <div className="menu-item" onClick={onLogout}>
-        <span>Logout</span>
-      </div>
+      <NavLink
+        onClick={onLogout}
+        className="menu-item"
+        href="/"
+        label="logout"
+      />
     </>
   );
 };

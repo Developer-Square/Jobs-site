@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { openModal, closeModal } from "@redq/reuse-modal";
 import { DrawerProvider } from "contexts/drawer/drawer.provider";
 import MobileDrawer from "./MobileDrawer";
@@ -17,10 +17,26 @@ import { SearchContext } from "contexts/search/search.context";
 import { HeaderContext } from "contexts/header/header.context";
 
 import { SearchIcon, LongArrowLeft } from "components/AllSvgIcon";
-import Logo from "components/Logo/Logo";
-import LogoImage from "image/logo.svg";
+// import LogoImage from "image/logo.svg";
 import { isCategoryPage } from "../is-home-page";
 import useDimensions from "helpers/useComponentSize";
+import Logoimage from "image/thedb.png";
+import styled from "styled-components";
+
+export const Logo = styled.div`
+  margin-right: auto;
+
+  @media only screen and (max-width: 1199px) {
+    display: none;
+  }
+`;
+export const LogoImage = styled.img`
+  display: block;
+  backface-visibility: hidden;
+  height: 100px;
+  max-width: 150px;
+  max-height: 50px;
+`;
 
 const SearchModal = ({ state, pathname, handleSearch }) => {
   const history = useHistory();
@@ -117,7 +133,9 @@ const MobileHeader = ({ className, pathname }) => {
           </DrawerWrapper>
 
           <LogoWrapper>
-            <Logo imageUrl={LogoImage} alt="theDB logo" />
+            <Link to="/">
+              <LogoImage src={Logoimage} alt="TheDB" />
+            </Link>
           </LogoWrapper>
 
           {isHomePage ? (

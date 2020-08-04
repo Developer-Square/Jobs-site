@@ -10,7 +10,7 @@ const MainContentArea = styled.main`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  background-color: #f7f7f7;
+  background-color: #fff;
   padding-right: 0;
   transition: padding-right 0.35s ease-in-out;
   padding-top: 0 !important;
@@ -209,6 +209,7 @@ const JobsRightCol = styled.div`
   width: 100%;
   position: relative;
   min-height: 1px;
+
   @media (min-width: 768px) {
     width: 33.33333333%;
     float: left;
@@ -217,7 +218,7 @@ const JobsRightCol = styled.div`
     box-sizing: border-box;
     /* padding-left: 15px;
     padding-right: 15px; */
-    width: 100%;
+    /* width: 100%; */
     &:before {
       content: " ";
       display: table;
@@ -244,9 +245,9 @@ const JobSpotlight = styled.div`
 `;
 const SpotlightCard = styled.div`
   display: block;
-  margin: 0 10px;
+  margin: 0 10px 0 10px;
   margin-bottom: 2px;
-  width: 294px;
+  width: 380px;
   float: left;
   height: 100%;
   min-height: 1px;
@@ -257,6 +258,13 @@ const SpotlightCard = styled.div`
   background-color: #fdfdfd;
   border: 1px solid #e2e2e2;
   padding: 35px 38px 31px 38px;
+  @media (max-width: 768px) {
+    width: 100%;
+    margin: 0;
+  }
+  @media only screen and (max-width: 1289px) and (min-width: 768px) {
+    width: 290px;
+  }
   span {
     svg {
       color: #999;
@@ -292,6 +300,7 @@ const SpotlightSalary = styled.span`
 const LeftContent = styled.div`
   margin-bottom: 35px;
   position: relative;
+
   ul {
     /* margin-bottom: 30px; */
     list-style: none;
@@ -303,7 +312,7 @@ const LeftContent = styled.div`
       line-height: 24px;
       transition: 0.3s !important;
       z-index: auto !important;
-      background-color: #fff;
+      background-color: #fdfdfd;
       a {
         border-radius: 4px 4px 0 0;
         background-color: #fffcee;
@@ -463,7 +472,7 @@ const UserComments = styled.div`
           color: #888;
           font-weight: 300;
           display: block;
-          padding: 0 28%;
+          /* padding: 0 28%; */
         }
       }
     }
@@ -482,12 +491,13 @@ const Comment = styled.div`
   @media (max-width: 1289px) {
     width: calc(33% - 20px);
   }
+
+  @media (max-width: 768px) {
+    width: calc(50% - 20px);
+  }
   @media (max-width: 480px) {
     width: calc(100% - 20px);
     margin-right: 0;
-  }
-  @media (max-width: 768px) {
-    width: calc(50% - 20px);
   }
   width: 370px;
   opacity: 1;
@@ -581,8 +591,7 @@ const H3 = styled.h3`
   transition: opacity 0.5s ease;
   overflow: hidden;
   padding-top: 30px !important;
-  padding-bottom: 50px !important;
-  background-color: #f9f9f9 !important;
+  /* padding-bottom: 50px !important; */
 `;
 
 const H4 = styled.h4`
@@ -612,9 +621,9 @@ const P = styled.p`
 const BannerSection = styled.div``;
 
 const ArticleWrapper = styled.div`
-  display: flex;
-
+  display: block;
   @media (min-width: 768px) {
+    display: flex;
     width: 33.33333333%;
   }
 `;

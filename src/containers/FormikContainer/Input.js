@@ -2,13 +2,41 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 import styled from "styled-components";
+import Uploader from "components/Uploader/Uploader";
 
 function Input(props) {
-  const { label, name, ...rest } = props;
+  const { label, name, type, file, setFieldValue, value, ...rest } = props;
+
   return (
     <FormInput>
       <label htmlFor={name}>{label}</label>
-      <Field placeholder={label} id={name} name={name} {...rest} />
+
+      {type === "file" ? (
+        <Field name={name}>
+          {({ form, field }) => {
+            const { setFieldValue } = form;
+            const { value } = field;
+            return (
+              <Uploader
+                id={name}
+                {...field}
+                {...rest}
+                selected={value}
+                onChange={(val) => setFieldValue(name, val)}
+              />
+            );
+          }}
+        </Field>
+      ) : (
+        <Field
+          placeholder={label}
+          id={name}
+          name={name}
+          type={type}
+          value={value}
+          {...rest}
+        />
+      )}
       <ErrorMessage component={TextError} name={name} />
     </FormInput>
   );
@@ -20,59 +48,24 @@ const FormInput = styled.div`
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
+  display: inline-block;
+  padding: 20px;
 
   > label {
-    display: none;
-    /* opacity: 0.3;
-    font-weight: bold;
-    position: absolute;
-    top: 22px;
-    left: 20px; */
+    /* display: none; */
+
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 28px;
+    color: #333;
   }
 
   > input[type="text"],
   > input[type="email"],
   > input[type="password"] {
-    width: 100%;
-    border: 0;
-    color: #fff;
-    padding: 10px 0px;
-    background: transparent;
-    border-bottom: 1px solid #fff;
-
-    &:focus {
-      /* // removing default focus style */
-      outline: 0;
-      color: #fff;
-      border-bottom: 2px solid #fff;
-      /* // adding new one */
-      background: transparent;
-    }
-    /* &:valid {
-        background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/check.svg);
-        background-size: 20px;
-        background-repeat: no-repeat;
-        background-position: 20px 20px;
-        & + label {
-          opacity: 0;
-        }
-      }
-
-    &:invalid:not(:focus):not(:placeholder-shown) {
-        background: palevioletred;
-        & + label {
-          opacity: 0;
-        }
-      }
-
-      &:invalid:focus:not(:placeholder-shown) {
-        & ~ .requirements {
-          max-height: 200px;
-          padding: 0 30px 20px 50px;
-        }
-      } */
-    }
+    opacity: 0.9;
   }
+
   > div {
     color: palevioletred;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;

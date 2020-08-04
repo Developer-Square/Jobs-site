@@ -1,15 +1,32 @@
 import React, { useReducer } from "react";
 import { DrawerContext } from "./drawer.context";
+import { useCreateContext } from "../create-context";
 const initialState = {
-  isOpen: false
+  isOpen: false,
+  drawerComponent: null,
+  data: null,
 };
 
 function reducer(state, action) {
   switch (action.type) {
+    case "OPEN_DRAWER":
+      return {
+        ...state,
+        isOpen: true,
+        drawerComponent: action.drawerComponent,
+        data: action.data,
+      };
+    case "CLOSE_DRAWER":
+      return {
+        ...state,
+        isOpen: false,
+        drawerComponent: null,
+        data: null,
+      };
     case "TOGGLE":
       return {
         ...state,
-        isOpen: !state.isOpen
+        isOpen: !state.isOpen,
       };
     default:
       return state;
@@ -17,9 +34,28 @@ function reducer(state, action) {
 }
 export const DrawerProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [useDrawerState, useDrawerDispatch, DrawerProviderz] = useCreateContext(
+    initialState,
+    reducer
+  );
   return (
-    <DrawerContext.Provider value={{ state, dispatch }}>
+    <DrawerContext.Provider
+      value={{
+        state,
+        dispatch,
+        useDrawerState,
+        useDrawerDispatch,
+        DrawerProviderz,
+      }}
+    >
       {children}
     </DrawerContext.Provider>
   );
 };
+
+const [useDrawerState, useDrawerDispatch] = useCreateContext(
+  initialState,
+  reducer
+);
+
+export { useDrawerState, useDrawerDispatch };

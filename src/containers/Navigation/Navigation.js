@@ -5,7 +5,7 @@ import { history } from "helpers/history";
 
 class Navigation extends Component {
   handleLogout = () => {
-    localStorage.removeItem("thedatabase_auth_roles");
+    localStorage.removeItem("thedb_auth_roles");
     history.push("/");
   };
 

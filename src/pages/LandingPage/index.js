@@ -2,14 +2,14 @@ import React from "react";
 import { SEO } from "components/seo";
 
 import Banner from "containers/Banner/Banner";
-import Card from "containers/Card/Card";
-import Team from "containers/Team/Team";
+// import Card from "containers/Card/Card";
+// import Team from "containers/Team/Team";
 import BannerImg from "image/hands.jpg";
 import {
   Container,
   RowWrapper,
-  RowContent,
-  ReviewContent,
+  // RowContent,
+  // ReviewContent,
   MainContentArea,
   JobsLeftCol,
   JobsRightCol,
@@ -50,8 +50,9 @@ import ImageWrapper from "components/Image/Image";
 import { CURRENCY } from "constants/constants";
 import { GiftBox, LockIcon, SearchIcon } from "components/AllSvgIcon";
 import FooterContainer from "../../containers/Footer/Footer";
-import CustomCarousel from "components/Carousel/Carousel";
+// import CustomCarousel from "components/Carousel/Carousel";
 import { ArrowNext } from "components/AllSvgIcon";
+import UserImage from "image/user.jpg";
 
 function LandingPage({ deviceType }) {
   const history = useHistory;
@@ -109,6 +110,39 @@ function LandingPage({ deviceType }) {
   //   },
   // ];
   // const data = categories;
+  const spotlightJobs = [
+    {
+      id: 1,
+      name: "The Database",
+      post: "Manager",
+      maxPrice: 40000,
+      minPrice: 50000,
+      rateLow: 1000,
+      rateHigh: 2000,
+      location: "Nairobi, Kenya",
+      description:
+        "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
+      companyLogo:
+        "https://thedatabase.co.ke/static/assets/img/brand/dblogo.png",
+      categories: [
+        {
+          id: 1,
+          title: "Internship",
+          slug: "internship",
+        },
+        {
+          id: 2,
+          title: "Temporary",
+          slug: "temporary",
+        },
+        {
+          id: 3,
+          title: "Full Time",
+          slug: "full-time",
+        },
+      ],
+    },
+  ];
   const jobs = [
     {
       id: 1,
@@ -141,65 +175,60 @@ function LandingPage({ deviceType }) {
         },
       ],
     },
-    // {
-    //   id: 2,
-    //   name: "The Database",
-    //   post: "Manager",
-    //   maxPrice: 40000,
-    //   minPrice: 10000,
-    //   rateLow: 1000,
-    //   rateHigh: 2000,
-    //   location: "Mombasa, Kenya",
-    //   description:
-    //     "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
-    //   companyLogo:
-    //     "https://thedatabase.co.ke/static/assets/img/brand/dblogo.png",
-    //   categories: [
-    //     {
-    //       id: 1,
-    //       title: "Internship",
-    //       slug: "internship",
-    //     },
-    //     {
-    //       id: 2,
-    //       title: "Temporary",
-    //       slug: "temporary",
-    //     },
-    //     {
-    //       id: 3,
-    //       title: "Full Time",
-    //       slug: "full-time",
-    //     },
-    //   ],
-    // },
+    {
+      id: 2,
+      name: "The Database",
+      post: "HR",
+      maxPrice: 40000,
+      minPrice: 10000,
+      rateLow: 1000,
+      rateHigh: 2000,
+      location: "Mombasa, Kenya",
+      description:
+        "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
+      companyLogo:
+        "https://thedatabase.co.ke/static/assets/img/brand/dblogo.png",
+      categories: [
+        {
+          id: 1,
+          title: "Full Time",
+          slug: "full-time",
+        },
+      ],
+    },
   ];
   const comments = [
     {
       id: 1,
-      name: "Someone You Know",
-      imageUrl:
-        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png",
+      name: "Mark Thumi",
+      imageUrl: UserImage,
       comment:
-        "Nam eu eleifend nulla. Duis consectetur sit amet risus sit amet   venenatis. Pellentesque pulvinar ante a tincidunt placerat. Donec   dapibus efficitur arcu, a rhoncus lectus egestas elementum.",
-      position: "Hr Specialist",
+        "Growing up, I have always known life could be better. From a young age I've always wanted to not only see change but to be the driving force behind it. That's why I'am a law student and more importantly, a social change maker. Serving current Enactus Africa Nazarene President has given me the unique opportunity and ability to meet and lead like minded individuals with whom we are all actualizing our vision of a better world and having fun while at it!",
+      position: "Law Student and Change Maker",
     },
     {
       id: 2,
-      name: "Someone Else",
-      imageUrl:
-        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png",
+      name: "Symprose Maraka",
+      imageUrl: UserImage,
       comment:
-        "Nam eu eleifend nulla. Duis consectetur sit amet risus sit amet   venenatis. Pellentesque pulvinar ante a tincidunt placerat. Donec   dapibus efficitur arcu, a rhoncus lectus egestas elementum.",
-      position: "Hr Specialist",
+        "Symprose is a 4th year law student. Being a nomad, brought up in the desert regions of northwestern Kenya (Turkana), Maraka is someone who can adapt to any environment and impact it positively. She is a new member in Enactus and sees this as her next big thing.Even with her background, she realizes she can change the world, and while at it hope to spark hope in other people to make a difference.",
+      position: "Law Student and Change Maker",
     },
+    // {
+    //   id: 3,
+    //   name: "Diora Gabriella",
+    //   imageUrl: UserImage,
+    //   comment:
+    //     "Born and raised in Burundi, Mfurayacu Diora Gabriella is an avid entrepreneur, passionate about creating impact and making the world a better place. A 4th year International Business Management(IBM) student and long time Enactus member, Diora is also a writer and a blogger. Her motto 'passion and compassion' is what drives her in all that she does.",
+    //   position: "IT Student, Writer and Change Maker",
+    // },
     {
-      id: 3,
-      name: "Someone Famous",
-      imageUrl:
-        "https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/resumes-list-avatar-01.png",
+      id: 4,
+      name: "Victor Gathogo",
+      imageUrl: UserImage,
       comment:
-        "Nam eu eleifend nulla. Duis consectetur sit amet risus sit amet   venenatis. Pellentesque pulvinar ante a tincidunt placerat. Donec   dapibus efficitur arcu, a rhoncus lectus egestas elementum.",
-      position: "Hr Specialist",
+        "A 4th year computer science student with a varied background having been raised both in the US and Kenya. Always being found among heterogeneous groups has led to an open mindedness towards the various perspectives brought about through one's experience, culture, language and upbringing. Nonetheless, amongst  the several unifying truths of the world, change for the better and bringing about of such change is a truth that we should all be striving towards and one that I can happily say I enjoy participating in.",
+      position: "omputer Science Student and Change Maker",
     },
   ];
   const articles = [
@@ -230,7 +259,7 @@ function LandingPage({ deviceType }) {
       slug: "intern volunteer",
     },
   ];
-  const spotlightContent = jobs.map((job, index) => (
+  const spotlightContent = spotlightJobs.map((job, index) => (
     <SpotlightCard key={index}>
       <Link to="/jobs">
         <H4>{job.post}</H4>
@@ -309,59 +338,59 @@ function LandingPage({ deviceType }) {
     </Comment>
   ));
 
-  const contents = [
-    {
-      id: 1,
-      title: "CV",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-    {
-      id: 2,
-      title: "Blogs",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-    {
-      id: 3,
-      title: "Intern Volunteer",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-  ];
+  // const contents = [
+  //   {
+  //     id: 1,
+  //     title: "CV",
+  //     description:
+  //       "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Blogs",
+  //     description:
+  //       "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Intern Volunteer",
+  //     description:
+  //       "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  //   },
+  // ];
 
-  const reviews = [
-    {
-      id: 1,
-      title: "CEO & Co Founder - The Database",
-      review:
-        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-    {
-      id: 2,
-      title: "HR Manager - The Database",
-      review:
-        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-    {
-      id: 3,
-      title: "Lead Engineer - The Database",
-      review:
-        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-    {
-      id: 4,
-      title: "System Analyst - The Database",
-      review:
-        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-    {
-      id: 5,
-      title: "Market Consultant - The Database",
-      review:
-        "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-  ];
+  // const reviews = [
+  //   {
+  //     id: 1,
+  //     title: "CEO & Co Founder - The Database",
+  //     review:
+  //       "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "HR Manager - The Database",
+  //     review:
+  //       "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Lead Engineer - The Database",
+  //     review:
+  //       "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "System Analyst - The Database",
+  //     review:
+  //       "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Market Consultant - The Database",
+  //     review:
+  //       "Lorem Ipsum is simply dummy text of the printing passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  //   },
+  // ];
   return (
     <>
       <SEO
@@ -412,8 +441,8 @@ function LandingPage({ deviceType }) {
               <LeftContent>
                 {jobs ? (
                   <ul>
-                    {jobs.map((job) => (
-                      <li>
+                    {jobs.map((job, index) => (
+                      <li key={index}>
                         <a href="jobs">
                           <ListingLogo>
                             <ImageWrapper
@@ -426,8 +455,11 @@ function LandingPage({ deviceType }) {
                               {job.post}
                               {job.categories.length > 1 ? (
                                 <TypeList>
-                                  {job.categories.map((category) => (
-                                    <ListSpan className={category.slug}>
+                                  {job.categories.map((category, index) => (
+                                    <ListSpan
+                                      key={index}
+                                      className={category.slug}
+                                    >
                                       {category.title}
                                     </ListSpan>
                                   ))}
@@ -494,7 +526,7 @@ function LandingPage({ deviceType }) {
             <Br />
           </RowWrapper>
         </Container>
-        <Container>
+        {/* <Container>
           <RowContent>
             {contents.map((content, index) => (
               <Card
@@ -504,7 +536,7 @@ function LandingPage({ deviceType }) {
               />
             ))}
           </RowContent>
-        </Container>
+        </Container> */}
 
         {/* AD BANNER SECTION */}
         <Container>
@@ -520,20 +552,20 @@ function LandingPage({ deviceType }) {
                   </span>
                 </h3>
                 <Comments>
-                  <CustomCarousel
+                  {/* <CustomCarousel
                     deviceType={deviceType}
                     content={userComment}
-                    perView={3}
+                    perView={1}
                     itemClass={{ display: "flex" }}
-                  />
-                  {/* {userComment} */}
+                  /> */}
+                  {userComment}
                 </Comments>
               </div>
             </div>
             <Br />
           </UserComments>
         </Container>
-        <Container>
+        {/* <Container>
           <h3
             style={{
               display: "flex",
@@ -550,6 +582,7 @@ function LandingPage({ deviceType }) {
             ))}
           </ReviewContent>
         </Container>
+       */}
       </MainContentArea>
       <FooterContainer />
     </>

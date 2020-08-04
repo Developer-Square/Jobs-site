@@ -3,9 +3,11 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 109.1 18" style="enable-background:new 0 0 109.1 18;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#5918E6;}
-	.st1{font-family:'Tahoma-Bold';}
-	.st2{font-size:17px;}
+	.st0{fill:#0F00B4;}
+	.st1{font-family:'FranklinGothic-Heavy';}
+	.st2{font-size:23.7633px;}
 </style>
-<text transform="matrix(1 0 0 1 29.1865 14.9166)" class="st0 st1 st2">The DB</text>
+<text transform="matrix(1.0414 0 0 1 8.6396 16.7227)" class="st0 st1 st2">The DB</text>
+<image style="overflow:visible;" width="375" height="663" xlink:href="thedb.png"  transform="matrix(2.714932e-02 0 0 2.714932e-02 91.027 0)">
+</image>
 </svg>
