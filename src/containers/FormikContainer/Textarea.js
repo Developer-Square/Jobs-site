@@ -18,14 +18,14 @@ export default Textarea;
 
 const FormInput = styled.div`
   width: 100%;
-  max-width:  100%;
+  max-width: 100%;
   margin: 0 auto;
   display: inline-block;
-  padding: 20px;
+  /* padding: 20px; */
 
   > label {
     /* display: none; */
-    
+
     margin-bottom: 5px;
     font-size: 14px;
     line-height: 28px;
@@ -35,10 +35,11 @@ const FormInput = styled.div`
   > input[type="text"],
   > input[type="email"],
   > input[type="password"],
-  textarea, select {
+  textarea,
+  select {
     opacity: 0.9;
-    }
   }
+
   > div {
     color: palevioletred;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;

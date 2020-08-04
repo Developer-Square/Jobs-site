@@ -28,7 +28,7 @@ const FormInput = styled.div`
   max-width: 50%;
   margin: 0 auto;
   display: inline-block;
-  padding: 20px;
+  /* padding: 20px; */
 
   > label {
     /* display: none; */
