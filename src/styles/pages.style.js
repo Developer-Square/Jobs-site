@@ -45,12 +45,32 @@ const RowWrapper = styled.div`
   min-height: 1px;
   padding-left: 15px;
   padding-right: 15px;
-  border-bottom: 1px solid #363636;
+  /* border-bottom: 1px solid #363636; */
   &:before {
     content: " ";
     display: table;
   }
 `;
+export const RowContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  justify-content: space-between;
+`;
+
+export const ReviewContent = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(223px, 1fr));
+  grid-gap: 20px;
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  justify-content: space-between;
+`;
+
 const Center = styled.div`
   width: 100%;
   display: -webkit-box;
@@ -593,9 +613,9 @@ const BannerSection = styled.div``;
 
 const ArticleWrapper = styled.div`
   display: flex;
+
   @media (min-width: 768px) {
     width: 33.33333333%;
-    float: left;
   }
 `;
 const Article = styled.article`

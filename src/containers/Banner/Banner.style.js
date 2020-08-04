@@ -14,7 +14,7 @@ const BannerWrapper = styled.div`
   background-size: cover;
 
   @media (max-width: 1400px) {
-    min-height: 100vh;
+    min-height: 80vh;
   }
 
   @media (max-width: 1200px) {
@@ -68,6 +68,26 @@ const BannerHeading = styled("h1")`
   }
 `;
 
+const BannerSubHeading1 = styled("h3")`
+  font-family: ${themeGet("fontFamily.1", "sans-serif")};
+  font-size: ${themeGet("fontSizes.6", "40")}px;
+  font-weight: 500;
+  font-style: italic;
+  color: #e6c018;
+  margin-bottom: 15px;
+  text-align: center;
+
+  @media (max-width: 1400px) {
+    font-size: ${themeGet("fontSizes.6", "45")}px;
+  }
+  @media (max-width: 990px) {
+    font-size: ${themeGet("fontSizes.5", "30")}px;
+  }
+  @media (max-width: 767px) {
+    font-size: 17px;
+  }
+`;
+
 const BannerSubHeading = styled("span")`
   font-family: ${themeGet("fontFamily.0", "sans-serif")};
   font-size: ${themeGet("fontSizes.3", "19")}px;
@@ -84,4 +104,10 @@ const BannerSubHeading = styled("span")`
   }
 `;
 
-export { BannerWrapper, BannerHeading, BannerSubHeading, BannerComponent };
+export {
+  BannerWrapper,
+  BannerHeading,
+  BannerSubHeading,
+  BannerSubHeading1,
+  BannerComponent,
+};

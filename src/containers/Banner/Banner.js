@@ -10,6 +10,7 @@ import {
   BannerWrapper,
   BannerHeading,
   BannerSubHeading,
+  BannerSubHeading1,
   BannerComponent,
 } from "./Banner.style";
 
@@ -63,7 +64,9 @@ const Banner = ({ imageUrl }) => {
       }}
     >
       <BannerComponent>
-        <BannerHeading>The Database - Jobs Need People</BannerHeading>
+        <BannerHeading>The Database </BannerHeading>
+        <br />
+        <BannerSubHeading1>Jobs Need People</BannerSubHeading1>
         <BannerSubHeading>
           Stay on top of shifting job markets by using a platform that gives you
           flexibility.
@@ -77,6 +80,7 @@ const Banner = ({ imageUrl }) => {
             boxShadow: "0 21px 36px rgba(0,0,0,0.05)",
             borderRadius: "6px",
             overflow: "hidden",
+            display: "none",
           }}
           handleSearch={(value) => handleSearchInput(value)}
           value={state.text || ""}
