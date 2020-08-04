@@ -149,13 +149,13 @@ function LandingPage({ deviceType }) {
   const jobs = [
     {
       id: 1,
-      name: "The Database",
+      name: "Sample Company",
       post: "Manager",
       maxPrice: 40000,
       minPrice: 50000,
       rateLow: 1000,
       rateHigh: 2000,
-      location: "Nairobi, Kenya",
+      location: "Sample, Location",
       description:
         "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
       companyLogo:
@@ -180,13 +180,13 @@ function LandingPage({ deviceType }) {
     },
     {
       id: 2,
-      name: "The Database",
+      name: "Lo Rem",
       post: "HR",
       maxPrice: 40000,
       minPrice: 10000,
       rateLow: 1000,
       rateHigh: 2000,
-      location: "Mombasa, Kenya",
+      location: "Sample, Location",
       description:
         "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
       companyLogo:
@@ -206,16 +206,16 @@ function LandingPage({ deviceType }) {
       name: "Mark Thumi",
       imageUrl: UserImage,
       comment:
-        "Growing up, I have always known life could be better. From a young age I've always wanted to not only see change but to be the driving force behind it. That's why I'am a law student and more importantly, a social change maker. Serving current Enactus Africa Nazarene President has given me the unique opportunity and ability to meet and lead like minded individuals with whom we are all actualizing our vision of a better world and having fun while at it!",
-      position: "Law Student and Change Maker",
+        "Youth-created youth employement over Government-created employment. What we mean by this is that its about time we stopped waiting on the government to create employment for the youth by coming together we can reinforce the efforts being made by the government and private secor. Habahaba hujaza kibaba!",
+      position: "CEO and Student at Africa Nazarene",
     },
     {
       id: 2,
-      name: "Symprose Maraka",
+      name: "Mang'are Adrian",
       imageUrl: UserImage,
       comment:
-        "Symprose is a 4th year law student. Being a nomad, brought up in the desert regions of northwestern Kenya (Turkana), Maraka is someone who can adapt to any environment and impact it positively. She is a new member in Enactus and sees this as her next big thing.Even with her background, she realizes she can change the world, and while at it hope to spark hope in other people to make a difference.",
-      position: "Law Student and Change Maker",
+        "I praise You, Father, Lord of heaven and earth, because You have hidden these things from the wise and learned, and revealed them to little children.",
+      position: "CTO and Studednt at Strathmore",
     },
     // {
     //   id: 3,
@@ -227,11 +227,11 @@ function LandingPage({ deviceType }) {
     // },
     {
       id: 4,
-      name: "Victor Gathogo",
+      name: "Eric Ochieng'",
       imageUrl: UserImage,
       comment:
-        "A 4th year computer science student with a varied background having been raised both in the US and Kenya. Always being found among heterogeneous groups has led to an open mindedness towards the various perspectives brought about through one's experience, culture, language and upbringing. Nonetheless, amongst  the several unifying truths of the world, change for the better and bringing about of such change is a truth that we should all be striving towards and one that I can happily say I enjoy participating in.",
-      position: "omputer Science Student and Change Maker",
+        "God-fearing, creative and an innovative individual.",
+      position: "CFO and Student at Strathmore",
     },
   ];
   const articles = [
@@ -240,7 +240,7 @@ function LandingPage({ deviceType }) {
       title: "Jobs",
       imgUrl: Image1,
       content:
-        "Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C",
+        "From full-time opportunities to part-time jobs, TheDatabase got you",
       slug: "jobs",
     },
     {
@@ -248,14 +248,14 @@ function LandingPage({ deviceType }) {
       title: "Gigs",
       imgUrl: Image2,
       content:
-        "Objectively innovate empowered manufactured products whereas parallel platforms. Holisticly predominate",
+        "Gigs are short term employment contracts that expire when the contractee accomplishes the task. Give or Get them at TheDatabase!",
       slug: "gigs",
     },
     {
       id: 3,
-      title: "Intern Volunteer",
+      title: "Internships",
       imgUrl: Image3,
-      content: "One morning, when Gregor Samsa woke from troubled dreams, he",
+      content: "Comrade, Covid-19 has given you the opportunity to gain valuable working experience as schools remain closed. Capitilize on it at TheDatabase",
       slug: "intern volunteer",
     },
   ];
@@ -423,7 +423,7 @@ function LandingPage({ deviceType }) {
                     <Button
                       onClick={() => history.push(`/blog/${article.slug}`)}
                       size="small"
-                      title="Read More ..."
+                      title="Get Started"
                       style={{ fontSize: 15, color: "#e6c018" }}
                     />
                   </Article>
@@ -545,11 +545,9 @@ function LandingPage({ deviceType }) {
             <div>
               <div>
                 <h3>
-                  What Our Users Say
+                  Meet The Team
                   <span>
-                    We collect reviews from our users so you can get an honest
-                    opinion of what an experience with our website are really
-                    like!
+                    TheDatabase is a family of nine young men and women. All are youths and passionate about effecting change in the society. Below are the leaders. 
                   </span>
                 </h3>
                 <Comments>
