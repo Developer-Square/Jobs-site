@@ -215,7 +215,7 @@ function LandingPage({ deviceType }) {
       imageUrl: UserImage,
       comment:
         "I praise You, Father, Lord of heaven and earth, because You have hidden these things from the wise and learned, and revealed them to little children.",
-      position: "CTO and Studednt at Strathmore",
+      position: "CTO and Student at Strathmore",
     },
     // {
     //   id: 3,
@@ -230,7 +230,7 @@ function LandingPage({ deviceType }) {
       name: "Eric Ochieng'",
       imageUrl: UserImage,
       comment:
-        "God-fearing, creative and an innovative individual.",
+        "God-fearing, creative and an innovative individual. Driven to be the change the youth aspire, a voice in youth unemployment and youth created jobs.",
       position: "CFO and Student at Strathmore",
     },
   ];
