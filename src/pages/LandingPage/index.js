@@ -4,7 +4,7 @@ import { SEO } from "components/seo";
 import Banner from "containers/Banner/Banner";
 // import Card from "containers/Card/Card";
 // import Team from "containers/Team/Team";
-import BannerImg from "image/hands.jpg";
+import BannerImg from "image/LANDING.jpg";
 import {
   Container,
   RowWrapper,
