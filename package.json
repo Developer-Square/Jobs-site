@@ -10,7 +10,6 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
-    "baseui": "^9.91.0",
     "crypto-js": "^4.0.0",
     "formik": "^2.1.5",
     "jwt-decode": "^2.2.0",
