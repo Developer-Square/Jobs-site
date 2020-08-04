@@ -53,9 +53,9 @@ import FooterContainer from "../../containers/Footer/Footer";
 // import CustomCarousel from "components/Carousel/Carousel";
 import { ArrowNext } from "components/AllSvgIcon";
 import UserImage from "image/user.jpg";
-import Image1 from "image/1.jpeg";
-import Image2 from "image/2.jpeg";
-import Image3 from "image/3.jpeg";
+import Image1 from "image/JOBS.jpg";
+import Image2 from "image/GIGS.jpg";
+import Image3 from "image/INTERNSHIPS.jpg";
 
 function LandingPage({ deviceType }) {
   const history = useHistory;
