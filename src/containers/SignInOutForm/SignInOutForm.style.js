@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { themeGet } from '@styled-system/theme-get';
-import Buttons from 'components/Button/Button';
+import styled from "styled-components";
+import { themeGet } from "@styled-system/theme-get";
+import Buttons from "components/Button/Button";
 
 export const Button = styled(Buttons)`
   &.google {
@@ -24,6 +24,9 @@ export const Container = styled.div`
   @media (max-width: 768px) {
     padding: 40px 30px 0;
   }
+  label {
+    display: none;
+  }
 `;
 
 export const LogoWrapper = styled.div`
@@ -35,43 +38,43 @@ export const LogoWrapper = styled.div`
 `;
 
 export const Heading = styled.h3`
-  color: ${themeGet('colors.primary', '#6c3a1f')};
+  color: ${themeGet("colors.primary", "#6c3a1f")};
   margin-bottom: 10px;
-  font-family: 'Poppins', sans-serif;
-  font-size: ${themeGet('fontSizes.4', '21')}px;
-  font-weight: ${themeGet('fontWeights.6', '700')};
+  font-family: "Poppins", sans-serif;
+  font-size: ${themeGet("fontSizes.4", "21")}px;
+  font-weight: ${themeGet("fontWeights.6", "700")};
 `;
 
 export const SubHeading = styled.span`
   margin-bottom: 30px;
-  font-family: 'Lato', sans-serif;
-  font-size: ${themeGet('fontSizes.2', '15')}px;
-  font-weight: ${themeGet('fontWeights.3', '400')};
-  color: ${themeGet('colors.darkRegular', '#77798c')};
+  font-family: "Lato", sans-serif;
+  font-size: ${themeGet("fontSizes.2", "15")}px;
+  font-weight: ${themeGet("fontWeights.3", "400")};
+  color: ${themeGet("colors.darkRegular", "#77798c")};
   display: block;
 `;
 
 export const OfferSection = styled.div`
   padding: 20px;
-  background-color: ${themeGet('colors.lightColor', '#F7F7F7')};
-  color: ${themeGet('colors.primary', '#6c3a1f')};
+  background-color: ${themeGet("colors.lightColor", "#F7F7F7")};
+  color: ${themeGet("colors.primary", "#6c3a1f")};
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 export const Offer = styled.p`
-  font-family: 'Lato', sans-serif;
-  font-size: ${themeGet('fontSizes.2', '15')}px;
-  font-weight: ${themeGet('fontWeights.3', '400')};
+  font-family: "Lato", sans-serif;
+  font-size: ${themeGet("fontSizes.2", "15")}px;
+  font-weight: ${themeGet("fontWeights.3", "400")};
   margin: 0;
 `;
 
 export const HelperText = styled.p`
-  font-family: 'Lato', sans-serif;
-  font-size: ${themeGet('fontSizes.1', '13')}px;
-  font-weight: ${themeGet('fontWeights.3', '400')};
-  color: ${themeGet('colors.darkRegular', '#77798c')};
+  font-family: "Lato", sans-serif;
+  font-size: ${themeGet("fontSizes.1", "13")}px;
+  font-weight: ${themeGet("fontWeights.3", "400")};
+  color: ${themeGet("colors.darkRegular", "#77798c")};
   margin: 0;
   text-align: center;
   width: 100%;
@@ -87,12 +90,12 @@ export const Input = styled.input`
   width: 100%;
   height: 48px;
   border-radius: 6px;
-  background-color: ${themeGet('colors.lightColor', '#F7F7F7')};
-  border: 1px solid ${themeGet('colors.borderColor', '#E6E6E6')};
-  font-family: 'Lato', sans-serif;
-  font-size: ${themeGet('fontSizes.2', '15')}px;
-  font-weight: ${themeGet('fontWeights.3', '400')};
-  color: ${themeGet('colors.darkBold', '#6c3a1f')};
+  background-color: ${themeGet("colors.lightColor", "#F7F7F7")};
+  border: 1px solid ${themeGet("colors.borderColor", "#E6E6E6")};
+  font-family: "Lato", sans-serif;
+  font-size: ${themeGet("fontSizes.2", "15")}px;
+  font-weight: ${themeGet("fontWeights.3", "400")};
+  color: ${themeGet("colors.darkBold", "#6c3a1f")};
   line-height: 19px;
   padding: 0 18px;
   box-sizing: border-box;
@@ -105,11 +108,11 @@ export const Input = styled.input`
   }
 
   &:focus {
-    border-color: ${themeGet('colors.primary', '#6c3a1f')};
+    border-color: ${themeGet("colors.primary", "#6c3a1f")};
   }
 
   &::placeholder {
-    color: ${themeGet('colors.darkRegular', '#77798c')};
+    color: ${themeGet("colors.darkRegular", "#77798c")};
     font-size: 14px;
   }
 
@@ -136,10 +139,10 @@ export const Divider = styled.div`
   position: relative;
 
   span {
-    font-family: 'Lato', sans-serif;
-    font-size: ${themeGet('fontSizes.2', '15')}px;
-    font-weight: ${themeGet('fontWeights.3', '400')};
-    color: ${themeGet('colors.darkBold', '#6c3a1f')};
+    font-family: "Lato", sans-serif;
+    font-size: ${themeGet("fontSizes.2", "15")}px;
+    font-weight: ${themeGet("fontWeights.3", "400")};
+    color: ${themeGet("colors.darkBold", "#6c3a1f")};
     line-height: 1;
     background-color: #ffffff;
     z-index: 1;
@@ -148,10 +151,10 @@ export const Divider = styled.div`
   }
 
   &::before {
-    content: '';
+    content: "";
     width: 100%;
     height: 1px;
-    background-color: ${themeGet('colors.borderColor', '#E6E6E6')};
+    background-color: ${themeGet("colors.borderColor", "#E6E6E6")};
     position: absolute;
     top: 50%;
   }
@@ -165,7 +168,7 @@ export const LinkButton = styled.button`
   padding: 0;
   font-size: 14px;
   font-weight: 700;
-  color: ${themeGet('colors.primary', '#6c3a1f')};
+  color: ${themeGet("colors.primary", "#6c3a1f")};
   text-decoration: underline;
   cursor: pointer;
 `;

@@ -36,7 +36,7 @@ const FormInput = styled.div`
   max-width: 400px;
   margin: 0 auto;
   display: inline-block;
-  padding: 20px;
+  /* padding: 20px; */
 
   label {
     /* display: none; */
