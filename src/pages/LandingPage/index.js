@@ -10,18 +10,13 @@ import {
   RowWrapper,
   RowContent,
   ReviewContent,
-  CategoriesContainer,
   MainContentArea,
-  CategoryBox,
-  BoxCounter,
-  BoxContent,
   JobsLeftCol,
   JobsRightCol,
   ListingLogo,
   ListingTitle,
   ListingIcons,
   ListSpan,
-  BoxIcon,
   Center,
   // JobsRow,
   TypeList,
@@ -48,8 +43,6 @@ import {
   H4,
   Br,
 } from "styles/pages.style";
-import { JOBS } from "constants/routes.constants";
-import { EllipsisIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 import { useHistory, Link } from "react-router-dom";
 import { LeftContent } from "styles/pages.style";
