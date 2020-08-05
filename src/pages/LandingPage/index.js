@@ -531,7 +531,6 @@ function LandingPage({ deviceType }) {
       <MainContentArea>
         <Container>
           <RowWrapper>
-            <H3>Here's Why</H3>
             {articles ? (
               <ArticleWrapper>
                 {articles.map((article, index) => (
