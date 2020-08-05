@@ -218,7 +218,6 @@ function LandingPage({ deviceType }) {
       rateLow: 1000,
       rateHigh: 2000,
       location: "Nairobi, Kenya",
-<<<<<<< HEAD
       description:
         "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
       companyLogo:
@@ -307,8 +306,6 @@ function LandingPage({ deviceType }) {
       rateLow: 1000,
       rateHigh: 2000,
       location: "Nairobi, Kenya",
-=======
->>>>>>> 07f0a540e66dd41ea5d25b71ff3a1fa292f43f5b
       description:
         "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
       companyLogo:
@@ -326,97 +323,6 @@ function LandingPage({ deviceType }) {
         },
         {
           id: 3,
-<<<<<<< HEAD
-=======
-          title: "Full Time",
-          slug: "full-time",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "The Database",
-      post: "HR Manager",
-      maxPrice: 40000,
-      minPrice: 50000,
-      rateLow: 1000,
-      rateHigh: 2000,
-      location: "Nairobi, Kenya",
-      description:
-        "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
-      companyLogo:
-        "https://thedatabase.co.ke/static/assets/img/brand/dblogo.png",
-      categories: [
-        {
-          id: 1,
-          title: "Internship",
-          slug: "internship",
-        },
-        {
-          id: 2,
-          title: "Temporary",
-          slug: "temporary",
-        },
-        {
-          id: 3,
-          title: "Full Time",
-          slug: "full-time",
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "The Database",
-      post: "Customer Service",
-      maxPrice: 40000,
-      minPrice: 50000,
-      rateLow: 1000,
-      rateHigh: 2000,
-      location: "Nairobi, Kenya",
-      description:
-        "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
-      companyLogo:
-        "https://thedatabase.co.ke/static/assets/img/brand/dblogo.png",
-      categories: [
-        {
-          id: 1,
-          title: "Internship",
-          slug: "internship",
-        },
-        {
-          id: 2,
-          title: "Temporary",
-          slug: "temporary",
-        },
-      ],
-    },
-    {
-      id: 6,
-      name: "The Database",
-      post: "Developer",
-      maxPrice: 40000,
-      minPrice: 50000,
-      rateLow: 1000,
-      rateHigh: 2000,
-      location: "Nairobi, Kenya",
-      description:
-        "The Manager is responsible for proper use, care, and maintenance of the dish machine. The   Dishwasher is also responsible for minor interior and exterior maintenance (snow & ice removal, trash…",
-      companyLogo:
-        "https://thedatabase.co.ke/static/assets/img/brand/dblogo.png",
-      categories: [
-        {
-          id: 1,
-          title: "Internship",
-          slug: "internship",
-        },
-        {
-          id: 2,
-          title: "Temporary",
-          slug: "temporary",
-        },
-        {
-          id: 3,
->>>>>>> 07f0a540e66dd41ea5d25b71ff3a1fa292f43f5b
           title: "Full Time",
           slug: "full-time",
         },
@@ -452,12 +358,8 @@ function LandingPage({ deviceType }) {
       id: 4,
       name: "Eric Ochieng'",
       imageUrl: UserImage,
-<<<<<<< HEAD
-      comment: "God-fearing, creative and an innovative individual.",
-=======
       comment:
         "God-fearing, creative and an innovative individual. Driven to be the change the youth aspire, a voice in youth unemployment and youth created jobs.",
->>>>>>> 07f0a540e66dd41ea5d25b71ff3a1fa292f43f5b
       position: "CFO and Student at Strathmore",
     },
   ];
