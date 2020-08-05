@@ -28,4 +28,7 @@ export const FormWrapper = styled.div`
   padding: 15px 30px;
   color: #333;
   display: block;
+  div {
+    margin: 0 20px;
+  }
 `;

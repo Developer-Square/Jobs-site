@@ -33,7 +33,7 @@ export default DatePicker;
 
 const FormInput = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
   display: inline-block;
   /* padding: 20px; */

@@ -126,6 +126,13 @@ const components = {
     icon: "Category",
     module: 1,
   },
+  internships: {
+    component: "Internships",
+    url: "/internships",
+    title: "Internships",
+    icon: "Category",
+    module: 1,
+  },
 };
 
 // modules for grouping.

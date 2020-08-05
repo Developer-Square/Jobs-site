@@ -12,6 +12,7 @@ import {
   PROFILE_PAGE,
   JOBS,
   GIGS,
+  INTERNSHIPS,
 } from "constants/routes.constants";
 import { AuthContext } from "contexts/auth/auth.context";
 
@@ -29,7 +30,7 @@ const sidebarMenus = [
   {
     name: "Profile",
     path: PROFILE_PAGE,
-    exact: false,
+    exact: true,
     icon: <SettingIcon />,
   },
   {
@@ -38,11 +39,16 @@ const sidebarMenus = [
     exact: true,
     icon: <CategoryIcon />,
   },
-
   {
     name: "Gigs",
     path: GIGS,
-    exact: false,
+    exact: true,
+    icon: <CategoryIcon />,
+  },
+  {
+    name: "Internships",
+    path: INTERNSHIPS,
+    exact: true,
     icon: <CategoryIcon />,
   },
 ];

@@ -1,218 +1,104 @@
 import React, { useEffect, useState } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { CardWrapper, FormWrapper } from "./Dashboard.style";
-import FormikControl from "containers/FormikContainer/FormikControl";
+import { CardWrapper } from "./Dashboard.style";
 import axios from "axios";
-import { BASE_URL } from "constants/constants";
+import { BASE_URL, CURRENCY } from "constants/constants";
 import { tokenConfig } from "helpers";
-import Button from "components/Button/Button";
+import ImageWrapper from "components/Image/Image";
 import {
-  Wrapper,
-  Container,
-  Heading,
-  LinkButton,
-  Offer,
-} from "./Dashboard.style";
-import { openModal } from "@redq/reuse-modal";
+  LeftContent,
+  ListingLogo,
+  ListingTitle,
+  H4,
+  TypeList,
+  ListSpan,
+  ListingIcons,
+} from "styles/pages.style";
+import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
+import { Center } from "styles/pages.style";
+import Button from "components/Button/Button";
 
-const MessageBanner = () => (
-  <Wrapper>
-    <Container style={{ paddingBottom: 30 }}>
-      <Heading>Job Added Successful</Heading>
-
-      <Offer style={{ padding: "20px 0 0" }}>
-        <LinkButton to="/dashboard/jobs">View Job</LinkButton>
-      </Offer>
-    </Container>
-  </Wrapper>
-);
-
-const Dashboard = () => {
-  const [indusrty, setIndustry] = useState([
-    { value: "", key: "Select Industry Type" },
-    { key: "telecommumication", value: 1 },
-    { key: "Accounting", value: 2 },
-  ]);
+function Dashboard() {
+  const [jobs, setJobs] = useState(null);
   useEffect(() => {
     axios
-      .post(`${BASE_URL}/industry/`, tokenConfig())
+      .get(`${BASE_URL}/jobs/`, tokenConfig())
       .then((res) => {
-        console.log("industry data", res.data);
-        setIndustry(res.data);
+        console.log("industry data", res.data.results);
+        setJobs(res.data.results);
       })
       .catch((err) => {
-        console.log("error", err.response.data);
+        console.log("error", err.response);
       });
   }, []);
-  const dropdownOptions = [
-    { value: "Select Job Type", key: "" },
-    { value: "fulltime", key: "Full-Time" },
-    { value: "parttime", key: "Part-Time" },
-    { value: "Volunteering", key: "Volunteering" },
-    { value: "Internship", key: "Internship" },
-  ];
-  const minQualificationsOptions = [
-    { value: "Select your Qualification", key: "" },
-    { value: "none", key: "None" },
-    { value: "pri", key: "primary" },
-    { value: "sec", key: "secondary" },
-    { value: "cert", key: "Certificate" },
-    { value: "dip", key: "Diploma" },
-    { value: "bsc", key: "BSc" },
-    { value: "msc", key: "MSc" },
-    { value: "phd", key: "PhD" },
-  ];
-  const experienceOptions = [
-    { value: "Select Years of experience", key: "" },
-    { value: "entry", key: "Entry Level" },
-    { value: "1-2", key: "1-2 years" },
-    { value: "3-5", key: "3-5 years" },
-    { value: "6-10", key: "6-10 years" },
-    { value: "above 10", key: "Above 10 years" },
-  ];
-
-  const initialValues = {
-    creator: localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : "",
-    title: "",
-    industry: "",
-    location: "",
-    salary: "",
-    description: "",
-    job_type: [],
-    experience: [],
-    qualifications: [],
-    courseDate: null,
-  };
-  console.log(
-    "the pk for user",
-    localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : ""
-  );
-
-  const validationSchema = Yup.object({
-    title: Yup.string().required("Required"),
-    industry: Yup.string().required("Required"),
-    location: Yup.string().required("Required"),
-    salary: Yup.string().required("Required"),
-    description: Yup.string().required("Required"),
-    job_type: Yup.string().required("Required"),
-    experience: Yup.string().required("Required"),
-    qualifications: Yup.string().required("Required"),
-    // courseDate: Yup.date().required("Required").nullable(),
-  });
-
-  const successBanner = () => {
-    openModal({
-      show: true,
-      overlayClassName: "quick-view-overlay",
-      closeOnClickOutside: true,
-      component: MessageBanner,
-      closeComponent: "",
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: "quick-view-modal",
-        width: 458,
-        height: "auto",
-      },
-    });
+  const handleApplication = () => {
+    console.log("will apply soon");
   };
 
-  const onSubmit = async (values, { setErrors, setSubmitting }) => {
-    console.log("val8es fdsf ", values);
-    setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    axios
-      .post(`${BASE_URL}/jobs/`, values, tokenConfig())
-      .then((res) => {
-        setSubmitting(false);
-        console.log("res", res.data);
-        successBanner();
-      })
-      .catch((err) => {
-        setSubmitting(false);
-        console.log("error", err.response.data);
-
-        setErrors(err.response.data);
-      });
-  };
   return (
     <CardWrapper>
-      <h4>Job Listing</h4>
-      <FormWrapper>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            return (
-              <Form>
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Title"
-                  name="title"
-                />
-                <FormikControl
-                  control="select"
-                  label="Industry"
-                  name="industry"
-                  options={indusrty}
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Salary"
-                  name="salary"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Location"
-                  name="location"
-                />
-                <FormikControl
-                  control="select"
-                  label="Job Type"
-                  name="job_type"
-                  options={dropdownOptions}
-                />
-                <FormikControl
-                  control="select"
-                  label="Qualification"
-                  name="qualifications"
-                  options={minQualificationsOptions}
-                />
-                <FormikControl
-                  control="select"
-                  label="Experience"
-                  name="experience"
-                  options={experienceOptions}
-                />
-                <FormikControl
-                  control="textarea"
-                  label="description"
-                  name="description"
-                />
-                <Button
-                  type="submit"
-                  size="small"
-                  title={formik.isSubmitting ? "Submitting... " : "Submit"}
-                  style={{ fontSize: 15, color: "#fff" }}
-                  disabled={!formik.isValid}
-                />
-              </Form>
-            );
-          }}
-        </Formik>
-      </FormWrapper>
+      <h4>Dashboard</h4>
+
+      <LeftContent>
+        {jobs !== null && jobs.length > 0 ? (
+          <ul>
+            {jobs.map((job, index) => (
+              <li key={index}>
+                <section>
+                  <ListingLogo>
+                    <ImageWrapper url={job.companyLogo} alt={"company logo"} />
+                  </ListingLogo>
+                  <ListingTitle>
+                    <H4>
+                      {job.title}
+
+                      <TypeList>
+                        <ListSpan className={`${job.type}`}>
+                          {job.job_type}
+                        </ListSpan>
+                      </TypeList>
+                    </H4>
+                    <ListingIcons>
+                      <li>
+                        <GiftBox />
+                        {job.description}
+                      </li>
+                      <li>
+                        <SearchIcon />
+                        {job.location}
+                      </li>
+                      <li>
+                        <LockIcon />
+                        {CURRENCY}
+                        {job.salary} - {CURRENCY}
+                        {job.salary}
+                      </li>
+                    </ListingIcons>
+                  </ListingTitle>
+                </section>
+                <section>
+                  <Center>
+                    <Button
+                      onClick={handleApplication}
+                      size="small"
+                      title={`Apply for ${job.job_type}`}
+                      style={{
+                        fontSize: 15,
+                        color: "#5918e6",
+                        backgroundColor: "#e6c018",
+                        float: "right",
+                      }}
+                    />
+                  </Center>
+                </section>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div>Sorry No recent listings available</div>
+        )}
+      </LeftContent>
     </CardWrapper>
   );
-};
+}
 
 export default Dashboard;

@@ -313,6 +313,21 @@ const LeftContent = styled.div`
       transition: 0.3s !important;
       z-index: auto !important;
       background-color: #fdfdfd;
+      section {
+        border-radius: 4px 4px 0 0;
+        background-color: #fffcee;
+        display: flex;
+        padding: 25px;
+        border-left: 4px solid #eee;
+        transition: 0.3s;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+        margin-top: -1px;
+        width: auto;
+        height: auto;
+        background: #fff;
+      }
       a {
         border-radius: 4px 4px 0 0;
         background-color: #fffcee;

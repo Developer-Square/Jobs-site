@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import JobsController from "./JobsController";
+import InternshipsController from "./InternshipsController";
 import { AuthContext } from "contexts/auth/auth.context";
 
-function Jobs() {
+function Internships() {
   const { authState, authDispatch } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const toggleView = () => {
@@ -31,9 +31,9 @@ function Jobs() {
           <button onClick={togglePost()}>Post</button>
         </>
       ) : (
-        <JobsController />
+        <InternshipsController />
       )}
     </>
   );
 }
-export default Jobs;
+export default Internships;

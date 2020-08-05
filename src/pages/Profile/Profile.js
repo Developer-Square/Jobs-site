@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Profile.style";
@@ -7,9 +7,12 @@ import axios from "axios";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
+import { AuthContext } from "contexts/auth/auth.context";
 
 function Profile() {
-  useEffect(() => {}, []);
+  const {
+    authState: { profile },
+  } = useContext(AuthContext);
   const genderOptions = [
     { value: "", key: "Select Gender" },
     { value: "male", key: "Male" },
@@ -86,7 +89,7 @@ function Profile() {
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log("error", err.response.data);
+        console.log("error", err);
 
         setErrors(err.response.data);
       });
@@ -104,7 +107,7 @@ function Profile() {
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log("error", err.response.data);
+        console.log("error", err);
 
         setErrors(err.response.data);
       });
@@ -154,76 +157,78 @@ function Profile() {
 
       <h4>Additional Details</h4>
       <FormWrapper>
-        <Formik
-          initialValues={initialAddValues}
-          validationSchema={addValidationSchema}
-          onSubmit={onAddSubmit}
-        >
-          {(formik) => {
-            return (
-              <Form>
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Title"
-                  name="title"
-                />
+        {profile.is_individual ? (
+          <Formik
+            initialValues={initialAddValues}
+            validationSchema={addValidationSchema}
+            onSubmit={onAddSubmit}
+          >
+            {(formik) => {
+              return (
+                <Form>
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Title"
+                    name="title"
+                  />
 
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Huduma Number"
-                  name="huduma_number"
-                />
-                <FormikControl
-                  control="date"
-                  label="Birth Date"
-                  name="date_of_birth"
-                />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Huduma Number"
+                    name="huduma_number"
+                  />
+                  <FormikControl
+                    control="date"
+                    label="Birth Date"
+                    name="date_of_birth"
+                  />
 
-                <FormikControl
-                  control="select"
-                  label="Gender"
-                  name="gender"
-                  options={genderOptions}
-                />
-                <FormikControl
-                  control="select"
-                  label="Status"
-                  name="status"
-                  options={statusOptions}
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Current Residence"
-                  name="location"
-                />
-                <FormikControl
-                  control="input"
-                  type="file"
-                  setFieldValue={formik.setFieldValue}
-                  value={formik.values.image}
-                  label="Profile Image"
-                  name="image"
-                />
-                <FormikControl
-                  control="textarea"
-                  label="Additional Info"
-                  name="about"
-                />
+                  <FormikControl
+                    control="select"
+                    label="Gender"
+                    name="gender"
+                    options={genderOptions}
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Status"
+                    name="status"
+                    options={statusOptions}
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Current Residence"
+                    name="location"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="file"
+                    setFieldValue={formik.setFieldValue}
+                    value={formik.values.image}
+                    label="Profile Image"
+                    name="image"
+                  />
+                  <FormikControl
+                    control="textarea"
+                    label="Additional Info"
+                    name="about"
+                  />
 
-                <Button
-                  type="submit"
-                  size="small"
-                  title={formik.isSubmitting ? "Adding... " : "Add"}
-                  style={{ fontSize: 15, color: "#fff" }}
-                  disabled={!formik.isValid}
-                />
-              </Form>
-            );
-          }}
-        </Formik>
+                  <Button
+                    type="submit"
+                    size="small"
+                    title={formik.isSubmitting ? "Adding... " : "Add"}
+                    style={{ fontSize: 15, color: "#fff" }}
+                    disabled={!formik.isValid}
+                  />
+                </Form>
+              );
+            }}
+          </Formik>
+        ) : null}
       </FormWrapper>
     </CardWrapper>
   );

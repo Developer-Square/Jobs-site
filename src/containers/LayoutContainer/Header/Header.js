@@ -12,7 +12,7 @@ import UserImage from "image/user.jpg";
 import LogoImage from "image/logo.svg";
 import { isCategoryPage } from "../is-home-page";
 
-const Header = ({ className }) => {
+const Header = ({ className, isSticky }) => {
   const location = useLocation();
   const history = useHistory();
   const path = location.pathname.replace(/\/+$/, "");
@@ -68,14 +68,13 @@ const Header = ({ className }) => {
     const queryParams = query.get("category")
       ? `category=${categoryParam}&text=${searchValue}`
       : `&text=${searchValue}`;
-    console.log("pathname or location", pathname);
 
     history.push(`${pathname}?${queryParams}`);
   };
   const showSearch = isCategoryPage(pathname);
   return (
     <HeaderWrapper className={className}>
-      <LeftMenu logo={LogoImage} />
+      <LeftMenu logo={LogoImage} isSticky={isSticky} />
       {!showSearch && (
         <SearchBox
           className="headerSearch"
