@@ -30,7 +30,7 @@ export const TopbarWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: #fff;
-  padding: 30px 60px;
+  padding: 15px 60px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06);
   position: relative;
 

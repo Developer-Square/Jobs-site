@@ -18,6 +18,18 @@ function reducer(state, action) {
         ...state,
         currentForm: "signIn",
       };
+    case "POST":
+      return {
+        ...state,
+        currentForm: "post",
+        isAuthenticated: true,
+      };
+    case "VIEW":
+      return {
+        ...state,
+        currentForm: "view",
+        isAuthenticated: true,
+      };
     case "UPDATE":
       return {
         ...state,

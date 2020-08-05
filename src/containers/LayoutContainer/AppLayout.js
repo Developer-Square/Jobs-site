@@ -38,12 +38,14 @@ const Layout = ({
             className={`${isSticky ? "sticky" : "unSticky"} ${
               isHomePage ? "home" : ""
             } desktop`}
+            isSticky={isSticky}
             pathname={pathname}
           />
           <Header
             className={`${isSticky ? "sticky" : "unSticky"} ${
               isHomePage ? "home" : ""
             }`}
+            isSticky={isSticky}
             token={token}
             pathname={pathname}
           />

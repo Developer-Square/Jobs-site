@@ -38,6 +38,7 @@ export default function SignOutModal() {
   const initialValues = {
     full_name: "",
     email: "",
+    username: "",
     password: "",
     password_confirm: "",
   };
@@ -145,7 +146,6 @@ export default function SignOutModal() {
           onSubmit={onSubmit}
         >
           {(formik) => {
-            // console.log("formik props", formik.errors);
             return (
               <Form>
                 <FormikControl
@@ -171,6 +171,20 @@ export default function SignOutModal() {
                   type="password"
                   label="Confirm Password"
                   name="password_confirm"
+                />
+                <FormikControl
+                  control="input"
+                  type="text"
+                  label="Username"
+                  name="username"
+                  // value={
+                  //   formik.values.full_name !== "" && formik.values.email !== ""
+                  //     ? formik.setFieldValue(
+                  //         formik.values.username,
+                  //         formik.values.full_name.split(" ").join("_")
+                  //       )
+                  //     : formik.setFieldValue(formik.values.username, "")
+                  // }
                 />
 
                 <HelperText style={{ padding: "20px 0 30px" }}>

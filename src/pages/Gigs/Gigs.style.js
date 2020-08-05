@@ -28,4 +28,10 @@ export const FormWrapper = styled.div`
   padding: 15px 30px;
   color: #333;
   display: block;
+  input,
+  label,
+  select,
+  textarea {
+    margin: 0 20px;
+  }
 `;
