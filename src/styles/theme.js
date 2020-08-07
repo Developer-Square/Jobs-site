@@ -187,7 +187,7 @@ export const darkTheme = {
   inputBackground: "rgba(255, 251, 251, 0.5)",
   breakpoints: ["32em", "48em", "64em"],
   space: [0, 4, 8, 10, 15, 20, 25, 30, 40, 56],
-  fontSizes: [10, 13, 15, 19, 21, 30, 45],
+  fontSizes: [10, 13, 15, 19, 21, 30, 45, 60],
   fontWeights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
   fontFamily: ["'Poppins', sans-serif"],
   lineHeights: {
