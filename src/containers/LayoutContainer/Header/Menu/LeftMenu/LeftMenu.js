@@ -19,8 +19,6 @@ export const LogoImage = styled.img`
   max-height: 50px;
 `;
 export const LeftMenu = ({ isSticky, logo }) => {
-  // const history = useHistory();
-  console.log("stickyyyyyyyyyyyy :", isSticky);
   return (
     <LeftMenuBox>
       <Logo>

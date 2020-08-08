@@ -34,6 +34,7 @@ export default function SignOutModal() {
   const passwordNotLongEnough = "password must be at least 8 characters";
   const passwordDoNotMatch = "passwords must match";
   const fieldRequired = "This field is required";
+  const specialXter = "Needs one special character or value";
 
   const initialValues = {
     full_name: "",
@@ -41,7 +42,12 @@ export default function SignOutModal() {
     username: "",
     password: "",
     password_confirm: "",
+    is_individual: "",
   };
+  const options = [
+    { key: "Individual", value: true },
+    { key: "Company", value: false },
+  ];
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -55,6 +61,7 @@ export default function SignOutModal() {
       .required(fieldRequired),
     password: Yup.string()
       .min(8, passwordNotLongEnough)
+      .matches(/^.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*$/, specialXter)
       .max(100)
       .required(fieldRequired),
     password_confirm: Yup.string()
@@ -74,7 +81,6 @@ export default function SignOutModal() {
     // /activate/eyJ1c2VybmFtZSI6ImloaWhpaCIsImFjdGlvbiI6ImFjdGl2YXRpb24ifQ:1jcuC4:rCUdGNtqNMaDwxItHCz912bA-qM
 
     const body = values;
-    console.log("body", body);
 
     axios
       .post(`${BASE_URL}/accounts/register/`, body)
@@ -123,7 +129,7 @@ export default function SignOutModal() {
       })
       .catch((err) => {
         authDispatch({ type: "SIGNUP_FAILED" });
-        console.log("error", err.response.data);
+        console.log("error", err);
 
         setErrors(err.response.data);
         setSubmitting(false);
@@ -148,6 +154,12 @@ export default function SignOutModal() {
           {(formik) => {
             return (
               <Form>
+                <FormikControl
+                  control="radio"
+                  label="Register as:"
+                  name="is_individual"
+                  options={options}
+                />
                 <FormikControl
                   control="input"
                   type="text"

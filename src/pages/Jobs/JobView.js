@@ -59,42 +59,51 @@ function JobView() {
       <LeftContent>
         {jobs !== null && jobs.length > 0 ? (
           <ul>
-            {jobs.map((job, index) => (
-              <li key={index}>
-                <a href="jobs">
-                  <ListingLogo>
-                    <ImageWrapper url={job.companyLogo} alt={"company logo"} />
-                  </ListingLogo>
-                  <ListingTitle>
-                    <H4>
-                      {job.title}
+            {jobs
+              .filter(
+                (filteredJob) =>
+                  filteredJob.job_type !== "gig" &&
+                  filteredJob.job_type !== "internship"
+              )
+              .map((job, index) => (
+                <li key={index}>
+                  <a href="jobs">
+                    <ListingLogo>
+                      <ImageWrapper
+                        url={job.companyLogo}
+                        alt={"company logo"}
+                      />
+                    </ListingLogo>
+                    <ListingTitle>
+                      <H4>
+                        {job.title}
 
-                      <TypeList>
-                        <ListSpan className={`${job.type}`}>
-                          {job.job_type}
-                        </ListSpan>
-                      </TypeList>
-                    </H4>
-                    <ListingIcons>
-                      <li>
-                        <GiftBox />
-                        {job.description}
-                      </li>
-                      <li>
-                        <SearchIcon />
-                        {job.location}
-                      </li>
-                      <li>
-                        <LockIcon />
-                        {CURRENCY}
-                        {job.salary} - {CURRENCY}
-                        {job.salary}
-                      </li>
-                    </ListingIcons>
-                  </ListingTitle>
-                </a>
-              </li>
-            ))}
+                        <TypeList>
+                          <ListSpan className={`${job.type}`}>
+                            {job.job_type}
+                          </ListSpan>
+                        </TypeList>
+                      </H4>
+                      <ListingIcons>
+                        <li>
+                          <GiftBox />
+                          {job.description}
+                        </li>
+                        <li>
+                          <SearchIcon />
+                          {job.location}
+                        </li>
+                        <li>
+                          <LockIcon />
+                          {CURRENCY}
+                          {job.salary} - {CURRENCY}
+                          {job.salary}
+                        </li>
+                      </ListingIcons>
+                    </ListingTitle>
+                  </a>
+                </li>
+              ))}
           </ul>
         ) : (
           <div>Sorry No Jobs posted recently</div>

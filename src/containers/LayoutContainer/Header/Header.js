@@ -68,7 +68,6 @@ const Header = ({ className, isSticky }) => {
     const queryParams = query.get("category")
       ? `category=${categoryParam}&text=${searchValue}`
       : `&text=${searchValue}`;
-    console.log("pathname or location", pathname);
 
     history.push(`${pathname}?${queryParams}`);
   };

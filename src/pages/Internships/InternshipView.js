@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { CardWrapper } from "./Gigs.style";
+import { CardWrapper } from "./Internships.style";
 import axios from "axios";
 import { BASE_URL, CURRENCY } from "constants/constants";
 import { tokenConfig } from "helpers";
@@ -18,15 +18,15 @@ import Button from "components/Button/Button";
 
 import { AuthContext } from "contexts/auth/auth.context";
 
-function GigView() {
+function InternshipView() {
   const { authDispatch } = useContext(AuthContext);
-  const [jobs, setJobs] = useState(null);
+  const [jobs, setInternships] = useState(null);
   useEffect(() => {
     axios
       .get(`${BASE_URL}/jobs/`, tokenConfig())
       .then((res) => {
         console.log("industry data", res.data.results);
-        setJobs(res.data.results);
+        setInternships(res.data.results);
       })
       .catch((err) => {
         console.log("error", err.response);
@@ -42,11 +42,11 @@ function GigView() {
   return (
     <CardWrapper>
       <h4>
-        Gigs Listing{" "}
+        Internships Listing{" "}
         <Button
           onClick={togglePost}
           size="small"
-          title="Post a Gig"
+          title="Post a Internship"
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -60,7 +60,7 @@ function GigView() {
         {jobs !== null && jobs.length > 0 ? (
           <ul>
             {jobs
-              .filter((filteredJob) => filteredJob.job_type === "gig")
+              .filter((filteredJob) => filteredJob.job_type === "internship")
               .map((job, index) => (
                 <>
                   {job !== null && job !== undefined ? (
@@ -108,11 +108,11 @@ function GigView() {
               ))}
           </ul>
         ) : (
-          <div>Sorry No Gigs posted recently</div>
+          <div>Sorry No Internships posted recently</div>
         )}
       </LeftContent>
     </CardWrapper>
   );
 }
 
-export default GigView;
+export default InternshipView;

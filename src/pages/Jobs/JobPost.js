@@ -13,26 +13,35 @@ function JobPost() {
   const { authDispatch } = useContext(AuthContext);
   const [indusrty, setIndustry] = useState([
     { value: "Select Industry Type", key: "" },
-    { key: "telecommumication", value: 1 },
-    { key: "Accounting", value: 2 },
   ]);
   useEffect(() => {
     axios
       .get(`${BASE_URL}/industry/`, tokenConfig())
       .then((res) => {
-        console.log("industry data", res.data);
-        setIndustry(res.data);
+        const arr = res.data.results;
+        const result = arr.reduce((acc, d) => {
+          acc.push({
+            value: "",
+            key: "Select Industry Type",
+          });
+          acc.push({
+            key: d.name,
+            value: d.id,
+          });
+          return acc;
+        }, []);
+        setIndustry(result);
       })
       .catch((err) => {
-        console.log("error", err.response.data);
+        console.log("error", err);
       });
   }, []);
   const dropdownOptions = [
     { value: "Select Job Type", key: "" },
     { value: "fulltime", key: "Full-Time" },
     { value: "parttime", key: "Part-Time" },
-    { value: "Volunteering", key: "Volunteering" },
-    { value: "Internship", key: "Internship" },
+    { value: "volunteering", key: "Volunteering" },
+    { value: "internship", key: "Internship" },
   ];
   const minQualificationsOptions = [
     { value: "Select your Qualification", key: "" },
@@ -59,13 +68,13 @@ function JobPost() {
       ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
       : "",
     title: "",
-    industry: "",
+    industry: [{ value: "Select Industry Type", key: "" }],
     location: "",
     salary: "",
     description: "",
     job_type: [],
-    experience: [],
-    qualifications: [],
+    years_of_exp: [],
+    min_qualifications: [],
     courseDate: null,
   };
   console.log(
@@ -99,7 +108,7 @@ function JobPost() {
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log("error", err.response.data);
+        console.log("error", err);
 
         setErrors(err.response.data);
       });
@@ -141,12 +150,6 @@ function JobPost() {
                   name="title"
                 />
                 <FormikControl
-                  control="select"
-                  label="Industry"
-                  name="industry"
-                  options={indusrty}
-                />
-                <FormikControl
                   control="input"
                   type="text"
                   label="Salary"
@@ -157,6 +160,12 @@ function JobPost() {
                   type="text"
                   label="Location"
                   name="location"
+                />
+                <FormikControl
+                  control="select"
+                  label="Industry"
+                  name="industry"
+                  options={indusrty}
                 />
                 <FormikControl
                   control="select"

@@ -49,11 +49,7 @@ const data = [
 const Topbar = ({ refs }) => {
   const history = useHistory();
   const { state, dispatch } = useContext(DrawerContext);
-  const {
-    authState: { profile },
-    authDispatch,
-  } = useContext(AuthContext);
-  console.log("profile", profile);
+  const { authDispatch } = useContext(AuthContext);
   // Toggle drawer
   const toggleHandler = React.useCallback(() => {
     dispatch({

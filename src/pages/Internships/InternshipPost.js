@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { CardWrapper, FormWrapper } from "./Gigs.style";
+import { CardWrapper, FormWrapper } from "./Internships.style";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
 import { BASE_URL } from "constants/constants";
@@ -9,7 +9,7 @@ import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 
-function GigPost() {
+function InternshipPost() {
   const { authDispatch } = useContext(AuthContext);
   const [indusrty, setIndustry] = useState([
     { value: "Select Industry Type", key: "" },
@@ -36,7 +36,13 @@ function GigPost() {
         console.log("error", err);
       });
   }, []);
-
+  const dropdownOptions = [
+    { value: "Select Internship Type", key: "" },
+    { value: "fulltime", key: "Full-Time" },
+    { value: "parttime", key: "Part-Time" },
+    { value: "Volunteering", key: "Volunteering" },
+    { value: "Internship", key: "Internship" },
+  ];
   const minQualificationsOptions = [
     { value: "Select your Qualification", key: "" },
     { value: "none", key: "None" },
@@ -62,11 +68,11 @@ function GigPost() {
       ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
       : "",
     title: "",
-    industry: "",
+    industry: [{ value: "Select Industry Type", key: "" }],
     location: "",
     salary: "",
     description: "",
-    job_type: "gig",
+    job_type: [],
     experience: [],
     qualifications: [],
     courseDate: null,
@@ -84,6 +90,7 @@ function GigPost() {
     location: Yup.string().required("Required"),
     salary: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
+    job_type: Yup.string().required("Required"),
     experience: Yup.string().required("Required"),
     qualifications: Yup.string().required("Required"),
     // courseDate: Yup.date().required("Required").nullable(),
@@ -114,11 +121,11 @@ function GigPost() {
   return (
     <CardWrapper>
       <h4>
-        Post A Gig
+        Post A Internship
         <Button
           onClick={toggleView}
           size="small"
-          title="Post a Gig"
+          title="Post a Internship"
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -142,12 +149,7 @@ function GigPost() {
                   label="Title"
                   name="title"
                 />
-                <FormikControl
-                  control="select"
-                  label="Industry"
-                  name="industry"
-                  options={indusrty}
-                />
+
                 <FormikControl
                   control="input"
                   type="text"
@@ -159,6 +161,18 @@ function GigPost() {
                   type="text"
                   label="Location"
                   name="location"
+                />
+                <FormikControl
+                  control="select"
+                  label="Industry"
+                  name="industry"
+                  options={indusrty}
+                />
+                <FormikControl
+                  control="select"
+                  label="Internship Type"
+                  name="job_type"
+                  options={dropdownOptions}
                 />
                 <FormikControl
                   control="select"
@@ -193,4 +207,4 @@ function GigPost() {
   );
 }
 
-export default GigPost;
+export default InternshipPost;
