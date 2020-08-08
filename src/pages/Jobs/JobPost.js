@@ -149,7 +149,6 @@ function JobPost() {
                   label="Title"
                   name="title"
                 />
-
                 <FormikControl
                   control="input"
                   type="text"
