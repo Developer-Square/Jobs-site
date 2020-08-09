@@ -72,7 +72,6 @@ const MobileDrawer = () => {
     authState: { isAuthenticated, profile },
     authDispatch,
   } = useContext(AuthContext);
-  console.log("profile", profile);
   // Toggle drawer
   const toggleHandler = React.useCallback(() => {
     dispatch({
@@ -83,6 +82,9 @@ const MobileDrawer = () => {
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("access_token");
+      localStorage.removeItem("thedb_auth_profile");
+      localStorage.removeItem("thedb_auth_payload");
+      localStorage.removeItem("thedb_auth_roles");
       authDispatch({ type: "SIGN_OUT" });
       history.push("/");
     }

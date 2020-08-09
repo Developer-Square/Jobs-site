@@ -27,6 +27,9 @@ const Header = ({ className, isSticky }) => {
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("access_token");
+      localStorage.removeItem("thedb_auth_profile");
+      localStorage.removeItem("thedb_auth_payload");
+      localStorage.removeItem("thedb_auth_roles");
       authDispatch({ type: "SIGN_OUT" });
       history.push("/");
     }

@@ -12,17 +12,19 @@ function RadioButtons(props) {
         {({ field }) => {
           return options.map((option) => {
             return (
-              <React.Fragment key={option.key}>
-                <input
-                  type="radio"
-                  id={option.value}
-                  {...field}
-                  {...rest}
-                  value={option.value}
-                  checked={field.value === option.value}
-                />
-                <label htmlFor={option.value}>{option.key}</label>
-              </React.Fragment>
+              <Fragment key={option.value}>
+                <label>
+                  <input
+                    type="radio"
+                    id={option.key}
+                    {...field}
+                    {...rest}
+                    value={Boolean(option.value)}
+                    checked={field.value === `${option.value}`}
+                  />
+                  {option.key}
+                </label>
+              </Fragment>
             );
           });
         }}
@@ -36,13 +38,13 @@ export default RadioButtons;
 
 const FormInput = styled.div`
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
   margin: 0 auto;
-  display: inline-block;
+  display: flex;
   /* padding: 20px; */
 
   > label {
-    /* display: none; */
+    display: inherit;
 
     margin-bottom: 5px;
     font-size: 14px;
@@ -50,12 +52,40 @@ const FormInput = styled.div`
     color: #333;
   }
 
-  > input[type="text"],
-  > input[type="email"],
-  > input[type="password"],
+  input,
   textarea,
   select {
     opacity: 0.9;
+    height: 10px;
+    width: 14px;
+  }
+
+  > div {
+    color: palevioletred;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    font-style: italic;
+  }
+`;
+const Fragment = styled.div`
+  margin: 0 auto;
+  display: flex;
+  /* padding: 20px; */
+
+  > label {
+    display: inherit;
+
+    margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 28px;
+    color: #333;
+  }
+
+  input,
+  textarea,
+  select {
+    opacity: 0.9;
+    height: 20px;
+    width: 14px;
   }
 
   > div {

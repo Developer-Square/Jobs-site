@@ -34,6 +34,7 @@ function reducer(state, action) {
       return {
         ...state,
         profile: action.payload.profile,
+        isAuthenticated: true,
       };
     case "SIGNIN_SUCCESS":
       return {
