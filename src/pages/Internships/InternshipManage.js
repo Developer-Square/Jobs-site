@@ -1,76 +1,51 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { CardWrapper, FormWrapper } from "./Gigs.style";
+import { CardWrapper, FormWrapper } from "./Internships.style";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
+import { useRouteMatch } from "react-router-dom";
+import { useAppState } from "contexts/app/app.provider";
 
-function GigPost() {
+function InternshipManage() {
   const {
     authState: { profile },
     authDispatch,
   } = useContext(AuthContext);
-  const [indusrty, setIndustry] = useState([
-    { value: "", key: "Select Industry Type" },
-  ]);
+  const match = useRouteMatch();
+  console.log("match :", match.params.jobID);
+  const [job, setJob] = useState();
+  const currentForm = useAppState("currentForm");
+  console.log("app state", currentForm);
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/industry/`, tokenConfig())
+      .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
       .then((res) => {
-        const arr = res.data.results;
-        const result = arr.reduce((acc, d) => {
-          acc.push({
-            value: "",
-            key: "Select Industry Type",
-          });
-          acc.push({
-            key: d.name,
-            value: d.id,
-          });
-          return acc;
-        }, []);
-        setIndustry(result);
+        const arr = res.data;
+        console.log("array jobs", arr);
+        setJob(arr);
       })
       .catch((err) => {
         console.log("error", err);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const minQualificationsOptions = [
-    { value: "", key: "Select your Qualification" },
-    { value: "none", key: "None" },
-    { value: "pri", key: "Primary" },
-    { value: "sec", key: "Secondary" },
-    { value: "cert", key: "Certificate" },
-    { value: "dip", key: "Diploma" },
-    { value: "bsc", key: "BSc" },
-    { value: "msc", key: "MSc" },
-    { value: "phd", key: "PhD" },
-  ];
-  const experienceOptions = [
-    { value: "", key: "Select Years of experience" },
-    { value: "entry", key: "Entry Level" },
-    { value: "1-2", key: "1-2 years" },
-    { value: "3-5", key: "3-5 years" },
-    { value: "6-10", key: "6-10 years" },
-    { value: "above 10", key: "Above 10 years" },
-  ];
-
   const initialValues = {
-    creator: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-    title: "",
-    industry: "",
-    location: "",
-    salary: "",
-    description: "",
-    job_type: "gig",
-    years_of_exp: "",
-    min_qualifications: "",
-    courseDate: null,
+    creator: job ? job.creator : "",
+    title: job ? job.title : "",
+    industry: job ? job.industry : "",
+    location: job ? job.location : "",
+    salary: job ? job.salary : "",
+    description: job ? job.description : "",
+    job_type: job ? job.job_type : "",
+    years_of_exp: job ? job.years_of_exp : "",
+    min_qualification: job ? job.min_qualifications : "",
+    id: job ? job.id : "",
   };
   console.log(
     "the pk for user",
@@ -83,8 +58,8 @@ function GigPost() {
     location: Yup.string().required("Required"),
     salary: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
-    years_of_exp: Yup.string().required("Required"),
-    min_qualification: Yup.string().required("Required"),
+    experience: Yup.string().required("Required"),
+    qualifications: Yup.string().required("Required"),
     // courseDate: Yup.date().required("Required").nullable(),
   });
 
@@ -93,7 +68,7 @@ function GigPost() {
     setSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     axios
-      .post(`${BASE_URL}/jobs/`, values, tokenConfig())
+      .post(`${BASE_URL}/jobs/${match.params.jobID}/`, values, tokenConfig())
       .then((res) => {
         setSubmitting(false);
         console.log("res", res.data);
@@ -105,19 +80,19 @@ function GigPost() {
         setErrors(err.response.data);
       });
   };
-  const toggleView = () => {
+  const toggleEdit = () => {
     authDispatch({
-      type: "VIEW",
+      type: "EDIT",
     });
   };
   return (
     <CardWrapper>
       <h4>
-        Post A Gig
+        Manage A Internship
         <Button
-          onClick={toggleView}
+          onClick={toggleEdit}
           size="small"
-          title="Post a Gig"
+          title="Manage a Internship"
           disabled={true}
           style={{
             fontSize: 15,
@@ -143,12 +118,6 @@ function GigPost() {
                   name="title"
                 />
                 <FormikControl
-                  control="select"
-                  label="Industry"
-                  name="industry"
-                  options={indusrty}
-                />
-                <FormikControl
                   control="input"
                   type="text"
                   label="Salary"
@@ -159,18 +128,6 @@ function GigPost() {
                   type="text"
                   label="Location"
                   name="location"
-                />
-                <FormikControl
-                  control="select"
-                  label="Qualification"
-                  name="min_qualification"
-                  options={minQualificationsOptions}
-                />
-                <FormikControl
-                  control="select"
-                  label="Experience"
-                  name="years_of_exp"
-                  options={experienceOptions}
                 />
                 <FormikControl
                   control="textarea"
@@ -193,4 +150,4 @@ function GigPost() {
   );
 }
 
-export default GigPost;
+export default InternshipManage;

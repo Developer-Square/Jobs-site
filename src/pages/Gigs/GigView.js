@@ -43,6 +43,14 @@ function GigView() {
       type: "POST",
     });
   };
+  const toggleManage = () => {
+    authDispatch({
+      type: "MANAGE",
+    });
+  };
+  const handleApplication = () => {
+    console.log("will apply soon");
+  };
   const handleModal = () => {
     openModal({
       show: true,
@@ -102,6 +110,43 @@ function GigView() {
                               <ListSpan className={`${job.job_type}`}>
                                 {job.job_type}
                               </ListSpan>
+                              {job.creator === profile.id ? (
+                                <Button
+                                  onClick={toggleManage}
+                                  size="small"
+                                  title={`Manage Job`}
+                                  disabled={profile.is_verified ? true : false}
+                                  style={{
+                                    fontSize: 15,
+                                    color: "#5918e6",
+                                    backgroundColor: "#e6c018",
+                                    float: "left",
+                                    height: "29px",
+                                    margin: "0 10px",
+                                  }}
+                                />
+                              ) : (
+                                <Button
+                                  onClick={
+                                    profile.is_verified
+                                      ? handleApplication
+                                      : handleModal
+                                  }
+                                  size="small"
+                                  title={`Apply`}
+                                  disabled={profile.is_verified ? true : false}
+                                  style={{
+                                    fontSize: 15,
+                                    color: "#5918e6",
+                                    backgroundColor: profile.is_verified
+                                      ? "#e6c018"
+                                      : "#f2f2f2",
+                                    float: "left",
+                                    height: "29px",
+                                    margin: "0 10px",
+                                  }}
+                                />
+                              )}
                             </TypeList>
                           </H4>
                           <ListingIcons>

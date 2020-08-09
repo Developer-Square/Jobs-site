@@ -30,6 +30,18 @@ function reducer(state, action) {
         currentForm: "view",
         isAuthenticated: true,
       };
+    case "MANAGE":
+      return {
+        ...state,
+        currentForm: "manage",
+        isAuthenticated: true,
+      };
+    case "EDIT":
+      return {
+        ...state,
+        currentForm: "edit",
+        isAuthenticated: true,
+      };
     case "UPDATE":
       return {
         ...state,

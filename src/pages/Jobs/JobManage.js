@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { CardWrapper, FormWrapper } from "./Gigs.style";
+import { CardWrapper, FormWrapper } from "./Jobs.style";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
 import { BASE_URL } from "constants/constants";
@@ -9,10 +9,9 @@ import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 
-function GigPost() {
+function JobManage() {
   const {
     authState: { profile },
-    authDispatch,
   } = useContext(AuthContext);
   const [indusrty, setIndustry] = useState([
     { value: "", key: "Select Industry Type" },
@@ -68,8 +67,8 @@ function GigPost() {
     salary: "",
     description: "",
     job_type: "gig",
-    years_of_exp: "",
-    min_qualifications: "",
+    experience: [],
+    qualifications: [],
     courseDate: null,
   };
   console.log(
@@ -83,8 +82,8 @@ function GigPost() {
     location: Yup.string().required("Required"),
     salary: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
-    years_of_exp: Yup.string().required("Required"),
-    min_qualification: Yup.string().required("Required"),
+    experience: Yup.string().required("Required"),
+    qualifications: Yup.string().required("Required"),
     // courseDate: Yup.date().required("Required").nullable(),
   });
 
@@ -105,28 +104,14 @@ function GigPost() {
         setErrors(err.response.data);
       });
   };
-  const toggleView = () => {
-    authDispatch({
-      type: "VIEW",
-    });
-  };
+  //   const toggleEdit = () => {
+  //     authDispatch({
+  //       type: "EDIT",
+  //     });
+  //   };
   return (
     <CardWrapper>
-      <h4>
-        Post A Gig
-        <Button
-          onClick={toggleView}
-          size="small"
-          title="Post a Gig"
-          disabled={true}
-          style={{
-            fontSize: 15,
-            color: "#5918e6",
-            backgroundColor: "#e6c018",
-            float: "right",
-          }}
-        />
-      </h4>
+      <h4>Manage A Job</h4>
       <FormWrapper>
         <Formik
           initialValues={initialValues}
@@ -163,13 +148,13 @@ function GigPost() {
                 <FormikControl
                   control="select"
                   label="Qualification"
-                  name="min_qualification"
+                  name="qualifications"
                   options={minQualificationsOptions}
                 />
                 <FormikControl
                   control="select"
                   label="Experience"
-                  name="years_of_exp"
+                  name="experience"
                   options={experienceOptions}
                 />
                 <FormikControl
@@ -193,4 +178,4 @@ function GigPost() {
   );
 }
 
-export default GigPost;
+export default JobManage;

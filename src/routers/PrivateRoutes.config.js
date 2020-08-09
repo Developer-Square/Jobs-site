@@ -4,5 +4,17 @@ import Profile from "pages/Profile/Profile";
 import Jobs from "pages/Jobs/Jobs";
 import Gigs from "pages/Gigs/Gigs";
 import Internships from "pages/Internships/Internships";
+import JobManage from "pages/Jobs/JobManage";
+import GigManage from "pages/Gigs/GigManage";
+import InternshipManage from "pages/Internships/InternshipManage";
 
-export { Dashboard, Profile, Jobs, Gigs, Internships };
+export {
+  Dashboard,
+  Profile,
+  Jobs,
+  Gigs,
+  Internships,
+  JobManage,
+  GigManage,
+  InternshipManage,
+};

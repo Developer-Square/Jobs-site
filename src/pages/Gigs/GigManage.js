@@ -9,7 +9,7 @@ import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 
-function GigPost() {
+function GigManage() {
   const {
     authState: { profile },
     authDispatch,
@@ -68,8 +68,8 @@ function GigPost() {
     salary: "",
     description: "",
     job_type: "gig",
-    years_of_exp: "",
-    min_qualifications: "",
+    experience: [],
+    qualifications: [],
     courseDate: null,
   };
   console.log(
@@ -83,8 +83,8 @@ function GigPost() {
     location: Yup.string().required("Required"),
     salary: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
-    years_of_exp: Yup.string().required("Required"),
-    min_qualification: Yup.string().required("Required"),
+    experience: Yup.string().required("Required"),
+    qualifications: Yup.string().required("Required"),
     // courseDate: Yup.date().required("Required").nullable(),
   });
 
@@ -105,19 +105,19 @@ function GigPost() {
         setErrors(err.response.data);
       });
   };
-  const toggleView = () => {
+  const toggleEdit = () => {
     authDispatch({
-      type: "VIEW",
+      type: "EDIT",
     });
   };
   return (
     <CardWrapper>
       <h4>
-        Post A Gig
+        Manage A Gig
         <Button
-          onClick={toggleView}
+          onClick={toggleEdit}
           size="small"
-          title="Post a Gig"
+          title="Manage a Gig"
           disabled={true}
           style={{
             fontSize: 15,
@@ -163,13 +163,13 @@ function GigPost() {
                 <FormikControl
                   control="select"
                   label="Qualification"
-                  name="min_qualification"
+                  name="qualifications"
                   options={minQualificationsOptions}
                 />
                 <FormikControl
                   control="select"
                   label="Experience"
-                  name="years_of_exp"
+                  name="experience"
                   options={experienceOptions}
                 />
                 <FormikControl
@@ -193,4 +193,4 @@ function GigPost() {
   );
 }
 
-export default GigPost;
+export default GigManage;

@@ -36,13 +36,6 @@ function InternshipPost() {
         console.log("error", err);
       });
   }, []);
-  const dropdownOptions = [
-    { value: "Select Internship Type", key: "" },
-    { value: "fulltime", key: "Full-Time" },
-    { value: "parttime", key: "Part-Time" },
-    { value: "Volunteering", key: "Volunteering" },
-    { value: "Internship", key: "Internship" },
-  ];
   const minQualificationsOptions = [
     { value: "Select your Qualification", key: "" },
     { value: "none", key: "None" },
@@ -72,9 +65,9 @@ function InternshipPost() {
     location: "",
     salary: "",
     description: "",
-    job_type: [],
-    experience: [],
-    qualifications: [],
+    job_type: "internship",
+    years_of_exp: "",
+    min_qualifications: "",
     courseDate: null,
   };
   console.log(
@@ -169,10 +162,10 @@ function InternshipPost() {
                   options={indusrty}
                 />
                 <FormikControl
-                  control="select"
+                  control="input"
+                  disabled={true}
                   label="Internship Type"
                   name="job_type"
-                  options={dropdownOptions}
                 />
                 <FormikControl
                   control="select"

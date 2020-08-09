@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import { CardWrapper } from "./Dashboard.style";
 import axios from "axios";
 import { BASE_URL, CURRENCY } from "constants/constants";
@@ -13,6 +15,7 @@ import {
   ListSpan,
   ListingIcons,
 } from "styles/pages.style";
+import { useStickyDispatch } from "contexts/app/app.provider";
 import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
@@ -23,6 +26,7 @@ function Dashboard() {
   const {
     authState: { profile },
   } = useContext(AuthContext);
+  const history = useHistory();
   const [jobs, setJobs] = useState(null);
   useEffect(() => {
     axios
@@ -35,6 +39,34 @@ function Dashboard() {
         console.log("error", err.response);
       });
   }, []);
+
+  const categorySelector = (category) => {
+    switch (category) {
+      case "fulltime":
+        return "jobs";
+      case "parttime":
+        return "jobs";
+      case "volunteering":
+        return "jobs";
+      case "internship":
+        return "internships";
+      case "Internship":
+        return "internships";
+      case "gig":
+        return "gigs";
+
+      default:
+        throw new Error(`Unsupported Category Type: ${category}`);
+    }
+  };
+  const useDispatch = useStickyDispatch();
+  const setForm = useCallback(() => useDispatch({ type: "MANAGE" }), [
+    useDispatch,
+  ]);
+  const toggleManage = (category, id) => {
+    setForm();
+    history.push(`/dashboard/${category}/${id}`);
+  };
   const handleApplication = () => {
     console.log("will apply soon");
   };
@@ -80,26 +112,48 @@ function Dashboard() {
                         <ListSpan className={`${job.job_type}`}>
                           {job.job_type}
                         </ListSpan>
-                        <Button
-                          onClick={
-                            profile.is_verified
-                              ? handleApplication
-                              : handleModal
-                          }
-                          size="small"
-                          title={`Apply`}
-                          disabled={profile.is_verified ? true : false}
-                          style={{
-                            fontSize: 15,
-                            color: "#5918e6",
-                            backgroundColor: profile.is_verified
-                              ? "#e6c018"
-                              : "#f2f2f2",
-                            float: "left",
-                            height: "29px",
-                            margin: "0 10px",
-                          }}
-                        />
+                        {job.creator === profile.id ? (
+                          <Button
+                            onClick={() =>
+                              toggleManage(
+                                categorySelector(job.job_type),
+                                job.id
+                              )
+                            }
+                            size="small"
+                            title={`Manage Job`}
+                            disabled={!profile.is_verified}
+                            style={{
+                              fontSize: 15,
+                              color: "#5918e6",
+                              backgroundColor: "#e6c018",
+                              float: "left",
+                              height: "29px",
+                              margin: "0 10px",
+                            }}
+                          />
+                        ) : (
+                          <Button
+                            onClick={
+                              profile.is_verified
+                                ? handleApplication
+                                : handleModal
+                            }
+                            size="small"
+                            title={`Apply`}
+                            disabled={!profile.is_verified}
+                            style={{
+                              fontSize: 15,
+                              color: "#5918e6",
+                              backgroundColor: profile.is_verified
+                                ? "#e6c018"
+                                : "#f2f2f2",
+                              float: "left",
+                              height: "29px",
+                              margin: "0 10px",
+                            }}
+                          />
+                        )}
                       </TypeList>
                     </h3>
                     <ListingIcons>
