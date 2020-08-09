@@ -636,7 +636,9 @@ const P = styled.p`
 const BannerSection = styled.div``;
 
 const ArticleWrapper = styled.div`
+  width: 100%;
   display: block;
+
   @media (min-width: 768px) {
     display: flex;
     width: 33.33333333%;

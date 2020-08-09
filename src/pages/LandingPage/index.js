@@ -2,8 +2,8 @@ import React from "react";
 import { SEO } from "components/seo";
 
 import Banner from "containers/Banner/Banner";
-// import Card from "containers/Card/Card";
-// import Team from "containers/Team/Team";
+import AdsSection from "components/AdsSection/AdsSection";
+import AdsSectionA from "components/AdsSection/AdsSectionA";
 import BannerImg from "image/LANDING.jpg";
 import {
   Container,
@@ -528,6 +528,14 @@ function LandingPage({ deviceType }) {
       />
       <Banner imageUrl={BannerImg} />
       <MainContentArea>
+        {/* AD BANNER SECTION. */}
+        <Container>
+          <RowWrapper>
+            <AdsSectionA />
+          </RowWrapper>
+        </Container>
+
+        <Br />
         <Container>
           <RowWrapper>
             {articles ? (
@@ -649,6 +657,11 @@ function LandingPage({ deviceType }) {
                       {spotlightContent}
                     </div>
                   ) : null}
+                  <div>
+                    <SpotlightCard>
+                      <AdsSection />
+                    </SpotlightCard>
+                  </div>
                 </JobSpotlight>
               </RightWrapper>
             </JobsRightCol>
