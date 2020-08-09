@@ -10,7 +10,10 @@ import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 
 function JobPost() {
-  const { authDispatch } = useContext(AuthContext);
+  const {
+    authState: { profile },
+    authDispatch,
+  } = useContext(AuthContext);
   const [indusrty, setIndustry] = useState([
     { value: "Select Industry Type", key: "" },
   ]);
@@ -37,17 +40,17 @@ function JobPost() {
       });
   }, []);
   const dropdownOptions = [
-    { value: "Select Job Type", key: "" },
+    { value: "", key: "Select Job Type" },
     { value: "fulltime", key: "Full-Time" },
     { value: "parttime", key: "Part-Time" },
     { value: "volunteering", key: "Volunteering" },
     { value: "internship", key: "Internship" },
   ];
   const minQualificationsOptions = [
-    { value: "Select your Qualification", key: "" },
+    { value: "", key: "Select your Qualification" },
     { value: "none", key: "None" },
-    { value: "pri", key: "primary" },
-    { value: "sec", key: "secondary" },
+    { value: "pri", key: "Primary" },
+    { value: "sec", key: "Secondary" },
     { value: "cert", key: "Certificate" },
     { value: "dip", key: "Diploma" },
     { value: "bsc", key: "BSc" },
@@ -55,7 +58,7 @@ function JobPost() {
     { value: "phd", key: "PhD" },
   ];
   const experienceOptions = [
-    { value: "Select Years of experience", key: "" },
+    { value: "", key: "Select Years of experience" },
     { value: "entry", key: "Entry Level" },
     { value: "1-2", key: "1-2 years" },
     { value: "3-5", key: "3-5 years" },
@@ -64,11 +67,9 @@ function JobPost() {
   ];
 
   const initialValues = {
-    creator: localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : "",
+    creator: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
     title: "",
-    industry: [{ value: "Select Industry Type", key: "" }],
+    industry: [{ value: "", key: "Select Industry Type" }],
     location: "",
     salary: "",
     description: "",
@@ -79,9 +80,7 @@ function JobPost() {
   };
   console.log(
     "the pk for user",
-    localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : ""
+    localStorage.getItem("thedb_auth_profile") ? profile.id : ""
   );
 
   const validationSchema = Yup.object({

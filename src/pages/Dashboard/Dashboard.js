@@ -14,9 +14,10 @@ import {
   ListingIcons,
 } from "styles/pages.style";
 import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
-import { Center } from "styles/pages.style";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
+import { openModal } from "@redq/reuse-modal";
+import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 
 function Dashboard() {
   const {
@@ -37,10 +38,31 @@ function Dashboard() {
   const handleApplication = () => {
     console.log("will apply soon");
   };
+  const handleModal = () => {
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: EmailVerificationModal,
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
 
   return (
     <CardWrapper>
-      <h4>Dashboard</h4>
+      <H4>
+        Dashboard
+        {profile.is_verified ? null : (
+          <span>Kindly verify Email to apply for the Openings</span>
+        )}
+      </H4>
 
       <LeftContent>
         {jobs !== null && jobs.length > 0 ? (
@@ -52,15 +74,34 @@ function Dashboard() {
                     <ImageWrapper url={job.companyLogo} alt={"company logo"} />
                   </ListingLogo>
                   <ListingTitle>
-                    <H4>
+                    <h3>
                       {job.title}
-
                       <TypeList>
-                        <ListSpan className={`${job.type}`}>
+                        <ListSpan className={`${job.job_type}`}>
                           {job.job_type}
                         </ListSpan>
+                        <Button
+                          onClick={
+                            profile.is_verified
+                              ? handleApplication
+                              : handleModal
+                          }
+                          size="small"
+                          title={`Apply`}
+                          disabled={profile.is_verified ? true : false}
+                          style={{
+                            fontSize: 15,
+                            color: "#5918e6",
+                            backgroundColor: profile.is_verified
+                              ? "#e6c018"
+                              : "#f2f2f2",
+                            float: "left",
+                            height: "29px",
+                            margin: "0 10px",
+                          }}
+                        />
                       </TypeList>
-                    </H4>
+                    </h3>
                     <ListingIcons>
                       <li>
                         <GiftBox />
@@ -78,25 +119,6 @@ function Dashboard() {
                       </li>
                     </ListingIcons>
                   </ListingTitle>
-                </section>
-                <section>
-                  <Center>
-                    {profile.is_verified ? (
-                      <Button
-                        onClick={handleApplication}
-                        size="small"
-                        title={`Apply for ${job.job_type}`}
-                        style={{
-                          fontSize: 15,
-                          color: "#5918e6",
-                          backgroundColor: "#e6c018",
-                          float: "right",
-                        }}
-                      />
-                    ) : (
-                      <h3>Kindly verify Email to apply for this job</h3>
-                    )}
-                  </Center>
                 </section>
               </li>
             ))}

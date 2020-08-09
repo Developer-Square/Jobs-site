@@ -125,7 +125,7 @@ function InternshipPost() {
         <Button
           onClick={toggleView}
           size="small"
-          title="Post a Internship"
+          title="Post Internship"
           style={{
             fontSize: 15,
             color: "#5918e6",

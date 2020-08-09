@@ -26,6 +26,7 @@ import {
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import { useHistory } from "react-router-dom";
+import { addToLocalStorageObject } from "helpers";
 
 export default function SignInModal() {
   const history = useHistory();
@@ -110,6 +111,10 @@ export default function SignInModal() {
             // eslint-disable-next-line no-unused-vars
             payload = { ...payload, ...extraPayloadData };
             addObjectToLocalStorageObject("thedb_auth_payload", payload);
+
+            let auth_profile = res.data;
+            addObjectToLocalStorageObject("thedb_auth_profile", auth_profile);
+            addToLocalStorageObject("thedb_auth_profile", "is_verified", false);
 
             let profile = {};
             let email = { email: values.email, secret: values.password };

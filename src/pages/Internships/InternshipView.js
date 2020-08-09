@@ -46,7 +46,7 @@ function InternshipView() {
         <Button
           onClick={togglePost}
           size="small"
-          title="Post a Internship"
+          title="Post Internship"
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -77,7 +77,7 @@ function InternshipView() {
                             {job.title}
 
                             <TypeList>
-                              <ListSpan className={`${job.type}`}>
+                              <ListSpan className={`${job.job_type}`}>
                                 {job.job_type}
                               </ListSpan>
                             </TypeList>

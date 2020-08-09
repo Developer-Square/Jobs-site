@@ -368,6 +368,10 @@ const ListingTitle = styled.div`
   flex-wrap: wrap;
   padding-left: 25px;
   padding-right: 110px;
+
+  @media (max-width: 768px) {
+    padding-right: 0;
+  }
 `;
 const ListingIcons = styled.ul`
   padding: 0;
@@ -416,6 +420,11 @@ const TypeList = styled.div`
     border: 1px solid #186fc9;
     background-color: rgba(24, 111, 201, 0.07);
   }
+  .fulltime {
+    color: #186fc9;
+    border: 1px solid #186fc9;
+    background-color: rgba(24, 111, 201, 0.07);
+  }
   .internship {
     color: #e1d123;
     border: 1px solid #e1d123;
@@ -427,6 +436,11 @@ const TypeList = styled.div`
     background-color: rgba(225, 35, 53, 0.07);
   }
   .part-time {
+    color: #f1630d;
+    border: 1px solid #f1630d;
+    background-color: rgba(241, 99, 13, 0.07);
+  }
+  .parttime {
     color: #f1630d;
     border: 1px solid #f1630d;
     background-color: rgba(241, 99, 13, 0.07);
@@ -617,6 +631,11 @@ const H4 = styled.h4`
   margin-bottom: 5px;
   color: #5918e6;
   margin-top: 2px;
+  > span {
+    float: right;
+    text-align: right;
+    font-size: 10px;
+  }
 `;
 const Br = styled.br`
   margin-top: 50px !important;

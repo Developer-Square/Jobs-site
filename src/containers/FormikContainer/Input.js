@@ -46,7 +46,7 @@ export default Input;
 
 const FormInput = styled.div`
   width: 100%;
-  max-width: 500px;
+  max-width: 460px;
   margin: 0 auto;
   display: inline-block;
   /* padding: 20px; */

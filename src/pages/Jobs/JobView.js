@@ -19,7 +19,10 @@ import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 
 function JobView() {
-  const { authDispatch } = useContext(AuthContext);
+  const {
+    authState: { profile },
+    authDispatch,
+  } = useContext(AuthContext);
   const [jobs, setJobs] = useState(null);
   useEffect(() => {
     axios
@@ -43,17 +46,20 @@ function JobView() {
     <CardWrapper>
       <h4>
         Jobs Listing{" "}
-        <Button
-          onClick={togglePost}
-          size="small"
-          title="Post a Job"
-          style={{
-            fontSize: 15,
-            color: "#5918e6",
-            backgroundColor: "#e6c018",
-            float: "right",
-          }}
-        />
+        {profile.is_individual ? null : (
+          <Button
+            onClick={togglePost}
+            size="small"
+            title="Post a Job"
+            disabled={true}
+            style={{
+              fontSize: 15,
+              color: "#5918e6",
+              backgroundColor: "#e6c018",
+              float: "right",
+            }}
+          />
+        )}
       </h4>
 
       <LeftContent>
@@ -79,7 +85,7 @@ function JobView() {
                         {job.title}
 
                         <TypeList>
-                          <ListSpan className={`${job.type}`}>
+                          <ListSpan className={`${job.job_type}`}>
                             {job.job_type}
                           </ListSpan>
                         </TypeList>

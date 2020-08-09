@@ -616,7 +616,7 @@ export const AlertDotIcon = () => {
         <g
           data-name="Ellipse 73"
           transform="translate(1598 32)"
-          fill="#5918e6"
+          fill="#e6c018"
           stroke="#ffffff"
           strokeWidth="0.3"
         >
@@ -627,7 +627,7 @@ export const AlertDotIcon = () => {
           data-name="Path 2700"
           d="M2,0A2,2,0,1,1,0,2,2,2,0,0,1,2,0Z"
           transform="translate(1601 35)"
-          fill="#5918e6"
+          fill="#fff"
         />
       </g>
     </svg>

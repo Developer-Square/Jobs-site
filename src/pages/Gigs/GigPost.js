@@ -10,7 +10,10 @@ import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 
 function GigPost() {
-  const { authDispatch } = useContext(AuthContext);
+  const {
+    authState: { profile },
+    authDispatch,
+  } = useContext(AuthContext);
   const [indusrty, setIndustry] = useState([
     { value: "", key: "Select Industry Type" },
   ]);
@@ -58,9 +61,7 @@ function GigPost() {
   ];
 
   const initialValues = {
-    creator: localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : "",
+    creator: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
     title: "",
     industry: "",
     location: "",
@@ -73,9 +74,7 @@ function GigPost() {
   };
   console.log(
     "the pk for user",
-    localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : ""
+    localStorage.getItem("thedb_auth_profile") ? profile.id : ""
   );
 
   const validationSchema = Yup.object({
