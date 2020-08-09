@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   isAuthenticated: isBrowser && !!localStorage.getItem("access_token"),
   currentForm: "signIn",
   profile: localStorage.getItem("thedb_auth_profile")
-    ? localStorage.getItem("thedb_auth_profile")
+    ? JSON.parse(localStorage.getItem("thedb_auth_profile"))
     : {},
 };
 

@@ -8,11 +8,14 @@ import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
+import moment from "moment";
 
 function Profile() {
   const {
     authState: { profile },
   } = useContext(AuthContext);
+  // const {is_individual}
+
   const genderOptions = [
     { value: "", key: "Select Gender" },
     { value: "male", key: "Male" },
@@ -43,7 +46,7 @@ function Profile() {
     title: "",
     huduma_number: "",
     image: null,
-    date_of_birth: null,
+    date_of_birth: new Date(),
     about: "",
     location: "",
     gender: "",
@@ -73,7 +76,12 @@ function Profile() {
     about: Yup.string().required("Required"),
     // image: Yup.mixed().required("Required"),
     huduma_number: Yup.string().required("Required"),
-    date_of_birth: Yup.date().required("Required").nullable(),
+    date_of_birth: Yup.date()
+      .test("Date of Birth", "Should be greather than 18", function (value) {
+        return moment().diff(moment(value), "years") >= 18;
+      })
+      .required("Required")
+      .nullable(),
   });
 
   const onSubmit = async (values, { setErrors, setSubmitting }) => {
@@ -95,11 +103,33 @@ function Profile() {
       });
   };
   const onAddSubmit = async (values, { setErrors, setSubmitting }) => {
-    console.log("val8es fdsf ", values);
+    const {
+      title,
+      huduma_number,
+      image,
+      date_of_birth,
+      about,
+      location,
+      gender,
+      status,
+      user,
+    } = values;
+    const body = {
+      title: title,
+      huduma_number: huduma_number,
+      image: image,
+      date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
+      about: about,
+      location: location,
+      gender: gender,
+      status: status,
+      user: user,
+    };
+    console.log("val8es fdsf ", body);
     setSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     axios
-      .post(`${BASE_URL}/individual/`, values, tokenConfig())
+      .post(`${BASE_URL}/individual/`, body, tokenConfig())
       .then((res) => {
         setSubmitting(false);
         console.log("res", res.data);
@@ -107,7 +137,7 @@ function Profile() {
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log("error", err);
+        console.log("error", err.response.data);
 
         setErrors(err.response.data);
       });
@@ -183,6 +213,9 @@ function Profile() {
                     control="date"
                     label="Birth Date"
                     name="date_of_birth"
+                    // value={moment(formik.values.date_of_birth).format(
+                    //   "YYYY-MM-DD"
+                    // )}
                   />
 
                   <FormikControl
