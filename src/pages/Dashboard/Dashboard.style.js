@@ -7,6 +7,7 @@ export const CardWrapper = styled.div`
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.06);
   border-radius: 4px;
   background: #fff;
+  padding: 0;
 
   h4 {
     font-size: 16px;
@@ -20,8 +21,11 @@ export const CardWrapper = styled.div`
     border-radius: 4px 4px 0 0;
   }
 
-  @media (max-width: 1400px) {
+  @media (min-width: 710px) {
     padding: 25px 40px;
+  }
+  @media (max-width: 710px) {
+    padding: 0;
   }
 `;
 
@@ -32,6 +36,9 @@ export const FormWrapper = styled.div`
   display: block;
   div {
     margin: 0 20px;
+    @media (max-width: 710px) {
+      margin: 0;
+    }
   }
 `;
 

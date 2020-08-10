@@ -4,7 +4,7 @@ import { Redirect, Route, withRouter } from "react-router-dom";
 // import { millisecondsToDaysHoursMinutesSeconds } from "helpers";
 
 const checkAuth = () => {
-  const payload = localStorage.getItem("thedb_auth_payload");
+  const payload = localStorage.getItem("thedb_auth_profile");
   if (payload === undefined || payload === null) {
     return false;
   }

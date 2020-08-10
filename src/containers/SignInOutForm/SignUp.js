@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Button,
   Wrapper,
@@ -24,9 +24,12 @@ import * as Yup from "yup";
 import axios from "axios";
 import { BASE_URL } from "constants/constants";
 import { addToLocalStorageObject } from "helpers";
+import { addToLocalStorageArray } from "helpers";
+import { addObjectToLocalStorageObject } from "helpers";
 
 export default function SignOutModal() {
   const { state, authDispatch } = useContext(AuthContext);
+  const history = useHistory();
   const emailNotLongEnough = "email must be at least 3 characters";
   const emailRequired = "Please enter an email address";
   const invalidEmail = "email must be a valid email";
@@ -34,7 +37,7 @@ export default function SignOutModal() {
   const passwordNotLongEnough = "password must be at least 8 characters";
   const passwordDoNotMatch = "passwords must match";
   const fieldRequired = "This field is required";
-  const specialXter = "Needs one special character or value";
+  // const specialXter = "Needs one special character or value";
 
   const initialValues = {
     full_name: "",
@@ -42,12 +45,18 @@ export default function SignOutModal() {
     username: "",
     password: "",
     password_confirm: "",
-    is_individual: "",
+    is_individual: true,
+    is_business: false,
   };
   const options = [
     { key: "Individual", value: true },
     { key: "Company", value: false },
   ];
+  const organizationOptions = [
+    { key: "Business", value: true },
+    { key: "Education", value: false },
+  ];
+  const YES = { key: "Individual", value: true };
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -61,7 +70,8 @@ export default function SignOutModal() {
       .required(fieldRequired),
     password: Yup.string()
       .min(8, passwordNotLongEnough)
-      .matches(/^.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?].*$/, specialXter)
+      .matches(/^.*[a-zA-Z].*$/, "Must Contain One Letter")
+      .matches(/^.*\d.*$/, "Must Contain One Number")
       .max(100)
       .required(fieldRequired),
     password_confirm: Yup.string()
@@ -77,30 +87,21 @@ export default function SignOutModal() {
 
   const onSubmit = async (values, { props, setErrors, setSubmitting }) => {
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    // /activate/eyJ1c2VybmFtZSI6ImloaWhpaCIsImFjdGlvbiI6ImFjdGl2YXRpb24ifQ:1jcuC4:rCUdGNtqNMaDwxItHCz912bA-qM
-
     const body = values;
+    console.log("body", body);
 
     axios
       .post(`${BASE_URL}/accounts/register/`, body)
-      .then((res) => {
+      .then(async (res) => {
         console.log("data received", res);
         setSubmitting(false);
-        addToLocalStorageObject(
-          "thedb_auth_profile",
-          "email",
-          res.data.email.toLowerCase()
-        );
-        addToLocalStorageObject(
-          "thedb_auth_profile",
-          "full_name",
-          res.data.full_name.toLowerCase()
-        );
-        addToLocalStorageObject("thedb_auth_profile", "id", res.data.id);
+        let auth_profile = res.data;
+        addObjectToLocalStorageObject("thedb_auth_profile", auth_profile);
+        addToLocalStorageObject("thedb_auth_profile", "is_verified", false);
+        // addToLocalStorageObject("thedb_auth_profile", "id", res.data.id);
         // hashPassword(values.password_confirm);
         // eslint-disable-next-line no-unused-vars
-        let profile = {};
+        let profile = { is_verified: false };
         let email = { email: values.email, secret: values.password };
         profile = { ...res.data, ...email };
 
@@ -112,6 +113,9 @@ export default function SignOutModal() {
           authDispatch({
             type: "EMAILCONFIRM",
           });
+          var roles;
+          roles = "admin";
+          addToLocalStorageArray("thedb_auth_roles", roles);
           authDispatch({
             type: "UPDATE",
             payload: {
@@ -119,7 +123,9 @@ export default function SignOutModal() {
               profile,
             },
           });
-
+          authDispatch({ type: "SIGNIN_SUCCESS" });
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          history.push("/dashboard");
           // closeModal();
         }
         // if ((res.status = 200)) {
@@ -128,8 +134,8 @@ export default function SignOutModal() {
         console.log("response", res);
       })
       .catch((err) => {
-        authDispatch({ type: "SIGNUP_FAILED" });
-        console.log("error", err);
+        // authDispatch({ type: "SIGNUP_FAILED" });
+        console.log("error", err.response.data);
 
         setErrors(err.response.data);
         setSubmitting(false);
@@ -152,6 +158,8 @@ export default function SignOutModal() {
           onSubmit={onSubmit}
         >
           {(formik) => {
+            const requireBusiness =
+              formik.values.is_individual !== `${YES.value}`;
             return (
               <Form>
                 <FormikControl
@@ -160,6 +168,19 @@ export default function SignOutModal() {
                   name="is_individual"
                   options={options}
                 />
+                {formik.values.is_individual ? null : (
+                  <>
+                    {requireBusiness && (
+                      <FormikControl
+                        control="radio"
+                        label="Choose Category"
+                        name="is_business"
+                        options={organizationOptions}
+                      />
+                    )}
+                  </>
+                )}
+
                 <FormikControl
                   control="input"
                   type="text"
@@ -189,14 +210,6 @@ export default function SignOutModal() {
                   type="text"
                   label="Username"
                   name="username"
-                  // value={
-                  //   formik.values.full_name !== "" && formik.values.email !== ""
-                  //     ? formik.setFieldValue(
-                  //         formik.values.username,
-                  //         formik.values.full_name.split(" ").join("_")
-                  //       )
-                  //     : formik.setFieldValue(formik.values.username, "")
-                  // }
                 />
 
                 <HelperText style={{ padding: "20px 0 30px" }}>

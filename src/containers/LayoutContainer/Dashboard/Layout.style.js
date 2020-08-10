@@ -21,6 +21,6 @@ export const ContentInnerWrapper = styled.div`
   overflow-y: auto;
 
   @media only screen and (max-width: 767px) {
-    padding: 45px 15px;
+    padding: 0px 15px;
   }
 `;

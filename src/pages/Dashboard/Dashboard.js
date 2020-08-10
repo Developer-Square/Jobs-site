@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { CardWrapper } from "./Dashboard.style";
 import axios from "axios";
 import { BASE_URL, CURRENCY } from "constants/constants";
@@ -16,8 +16,12 @@ import {
 import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
 import { Center } from "styles/pages.style";
 import Button from "components/Button/Button";
+import { AuthContext } from "contexts/auth/auth.context";
 
 function Dashboard() {
+  const {
+    authState: { profile },
+  } = useContext(AuthContext);
   const [jobs, setJobs] = useState(null);
   useEffect(() => {
     axios
@@ -77,17 +81,21 @@ function Dashboard() {
                 </section>
                 <section>
                   <Center>
-                    <Button
-                      onClick={handleApplication}
-                      size="small"
-                      title={`Apply for ${job.job_type}`}
-                      style={{
-                        fontSize: 15,
-                        color: "#5918e6",
-                        backgroundColor: "#e6c018",
-                        float: "right",
-                      }}
-                    />
+                    {profile.is_verified ? (
+                      <Button
+                        onClick={handleApplication}
+                        size="small"
+                        title={`Apply for ${job.job_type}`}
+                        style={{
+                          fontSize: 15,
+                          color: "#5918e6",
+                          backgroundColor: "#e6c018",
+                          float: "right",
+                        }}
+                      />
+                    ) : (
+                      <h3>Kindly verify Email to apply for this job</h3>
+                    )}
                   </Center>
                 </section>
               </li>

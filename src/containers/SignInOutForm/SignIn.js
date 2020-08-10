@@ -25,8 +25,10 @@ import {
 } from "helpers";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
+import { useHistory } from "react-router-dom";
 
 export default function SignInModal() {
+  const history = useHistory();
   const emailNotLongEnough = "email must be at least 3 characters";
   const emailRequired = "Please enter an email address";
   const invalidEmail = "email must be a valid email";
@@ -91,7 +93,7 @@ export default function SignInModal() {
       try {
         axios
           .post(`${BASE_URL}/accounts/login/`, body)
-          .then((res) => {
+          .then(async (res) => {
             console.log("data received", res);
             setSubmitting(false);
             var roles;
@@ -125,6 +127,8 @@ export default function SignInModal() {
                   profile,
                 },
               });
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              history.push("/dashboard");
 
               // closeModal();
             }
@@ -148,7 +152,7 @@ export default function SignInModal() {
           })
           .catch((err) => {
             authDispatch({ type: "SIGNUP_FAILED" });
-            console.log("error", err);
+            console.log("error", err.response.data);
 
             setErrors(err.response.data);
             setSubmitting(false);

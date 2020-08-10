@@ -59,7 +59,6 @@ import Image3 from "image/INTERNSHIPS.jpg";
 
 function LandingPage({ deviceType }) {
   const history = useHistory;
-  console.log(deviceType);
   // const categories = [
   //   {
   //     id: 1,

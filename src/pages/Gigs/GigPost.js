@@ -12,7 +12,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 function GigPost() {
   const { authDispatch } = useContext(AuthContext);
   const [indusrty, setIndustry] = useState([
-    { value: "Select Industry Type", key: "" },
+    { value: "", key: "Select Industry Type" },
   ]);
   useEffect(() => {
     axios
@@ -38,10 +38,10 @@ function GigPost() {
   }, []);
 
   const minQualificationsOptions = [
-    { value: "Select your Qualification", key: "" },
+    { value: "", key: "Select your Qualification" },
     { value: "none", key: "None" },
-    { value: "pri", key: "primary" },
-    { value: "sec", key: "secondary" },
+    { value: "pri", key: "Primary" },
+    { value: "sec", key: "Secondary" },
     { value: "cert", key: "Certificate" },
     { value: "dip", key: "Diploma" },
     { value: "bsc", key: "BSc" },
@@ -49,7 +49,7 @@ function GigPost() {
     { value: "phd", key: "PhD" },
   ];
   const experienceOptions = [
-    { value: "Select Years of experience", key: "" },
+    { value: "", key: "Select Years of experience" },
     { value: "entry", key: "Entry Level" },
     { value: "1-2", key: "1-2 years" },
     { value: "3-5", key: "3-5 years" },
@@ -119,6 +119,7 @@ function GigPost() {
           onClick={toggleView}
           size="small"
           title="Post a Gig"
+          disabled={true}
           style={{
             fontSize: 15,
             color: "#5918e6",
