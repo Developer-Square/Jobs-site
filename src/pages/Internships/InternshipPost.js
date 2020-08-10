@@ -21,10 +21,6 @@ function InternshipPost() {
         const arr = res.data.results;
         const result = arr.reduce((acc, d) => {
           acc.push({
-            value: "",
-            key: "Select Industry Type",
-          });
-          acc.push({
             key: d.name,
             value: d.id,
           });
@@ -36,13 +32,6 @@ function InternshipPost() {
         console.log("error", err);
       });
   }, []);
-  const dropdownOptions = [
-    { value: "Select Internship Type", key: "" },
-    { value: "fulltime", key: "Full-Time" },
-    { value: "parttime", key: "Part-Time" },
-    { value: "Volunteering", key: "Volunteering" },
-    { value: "Internship", key: "Internship" },
-  ];
   const minQualificationsOptions = [
     { value: "Select your Qualification", key: "" },
     { value: "none", key: "None" },
@@ -68,13 +57,13 @@ function InternshipPost() {
       ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
       : "",
     title: "",
-    industry: [{ value: "Select Industry Type", key: "" }],
+    industry: "",
     location: "",
     salary: "",
     description: "",
-    job_type: [],
-    experience: [],
-    qualifications: [],
+    job_type: "internship",
+    years_of_exp: "",
+    min_qualifications: "",
     courseDate: null,
   };
   console.log(
@@ -121,11 +110,11 @@ function InternshipPost() {
   return (
     <CardWrapper>
       <h4>
-        Post A Internship
+        Post Internship
         <Button
           onClick={toggleView}
           size="small"
-          title="Post a Internship"
+          title="Post Internship"
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -169,10 +158,10 @@ function InternshipPost() {
                   options={indusrty}
                 />
                 <FormikControl
-                  control="select"
+                  control="input"
+                  disabled={true}
                   label="Internship Type"
                   name="job_type"
-                  options={dropdownOptions}
                 />
                 <FormikControl
                   control="select"

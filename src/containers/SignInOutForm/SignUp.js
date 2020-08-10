@@ -26,6 +26,7 @@ import { BASE_URL } from "constants/constants";
 import { addToLocalStorageObject } from "helpers";
 import { addToLocalStorageArray } from "helpers";
 import { addObjectToLocalStorageObject } from "helpers";
+import { TOS } from "constants/routes.constants";
 
 export default function SignOutModal() {
   const { state, authDispatch } = useContext(AuthContext);
@@ -45,7 +46,7 @@ export default function SignOutModal() {
     username: "",
     password: "",
     password_confirm: "",
-    is_individual: true,
+    is_individual: "true",
     is_business: false,
   };
   const options = [
@@ -145,6 +146,10 @@ export default function SignOutModal() {
 
     return null;
   };
+  const handleTOS = () => {
+    closeModal();
+    history.push(`${TOS}`);
+  };
 
   return (
     <Wrapper>
@@ -168,7 +173,7 @@ export default function SignOutModal() {
                   name="is_individual"
                   options={options}
                 />
-                {formik.values.is_individual ? null : (
+                {formik.values.is_individual === "true" ? null : (
                   <>
                     {requireBusiness && (
                       <FormikControl
@@ -214,7 +219,7 @@ export default function SignOutModal() {
 
                 <HelperText style={{ padding: "20px 0 30px" }}>
                   By signing up, you agree to The Database's{" "}
-                  <Link to={TERMS_CONDITIONS} onClick={() => closeModal()}>
+                  <Link to={TERMS_CONDITIONS} onClick={() => handleTOS}>
                     Terms &amp; Condtions
                   </Link>
                 </HelperText>
@@ -244,7 +249,7 @@ export default function SignOutModal() {
 
                 <Offer style={{ padding: "20px 0" }}>
                   Already have an account?{" "}
-                  <LinkButton onClick={toggleSignInForm}>Login"</LinkButton>
+                  <LinkButton onClick={toggleSignInForm}>Login</LinkButton>
                 </Offer>
               </Form>
             );

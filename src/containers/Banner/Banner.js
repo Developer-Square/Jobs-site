@@ -13,9 +13,14 @@ import {
   BannerSubHeading1,
   BannerComponent,
 } from "./Banner.style";
+import Button from "components/Button/Button";
+import AuthenticationForm from "containers/SignInOutForm/Form";
+import { openModal } from "@redq/reuse-modal";
+import { AuthContext } from "contexts/auth/auth.context";
 
 const Banner = ({ imageUrl }) => {
   const { state, dispatch } = useContext(SearchContext);
+  const { authDispatch } = useContext(AuthContext);
   const history = useHistory();
   const location = useLocation();
   const query = useRouterQuery();
@@ -55,6 +60,26 @@ const Banner = ({ imageUrl }) => {
       setSticky();
     }
   };
+  const handleJoin = () => {
+    authDispatch({
+      type: "SIGNUP",
+    });
+
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: AuthenticationForm,
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
 
   return (
     <BannerWrapper
@@ -73,6 +98,18 @@ const Banner = ({ imageUrl }) => {
         <BannerSubHeading>
           Get or Post a Gig, Employ or Meet Dream Employers on TheDB.
         </BannerSubHeading>
+        <Button
+          onClick={handleJoin}
+          size="small"
+          title={`Get Started`}
+          style={{
+            fontSize: 15,
+            color: "#fff",
+            backgroundColor: "#e6c018",
+            float: "right",
+          }}
+        />
+
         <SearchBox
           style={{
             width: 700,

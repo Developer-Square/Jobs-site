@@ -1,21 +1,40 @@
-import React, { useEffect, useState, useContext } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Jobs.style";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
+import { useStickyDispatch } from "contexts/app/app.provider";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
+import { useRouteMatch } from "react-router-dom";
+import { useAppState } from "contexts/app/app.provider";
 
-function JobPost() {
+function JobManage() {
   const {
     authState: { profile },
-    authDispatch,
   } = useContext(AuthContext);
-  const [indusrty, setIndustry] = useState([]);
+  const match = useRouteMatch();
+  const [initialValues, setInitialValues] = useState([]);
+  const [industry, setIndustry] = useState([
+    { value: "", key: "Select Industry Type" },
+  ]);
+  const useDispatch = useStickyDispatch();
+  const setList = useCallback(() => useDispatch({ type: "MANAGE" }), [
+    useDispatch,
+  ]);
+  const setForm = useCallback(() => useDispatch({ type: "EDIT" }), [
+    useDispatch,
+  ]);
+  const currentForm = useAppState("currentForm");
+  console.log("app state", currentForm);
+  const isEdit = currentForm === "edit";
+
   useEffect(() => {
+    setList();
     axios
       .get(`${BASE_URL}/industry/`, tokenConfig())
       .then((res) => {
@@ -27,21 +46,25 @@ function JobPost() {
           });
           return acc;
         }, []);
-        console.log(result);
         setIndustry(result);
       })
       .catch((err) => {
         console.log("error", err);
       });
+    axios
+      .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
+      .then((res) => {
+        const arr = res.data;
+        console.log("array jobs", arr);
+        // setJob(arr);
+        setInitialValues(arr);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const dropdownOptions = [
-    { value: "", key: "Select Job Type" },
-    { value: "fulltime", key: "Full-Time" },
-    { value: "parttime", key: "Part-Time" },
-    { value: "volunteering", key: "Volunteering" },
-    { value: "internship", key: "Internship" },
-    { value: "gig", key: "Gig" },
-  ];
+
   const minQualificationsOptions = [
     { value: "", key: "Select your Qualification" },
     { value: "none", key: "None" },
@@ -62,18 +85,6 @@ function JobPost() {
     { value: "above 10", key: "Above 10 years" },
   ];
 
-  const initialValues = {
-    creator: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-    title: "",
-    industry: "",
-    location: "",
-    salary: "",
-    description: "",
-    job_type: "",
-    years_of_exp: "",
-    min_qualification: "",
-    courseDate: null,
-  };
   console.log(
     "the pk for user",
     localStorage.getItem("thedb_auth_profile") ? profile.id : ""
@@ -85,9 +96,8 @@ function JobPost() {
     location: Yup.string().required("Required"),
     salary: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
-    job_type: Yup.string().required("Required"),
-    years_of_exp: Yup.string().required("Required"),
-    min_qualification: Yup.string().required("Required"),
+    experience: Yup.string().required("Required"),
+    qualifications: Yup.string().required("Required"),
     // courseDate: Yup.date().required("Required").nullable(),
   });
 
@@ -103,24 +113,24 @@ function JobPost() {
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log("error", err.response.data);
+        console.log("error", err);
 
         setErrors(err.response.data);
       });
   };
-  const toggleView = () => {
-    authDispatch({
-      type: "VIEW",
-    });
-  };
+  //   const toggleEdit = () => {
+  //     authDispatch({
+  //       type: "EDIT",
+  //     });
+  //   };
   return (
     <CardWrapper>
       <h4>
-        Post A Job
+        Manage
         <Button
-          onClick={toggleView}
+          onClick={isEdit ? setList : setForm}
           size="small"
-          title="Post a Job"
+          title={isEdit ? `Manage Applications` : `Edit Post`}
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -129,7 +139,7 @@ function JobPost() {
           }}
         />
       </h4>
-      <>
+      {currentForm === "edit" && (
         <FormWrapper>
           <Formik
             initialValues={initialValues}
@@ -146,6 +156,12 @@ function JobPost() {
                     name="title"
                   />
                   <FormikControl
+                    control="select"
+                    label="Industry"
+                    name="industry"
+                    options={industry}
+                  />
+                  <FormikControl
                     control="input"
                     type="text"
                     label="Salary"
@@ -159,26 +175,14 @@ function JobPost() {
                   />
                   <FormikControl
                     control="select"
-                    label="Industry"
-                    name="industry"
-                    options={indusrty}
-                  />
-                  <FormikControl
-                    control="select"
-                    label="Job Type"
-                    name="job_type"
-                    options={dropdownOptions}
-                  />
-                  <FormikControl
-                    control="select"
                     label="Qualification"
-                    name="min_qualification"
+                    name="qualifications"
                     options={minQualificationsOptions}
                   />
                   <FormikControl
                     control="select"
                     label="Experience"
-                    name="years_of_exp"
+                    name="experience"
                     options={experienceOptions}
                   />
                   <FormikControl
@@ -198,9 +202,15 @@ function JobPost() {
             }}
           </Formik>
         </FormWrapper>
-      </>
+      )}
+      {currentForm === "manage" && (
+        <ul>
+          <li>applicant one</li>
+          <li>applicant two</li>
+        </ul>
+      )}
     </CardWrapper>
   );
 }
 
-export default JobPost;
+export default JobManage;

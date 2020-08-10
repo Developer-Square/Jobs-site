@@ -98,13 +98,13 @@ const components = {
     icon: "Category",
     module: 1,
   },
-  manageJobs: {
-    component: "ManageJobs",
-    url: "/manage-jobs",
-    title: "Manage Jobs",
-    icon: "Category",
-    module: 1,
-  },
+  // manageJobs: {
+  //   component: "ManageJobs",
+  //   url: "/manage-jobs",
+  //   title: "Manage Jobs",
+  //   icon: "Category",
+  //   module: 1,
+  // },
   profile: {
     component: "Profile",
     url: "/profile",
@@ -129,6 +129,27 @@ const components = {
   internships: {
     component: "Internships",
     url: "/internships",
+    title: "Internships",
+    icon: "Category",
+    module: 1,
+  },
+  manageJobs: {
+    component: "JobManage",
+    url: "/jobs/:jobID",
+    title: "Gigs",
+    icon: "Category",
+    module: 1,
+  },
+  manageGigs: {
+    component: "GigManage",
+    url: "/gigs/:jobID",
+    title: "Gigs",
+    icon: "Category",
+    module: 1,
+  },
+  manageInternships: {
+    component: "InternshipManage",
+    url: "/internships/:jobID",
     title: "Internships",
     icon: "Category",
     module: 1,

@@ -3,6 +3,9 @@ import { Route, Switch } from "react-router-dom";
 import LandingPage from "pages/LandingPage";
 import NotFound from "pages/NotFound";
 import EmailVerification from "containers/SignInOutForm/emailVerification";
+import PrivacyPolicy from "pages/TOS/PrivacyPolicy";
+import About from "pages/About/about";
+import { TOS, ABOUT } from "constants/routes.constants";
 
 const PublicRoutes = ({ deviceType }) => (
   <Fragment>
@@ -11,15 +14,8 @@ const PublicRoutes = ({ deviceType }) => (
         <LandingPage deviceType={deviceType} />
       </Route>
       <Route exact path={`/activate`} component={EmailVerification} />
-      {/* <Route exact path={`/activate/:emailToken`} component={EmailActivation} />
-      <Route exact path={`/login`} component={Login} />
-      <Route exact path={`/signup`} component={Signup} />
-      <Route exact path={`/password-reset`} component={PasswordResetEmail} />
-      <Route
-        exact
-        path={`/password-reset/:resetToken`}
-        component={PasswordReset}
-      /> */}
+      <Route exact path={`${TOS}`} component={PrivacyPolicy} />
+      <Route exact path={`${ABOUT}`} component={About} />
       <Route component={NotFound} deviceType={deviceType} />
     </Switch>
   </Fragment>

@@ -10,7 +10,10 @@ import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 
 function GigPost() {
-  const { authDispatch } = useContext(AuthContext);
+  const {
+    authState: { profile },
+    authDispatch,
+  } = useContext(AuthContext);
   const [indusrty, setIndustry] = useState([
     { value: "", key: "Select Industry Type" },
   ]);
@@ -58,24 +61,20 @@ function GigPost() {
   ];
 
   const initialValues = {
-    creator: localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : "",
+    creator: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
     title: "",
     industry: "",
     location: "",
     salary: "",
     description: "",
     job_type: "gig",
-    experience: [],
-    qualifications: [],
+    years_of_exp: "",
+    min_qualifications: "",
     courseDate: null,
   };
   console.log(
     "the pk for user",
-    localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : ""
+    localStorage.getItem("thedb_auth_profile") ? profile.id : ""
   );
 
   const validationSchema = Yup.object({
@@ -84,9 +83,8 @@ function GigPost() {
     location: Yup.string().required("Required"),
     salary: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
-    experience: Yup.string().required("Required"),
-    qualifications: Yup.string().required("Required"),
-    // courseDate: Yup.date().required("Required").nullable(),
+    years_of_exp: Yup.string().required("Required"),
+    min_qualification: Yup.string().required("Required"),
   });
 
   const onSubmit = async (values, { setErrors, setSubmitting }) => {
@@ -164,13 +162,13 @@ function GigPost() {
                 <FormikControl
                   control="select"
                   label="Qualification"
-                  name="qualifications"
+                  name="min_qualification"
                   options={minQualificationsOptions}
                 />
                 <FormikControl
                   control="select"
                   label="Experience"
-                  name="experience"
+                  name="years_of_exp"
                   options={experienceOptions}
                 />
                 <FormikControl

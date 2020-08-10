@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Profile.style";
@@ -14,7 +14,52 @@ function Profile() {
   const {
     authState: { profile },
   } = useContext(AuthContext);
-  // const {is_individual}
+
+  const [initialValues, setInitialValues] = useState({});
+  const [initialProfileValues, setInitialProfileValues] = useState({});
+  const [initialOrganizationValues, setInitialOrganizationValues] = useState(
+    {}
+  );
+
+  useEffect(() => {
+    if (localStorage.getItem("thedb_auth_profile") !== null) {
+      setInitialValues({
+        email: localStorage.getItem("thedb_auth_profile") ? profile.email : "",
+        first_name: localStorage.getItem("thedb_auth_profile")
+          ? profile.first_name
+          : "",
+        last_name: localStorage.getItem("thedb_auth_profile")
+          ? profile.last_name
+          : "",
+        salary: "",
+        description: "",
+        experience: [],
+        qualifications: [],
+      });
+      setInitialProfileValues({
+        title: "",
+        huduma_number: "",
+        image: null,
+        date_of_birth: new Date(),
+        about: "",
+        location: "",
+        gender: "",
+        status: "",
+        user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
+      });
+      setInitialOrganizationValues({
+        name: "",
+        description: "",
+        website: "https://",
+        country: "",
+        location: "",
+        address: "",
+        logo: null,
+        user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const genderOptions = [
     { value: "", key: "Select Gender" },
@@ -22,39 +67,11 @@ function Profile() {
     { value: "female", key: "Female" },
   ];
   const statusOptions = [
+    { value: "", key: "Select Options" },
     { value: "Open", key: "Open for offers" },
     { value: "Busy", key: "Busy" },
     { value: "Looking", key: "Actively looking" },
   ];
-
-  const initialValues = {
-    email: localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["email"]
-      : "",
-    first_name: localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["first_name"]
-      : "",
-    last_name: localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["last_name"]
-      : "",
-    salary: "",
-    description: "",
-    experience: [],
-    qualifications: [],
-  };
-  const initialAddValues = {
-    title: "",
-    huduma_number: "",
-    image: null,
-    date_of_birth: new Date(),
-    about: "",
-    location: "",
-    gender: "",
-    status: "",
-    user: localStorage.getItem("thedb_auth_profile")
-      ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-      : "",
-  };
 
   const emailNotLongEnough = "email must be at least 3 characters";
   const emailRequired = "Please enter an email address";
@@ -69,9 +86,9 @@ function Profile() {
       .email(invalidEmail)
       .required(emailRequired),
   });
-  const addValidationSchema = Yup.object({
+  const profileValidationSchema = Yup.object({
     title: Yup.string().required("Required"),
-    user: Yup.number().required("Required"),
+    // user: Yup.number().required("Required"),
     status: Yup.string().required("Required"),
     about: Yup.string().required("Required"),
     // image: Yup.mixed().required("Required"),
@@ -82,6 +99,15 @@ function Profile() {
       })
       .required("Required")
       .nullable(),
+  });
+  const organizationValidationSchema = Yup.object({
+    name: Yup.string().required("Required"),
+    location: Yup.string().required("Required"),
+    address: Yup.string().required("Required"),
+    logo: Yup.mixed().required("Required"),
+    website: Yup.string().url("Please enter a valid URL, http:// or https://", {
+      allowLocal: true,
+    }),
   });
 
   const onSubmit = async (values, { setErrors, setSubmitting }) => {
@@ -102,6 +128,42 @@ function Profile() {
         setErrors(err.response.data);
       });
   };
+  const onOrgSubmit = async (values, { setErrors, setSubmitting }) => {
+    const {
+      name,
+      description,
+      logo,
+      address,
+      country,
+      location,
+      website,
+    } = values;
+    const body = {
+      name: name,
+      description: description,
+      website: website,
+      country: country,
+      location: location,
+      address: address,
+      logo: logo[0].path,
+      user: profile.id,
+    };
+    console.log("body values ", typeof body.logo, body.logo);
+    setSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    axios
+      .post(`${BASE_URL}/organization/`, body, tokenConfig())
+      .then((res) => {
+        setSubmitting(false);
+        console.log("res", res.data);
+        // successBanner();
+      })
+      .catch((err) => {
+        setSubmitting(false);
+        console.log("error", err.response.data);
+        setErrors(err.response.data);
+      });
+  };
   const onAddSubmit = async (values, { setErrors, setSubmitting }) => {
     const {
       title,
@@ -112,18 +174,17 @@ function Profile() {
       location,
       gender,
       status,
-      user,
     } = values;
     const body = {
       title: title,
       huduma_number: huduma_number,
-      image: image,
+      image: image[0].path,
       date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
       about: about,
       location: location,
       gender: gender,
       status: status,
-      user: user,
+      user: profile.id,
     };
     console.log("val8es fdsf ", body);
     setSubmitting(true);
@@ -189,8 +250,8 @@ function Profile() {
       <FormWrapper>
         {profile.is_individual ? (
           <Formik
-            initialValues={initialAddValues}
-            validationSchema={addValidationSchema}
+            initialValues={initialProfileValues}
+            validationSchema={profileValidationSchema}
             onSubmit={onAddSubmit}
           >
             {(formik) => {
@@ -213,11 +274,7 @@ function Profile() {
                     control="date"
                     label="Birth Date"
                     name="date_of_birth"
-                    // value={moment(formik.values.date_of_birth).format(
-                    //   "YYYY-MM-DD"
-                    // )}
                   />
-
                   <FormikControl
                     control="select"
                     label="Gender"
@@ -237,6 +294,11 @@ function Profile() {
                     name="location"
                   />
                   <FormikControl
+                    control="textarea"
+                    label="Additional Info"
+                    name="about"
+                  />
+                  <FormikControl
                     control="input"
                     type="file"
                     setFieldValue={formik.setFieldValue}
@@ -244,12 +306,6 @@ function Profile() {
                     label="Profile Image"
                     name="image"
                   />
-                  <FormikControl
-                    control="textarea"
-                    label="Additional Info"
-                    name="about"
-                  />
-
                   <Button
                     type="submit"
                     size="small"
@@ -261,7 +317,70 @@ function Profile() {
               );
             }}
           </Formik>
-        ) : null}
+        ) : (
+          <Formik
+            initialValues={initialOrganizationValues}
+            validationSchema={organizationValidationSchema}
+            onSubmit={onOrgSubmit}
+          >
+            {(formik) => {
+              return (
+                <Form>
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Organization Name"
+                    name="name"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Website Domain"
+                    name="website"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Country"
+                    name="country"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Current Office Location"
+                    name="location"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Company Address"
+                    name="address"
+                  />
+                  <FormikControl
+                    control="textarea"
+                    label="About Company Info"
+                    name="description"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="file"
+                    setFieldValue={formik.setFieldValue}
+                    value={formik.values.logo}
+                    label="Company Logo"
+                    name="logo"
+                  />
+                  <Button
+                    type="submit"
+                    size="small"
+                    title={formik.isSubmitting ? "Creating Profile... " : "Add"}
+                    style={{ fontSize: 15, color: "#fff" }}
+                    disabled={!formik.isValid}
+                  />
+                </Form>
+              );
+            }}
+          </Formik>
+        )}
       </FormWrapper>
     </CardWrapper>
   );

@@ -17,9 +17,15 @@ import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 
 import { AuthContext } from "contexts/auth/auth.context";
+import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import { openModal } from "@redq/reuse-modal";
+import ApplicationModal from "pages/common/ApplicationModal";
 
 function JobView() {
-  const { authDispatch } = useContext(AuthContext);
+  const {
+    authState: { profile },
+    authDispatch,
+  } = useContext(AuthContext);
   const [jobs, setJobs] = useState(null);
   useEffect(() => {
     axios
@@ -38,22 +44,63 @@ function JobView() {
       type: "POST",
     });
   };
+  const toggleManage = () => {
+    authDispatch({
+      type: "MANAGE",
+    });
+  };
+  const handleApplication = (jobId) => {
+    console.log("will apply soon");
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: () => ApplicationModal(jobId),
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
+  const handleModal = () => {
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: EmailVerificationModal,
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
 
   return (
     <CardWrapper>
       <h4>
         Jobs Listing{" "}
-        <Button
-          onClick={togglePost}
-          size="small"
-          title="Post a Job"
-          style={{
-            fontSize: 15,
-            color: "#5918e6",
-            backgroundColor: "#e6c018",
-            float: "right",
-          }}
-        />
+        {profile.is_individual ? null : (
+          <Button
+            onClick={profile.is_verified ? togglePost : handleModal}
+            size="small"
+            title="Post a Job"
+            disabled={!profile.is_verified}
+            style={{
+              fontSize: 15,
+              color: "#5918e6",
+              backgroundColor: "#e6c018",
+              float: "right",
+            }}
+          />
+        )}
       </h4>
 
       <LeftContent>
@@ -67,7 +114,7 @@ function JobView() {
               )
               .map((job, index) => (
                 <li key={index}>
-                  <a href="jobs">
+                  <section>
                     <ListingLogo>
                       <ImageWrapper
                         url={job.companyLogo}
@@ -79,9 +126,46 @@ function JobView() {
                         {job.title}
 
                         <TypeList>
-                          <ListSpan className={`${job.type}`}>
+                          <ListSpan className={`${job.job_type}`}>
                             {job.job_type}
                           </ListSpan>
+                          {job.creator === profile.id ? (
+                            <Button
+                              onClick={toggleManage}
+                              size="small"
+                              title={`Manage Job`}
+                              disabled={!profile.is_verified}
+                              style={{
+                                fontSize: 15,
+                                color: "#5918e6",
+                                backgroundColor: "#e6c018",
+                                float: "left",
+                                height: "29px",
+                                margin: "0 10px",
+                              }}
+                            />
+                          ) : (
+                            <Button
+                              onClick={
+                                profile.is_verified
+                                  ? handleApplication
+                                  : handleModal
+                              }
+                              size="small"
+                              title={`Apply`}
+                              disabled={!profile.is_verified}
+                              style={{
+                                fontSize: 15,
+                                color: "#5918e6",
+                                backgroundColor: profile.is_verified
+                                  ? "#e6c018"
+                                  : "#f2f2f2",
+                                float: "left",
+                                height: "29px",
+                                margin: "0 10px",
+                              }}
+                            />
+                          )}
                         </TypeList>
                       </H4>
                       <ListingIcons>
@@ -101,7 +185,7 @@ function JobView() {
                         </li>
                       </ListingIcons>
                     </ListingTitle>
-                  </a>
+                  </section>
                 </li>
               ))}
           </ul>
