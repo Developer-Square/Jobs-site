@@ -19,6 +19,7 @@ import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 import { openModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import ApplicationModal from "pages/common/ApplicationModal";
 
 function GigView() {
   const {
@@ -48,8 +49,22 @@ function GigView() {
       type: "MANAGE",
     });
   };
-  const handleApplication = () => {
+  const handleApplication = (jobId) => {
     console.log("will apply soon");
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: () => ApplicationModal(jobId),
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
   };
   const handleModal = () => {
     openModal({
@@ -76,7 +91,7 @@ function GigView() {
           onClick={profile.is_verified ? togglePost : handleModal}
           size="small"
           title="Post a Gig"
-          disabled={profile.is_verified ? true : false}
+          disabled={!profile.is_verified}
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -115,7 +130,7 @@ function GigView() {
                                   onClick={toggleManage}
                                   size="small"
                                   title={`Manage Job`}
-                                  disabled={profile.is_verified ? true : false}
+                                  disabled={!profile.is_verified}
                                   style={{
                                     fontSize: 15,
                                     color: "#5918e6",
@@ -134,7 +149,7 @@ function GigView() {
                                   }
                                   size="small"
                                   title={`Apply`}
-                                  disabled={profile.is_verified ? true : false}
+                                  disabled={!profile.is_verified}
                                   style={{
                                     fontSize: 15,
                                     color: "#5918e6",

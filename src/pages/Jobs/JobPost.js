@@ -11,12 +11,10 @@ import { AuthContext } from "contexts/auth/auth.context";
 
 function JobPost() {
   const {
-    authState: { profile, currentForm },
+    authState: { profile },
     authDispatch,
   } = useContext(AuthContext);
-  const [indusrty, setIndustry] = useState([
-    { value: "Select Industry Type", key: "" },
-  ]);
+  const [indusrty, setIndustry] = useState([]);
   useEffect(() => {
     axios
       .get(`${BASE_URL}/industry/`, tokenConfig())
@@ -24,15 +22,12 @@ function JobPost() {
         const arr = res.data.results;
         const result = arr.reduce((acc, d) => {
           acc.push({
-            value: "",
-            key: "Select Industry Type",
-          });
-          acc.push({
             key: d.name,
             value: d.id,
           });
           return acc;
         }, []);
+        console.log(result);
         setIndustry(result);
       })
       .catch((err) => {
@@ -70,7 +65,7 @@ function JobPost() {
   const initialValues = {
     creator: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
     title: "",
-    industry: [{ value: "", key: "Select Industry Type" }],
+    industry: "",
     location: "",
     salary: "",
     description: "",
@@ -108,7 +103,7 @@ function JobPost() {
       })
       .catch((err) => {
         setSubmitting(false);
-        console.log("error", err);
+        console.log("error", err.response.data);
 
         setErrors(err.response.data);
       });
@@ -135,82 +130,74 @@ function JobPost() {
         />
       </h4>
       <>
-        {currentForm === "manage" && (
-          <FormWrapper>
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={onSubmit}
-            >
-              {(formik) => {
-                return (
-                  <Form>
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="Title"
-                      name="title"
-                    />
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="Salary"
-                      name="salary"
-                    />
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="Location"
-                      name="location"
-                    />
-                    <FormikControl
-                      control="select"
-                      label="Industry"
-                      name="industry"
-                      options={indusrty}
-                    />
-                    <FormikControl
-                      control="select"
-                      label="Job Type"
-                      name="job_type"
-                      options={dropdownOptions}
-                    />
-                    <FormikControl
-                      control="select"
-                      label="Qualification"
-                      name="min_qualification"
-                      options={minQualificationsOptions}
-                    />
-                    <FormikControl
-                      control="select"
-                      label="Experience"
-                      name="years_of_exp"
-                      options={experienceOptions}
-                    />
-                    <FormikControl
-                      control="textarea"
-                      label="description"
-                      name="description"
-                    />
-                    <Button
-                      type="submit"
-                      size="small"
-                      title={formik.isSubmitting ? "Submitting... " : "Submit"}
-                      style={{ fontSize: 15, color: "#fff" }}
-                      disabled={!formik.isValid}
-                    />
-                  </Form>
-                );
-              }}
-            </Formik>
-          </FormWrapper>
-        )}
-        {currentForm === "edit" && (
-          <ul>
-            <li>applicant one</li>
-            <li>applicant two</li>
-          </ul>
-        )}
+        <FormWrapper>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => {
+              return (
+                <Form>
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Title"
+                    name="title"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Salary"
+                    name="salary"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Location"
+                    name="location"
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Industry"
+                    name="industry"
+                    options={indusrty}
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Job Type"
+                    name="job_type"
+                    options={dropdownOptions}
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Qualification"
+                    name="min_qualification"
+                    options={minQualificationsOptions}
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Experience"
+                    name="years_of_exp"
+                    options={experienceOptions}
+                  />
+                  <FormikControl
+                    control="textarea"
+                    label="description"
+                    name="description"
+                  />
+                  <Button
+                    type="submit"
+                    size="small"
+                    title={formik.isSubmitting ? "Submitting... " : "Submit"}
+                    style={{ fontSize: 15, color: "#fff" }}
+                    disabled={!formik.isValid}
+                  />
+                </Form>
+              );
+            }}
+          </Formik>
+        </FormWrapper>
       </>
     </CardWrapper>
   );

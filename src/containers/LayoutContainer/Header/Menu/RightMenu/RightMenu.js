@@ -2,7 +2,7 @@ import React from "react";
 import NavLink from "components/NavLink/NavLink";
 import Button from "components/Button/Button";
 import Popover from "components/Popover/Popover";
-import { JOBS, GIGS, HELP_PAGE } from "constants/routes.constants";
+import { JOBS, GIGS, ABOUT, HELP_PAGE } from "constants/routes.constants";
 import { AuthorizedMenu } from "../AuthorizedMenu";
 import { HelpIcon } from "components/AllSvgIcon";
 import { RightMenuBox } from "./RightMenu.style";
@@ -10,8 +10,14 @@ import { RightMenuBox } from "./RightMenu.style";
 export const RightMenu = ({ onLogout, avatar, isAuthenticated, onJoin }) => {
   return (
     <RightMenuBox>
-      <NavLink className="menu-item" href={JOBS} label="Jobs" />
-      <NavLink className="menu-item" href={GIGS} label="Gigs" />
+      {isAuthenticated ? (
+        <>
+          <NavLink className="menu-item" href={JOBS} label="Jobs" />
+          <NavLink className="menu-item" href={GIGS} label="Gigs" />
+        </>
+      ) : (
+        <NavLink className="menu-item" href={ABOUT} label="About" />
+      )}
       <NavLink
         className="menu-item"
         href={HELP_PAGE}

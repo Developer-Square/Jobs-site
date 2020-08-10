@@ -85,7 +85,6 @@ function GigPost() {
     description: Yup.string().required("Required"),
     years_of_exp: Yup.string().required("Required"),
     min_qualification: Yup.string().required("Required"),
-    // courseDate: Yup.date().required("Required").nullable(),
   });
 
   const onSubmit = async (values, { setErrors, setSubmitting }) => {

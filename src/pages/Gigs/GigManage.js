@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Gigs.style";
@@ -8,25 +9,36 @@ import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
+import { useAppState } from "contexts/app/app.provider";
+import { useRouteMatch } from "react-router-dom";
+import { useStickyDispatch } from "contexts/app/app.provider";
 
 function GigManage() {
   const {
     authState: { profile },
-    authDispatch,
   } = useContext(AuthContext);
-  const [indusrty, setIndustry] = useState([
+  const match = useRouteMatch();
+  const [industry, setIndustry] = useState([
     { value: "", key: "Select Industry Type" },
   ]);
+  const [initialValues, setInitialValues] = useState([]);
+  const useDispatch = useStickyDispatch();
+  const setList = useCallback(() => useDispatch({ type: "MANAGE" }), [
+    useDispatch,
+  ]);
+  const setForm = useCallback(() => useDispatch({ type: "EDIT" }), [
+    useDispatch,
+  ]);
+  const currentForm = useAppState("currentForm");
+  console.log("app state", currentForm);
+  const isEdit = currentForm === "edit";
   useEffect(() => {
+    setList();
     axios
       .get(`${BASE_URL}/industry/`, tokenConfig())
       .then((res) => {
         const arr = res.data.results;
         const result = arr.reduce((acc, d) => {
-          acc.push({
-            value: "",
-            key: "Select Industry Type",
-          });
           acc.push({
             key: d.name,
             value: d.id,
@@ -38,6 +50,18 @@ function GigManage() {
       .catch((err) => {
         console.log("error", err);
       });
+    axios
+      .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
+      .then((res) => {
+        const arr = res.data;
+        console.log("array jobs", arr);
+        // setJob(arr);
+        setInitialValues(arr);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const minQualificationsOptions = [
@@ -60,18 +84,18 @@ function GigManage() {
     { value: "above 10", key: "Above 10 years" },
   ];
 
-  const initialValues = {
-    creator: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-    title: "",
-    industry: "",
-    location: "",
-    salary: "",
-    description: "",
-    job_type: "gig",
-    experience: [],
-    qualifications: [],
-    courseDate: null,
-  };
+  // const initialValues = {
+  //   creator: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
+  //   title: "",
+  //   industry: "",
+  //   location: "",
+  //   salary: "",
+  //   description: "",
+  //   job_type: "gig",
+  //   experience: [],
+  //   qualifications: [],
+  //   courseDate: null,
+  // };
   console.log(
     "the pk for user",
     localStorage.getItem("thedb_auth_profile") ? profile.id : ""
@@ -105,20 +129,15 @@ function GigManage() {
         setErrors(err.response.data);
       });
   };
-  const toggleEdit = () => {
-    authDispatch({
-      type: "EDIT",
-    });
-  };
+
   return (
     <CardWrapper>
       <h4>
-        Manage A Gig
+        Manage Gig
         <Button
-          onClick={toggleEdit}
+          onClick={isEdit ? setList : setForm}
           size="small"
-          title="Manage a Gig"
-          disabled={true}
+          title={isEdit ? `Manage Applications` : `Edit Post`}
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -127,68 +146,76 @@ function GigManage() {
           }}
         />
       </h4>
-      <FormWrapper>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            return (
-              <Form>
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Title"
-                  name="title"
-                />
-                <FormikControl
-                  control="select"
-                  label="Industry"
-                  name="industry"
-                  options={indusrty}
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Salary"
-                  name="salary"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Location"
-                  name="location"
-                />
-                <FormikControl
-                  control="select"
-                  label="Qualification"
-                  name="qualifications"
-                  options={minQualificationsOptions}
-                />
-                <FormikControl
-                  control="select"
-                  label="Experience"
-                  name="experience"
-                  options={experienceOptions}
-                />
-                <FormikControl
-                  control="textarea"
-                  label="description"
-                  name="description"
-                />
-                <Button
-                  type="submit"
-                  size="small"
-                  title={formik.isSubmitting ? "Submitting... " : "Submit"}
-                  style={{ fontSize: 15, color: "#fff" }}
-                  disabled={!formik.isValid}
-                />
-              </Form>
-            );
-          }}
-        </Formik>
-      </FormWrapper>
+      {currentForm === "edit" && (
+        <FormWrapper>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => {
+              return (
+                <Form>
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Title"
+                    name="title"
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Industry"
+                    name="industry"
+                    options={industry}
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Salary"
+                    name="salary"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Location"
+                    name="location"
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Qualification"
+                    name="qualifications"
+                    options={minQualificationsOptions}
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Experience"
+                    name="experience"
+                    options={experienceOptions}
+                  />
+                  <FormikControl
+                    control="textarea"
+                    label="description"
+                    name="description"
+                  />
+                  <Button
+                    type="submit"
+                    size="small"
+                    title={formik.isSubmitting ? "Submitting... " : "Submit"}
+                    style={{ fontSize: 15, color: "#fff" }}
+                    disabled={!formik.isValid}
+                  />
+                </Form>
+              );
+            }}
+          </Formik>
+        </FormWrapper>
+      )}
+      {currentForm === "manage" && (
+        <ul>
+          <li>applicant one</li>
+          <li>applicant two</li>
+        </ul>
+      )}
     </CardWrapper>
   );
 }

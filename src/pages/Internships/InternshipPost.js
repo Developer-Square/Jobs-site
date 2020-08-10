@@ -21,10 +21,6 @@ function InternshipPost() {
         const arr = res.data.results;
         const result = arr.reduce((acc, d) => {
           acc.push({
-            value: "",
-            key: "Select Industry Type",
-          });
-          acc.push({
             key: d.name,
             value: d.id,
           });
@@ -61,7 +57,7 @@ function InternshipPost() {
       ? JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
       : "",
     title: "",
-    industry: [{ value: "Select Industry Type", key: "" }],
+    industry: "",
     location: "",
     salary: "",
     description: "",
@@ -114,7 +110,7 @@ function InternshipPost() {
   return (
     <CardWrapper>
       <h4>
-        Post A Internship
+        Post Internship
         <Button
           onClick={toggleView}
           size="small"

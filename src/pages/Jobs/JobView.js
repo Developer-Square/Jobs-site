@@ -19,6 +19,7 @@ import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import { openModal } from "@redq/reuse-modal";
+import ApplicationModal from "pages/common/ApplicationModal";
 
 function JobView() {
   const {
@@ -48,8 +49,22 @@ function JobView() {
       type: "MANAGE",
     });
   };
-  const handleApplication = () => {
+  const handleApplication = (jobId) => {
     console.log("will apply soon");
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: () => ApplicationModal(jobId),
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
   };
   const handleModal = () => {
     openModal({
@@ -74,7 +89,7 @@ function JobView() {
         Jobs Listing{" "}
         {profile.is_individual ? null : (
           <Button
-            onClick={togglePost}
+            onClick={profile.is_verified ? togglePost : handleModal}
             size="small"
             title="Post a Job"
             disabled={!profile.is_verified}

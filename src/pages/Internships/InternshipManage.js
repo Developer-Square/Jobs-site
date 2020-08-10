@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Internships.style";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
+import { useStickyDispatch } from "contexts/app/app.provider";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
@@ -14,39 +16,56 @@ import { useAppState } from "contexts/app/app.provider";
 function InternshipManage() {
   const {
     authState: { profile },
-    authDispatch,
   } = useContext(AuthContext);
   const match = useRouteMatch();
-  console.log("match :", match.params.jobID);
-  const [job, setJob] = useState();
+  const [initialValues, setInitialValues] = useState([]);
+  const [industry, setIndustry] = useState([
+    { value: "", key: "Select Industry Type" },
+  ]);
+  const useDispatch = useStickyDispatch();
+  const setList = useCallback(() => useDispatch({ type: "MANAGE" }), [
+    useDispatch,
+  ]);
+  const setForm = useCallback(() => useDispatch({ type: "EDIT" }), [
+    useDispatch,
+  ]);
   const currentForm = useAppState("currentForm");
   console.log("app state", currentForm);
+  const isEdit = currentForm === "edit";
+
   useEffect(() => {
+    setList();
+    axios
+      .get(`${BASE_URL}/industry/`, tokenConfig())
+      .then((res) => {
+        const arr = res.data.results;
+        const result = arr.reduce((acc, d) => {
+          acc.push({
+            key: d.name,
+            value: d.id,
+          });
+          return acc;
+        }, []);
+        setIndustry(result);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
     axios
       .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
       .then((res) => {
         const arr = res.data;
         console.log("array jobs", arr);
-        setJob(arr);
+        // setJob(arr);
+        setInitialValues(arr);
       })
       .catch((err) => {
         console.log("error", err);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // console.log("job title", job.title);
 
-  const initialValues = {
-    creator: job ? job.creator : "",
-    title: job ? job.title : "",
-    industry: job ? job.industry : "",
-    location: job ? job.location : "",
-    salary: job ? job.salary : "",
-    description: job ? job.description : "",
-    job_type: job ? job.job_type : "",
-    years_of_exp: job ? job.years_of_exp : "",
-    min_qualification: job ? job.min_qualifications : "",
-    id: job ? job.id : "",
-  };
   console.log(
     "the pk for user",
     localStorage.getItem("thedb_auth_profile") ? profile.id : ""
@@ -58,9 +77,8 @@ function InternshipManage() {
     location: Yup.string().required("Required"),
     salary: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
-    experience: Yup.string().required("Required"),
-    qualifications: Yup.string().required("Required"),
-    // courseDate: Yup.date().required("Required").nullable(),
+    years_of_exp: Yup.string().required("Required"),
+    min_qualification: Yup.string().required("Required"),
   });
 
   const onSubmit = async (values, { setErrors, setSubmitting }) => {
@@ -80,20 +98,15 @@ function InternshipManage() {
         setErrors(err.response.data);
       });
   };
-  const toggleEdit = () => {
-    authDispatch({
-      type: "EDIT",
-    });
-  };
+
   return (
     <CardWrapper>
       <h4>
-        Manage A Internship
+        Manage Internship
         <Button
-          onClick={toggleEdit}
+          onClick={isEdit ? setList : setForm}
           size="small"
-          title="Manage a Internship"
-          disabled={true}
+          title={isEdit ? `Manage Applications` : `Edit Post`}
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -102,50 +115,64 @@ function InternshipManage() {
           }}
         />
       </h4>
-      <FormWrapper>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            return (
-              <Form>
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Title"
-                  name="title"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Salary"
-                  name="salary"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Location"
-                  name="location"
-                />
-                <FormikControl
-                  control="textarea"
-                  label="description"
-                  name="description"
-                />
-                <Button
-                  type="submit"
-                  size="small"
-                  title={formik.isSubmitting ? "Submitting... " : "Submit"}
-                  style={{ fontSize: 15, color: "#fff" }}
-                  disabled={!formik.isValid}
-                />
-              </Form>
-            );
-          }}
-        </Formik>
-      </FormWrapper>
+      {currentForm === "edit" && (
+        <FormWrapper>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => {
+              return (
+                <Form>
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Title"
+                    name="title"
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Industry"
+                    name="industry"
+                    options={industry}
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Salary"
+                    name="salary"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Location"
+                    name="location"
+                  />
+                  <FormikControl
+                    control="textarea"
+                    label="description"
+                    name="description"
+                  />
+                  <Button
+                    type="submit"
+                    size="small"
+                    title={formik.isSubmitting ? "Submitting... " : "Submit"}
+                    style={{ fontSize: 15, color: "#fff" }}
+                    disabled={!formik.isValid}
+                  />
+                </Form>
+              );
+            }}
+          </Formik>
+        </FormWrapper>
+      )}
+      {currentForm === "manage" && (
+        <ul>
+          <li>applicant one</li>
+          <li>applicant two</li>
+        </ul>
+      )}
     </CardWrapper>
   );
 }

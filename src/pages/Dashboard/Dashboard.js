@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useHistory } from "react-router-dom";
+import { openModal } from "@redq/reuse-modal";
 import { CardWrapper } from "./Dashboard.style";
 import axios from "axios";
 import { BASE_URL, CURRENCY } from "constants/constants";
@@ -19,8 +20,8 @@ import { useStickyDispatch } from "contexts/app/app.provider";
 import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
-import { openModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import ApplicationModal from "../common/ApplicationModal";
 
 function Dashboard() {
   const {
@@ -67,15 +68,29 @@ function Dashboard() {
     setForm();
     history.push(`/dashboard/${category}/${id}`);
   };
-  const handleApplication = () => {
-    console.log("will apply soon");
-  };
   const handleModal = () => {
     openModal({
       show: true,
       overlayClassName: "quick-view-overlay",
       closeOnClickOutside: true,
       component: EmailVerificationModal,
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
+  const handleApplication = (jobId) => {
+    console.log("will apply soon");
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: () => ApplicationModal(jobId),
       closeComponent: "",
       config: {
         enableResizing: false,
@@ -94,6 +109,20 @@ function Dashboard() {
         {profile.is_verified ? null : (
           <span>Kindly verify Email to apply for the Openings</span>
         )}
+        <Button
+          onClick={() => handleApplication(1)}
+          size="small"
+          title={`Apply`}
+          disabled={false}
+          style={{
+            fontSize: 15,
+            color: "#5918e6",
+            backgroundColor: profile.is_verified ? "#e6c018" : "#f2f2f2",
+            float: "left",
+            height: "29px",
+            margin: "0 10px",
+          }}
+        />
       </H4>
 
       <LeftContent>
@@ -134,9 +163,9 @@ function Dashboard() {
                           />
                         ) : (
                           <Button
-                            onClick={
-                              profile.is_verified
-                                ? handleApplication
+                            onClick={() =>
+                              !profile.is_verified
+                                ? handleApplication(job.id)
                                 : handleModal
                             }
                             size="small"

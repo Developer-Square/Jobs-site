@@ -88,7 +88,7 @@ function Profile() {
   });
   const profileValidationSchema = Yup.object({
     title: Yup.string().required("Required"),
-    user: Yup.number().required("Required"),
+    // user: Yup.number().required("Required"),
     status: Yup.string().required("Required"),
     about: Yup.string().required("Required"),
     // image: Yup.mixed().required("Required"),
@@ -102,7 +102,6 @@ function Profile() {
   });
   const organizationValidationSchema = Yup.object({
     name: Yup.string().required("Required"),
-    user: Yup.number().required("Required"),
     location: Yup.string().required("Required"),
     address: Yup.string().required("Required"),
     logo: Yup.mixed().required("Required"),
@@ -130,11 +129,30 @@ function Profile() {
       });
   };
   const onOrgSubmit = async (values, { setErrors, setSubmitting }) => {
-    console.log("val8es fdsf ", values);
+    const {
+      name,
+      description,
+      logo,
+      address,
+      country,
+      location,
+      website,
+    } = values;
+    const body = {
+      name: name,
+      description: description,
+      website: website,
+      country: country,
+      location: location,
+      address: address,
+      logo: logo[0].path,
+      user: profile.id,
+    };
+    console.log("body values ", typeof body.logo, body.logo);
     setSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     axios
-      .post(`${BASE_URL}/organization/`, values, tokenConfig())
+      .post(`${BASE_URL}/organization/`, body, tokenConfig())
       .then((res) => {
         setSubmitting(false);
         console.log("res", res.data);
@@ -156,18 +174,17 @@ function Profile() {
       location,
       gender,
       status,
-      user,
     } = values;
     const body = {
       title: title,
       huduma_number: huduma_number,
-      image: image,
+      image: image[0].path,
       date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
       about: about,
       location: location,
       gender: gender,
       status: status,
-      user: user,
+      user: profile.id,
     };
     console.log("val8es fdsf ", body);
     setSubmitting(true);
@@ -285,7 +302,7 @@ function Profile() {
                     control="input"
                     type="file"
                     setFieldValue={formik.setFieldValue}
-                    value={formik.values.image[0]}
+                    value={formik.values.image}
                     label="Profile Image"
                     name="image"
                   />
