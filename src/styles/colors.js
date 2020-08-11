@@ -1,7 +1,7 @@
 const colors = {
   transparent: "transparent", // 0
   white: "#ffffff", // 2
-  darkBold: "#5918e6", // 3
+  darkBold: "#21277F", // 3
   darkMedium: "#424561", // 3
   darkRegular: "#77798C", // 3
   darkLight: "#C2C3CC", // 3
