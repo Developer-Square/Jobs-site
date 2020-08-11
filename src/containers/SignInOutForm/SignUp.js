@@ -155,7 +155,7 @@ export default function SignOutModal() {
       <Container>
         <Heading>Sign Up</Heading>
 
-        <SubHeading>Every fill is required in sign up</SubHeading>
+        <SubHeading>Fill in the form to sign up</SubHeading>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
