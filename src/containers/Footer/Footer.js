@@ -26,7 +26,7 @@ export default function FooterContainer() {
               <Facebook />
               Facebook
             </Footer.Link>
-            <Footer.Link href="#">
+            <Footer.Link href="https://www.instagram.com/thedatabase.co.ke/">
               <Instagram />
               Instagram
             </Footer.Link>
