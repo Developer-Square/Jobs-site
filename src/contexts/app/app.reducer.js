@@ -1,7 +1,7 @@
 export const initialState = {
   isSticky: false,
   isSidebarSticky: true,
-  currentForm: [],
+  currentForm: "view",
 };
 
 export function reducer(state, { type }) {

@@ -372,6 +372,11 @@ const ListingTitle = styled.div`
   @media (max-width: 768px) {
     padding-right: 0;
   }
+  h3 {
+    @media (max-width: 768px) {
+      padding: 0;
+    }
+  }
 `;
 const ListingIcons = styled.ul`
   padding: 0;

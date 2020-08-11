@@ -20,7 +20,10 @@ import { AuthContext } from "contexts/auth/auth.context";
 
 const Banner = ({ imageUrl }) => {
   const { state, dispatch } = useContext(SearchContext);
-  const { authDispatch } = useContext(AuthContext);
+  const {
+    authState: { isAuthenticated },
+    authDispatch,
+  } = useContext(AuthContext);
   const history = useHistory();
   const location = useLocation();
   const query = useRouterQuery();
@@ -60,6 +63,9 @@ const Banner = ({ imageUrl }) => {
       setSticky();
     }
   };
+  const handleRedirect = () => {
+    history.push("/dashboard");
+  };
   const handleJoin = () => {
     authDispatch({
       type: "SIGNUP",
@@ -98,18 +104,31 @@ const Banner = ({ imageUrl }) => {
         <BannerSubHeading>
           Get or Post a Gig, Employ or Meet Dream Employers on TheDB.
         </BannerSubHeading>
-        <Button
-          onClick={handleJoin}
-          size="small"
-          title={`Get Started`}
-          style={{
-            fontSize: 15,
-            color: "#fff",
-            backgroundColor: "#e6c018",
-            float: "right",
-          }}
-        />
-
+        {isAuthenticated ? (
+          <Button
+            onClick={handleRedirect}
+            size="small"
+            title={`Go to Dashboard`}
+            style={{
+              fontSize: 15,
+              color: "#fff",
+              backgroundColor: "#e6c018",
+              float: "right",
+            }}
+          />
+        ) : (
+          <Button
+            onClick={handleJoin}
+            size="small"
+            title={`Get Started`}
+            style={{
+              fontSize: 15,
+              color: "#fff",
+              backgroundColor: "#e6c018",
+              float: "right",
+            }}
+          />
+        )}
         <SearchBox
           style={{
             width: 700,

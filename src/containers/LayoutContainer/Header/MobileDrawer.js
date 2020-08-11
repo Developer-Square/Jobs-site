@@ -31,6 +31,7 @@ import {
   PROFILE_PAGE,
   HELP_PAGE,
 } from "constants/routes.constants";
+import { SDG } from "constants/routes.constants";
 
 const DrawerMenuItems = [
   {
@@ -176,6 +177,14 @@ const MobileDrawer = () => {
                 />
               </DrawerMenuItem>
             ))}
+            <DrawerMenuItem>
+              <NavLink
+                onClick={toggleHandler}
+                href={SDG}
+                label={"Software Development Goals"}
+                className="drawer_menu_item"
+              />
+            </DrawerMenuItem>
           </DrawerMenu>
 
           {isAuthenticated && (

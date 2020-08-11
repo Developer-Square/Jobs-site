@@ -33,11 +33,11 @@ export default function App() {
     <OriginalThemeProvider theme={themeMode}>
       <SearchProvider query={query}>
         <HeaderProvider>
-          <StickyProvider>
-            <AuthProvider>
+          <AuthProvider>
+            <StickyProvider>
               <BaseRouter deviceType={deviceType} />
-            </AuthProvider>
-          </StickyProvider>
+            </StickyProvider>
+          </AuthProvider>
         </HeaderProvider>
         <GlobalStyle />
       </SearchProvider>

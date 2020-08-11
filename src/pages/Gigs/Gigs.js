@@ -1,39 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useCallback } from "react";
 import GigsController from "./GigsController";
-import { AuthContext } from "contexts/auth/auth.context";
+import { useStickyDispatch } from "contexts/app/app.provider";
 
 function Gigs() {
-  const { authState, authDispatch } = useContext(AuthContext);
-  const [loading, setLoading] = useState(true);
-  const toggleView = () => {
-    authDispatch({
-      type: "VIEW",
-    });
-  };
-  const togglePost = () => {
-    authDispatch({
-      type: "POST",
-    });
-  };
+  const useDispatch = useStickyDispatch();
+  const setAppState = useCallback(() => useDispatch({ type: "VIEW" }), [
+    useDispatch,
+  ]);
   useEffect(() => {
-    authDispatch({
-      type: "VIEW",
-    });
-    setLoading(false);
+    setAppState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log("auth state", authState);
-  return (
-    <>
-      {loading ? (
-        <>
-          <button onClick={toggleView()}>View</button>
-          <button onClick={togglePost()}>Post</button>
-        </>
-      ) : (
-        <GigsController />
-      )}
-    </>
-  );
+  return <GigsController />;
 }
 export default Gigs;

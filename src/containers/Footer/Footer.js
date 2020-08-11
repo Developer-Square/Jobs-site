@@ -1,6 +1,6 @@
 import React from "react";
-import Footer from "../../components/Footer";
-import Icon from "../../components/Icons";
+import Footer from "components/Footer/Footer";
+import { Facebook, Twitter, YouTube, Instagram } from "components/AllSvgIcon";
 
 export default function FooterContainer() {
   return (
@@ -23,19 +23,19 @@ export default function FooterContainer() {
           <Footer.Column>
             <Footer.Title>Social</Footer.Title>
             <Footer.Link href="#">
-              <Icon className="fab fa-facebook-f" />
+              <Facebook />
               Facebook
             </Footer.Link>
             <Footer.Link href="#">
-              <Icon className="fab fa-instagram" />
+              <Instagram />
               Instagram
             </Footer.Link>
             <Footer.Link href="#">
-              <Icon className="fab fa-youtube" />
+              <YouTube />
               Youtube
             </Footer.Link>
             <Footer.Link href="#">
-              <Icon className="fab fa-twitter" />
+              <Twitter />
               Twitter
             </Footer.Link>
           </Footer.Column>

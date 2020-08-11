@@ -8,13 +8,12 @@ import {
   SubHeading,
   HelperText,
   Offer,
-  Divider,
+  // Divider,
   LinkButton,
 } from "./SignInOutForm.style";
-import {
-  Facebook,
-  // Google
-} from "components/AllSvgIcon";
+import // Facebook,
+// Google
+"components/AllSvgIcon";
 import { AuthContext } from "contexts/auth/auth.context";
 import { TERMS_CONDITIONS } from "constants/routes.constants";
 import { closeModal } from "@redq/reuse-modal";
@@ -233,7 +232,7 @@ export default function SignOutModal() {
                   }
                   style={{ color: "#ffffff" }}
                 />
-                <Divider>
+                {/* <Divider>
                   <span>or continue with</span>
                 </Divider>
 
@@ -245,7 +244,7 @@ export default function SignOutModal() {
                   icon={<Facebook />}
                   iconStyle={{ color: "#ffffff", marginRight: 5 }}
                   style={{ color: "#ffffff" }}
-                />
+                /> */}
 
                 <Offer style={{ padding: "20px 0" }}>
                   Already have an account?{" "}
