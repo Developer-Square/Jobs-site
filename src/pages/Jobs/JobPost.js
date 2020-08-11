@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Jobs.style";
@@ -8,39 +9,27 @@ import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
+import { Industries } from "pages/common/industry";
+import { useHistory } from "react-router-dom";
+import { useStickyDispatch } from "contexts/app/app.provider";
 
 function JobPost() {
+  const history = useHistory();
   const {
     authState: { profile },
-    authDispatch,
   } = useContext(AuthContext);
-  const [indusrty, setIndustry] = useState([]);
+  const [industry] = useState(Industries);
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/industry/`, tokenConfig())
-      .then((res) => {
-        const arr = res.data.results;
-        const result = arr.reduce((acc, d) => {
-          acc.push({
-            key: d.name,
-            value: d.id,
-          });
-          return acc;
-        }, []);
-        console.log(result);
-        setIndustry(result);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+    if (!profile.is_verified) {
+      history.push(`/dashboard/jobs`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const dropdownOptions = [
     { value: "", key: "Select Job Type" },
     { value: "fulltime", key: "Full-Time" },
     { value: "parttime", key: "Part-Time" },
     { value: "volunteering", key: "Volunteering" },
-    { value: "internship", key: "Internship" },
-    { value: "gig", key: "Gig" },
   ];
   const minQualificationsOptions = [
     { value: "", key: "Select your Qualification" },
@@ -74,10 +63,6 @@ function JobPost() {
     min_qualification: "",
     courseDate: null,
   };
-  console.log(
-    "the pk for user",
-    localStorage.getItem("thedb_auth_profile") ? profile.id : ""
-  );
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Required"),
@@ -108,19 +93,21 @@ function JobPost() {
         setErrors(err.response.data);
       });
   };
+  const useDispatch = useStickyDispatch();
+  const setForm = useCallback(() => useDispatch({ type: "VIEW" }), [
+    useDispatch,
+  ]);
   const toggleView = () => {
-    authDispatch({
-      type: "VIEW",
-    });
+    setForm();
   };
   return (
     <CardWrapper>
       <h4>
         Post A Job
         <Button
-          onClick={toggleView}
+          onClick={() => toggleView()}
           size="small"
-          title="Post a Job"
+          title="Listings"
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -161,7 +148,7 @@ function JobPost() {
                     control="select"
                     label="Industry"
                     name="industry"
-                    options={indusrty}
+                    options={industry}
                   />
                   <FormikControl
                     control="select"

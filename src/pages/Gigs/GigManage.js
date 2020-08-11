@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Gigs.style";
@@ -8,19 +8,14 @@ import axios from "axios";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
-import { AuthContext } from "contexts/auth/auth.context";
 import { useAppState } from "contexts/app/app.provider";
 import { useRouteMatch } from "react-router-dom";
 import { useStickyDispatch } from "contexts/app/app.provider";
+import { Industries } from "pages/common/industry";
 
 function GigManage() {
-  const {
-    authState: { profile },
-  } = useContext(AuthContext);
   const match = useRouteMatch();
-  const [industry, setIndustry] = useState([
-    { value: "", key: "Select Industry Type" },
-  ]);
+  const industry = Industries;
   const [initialValues, setInitialValues] = useState([]);
   const useDispatch = useStickyDispatch();
   const setList = useCallback(() => useDispatch({ type: "MANAGE" }), [
@@ -34,22 +29,22 @@ function GigManage() {
   const isEdit = currentForm === "edit";
   useEffect(() => {
     setList();
-    axios
-      .get(`${BASE_URL}/industry/`, tokenConfig())
-      .then((res) => {
-        const arr = res.data.results;
-        const result = arr.reduce((acc, d) => {
-          acc.push({
-            key: d.name,
-            value: d.id,
-          });
-          return acc;
-        }, []);
-        setIndustry(result);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+    // axios
+    //   .get(`${BASE_URL}/industry/`, tokenConfig())
+    //   .then((res) => {
+    //     const arr = res.data.results;
+    //     const result = arr.reduce((acc, d) => {
+    //       acc.push({
+    //         key: d.name,
+    //         value: d.id,
+    //       });
+    //       return acc;
+    //     }, []);
+    //     setIndustry(result);
+    //   })
+    //   .catch((err) => {
+    //     console.log("error", err);
+    //   });
     axios
       .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
       .then((res) => {
@@ -96,10 +91,6 @@ function GigManage() {
   //   qualifications: [],
   //   courseDate: null,
   // };
-  console.log(
-    "the pk for user",
-    localStorage.getItem("thedb_auth_profile") ? profile.id : ""
-  );
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Required"),

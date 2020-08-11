@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Jobs.style";
@@ -9,19 +9,14 @@ import { useStickyDispatch } from "contexts/app/app.provider";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
-import { AuthContext } from "contexts/auth/auth.context";
 import { useRouteMatch } from "react-router-dom";
 import { useAppState } from "contexts/app/app.provider";
+import { Industries } from "pages/common/industry";
 
 function JobManage() {
-  const {
-    authState: { profile },
-  } = useContext(AuthContext);
   const match = useRouteMatch();
   const [initialValues, setInitialValues] = useState([]);
-  const [industry, setIndustry] = useState([
-    { value: "", key: "Select Industry Type" },
-  ]);
+  const industry = Industries;
   const useDispatch = useStickyDispatch();
   const setList = useCallback(() => useDispatch({ type: "MANAGE" }), [
     useDispatch,
@@ -35,22 +30,6 @@ function JobManage() {
 
   useEffect(() => {
     setList();
-    axios
-      .get(`${BASE_URL}/industry/`, tokenConfig())
-      .then((res) => {
-        const arr = res.data.results;
-        const result = arr.reduce((acc, d) => {
-          acc.push({
-            key: d.name,
-            value: d.id,
-          });
-          return acc;
-        }, []);
-        setIndustry(result);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
     axios
       .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
       .then((res) => {
@@ -85,11 +64,6 @@ function JobManage() {
     { value: "above 10", key: "Above 10 years" },
   ];
 
-  console.log(
-    "the pk for user",
-    localStorage.getItem("thedb_auth_profile") ? profile.id : ""
-  );
-
   const validationSchema = Yup.object({
     title: Yup.string().required("Required"),
     industry: Yup.string().required("Required"),
@@ -118,11 +92,6 @@ function JobManage() {
         setErrors(err.response.data);
       });
   };
-  //   const toggleEdit = () => {
-  //     authDispatch({
-  //       type: "EDIT",
-  //     });
-  //   };
   return (
     <CardWrapper>
       <h4>

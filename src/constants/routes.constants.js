@@ -3,6 +3,7 @@ export const PROFILE_PAGE = "/dashboard/profile";
 export const CONTACT = "/contact-us";
 export const HOME = "/home";
 export const TOS = "/terms-and-conditions";
+export const SDG = "/sustainable-development-goals";
 
 export const ACCOUNT = "/account";
 export const ADMIN = "/admin";

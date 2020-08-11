@@ -47,6 +47,10 @@ export const Link = styled.a`
     color: #ff9c00;
     transition: 200ms ease-in;
   }
+  svg {
+    font-size: 18px;
+    margin-right: 16px;
+  }
 `;
 
 export const Title = styled.p`

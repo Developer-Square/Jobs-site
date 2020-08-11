@@ -8,13 +8,13 @@ import {
   SubHeading,
   OfferSection,
   Offer,
-  Divider,
+  // Divider,
 } from "./SignInOutForm.style";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Facebook, Google } from "components/AllSvgIcon";
+// import { Facebook, Google } from "components/AllSvgIcon";
 import { AuthContext } from "contexts/auth/auth.context";
-import { closeModal } from "@redq/reuse-modal";
+// import { closeModal } from "@redq/reuse-modal";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
 
@@ -40,8 +40,8 @@ export default function SignInModal() {
     password: "",
   });
   const { state, authDispatch } = useContext(AuthContext);
-  const [login] = useState("");
-  const [password] = useState("");
+  // const [login] = useState("");
+  // const [password] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("thedb_auth_profile") !== null) {
@@ -64,13 +64,13 @@ export default function SignInModal() {
     });
   };
 
-  const loginCallback = () => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("access_token", `${login}.${password}`);
-      authDispatch({ type: "SIGNIN_SUCCESS" });
-      closeModal();
-    }
-  };
+  // const loginCallback = () => {
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("access_token", `${login}.${password}`);
+  //     authDispatch({ type: "SIGNIN_SUCCESS" });
+  //     closeModal();
+  //   }
+  // };
   const validationSchema = Yup.object({
     login: Yup.string()
       .min(3, emailNotLongEnough)
@@ -221,7 +221,7 @@ export default function SignInModal() {
             );
           }}
         </Formik>
-        <Divider>
+        {/* <Divider>
           <span>or</span>
         </Divider>
 
@@ -245,7 +245,7 @@ export default function SignInModal() {
           iconStyle={{ color: "#ffffff", marginRight: 5 }}
           onClick={loginCallback}
           style={{ color: "#ffffff" }}
-        />
+        /> */}
 
         <Offer style={{ padding: "20px 0" }}>
           Don't have any account?{" "}

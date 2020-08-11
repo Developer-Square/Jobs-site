@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CardWrapper, FormWrapper } from "./Internships.style";
@@ -8,29 +9,21 @@ import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
+import { Industries } from "pages/common/industry";
+import { useHistory } from "react-router-dom";
+import { useStickyDispatch } from "contexts/app/app.provider";
 
 function InternshipPost() {
-  const { authDispatch } = useContext(AuthContext);
-  const [indusrty, setIndustry] = useState([
-    { value: "Select Industry Type", key: "" },
-  ]);
+  const history = useHistory();
+  const {
+    authState: { profile },
+  } = useContext(AuthContext);
+  const [industry] = useState(Industries);
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/industry/`, tokenConfig())
-      .then((res) => {
-        const arr = res.data.results;
-        const result = arr.reduce((acc, d) => {
-          acc.push({
-            key: d.name,
-            value: d.id,
-          });
-          return acc;
-        }, []);
-        setIndustry(result);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+    if (!profile.is_verified) {
+      history.push(`/dashboard/jobs`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const minQualificationsOptions = [
     { value: "Select your Qualification", key: "" },
@@ -61,7 +54,7 @@ function InternshipPost() {
     location: "",
     salary: "",
     description: "",
-    job_type: "internship",
+    job_type: "Internship",
     years_of_exp: "",
     min_qualifications: "",
     courseDate: null,
@@ -102,10 +95,12 @@ function InternshipPost() {
         setErrors(err.response.data);
       });
   };
+  const useDispatch = useStickyDispatch();
+  const setForm = useCallback(() => useDispatch({ type: "VIEW" }), [
+    useDispatch,
+  ]);
   const toggleView = () => {
-    authDispatch({
-      type: "VIEW",
-    });
+    setForm();
   };
   return (
     <CardWrapper>
@@ -114,7 +109,7 @@ function InternshipPost() {
         <Button
           onClick={toggleView}
           size="small"
-          title="Post Internship"
+          title="Listings"
           style={{
             fontSize: 15,
             color: "#5918e6",
@@ -155,7 +150,7 @@ function InternshipPost() {
                   control="select"
                   label="Industry"
                   name="industry"
-                  options={indusrty}
+                  options={industry}
                 />
                 <FormikControl
                   control="input"

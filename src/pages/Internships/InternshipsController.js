@@ -1,18 +1,17 @@
-import React, { useContext } from "react";
-import { AuthContext } from "contexts/auth/auth.context";
+import React from "react";
+import { useAppState } from "contexts/app/app.provider";
 import InternshipPost from "./InternshipPost";
 import InternshipView from "./InternshipView";
 
 export default function InternshipsController() {
-  const { authState } = useContext(AuthContext);
   let RenderView;
 
-  if (authState.currentForm === "post") {
+  if (useAppState("currentForm") === "post") {
     console.log("Render view post", RenderView);
     RenderView = InternshipPost;
   }
 
-  if (authState.currentForm === "view") {
+  if (useAppState("currentForm") === "view") {
     console.log("Render view view", RenderView);
     RenderView = InternshipView;
   }

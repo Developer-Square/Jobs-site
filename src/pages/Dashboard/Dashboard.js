@@ -22,6 +22,7 @@ import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import ApplicationModal from "../common/ApplicationModal";
+import Loader from "components/Loader/Loader";
 
 function Dashboard() {
   const {
@@ -29,12 +30,15 @@ function Dashboard() {
   } = useContext(AuthContext);
   const history = useHistory();
   const [jobs, setJobs] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${BASE_URL}/jobs/`, tokenConfig())
       .then((res) => {
         console.log("industry data", res.data.results);
         setJobs(res.data.results);
+        setLoading(false);
       })
       .catch((err) => {
         console.log("error", err.response);
@@ -68,12 +72,12 @@ function Dashboard() {
     setForm();
     history.push(`/dashboard/${category}/${id}`);
   };
-  const handleModal = () => {
+  const handleModal = (text) => {
     openModal({
       show: true,
       overlayClassName: "quick-view-overlay",
       closeOnClickOutside: true,
-      component: EmailVerificationModal,
+      component: () => EmailVerificationModal(text),
       closeComponent: "",
       config: {
         enableResizing: false,
@@ -107,9 +111,9 @@ function Dashboard() {
       <H4>
         Dashboard
         {profile.is_verified ? null : (
-          <span>Kindly verify Email to apply for the Openings</span>
+          <span>Verify Email to apply for the Openings</span>
         )}
-        <Button
+        {/* <Button
           onClick={() => handleApplication(1)}
           size="small"
           title={`Apply`}
@@ -122,94 +126,102 @@ function Dashboard() {
             height: "29px",
             margin: "0 10px",
           }}
-        />
+        /> */}
       </H4>
-
-      <LeftContent>
-        {jobs !== null && jobs.length > 0 ? (
-          <ul>
-            {jobs.map((job, index) => (
-              <li key={index}>
-                <section>
-                  <ListingLogo>
-                    <ImageWrapper url={job.companyLogo} alt={"company logo"} />
-                  </ListingLogo>
-                  <ListingTitle>
-                    <h3>
-                      {job.title}
-                      <TypeList>
-                        <ListSpan className={`${job.job_type}`}>
-                          {job.job_type}
-                        </ListSpan>
-                        {job.creator === profile.id ? (
-                          <Button
-                            onClick={() =>
-                              toggleManage(
-                                categorySelector(job.job_type),
-                                job.id
-                              )
-                            }
-                            size="small"
-                            title={`Manage Job`}
-                            disabled={!profile.is_verified}
-                            style={{
-                              fontSize: 15,
-                              color: "#5918e6",
-                              backgroundColor: "#e6c018",
-                              float: "left",
-                              height: "29px",
-                              margin: "0 10px",
-                            }}
-                          />
-                        ) : (
-                          <Button
-                            onClick={() =>
-                              !profile.is_verified
-                                ? handleApplication(job.id)
-                                : handleModal
-                            }
-                            size="small"
-                            title={`Apply`}
-                            disabled={!profile.is_verified}
-                            style={{
-                              fontSize: 15,
-                              color: "#5918e6",
-                              backgroundColor: profile.is_verified
-                                ? "#e6c018"
-                                : "#f2f2f2",
-                              float: "left",
-                              height: "29px",
-                              margin: "0 10px",
-                            }}
-                          />
-                        )}
-                      </TypeList>
-                    </h3>
-                    <ListingIcons>
-                      <li>
-                        <GiftBox />
-                        {job.description}
-                      </li>
-                      <li>
-                        <SearchIcon />
-                        {job.location}
-                      </li>
-                      <li>
-                        <LockIcon />
-                        {CURRENCY}
-                        {job.salary} - {CURRENCY}
-                        {job.salary}
-                      </li>
-                    </ListingIcons>
-                  </ListingTitle>
-                </section>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div>Sorry No recent listings available</div>
-        )}
-      </LeftContent>
+      {loading ? (
+        <Loader />
+      ) : (
+        <LeftContent>
+          <>
+            {jobs !== null && jobs.length > 0 ? (
+              <ul>
+                {jobs.map((job, index) => (
+                  <li key={index}>
+                    <section>
+                      <ListingLogo>
+                        <ImageWrapper
+                          url={job.companyLogo}
+                          alt={"company logo"}
+                        />
+                      </ListingLogo>
+                      <ListingTitle>
+                        <h3>
+                          {job.title}
+                          <TypeList>
+                            <ListSpan className={`${job.job_type}`}>
+                              {job.job_type}
+                            </ListSpan>
+                            {job.creator === profile.id ? (
+                              <Button
+                                onClick={() =>
+                                  toggleManage(
+                                    categorySelector(job.job_type),
+                                    job.id
+                                  )
+                                }
+                                size="small"
+                                title={`Manage Job`}
+                                // disabled={!profile.is_verified}
+                                style={{
+                                  fontSize: 15,
+                                  color: "#5918e6",
+                                  backgroundColor: "#e6c018",
+                                  // float: "left",
+                                  height: "29px",
+                                  margin: "0 10px",
+                                }}
+                              />
+                            ) : (
+                              <Button
+                                onClick={() =>
+                                  !profile.is_verified
+                                    ? handleApplication(job.id)
+                                    : handleModal
+                                }
+                                size="small"
+                                title={`Apply`}
+                                // disabled={!profile.is_verified}
+                                style={{
+                                  fontSize: 15,
+                                  color: "#5918e6",
+                                  backgroundColor: profile.is_verified
+                                    ? "#e6c018"
+                                    : "#f2f2f2",
+                                  float: "right",
+                                  height: "29px",
+                                  margin: "0 0 0 10px",
+                                }}
+                              />
+                            )}
+                          </TypeList>
+                        </h3>
+                        <ListingIcons>
+                          <li>
+                            <GiftBox />
+                            {job.description}
+                          </li>
+                          <li>
+                            <SearchIcon />
+                            {job.location}
+                          </li>
+                          <li>
+                            <LockIcon />
+                            {CURRENCY}
+                            {job.salary} - {CURRENCY}
+                            {job.salary}
+                          </li>
+                        </ListingIcons>
+                      </ListingTitle>
+                    </section>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div>Sorry No recent listings available</div>
+            )}
+          </>
+        </LeftContent>
+      )}
     </CardWrapper>
   );
 }
