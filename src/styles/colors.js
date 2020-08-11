@@ -11,7 +11,7 @@ const colors = {
   labelColor: "#909090", // 4
   inactiveButton: "#b7dbdd", // 6
   borderColor: "#f1f1f1", // 7
-  primary: "#5918e6", // 8
+  primary: "#21277F", // 8
   primaryHover: "#e3d0b6", // 9
   secondary: "#ff5b60", // 10
   secondaryHover: "#FF282F", // 11
