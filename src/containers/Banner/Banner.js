@@ -88,7 +88,7 @@ const Banner = ({ imageUrl }) => {
       }}
     >
       <BannerComponent>
-        <BannerHeading>The Database </BannerHeading>
+        <BannerHeading>THE DATABASE </BannerHeading>
         <br />
         <BannerSubHeading1>Jobs Need People</BannerSubHeading1>
         <BannerSubHeading>
