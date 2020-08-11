@@ -34,7 +34,7 @@ export default function FooterContainer() {
               <YouTube />
               Youtube
             </Footer.Link>
-            <Footer.Link href="#">
+            <Footer.Link href="https://twitter.com/ThedatabaseKe">
               <Twitter />
               Twitter
             </Footer.Link>
