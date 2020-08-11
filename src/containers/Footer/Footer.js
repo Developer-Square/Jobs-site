@@ -22,7 +22,7 @@ export default function FooterContainer() {
           </Footer.Column>
           <Footer.Column>
             <Footer.Title>Social</Footer.Title>
-            <Footer.Link href="#">
+            <Footer.Link href="https://facebook.com/thedatabase.co.ke">
               <Facebook />
               Facebook
             </Footer.Link>
