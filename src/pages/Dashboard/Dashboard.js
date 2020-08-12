@@ -23,6 +23,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import ApplicationModal from "../common/ApplicationModal";
 import Loader from "components/Loader/Loader";
+import Error500 from "components/Error/Error500";
 
 function Dashboard() {
   const {
@@ -30,19 +31,28 @@ function Dashboard() {
   } = useContext(AuthContext);
   const history = useHistory();
   const [jobs, setJobs] = useState(null);
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get(`${BASE_URL}/jobs/`, tokenConfig())
-      .then((res) => {
-        console.log("industry data", res.data.results);
-        setJobs(res.data.results);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log("error", err.response);
-      });
+    setTimeout(() => {
+      setLoading(true);
+      try {
+        axios
+          .get(`${BASE_URL}/jobs/`, tokenConfig())
+          .then((res) => {
+            console.log("industry data", res.data.results);
+            setJobs(res.data.results);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log(err.response.status);
+            setError(err);
+            setLoading(false);
+          });
+      } catch (error) {
+        setError(error);
+      }
+    }, 3000);
   }, []);
 
   const categorySelector = (category) => {
@@ -105,12 +115,15 @@ function Dashboard() {
       },
     });
   };
+  if (error) {
+    return <Error500 err={error} />;
+  }
 
   return (
     <CardWrapper>
       <H4>
         Dashboard
-        {profile.is_verified ? null : (
+        {profile.dummy_verified ? null : (
           <span>Verify Email to apply for the Openings</span>
         )}
         {/* <Button
@@ -121,7 +134,7 @@ function Dashboard() {
           style={{
             fontSize: 15,
             color: "#5918e6",
-            backgroundColor: profile.is_verified ? "#e6c018" : "#f2f2f2",
+            backgroundColor: profile.dummy_verified ? "#e6c018" : "#f2f2f2",
             float: "left",
             height: "29px",
             margin: "0 10px",
@@ -161,7 +174,7 @@ function Dashboard() {
                                 }
                                 size="small"
                                 title={`Manage Job`}
-                                // disabled={!profile.is_verified}
+                                // disabled={!profile.dummy_verified}
                                 style={{
                                   fontSize: 15,
                                   color: "#5918e6",
@@ -174,17 +187,17 @@ function Dashboard() {
                             ) : (
                               <Button
                                 onClick={() =>
-                                  !profile.is_verified
+                                  !profile.dummy_verified
                                     ? handleApplication(job.id)
                                     : handleModal
                                 }
                                 size="small"
                                 title={`Apply`}
-                                // disabled={!profile.is_verified}
+                                // disabled={!profile.dummy_verified}
                                 style={{
                                   fontSize: 15,
                                   color: "#5918e6",
-                                  backgroundColor: profile.is_verified
+                                  backgroundColor: profile.dummy_verified
                                     ? "#e6c018"
                                     : "#f2f2f2",
                                   float: "right",

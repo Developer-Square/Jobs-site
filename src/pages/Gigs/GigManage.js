@@ -12,11 +12,26 @@ import { useAppState } from "contexts/app/app.provider";
 import { useRouteMatch } from "react-router-dom";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import { Industries } from "pages/common/industry";
+import Loader from "components/Loader/Loader";
+import Error500 from "components/Error/Error500";
+import { openModal } from "@redq/reuse-modal";
+import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import {
+  ListingLogo,
+  ListingTitle,
+  ListingIcons,
+  LeftContent,
+  TypeList,
+} from "styles/pages.style";
+import ImageWrapper from "components/Image/Image";
+import { LockIcon } from "components/AllSvgIcon";
+import { CURRENCY } from "constants/constants";
+import ModalTemplate from "pages/common/ModalTemplate";
 
 function GigManage() {
   const match = useRouteMatch();
   const industry = Industries;
-  const [initialValues, setInitialValues] = useState([]);
+  const [initialValues, setInitialValues] = useState();
   const useDispatch = useStickyDispatch();
   const setList = useCallback(() => useDispatch({ type: "MANAGE" }), [
     useDispatch,
@@ -25,37 +40,67 @@ function GigManage() {
     useDispatch,
   ]);
   const currentForm = useAppState("currentForm");
-  console.log("app state", currentForm);
   const isEdit = currentForm === "edit";
+  const [applicants, setApplicants] = useState([
+    {
+      email: "demo@demo.com",
+      full_name: "Tester User",
+      id: 1,
+      username: "1demo.com",
+      salary: 5000,
+    },
+    {
+      email: "admin@demo.com",
+      full_name: "Only User",
+      id: 2,
+      username: "IDM",
+      salary: 4000,
+    },
+  ]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     setList();
-    // axios
-    //   .get(`${BASE_URL}/industry/`, tokenConfig())
-    //   .then((res) => {
-    //     const arr = res.data.results;
-    //     const result = arr.reduce((acc, d) => {
-    //       acc.push({
-    //         key: d.name,
-    //         value: d.id,
-    //       });
-    //       return acc;
-    //     }, []);
-    //     setIndustry(result);
-    //   })
-    //   .catch((err) => {
-    //     console.log("error", err);
-    //   });
-    axios
-      .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
-      .then((res) => {
-        const arr = res.data;
-        console.log("array jobs", arr);
-        // setJob(arr);
-        setInitialValues(arr);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+    setTimeout(() => {
+      try {
+        axios
+          .get(`${BASE_URL}/jobs/?job_id=${match.params.jobID}`, tokenConfig())
+          .then((res) => {
+            // const arr = res.data.results;
+            // const result = arr.reduce((acc, d) => {
+            //   acc.push({
+            //     key: d.name,
+            //     value: d.id,
+            //   });
+            //   return acc;
+            // }, []);
+            setApplicants(res.data.results);
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log("Catching Errors:", err);
+            setError(err);
+          });
+        axios
+          .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
+          .then((res) => {
+            const arr = res.data;
+            console.log("array jobs", arr);
+            // setJob(arr);
+            setInitialValues(arr);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log("Catching Errors:", error);
+            setError(error);
+          });
+      } catch (error) {
+        console.log("Catching Errors:", error);
+        setError(error);
+      }
+    }, 2000);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -104,22 +149,133 @@ function GigManage() {
   });
 
   const onSubmit = async (values, { setErrors, setSubmitting }) => {
+    setLoading(true);
     console.log("val8es fdsf ", values);
     setSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     axios
-      .post(`${BASE_URL}/jobs/`, values, tokenConfig())
+      .post(`${BASE_URL}/jobs/${match.params.jobID}/`, values, tokenConfig())
       .then((res) => {
         setSubmitting(false);
         console.log("res", res.data);
       })
       .catch((err) => {
+        if (err.response.status > 199 && err.response.status < 300) {
+          setErrors(err.response.data);
+        } else {
+          setError(err);
+        }
+        console.log(err.response.status);
         setSubmitting(false);
-        console.log("error", err);
-
-        setErrors(err.response.data);
+        setLoading(false);
       });
   };
+  const closeApplications = () => {
+    setLoading(true);
+    axios
+      .post(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
+      .then((res) => {
+        openModal({
+          show: true,
+          overlayClassName: "quick-view-overlay",
+          closeOnClickOutside: true,
+          component: () => EmailVerificationModal("Applications halted!"),
+          closeComponent: "",
+          config: {
+            enableResizing: false,
+            disableDragging: true,
+            className: "quick-view-modal",
+            width: 458,
+            height: "auto",
+          },
+        });
+      })
+      .catch((err) => {
+        setError(err);
+        console.log(err.response.status);
+        setLoading(false);
+      });
+  };
+  const deleteJob = (text) => {
+    setLoading(true);
+    axios
+      .delete(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
+      .then((res) => {
+        setLoading(false);
+        openModal({
+          show: true,
+          overlayClassName: "quick-view-overlay",
+          closeOnClickOutside: true,
+          component: () => EmailVerificationModal("Job deleted"),
+          closeComponent: "",
+          config: {
+            enableResizing: false,
+            disableDragging: true,
+            className: "quick-view-modal",
+            width: 458,
+            height: "auto",
+          },
+        });
+      })
+      .catch((err) => {
+        setError(err);
+        console.log(err.response.status);
+        setLoading(false);
+      });
+  };
+  const selectApplicant = () => {
+    const values = { status: "accepted" };
+    axios
+      .post(
+        `${BASE_URL}/application/${match.params.jobID}/`,
+        values,
+        tokenConfig()
+      )
+      .then((res) => {
+        setLoading(false);
+        openModal({
+          show: true,
+          overlayClassName: "quick-view-overlay",
+          closeOnClickOutside: true,
+          component: () => EmailVerificationModal("Job deleted"),
+          closeComponent: "",
+          config: {
+            enableResizing: false,
+            disableDragging: true,
+            className: "quick-view-modal",
+            width: 458,
+            height: "auto",
+          },
+        });
+      })
+      .catch((err) => {
+        if (err.response.status > 199 && err.response.status < 300) {
+        } else {
+          setError(err);
+        }
+        console.log(err.response.status);
+        setLoading(false);
+      });
+  };
+  const applicantView = (profile) => {
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: () => ModalTemplate(profile),
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
+  if (error) {
+    return <Error500 err={error} />;
+  }
 
   return (
     <CardWrapper>
@@ -137,75 +293,149 @@ function GigManage() {
           }}
         />
       </h4>
-      {currentForm === "edit" && (
-        <FormWrapper>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
-            {(formik) => {
-              return (
-                <Form>
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Title"
-                    name="title"
-                  />
-                  <FormikControl
-                    control="select"
-                    label="Industry"
-                    name="industry"
-                    options={industry}
-                  />
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Salary"
-                    name="salary"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Location"
-                    name="location"
-                  />
-                  <FormikControl
-                    control="select"
-                    label="Qualification"
-                    name="qualifications"
-                    options={minQualificationsOptions}
-                  />
-                  <FormikControl
-                    control="select"
-                    label="Experience"
-                    name="experience"
-                    options={experienceOptions}
-                  />
-                  <FormikControl
-                    control="textarea"
-                    label="description"
-                    name="description"
-                  />
-                  <Button
-                    type="submit"
-                    size="small"
-                    title={formik.isSubmitting ? "Submitting... " : "Submit"}
-                    style={{ fontSize: 15, color: "#fff" }}
-                    disabled={!formik.isValid}
-                  />
-                </Form>
-              );
-            }}
-          </Formik>
-        </FormWrapper>
-      )}
-      {currentForm === "manage" && (
-        <ul>
-          <li>applicant one</li>
-          <li>applicant two</li>
-        </ul>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {currentForm === "edit" && (
+            <>
+              <h4>
+                .
+                <Button
+                  onClick={closeApplications}
+                  size="small"
+                  title={`Close Applications`}
+                  style={{
+                    fontSize: 15,
+                    color: "#fff",
+                    backgroundColor: "#c018e6",
+                    float: "left",
+                  }}
+                />
+                <Button
+                  onClick={deleteJob}
+                  size="small"
+                  title={`Delete Job`}
+                  style={{
+                    fontSize: 15,
+                    color: "#fff",
+                    backgroundColor: "#e6183e",
+                    float: "right",
+                  }}
+                />
+              </h4>
+              <FormWrapper>
+                <Formik
+                  initialValues={initialValues}
+                  validationSchema={validationSchema}
+                  onSubmit={onSubmit}
+                >
+                  {(formik) => {
+                    return (
+                      <Form>
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="Title"
+                          name="title"
+                        />
+                        <FormikControl
+                          control="select"
+                          label="Industry"
+                          name="industry"
+                          options={industry}
+                        />
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="Salary"
+                          name="salary"
+                        />
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="Location"
+                          name="location"
+                        />
+                        <FormikControl
+                          control="select"
+                          label="Qualification"
+                          name="qualifications"
+                          options={minQualificationsOptions}
+                        />
+                        <FormikControl
+                          control="select"
+                          label="Experience"
+                          name="experience"
+                          options={experienceOptions}
+                        />
+                        <FormikControl
+                          control="textarea"
+                          label="description"
+                          name="description"
+                        />
+                        <Button
+                          type="submit"
+                          size="small"
+                          title={
+                            formik.isSubmitting ? "Submitting... " : "Submit"
+                          }
+                          style={{ fontSize: 15, color: "#fff" }}
+                          disabled={!formik.isValid}
+                        />
+                      </Form>
+                    );
+                  }}
+                </Formik>
+              </FormWrapper>
+            </>
+          )}
+          {currentForm === "manage" && (
+            <LeftContent>
+              <ul>
+                {applicants.map((applicant, index) => (
+                  <li key={index}>
+                    <section onClick={() => applicantView(applicant)}>
+                      <ListingLogo>
+                        <ImageWrapper
+                          url={applicant.image}
+                          alt={"company logo"}
+                        />
+                      </ListingLogo>
+                      <ListingTitle>
+                        <h3>
+                          {applicant.full_name}
+                          <TypeList>
+                            <Button
+                              onClick={() => selectApplicant()}
+                              size="small"
+                              title={`Approve`}
+                              style={{
+                                fontSize: 15,
+                                color: "#fff",
+                                backgroundColor: "#5918e6",
+                                float: "right",
+                                height: "29px",
+                                margin: "0 0 0 10px",
+                              }}
+                            />
+                          </TypeList>
+                        </h3>
+                        <ListingIcons>
+                          <li>
+                            <LockIcon />
+                            {CURRENCY}
+                            {applicant.salary}
+                          </li>
+                        </ListingIcons>
+                      </ListingTitle>
+                    </section>
+                  </li>
+                ))}
+              </ul>
+            </LeftContent>
+          )}
+        </>
       )}
     </CardWrapper>
   );

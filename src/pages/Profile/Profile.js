@@ -1,65 +1,69 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import moment from "moment";
 import { CardWrapper, FormWrapper } from "./Profile.style";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
 import { BASE_URL } from "constants/constants";
-import { tokenConfig } from "helpers";
+import { tokenConfig, addObjectToLocalStorageObject } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
-import moment from "moment";
+import LogoImage from "image/thedb.png";
+import { openModal } from "@redq/reuse-modal";
+import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import Loader from "components/Loader/Loader";
+import Error500 from "components/Error/Error500";
+import {} from "helpers";
 
 function Profile() {
   const {
     authState: { profile },
   } = useContext(AuthContext);
-
-  const [initialValues, setInitialValues] = useState({});
-  const [initialProfileValues, setInitialProfileValues] = useState({});
-  const [initialOrganizationValues, setInitialOrganizationValues] = useState(
-    {}
-  );
-
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (localStorage.getItem("thedb_auth_profile") !== null) {
-      setInitialValues({
-        email: localStorage.getItem("thedb_auth_profile") ? profile.email : "",
-        first_name: localStorage.getItem("thedb_auth_profile")
-          ? profile.first_name
-          : "",
-        last_name: localStorage.getItem("thedb_auth_profile")
-          ? profile.last_name
-          : "",
-        salary: "",
-        description: "",
-        experience: [],
-        qualifications: [],
-      });
-      setInitialProfileValues({
-        title: "",
-        huduma_number: "",
-        image: null,
-        date_of_birth: new Date(),
-        about: "",
-        location: "",
-        gender: "",
-        status: "",
-        user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-      });
-      setInitialOrganizationValues({
-        name: "",
-        description: "",
-        website: "https://",
-        country: "",
-        location: "",
-        address: "",
-        logo: null,
-        user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   }, []);
+  const [initialValues] = useState({
+    email: localStorage.getItem("thedb_auth_profile") ? profile.email : "",
+    first_name: localStorage.getItem("thedb_auth_profile")
+      ? profile.full_name.split(" ")[0]
+      : "",
+    last_name: localStorage.getItem("thedb_auth_profile")
+      ? profile.full_name.split(" ")[1]
+      : "",
+    full_name: localStorage.getItem("thedb_auth_profile")
+      ? profile.full_name
+      : "",
+    salary: "",
+    description: "",
+    experience: [],
+    qualifications: [],
+  });
+  const [initialProfileValues] = useState({
+    title: "",
+    huduma_number: "",
+    image: LogoImage,
+    date_of_birth: new Date(),
+    about: "",
+    location: "",
+    gender: "",
+    status: "",
+    user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
+  });
+  const [initialOrganizationValues] = useState({
+    name: "",
+    description: "",
+    website: "https://",
+    country: "",
+    location: "",
+    address: "",
+    logo: LogoImage,
+    user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
+  });
 
   const genderOptions = [
     { value: "", key: "Select Gender" },
@@ -109,26 +113,70 @@ function Profile() {
       allowLocal: true,
     }),
   });
-
-  const onSubmit = async (values, { setErrors, setSubmitting }) => {
-    console.log("val8es fdsf ", values);
-    setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    axios
-      .post(`${BASE_URL}/accounts/profile/`, values, tokenConfig())
-      .then((res) => {
-        setSubmitting(false);
-        console.log("res", res.data);
-        // successBanner();
-      })
-      .catch((err) => {
-        setSubmitting(false);
-        console.log("error", err);
-
-        setErrors(err.response.data);
-      });
+  const handleModal = (text, subtext) => {
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: () => EmailVerificationModal(text, subtext),
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
   };
-  const onOrgSubmit = async (values, { setErrors, setSubmitting }) => {
+
+  const onSubmit = (values, { setErrors, setSubmitting }) => {
+    const {
+      email,
+      first_name,
+      last_name,
+      salary,
+      description,
+      experience,
+      qualifications,
+    } = values;
+    const body = {
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      full_name: `${first_name}${" "}${last_name}`,
+      salary: salary,
+      description: description,
+      experience: experience,
+      qualifications: qualifications,
+    };
+    setSubmitting(true);
+    setLoading(true);
+    try {
+      axios
+        .post(`${BASE_URL}/accounts/profile/`, body, tokenConfig())
+        .then((res) => {
+          setSubmitting(false);
+          console.log("res", res.data);
+          addObjectToLocalStorageObject("thedb_auth_profile", res.data);
+          handleModal("Profile Edited Successfully", "");
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.response.status > 199 && err.response.status < 300) {
+            setErrors(err.response.data);
+          } else {
+            setError(err);
+          }
+          console.log(err.response.status);
+          setSubmitting(false);
+          setLoading(false);
+        });
+    } catch (error) {
+      setError(error);
+    }
+  };
+  const onOrgSubmit = (type, values, { setErrors, setSubmitting }) => {
     const {
       name,
       description,
@@ -138,6 +186,7 @@ function Profile() {
       location,
       website,
     } = values;
+
     const body = {
       name: name,
       description: description,
@@ -145,24 +194,50 @@ function Profile() {
       country: country,
       location: location,
       address: address,
-      logo: logo[0].path,
+      logo: logo.preview,
       user: profile.id,
     };
-    console.log("body values ", typeof body.logo, body.logo);
+    console.log("body values ", typeof logo.preview, logo.preview);
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    axios
-      .post(`${BASE_URL}/organization/`, body, tokenConfig())
-      .then((res) => {
-        setSubmitting(false);
-        console.log("res", res.data);
-        // successBanner();
-      })
-      .catch((err) => {
-        setSubmitting(false);
-        console.log("error", err.response.data);
-        setErrors(err.response.data);
-      });
+    setLoading(true);
+    try {
+      axios
+        .post(`${BASE_URL}/organization/`, body, tokenConfig())
+        .then((res) => {
+          setSubmitting(false);
+          console.log("res", res.data);
+          handleModal("Profile Created Successfully", "");
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.response.data) {
+            setErrors(err.response.data);
+          }
+          setSubmitting(false);
+          setError(err);
+          setLoading(false);
+        });
+      axios
+        .post(`${BASE_URL}/${type}/`, body, tokenConfig())
+        .then((res) => {
+          setSubmitting(false);
+          console.log("res", res.data);
+          handleModal(`${type} Profile Created Successfully`, "");
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.response.status > 199 && err.response.status < 300) {
+            setErrors(err.response.data);
+          } else {
+            setError(err);
+          }
+          console.log(err.response.status);
+          setSubmitting(false);
+          setLoading(false);
+        });
+    } catch (error) {
+      setError(error);
+    }
   };
   const onAddSubmit = async (values, { setErrors, setSubmitting }) => {
     const {
@@ -178,7 +253,7 @@ function Profile() {
     const body = {
       title: title,
       huduma_number: huduma_number,
-      image: image[0].path,
+      image: image.preview,
       date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
       about: about,
       location: location,
@@ -188,200 +263,226 @@ function Profile() {
     };
     console.log("val8es fdsf ", body);
     setSubmitting(true);
+    setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    axios
-      .post(`${BASE_URL}/individual/`, body, tokenConfig())
-      .then((res) => {
-        setSubmitting(false);
-        console.log("res", res.data);
-        // successBanner();
-      })
-      .catch((err) => {
-        setSubmitting(false);
-        console.log("error", err.response.data);
-
-        setErrors(err.response.data);
-      });
+    try {
+      axios
+        .post(`${BASE_URL}/individual/`, body, tokenConfig())
+        .then((res) => {
+          setSubmitting(false);
+          console.log("res", res.data);
+          handleModal("Profile Updated Successfully", "");
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.response.status > 199 && err.response.status < 300) {
+            setErrors(err.response.data);
+          } else {
+            setError(err);
+          }
+          console.log(err.response.status);
+          setSubmitting(false);
+          setLoading(false);
+        });
+    } catch (error) {
+      setError(error);
+    }
   };
+  if (error) {
+    return <Error500 err={error} />;
+  }
+
   return (
     <CardWrapper>
       <h4>Profile</h4>
-      <FormWrapper>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            return (
-              <Form>
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="First Name"
-                  name="first_name"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Last Name"
-                  name="last_name"
-                />
-                <FormikControl
-                  control="input"
-                  type="email"
-                  label="Email"
-                  name="email"
-                />
-                <Button
-                  type="submit"
-                  size="small"
-                  title={formik.isSubmitting ? "Changing... " : "Change"}
-                  style={{ fontSize: 15, color: "#fff" }}
-                  disabled={!formik.isValid}
-                />
-              </Form>
-            );
-          }}
-        </Formik>
-      </FormWrapper>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {" "}
+          <FormWrapper>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={onSubmit}
+            >
+              {(formik) => {
+                return (
+                  <Form>
+                    <FormikControl
+                      control="input"
+                      type="text"
+                      label="First Name"
+                      name="first_name"
+                    />
+                    <FormikControl
+                      control="input"
+                      type="text"
+                      label="Last Name"
+                      name="last_name"
+                    />
+                    <FormikControl
+                      control="input"
+                      type="email"
+                      label="Email"
+                      name="email"
+                      onClick={() => handleModal("", "Sorry, cant edit email")}
+                      disabled={true}
+                      readonly
+                    />
+                    <Button
+                      type="submit"
+                      size="small"
+                      title={formik.isSubmitting ? "Changing... " : "Change"}
+                      style={{ fontSize: 15, color: "#fff" }}
+                      disabled={!formik.isValid}
+                    />
+                  </Form>
+                );
+              }}
+            </Formik>
+          </FormWrapper>
+          <h4>Additional Details</h4>
+          <FormWrapper>
+            {profile.is_individual ? (
+              <Formik
+                initialValues={initialProfileValues}
+                validationSchema={profileValidationSchema}
+                onSubmit={onAddSubmit}
+              >
+                {(formik) => {
+                  return (
+                    <Form>
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Title"
+                        name="title"
+                      />
 
-      <h4>Additional Details</h4>
-      <FormWrapper>
-        {profile.is_individual ? (
-          <Formik
-            initialValues={initialProfileValues}
-            validationSchema={profileValidationSchema}
-            onSubmit={onAddSubmit}
-          >
-            {(formik) => {
-              return (
-                <Form>
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Title"
-                    name="title"
-                  />
-
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Huduma Number"
-                    name="huduma_number"
-                  />
-                  <FormikControl
-                    control="date"
-                    label="Birth Date"
-                    name="date_of_birth"
-                  />
-                  <FormikControl
-                    control="select"
-                    label="Gender"
-                    name="gender"
-                    options={genderOptions}
-                  />
-                  <FormikControl
-                    control="select"
-                    label="Status"
-                    name="status"
-                    options={statusOptions}
-                  />
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Current Residence"
-                    name="location"
-                  />
-                  <FormikControl
-                    control="textarea"
-                    label="Additional Info"
-                    name="about"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="file"
-                    setFieldValue={formik.setFieldValue}
-                    value={formik.values.image}
-                    label="Profile Image"
-                    name="image"
-                  />
-                  <Button
-                    type="submit"
-                    size="small"
-                    title={formik.isSubmitting ? "Adding... " : "Add"}
-                    style={{ fontSize: 15, color: "#fff" }}
-                    disabled={!formik.isValid}
-                  />
-                </Form>
-              );
-            }}
-          </Formik>
-        ) : (
-          <Formik
-            initialValues={initialOrganizationValues}
-            validationSchema={organizationValidationSchema}
-            onSubmit={onOrgSubmit}
-          >
-            {(formik) => {
-              return (
-                <Form>
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Organization Name"
-                    name="name"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Website Domain"
-                    name="website"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Country"
-                    name="country"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Current Office Location"
-                    name="location"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Company Address"
-                    name="address"
-                  />
-                  <FormikControl
-                    control="textarea"
-                    label="About Company Info"
-                    name="description"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="file"
-                    setFieldValue={formik.setFieldValue}
-                    value={formik.values.logo}
-                    label="Company Logo"
-                    name="logo"
-                  />
-                  <Button
-                    type="submit"
-                    size="small"
-                    title={formik.isSubmitting ? "Creating Profile... " : "Add"}
-                    style={{ fontSize: 15, color: "#fff" }}
-                    disabled={!formik.isValid}
-                  />
-                </Form>
-              );
-            }}
-          </Formik>
-        )}
-      </FormWrapper>
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Huduma Number"
+                        name="huduma_number"
+                      />
+                      <FormikControl
+                        control="date"
+                        label="Birth Date"
+                        name="date_of_birth"
+                      />
+                      <FormikControl
+                        control="select"
+                        label="Gender"
+                        name="gender"
+                        options={genderOptions}
+                      />
+                      <FormikControl
+                        control="select"
+                        label="Status"
+                        name="status"
+                        options={statusOptions}
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Current Residence"
+                        name="location"
+                      />
+                      <FormikControl
+                        control="textarea"
+                        label="Additional Info"
+                        name="about"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="file"
+                        setFieldValue={formik.setFieldValue}
+                        value={formik.values.image}
+                        label="Profile Image"
+                        name="image"
+                      />
+                      <Button
+                        type="submit"
+                        size="small"
+                        title={formik.isSubmitting ? "Adding... " : "Add"}
+                        style={{ fontSize: 15, color: "#fff" }}
+                        disabled={!formik.isValid}
+                      />
+                    </Form>
+                  );
+                }}
+              </Formik>
+            ) : (
+              <Formik
+                initialValues={initialOrganizationValues}
+                validationSchema={organizationValidationSchema}
+                onSubmit={onOrgSubmit}
+              >
+                {(formik) => {
+                  return (
+                    <Form>
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Organization Name"
+                        name="name"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Website Domain"
+                        name="website"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Country"
+                        name="country"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Current Office Location"
+                        name="location"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Company Address"
+                        name="address"
+                      />
+                      <FormikControl
+                        control="textarea"
+                        label="About Company Info"
+                        name="description"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="file"
+                        setFieldValue={formik.setFieldValue}
+                        value={formik.values.logo}
+                        label="Company Logo"
+                        name="logo"
+                      />
+                      {/* <Field type="file" name="logo" id="logo" value={null} /> */}
+                      <Button
+                        type="submit"
+                        size="small"
+                        title={
+                          formik.isSubmitting ? "Creating Profile... " : "Add"
+                        }
+                        style={{ fontSize: 15, color: "#fff" }}
+                        disabled={!formik.isValid}
+                      />
+                    </Form>
+                  );
+                }}
+              </Formik>
+            )}
+          </FormWrapper>
+        </>
+      )}
     </CardWrapper>
   );
 }

@@ -6,19 +6,15 @@ import GigManage from "./GigManage";
 
 export default function GigsController() {
   let RenderView;
-  console.log("dfsfsfsfdsfs", useAppState("currentForm"));
 
   if (useAppState("currentForm") === "post") {
-    console.log("Render view post", RenderView);
     RenderView = GigPost;
   }
 
   if (useAppState("currentForm") === "view") {
-    console.log("Render view view", RenderView);
     RenderView = GigView;
   }
   if (useAppState("currentForm") === "manage") {
-    console.log("Render view manage", RenderView);
     RenderView = GigManage;
   }
 

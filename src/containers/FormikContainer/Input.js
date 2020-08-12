@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Uploader from "components/Uploader/Uploader";
 
 function Input(props) {
-  const { label, name, type, file, setFieldValue, value, ...rest } = props;
+  const { label, name, type, file, setFieldValue, ...rest } = props;
 
   return (
     <FormInput>
@@ -19,9 +19,8 @@ function Input(props) {
             return (
               <Uploader
                 id={name}
+                selected={value[0].path}
                 {...field}
-                {...rest}
-                selected={value}
                 onChange={(val) => setFieldValue(name, val)}
               />
             );
@@ -33,7 +32,6 @@ function Input(props) {
           id={name}
           name={name}
           type={type}
-          value={value}
           {...rest}
         />
       )}

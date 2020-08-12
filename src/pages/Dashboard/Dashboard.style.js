@@ -77,7 +77,7 @@ export const LogoWrapper = styled.div`
 export const Heading = styled.h3`
   color: ${themeGet("colors.primary", "#6c3a1f")};
   margin-bottom: 10px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Playfair Display", sans-serif;
   font-size: ${themeGet("fontSizes.4", "21")}px;
   font-weight: ${themeGet("fontWeights.6", "700")};
 `;

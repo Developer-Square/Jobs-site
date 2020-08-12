@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import {
   Button,
@@ -26,10 +26,19 @@ import { addToLocalStorageObject } from "helpers";
 import { addToLocalStorageArray } from "helpers";
 import { addObjectToLocalStorageObject } from "helpers";
 import { TOS } from "constants/routes.constants";
+import Loader from "components/Loader/Loader";
+import Error500 from "components/Error/Error500";
 
 export default function SignOutModal() {
   const { state, authDispatch } = useContext(AuthContext);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const history = useHistory();
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
   const emailNotLongEnough = "email must be at least 3 characters";
   const emailRequired = "Please enter an email address";
   const invalidEmail = "email must be a valid email";
@@ -37,7 +46,6 @@ export default function SignOutModal() {
   const passwordNotLongEnough = "password must be at least 8 characters";
   const passwordDoNotMatch = "passwords must match";
   const fieldRequired = "This field is required";
-  // const specialXter = "Needs one special character or value";
 
   const initialValues = {
     full_name: "",
@@ -46,7 +54,7 @@ export default function SignOutModal() {
     password: "",
     password_confirm: "",
     is_individual: "true",
-    is_business: false,
+    is_business: "false",
   };
   const options = [
     { key: "Individual", value: true },
@@ -97,11 +105,11 @@ export default function SignOutModal() {
         setSubmitting(false);
         let auth_profile = res.data;
         addObjectToLocalStorageObject("thedb_auth_profile", auth_profile);
-        addToLocalStorageObject("thedb_auth_profile", "is_verified", false);
+        addToLocalStorageObject("thedb_auth_profile", "dummy_verified", false);
         // addToLocalStorageObject("thedb_auth_profile", "id", res.data.id);
         // hashPassword(values.password_confirm);
         // eslint-disable-next-line no-unused-vars
-        let profile = { is_verified: false };
+        let profile = { dummy_verified: false };
         let email = { email: values.email, secret: values.password };
         profile = { ...res.data, ...email };
 
@@ -134,13 +142,14 @@ export default function SignOutModal() {
         console.log("response", res);
       })
       .catch((err) => {
-        // authDispatch({ type: "SIGNUP_FAILED" });
-        console.log("error", err.response.data);
-
-        setErrors(err.response.data);
+        if (err.response.status > 199 && err.response.status < 300) {
+          setErrors(err.response.data);
+        } else {
+          setError(err);
+        }
+        console.log(err.response.status);
         setSubmitting(false);
-
-        return err.response.data;
+        setLoading(false);
       });
 
     return null;
@@ -149,90 +158,96 @@ export default function SignOutModal() {
     closeModal();
     history.push(`${TOS}`);
   };
+  if (error) {
+    return <Error500 err={error} />;
+  }
 
   return (
     <Wrapper>
       <Container>
         <Heading>Sign Up</Heading>
-
-        <SubHeading>Every fill is required in sign up</SubHeading>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            const requireBusiness =
-              formik.values.is_individual !== `${YES.value}`;
-            return (
-              <Form>
-                <FormikControl
-                  control="radio"
-                  label="Register as:"
-                  name="is_individual"
-                  options={options}
-                />
-                {formik.values.is_individual === "true" ? null : (
-                  <>
-                    {requireBusiness && (
-                      <FormikControl
-                        control="radio"
-                        label="Choose Category"
-                        name="is_business"
-                        options={organizationOptions}
-                      />
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <SubHeading>Every fill is required in sign up</SubHeading>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={onSubmit}
+            >
+              {(formik) => {
+                const requireBusiness =
+                  formik.values.is_individual !== `${YES.value}`;
+                return (
+                  <Form>
+                    <FormikControl
+                      control="radio"
+                      label="Register as:"
+                      name="is_individual"
+                      options={options}
+                    />
+                    {formik.values.is_individual === "true" ? null : (
+                      <>
+                        {requireBusiness && (
+                          <FormikControl
+                            control="radio"
+                            label="Choose Category"
+                            name="is_business"
+                            options={organizationOptions}
+                          />
+                        )}
+                      </>
                     )}
-                  </>
-                )}
 
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Full Name"
-                  name="full_name"
-                />
-                <FormikControl
-                  control="input"
-                  type="email"
-                  label="Email"
-                  name="email"
-                />
-                <FormikControl
-                  control="input"
-                  type="password"
-                  label="Password"
-                  name="password"
-                />
-                <FormikControl
-                  control="input"
-                  type="password"
-                  label="Confirm Password"
-                  name="password_confirm"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Username"
-                  name="username"
-                />
+                    <FormikControl
+                      control="input"
+                      type="text"
+                      label="Full Name"
+                      name="full_name"
+                    />
+                    <FormikControl
+                      control="input"
+                      type="email"
+                      label="Email"
+                      name="email"
+                    />
+                    <FormikControl
+                      control="input"
+                      type="password"
+                      label="Password"
+                      name="password"
+                    />
+                    <FormikControl
+                      control="input"
+                      type="password"
+                      label="Confirm Password"
+                      name="password_confirm"
+                    />
+                    <FormikControl
+                      control="input"
+                      type="text"
+                      label="Username"
+                      name="username"
+                    />
 
-                <HelperText style={{ padding: "20px 0 30px" }}>
-                  By signing up, you agree to The Database's{" "}
-                  <Link to={TERMS_CONDITIONS} onClick={() => handleTOS}>
-                    Terms &amp; Condtions
-                  </Link>
-                </HelperText>
+                    <HelperText style={{ padding: "20px 0 30px" }}>
+                      By signing up, you agree to The Database's{" "}
+                      <Link to={TERMS_CONDITIONS} onClick={() => handleTOS}>
+                        Terms &amp; Condtions
+                      </Link>
+                    </HelperText>
 
-                <Button
-                  type="submit"
-                  disabled={!formik.isValid}
-                  fullwidth
-                  title={
-                    formik.isSubmitting ? "Creating account... " : "Sign Up"
-                  }
-                  style={{ color: "#ffffff" }}
-                />
-                {/* <Divider>
+                    <Button
+                      type="submit"
+                      disabled={!formik.isValid}
+                      fullwidth
+                      title={
+                        formik.isSubmitting ? "Creating account... " : "Sign Up"
+                      }
+                      style={{ color: "#ffffff" }}
+                    />
+                    {/* <Divider>
                   <span>or continue with</span>
                 </Divider>
 
@@ -246,14 +261,16 @@ export default function SignOutModal() {
                   style={{ color: "#ffffff" }}
                 /> */}
 
-                <Offer style={{ padding: "20px 0" }}>
-                  Already have an account?{" "}
-                  <LinkButton onClick={toggleSignInForm}>Login</LinkButton>
-                </Offer>
-              </Form>
-            );
-          }}
-        </Formik>
+                    <Offer style={{ padding: "20px 0" }}>
+                      Already have an account?{" "}
+                      <LinkButton onClick={toggleSignInForm}>Login</LinkButton>
+                    </Offer>
+                  </Form>
+                );
+              }}
+            </Formik>
+          </>
+        )}
       </Container>
     </Wrapper>
   );

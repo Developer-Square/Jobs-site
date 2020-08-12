@@ -20,7 +20,7 @@ function InternshipPost() {
   } = useContext(AuthContext);
   const [industry] = useState(Industries);
   useEffect(() => {
-    if (!profile.is_verified) {
+    if (!profile.dummy_verified && profile.is_business) {
       history.push(`/dashboard/jobs`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

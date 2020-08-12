@@ -23,6 +23,7 @@ import { openModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import Loader from "components/Loader/Loader";
 import { useStickyDispatch } from "contexts/app/app.provider";
+import Error500 from "components/Error/Error500";
 
 function InternshipView() {
   const {
@@ -30,18 +31,23 @@ function InternshipView() {
   } = useContext(AuthContext);
   const [internships, setInternships] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get(`${BASE_URL}/jobs/`, tokenConfig())
-      .then((res) => {
-        console.log("industry data", res.data.results);
-        setInternships(res.data.results);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log("error", err.response);
-      });
+    setTimeout(() => {
+      axios
+        .get(`${BASE_URL}/jobs/`, tokenConfig())
+        .then((res) => {
+          console.log("industry data", res.data.results);
+          setInternships(res.data.results);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log("Catching Errors:", err);
+          setError(err);
+        });
+    }, 2000);
   }, []);
 
   const useDispatch = useStickyDispatch();
@@ -90,6 +96,9 @@ function InternshipView() {
       },
     });
   };
+  if (error) {
+    return <Error500 err={error} />;
+  }
 
   return (
     <CardWrapper>
@@ -97,17 +106,17 @@ function InternshipView() {
         Internships{" "}
         <Button
           onClick={() =>
-            profile.is_verified
+            profile.dummy_verified
               ? togglePost()
               : handleModal("Confirm Email First to post an internship")
           }
           size="small"
           title="Post Internship"
-          // disabled={!profile.is_verified}
+          // disabled={!profile.dummy_verified}
           style={{
             fontSize: 15,
             color: "#5918e6",
-            backgroundColor: profile.is_verified ? "#e6c018" : "#f2f2f2",
+            backgroundColor: profile.dummy_verified ? "#e6c018" : "#f2f2f2",
             float: "right",
           }}
         />
@@ -144,7 +153,7 @@ function InternshipView() {
                                     onClick={toggleManage}
                                     size="small"
                                     title={`Manage Job`}
-                                    disabled={!profile.is_verified}
+                                    disabled={!profile.dummy_verified}
                                     style={{
                                       fontSize: 15,
                                       color: "#5918e6",
@@ -157,17 +166,17 @@ function InternshipView() {
                                 ) : (
                                   <Button
                                     onClick={
-                                      profile.is_verified
+                                      profile.dummy_verified
                                         ? handleApplication
                                         : handleModal
                                     }
                                     size="small"
                                     title={`Apply`}
-                                    disabled={!profile.is_verified}
+                                    disabled={!profile.dummy_verified}
                                     style={{
                                       fontSize: 15,
                                       color: "#5918e6",
-                                      backgroundColor: profile.is_verified
+                                      backgroundColor: profile.dummy_verified
                                         ? "#e6c018"
                                         : "#f2f2f2",
                                       float: "right",

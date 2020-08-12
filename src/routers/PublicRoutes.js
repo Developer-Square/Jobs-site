@@ -6,7 +6,7 @@ import EmailVerification from "containers/SignInOutForm/emailVerification";
 import PrivacyPolicy from "pages/TOS/PrivacyPolicy";
 import About from "pages/About/about";
 import { TOS, ABOUT, SDG } from "constants/routes.constants";
-import TermsOfUse from "pages/TOS/SDG";
+import TermsOfUse from "pages/TOS/sdg";
 
 const PublicRoutes = ({ deviceType }) => (
   <Fragment>

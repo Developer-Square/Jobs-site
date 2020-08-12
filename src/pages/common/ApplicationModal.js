@@ -21,12 +21,14 @@ function ApplicationModal(jobId) {
     authState: { profile },
   } = useContext(AuthContext);
   const [success, setSuccess] = useState(false);
-  const submitApplication = () => {
+  const submitApplication = (values, { setErrors, setSubmitting }) => {
+    setSubmitting(true);
+    const { budget, comment } = values;
     const body = {
       applicant: profile.id,
       job: 1,
-      budget: 200,
-      comment: "",
+      budget: budget,
+      comment: comment,
     };
     axios
       .post(`${BASE_URL}/jobs/applications/`, body, tokenConfig())
