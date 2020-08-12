@@ -8,7 +8,7 @@ export const comments = [
     name: "Mark Thumi",
     imageUrl: markImage,
     comment:
-      "Youth-created youth employement over Government-created employment. What we mean by this is that its about time we stopped waiting on the government to create employment for the youth by coming together we can reinforce the efforts being made by the government and private secor. Habahaba hujaza kibaba!",
+      "The leaders of tomorrow are here. It's about time the youth came together to address youth-related challenges starting with the complex issue of unemployment.",
     position: "CEO and Student at Africa Nazarene",
   },
   {
