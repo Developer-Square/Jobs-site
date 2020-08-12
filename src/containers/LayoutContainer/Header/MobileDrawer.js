@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { openModal } from "@redq/reuse-modal";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
 import Drawer from "components/Drawer/Drawer";
 import Button from "components/Button/Button";
@@ -23,15 +23,10 @@ import {
   UesrOptionMenu,
 } from "./Header.style";
 import UserImage from "image/user.jpg";
-
-import {
-  JOBS,
-  GIGS,
-  CONTACT,
-  PROFILE_PAGE,
-  HELP_PAGE,
-} from "constants/routes.constants";
+import { useStickyState } from "contexts/app/app.provider";
+import { CONTACT, PROFILE_PAGE, HELP_PAGE } from "constants/routes.constants";
 import { SDG } from "constants/routes.constants";
+import { isCategoryPage } from "../is-home-page";
 
 const DrawerMenuItems = [
   {
@@ -41,26 +36,16 @@ const DrawerMenuItems = [
   },
   {
     id: 2,
-    label: "Jobs",
-    href: JOBS,
-  },
-  {
-    id: 3,
-    label: "Gigs",
-    href: GIGS,
-  },
-  {
-    id: 4,
     label: "Profile",
     href: PROFILE_PAGE,
   },
   {
-    id: 5,
+    id: 3,
     label: "Contact Us",
     href: CONTACT,
   },
   {
-    id: 7,
+    id: 4,
     label: "Help",
     href: HELP_PAGE,
   },
@@ -73,6 +58,11 @@ const MobileDrawer = () => {
     authState: { isAuthenticated, profile },
     authDispatch,
   } = useContext(AuthContext);
+  const location = useLocation();
+  const path = location.pathname.replace(/\/+$/, "");
+  const pathname = path[0] === "/" ? path.substr(1) : path;
+
+  const isHomePage = isCategoryPage(pathname);
   // Toggle drawer
   const toggleHandler = React.useCallback(() => {
     dispatch({
@@ -121,15 +111,21 @@ const MobileDrawer = () => {
       },
     });
   };
+  const isSticky = useStickyState("isSticky");
+  const classStyle = isSticky
+    ? {}
+    : isHomePage
+    ? { backgroundColor: "white" }
+    : {};
 
   return (
     <Drawer
       width="316px"
       drawerHandler={
         <HamburgerIcon>
-          <span />
-          <span />
-          <span />
+          <span style={classStyle} />
+          <span style={classStyle} />
+          <span style={classStyle} />
         </HamburgerIcon>
       }
       open={state.isOpen}
@@ -193,6 +189,27 @@ const MobileDrawer = () => {
                 <NavLink
                   href="/profile"
                   label="Your Account Settings"
+                  className="drawer_menu_item"
+                />
+              </DrawerMenuItem>
+              <DrawerMenuItem>
+                <NavLink
+                  href="/profile"
+                  label="Profile"
+                  className="drawer_menu_item"
+                />
+              </DrawerMenuItem>
+              <DrawerMenuItem>
+                <NavLink
+                  href="/dashboard/gigs"
+                  label="Gigs"
+                  className="drawer_menu_item"
+                />
+              </DrawerMenuItem>
+              <DrawerMenuItem>
+                <NavLink
+                  href="/dashboard/jobs"
+                  label="Jobs"
                   className="drawer_menu_item"
                 />
               </DrawerMenuItem>

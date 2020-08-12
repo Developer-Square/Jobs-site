@@ -10,7 +10,7 @@ export const GlobalStyle = createGlobalStyle`
   *::after,
   *::before {
     box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+    font-family: "Playfair Display", sans-serif;
   }
   *:before, *:after {
     -webkit-box-sizing: border-box;
@@ -19,7 +19,7 @@ export const GlobalStyle = createGlobalStyle`
 }
   body {
     
-    font-family: "Poppins", sans-serif;
+    font-family: "Playfair Display", sans-serif;
     padding-top: 0;/*${NAV_BAR_HEIGHT};*/
     transition: all 0.25s linear;
     background-color: #f7f7f7;

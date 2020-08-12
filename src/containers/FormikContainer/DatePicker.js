@@ -4,7 +4,6 @@ import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
-import moment from "moment";
 
 function DatePicker(props) {
   const { label, name, ...rest } = props;
@@ -15,7 +14,6 @@ function DatePicker(props) {
         {({ form, field }) => {
           const { setFieldValue } = form;
           const { value } = field;
-          console.log("value date", moment(value).format("YYYY-MM-DD"));
           return (
             <DateView
               dateFormat="yyyy-MM-dd"
