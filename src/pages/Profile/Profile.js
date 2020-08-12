@@ -46,7 +46,7 @@ function Profile() {
       });
       setInitialProfileValues({
         title: "tre",
-        huduma_number: "555555",
+        id_number: "555555",
         image: LogoImage,
         date_of_birth: new Date(),
         about: "bgtrfv",
@@ -77,7 +77,7 @@ function Profile() {
   ];
   const statusOptions = [
     { value: "", key: "Select Options" },
-    { value: "Open", key: "Open for offers" },
+    { value: "Open", key: "Open to offers" },
     { value: "Busy", key: "Busy" },
     { value: "Looking", key: "Actively looking" },
   ];
@@ -101,7 +101,7 @@ function Profile() {
     status: Yup.string().required("Required"),
     about: Yup.string().required("Required"),
     // image: Yup.mixed().required("Required"),
-    huduma_number: Yup.string().required("Required"),
+    id_number: Yup.string().required("Required"),
     date_of_birth: Yup.date()
       .test("Date of Birth", "Should be greather than 18", function (value) {
         return moment().diff(moment(value), "years") >= 18;
