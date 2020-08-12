@@ -22,11 +22,11 @@ export default function FooterContainer() {
           </Footer.Column>
           <Footer.Column>
             <Footer.Title>Social</Footer.Title>
-            <Footer.Link href="#">
+            <Footer.Link href="https://facebook.com/thedatabase.co.ke">
               <Facebook />
               Facebook
             </Footer.Link>
-            <Footer.Link href="#">
+            <Footer.Link href="https://www.instagram.com/thedatabase.co.ke/">
               <Instagram />
               Instagram
             </Footer.Link>
@@ -34,7 +34,7 @@ export default function FooterContainer() {
               <YouTube />
               Youtube
             </Footer.Link>
-            <Footer.Link href="#">
+            <Footer.Link href="https://twitter.com/ThedatabaseKe">
               <Twitter />
               Twitter
             </Footer.Link>

@@ -177,7 +177,7 @@ const MobileDrawer = () => {
               <NavLink
                 onClick={toggleHandler}
                 href={SDG}
-                label={"Software Development Goals"}
+                label={"Sustainable Development Goals"}
                 className="drawer_menu_item"
               />
             </DrawerMenuItem>
