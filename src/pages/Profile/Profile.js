@@ -20,50 +20,55 @@ function Profile() {
   const {
     authState: { profile },
   } = useContext(AuthContext);
+  const [initialValues, setInitialValues] = useState();
+  const [initialProfileValues, setInitialProfileValues] = useState();
+  const [initialOrganizationValues, setInitialOrganizationValues] = useState();
+
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setTimeout(() => {
+      setInitialValues({
+        email: localStorage.getItem("thedb_auth_profile") ? profile.email : "",
+        first_name: localStorage.getItem("thedb_auth_profile")
+          ? profile.first_name
+          : "",
+        last_name: localStorage.getItem("thedb_auth_profile")
+          ? profile.last_name
+          : "",
+        full_name: localStorage.getItem("thedb_auth_profile")
+          ? profile.full_name
+          : "",
+        salary: "",
+        description: "",
+        experience: [],
+        qualifications: [],
+      });
+      setInitialProfileValues({
+        title: "tre",
+        huduma_number: "555555",
+        image: LogoImage,
+        date_of_birth: new Date(),
+        about: "bgtrfv",
+        location: "ke",
+        gender: "male",
+        status: "Looking",
+        user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
+      });
+      setInitialOrganizationValues({
+        name: "Telecommunication Company",
+        description: "a cool company",
+        website: "https://www.coo.lcom",
+        country: "Kenya",
+        location: "Nairobi, Kenya",
+        address: "12345, st, Nairobi",
+        logo: LogoImage,
+        user: 1,
+      });
       setLoading(false);
     }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [initialValues] = useState({
-    email: localStorage.getItem("thedb_auth_profile") ? profile.email : "",
-    first_name: localStorage.getItem("thedb_auth_profile")
-      ? profile.full_name.split(" ")[0]
-      : "",
-    last_name: localStorage.getItem("thedb_auth_profile")
-      ? profile.full_name.split(" ")[1]
-      : "",
-    full_name: localStorage.getItem("thedb_auth_profile")
-      ? profile.full_name
-      : "",
-    salary: "",
-    description: "",
-    experience: [],
-    qualifications: [],
-  });
-  const [initialProfileValues] = useState({
-    title: "",
-    huduma_number: "",
-    image: LogoImage,
-    date_of_birth: new Date(),
-    about: "",
-    location: "",
-    gender: "",
-    status: "",
-    user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-  });
-  const [initialOrganizationValues] = useState({
-    name: "",
-    description: "",
-    website: "https://",
-    country: "",
-    location: "",
-    address: "",
-    logo: LogoImage,
-    user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-  });
 
   const genderOptions = [
     { value: "", key: "Select Gender" },
@@ -176,11 +181,11 @@ function Profile() {
       setError(error);
     }
   };
-  const onOrgSubmit = (type, values, { setErrors, setSubmitting }) => {
+  const onOrgSubmit = (values, { setErrors, setSubmitting }) => {
     const {
       name,
       description,
-      logo,
+      // logo,
       address,
       country,
       location,
@@ -194,10 +199,10 @@ function Profile() {
       country: country,
       location: location,
       address: address,
-      logo: logo.preview,
+      logo: undefined,
       user: profile.id,
     };
-    console.log("body values ", typeof logo.preview, logo.preview);
+    console.log("body values ", body, values);
     setSubmitting(true);
     setLoading(true);
     try {
@@ -210,22 +215,7 @@ function Profile() {
           setLoading(false);
         })
         .catch((err) => {
-          if (err.response.data) {
-            setErrors(err.response.data);
-          }
-          setSubmitting(false);
-          setError(err);
-          setLoading(false);
-        });
-      axios
-        .post(`${BASE_URL}/${type}/`, body, tokenConfig())
-        .then((res) => {
-          setSubmitting(false);
-          console.log("res", res.data);
-          handleModal(`${type} Profile Created Successfully`, "");
-          setLoading(false);
-        })
-        .catch((err) => {
+          console.log("res errors", err.response);
           if (err.response.status > 199 && err.response.status < 300) {
             setErrors(err.response.data);
           } else {
@@ -235,6 +225,24 @@ function Profile() {
           setSubmitting(false);
           setLoading(false);
         });
+      // axios
+      //   .post(`${BASE_URL}/${type}/`, body, tokenConfig())
+      //   .then((res) => {
+      //     setSubmitting(false);
+      //     console.log("res", res.data);
+      //     handleModal(`${type} Profile Created Successfully`, "");
+      //     setLoading(false);
+      //   })
+      //   .catch((err) => {
+      //     if (err.response.status > 199 && err.response.status < 300) {
+      //       setErrors(err.response.data);
+      //     } else {
+      //       setError(err);
+      //     }
+      //     console.log(err.response.status);
+      //     setSubmitting(false);
+      //     setLoading(false);
+      //   });
     } catch (error) {
       setError(error);
     }
@@ -253,7 +261,7 @@ function Profile() {
     const body = {
       title: title,
       huduma_number: huduma_number,
-      image: image.preview,
+      image: undefined,
       date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
       about: about,
       location: location,
@@ -261,7 +269,7 @@ function Profile() {
       status: status,
       user: profile.id,
     };
-    console.log("val8es fdsf ", body);
+    console.log("val8es fdsf ", body, image);
     setSubmitting(true);
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -275,12 +283,12 @@ function Profile() {
           setLoading(false);
         })
         .catch((err) => {
-          if (err.response.status > 199 && err.response.status < 300) {
+          if (err.response.status > 199 && err.response.status < 500) {
             setErrors(err.response.data);
           } else {
             setError(err);
           }
-          console.log(err.response.status);
+          console.log(err.response.data);
           setSubmitting(false);
           setLoading(false);
         });
@@ -328,7 +336,7 @@ function Profile() {
                       name="email"
                       onClick={() => handleModal("", "Sorry, cant edit email")}
                       disabled={true}
-                      readonly
+                      readOnly
                     />
                     <Button
                       type="submit"
@@ -343,8 +351,8 @@ function Profile() {
             </Formik>
           </FormWrapper>
           <h4>Additional Details</h4>
-          <FormWrapper>
-            {profile.is_individual ? (
+          {!profile.is_individual ? (
+            <FormWrapper>
               <Formik
                 initialValues={initialProfileValues}
                 validationSchema={profileValidationSchema}
@@ -402,6 +410,7 @@ function Profile() {
                         label="Profile Image"
                         name="image"
                       />
+                      {/* <Field type="file" name="image" id="image" value={null} /> */}
                       <Button
                         type="submit"
                         size="small"
@@ -413,7 +422,9 @@ function Profile() {
                   );
                 }}
               </Formik>
-            ) : (
+            </FormWrapper>
+          ) : (
+            <FormWrapper>
               <Formik
                 initialValues={initialOrganizationValues}
                 validationSchema={organizationValidationSchema}
@@ -479,8 +490,8 @@ function Profile() {
                   );
                 }}
               </Formik>
-            )}
-          </FormWrapper>
+            </FormWrapper>
+          )}
         </>
       )}
     </CardWrapper>

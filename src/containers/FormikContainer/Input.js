@@ -19,8 +19,9 @@ function Input(props) {
             return (
               <Uploader
                 id={name}
-                selected={value[0].path}
+                selected={value}
                 {...field}
+                {...rest}
                 onChange={(val) => setFieldValue(name, val)}
               />
             );
