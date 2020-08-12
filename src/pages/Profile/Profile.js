@@ -250,7 +250,7 @@ function Profile() {
   const onAddSubmit = async (values, { setErrors, setSubmitting }) => {
     const {
       title,
-      huduma_number,
+      id_number,
       image,
       date_of_birth,
       about,
@@ -260,7 +260,7 @@ function Profile() {
     } = values;
     const body = {
       title: title,
-      huduma_number: huduma_number,
+      id_number: id_number,
       image: undefined,
       date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
       about: about,
@@ -372,7 +372,7 @@ function Profile() {
                         control="input"
                         type="text"
                         label="Huduma Number"
-                        name="huduma_number"
+                        name="id_number"
                       />
                       <FormikControl
                         control="date"
