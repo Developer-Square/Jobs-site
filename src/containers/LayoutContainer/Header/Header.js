@@ -31,6 +31,8 @@ const Header = ({ className, isSticky }) => {
       localStorage.removeItem("thedb_auth_payload");
       localStorage.removeItem("thedb_auth_roles");
       localStorage.removeItem("thedb_applications");
+      localStorage.removeItem("thedb_org_profile");
+      localStorage.removeItem("thedb_individual_profile");
       authDispatch({ type: "SIGN_OUT" });
       history.push("/");
     }

@@ -24,7 +24,6 @@ function Profile() {
   const [initialProfileValues, setInitialProfileValues] = useState();
   const [initialOrganizationValues, setInitialOrganizationValues] = useState();
   const [editting, setEditting] = useState(false);
-
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -40,17 +39,18 @@ function Profile() {
               const individual = res.data.results.filter(
                 (filteredIndividual) => filteredIndividual.user === profile.id
               );
-              addObjectToLocalStorageObject(
-                "thedb_individual_profile",
-                individual[0]
-              );
-              if (individual[0].id) {
+              if (individual.length > 0) {
+                addObjectToLocalStorageObject(
+                  "thedb_individual_profile",
+                  individual[0]
+                );
                 setEditting(true);
               }
               setLoading(false);
             })
             .catch((err) => {
               setError(err);
+              console.log("frererefrr", err);
             });
         } catch (error) {
           setError(error);
@@ -61,10 +61,16 @@ function Profile() {
             .get(`${BASE_URL}/organization/`, tokenConfig())
             .then((res) => {
               console.log("res", res.data);
-              const individual = res.data.results.filter(
+              const organization = res.data.results.filter(
                 (filteredCompany) => filteredCompany.user === profile.id
               );
-              addObjectToLocalStorageObject("thedb_org_profile", individual[0]);
+              if (organization.length > 0) {
+                addObjectToLocalStorageObject(
+                  "thedb_org_profile",
+                  organization[0]
+                );
+                setEditting(true);
+              }
               setLoading(false);
             })
             .catch((err) => {
@@ -103,7 +109,7 @@ function Profile() {
           title: "",
           id_number: "",
           image: LogoImage,
-          date_of_birth: new Date() - 10,
+          date_of_birth: new Date(1999, 1, 1),
           about: "",
           location: "",
           gender: "",
@@ -127,7 +133,6 @@ function Profile() {
           user: profile.id,
         });
       }
-
       setLoading(false);
     }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -265,7 +270,7 @@ function Profile() {
       location: location,
       address: address,
       logo: undefined,
-      user: profile.id,
+      user: JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"],
     };
     console.log("body values ", body, values);
     setSubmitting(true);
@@ -289,6 +294,8 @@ function Profile() {
                   "You Already registered a company under your account",
                   `(Only one organization can be registered under an account)`
                 );
+              } else {
+                setErrors(err.response.data);
               }
             }
             setErrors(err.response.data);
@@ -303,6 +310,7 @@ function Profile() {
       setError(error);
     }
   };
+  console.log(editting);
   const onOrgChangeSubmit = (values, { setErrors, setSubmitting }) => {
     const {
       name,
@@ -351,6 +359,8 @@ function Profile() {
                   "You Already registered a company under your account",
                   `(Only one organization can be registered under an account)`
                 );
+              } else {
+                setErrors(err.response.data);
               }
             }
             setErrors(err.response.data);
@@ -530,7 +540,7 @@ function Profile() {
               <Formik
                 initialValues={initialProfileValues}
                 validationSchema={profileValidationSchema}
-                onSubmit={editting ? onChangeSubmit : onAddSubmit}
+                onSubmit={() => (editting ? onChangeSubmit : onAddSubmit)}
               >
                 {(formik) => {
                   return (
@@ -646,7 +656,7 @@ function Profile() {
                         control="input"
                         type="file"
                         setFieldValue={formik.setFieldValue}
-                        value={formik.values.logo}
+                        // value={formik.values.logo}
                         label="Company Logo"
                         name="logo"
                       />
