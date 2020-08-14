@@ -5,13 +5,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
-import {
-  FormWrapper,
-  Wrapper,
-  Container,
-  SubHeading,
-  Heading,
-} from "../Dashboard/Dashboard.style";
+import { FormWrapper, Wrapper, Container, SubHeading, Heading } from "./style";
 import { AuthContext } from "contexts/auth/auth.context";
 import { BASE_URL } from "constants/constants";
 import { addToLocalStorageArray } from "helpers";
@@ -31,7 +25,7 @@ function ApplicationModal(jobId) {
       comment: comment,
     };
     axios
-      .post(`${BASE_URL}/jobs/applications`, body, tokenConfig())
+      .post(`${BASE_URL}/jobs/applications/`, body, tokenConfig())
       .then((res) => {
         console.log("applicant data", res.data);
         setSuccess(true);

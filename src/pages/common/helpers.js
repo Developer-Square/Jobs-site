@@ -8,6 +8,8 @@ export const categorySelector = (category) => {
       return "jobs";
     case "volunteering":
       return "jobs";
+    case "Volunteering":
+      return "jobs";
     case "internship":
       return "internships";
     case "Internship":

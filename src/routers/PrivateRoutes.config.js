@@ -7,6 +7,7 @@ import Internships from "pages/Internships/Internships";
 import JobManage from "pages/Jobs/JobManage";
 import GigManage from "pages/Gigs/GigManage";
 import InternshipManage from "pages/Internships/InternshipManage";
+import Applications from "pages/Applications/Applications";
 
 export {
   Dashboard,
@@ -17,4 +18,5 @@ export {
   JobManage,
   GigManage,
   InternshipManage,
+  Applications,
 };

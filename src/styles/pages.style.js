@@ -447,9 +447,11 @@ const TypeList = styled.div`
     border: 1px solid #f1630d;
     background-color: rgba(241, 99, 13, 0.07);
   }
-  .freelance {
-    color: #53b427;
-    border: 1px solid #53b427;
+  .freelance,
+  .volunteering,
+  .Volunteering {
+    color: #c018e6;
+    border: 1px solid #c018e6;
     background-color: rgba(83, 180, 39, 0.07);
   }
   .gig,

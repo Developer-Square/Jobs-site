@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import { CardWrapper } from "./Gigs.style";
+import { CardWrapper } from "../common/style";
 import axios from "axios";
 import { BASE_URL, CURRENCY } from "constants/constants";
 import { tokenConfig } from "helpers";
@@ -30,18 +30,20 @@ function GigView() {
   const {
     authState: { profile },
   } = useContext(AuthContext);
-  const [jobs, setJobs] = useState(null);
+  const [applications, setApplications] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const history = useHistory();
   useEffect(() => {
-    setLoading(true);
     setTimeout(() => {
       axios
-        .get(`${BASE_URL}/jobs/`, tokenConfig())
+        .get(`${BASE_URL}/jobs/applicants/`, tokenConfig())
         .then((res) => {
           console.log("industry data", res.data.results);
-          setJobs(res.data.results);
+          const applications = res.data.results.filter(
+            (filteredApplication) => filteredApplication.id === profile.id
+          );
+          setApplications(applications);
           setLoading(false);
         })
         .catch((err) => {
@@ -50,6 +52,7 @@ function GigView() {
           setError(err);
         });
     }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const useDispatch = useStickyDispatch();
@@ -59,10 +62,12 @@ function GigView() {
   const setPost = useCallback(() => useDispatch({ type: "POST" }), [
     useDispatch,
   ]);
+
   const toggleManage = (category, id) => {
     setManage();
     history.push(`/dashboard/${category}/${id}`);
   };
+  // eslint-disable-next-line no-unused-vars
   const togglePost = () => {
     setPost();
   };
@@ -104,22 +109,40 @@ function GigView() {
 
   return (
     <CardWrapper>
+      <H4>Applications</H4>
       <H4>
-        Gigs Listing{" "}
         <Button
-          onClick={() =>
-            profile.dummy_verified
-              ? togglePost()
-              : handleModal("Confirm Email First to post a gig")
-          }
+          onClick={() => history.push(`/dashboard/jobs`)}
           size="small"
-          title="Post a Gig"
-          // disabled={!profile.dummy_verified}
+          title={`Jobs`}
           style={{
             fontSize: 15,
-            color: "#5918e6",
-            backgroundColor: profile.dummy_verified ? "#e6c018" : "#f2f2f2",
-            float: "right",
+            color: "#fff",
+            backgroundColor: "#c018e6",
+            margin: "0 10px",
+          }}
+        />
+        <Button
+          onClick={() => history.push(`/dashboard/internships`)}
+          size="small"
+          title={`Internships`}
+          style={{
+            fontSize: 15,
+            color: "#fff",
+            backgroundColor: "#e618a5",
+            margin: "0 10px",
+          }}
+        />
+
+        <Button
+          onClick={() => history.push(`/dashboard/gigs`)}
+          size="small"
+          title={`Gigs`}
+          style={{
+            fontSize: 15,
+            color: "#fff",
+            backgroundColor: "#e65918",
+            margin: "0 10px",
           }}
         />
       </H4>
@@ -127,37 +150,33 @@ function GigView() {
         <Loader />
       ) : (
         <LeftContent>
-          {jobs !== null && jobs.length > 0 ? (
+          {applications !== null && applications.length > 0 ? (
             <ul>
-              {jobs
-                .filter(
-                  (filteredJob) =>
-                    filteredJob.job_type === "gig" ||
-                    filteredJob.job_type === "Gig"
-                )
-                .map((job, index) => (
-                  <li key={index}>
-                    {job !== null && job !== undefined ? (
+              {applications.map((app, index) => (
+                <>
+                  {app !== null && app !== undefined ? (
+                    <li key={index}>
                       <section>
                         <ListingLogo>
                           <ImageWrapper
-                            url={job.companyLogo}
+                            url={setApplications.companyLogo}
                             alt={"company logo"}
                           />
                         </ListingLogo>
                         <ListingTitle>
-                          <H4>
-                            {job.title}
+                          <h3>
+                            {app.title}
+
                             <TypeList>
-                              <ListSpan className={`${job.job_type}`}>
-                                {job.job_type}
+                              <ListSpan className={`${app.job_type}`}>
+                                {app.job_type}
                               </ListSpan>
-                              {job.creator === profile.id ? (
+                              {app.creator === profile.id ? (
                                 <Button
                                   onClick={() =>
                                     toggleManage(
-                                      categorySelector(job.job_type),
-                                      job.id
+                                      categorySelector(app.job_type),
+                                      app.id
                                     )
                                   }
                                   size="small"
@@ -174,59 +193,32 @@ function GigView() {
                                 />
                               ) : (
                                 <>
-                                  {localStorage.getItem(
-                                    "thedb_applications"
-                                  ) ? (
-                                    <>
-                                      {localStorage
-                                        .getItem("thedb_applications")
-                                        .includes(job.id) ? (
-                                        <Button
-                                          onClick={() =>
-                                            profile.dummy_verified
-                                              ? handleApplication(job.id)
-                                              : handleModal()
-                                          }
-                                          size="small"
-                                          title={`Applied ✔`}
-                                          disabled={true}
-                                          style={{
-                                            fontSize: 15,
-                                            color: "#5918e6",
-                                            backgroundColor: "#f2f2f2",
-                                            float: "right",
-                                            height: "29px",
-                                            margin: "0 0 0 10px",
-                                          }}
-                                        />
-                                      ) : (
-                                        <Button
-                                          onClick={() =>
-                                            profile.dummy_verified
-                                              ? handleApplication(job.id)
-                                              : handleModal()
-                                          }
-                                          size="small"
-                                          title={`Apply`}
-                                          // disabled={!profile.dummy_verified}
-                                          style={{
-                                            fontSize: 15,
-                                            color: "#5918e6",
-                                            backgroundColor: profile.dummy_verified
-                                              ? "#e6c018"
-                                              : "#f2f2f2",
-                                            float: "right",
-                                            height: "29px",
-                                            margin: "0 0 0 10px",
-                                          }}
-                                        />
-                                      )}
-                                    </>
+                                  {localStorage
+                                    .getItem("thedb_applications")
+                                    .includes(app.id) ? (
+                                    <Button
+                                      onClick={() =>
+                                        profile.dummy_verified
+                                          ? handleApplication(app.id)
+                                          : handleModal()
+                                      }
+                                      size="small"
+                                      title={`Applied ✔`}
+                                      disabled={true}
+                                      style={{
+                                        fontSize: 15,
+                                        color: "#5918e6",
+                                        backgroundColor: "#f2f2f2",
+                                        float: "right",
+                                        height: "29px",
+                                        margin: "0 0 0 10px",
+                                      }}
+                                    />
                                   ) : (
                                     <Button
                                       onClick={() =>
                                         profile.dummy_verified
-                                          ? handleApplication(job.id)
+                                          ? handleApplication(app.id)
                                           : handleModal()
                                       }
                                       size="small"
@@ -247,33 +239,72 @@ function GigView() {
                                 </>
                               )}
                             </TypeList>
-                          </H4>
+                          </h3>
                           <ListingIcons>
                             <li>
                               <GiftBox />
-                              {job.description}
+                              {app.description}
                             </li>
                             <li>
                               <SearchIcon />
-                              {job.location}
+                              {app.location}
                             </li>
                             <li>
                               <LockIcon />
                               {CURRENCY}
-                              {job.salary} - {CURRENCY}
-                              {job.salary}
+                              {app.salary} - {CURRENCY}
+                              {app.salary}
                             </li>
                           </ListingIcons>
                         </ListingTitle>
                       </section>
-                    ) : (
-                      <div>Sorry, No Gigs posted recently</div>
-                    )}
-                  </li>
-                ))}
+                    </li>
+                  ) : (
+                    <>
+                      <h4>
+                        View recent posts
+                        <Button
+                          onClick={() => history.push(`/dashboard/jobs`)}
+                          size="small"
+                          title={`Jobs`}
+                          style={{
+                            fontSize: 15,
+                            color: "#fff",
+                            backgroundColor: "#c018e6",
+                            float: "left",
+                          }}
+                        />
+                        <Button
+                          onClick={() => history.push(`/dashboard/internships`)}
+                          size="small"
+                          title={`Internships`}
+                          style={{
+                            fontSize: 15,
+                            color: "#fff",
+                            backgroundColor: "#e61835",
+                            float: "right",
+                          }}
+                        />
+                        <Button
+                          onClick={() => history.push(`/dashboard/gigs`)}
+                          size="small"
+                          title={`Gigs`}
+                          style={{
+                            fontSize: 15,
+                            color: "#fff",
+                            backgroundColor: "#e65918",
+                            float: "right",
+                          }}
+                        />
+                      </h4>
+                      <div>Sorry, No applications made yet</div>
+                    </>
+                  )}
+                </>
+              ))}
             </ul>
           ) : (
-            <div>Sorry No Gigs posted recently</div>
+            <div>Sorry, No applications made yet</div>
           )}
         </LeftContent>
       )}

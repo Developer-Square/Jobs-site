@@ -28,24 +28,25 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setTimeout(() => {
-      if (localStorage.getItem("thedb_auth_profile")["is_individual"]) {
+      if (
+        JSON.parse(localStorage.getItem("thedb_auth_profile"))["is_individual"]
+      ) {
         try {
           axios
             .get(`${BASE_URL}/individual/`, tokenConfig())
             .then((res) => {
               console.log("res", res.data);
-              const company = res.data.results.filter(
-                (filteredCompany) => filteredCompany.user === profile.id
+              const individual = res.data.results.filter(
+                (filteredIndividual) => filteredIndividual.user === profile.id
               );
               addObjectToLocalStorageObject(
                 "thedb_individual_profile",
-                company[0]
+                individual[0]
               );
               setLoading(false);
             })
             .catch((err) => {
               setError(err);
-              console.log(err.response.status);
             });
         } catch (error) {
           setError(error);
@@ -87,6 +88,10 @@ function Profile() {
       });
       if (localStorage.getItem("thedb_individual_profile")) {
         setInitialProfileValues(
+          JSON.parse(localStorage.getItem("thedb_individual_profile"))
+        );
+        console.log(
+          "individual initial values",
           JSON.parse(localStorage.getItem("thedb_individual_profile"))
         );
       } else {
@@ -155,7 +160,10 @@ function Profile() {
     status: Yup.string().required("Required"),
     about: Yup.string().required("Required"),
     // image: Yup.mixed().required("Required"),
-    id_number: Yup.string().required("Required"),
+    id_number: Yup.number()
+      .max(2147483647, "Id Number too long")
+      .min(10101010, "Id Number is invalid")
+      .required("Required"),
     date_of_birth: Yup.date()
       .test("Date of Birth", "Should be greather than 18", function (value) {
         return moment().diff(moment(value), "years") >= 18;
@@ -334,7 +342,6 @@ function Profile() {
     };
     console.log("val8es fdsf ", body, image);
     setSubmitting(true);
-    setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       axios
@@ -344,17 +351,17 @@ function Profile() {
           console.log("res", res.data);
           handleModal("Profile Updated Successfully", "");
           addObjectToLocalStorageObject("thedb_individual_profile", res.data);
-          setLoading(false);
         })
         .catch((err) => {
           if (err.response.data) {
             setErrors(err.response.data);
+            console.log("errors za data");
           } else {
             setError(err);
+            console.log("errors general");
           }
           console.log(err.response.data);
           setSubmitting(false);
-          setLoading(false);
         });
     } catch (error) {
       setError(error);
@@ -435,7 +442,7 @@ function Profile() {
                       <FormikControl
                         control="input"
                         type="text"
-                        label="Huduma Number"
+                        label="ID Number"
                         name="id_number"
                       />
                       <FormikControl
@@ -470,7 +477,7 @@ function Profile() {
                         control="input"
                         type="file"
                         setFieldValue={formik.setFieldValue}
-                        value={formik.values.image}
+                        // value={formik.values.image}
                         label="Profile Image"
                         name="image"
                       />

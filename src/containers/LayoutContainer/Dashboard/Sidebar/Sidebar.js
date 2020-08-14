@@ -18,6 +18,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 
 import { DashboardIcon, SettingIcon, LogoutIcon } from "components/AllSvgIcon";
 import { CategoryIcon } from "components/AllSvgIcon";
+import { APPLICATIONS } from "constants/routes.constants";
 
 const sidebarMenus = [
   {
@@ -55,7 +56,10 @@ const sidebarMenus = [
 
 export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
   const history = useHistory();
-  const { authState: authDispatch } = useContext(AuthContext);
+  const {
+    authState: { profile },
+    authDispatch,
+  } = useContext(AuthContext);
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
@@ -63,6 +67,7 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
       localStorage.removeItem("thedb_auth_profile");
       localStorage.removeItem("thedb_auth_payload");
       localStorage.removeItem("thedb_auth_roles");
+      localStorage.removeItem("thedb_applications");
       authDispatch({ type: "SIGN_OUT" });
       history.push("/");
     }
@@ -86,6 +91,23 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
             {menu.name}
           </NavLink>
         ))}
+        {profile.is_individual ? (
+          <NavLink
+            to={APPLICATIONS}
+            exact={true}
+            activeStyle={{
+              color: "#6C3A1F",
+              backgroundColor: "#f7f7f7",
+              borderRadius: "50px 0 0 50px",
+            }}
+            onClick={onMenuItemClick}
+          >
+            <Svg>
+              <CategoryIcon />
+            </Svg>
+            Applications
+          </NavLink>
+        ) : null}
       </MenuWrapper>
 
       <LogoutBtn

@@ -20,6 +20,7 @@ export const AUTH = "/auth";
 export const JOBS = "/dashboard/jobs";
 export const GIGS = "/dashboard/gigs";
 export const INTERNSHIPS = "/dashboard/internships";
+export const APPLICATIONS = "/dashboard/applications";
 export const HELP_PAGE = "/help";
 export const ABOUT = "/about";
 export const TERMS_CONDITIONS = "/terms-and-conditions";

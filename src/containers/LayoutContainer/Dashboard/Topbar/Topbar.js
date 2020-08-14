@@ -63,6 +63,7 @@ const Topbar = ({ refs }) => {
       localStorage.removeItem("thedb_auth_profile");
       localStorage.removeItem("thedb_auth_payload");
       localStorage.removeItem("thedb_auth_roles");
+      localStorage.removeItem("thedb_applications");
       authDispatch({ type: "SIGN_OUT" });
       history.push("/");
     }

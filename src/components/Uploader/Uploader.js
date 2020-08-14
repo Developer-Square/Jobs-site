@@ -86,7 +86,11 @@ function Uploader({ onChange, imageURL }) {
   const thumbs = files.map((file) => (
     <Thumb key={file.name}>
       <div style={thumbInner}>
-        <img src={file.preview} style={img} alt={file.name} />
+        <img
+          src={typeof file === "string" ? file : file.preview}
+          style={img}
+          alt={file.name}
+        />
       </div>
     </Thumb>
   ));

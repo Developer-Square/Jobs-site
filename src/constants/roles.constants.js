@@ -133,6 +133,13 @@ const components = {
     icon: "Category",
     module: 1,
   },
+  applications: {
+    component: "Applications",
+    url: "/applications",
+    title: "Applications",
+    icon: "Category",
+    module: 1,
+  },
   manageJobs: {
     component: "JobManage",
     url: "/jobs/:jobID",

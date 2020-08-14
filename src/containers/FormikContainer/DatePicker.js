@@ -20,7 +20,7 @@ function DatePicker(props) {
               id={name}
               {...field}
               {...rest}
-              selected={value}
+              selected={typeof value === "string" ? new Date(value) : value}
               onChange={(val) => setFieldValue(name, val)}
             />
           );
