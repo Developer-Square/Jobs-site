@@ -25,7 +25,6 @@ import {
 } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
 import { LockIcon } from "components/AllSvgIcon";
-import { CURRENCY } from "constants/constants";
 import ModalTemplate from "pages/common/ModalTemplate";
 import { H3 } from "styles/pages.style";
 

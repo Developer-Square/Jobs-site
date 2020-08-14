@@ -21,7 +21,6 @@ import {
 } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
 import { LockIcon } from "components/AllSvgIcon";
-import { CURRENCY } from "constants/constants";
 import Error500 from "components/Error/Error500";
 import Loader from "components/Loader/Loader";
 import { openModal } from "@redq/reuse-modal";
