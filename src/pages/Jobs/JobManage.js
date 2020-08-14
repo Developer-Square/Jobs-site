@@ -31,6 +31,7 @@ import ModalTemplate from "pages/common/ModalTemplate";
 function JobManage() {
   const match = useRouteMatch();
   const [initialValues, setInitialValues] = useState([]);
+  const [editting, setEditting] = useState(false);
   const industry = Industries;
   const useDispatch = useStickyDispatch();
   const setList = useCallback(() => useDispatch({ type: "MANAGE" }), [
@@ -62,35 +63,54 @@ function JobManage() {
   useEffect(() => {
     setLoading(false);
     setList();
-    axios
-      .get(`${BASE_URL}/jobs/?job_id=${match.params.jobID}`, tokenConfig())
-      .then((res) => {
-        // const arr = res.data.results;
-        // const result = arr.reduce((acc, d) => {
-        //   acc.push({
-        //     key: d.name,
-        //     value: d.id,
-        //   });
-        //   return acc;
-        // }, []);
-        setApplicants(res.data.results);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-    axios
-      .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
-      .then((res) => {
-        const arr = res.data;
-        console.log("array jobs", arr);
-        // setJob(arr);
-        setInitialValues(arr);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+    try {
+      axios
+        .get(
+          `${BASE_URL}/jobs/applications/?job_id=${match.params.jobID}`,
+          tokenConfig()
+        )
+        .then((res) => {
+          // const arr = res.data.results;
+          // const result = arr.reduce((acc, d) => {
+          //   acc.push({
+          //     key: d.name,
+          //     value: d.id,
+          //   });
+          //   return acc;
+          // }, []);
+          setApplicants(res.data.results);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log("Catching Errors:", err);
+          setError(err);
+        });
+      axios
+        .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
+        .then((res) => {
+          const arr = res.data;
+          console.log("array jobs", arr);
+          // setJob(arr);
+          setInitialValues(arr);
+          if (arr.id) {
+            setEditting(true);
+          }
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log("Catching Errors:", err);
+          setError(err);
+          setLoading(false);
+        });
+    } catch (error) {
+      console.log("Catching Errors:", error);
+      setError(error);
+      setLoading(false);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // console.log("job title", job.title);
 
   const minQualificationsOptions = [
     { value: "", key: "Select your Qualification" },
@@ -128,7 +148,7 @@ function JobManage() {
     setSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     axios
-      .post(`${BASE_URL}/jobs/`, values, tokenConfig())
+      .post(`${BASE_URL}/jobs/${match.params.jobID}/`, values, tokenConfig())
       .then((res) => {
         setSubmitting(false);
         console.log("res", res.data);
@@ -140,10 +160,53 @@ function JobManage() {
         setErrors(err.response.data);
       });
   };
+  const onChangeSubmit = async (values, { setErrors, setSubmitting }) => {
+    console.log("val8es fdsf ", values);
+    setSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    axios
+      .put(`${BASE_URL}/jobs/${match.params.jobID}/`, values, tokenConfig())
+      .then((res) => {
+        setSubmitting(false);
+        console.log("res", res.data);
+      })
+      .catch((err) => {
+        setSubmitting(false);
+        console.log("error", err);
+
+        setErrors(err.response.data);
+      });
+  };
+
   const closeApplications = () => {
     setLoading(true);
+    const {
+      id,
+      creator,
+      title,
+      industry,
+      job_type,
+      min_qualification,
+      years_of_exp,
+      description,
+      salary,
+      location,
+    } = initialValues;
+    const body = {
+      is_active: false,
+      creator: creator,
+      job_type: job_type,
+      title: title,
+      id: id,
+      industry: industry,
+      min_qualification: min_qualification,
+      years_of_exp: years_of_exp,
+      description: description,
+      salary: salary,
+      location: location,
+    };
     axios
-      .post(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
+      .put(`${BASE_URL}/jobs/${match.params.jobID}/`, body, tokenConfig())
       .then((res) => {
         openModal({
           show: true,
@@ -159,10 +222,11 @@ function JobManage() {
             height: "auto",
           },
         });
+        setLoading(false);
       })
       .catch((err) => {
         setError(err);
-        console.log(err.response.status);
+        console.log(err.response.data);
         setLoading(false);
       });
   };
@@ -298,7 +362,7 @@ function JobManage() {
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
-                  onSubmit={onSubmit}
+                  onSubmit={editting ? onChangeSubmit : onSubmit}
                 >
                   {(formik) => {
                     return (

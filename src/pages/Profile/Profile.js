@@ -23,6 +23,7 @@ function Profile() {
   const [initialValues, setInitialValues] = useState();
   const [initialProfileValues, setInitialProfileValues] = useState();
   const [initialOrganizationValues, setInitialOrganizationValues] = useState();
+  const [editting, setEditting] = useState(false);
 
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -43,6 +44,9 @@ function Profile() {
                 "thedb_individual_profile",
                 individual[0]
               );
+              if (individual[0].id) {
+                setEditting(true);
+              }
               setLoading(false);
             })
             .catch((err) => {
@@ -253,7 +257,6 @@ function Profile() {
       location,
       website,
     } = values;
-
     const body = {
       name: name,
       description: description,
@@ -296,24 +299,68 @@ function Profile() {
           setSubmitting(false);
           setLoading(false);
         });
-      // axios
-      //   .post(`${BASE_URL}/${type}/`, body, tokenConfig())
-      //   .then((res) => {
-      //     setSubmitting(false);
-      //     console.log("res", res.data);
-      //     handleModal(`${type} Profile Created Successfully`, "");
-      //     setLoading(false);
-      //   })
-      //   .catch((err) => {
-      //     if (err.response.data) {
-      //       setErrors(err.response.data);
-      //     } else {
-      //       setError(err);
-      //     }
-      //     console.log(err.response.status);
-      //     setSubmitting(false);
-      //     setLoading(false);
-      //   });
+    } catch (error) {
+      setError(error);
+    }
+  };
+  const onOrgChangeSubmit = (values, { setErrors, setSubmitting }) => {
+    const {
+      name,
+      description,
+      // logo,
+      address,
+      country,
+      location,
+      website,
+    } = values;
+    const body = {
+      name: name,
+      description: description,
+      website: website,
+      country: country,
+      location: location,
+      address: address,
+      logo: undefined,
+      user: profile.id,
+    };
+    console.log("body values ", body, values);
+    setSubmitting(true);
+    setLoading(true);
+    try {
+      axios
+        .put(
+          `${BASE_URL}/organization/${
+            JSON.parse(localStorage.getItem("thedb_org_profile"))["id"]
+          }/`,
+          body,
+          tokenConfig()
+        )
+        .then((res) => {
+          setSubmitting(false);
+          console.log("res", res.data);
+          handleModal("Profile Created Successfully", "");
+          addObjectToLocalStorageObject("thedb_org_profile", res.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log("res errors", err.response.data);
+          if (err.response.data) {
+            if (err.response.data.user) {
+              if (err.response.data.user[0] === "This field must be unique.") {
+                handleModal(
+                  "You Already registered a company under your account",
+                  `(Only one organization can be registered under an account)`
+                );
+              }
+            }
+            setErrors(err.response.data);
+          } else {
+            setError(err);
+          }
+          console.log(err.response.data);
+          setSubmitting(false);
+          setLoading(false);
+        });
     } catch (error) {
       setError(error);
     }
@@ -367,6 +414,62 @@ function Profile() {
       setError(error);
     }
   };
+  const onChangeSubmit = async (values, { setErrors, setSubmitting }) => {
+    const {
+      title,
+      id_number,
+      image,
+      date_of_birth,
+      about,
+      location,
+      gender,
+      status,
+    } = values;
+    const body = {
+      title: title,
+      id_number: id_number,
+      image: undefined,
+      date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
+      about: about,
+      location: location,
+      gender: gender,
+      status: status,
+      user: profile.id,
+    };
+    console.log("val8es fdsf ", body, image);
+    setSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      axios
+        .put(
+          `${BASE_URL}/individual/${
+            JSON.parse(localStorage.getItem("thedb_individual_profile"))["id"]
+          }/`,
+          body,
+          tokenConfig()
+        )
+        .then((res) => {
+          setSubmitting(false);
+          console.log("res", res.data);
+          handleModal("Profile Updated Successfully", "");
+          addObjectToLocalStorageObject("thedb_individual_profile", res.data);
+        })
+        .catch((err) => {
+          if (err.response.data) {
+            setErrors(err.response.data);
+            console.log("errors za data");
+          } else {
+            setError(err);
+            console.log("errors general");
+          }
+          console.log(err.response.data);
+          setSubmitting(false);
+        });
+    } catch (error) {
+      setError(error);
+    }
+  };
+
   if (error) {
     return <Error500 err={error} />;
   }
@@ -427,7 +530,7 @@ function Profile() {
               <Formik
                 initialValues={initialProfileValues}
                 validationSchema={profileValidationSchema}
-                onSubmit={onAddSubmit}
+                onSubmit={editting ? onChangeSubmit : onAddSubmit}
               >
                 {(formik) => {
                   return (
@@ -499,7 +602,7 @@ function Profile() {
               <Formik
                 initialValues={initialOrganizationValues}
                 validationSchema={organizationValidationSchema}
-                onSubmit={onOrgSubmit}
+                onSubmit={editting ? onOrgChangeSubmit : onOrgSubmit}
               >
                 {(formik) => {
                   return (
