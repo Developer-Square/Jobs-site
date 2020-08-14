@@ -474,8 +474,7 @@ function GigManage() {
                             <ListingIcons>
                               <li>
                                 <LockIcon />
-                                {CURRENCY}
-                                {applicant.salary}
+                                {applicant.email}
                               </li>
                             </ListingIcons>
                           </ListingTitle>

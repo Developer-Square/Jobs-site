@@ -458,8 +458,7 @@ function JobManage() {
                         <ListingIcons>
                           <li>
                             <LockIcon />
-                            {CURRENCY}
-                            {applicant.salary}
+                            {applicant.email}
                           </li>
                         </ListingIcons>
                       </ListingTitle>

@@ -433,8 +433,7 @@ function Manage({ type, name, isBusiness, isIndividual }) {
                             <ListingIcons>
                               <li>
                                 <LockIcon />
-                                {CURRENCY}
-                                {applicant.salary}
+                                {applicant.email}
                               </li>
                             </ListingIcons>
                           </ListingTitle>
