@@ -670,7 +670,7 @@ const ArticleWrapper = styled.div`
 
   @media (min-width: 768px) {
     display: flex;
-    width: 33.33333333%;
+    /* width: 33.33333333%; */
   }
 `;
 const Article = styled.article`

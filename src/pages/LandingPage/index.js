@@ -170,7 +170,11 @@ function LandingPage({ deviceType }) {
                         <ImageWrapper
                           url={article.imgUrl}
                           alt={`article image`}
-                          style={{ height: "400px" }}
+                          style={{
+                            height: "400px",
+                            objectFit: "cover",
+                            width: "100%",
+                          }}
                         />
                       </Link>
                       <ArrowNext />
