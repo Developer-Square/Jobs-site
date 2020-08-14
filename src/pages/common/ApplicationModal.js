@@ -14,7 +14,7 @@ import {
 } from "../Dashboard/Dashboard.style";
 import { AuthContext } from "contexts/auth/auth.context";
 import { BASE_URL } from "constants/constants";
-import { addObjectToLocalStorageObject } from "helpers";
+import { addToLocalStorageArray } from "helpers";
 
 function ApplicationModal(jobId) {
   const {
@@ -26,31 +26,35 @@ function ApplicationModal(jobId) {
     const { budget, comment } = values;
     const body = {
       applicant: profile.id,
-      job: 1,
+      job: jobId,
       budget: budget,
       comment: comment,
     };
     axios
-      .post(`${BASE_URL}/jobs/applications/`, body, tokenConfig())
+      .post(`${BASE_URL}/jobs/applications`, body, tokenConfig())
       .then((res) => {
-        console.log("applicant data", res.data.results);
+        console.log("applicant data", res.data);
         setSuccess(true);
-        axios
-          .get()
-          .post(
-            `${BASE_URL}/jobs/applicant/${profile.id}/`,
-            body,
-            tokenConfig()
-          )
-          .then((res) => {
-            addObjectToLocalStorageObject(
-              "thedb_applications",
-              res.data.applications
-            );
-          });
+        addToLocalStorageArray("thedb_applications", res.data.job);
+        // axios
+        //   .get()
+        //   .post(
+        //     `${BASE_URL}/jobs/applicant/${profile.id}/`,
+        //     body,
+        //     tokenConfig()
+        //   )
+        //   .then((res) => {
+        //     addObjectToLocalStorageObject(
+        //       "thedb_applications",
+        //       res.data.applications
+        //     );
+        //   })
+        //   .catch((err) => {
+        //     console.log("error ndani", err);
+        //   });
       })
       .catch((err) => {
-        console.log("error", err.response);
+        console.log("error", err);
       });
   };
   const initialValues = {

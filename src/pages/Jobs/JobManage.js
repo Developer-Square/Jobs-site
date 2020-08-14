@@ -219,7 +219,7 @@ function JobManage() {
         });
       })
       .catch((err) => {
-        if (err.response.status > 199 && err.response.status < 300) {
+        if (err.response.data) {
         } else {
           setError(err);
         }

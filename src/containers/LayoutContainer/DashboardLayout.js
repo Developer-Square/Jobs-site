@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import useComponentSize from "helpers/useComponentSize";
 import Sidebar from "./Dashboard/Sidebar/Sidebar";
 import Topbar from "./Dashboard/Topbar/Topbar";
@@ -12,7 +12,7 @@ import {
 } from "./Dashboard/Layout.style";
 import { useDeviceType } from "helpers/useDeviceType";
 import styled from "styled-components";
-import { DrawerContext } from "contexts/drawer/drawer.context";
+// import { DrawerContext } from "contexts/drawer/drawer.context";
 
 const SidedbarDesktop = styled.div`
   @media only screen and (max-width: 1199px) {
@@ -24,13 +24,14 @@ const DashboardLayout = ({ children }) => {
   let [topbarRef, { height }] = useComponentSize();
   let [sidebarRef, { width }] = useComponentSize();
   const { desktop } = useDeviceType();
-  const { dispatch } = useContext(DrawerContext);
+  // const { useDrawerDispatch } = useContext(DrawerContext);
   // Toggle drawer
-  const toggleHandler = React.useCallback(() => {
-    dispatch({
-      type: "TOGGLE",
-    });
-  }, [dispatch]);
+  // const toggleHandler = React.useCallback(() => {
+  //   // eslint-disable-next-line react-hooks/rules-of-hooks
+  //   useDrawerDispatch({
+  //     type: "TOGGLE",
+  //   });
+  // }, [useDrawerDispatch]);
 
   return (
     <DrawerProvider>
@@ -48,7 +49,7 @@ const DashboardLayout = ({ children }) => {
                 style={{
                   height: `calc(100vh - ${height}px)`,
                 }}
-                onMenuItemClick={toggleHandler}
+                // onMenuItemClick={toggleHandler}
               />
             </SidedbarDesktop>
             <ContentWrapper

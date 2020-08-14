@@ -150,7 +150,7 @@ export default function SignInModal() {
                 );
               })
               .catch((err) => {
-                if (err.response.status > 199 && err.response.status < 300) {
+                if (err.response.data) {
                   setErrors(err.response.data);
                 } else {
                   setError(err);
@@ -165,12 +165,12 @@ export default function SignInModal() {
             console.log("response", res);
           })
           .catch((err) => {
-            if (err.response.status > 199 && err.response.status < 300) {
+            if (err.response.data) {
               setErrors(err.response.data);
             } else {
               setError(err);
             }
-            console.log(err.response.status);
+            console.log(err.response);
             setSubmitting(false);
             setLoading(false);
           });

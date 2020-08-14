@@ -24,6 +24,7 @@ import EmailVerificationModal from "containers/SignInOutForm/emailVerificationMo
 import ApplicationModal from "../common/ApplicationModal";
 import Loader from "components/Loader/Loader";
 import Error500 from "components/Error/Error500";
+import { categorySelector } from "pages/common/helpers";
 
 function Dashboard() {
   const {
@@ -45,35 +46,16 @@ function Dashboard() {
             setLoading(false);
           })
           .catch((err) => {
-            console.log(err.response.status);
+            console.log(err);
             setError(err);
             setLoading(false);
           });
       } catch (error) {
         setError(error);
       }
-    }, 3000);
+    }, 2000);
   }, []);
 
-  const categorySelector = (category) => {
-    switch (category) {
-      case "fulltime":
-        return "jobs";
-      case "parttime":
-        return "jobs";
-      case "volunteering":
-        return "jobs";
-      case "internship":
-        return "internships";
-      case "Internship":
-        return "internships";
-      case "gig":
-        return "gigs";
-
-      default:
-        throw new Error(`Unsupported Category Type: ${category}`);
-    }
-  };
   const useDispatch = useStickyDispatch();
   const setForm = useCallback(() => useDispatch({ type: "MANAGE" }), [
     useDispatch,
@@ -126,20 +108,6 @@ function Dashboard() {
         {profile.dummy_verified ? null : (
           <span>Verify Email to apply for the Openings</span>
         )}
-        {/* <Button
-          onClick={() => handleApplication(1)}
-          size="small"
-          title={`Apply`}
-          disabled={false}
-          style={{
-            fontSize: 15,
-            color: "#5918e6",
-            backgroundColor: profile.dummy_verified ? "#e6c018" : "#f2f2f2",
-            float: "left",
-            height: "29px",
-            margin: "0 10px",
-          }}
-        /> */}
       </H4>
       {loading ? (
         <Loader />
@@ -185,26 +153,51 @@ function Dashboard() {
                                 }}
                               />
                             ) : (
-                              <Button
-                                onClick={() =>
-                                  !profile.dummy_verified
-                                    ? handleApplication(job.id)
-                                    : handleModal
-                                }
-                                size="small"
-                                title={`Apply`}
-                                // disabled={!profile.dummy_verified}
-                                style={{
-                                  fontSize: 15,
-                                  color: "#5918e6",
-                                  backgroundColor: profile.dummy_verified
-                                    ? "#e6c018"
-                                    : "#f2f2f2",
-                                  float: "right",
-                                  height: "29px",
-                                  margin: "0 0 0 10px",
-                                }}
-                              />
+                              <>
+                                {localStorage
+                                  .getItem("thedb_applications")
+                                  .includes(job.id) ? (
+                                  <Button
+                                    onClick={() =>
+                                      profile.dummy_verified
+                                        ? handleApplication(job.id)
+                                        : handleModal()
+                                    }
+                                    size="small"
+                                    title={`Applied ✔`}
+                                    disabled={true}
+                                    style={{
+                                      fontSize: 15,
+                                      color: "#5918e6",
+                                      backgroundColor: "#f2f2f2",
+                                      float: "right",
+                                      height: "29px",
+                                      margin: "0 0 0 10px",
+                                    }}
+                                  />
+                                ) : (
+                                  <Button
+                                    onClick={() =>
+                                      profile.dummy_verified
+                                        ? handleApplication(job.id)
+                                        : handleModal()
+                                    }
+                                    size="small"
+                                    title={`Apply`}
+                                    // disabled={!profile.dummy_verified}
+                                    style={{
+                                      fontSize: 15,
+                                      color: "#5918e6",
+                                      backgroundColor: profile.dummy_verified
+                                        ? "#e6c018"
+                                        : "#f2f2f2",
+                                      float: "right",
+                                      height: "29px",
+                                      margin: "0 0 0 10px",
+                                    }}
+                                  />
+                                )}
+                              </>
                             )}
                           </TypeList>
                         </h3>

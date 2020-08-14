@@ -27,6 +27,7 @@ import ImageWrapper from "components/Image/Image";
 import { LockIcon } from "components/AllSvgIcon";
 import { CURRENCY } from "constants/constants";
 import ModalTemplate from "pages/common/ModalTemplate";
+import { H3 } from "styles/pages.style";
 
 function GigManage() {
   const match = useRouteMatch();
@@ -65,7 +66,10 @@ function GigManage() {
     setTimeout(() => {
       try {
         axios
-          .get(`${BASE_URL}/jobs/?job_id=${match.params.jobID}`, tokenConfig())
+          .get(
+            `${BASE_URL}/jobs/applications/?job_id=${match.params.jobID}`,
+            tokenConfig()
+          )
           .then((res) => {
             // const arr = res.data.results;
             // const result = arr.reduce((acc, d) => {
@@ -76,6 +80,7 @@ function GigManage() {
             //   return acc;
             // }, []);
             setApplicants(res.data.results);
+            console.log("applicants", res.data.results);
           })
           .catch((err) => {
             setLoading(false);
@@ -94,10 +99,12 @@ function GigManage() {
           .catch((err) => {
             console.log("Catching Errors:", error);
             setError(error);
+            setLoading(false);
           });
       } catch (error) {
         console.log("Catching Errors:", error);
         setError(error);
+        setLoading(false);
       }
     }, 2000);
 
@@ -393,45 +400,51 @@ function GigManage() {
           {currentForm === "manage" && (
             <LeftContent>
               <ul>
-                {applicants.map((applicant, index) => (
-                  <li key={index}>
-                    <section onClick={() => applicantView(applicant)}>
-                      <ListingLogo>
-                        <ImageWrapper
-                          url={applicant.image}
-                          alt={"company logo"}
-                        />
-                      </ListingLogo>
-                      <ListingTitle>
-                        <h3>
-                          {applicant.full_name}
-                          <TypeList>
-                            <Button
-                              onClick={() => selectApplicant()}
-                              size="small"
-                              title={`Approve`}
-                              style={{
-                                fontSize: 15,
-                                color: "#fff",
-                                backgroundColor: "#5918e6",
-                                float: "right",
-                                height: "29px",
-                                margin: "0 0 0 10px",
-                              }}
+                {applicants.length > 0 ? (
+                  <>
+                    {applicants.map((applicant, index) => (
+                      <li key={index}>
+                        <section onClick={() => applicantView(applicant)}>
+                          <ListingLogo>
+                            <ImageWrapper
+                              url={applicant.image}
+                              alt={"company logo"}
                             />
-                          </TypeList>
-                        </h3>
-                        <ListingIcons>
-                          <li>
-                            <LockIcon />
-                            {CURRENCY}
-                            {applicant.salary}
-                          </li>
-                        </ListingIcons>
-                      </ListingTitle>
-                    </section>
-                  </li>
-                ))}
+                          </ListingLogo>
+                          <ListingTitle>
+                            <h3>
+                              {applicant.full_name}
+                              <TypeList>
+                                <Button
+                                  onClick={() => selectApplicant()}
+                                  size="small"
+                                  title={`Approve`}
+                                  style={{
+                                    fontSize: 15,
+                                    color: "#fff",
+                                    backgroundColor: "#5918e6",
+                                    float: "right",
+                                    height: "29px",
+                                    margin: "0 0 0 10px",
+                                  }}
+                                />
+                              </TypeList>
+                            </h3>
+                            <ListingIcons>
+                              <li>
+                                <LockIcon />
+                                {CURRENCY}
+                                {applicant.salary}
+                              </li>
+                            </ListingIcons>
+                          </ListingTitle>
+                        </section>
+                      </li>
+                    ))}
+                  </>
+                ) : (
+                  <H3>No Applications Yet</H3>
+                )}
               </ul>
             </LeftContent>
           )}

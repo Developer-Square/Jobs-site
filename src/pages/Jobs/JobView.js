@@ -133,7 +133,9 @@ function JobView() {
                 .filter(
                   (filteredJob) =>
                     filteredJob.job_type !== "gig" &&
-                    filteredJob.job_type !== "internship"
+                    filteredJob.job_type !== "Gig" &&
+                    filteredJob.job_type !== "internship" &&
+                    filteredJob.job_type !== "Internship"
                 )
                 .map((job, index) => (
                   <li key={index}>
@@ -168,26 +170,51 @@ function JobView() {
                                 }}
                               />
                             ) : (
-                              <Button
-                                onClick={
-                                  profile.dummy_verified
-                                    ? handleApplication
-                                    : handleModal
-                                }
-                                size="small"
-                                title={`Apply`}
-                                disabled={!profile.dummy_verified}
-                                style={{
-                                  fontSize: 15,
-                                  color: "#5918e6",
-                                  backgroundColor: profile.dummy_verified
-                                    ? "#e6c018"
-                                    : "#f2f2f2",
-                                  float: "left",
-                                  height: "29px",
-                                  margin: "0 0 0 10px",
-                                }}
-                              />
+                              <>
+                                {localStorage
+                                  .getItem("thedb_applications")
+                                  .includes(job.id) ? (
+                                  <Button
+                                    onClick={() =>
+                                      profile.dummy_verified
+                                        ? handleApplication(job.id)
+                                        : handleModal()
+                                    }
+                                    size="small"
+                                    title={`Applied ✔`}
+                                    disabled={true}
+                                    style={{
+                                      fontSize: 15,
+                                      color: "#5918e6",
+                                      backgroundColor: "#f2f2f2",
+                                      float: "right",
+                                      height: "29px",
+                                      margin: "0 0 0 10px",
+                                    }}
+                                  />
+                                ) : (
+                                  <Button
+                                    onClick={() =>
+                                      profile.dummy_verified
+                                        ? handleApplication(job.id)
+                                        : handleModal()
+                                    }
+                                    size="small"
+                                    title={`Apply`}
+                                    // disabled={!profile.dummy_verified}
+                                    style={{
+                                      fontSize: 15,
+                                      color: "#5918e6",
+                                      backgroundColor: profile.dummy_verified
+                                        ? "#e6c018"
+                                        : "#f2f2f2",
+                                      float: "right",
+                                      height: "29px",
+                                      margin: "0 0 0 10px",
+                                    }}
+                                  />
+                                )}
+                              </>
                             )}
                           </TypeList>
                         </H4>

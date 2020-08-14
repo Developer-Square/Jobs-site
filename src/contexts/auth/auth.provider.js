@@ -27,7 +27,6 @@ function reducer(state, action) {
     case "SIGNIN_SUCCESS":
       return {
         ...state,
-        isAuthenticated: true,
       };
     case "LOGIN_SUCCESS":
       return {

@@ -16,7 +16,6 @@ import {
 } from "styles/pages.style";
 import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
-
 import { AuthContext } from "contexts/auth/auth.context";
 import { openModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
@@ -24,6 +23,8 @@ import ApplicationModal from "pages/common/ApplicationModal";
 import Loader from "components/Loader/Loader";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import Error500 from "components/Error/Error500";
+import { useHistory } from "react-router-dom";
+import { categorySelector } from "pages/common/helpers";
 
 function GigView() {
   const {
@@ -32,6 +33,7 @@ function GigView() {
   const [jobs, setJobs] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const history = useHistory();
   useEffect(() => {
     setTimeout(() => {
       axios
@@ -56,8 +58,10 @@ function GigView() {
   const setPost = useCallback(() => useDispatch({ type: "POST" }), [
     useDispatch,
   ]);
-  const toggleManage = () => {
+
+  const toggleManage = (category, id) => {
     setManage();
+    history.push(`/dashboard/${category}/${id}`);
   };
   const togglePost = () => {
     setPost();
@@ -127,7 +131,11 @@ function GigView() {
           {jobs !== null && jobs.length > 0 ? (
             <ul>
               {jobs
-                .filter((filteredJob) => filteredJob.job_type === "gig")
+                .filter(
+                  (filteredJob) =>
+                    filteredJob.job_type === "gig" ||
+                    filteredJob.job_type === "Gig"
+                )
                 .map((job, index) => (
                   <>
                     {job !== null && job !== undefined ? (
@@ -149,9 +157,14 @@ function GigView() {
                                 </ListSpan>
                                 {job.creator === profile.id ? (
                                   <Button
-                                    onClick={toggleManage}
+                                    onClick={() =>
+                                      toggleManage(
+                                        categorySelector(job.job_type),
+                                        job.id
+                                      )
+                                    }
                                     size="small"
-                                    title={`Manage Job`}
+                                    title={`Manage Gig`}
                                     disabled={!profile.dummy_verified}
                                     style={{
                                       fontSize: 15,
@@ -163,26 +176,51 @@ function GigView() {
                                     }}
                                   />
                                 ) : (
-                                  <Button
-                                    onClick={
-                                      profile.dummy_verified
-                                        ? handleApplication
-                                        : handleModal
-                                    }
-                                    size="small"
-                                    title={`Apply`}
-                                    disabled={!profile.dummy_verified}
-                                    style={{
-                                      fontSize: 15,
-                                      color: "#5918e6",
-                                      backgroundColor: profile.dummy_verified
-                                        ? "#e6c018"
-                                        : "#f2f2f2",
-                                      float: "right",
-                                      height: "29px",
-                                      margin: "0 0 0 10px",
-                                    }}
-                                  />
+                                  <>
+                                    {localStorage
+                                      .getItem("thedb_applications")
+                                      .includes(job.id) ? (
+                                      <Button
+                                        onClick={() =>
+                                          profile.dummy_verified
+                                            ? handleApplication(job.id)
+                                            : handleModal()
+                                        }
+                                        size="small"
+                                        title={`Applied ✔`}
+                                        disabled={true}
+                                        style={{
+                                          fontSize: 15,
+                                          color: "#5918e6",
+                                          backgroundColor: "#f2f2f2",
+                                          float: "right",
+                                          height: "29px",
+                                          margin: "0 0 0 10px",
+                                        }}
+                                      />
+                                    ) : (
+                                      <Button
+                                        onClick={() =>
+                                          profile.dummy_verified
+                                            ? handleApplication(job.id)
+                                            : handleModal()
+                                        }
+                                        size="small"
+                                        title={`Apply`}
+                                        // disabled={!profile.dummy_verified}
+                                        style={{
+                                          fontSize: 15,
+                                          color: "#5918e6",
+                                          backgroundColor: profile.dummy_verified
+                                            ? "#e6c018"
+                                            : "#f2f2f2",
+                                          float: "right",
+                                          height: "29px",
+                                          margin: "0 0 0 10px",
+                                        }}
+                                      />
+                                    )}
+                                  </>
                                 )}
                               </TypeList>
                             </h3>

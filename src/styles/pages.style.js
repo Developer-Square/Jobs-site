@@ -430,7 +430,8 @@ const TypeList = styled.div`
     border: 1px solid #186fc9;
     background-color: rgba(24, 111, 201, 0.07);
   }
-  .internship {
+  .internship,
+  .Internship {
     color: #e1d123;
     border: 1px solid #e1d123;
     background-color: rgba(225, 209, 35, 0.07);
@@ -440,17 +441,19 @@ const TypeList = styled.div`
     border: 1px solid #e12335;
     background-color: rgba(225, 35, 53, 0.07);
   }
-  .part-time {
-    color: #f1630d;
-    border: 1px solid #f1630d;
-    background-color: rgba(241, 99, 13, 0.07);
-  }
+  .part-time,
   .parttime {
     color: #f1630d;
     border: 1px solid #f1630d;
     background-color: rgba(241, 99, 13, 0.07);
   }
   .freelance {
+    color: #53b427;
+    border: 1px solid #53b427;
+    background-color: rgba(83, 180, 39, 0.07);
+  }
+  .gig,
+  .Gig {
     color: #53b427;
     border: 1px solid #53b427;
     background-color: rgba(83, 180, 39, 0.07);

@@ -10,7 +10,6 @@ export default function JobsController() {
   if (useAppState("currentForm") === "post") {
     RenderView = JobPost;
   }
-
   if (useAppState("currentForm") === "view") {
     RenderView = JobView;
   }

@@ -24,7 +24,7 @@ function JobPost() {
   } = useContext(AuthContext);
   const [industry] = useState(Industries);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   useEffect(() => {
     if (!profile.dummy_verified) {
       history.push(`/dashboard/jobs`);
@@ -113,9 +113,13 @@ function JobPost() {
           "Job Created Successfully",
           `${res.data.title} - ${res.data.location} @ ${res.data.salary}`
         );
+        setTimeout(() => {
+          setLoading(false);
+          history.push(`/dashboard/jobs/${res.data.title}`);
+        }, 2000);
       })
       .catch((err) => {
-        if (err.response.status > 199 && err.response.status < 300) {
+        if (err.response.data) {
           setErrors(err.response.data);
         } else {
           setError(err);

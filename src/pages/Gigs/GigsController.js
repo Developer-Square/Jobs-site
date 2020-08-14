@@ -10,7 +10,6 @@ export default function GigsController() {
   if (useAppState("currentForm") === "post") {
     RenderView = GigPost;
   }
-
   if (useAppState("currentForm") === "view") {
     RenderView = GigView;
   }

@@ -12,17 +12,26 @@ import { AuthContext } from "contexts/auth/auth.context";
 import { Industries } from "pages/common/industry";
 import { useHistory } from "react-router-dom";
 import { useStickyDispatch } from "contexts/app/app.provider";
+import { openModal } from "@redq/reuse-modal";
+import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import Error500 from "components/Error/Error500";
+import Loader from "components/Loader/Loader";
 
 function InternshipPost() {
   const history = useHistory();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const {
     authState: { profile },
   } = useContext(AuthContext);
   const [industry] = useState(Industries);
   useEffect(() => {
-    if (!profile.dummy_verified && profile.is_business) {
+    if (!profile.dummy_verified) {
       history.push(`/dashboard/jobs`);
     }
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const minQualificationsOptions = [
@@ -54,7 +63,7 @@ function InternshipPost() {
     location: "",
     salary: "",
     description: "",
-    job_type: "Internship",
+    job_type: "internship",
     years_of_exp: "",
     min_qualifications: "",
     courseDate: null,
@@ -77,6 +86,22 @@ function InternshipPost() {
     qualifications: Yup.string().required("Required"),
     // courseDate: Yup.date().required("Required").nullable(),
   });
+  const handleModal = (text, subtext) => {
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: () => EmailVerificationModal(text, subtext),
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
 
   const onSubmit = async (values, { setErrors, setSubmitting }) => {
     console.log("val8es fdsf ", values);
@@ -87,12 +112,24 @@ function InternshipPost() {
       .then((res) => {
         setSubmitting(false);
         console.log("res", res.data);
+        handleModal(
+          "Job Created Successfully",
+          `${res.data.title} - ${res.data.location} @ ${res.data.salary}`
+        );
+        setTimeout(() => {
+          setLoading(false);
+          history.push(`/dashboard/jobs/${res.data.title}`);
+        }, 2000);
       })
       .catch((err) => {
+        if (err.response.data) {
+          setErrors(err.response.data);
+        } else {
+          setError(err);
+        }
+        console.log(err.response.status);
         setSubmitting(false);
-        console.log("error", err);
-
-        setErrors(err.response.data);
+        setLoading(false);
       });
   };
   const useDispatch = useStickyDispatch();
@@ -102,6 +139,9 @@ function InternshipPost() {
   const toggleView = () => {
     setForm();
   };
+  if (error) {
+    return <Error500 err={error} />;
+  }
   return (
     <CardWrapper>
       <h4>
@@ -118,75 +158,79 @@ function InternshipPost() {
           }}
         />
       </h4>
-      <FormWrapper>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            return (
-              <Form>
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Title"
-                  name="title"
-                />
+      {loading ? (
+        <Loader />
+      ) : (
+        <FormWrapper>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => {
+              return (
+                <Form>
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Title"
+                    name="title"
+                  />
 
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Salary"
-                  name="salary"
-                />
-                <FormikControl
-                  control="input"
-                  type="text"
-                  label="Location"
-                  name="location"
-                />
-                <FormikControl
-                  control="select"
-                  label="Industry"
-                  name="industry"
-                  options={industry}
-                />
-                <FormikControl
-                  control="input"
-                  disabled={true}
-                  label="Internship Type"
-                  name="job_type"
-                />
-                <FormikControl
-                  control="select"
-                  label="Qualification"
-                  name="qualifications"
-                  options={minQualificationsOptions}
-                />
-                <FormikControl
-                  control="select"
-                  label="Experience"
-                  name="experience"
-                  options={experienceOptions}
-                />
-                <FormikControl
-                  control="textarea"
-                  label="description"
-                  name="description"
-                />
-                <Button
-                  type="submit"
-                  size="small"
-                  title={formik.isSubmitting ? "Submitting... " : "Submit"}
-                  style={{ fontSize: 15, color: "#fff" }}
-                  disabled={!formik.isValid}
-                />
-              </Form>
-            );
-          }}
-        </Formik>
-      </FormWrapper>
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Salary"
+                    name="salary"
+                  />
+                  <FormikControl
+                    control="input"
+                    type="text"
+                    label="Location"
+                    name="location"
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Industry"
+                    name="industry"
+                    options={industry}
+                  />
+                  <FormikControl
+                    control="input"
+                    disabled={true}
+                    label="Internship Type"
+                    name="job_type"
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Qualification"
+                    name="qualifications"
+                    options={minQualificationsOptions}
+                  />
+                  <FormikControl
+                    control="select"
+                    label="Experience"
+                    name="experience"
+                    options={experienceOptions}
+                  />
+                  <FormikControl
+                    control="textarea"
+                    label="description"
+                    name="description"
+                  />
+                  <Button
+                    type="submit"
+                    size="small"
+                    title={formik.isSubmitting ? "Submitting... " : "Submit"}
+                    style={{ fontSize: 15, color: "#fff" }}
+                    disabled={!formik.isValid}
+                  />
+                </Form>
+              );
+            }}
+          </Formik>
+        </FormWrapper>
+      )}
     </CardWrapper>
   );
 }

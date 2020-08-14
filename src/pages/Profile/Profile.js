@@ -28,6 +28,47 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setTimeout(() => {
+      if (localStorage.getItem("thedb_auth_profile")["is_individual"]) {
+        try {
+          axios
+            .get(`${BASE_URL}/individual/`, tokenConfig())
+            .then((res) => {
+              console.log("res", res.data);
+              const company = res.data.results.filter(
+                (filteredCompany) => filteredCompany.user === profile.id
+              );
+              addObjectToLocalStorageObject(
+                "thedb_individual_profile",
+                company[0]
+              );
+              setLoading(false);
+            })
+            .catch((err) => {
+              setError(err);
+              console.log(err.response.status);
+            });
+        } catch (error) {
+          setError(error);
+        }
+      } else {
+        try {
+          axios
+            .get(`${BASE_URL}/organization/`, tokenConfig())
+            .then((res) => {
+              console.log("res", res.data);
+              const individual = res.data.results.filter(
+                (filteredCompany) => filteredCompany.user === profile.id
+              );
+              addObjectToLocalStorageObject("thedb_org_profile", individual[0]);
+              setLoading(false);
+            })
+            .catch((err) => {
+              setError(err);
+            });
+        } catch (error) {
+          setError(error);
+        }
+      }
       setInitialValues({
         email: localStorage.getItem("thedb_auth_profile") ? profile.email : "",
         first_name: localStorage.getItem("thedb_auth_profile")
@@ -44,27 +85,40 @@ function Profile() {
         experience: [],
         qualifications: [],
       });
-      setInitialProfileValues({
-        title: "tre",
-        id_number: "555555",
-        image: LogoImage,
-        date_of_birth: new Date(),
-        about: "bgtrfv",
-        location: "ke",
-        gender: "male",
-        status: "Looking",
-        user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-      });
-      setInitialOrganizationValues({
-        name: "Telecommunication Company",
-        description: "a cool company",
-        website: "https://www.coo.lcom",
-        country: "Kenya",
-        location: "Nairobi, Kenya",
-        address: "12345, st, Nairobi",
-        logo: LogoImage,
-        user: 1,
-      });
+      if (localStorage.getItem("thedb_individual_profile")) {
+        setInitialProfileValues(
+          JSON.parse(localStorage.getItem("thedb_individual_profile"))
+        );
+      } else {
+        setInitialProfileValues({
+          title: "",
+          id_number: "",
+          image: LogoImage,
+          date_of_birth: new Date() - 10,
+          about: "",
+          location: "",
+          gender: "",
+          status: "",
+          user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
+        });
+      }
+      if (localStorage.getItem("thedb_org_profile")) {
+        setInitialOrganizationValues(
+          JSON.parse(localStorage.getItem("thedb_org_profile"))
+        );
+      } else {
+        setInitialOrganizationValues({
+          name: "",
+          description: "",
+          website: "https://",
+          country: "",
+          location: "",
+          address: "",
+          logo: LogoImage,
+          user: profile.id,
+        });
+      }
+
       setLoading(false);
     }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -168,7 +222,7 @@ function Profile() {
           setLoading(false);
         })
         .catch((err) => {
-          if (err.response.status > 199 && err.response.status < 300) {
+          if (err.response.data) {
             setErrors(err.response.data);
           } else {
             setError(err);
@@ -212,16 +266,25 @@ function Profile() {
           setSubmitting(false);
           console.log("res", res.data);
           handleModal("Profile Created Successfully", "");
+          addObjectToLocalStorageObject("thedb_org_profile", res.data);
           setLoading(false);
         })
         .catch((err) => {
-          console.log("res errors", err.response);
-          if (err.response.status > 199 && err.response.status < 300) {
+          console.log("res errors", err.response.data);
+          if (err.response.data) {
+            if (err.response.data.user) {
+              if (err.response.data.user[0] === "This field must be unique.") {
+                handleModal(
+                  "You Already registered a company under your account",
+                  `(Only one organization can be registered under an account)`
+                );
+              }
+            }
             setErrors(err.response.data);
           } else {
             setError(err);
           }
-          console.log(err.response.status);
+          console.log(err.response.data);
           setSubmitting(false);
           setLoading(false);
         });
@@ -234,7 +297,7 @@ function Profile() {
       //     setLoading(false);
       //   })
       //   .catch((err) => {
-      //     if (err.response.status > 199 && err.response.status < 300) {
+      //     if (err.response.data) {
       //       setErrors(err.response.data);
       //     } else {
       //       setError(err);
@@ -280,10 +343,11 @@ function Profile() {
           setSubmitting(false);
           console.log("res", res.data);
           handleModal("Profile Updated Successfully", "");
+          addObjectToLocalStorageObject("thedb_individual_profile", res.data);
           setLoading(false);
         })
         .catch((err) => {
-          if (err.response.status > 199 && err.response.status < 500) {
+          if (err.response.data) {
             setErrors(err.response.data);
           } else {
             setError(err);
@@ -351,7 +415,7 @@ function Profile() {
             </Formik>
           </FormWrapper>
           <h4>Additional Details</h4>
-          {!profile.is_individual ? (
+          {profile.is_individual ? (
             <FormWrapper>
               <Formik
                 initialValues={initialProfileValues}

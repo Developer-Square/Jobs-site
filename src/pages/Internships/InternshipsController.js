@@ -10,7 +10,6 @@ export default function InternshipsController() {
   if (useAppState("currentForm") === "post") {
     RenderView = InternshipPost;
   }
-
   if (useAppState("currentForm") === "view") {
     RenderView = InternshipView;
   }

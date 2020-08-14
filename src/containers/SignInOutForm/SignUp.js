@@ -22,15 +22,12 @@ import FormikControl from "containers/FormikContainer/FormikControl";
 import * as Yup from "yup";
 import axios from "axios";
 import { BASE_URL } from "constants/constants";
-import { addToLocalStorageObject } from "helpers";
-import { addToLocalStorageArray } from "helpers";
-import { addObjectToLocalStorageObject } from "helpers";
 import { TOS } from "constants/routes.constants";
 import Loader from "components/Loader/Loader";
 import Error500 from "components/Error/Error500";
 
 export default function SignOutModal() {
-  const { state, authDispatch } = useContext(AuthContext);
+  const { authDispatch } = useContext(AuthContext);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const history = useHistory();
@@ -103,51 +100,25 @@ export default function SignOutModal() {
       .then(async (res) => {
         console.log("data received", res);
         setSubmitting(false);
-        let auth_profile = res.data;
-        addObjectToLocalStorageObject("thedb_auth_profile", auth_profile);
-        addToLocalStorageObject("thedb_auth_profile", "dummy_verified", false);
-        // addToLocalStorageObject("thedb_auth_profile", "id", res.data.id);
-        // hashPassword(values.password_confirm);
-        // eslint-disable-next-line no-unused-vars
-        let profile = { dummy_verified: false };
-        let email = { email: values.email, secret: values.password };
-        profile = { ...res.data, ...email };
 
         if (typeof window !== "undefined") {
-          localStorage.setItem(
-            "access_token",
-            `${values.email}.${values.password}`
-          );
           authDispatch({
             type: "EMAILCONFIRM",
           });
-          var roles;
-          roles = "admin";
-          addToLocalStorageArray("thedb_auth_roles", roles);
-          authDispatch({
-            type: "UPDATE",
-            payload: {
-              ...state,
-              profile,
-            },
-          });
-          authDispatch({ type: "SIGNIN_SUCCESS" });
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          history.push("/dashboard");
+          // authDispatch({ type: "SIGNUP_SUCCESS" });
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          authDispatch({ type: "SIGNIN" });
           // closeModal();
         }
-        // if ((res.status = 200)) {
-        //   dispatch(createMessage({ success: "Registration successful" }));
-        // }
         console.log("response", res);
       })
       .catch((err) => {
-        if (err.response.status > 199 && err.response.status < 300) {
+        if (err.response.data) {
           setErrors(err.response.data);
         } else {
           setError(err);
         }
-        console.log(err.response.status);
+        console.log(err);
         setSubmitting(false);
         setLoading(false);
       });

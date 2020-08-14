@@ -21,7 +21,8 @@ export default function EmailConfirmationModal() {
       <Container style={{ paddingBottom: 30 }}>
         <Heading>Registration Successful</Heading>
 
-        <SubHeading>check your email for email confirmation"</SubHeading>
+        {/* <SubHeading>Check your email for email confirmation</SubHeading> */}
+        <SubHeading>Log in to use The Database</SubHeading>
 
         <Offer style={{ padding: "20px 0 0" }}>
           Back to" <LinkButton onClick={toggleSignInForm}>Login</LinkButton>
