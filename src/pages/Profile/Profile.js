@@ -540,7 +540,7 @@ function Profile() {
               <Formik
                 initialValues={initialProfileValues}
                 validationSchema={profileValidationSchema}
-                onSubmit={() => (editting ? onChangeSubmit : onAddSubmit)}
+                onSubmit={editting ? onChangeSubmit : onAddSubmit}
               >
                 {(formik) => {
                   return (
