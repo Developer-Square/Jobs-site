@@ -115,6 +115,7 @@ export default function SignOutModal() {
       .catch((err) => {
         if (err.response.data) {
           setErrors(err.response.data);
+          console.log(err.response.data);
         } else {
           setError(err);
         }

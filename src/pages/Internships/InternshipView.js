@@ -24,6 +24,8 @@ import EmailVerificationModal from "containers/SignInOutForm/emailVerificationMo
 import Loader from "components/Loader/Loader";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import Error500 from "components/Error/Error500";
+import { categorySelector } from "pages/common/helpers";
+import { useHistory } from "react-router-dom";
 
 function InternshipView() {
   const {
@@ -32,6 +34,7 @@ function InternshipView() {
   const [internships, setInternships] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setTimeout(() => {
@@ -57,8 +60,9 @@ function InternshipView() {
   const setPost = useCallback(() => useDispatch({ type: "POST" }), [
     useDispatch,
   ]);
-  const toggleManage = () => {
+  const toggleManage = (category, id) => {
     setManage();
+    history.push(`/dashboard/${category}/${id}`);
   };
   const togglePost = () => {
     setPost();
@@ -155,7 +159,12 @@ function InternshipView() {
                                 </ListSpan>
                                 {job.creator === profile.id ? (
                                   <Button
-                                    onClick={toggleManage}
+                                    onClick={() =>
+                                      toggleManage(
+                                        categorySelector(job.job_type),
+                                        job.id
+                                      )
+                                    }
                                     size="small"
                                     title={`Manage Job`}
                                     disabled={!profile.dummy_verified}

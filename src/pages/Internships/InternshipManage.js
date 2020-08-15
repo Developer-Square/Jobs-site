@@ -293,7 +293,7 @@ function InternshipManage() {
   return (
     <CardWrapper>
       <h4>
-        Manage Internship
+        Manage Applications
         <Button
           onClick={isEdit ? setList : setForm}
           size="small"

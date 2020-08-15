@@ -26,9 +26,7 @@ import {
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
 import { useHistory } from "react-router-dom";
-import { addToLocalStorageObject } from "helpers";
 import Error500 from "components/Error/Error500";
-import Loader from "components/Loader/Loader";
 
 export default function SignInModal() {
   const history = useHistory();
@@ -40,7 +38,6 @@ export default function SignInModal() {
   const [initialValues, setInitialValues] = useState();
   const { state, authDispatch } = useContext(AuthContext);
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (localStorage.getItem("thedb_auth_profile") !== null) {
@@ -48,12 +45,12 @@ export default function SignInModal() {
         login: JSON.parse(localStorage.getItem("thedb_auth_profile")).email,
         password: unhashPassword(),
       });
+    } else {
+      setInitialValues({
+        login: "",
+        password: "",
+      });
     }
-    setInitialValues({
-      login: "",
-      password: "",
-    });
-    setLoading(false);
   }, []);
 
   const toggleSignUpForm = () => {
@@ -82,7 +79,6 @@ export default function SignInModal() {
   });
 
   const onSubmit = (values, { setErrors, setSubmitting }) => {
-    setLoading(true);
     const body = values;
     console.log("body", body);
     setTimeout(() => {
@@ -112,11 +108,6 @@ export default function SignInModal() {
 
             let auth_profile = res.data;
             addObjectToLocalStorageObject("thedb_auth_profile", auth_profile);
-            addToLocalStorageObject(
-              "thedb_auth_profile",
-              "dummy_verified",
-              false
-            );
 
             let profile = {};
             let email = { email: values.email, secret: values.password };
@@ -135,19 +126,26 @@ export default function SignInModal() {
                 },
               });
               await new Promise((resolve) => setTimeout(resolve, 1000));
-              history.push("/dashboard");
 
               // closeModal();
             }
             // CHECK TOKEN & LOAD USER
             axios
               .get(`${BASE_URL}/accounts/profile/`, tokenConfig())
-              .then((res) => {
+              .then(async (res) => {
                 let auth_profile = res.data;
                 addObjectToLocalStorageObject(
                   "thedb_auth_profile",
                   auth_profile
                 );
+                authDispatch({
+                  type: "UPDATE",
+                  payload: {
+                    ...state,
+                    profile: auth_profile,
+                  },
+                });
+                await new Promise((resolve) => setTimeout(resolve, 1000));
               })
               .catch((err) => {
                 if (err.response.data) {
@@ -157,12 +155,36 @@ export default function SignInModal() {
                 }
                 console.log(err.response.status);
                 setSubmitting(false);
-                setLoading(false);
+              });
+            axios
+              .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
+              .then(async (res) => {
+                console.log("applicant data", res.data);
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                const applications = res.data.results
+                  .filter(
+                    (filteredApplications) =>
+                      filteredApplications.applicant ===
+                      JSON.parse(localStorage.getItem("thedb_auth_profile"))[
+                        "id"
+                      ]
+                  )
+                  // eslint-disable-next-line array-callback-return
+                  .reduce((arr, b) => {
+                    arr.push(b.job);
+                    return arr;
+                  }, []);
+                console.log("applications", applications);
+                addToLocalStorageArray("thedb_applications", applications);
+              })
+              .catch((err) => {
+                console.log("error", err);
               });
             // if ((res.status = 200)) {
             //   dispatch(createMessage({ success: "Registration successful" }));
             // }
             console.log("response", res);
+            history.push("/dashboard");
           })
           .catch((err) => {
             if (err.response.data) {
@@ -172,20 +194,12 @@ export default function SignInModal() {
             }
             console.log(err.response);
             setSubmitting(false);
-            setLoading(false);
           });
       } catch (error) {
         console.log("Catching Errors:", error);
         setError(error);
       }
-      var payload = {
-        username: "hihihfisfihi",
-        exp: 1591028890,
-        origIat: 1591028590,
-        user_id: "VXNlcjo3Mg==",
-        is_staff: false,
-        is_superuser: false,
-      };
+      var payload = {};
       let email = { email: values.email, secret: values.password };
       payload = { ...payload, ...email };
       addObjectToLocalStorageObject("thedb_auth_payload", payload);
@@ -199,49 +213,43 @@ export default function SignInModal() {
   return (
     <Wrapper>
       <Container>
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            <Heading>Welcome Back</Heading>
+        <Heading>Welcome Back</Heading>
 
-            <SubHeading>Login with your email &amp; password</SubHeading>
-            <Formik
-              initialValues={initialValues}
-              enableReinitialize={true}
-              validationSchema={validationSchema}
-              onSubmit={onSubmit}
-            >
-              {(formik) => {
-                return (
-                  <Form>
-                    <FormikControl
-                      control="input"
-                      type="email"
-                      label="Email"
-                      name="login"
-                    />
-                    <FormikControl
-                      control="input"
-                      type="password"
-                      label="Password"
-                      name="password"
-                    />
+        <SubHeading>Login with your email &amp; password</SubHeading>
+        <Formik
+          initialValues={initialValues}
+          enableReinitialize={true}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => {
+            return (
+              <Form>
+                <FormikControl
+                  control="input"
+                  type="email"
+                  label="Email"
+                  name="login"
+                />
+                <FormikControl
+                  control="input"
+                  type="password"
+                  label="Password"
+                  name="password"
+                />
 
-                    <Button
-                      type="submit"
-                      disabled={!formik.isValid}
-                      fullwidth
-                      title={
-                        formik.isSubmitting ? "Loging you in... " : "Log in"
-                      }
-                      style={{ color: "#ffffff" }}
-                    />
-                  </Form>
-                );
-              }}
-            </Formik>
-            {/* <Divider>
+                <Button
+                  type="submit"
+                  disabled={!formik.isValid}
+                  fullwidth
+                  title={formik.isSubmitting ? "Loging you in... " : "Log in"}
+                  style={{ color: "#ffffff" }}
+                />
+              </Form>
+            );
+          }}
+        </Formik>
+        {/* <Divider>
           <span>or</span>
         </Divider>
 
@@ -267,18 +275,16 @@ export default function SignInModal() {
           style={{ color: "#ffffff" }}
         /> */}
 
-            <Offer style={{ padding: "20px 0" }}>
-              Don't have any account?{" "}
-              <LinkButton onClick={toggleSignUpForm}>Sign Up</LinkButton>
-            </Offer>
-            <OfferSection>
-              <Offer>
-                Forgot your password?{" "}
-                <LinkButton onClick={toggleForgotPassForm}>Reset It</LinkButton>
-              </Offer>
-            </OfferSection>
-          </>
-        )}{" "}
+        <Offer style={{ padding: "20px 0" }}>
+          Don't have any account?{" "}
+          <LinkButton onClick={toggleSignUpForm}>Sign Up</LinkButton>
+        </Offer>
+        <OfferSection>
+          <Offer>
+            Forgot your password?{" "}
+            <LinkButton onClick={toggleForgotPassForm}>Reset It</LinkButton>
+          </Offer>
+        </OfferSection>
       </Container>
     </Wrapper>
   );

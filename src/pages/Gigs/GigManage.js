@@ -327,7 +327,7 @@ function GigManage() {
   return (
     <CardWrapper>
       <h4>
-        Manage Gig
+        Manage Applications
         <Button
           onClick={isEdit ? setList : setForm}
           size="small"

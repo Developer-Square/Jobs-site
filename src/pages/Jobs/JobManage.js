@@ -312,7 +312,7 @@ function JobManage() {
   return (
     <CardWrapper>
       <h4>
-        Manage
+        Manage Applications
         <Button
           onClick={isEdit ? setList : setForm}
           size="small"

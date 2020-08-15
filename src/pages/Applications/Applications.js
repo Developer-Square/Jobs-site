@@ -37,12 +37,13 @@ function GigView() {
   useEffect(() => {
     setTimeout(() => {
       axios
-        .get(`${BASE_URL}/jobs/applicants/`, tokenConfig())
+        .get(
+          `${BASE_URL}/jobs/applications/?user_id=${profile.id}`,
+          tokenConfig()
+        )
         .then((res) => {
           console.log("industry data", res.data.results);
-          const applications = res.data.results.filter(
-            (filteredApplication) => filteredApplication.id === profile.id
-          );
+          const applications = res.data.results;
           setApplications(applications);
           setLoading(false);
         })
@@ -193,9 +194,55 @@ function GigView() {
                                 />
                               ) : (
                                 <>
-                                  {localStorage
-                                    .getItem("thedb_applications")
-                                    .includes(app.id) ? (
+                                  {localStorage.getItem(
+                                    "thedb_applications"
+                                  ) ? (
+                                    <>
+                                      {localStorage
+                                        .getItem("thedb_applications")
+                                        .includes(app.id) ? (
+                                        <Button
+                                          onClick={() =>
+                                            profile.dummy_verified
+                                              ? handleApplication(app.id)
+                                              : handleModal()
+                                          }
+                                          size="small"
+                                          title={`Applied ✔`}
+                                          disabled={true}
+                                          style={{
+                                            fontSize: 15,
+                                            color: "#5918e6",
+                                            backgroundColor: "#f2f2f2",
+                                            float: "right",
+                                            height: "29px",
+                                            margin: "0 0 0 10px",
+                                          }}
+                                        />
+                                      ) : (
+                                        <Button
+                                          onClick={() =>
+                                            profile.dummy_verified
+                                              ? handleApplication(app.id)
+                                              : handleModal()
+                                          }
+                                          size="small"
+                                          title={`Apply`}
+                                          // disabled={!profile.dummy_verified}
+                                          style={{
+                                            fontSize: 15,
+                                            color: "#5918e6",
+                                            backgroundColor: profile.dummy_verified
+                                              ? "#e6c018"
+                                              : "#f2f2f2",
+                                            float: "right",
+                                            height: "29px",
+                                            margin: "0 0 0 10px",
+                                          }}
+                                        />
+                                      )}
+                                    </>
+                                  ) : (
                                     <Button
                                       onClick={() =>
                                         profile.dummy_verified
@@ -209,27 +256,6 @@ function GigView() {
                                         fontSize: 15,
                                         color: "#5918e6",
                                         backgroundColor: "#f2f2f2",
-                                        float: "right",
-                                        height: "29px",
-                                        margin: "0 0 0 10px",
-                                      }}
-                                    />
-                                  ) : (
-                                    <Button
-                                      onClick={() =>
-                                        profile.dummy_verified
-                                          ? handleApplication(app.id)
-                                          : handleModal()
-                                      }
-                                      size="small"
-                                      title={`Apply`}
-                                      // disabled={!profile.dummy_verified}
-                                      style={{
-                                        fontSize: 15,
-                                        color: "#5918e6",
-                                        backgroundColor: profile.dummy_verified
-                                          ? "#e6c018"
-                                          : "#f2f2f2",
                                         float: "right",
                                         height: "29px",
                                         margin: "0 0 0 10px",
