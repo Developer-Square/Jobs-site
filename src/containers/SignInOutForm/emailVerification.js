@@ -1,85 +1,95 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import {
-  LinkButton,
-  Button,
-  Wrapper,
-  Container,
-  Heading,
-  SubHeading,
-  Offer,
-  Divider,
-} from "./SignInOutForm.style";
-import FormikControl from "containers/FormikContainer/FormikControl";
-import { Facebook } from "components/AllSvgIcon";
+import { Wrapper, Container, Heading, SubHeading } from "./SignInOutForm.style";
+import axios from "axios";
+import { BASE_URL } from "constants/constants";
+import Error500 from "components/Error/Error500";
+import Loader from "components/Loader/Loader";
+import { openModal } from "@redq/reuse-modal";
+import EmailVerificationModal from "./emailVerificationModal";
+import SignInModal from "./SignIn";
 
-const EmailVerification = () => <EmailForm />;
-
-function EmailForm() {
+function EmailVerification() {
   let location = useLocation();
   let history = useHistory();
   console.log("the locatrion props: ", location);
   console.log("the history props: ", history);
-
-  // const [resendVerification] = useMutation(RESEND_ACTIVATION_EMAIL_MUTATION);
-
-  const emailNotLongEnough = "email must be at least 3 characters";
-  const emailRequired = "Please enter an email address";
-  const invalidEmail = "email must be a valid email";
-  const getEmail = () => {
-    const pureJSON = localStorage.getItem("thedb_auth_profile");
-    const accessToken = JSON.parse(pureJSON);
-    if (accessToken === null || undefined) {
-      return false;
-    } else {
-      return accessToken.email;
+  let query = new URLSearchParams(location.search);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const handleModal = (text, subtext) => {
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: () => EmailVerificationModal(text, subtext),
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
+  const handleLogin = () => {
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: SignInModal,
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
+  useEffect(() => {
+    if (
+      query.get("user_id") &&
+      query.get("timestamp") &&
+      query.get("signature")
+    ) {
+      const body = {
+        user_id: query.get("user_id"),
+        timestamp: query.get("timestamp"),
+        signature: query.get("signature"),
+      };
+      try {
+        axios
+          .post(`${BASE_URL}/accounts/verify-registration/`, body)
+          .then(async (res) => {
+            console.log("verification data", res.data);
+            handleModal(
+              "Verification Successful",
+              "Login to experience the full benefits of TheDatabase"
+            );
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+            handleLogin();
+          })
+          .catch((err) => {
+            console.log(err);
+            setError(err);
+          });
+      } catch (error) {
+        console.log("catch errors: ", JSON.stringify(error));
+      }
+      setLoading(false);
     }
-  };
-  const initialValues = {
-    email: !getEmail() ? "" : getEmail(),
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .min(3, emailNotLongEnough)
-      .max(100)
-      .email(invalidEmail)
-      .required(emailRequired),
-  });
-
-  const onSubmit = async (values, { props, setErrors, setSubmitting }) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("the values hapa : ", values);
-    // try {
-    //   const { data, loading, errors } = await resendVerification({
-    //     variables: values,
-    //   });
-
-    //   console.log("data: ", data, "loading : ", loading, "errors : ", errors);
-    //   if (loading) return <p>Loading ...</p>;
-    //   if (errors) {
-    //     console.log(errors);
-    //     console.log("errors from function:", errors.message);
-    //     return errors;
-    //   }
-    //   if (data) {
-    //     if (data.resendActivationEmail.success) {
-    //       console.log("data received", data);
-    //       window.alert("semail link sent"); //do something other than alert
-    //       setSubmitting(false);
-    //     } else {
-    //       console.log("the props", props);
-    //       setErrors(err.response.data);
-    //       setSubmitting(false);
-    //     }
-    //   }
-    //   return null;
-    // } catch (error) {
-    //   console.log("catch errors: ", JSON.stringify(error));
-    // }
-  };
+  if (error) {
+    return <Error500 err={error} />;
+  }
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Wrapper style={{ paddingTop: "55px" }}>
@@ -87,53 +97,6 @@ function EmailForm() {
         <Heading>Email Verification</Heading>
 
         <SubHeading>check your email for email confirmation</SubHeading>
-        {/* <SubHeading>Enter email address for verification</SubHeading> */}
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            return (
-              <Form>
-                <FormikControl
-                  control="input"
-                  type="email"
-                  label="Email"
-                  name="email"
-                />
-
-                <Button
-                  type="submit"
-                  disabled={!formik.isValid}
-                  fullwidth
-                  title={formik.isSubmitting ? "Sending ..." : "Resend Email"}
-                  style={{ color: "#ffffff" }}
-                />
-                <Divider>
-                  <span>or continue with</span>
-                </Divider>
-
-                <Button
-                  fullwidth
-                  title={"Facebook"}
-                  iconPosition="left"
-                  className="facebook"
-                  icon={<Facebook />}
-                  iconStyle={{ color: "#ffffff", marginRight: 5 }}
-                  style={{ color: "#ffffff" }}
-                />
-
-                <Offer style={{ padding: "20px 0" }}>
-                  Already have an account?{" "}
-                  <LinkButton onClick={() => alert("will do that")}>
-                    Login"
-                  </LinkButton>
-                </Offer>
-              </Form>
-            );
-          }}
-        </Formik>
       </Container>
     </Wrapper>
   );

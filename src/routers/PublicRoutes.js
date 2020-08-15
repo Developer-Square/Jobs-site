@@ -14,7 +14,7 @@ const PublicRoutes = ({ deviceType }) => (
       <Route exact path={`/`}>
         <LandingPage deviceType={deviceType} />
       </Route>
-      <Route exact path={`/activate`} component={EmailVerification} />
+      <Route exact path={`/auth/email-verify/`} component={EmailVerification} />
       <Route exact path={`${TOS}`} component={PrivacyPolicy} />
       <Route exact path={`${ABOUT}`} component={About} />
       <Route exact path={`${SDG}`} component={TermsOfUse} />

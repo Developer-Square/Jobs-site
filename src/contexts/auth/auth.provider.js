@@ -48,7 +48,7 @@ function reducer(state, action) {
       return {
         ...state,
         currentForm: "emailConfirm",
-        isAuthenticated: true,
+        isAuthenticated: false,
       };
     case "SIGNUP_SUCCESS":
       return {

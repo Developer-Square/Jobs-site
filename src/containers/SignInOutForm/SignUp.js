@@ -99,8 +99,6 @@ export default function SignOutModal() {
       .post(`${BASE_URL}/accounts/register/`, body)
       .then(async (res) => {
         console.log("data received", res);
-        setSubmitting(false);
-
         if (typeof window !== "undefined") {
           authDispatch({
             type: "EMAILCONFIRM",
@@ -110,6 +108,7 @@ export default function SignOutModal() {
           authDispatch({ type: "SIGNIN" });
           // closeModal();
         }
+        setSubmitting(false);
         console.log("response", res);
       })
       .catch((err) => {
