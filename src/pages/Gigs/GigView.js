@@ -152,6 +152,7 @@ function GigView() {
                               <ListSpan className={`${job.job_type}`}>
                                 {job.job_type}
                               </ListSpan>
+
                               {job.creator === profile.id ? (
                                 <Button
                                   onClick={() =>
@@ -174,31 +175,56 @@ function GigView() {
                                 />
                               ) : (
                                 <>
-                                  {localStorage.getItem(
-                                    "thedb_applications"
-                                  ) ? (
+                                  {profile.is_individual ? (
                                     <>
-                                      {localStorage
-                                        .getItem("thedb_applications")
-                                        .includes(job.id) ? (
-                                        <Button
-                                          onClick={() =>
-                                            profile.dummy_verified
-                                              ? handleApplication(job.id)
-                                              : handleModal()
-                                          }
-                                          size="small"
-                                          title={`Applied ✔`}
-                                          disabled={true}
-                                          style={{
-                                            fontSize: 15,
-                                            color: "#5918e6",
-                                            backgroundColor: "#f2f2f2",
-                                            float: "right",
-                                            height: "29px",
-                                            margin: "0 0 0 10px",
-                                          }}
-                                        />
+                                      {localStorage.getItem(
+                                        "thedb_applications"
+                                      ) ? (
+                                        <>
+                                          {localStorage
+                                            .getItem("thedb_applications")
+                                            .includes(job.id) ? (
+                                            <Button
+                                              onClick={() =>
+                                                profile.dummy_verified
+                                                  ? handleApplication(job.id)
+                                                  : handleModal()
+                                              }
+                                              size="small"
+                                              title={`Applied ✔`}
+                                              disabled={true}
+                                              style={{
+                                                fontSize: 15,
+                                                color: "#5918e6",
+                                                backgroundColor: "#f2f2f2",
+                                                float: "right",
+                                                height: "29px",
+                                                margin: "0 0 0 10px",
+                                              }}
+                                            />
+                                          ) : (
+                                            <Button
+                                              onClick={() =>
+                                                profile.dummy_verified
+                                                  ? handleApplication(job.id)
+                                                  : handleModal()
+                                              }
+                                              size="small"
+                                              title={`Apply`}
+                                              // disabled={!profile.dummy_verified}
+                                              style={{
+                                                fontSize: 15,
+                                                color: "#5918e6",
+                                                backgroundColor: profile.dummy_verified
+                                                  ? "#e6c018"
+                                                  : "#f2f2f2",
+                                                float: "right",
+                                                height: "29px",
+                                                margin: "0 0 0 10px",
+                                              }}
+                                            />
+                                          )}
+                                        </>
                                       ) : (
                                         <Button
                                           onClick={() =>
@@ -222,28 +248,7 @@ function GigView() {
                                         />
                                       )}
                                     </>
-                                  ) : (
-                                    <Button
-                                      onClick={() =>
-                                        profile.dummy_verified
-                                          ? handleApplication(job.id)
-                                          : handleModal()
-                                      }
-                                      size="small"
-                                      title={`Apply`}
-                                      // disabled={!profile.dummy_verified}
-                                      style={{
-                                        fontSize: 15,
-                                        color: "#5918e6",
-                                        backgroundColor: profile.dummy_verified
-                                          ? "#e6c018"
-                                          : "#f2f2f2",
-                                        float: "right",
-                                        height: "29px",
-                                        margin: "0 0 0 10px",
-                                      }}
-                                    />
-                                  )}
+                                  ) : null}
                                 </>
                               )}
                             </TypeList>

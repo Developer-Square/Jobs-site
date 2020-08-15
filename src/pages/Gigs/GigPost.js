@@ -107,6 +107,10 @@ function GigPost() {
           "Job Created Successfully",
           `${res.data.title} - ${res.data.location} @ ${res.data.salary}`
         );
+        setTimeout(() => {
+          setLoading(false);
+          history.push(`/dashboard/gigs/${res.data.id}`);
+        }, 2000);
       })
       .catch((err) => {
         if (err.response.data) {

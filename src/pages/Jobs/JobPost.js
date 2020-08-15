@@ -115,7 +115,7 @@ function JobPost() {
         );
         setTimeout(() => {
           setLoading(false);
-          history.push(`/dashboard/jobs/${res.data.title}`);
+          history.push(`/dashboard/jobs/${res.data.id}`);
         }, 2000);
       })
       .catch((err) => {

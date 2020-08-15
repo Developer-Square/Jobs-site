@@ -118,7 +118,7 @@ function InternshipPost() {
         );
         setTimeout(() => {
           setLoading(false);
-          history.push(`/dashboard/jobs/${res.data.title}`);
+          history.push(`/dashboard/internships/${res.data.id}`);
         }, 2000);
       })
       .catch((err) => {
