@@ -1,6 +1,7 @@
 import React from "react";
 import Footer from "components/Footer/Footer";
 import { Facebook, Twitter, YouTube, Instagram } from "components/AllSvgIcon";
+import { TOS, HELP_PAGE } from "constants/routes.constants";
 
 export default function FooterContainer() {
   return (
@@ -9,10 +10,10 @@ export default function FooterContainer() {
         <Footer.Row>
           <Footer.Column>
             <Footer.Title>We Care</Footer.Title>
-            <Footer.Link>Privacy Policy</Footer.Link>
-            <Footer.Link>Terms of Service</Footer.Link>
-            <Footer.Link>FAQs</Footer.Link>
-            <Footer.Link>Help</Footer.Link>
+            <Footer.Link href={`${TOS}`}>Privacy Policy</Footer.Link>
+            <Footer.Link href={`${TOS}`}>Terms of Service</Footer.Link>
+            <Footer.Link href={`${HELP_PAGE}`}>FAQs</Footer.Link>
+            <Footer.Link href={`${HELP_PAGE}`}>Help</Footer.Link>
           </Footer.Column>
           <Footer.Column>
             <Footer.Title>Contact Us</Footer.Title>
