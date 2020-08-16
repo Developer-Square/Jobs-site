@@ -188,7 +188,11 @@ export default function SignInModal() {
           })
           .catch((err) => {
             if (err.response) {
-              setErrors(err.response.data);
+              setErrors(
+                err.response.data.detail === "Login or password invalid."
+                  ? { password: "Incorrect password or email" }
+                  : null
+              );
             } else {
               setError(err);
             }
