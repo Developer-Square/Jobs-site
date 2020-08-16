@@ -5,8 +5,9 @@ import NotFound from "pages/NotFound";
 import EmailVerification from "containers/SignInOutForm/emailVerification";
 import PrivacyPolicy from "pages/tos/PrivacyPolicy";
 import About from "pages/About/about";
-import { TOS, ABOUT, SDG } from "constants/routes.constants";
+import { TOS, ABOUT, SDG, HELP_PAGE } from "constants/routes.constants";
 import TermsOfUse from "pages/tos/sdg";
+import Help from "pages/Help/Help";
 
 const PublicRoutes = ({ deviceType }) => (
   <Fragment>
@@ -18,6 +19,7 @@ const PublicRoutes = ({ deviceType }) => (
       <Route exact path={`${TOS}`} component={PrivacyPolicy} />
       <Route exact path={`${ABOUT}`} component={About} />
       <Route exact path={`${SDG}`} component={TermsOfUse} />
+      <Route exact path={`${HELP_PAGE}`} component={Help} />
       <Route component={NotFound} deviceType={deviceType} />
     </Switch>
   </Fragment>
