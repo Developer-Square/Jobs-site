@@ -185,7 +185,7 @@ function InternshipView() {
                                       )
                                     }
                                     size="small"
-                                    title={`Manage Job`}
+                                    title={`Manage Internship`}
                                     disabled={!profile.dummy_verified}
                                     style={{
                                       fontSize: 15,
