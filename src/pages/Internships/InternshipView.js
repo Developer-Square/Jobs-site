@@ -35,6 +35,7 @@ function InternshipView() {
   const [internships, setInternships] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [reload, setReload] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -51,8 +52,9 @@ function InternshipView() {
           console.log("Catching Errors:", err);
           setError(err);
         });
+      setReload(false);
     }, 2000);
-  }, []);
+  }, [reload]);
 
   const useDispatch = useStickyDispatch();
   const setManage = useCallback(() => useDispatch({ type: "MANAGE" }), [
@@ -116,6 +118,7 @@ function InternshipView() {
         height: "auto",
       },
     });
+    setReload(true);
   };
   if (error) {
     return <Error500 err={error} />;
@@ -185,7 +188,7 @@ function InternshipView() {
                                       )
                                     }
                                     size="small"
-                                    title={`Manage Job`}
+                                    title={`Manage Internship`}
                                     disabled={!profile.dummy_verified}
                                     style={{
                                       fontSize: 15,

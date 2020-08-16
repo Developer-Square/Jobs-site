@@ -34,6 +34,7 @@ function JobView() {
   const [jobs, setJobs] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [reload, setReload] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -51,8 +52,9 @@ function JobView() {
           console.log("Catching Errors:", err);
           setError(err);
         });
+      setReload(false);
     }, 2000);
-  }, []);
+  }, [reload]);
 
   const useDispatch = useStickyDispatch();
   const setManage = useCallback(() => useDispatch({ type: "MANAGE" }), [
@@ -100,6 +102,7 @@ function JobView() {
         height: "auto",
       },
     });
+    setReload(true);
   };
   const handleModal = (text) => {
     openModal({

@@ -62,7 +62,7 @@ export const Heading = styled.h3`
 `;
 
 export const SubHeading = styled.span`
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
   font-family: "Lato", sans-serif;
   font-size: ${themeGet("fontSizes.2", "15")}px;
   font-weight: ${themeGet("fontWeights.3", "400")};

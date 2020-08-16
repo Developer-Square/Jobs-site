@@ -34,6 +34,7 @@ function GigView() {
   const [jobs, setJobs] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [reload, setReload] = useState(false);
   const history = useHistory();
   useEffect(() => {
     setLoading(true);
@@ -50,8 +51,9 @@ function GigView() {
           console.log("Catching Errors:", err);
           setError(err);
         });
+      setReload(false);
     }, 2000);
-  }, []);
+  }, [reload]);
 
   const useDispatch = useStickyDispatch();
   const setManage = useCallback(() => useDispatch({ type: "MANAGE" }), [
@@ -99,6 +101,7 @@ function GigView() {
         height: "auto",
       },
     });
+    setReload(true);
   };
   const handleModal = (text) => {
     openModal({

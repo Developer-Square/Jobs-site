@@ -34,7 +34,7 @@ function Dashboard() {
   const [jobs, setJobs] = useState(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [reload, setReload] = useState(false);
   useEffect(() => {
     setTimeout(() => {
       setLoading(true);
@@ -104,9 +104,10 @@ function Dashboard() {
       } catch (error) {
         setError(error);
       }
+      setReload(false);
     }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [reload]);
 
   const useDispatch = useStickyDispatch();
   const setForm = useCallback(() => useDispatch({ type: "MANAGE" }), [
@@ -159,6 +160,7 @@ function Dashboard() {
         height: "auto",
       },
     });
+    setReload(true);
   };
   if (error) {
     return <Error500 err={error} />;

@@ -31,6 +31,13 @@ function JobManage() {
   const match = useRouteMatch();
   const [initialValues, setInitialValues] = useState([]);
   const [editting, setEditting] = useState(false);
+  const [applicants, setApplicants] = useState([]);
+  const [application, setApplication] = useState();
+  const [userApplied, setUserApplied] = useState([]);
+  const [userShortlisted, setUserShortlisted] = useState([]);
+  const [userApproved, setUserApproved] = useState([]);
+  const [userRejected, setUserRejected] = useState([]);
+  const [reload, setReload] = useState(false);
   const industry = Industries;
   const useDispatch = useStickyDispatch();
   const setList = useCallback(() => useDispatch({ type: "MANAGE" }), [
@@ -41,74 +48,115 @@ function JobManage() {
   ]);
   const currentForm = useAppState("currentForm");
   const isEdit = currentForm === "edit";
-  const [applicants, setApplicants] = useState([
-    {
-      email: "demo@demo.com",
-      full_name: "Tester User",
-      id: 1,
-      username: "1demo.com",
-      salary: 5000,
-    },
-    {
-      email: "admin@demo.com",
-      full_name: "Only User",
-      id: 2,
-      username: "IDM",
-      salary: 4000,
-    },
-  ]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(false);
     setList();
-    try {
-      axios
-        .get(
-          `${BASE_URL}/jobs/applications/?job_id=${match.params.jobID}`,
-          tokenConfig()
-        )
-        .then((res) => {
-          // const arr = res.data.results;
-          // const result = arr.reduce((acc, d) => {
-          //   acc.push({
-          //     key: d.name,
-          //     value: d.id,
-          //   });
-          //   return acc;
-          // }, []);
-          setApplicants(res.data.results);
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.log("Catching Errors:", err);
-          setError(err);
-        });
-      axios
-        .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
-        .then((res) => {
-          const arr = res.data;
-          console.log("array jobs", arr);
-          // setJob(arr);
-          setInitialValues(arr);
-          if (arr.id) {
-            setEditting(true);
-          }
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log("Catching Errors:", err);
-          setError(err);
-          setLoading(false);
-        });
-    } catch (error) {
-      console.log("Catching Errors:", error);
-      setError(error);
-      setLoading(false);
-    }
-
+    setTimeout(() => {
+      try {
+        axios
+          .get(
+            `${BASE_URL}/jobs/applications/?job_id=${match.params.jobID}`,
+            tokenConfig()
+          )
+          .then((res) => {
+            // const arr = res.data.results;
+            // const result = arr.reduce((acc, d) => {
+            //   acc.push({
+            //     key: d.name,
+            //     value: d.id,
+            //   });
+            //   return acc;
+            // }, []);
+            setApplicants(res.data.results);
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log("Catching Errors:", err);
+            setError(err);
+          });
+        axios
+          .get(`${BASE_URL}/jobs/${match.params.jobID}/`, tokenConfig())
+          .then((res) => {
+            const arr = res.data;
+            console.log("array jobs", arr);
+            // setJob(arr);
+            setInitialValues(arr);
+            if (arr.id) {
+              setEditting(true);
+            }
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.log("Catching Errors:", err);
+            setError(err);
+            setLoading(false);
+          });
+        axios
+          .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
+          .then((res) => {
+            console.log("industry data", res.data.results);
+            const shortlisted = res.data.results
+              .filter(
+                (filteredUsers) =>
+                  filteredUsers.status === "shortlisted" ||
+                  filteredUsers.status === "Shortlisted"
+              )
+              .reduce((arr, b) => {
+                arr.push(b.applicant);
+                return arr;
+              }, []);
+            setUserShortlisted(shortlisted);
+            const approved = res.data.results
+              .filter(
+                (filteredUsers) =>
+                  filteredUsers.status === "accepted" ||
+                  filteredUsers.status === "Accepted"
+              )
+              .reduce((arr, b) => {
+                arr.push(b.applicant);
+                return arr;
+              }, []);
+            setUserApproved(approved);
+            const applied = res.data.results
+              .filter(
+                (filteredUsers) =>
+                  filteredUsers.status === "applied" ||
+                  filteredUsers.status === "Applied"
+              )
+              .reduce((arr, b) => {
+                arr.push(b.applicant);
+                return arr;
+              }, []);
+            setUserApplied(applied);
+            const rejected = res.data.results
+              .filter(
+                (filteredUsers) =>
+                  filteredUsers.status === "rejected" ||
+                  filteredUsers.status === "Rejected"
+              )
+              .reduce((arr, b) => {
+                arr.push(b.applicant);
+                return arr;
+              }, []);
+            setUserRejected(rejected);
+            setLoading(false);
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log("Catching Errors:", err);
+            setError(err);
+          });
+      } catch (error) {
+        console.log("Catching Errors:", error);
+        setError(error);
+        setLoading(false);
+      }
+      setReload(false);
+    }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [reload]);
   // console.log("job title", job.title);
 
   const minQualificationsOptions = [
@@ -256,11 +304,12 @@ function JobManage() {
         setLoading(false);
       });
   };
-  const selectApplicant = () => {
-    const values = { status: "accepted" };
+  const selectApplicant = (account, profile, status) => {
+    const values = { status: status };
+    console.log("values set applicant", values);
     axios
-      .post(
-        `${BASE_URL}/application/${match.params.jobID}/`,
+      .patch(
+        `${BASE_URL}/jobs/applications/${account.id}/`,
         values,
         tokenConfig()
       )
@@ -270,7 +319,8 @@ function JobManage() {
           show: true,
           overlayClassName: "quick-view-overlay",
           closeOnClickOutside: true,
-          component: () => EmailVerificationModal("Job deleted"),
+          component: () =>
+            EmailVerificationModal(`${profile.full_name}${" "}${status}`),
           closeComponent: "",
           config: {
             enableResizing: false,
@@ -280,31 +330,103 @@ function JobManage() {
             height: "auto",
           },
         });
+        setReload(true);
       })
       .catch((err) => {
         if (err.response) {
         } else {
           setError(err);
         }
-        console.log(err.response.status);
+        console.log(err.response.data);
         setLoading(false);
+        setReload(true);
       });
   };
-  const applicantView = (profile) => {
-    openModal({
-      show: true,
-      overlayClassName: "quick-view-overlay",
-      closeOnClickOutside: true,
-      component: () => ModalTemplate(profile),
-      closeComponent: "",
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: "quick-view-modal",
-        width: 458,
-        height: "auto",
-      },
-    });
+  const applicantView = async (profile) => {
+    await axios
+      .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
+      .then(async (res) => {
+        const arr = res.data.results.filter(
+          (filteredApplication) =>
+            filteredApplication.applicant === profile.id &&
+            `${filteredApplication.job}` === match.params.jobID
+        );
+        setApplication(arr[0]);
+      })
+      .catch((err) => {
+        console.log("Catching Errors:", err);
+        setError(err);
+        setLoading(false);
+      });
+    if (application) {
+      await setTimeout(() => {
+        openModal({
+          show: true,
+          overlayClassName: "quick-view-overlay",
+          closeOnClickOutside: true,
+          component: () =>
+            ModalTemplate(
+              profile,
+              application,
+              <>
+                {!userShortlisted.includes(profile.id) && (
+                  <Button
+                    onClick={() =>
+                      selectApplicant(application, profile, "shortlisted")
+                    }
+                    size="small"
+                    title={`Shortlist`}
+                    style={{
+                      fontSize: 15,
+                      color: "#fff",
+                      backgroundColor: "#e618a5",
+                      margin: "10px 10px",
+                    }}
+                  />
+                )}
+                {!userApproved.includes(profile.id) && (
+                  <Button
+                    onClick={() =>
+                      selectApplicant(application, profile, "accepted")
+                    }
+                    size="small"
+                    title={`Accept`}
+                    style={{
+                      fontSize: 15,
+                      color: "#fff",
+                      backgroundColor: "#e65918",
+                      margin: "10px 10px",
+                    }}
+                  />
+                )}
+                {!userRejected.includes(profile.id) && (
+                  <Button
+                    onClick={() =>
+                      selectApplicant(application, profile, "rejected")
+                    }
+                    size="small"
+                    title={`Reject`}
+                    style={{
+                      fontSize: 15,
+                      color: "#fff",
+                      backgroundColor: "#e6183e",
+                      margin: "10px 10px",
+                    }}
+                  />
+                )}
+              </>
+            ),
+          closeComponent: "",
+          config: {
+            enableResizing: false,
+            disableDragging: true,
+            className: "quick-view-modal",
+            width: 458,
+            height: "auto",
+          },
+        });
+      }, 1000);
+    }
   };
   if (error) {
     return <Error500 err={error} />;
@@ -439,19 +561,66 @@ function JobManage() {
                         <h3>
                           {applicant.full_name}
                           <TypeList>
-                            <Button
-                              onClick={() => selectApplicant(applicant.id)}
-                              size="small"
-                              title={`Approve`}
-                              style={{
-                                fontSize: 15,
-                                color: "#fff",
-                                backgroundColor: "#5918e6",
-                                float: "right",
-                                height: "29px",
-                                margin: "0 0 0 10px",
-                              }}
-                            />
+                            {userApplied.includes(applicant.id) && (
+                              <Button
+                                onClick={() => applicantView(applicant)}
+                                size="small"
+                                title={`Approve`}
+                                style={{
+                                  fontSize: 15,
+                                  color: "#fff",
+                                  backgroundColor: "#5918e6",
+                                  float: "right",
+                                  height: "29px",
+                                  margin: "0 0 0 10px",
+                                }}
+                              />
+                            )}
+                            {userApproved.includes(applicant.id) && (
+                              <Button
+                                onClick={() => applicantView(applicant)}
+                                size="small"
+                                title={`Approved`}
+                                style={{
+                                  fontSize: 15,
+                                  color: "#fff",
+                                  backgroundColor: "#18e62d",
+                                  float: "right",
+                                  height: "29px",
+                                  margin: "0 0 0 10px",
+                                }}
+                              />
+                            )}
+                            {userRejected.includes(applicant.id) && (
+                              <Button
+                                onClick={() => applicantView(applicant)}
+                                size="small"
+                                title={`Rejected`}
+                                style={{
+                                  fontSize: 15,
+                                  color: "#fff",
+                                  backgroundColor: "#e6183e",
+                                  float: "right",
+                                  height: "29px",
+                                  margin: "0 0 0 10px",
+                                }}
+                              />
+                            )}
+                            {userShortlisted.includes(applicant.id) && (
+                              <Button
+                                onClick={() => applicantView(applicant)}
+                                size="small"
+                                title={`Shortlisted`}
+                                style={{
+                                  fontSize: 15,
+                                  color: "#fff",
+                                  backgroundColor: "#c018e6",
+                                  float: "right",
+                                  height: "29px",
+                                  margin: "0 0 0 10px",
+                                }}
+                              />
+                            )}
                           </TypeList>
                         </h3>
                         <ListingIcons>

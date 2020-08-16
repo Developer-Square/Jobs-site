@@ -207,7 +207,7 @@ function LandingPage({ deviceType }) {
                   <ul>
                     {jobs.map((job, index) => (
                       <li key={index}>
-                        <a href="jobs">
+                        <a href="/dashboard/jobs">
                           <ListingLogo>
                             <ImageWrapper
                               url={job.companyLogo}
