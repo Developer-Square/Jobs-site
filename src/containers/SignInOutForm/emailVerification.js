@@ -66,7 +66,7 @@ function EmailVerification() {
           .then(async (res) => {
             console.log("verification data", res.data);
             handleModal(
-              "Verification Successful",
+              "Verification Successful ✔",
               "Login to experience the full benefits of TheDatabase"
             );
             await new Promise((resolve) => setTimeout(resolve, 5000));

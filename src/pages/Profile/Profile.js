@@ -6,7 +6,11 @@ import { CardWrapper, FormWrapper } from "./Profile.style";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import axios from "axios";
 import { BASE_URL } from "constants/constants";
-import { tokenConfig, addObjectToLocalStorageObject } from "helpers";
+import {
+  formTokenConfig,
+  tokenConfig,
+  addObjectToLocalStorageObject,
+} from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 import LogoImage from "image/thedb.png";
@@ -14,7 +18,6 @@ import { openModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import Loader from "components/Loader/Loader";
 import Error500 from "components/Error/Error500";
-import {} from "helpers";
 
 function Profile() {
   const {
@@ -129,7 +132,7 @@ function Profile() {
           country: "",
           location: "",
           address: "",
-          logo: LogoImage,
+          logo: "LogoImage",
           user: profile.id,
         });
       }
@@ -235,11 +238,11 @@ function Profile() {
           setSubmitting(false);
           console.log("res", res.data);
           addObjectToLocalStorageObject("thedb_auth_profile", res.data);
-          handleModal("Profile Edited Successfully", "");
+          handleModal("Profile Edited Successfully ✔", "");
           setLoading(false);
         })
         .catch((err) => {
-          if (err.response.data) {
+          if (err.response) {
             setErrors(err.response.data);
           } else {
             setError(err);
@@ -256,38 +259,40 @@ function Profile() {
     const {
       name,
       description,
-      // logo,
+      logo,
       address,
       country,
       location,
       website,
     } = values;
-    const body = {
-      name: name,
-      description: description,
-      website: website,
-      country: country,
-      location: location,
-      address: address,
-      logo: undefined,
-      user: JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"],
-    };
-    console.log("body values ", body, values);
+    let formData = new FormData();
+    console.log("type of image", typeof logo);
+    if (typeof logo !== "string" || typeof logo !== undefined) {
+      formData.append("logo", logo[0]);
+    }
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("website", website);
+    formData.append("country", country);
+    formData.append("location", location);
+    formData.append("address", address);
+    formData.append("user", profile.id);
+    console.log("body values ", formData, values);
     setSubmitting(true);
     setLoading(true);
     try {
       axios
-        .post(`${BASE_URL}/organization/`, body, tokenConfig())
+        .post(`${BASE_URL}/organization/`, formData, formTokenConfig())
         .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
-          handleModal("Profile Created Successfully", "");
+          handleModal("Profile Created Successfully ✔", "");
           addObjectToLocalStorageObject("thedb_org_profile", res.data);
           setLoading(false);
         })
         .catch((err) => {
           console.log("res errors", err.response.data);
-          if (err.response.data) {
+          if (err.response) {
             if (err.response.data.user) {
               if (err.response.data.user[0] === "This field must be unique.") {
                 handleModal(
@@ -310,28 +315,29 @@ function Profile() {
       setError(error);
     }
   };
-  console.log(editting);
   const onOrgChangeSubmit = (values, { setErrors, setSubmitting }) => {
     const {
       name,
       description,
-      // logo,
+      logo,
       address,
       country,
       location,
       website,
     } = values;
-    const body = {
-      name: name,
-      description: description,
-      website: website,
-      country: country,
-      location: location,
-      address: address,
-      logo: undefined,
-      user: profile.id,
-    };
-    console.log("body values ", body, values);
+    let formData = new FormData();
+    console.log("type of image", typeof logo);
+    if (typeof logo !== "string" || typeof logo !== undefined) {
+      formData.append("logo", logo[0]);
+    }
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("website", website);
+    formData.append("country", country);
+    formData.append("location", location);
+    formData.append("address", address);
+    formData.append("user", profile.id);
+    console.log("body values ", ...formData, logo);
     setSubmitting(true);
     setLoading(true);
     try {
@@ -340,19 +346,19 @@ function Profile() {
           `${BASE_URL}/organization/${
             JSON.parse(localStorage.getItem("thedb_org_profile"))["id"]
           }/`,
-          body,
-          tokenConfig()
+          formData,
+          formTokenConfig()
         )
         .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
-          handleModal("Profile Created Successfully", "");
+          handleModal("Profile Created Successfully ✔", "");
           addObjectToLocalStorageObject("thedb_org_profile", res.data);
           setLoading(false);
         })
         .catch((err) => {
           console.log("res errors", err.response.data);
-          if (err.response.data) {
+          if (err.response) {
             if (err.response.data.user) {
               if (err.response.data.user[0] === "This field must be unique.") {
                 handleModal(
@@ -386,31 +392,34 @@ function Profile() {
       gender,
       status,
     } = values;
-    const body = {
-      title: title,
-      id_number: id_number,
-      image: undefined,
-      date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
-      about: about,
-      location: location,
-      gender: gender,
-      status: status,
-      user: profile.id,
-    };
-    console.log("val8es fdsf ", body, image);
+    let formData = new FormData();
+    if (typeof image !== "string") {
+      formData.append("image", image[0]);
+    }
+    formData.append("user", profile.id);
+    formData.append("title", title);
+    formData.append("id_number", id_number);
+    formData.append(
+      "date_of_birth",
+      moment(date_of_birth).format("YYYY-MM-DD")
+    );
+    formData.append("about", about);
+    formData.append("location", location);
+    formData.append("gender", gender);
+    formData.append("status", status);
+    console.log("val8es fdsf ", ...formData, image);
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       axios
-        .post(`${BASE_URL}/individual/`, body, tokenConfig())
+        .post(`${BASE_URL}/individual/`, formData, formTokenConfig())
         .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
-          handleModal("Profile Updated Successfully", "");
+          handleModal("Profile Updated Successfully ✔", "");
           addObjectToLocalStorageObject("thedb_individual_profile", res.data);
         })
         .catch((err) => {
-          if (err.response.data) {
+          if (err.response) {
             setErrors(err.response.data);
             console.log("errors za data");
           } else {
@@ -435,37 +444,42 @@ function Profile() {
       gender,
       status,
     } = values;
-    const body = {
-      title: title,
-      id_number: id_number,
-      image: undefined,
-      date_of_birth: moment(date_of_birth).format("YYYY-MM-DD"),
-      about: about,
-      location: location,
-      gender: gender,
-      status: status,
-      user: profile.id,
-    };
-    console.log("val8es fdsf ", body, image);
+
+    let formData = new FormData();
+    console.log("type of image", typeof image);
+    if (typeof image !== "string") {
+      formData.append("image", image[0]);
+    }
+    formData.append("user", profile.id);
+    formData.append("title", title);
+    formData.append("id_number", id_number);
+    formData.append(
+      "date_of_birth",
+      moment(date_of_birth).format("YYYY-MM-DD")
+    );
+    formData.append("about", about);
+    formData.append("location", location);
+    formData.append("gender", gender);
+    formData.append("status", status);
+    console.log("val8es fdsf ", ...formData, image);
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
       axios
         .put(
           `${BASE_URL}/individual/${
             JSON.parse(localStorage.getItem("thedb_individual_profile"))["id"]
           }/`,
-          body,
-          tokenConfig()
+          formData,
+          formTokenConfig()
         )
         .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
-          handleModal("Profile Updated Successfully", "");
+          handleModal("Profile Updated Successfully ✔", "");
           addObjectToLocalStorageObject("thedb_individual_profile", res.data);
         })
         .catch((err) => {
-          if (err.response.data) {
+          if (err.response) {
             setErrors(err.response.data);
             console.log("errors za data");
           } else {

@@ -110,7 +110,7 @@ function Post({ type, name, isBusiness, isIndividual }) {
         setSubmitting(false);
         console.log("res", res.data);
         handleModal(
-          " Created Successfully",
+          " Created Successfully ✔",
           `${res.data.title} - ${res.data.location} @ ${res.data.salary}`
         );
         setTimeout(() => {
@@ -119,7 +119,7 @@ function Post({ type, name, isBusiness, isIndividual }) {
         }, 2000);
       })
       .catch((err) => {
-        if (err.response.data) {
+        if (err.response) {
           setErrors(err.response.data);
         } else {
           setError(err);

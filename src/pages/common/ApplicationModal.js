@@ -110,7 +110,7 @@ function ApplicationModal(jobId) {
             </FormWrapper>
           </>
         ) : (
-          <Heading>Application Successful</Heading>
+          <Heading>Application Successful ✔</Heading>
         )}{" "}
       </Container>
     </Wrapper>

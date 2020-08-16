@@ -19,13 +19,14 @@ import Button from "components/Button/Button";
 
 import { AuthContext } from "contexts/auth/auth.context";
 import ApplicationModal from "pages/common/ApplicationModal";
-import { openModal } from "@redq/reuse-modal";
+import { openModal, closeModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import Loader from "components/Loader/Loader";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import Error500 from "components/Error/Error500";
 import { categorySelector } from "pages/common/helpers";
 import { useHistory } from "react-router-dom";
+import { Offer, LinkButton } from "pages/common/style";
 
 function InternshipView() {
   const {
@@ -88,7 +89,24 @@ function InternshipView() {
       show: true,
       overlayClassName: "quick-view-overlay",
       closeOnClickOutside: true,
-      component: () => ApplicationModal(jobId),
+      component: localStorage.getItem("thedb_individual_profile")
+        ? () => ApplicationModal(jobId)
+        : () =>
+            EmailVerificationModal(
+              `Hey ${profile.full_name}`,
+              "Complete your 'Additional Details' profile to apply for this job",
+              <Offer style={{ padding: "10px 0" }}>
+                Update{" "}
+                <LinkButton
+                  onClick={() => {
+                    closeModal();
+                    history.push("/dashboard/profile");
+                  }}
+                >
+                  Profile
+                </LinkButton>
+              </Offer>
+            ),
       closeComponent: "",
       config: {
         enableResizing: false,

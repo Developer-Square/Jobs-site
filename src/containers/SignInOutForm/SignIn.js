@@ -148,7 +148,7 @@ export default function SignInModal() {
                 await new Promise((resolve) => setTimeout(resolve, 1000));
               })
               .catch((err) => {
-                if (err.response.data) {
+                if (err.response) {
                   setErrors(err.response.data);
                 } else {
                   setError(err);
@@ -187,7 +187,7 @@ export default function SignInModal() {
             history.push("/dashboard");
           })
           .catch((err) => {
-            if (err.response.data) {
+            if (err.response) {
               setErrors(err.response.data);
             } else {
               setError(err);

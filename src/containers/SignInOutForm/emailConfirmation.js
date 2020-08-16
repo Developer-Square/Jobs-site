@@ -19,7 +19,7 @@ export default function EmailConfirmationModal() {
   return (
     <Wrapper>
       <Container style={{ paddingBottom: 30 }}>
-        <Heading>Registration Successful</Heading>
+        <Heading>Registration Successful ✔</Heading>
 
         {/* <SubHeading>Check your email for email confirmation</SubHeading> */}
         <SubHeading>Log in to use The Database</SubHeading>

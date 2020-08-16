@@ -262,7 +262,7 @@ function InternshipManage() {
         });
       })
       .catch((err) => {
-        if (err.response.data) {
+        if (err.response) {
         } else {
           setError(err);
         }

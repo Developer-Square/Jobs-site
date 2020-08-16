@@ -2,10 +2,10 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { openModal } from "@redq/reuse-modal";
-import { CardWrapper } from "./Dashboard.style";
+import { CardWrapper, Offer, LinkButton } from "./Dashboard.style";
 import axios from "axios";
 import { BASE_URL, CURRENCY } from "constants/constants";
-import { tokenConfig } from "helpers";
+import { tokenConfig, addObjectToLocalStorageObject } from "helpers";
 import ImageWrapper from "components/Image/Image";
 import {
   LeftContent,
@@ -34,10 +34,60 @@ function Dashboard() {
   const [jobs, setJobs] = useState(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-  console.log("profile", profile);
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(true);
+      if (
+        JSON.parse(localStorage.getItem("thedb_auth_profile"))["is_individual"]
+      ) {
+        try {
+          axios
+            .get(`${BASE_URL}/individual/`, tokenConfig())
+            .then((res) => {
+              console.log("res individual", res.data);
+              const individual = res.data.results.filter(
+                (filteredIndividual) =>
+                  filteredIndividual.user ===
+                  JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
+              );
+              if (individual.length > 0) {
+                addObjectToLocalStorageObject(
+                  "thedb_individual_profile",
+                  individual[0]
+                );
+              }
+            })
+            .catch((err) => {
+              setError(err);
+              console.log("frererefrr", err);
+            });
+        } catch (error) {
+          setError(error);
+        }
+      } else {
+        try {
+          axios
+            .get(`${BASE_URL}/organization/`, tokenConfig())
+            .then((res) => {
+              console.log("res org", res.data);
+              const organization = res.data.results.filter(
+                (filteredCompany) => filteredCompany.user === profile.id
+              );
+              if (organization.length > 0) {
+                addObjectToLocalStorageObject(
+                  "thedb_org_profile",
+                  organization[0]
+                );
+              }
+            })
+            .catch((err) => {
+              setError(err);
+            });
+        } catch (error) {
+          setError(error);
+        }
+      }
       try {
         axios
           .get(`${BASE_URL}/jobs/`, tokenConfig())
@@ -55,6 +105,7 @@ function Dashboard() {
         setError(error);
       }
     }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const useDispatch = useStickyDispatch();
@@ -86,7 +137,19 @@ function Dashboard() {
       show: true,
       overlayClassName: "quick-view-overlay",
       closeOnClickOutside: true,
-      component: () => ApplicationModal(jobId),
+      component: localStorage.getItem("thedb_individual_profile")
+        ? () => ApplicationModal(jobId)
+        : () =>
+            EmailVerificationModal(
+              `Hey ${profile.full_name}`,
+              "Complete your 'Additional Details' profile to apply for this job",
+              <Offer style={{ padding: "10px 0" }}>
+                Update{" "}
+                <LinkButton onClick={() => history.push("/dashboard/profile")}>
+                  Profile
+                </LinkButton>
+              </Offer>
+            ),
       closeComponent: "",
       config: {
         enableResizing: false,

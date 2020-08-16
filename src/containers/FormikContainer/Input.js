@@ -23,6 +23,7 @@ function Input(props) {
                 {...field}
                 {...rest}
                 onChange={(val) => setFieldValue(name, val)}
+                imageURL={value}
               />
             );
           }}

@@ -110,7 +110,7 @@ function JobPost() {
         setSubmitting(false);
         console.log("res", res.data);
         handleModal(
-          "Job Created Successfully",
+          "Job Created Successfully ✔",
           `${res.data.title} - ${res.data.location} @ ${res.data.salary}`
         );
         setTimeout(() => {
@@ -119,7 +119,7 @@ function JobPost() {
         }, 2000);
       })
       .catch((err) => {
-        if (err.response.data) {
+        if (err.response) {
           setErrors(err.response.data);
         } else {
           setError(err);

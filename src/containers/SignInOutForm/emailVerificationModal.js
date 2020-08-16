@@ -1,7 +1,7 @@
 import React from "react";
 import { Wrapper, Container, Heading, SubHeading } from "./SignInOutForm.style";
 
-export default function EmailVerificationModal(text, subtext) {
+export default function EmailVerificationModal(text, subtext, fx) {
   console.log("text", text);
   return (
     <Wrapper>
@@ -10,6 +10,7 @@ export default function EmailVerificationModal(text, subtext) {
           <>
             <Heading>{text}</Heading>
             {subtext ? <SubHeading>{subtext}</SubHeading> : null}
+            {fx ? <SubHeading>{fx}</SubHeading> : null}
           </>
         ) : (
           <Heading>Check your email for Verification</Heading>

@@ -19,7 +19,7 @@ export default function LoginSuccessModal() {
   return (
     <Wrapper>
       <Container style={{ paddingBottom: 30 }}>
-        <Heading>Login Successful</Heading>
+        <Heading>Login Successful ✔</Heading>
 
         <SubHeading>Welcomne to the database</SubHeading>
 

@@ -3,6 +3,24 @@ import _ from "lodash";
 import CryptoJS from "crypto-js";
 import AES from "crypto-js/aes";
 
+export const formTokenConfig = (getState) => {
+  // const token = getState().auth.token;
+  const token = localStorage.getItem("access_token");
+  // Headers
+  let data = new FormData();
+  const config = {
+    headers: {
+      accept: "application/json",
+      "Accept-Language": "en-US,en;q=0.8",
+      "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+    },
+  };
+  if (token) {
+    config.headers["Authorization"] = `Token ${token}`;
+  }
+
+  return config;
+};
 export const tokenConfig = (getState) => {
   // const token = getState().auth.token;
   const token = localStorage.getItem("access_token");

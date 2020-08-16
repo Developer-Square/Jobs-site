@@ -113,7 +113,7 @@ function GigPost() {
         }, 2000);
       })
       .catch((err) => {
-        if (err.response.data) {
+        if (err.response) {
           setErrors(err.response.data);
         } else {
           setError(err);
