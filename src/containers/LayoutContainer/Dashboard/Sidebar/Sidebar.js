@@ -11,6 +11,7 @@ import {
   DASHBOARD,
   PROFILE_PAGE,
   JOBS,
+  MYJOBS,
   GIGS,
   INTERNSHIPS,
 } from "constants/routes.constants";
@@ -109,7 +110,23 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
             </Svg>
             Applications
           </NavLink>
-        ) : null}
+        ) : (
+          <NavLink
+            to={`${MYJOBS}`}
+            exact={true}
+            activeStyle={{
+              color: "#6C3A1F",
+              backgroundColor: "#f7f7f7",
+              borderRadius: "50px 0 0 50px",
+            }}
+            onClick={onMenuItemClick}
+          >
+            <Svg>
+              <CategoryIcon />
+            </Svg>
+            My Jobs
+          </NavLink>
+        )}
       </MenuWrapper>
 
       <LogoutBtn

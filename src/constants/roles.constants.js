@@ -140,6 +140,13 @@ const components = {
     icon: "Category",
     module: 1,
   },
+  myJobs: {
+    component: "MyJobs",
+    url: "/my-jobs",
+    title: "My Jobs",
+    icon: "Category",
+    module: 1,
+  },
   manageJobs: {
     component: "JobManage",
     url: "/jobs/:jobID",

@@ -18,6 +18,7 @@ export const APP = "/apps";
 export const AUTH = "/auth";
 
 export const JOBS = "/dashboard/jobs";
+export const MYJOBS = "/dashboard/my-jobs";
 export const GIGS = "/dashboard/gigs";
 export const INTERNSHIPS = "/dashboard/internships";
 export const APPLICATIONS = "/dashboard/applications";
