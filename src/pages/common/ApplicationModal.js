@@ -61,7 +61,9 @@ function ApplicationModal(jobId) {
   };
   const validationSchema = Yup.object({
     budget: Yup.string().required("Required"),
-    comment: Yup.string().required("Required"),
+    comment: Yup.string()
+      .max(100, "Should not exceed 100 characters")
+      .required("Required"),
   });
   return (
     <Wrapper>
