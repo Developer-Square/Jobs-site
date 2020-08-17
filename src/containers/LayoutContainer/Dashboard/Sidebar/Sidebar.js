@@ -14,12 +14,14 @@ import {
   MYJOBS,
   GIGS,
   INTERNSHIPS,
+  MYINTERNSHIPS,
+  MYGIGS,
+  APPLICATIONS,
 } from "constants/routes.constants";
 import { AuthContext } from "contexts/auth/auth.context";
 
 import { DashboardIcon, SettingIcon, LogoutIcon } from "components/AllSvgIcon";
 import { CategoryIcon } from "components/AllSvgIcon";
-import { APPLICATIONS } from "constants/routes.constants";
 
 const sidebarMenus = [
   {
@@ -111,22 +113,57 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
             Applications
           </NavLink>
         ) : (
-          <NavLink
-            to={`${MYJOBS}`}
-            exact={true}
-            activeStyle={{
-              color: "#6C3A1F",
-              backgroundColor: "#f7f7f7",
-              borderRadius: "50px 0 0 50px",
-            }}
-            onClick={onMenuItemClick}
-          >
-            <Svg>
-              <CategoryIcon />
-            </Svg>
-            My Jobs
-          </NavLink>
+          <>
+            <NavLink
+              to={`${MYJOBS}`}
+              exact={true}
+              activeStyle={{
+                color: "#6C3A1F",
+                backgroundColor: "#f7f7f7",
+                borderRadius: "50px 0 0 50px",
+              }}
+              onClick={onMenuItemClick}
+            >
+              <Svg>
+                <CategoryIcon />
+              </Svg>
+              My Jobs
+            </NavLink>
+            {profile.is_business ? null : (
+              <NavLink
+                to={`${MYINTERNSHIPS}`}
+                exact={true}
+                activeStyle={{
+                  color: "#6C3A1F",
+                  backgroundColor: "#f7f7f7",
+                  borderRadius: "50px 0 0 50px",
+                }}
+                onClick={onMenuItemClick}
+              >
+                <Svg>
+                  <CategoryIcon />
+                </Svg>
+                My Internships
+              </NavLink>
+            )}
+          </>
         )}
+
+        <NavLink
+          to={`${MYGIGS}`}
+          exact={true}
+          activeStyle={{
+            color: "#6C3A1F",
+            backgroundColor: "#f7f7f7",
+            borderRadius: "50px 0 0 50px",
+          }}
+          onClick={onMenuItemClick}
+        >
+          <Svg>
+            <CategoryIcon />
+          </Svg>
+          My Gigs
+        </NavLink>
       </MenuWrapper>
 
       <LogoutBtn

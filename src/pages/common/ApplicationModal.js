@@ -9,6 +9,8 @@ import { FormWrapper, Wrapper, Container, SubHeading, Heading } from "./style";
 import { AuthContext } from "contexts/auth/auth.context";
 import { BASE_URL } from "constants/constants";
 import { addToLocalStorageArray } from "helpers";
+import { openModal } from "@redq/reuse-modal";
+import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 
 function ApplicationModal(jobId) {
   const {
@@ -30,22 +32,24 @@ function ApplicationModal(jobId) {
         console.log("applicant data", res.data);
         setSuccess(true);
         addToLocalStorageArray("thedb_applications", res.data.job);
-        // axios
-        //   .get()
-        //   .post(
-        //     `${BASE_URL}/jobs/applicant/${profile.id}/`,
-        //     body,
-        //     tokenConfig()
-        //   )
-        //   .then((res) => {
-        //     addObjectToLocalStorageObject(
-        //       "thedb_applications",
-        //       res.data.applications
-        //     );
-        //   })
-        //   .catch((err) => {
-        //     console.log("error ndani", err);
-        //   });
+        openModal({
+          show: true,
+          overlayClassName: "quick-view-overlay",
+          closeOnClickOutside: true,
+          component: () =>
+            EmailVerificationModal(
+              `Application Successful ✔`,
+              "The employer has been notified and will review your application soon"
+            ),
+          closeComponent: "",
+          config: {
+            enableResizing: false,
+            disableDragging: true,
+            className: "quick-view-modal",
+            width: 458,
+            height: "auto",
+          },
+        });
       })
       .catch((err) => {
         console.log("error", err);

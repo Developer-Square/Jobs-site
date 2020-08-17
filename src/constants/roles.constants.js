@@ -147,6 +147,20 @@ const components = {
     icon: "Category",
     module: 1,
   },
+  myGigs: {
+    component: "MyGigs",
+    url: "/my-gigs",
+    title: "My Gigs",
+    icon: "Category",
+    module: 1,
+  },
+  myInternships: {
+    component: "MyInternships",
+    url: "/my-internships",
+    title: "My Internships",
+    icon: "Category",
+    module: 1,
+  },
   manageJobs: {
     component: "JobManage",
     url: "/jobs/:jobID",

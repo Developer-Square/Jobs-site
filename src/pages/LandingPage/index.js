@@ -58,7 +58,7 @@ import { jobs as availableJobs } from "./jobs";
 import { articles as topArticles } from "./articles";
 
 function LandingPage({ deviceType }) {
-  const history = useHistory;
+  const history = useHistory();
   const spotlightJobs = spotlight;
   const comments = userComments;
   const jobs = availableJobs;
@@ -263,7 +263,7 @@ function LandingPage({ deviceType }) {
               </LeftContent>
               <Center>
                 <Button
-                  onClick={() => history.push("/jobs")}
+                  onClick={() => history.push("/dashboard/jobs")}
                   size="small"
                   title="Show More Jobs"
                   style={{ fontSize: 15, color: "#e6c018" }}
