@@ -3,6 +3,7 @@ import styled from "styled-components";
 const PopoverWrapper = styled.div`
   position: relative;
   cursor: pointer;
+  margin-right: 10px;
 
   .popover-handler {
     display: inline-block;

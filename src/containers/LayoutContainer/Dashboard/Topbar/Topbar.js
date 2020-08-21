@@ -18,7 +18,7 @@ import {
   AlertDot,
   NotificationIconWrapper,
   UserDropdowItem,
-  NavLink,
+  NavLink as NavBarLink,
   LogoutBtn,
   CloseButton,
   DrawerWrapper,
@@ -31,9 +31,7 @@ import {
 import UserImage from "image/user.jpg";
 import Drawer from "components/Drawer/Drawer";
 import Logoimage from "image/thedb.png";
-// import LogoImage from "image/logo.svg";
-// import { LeftMenuBox } from "containers/LayoutContainer/Header/Menu/LeftMenu/LeftMenu.style";
-// import { RightMenu } from "containers/LayoutContainer/Header/Menu/RightMenu/RightMenu";
+import NavLink from "components/NavLink/NavLink";
 import Sidebar from "../Sidebar/Sidebar";
 // import AuthenticationForm from "containers/SignInOutForm/Form";
 import { PROFILE_PAGE } from "constants/routes.constants";
@@ -49,7 +47,10 @@ const data = [
 const Topbar = ({ refs }) => {
   const history = useHistory();
   const { state, dispatch } = useContext(DrawerContext);
-  const { authDispatch } = useContext(AuthContext);
+  const {
+    authState: { profile },
+    authDispatch,
+  } = useContext(AuthContext);
   // Toggle drawer
   const toggleHandler = React.useCallback(() => {
     dispatch({
@@ -140,12 +141,12 @@ const Topbar = ({ refs }) => {
           }
           content={
             <UserDropdowItem>
-              <NavLink to={PROFILE_PAGE} exact={false}>
+              <NavBarLink to={PROFILE_PAGE} exact={false}>
                 Profile
-              </NavLink>
-              <NavLink to={SETTINGS} exact={false}>
+              </NavBarLink>
+              <NavBarLink to={SETTINGS} exact={false}>
                 Settings
-              </NavLink>
+              </NavBarLink>
               <LogoutBtn
                 onClick={() => {
                   handleLogout();
@@ -155,11 +156,14 @@ const Topbar = ({ refs }) => {
               </LogoutBtn>
             </UserDropdowItem>
           }
-        >
-          <ProfileImg>
-            <Image src={UserImage} alt="user" />
-          </ProfileImg>
-        </Popover>
+        />
+        <NavLink
+          className="menu-item"
+          href={PROFILE_PAGE}
+          label={`${
+            profile.first_name !== "" ? profile.first_name : profile.email
+          }`}
+        />
       </TopbarRightSide>
     </TopbarWrapper>
   );

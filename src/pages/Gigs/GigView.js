@@ -26,6 +26,7 @@ import Error500 from "components/Error/Error500";
 import { useHistory } from "react-router-dom";
 import { categorySelector } from "pages/common/helpers";
 import { Offer, LinkButton } from "pages/common/style";
+import { useAppState } from "contexts/app/app.provider";
 
 function GigView() {
   const {
@@ -34,7 +35,7 @@ function GigView() {
   const [jobs, setJobs] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [reload, setReload] = useState(false);
+  const reload = useAppState("isReload");
   const history = useHistory();
   useEffect(() => {
     setLoading(true);
@@ -51,7 +52,6 @@ function GigView() {
           console.log("Catching Errors:", err);
           setError(err);
         });
-      setReload(false);
     }, 2000);
   }, [reload]);
 
@@ -101,7 +101,6 @@ function GigView() {
         height: "auto",
       },
     });
-    setReload(true);
   };
   const handleModal = (text) => {
     openModal({
@@ -148,104 +147,79 @@ function GigView() {
         <Loader />
       ) : (
         <LeftContent>
-          {jobs !== null && jobs.length > 0 ? (
-            <ul>
-              {jobs
-                .filter(
-                  (filteredJob) =>
-                    filteredJob.job_type === "gig" ||
-                    filteredJob.job_type === "Gig"
-                )
-                .map((job, index) => (
-                  <li key={index}>
-                    {job !== null && job !== undefined ? (
-                      <section>
-                        <ListingLogo>
-                          <ImageWrapper
-                            url={job.companyLogo}
-                            alt={"company logo"}
-                          />
-                        </ListingLogo>
-                        <ListingTitle>
-                          <H4>
-                            {job.title}
-                            <TypeList>
-                              <ListSpan className={`${job.job_type}`}>
-                                {job.job_type}
-                              </ListSpan>
+          <ul>
+            {jobs
+              .filter(
+                (filteredJob) =>
+                  filteredJob.job_type === "gig" ||
+                  filteredJob.job_type === "Gig"
+              )
+              .map((job, index) => (
+                <li key={index}>
+                  <section>
+                    <ListingLogo>
+                      <ImageWrapper
+                        url={job.companyLogo}
+                        alt={"company logo"}
+                      />
+                    </ListingLogo>
+                    <ListingTitle>
+                      <H4>
+                        {job.title}
+                        <TypeList>
+                          <ListSpan className={`${job.job_type}`}>
+                            {job.job_type}
+                          </ListSpan>
 
-                              {job.creator === profile.id ? (
-                                <Button
-                                  onClick={() =>
-                                    toggleManage(
-                                      categorySelector(job.job_type),
-                                      job.id
-                                    )
-                                  }
-                                  size="small"
-                                  title={`Manage Gig`}
-                                  disabled={!profile.dummy_verified}
-                                  style={{
-                                    fontSize: 15,
-                                    color: "#5918e6",
-                                    backgroundColor: "#e6c018",
-                                    float: "right",
-                                    height: "29px",
-                                    margin: "0 0 0 10px",
-                                  }}
-                                />
-                              ) : (
+                          {job.creator === profile.id ? (
+                            <Button
+                              onClick={() =>
+                                toggleManage(
+                                  categorySelector(job.job_type),
+                                  job.id
+                                )
+                              }
+                              size="small"
+                              title={`Manage Gig`}
+                              disabled={!profile.dummy_verified}
+                              style={{
+                                fontSize: 15,
+                                color: "#5918e6",
+                                backgroundColor: "#e6c018",
+                                float: "right",
+                                height: "29px",
+                                margin: "0 0 0 10px",
+                              }}
+                            />
+                          ) : (
+                            <>
+                              {profile.is_individual ? (
                                 <>
-                                  {profile.is_individual ? (
+                                  {localStorage.getItem(
+                                    "thedb_applications"
+                                  ) ? (
                                     <>
-                                      {localStorage.getItem(
-                                        "thedb_applications"
-                                      ) ? (
-                                        <>
-                                          {localStorage
-                                            .getItem("thedb_applications")
-                                            .includes(job.id) ? (
-                                            <Button
-                                              onClick={() =>
-                                                profile.dummy_verified
-                                                  ? handleApplication(job.id)
-                                                  : handleModal()
-                                              }
-                                              size="small"
-                                              title={`Applied ✔`}
-                                              disabled={true}
-                                              style={{
-                                                fontSize: 15,
-                                                color: "#5918e6",
-                                                backgroundColor: "#f2f2f2",
-                                                float: "right",
-                                                height: "29px",
-                                                margin: "0 0 0 10px",
-                                              }}
-                                            />
-                                          ) : (
-                                            <Button
-                                              onClick={() =>
-                                                profile.dummy_verified
-                                                  ? handleApplication(job.id)
-                                                  : handleModal()
-                                              }
-                                              size="small"
-                                              title={`Apply`}
-                                              // disabled={!profile.dummy_verified}
-                                              style={{
-                                                fontSize: 15,
-                                                color: "#5918e6",
-                                                backgroundColor: profile.dummy_verified
-                                                  ? "#e6c018"
-                                                  : "#f2f2f2",
-                                                float: "right",
-                                                height: "29px",
-                                                margin: "0 0 0 10px",
-                                              }}
-                                            />
-                                          )}
-                                        </>
+                                      {localStorage
+                                        .getItem("thedb_applications")
+                                        .includes(job.id) ? (
+                                        <Button
+                                          onClick={() =>
+                                            profile.dummy_verified
+                                              ? handleApplication(job.id)
+                                              : handleModal()
+                                          }
+                                          size="small"
+                                          title={`Applied ✔`}
+                                          disabled={true}
+                                          style={{
+                                            fontSize: 15,
+                                            color: "#5918e6",
+                                            backgroundColor: "#f2f2f2",
+                                            float: "right",
+                                            height: "29px",
+                                            margin: "0 0 0 10px",
+                                          }}
+                                        />
                                       ) : (
                                         <Button
                                           onClick={() =>
@@ -269,38 +243,61 @@ function GigView() {
                                         />
                                       )}
                                     </>
-                                  ) : null}
+                                  ) : (
+                                    <Button
+                                      onClick={() =>
+                                        profile.dummy_verified
+                                          ? handleApplication(job.id)
+                                          : handleModal()
+                                      }
+                                      size="small"
+                                      title={`Apply`}
+                                      // disabled={!profile.dummy_verified}
+                                      style={{
+                                        fontSize: 15,
+                                        color: "#5918e6",
+                                        backgroundColor: profile.dummy_verified
+                                          ? "#e6c018"
+                                          : "#f2f2f2",
+                                        float: "right",
+                                        height: "29px",
+                                        margin: "0 0 0 10px",
+                                      }}
+                                    />
+                                  )}
                                 </>
-                              )}
-                            </TypeList>
-                          </H4>
-                          <ListingIcons>
-                            <li>
-                              <GiftBox />
-                              {job.description}
-                            </li>
-                            <li>
-                              <SearchIcon />
-                              {job.location}
-                            </li>
-                            <li>
-                              <LockIcon />
-                              {CURRENCY}
-                              {job.salary} - {CURRENCY}
-                              {job.salary}
-                            </li>
-                          </ListingIcons>
-                        </ListingTitle>
-                      </section>
-                    ) : (
-                      <div>Sorry, No Gigs posted recently</div>
-                    )}
-                  </li>
-                ))}
-            </ul>
-          ) : (
-            <div>Sorry No Gigs posted recently</div>
-          )}
+                              ) : null}
+                            </>
+                          )}
+                        </TypeList>
+                      </H4>
+                      <ListingIcons>
+                        <li>
+                          <GiftBox />
+                          {job.description}
+                        </li>
+                        <li>
+                          <SearchIcon />
+                          {job.location}
+                        </li>
+                        <li>
+                          <LockIcon />
+                          {CURRENCY}
+
+                          {job.salary}
+                        </li>
+                      </ListingIcons>
+                    </ListingTitle>
+                  </section>
+                </li>
+              ))}
+            {jobs.filter(
+              (filteredJob) =>
+                filteredJob.job_type === "gig" || filteredJob.job_type === "Gig"
+            ).length > 0 ? null : (
+              <div>Sorry No Gigs posted recently</div>
+            )}
+          </ul>
         </LeftContent>
       )}
     </CardWrapper>

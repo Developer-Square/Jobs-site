@@ -2,12 +2,22 @@ import React from "react";
 import NavLink from "components/NavLink/NavLink";
 import Button from "components/Button/Button";
 import Popover from "components/Popover/Popover";
-import { JOBS, GIGS, ABOUT, HELP_PAGE } from "constants/routes.constants";
+import {
+  JOBS,
+  GIGS,
+  ABOUT,
+  HELP_PAGE,
+  PROFILE_PAGE,
+} from "constants/routes.constants";
 import { AuthorizedMenu } from "../AuthorizedMenu";
 import { HelpIcon } from "components/AllSvgIcon";
 import { RightMenuBox } from "./RightMenu.style";
+import { AuthContext } from "contexts/auth/auth.context";
 
 export const RightMenu = ({ onLogout, avatar, isAuthenticated, onJoin }) => {
+  const {
+    authState: { profile },
+  } = React.useContext(AuthContext);
   return (
     <RightMenuBox>
       {isAuthenticated ? (
@@ -34,12 +44,21 @@ export const RightMenu = ({ onLogout, avatar, isAuthenticated, onJoin }) => {
           style={{ fontSize: 15, color: "#5918e6", backgroundColor: "#e6c018" }}
         />
       ) : (
-        <Popover
-          direction="right"
-          className="user-pages-dropdown"
-          handler={<img src={avatar} alt="user" />}
-          content={<AuthorizedMenu onLogout={onLogout} />}
-        />
+        <>
+          <Popover
+            direction="right"
+            className="user-pages-dropdown"
+            handler={<img src={avatar} alt="user" />}
+            content={<AuthorizedMenu onLogout={onLogout} />}
+          />
+          <NavLink
+            className="menu-item"
+            href={PROFILE_PAGE}
+            label={`${
+              profile.first_name !== "" ? profile.first_name : profile.email
+            }`}
+          />
+        </>
       )}
     </RightMenuBox>
   );

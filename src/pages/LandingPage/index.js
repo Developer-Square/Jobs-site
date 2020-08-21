@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { SEO } from "components/seo";
 
 import Banner from "containers/Banner/Banner";
@@ -52,80 +52,73 @@ import { GiftBox, LockIcon, SearchIcon } from "components/AllSvgIcon";
 import FooterContainer from "containers/Footer/Footer";
 // import CustomCarousel from "components/Carousel/Carousel";
 import { ArrowNext } from "components/AllSvgIcon";
-import { spotlightJobs as spotlight } from "./spotlightJobs";
 import { comments as userComments } from "./comments";
-import { jobs as availableJobs } from "./jobs";
 import { articles as topArticles } from "./articles";
+import { BASE_URL } from "constants/constants";
+import axios from "axios";
+import Error500 from "components/Error/Error500";
+import Loader from "components/Loader/Loader";
+import { getOrgLogo } from "pages/common/helpers";
+import { AuthContext } from "contexts/auth/auth.context";
+import { handleModal } from "pages/common/helpers";
+import AuthenticationForm from "containers/SignInOutForm/Form";
+import { openModal } from "@redq/reuse-modal";
+import { categorySelector } from "pages/common/helpers";
 
 function LandingPage({ deviceType }) {
+  const {
+    authState: { isAuthenticated },
+    authDispatch,
+  } = useContext(AuthContext);
   const history = useHistory();
-  const spotlightJobs = spotlight;
   const comments = userComments;
-  const jobs = availableJobs;
   const articles = topArticles;
+  const [jobs, setJobs] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const spotlightContent = spotlightJobs.map((job, index) => (
-    <SpotlightCard key={index}>
-      <Link to="/jobs">
-        <H4>{job.post}</H4>
-        <br />
-        {job.categories.length > 1 ? (
-          <TypeList
-            style={{
-              position: `inherit`,
-              top: `0`,
-              maxWidth: `100%`,
-            }}
-          >
-            {job.categories.map((category, index) => (
-              <ListSpan key={index} className={category.slug}>
-                {category.title}
-              </ListSpan>
-            ))}
-          </TypeList>
-        ) : (
-          <TypeList>
-            <ListSpan className={`${job.categories[0].slug}`}>
-              {job.categories[0].title}
-            </ListSpan>
-          </TypeList>
-        )}
-      </Link>
-      <SpotlightName>
-        <GiftBox />
-        {job.name}
-      </SpotlightName>
-      <br />
-      <SpotlightLocation>
-        {" "}
-        <SearchIcon />
-        {job.location}
-      </SpotlightLocation>
-      <br />
-      <SpotlightRate>
-        <LockIcon />
-        {CURRENCY}
-        {job.rateLow} - {CURRENCY}
-        {job.rateHigh} / hour
-      </SpotlightRate>
-      <br />
-      <SpotlightSalary>
-        <LockIcon />
-        {CURRENCY}
-        {job.maxPrice} - {CURRENCY}
-        {job.maxPrice}
-      </SpotlightSalary>
-      <P>{job.description}</P>
-      <Center>
-        <Button
-          onClick={() => history.push("/jobs")}
-          size="small"
-          title="Apply For this job"
-          style={{ fontSize: 15, color: "#e6c018" }}
-        />
-      </Center>
-    </SpotlightCard>
-  ));
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      try {
+        axios
+          .get(`${BASE_URL}/jobs/`)
+          .then((res) => {
+            setJobs(res.data.results);
+
+            setLoading(false);
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log("Catching Errors:", err);
+            setError(err);
+          });
+      } catch (error) {
+        setError(error);
+      }
+    }, 2000);
+  }, []);
+
+  const toggleSignInForm = () => {
+    authDispatch({
+      type: "SIGNIN",
+    });
+    openModal({
+      show: true,
+      overlayClassName: "quick-view-overlay",
+      closeOnClickOutside: true,
+      component: AuthenticationForm,
+      closeComponent: "",
+      config: {
+        enableResizing: false,
+        disableDragging: true,
+        className: "quick-view-modal",
+        width: 458,
+        height: "auto",
+      },
+    });
+  };
+
   const userComment = comments.map((comment, index) => (
     <Comment key={index}>
       <TestimonialBox>
@@ -184,7 +177,7 @@ function LandingPage({ deviceType }) {
                       <p>{article.content}</p>
                     </ArticleSection>
                     <Button
-                      onClick={() => history.push(`/blog/${article.slug}`)}
+                      onClick={() => history.push(`/dashboard/${article.slug}`)}
                       size="small"
                       title="Get Started"
                       style={{ fontSize: 15, color: "#e6c018" }}
@@ -203,71 +196,97 @@ function LandingPage({ deviceType }) {
             <JobsLeftCol>
               <H3>Recent Jobs</H3>
               <LeftContent>
-                {jobs ? (
-                  <ul>
-                    {jobs.map((job, index) => (
-                      <li key={index}>
-                        <a href="/dashboard/jobs">
-                          <ListingLogo>
-                            <ImageWrapper
-                              url={job.companyLogo}
-                              alt={"company logo"}
-                            />
-                          </ListingLogo>
-                          <ListingTitle>
-                            <H4>
-                              {job.post}
-                              {job.categories.length > 1 ? (
-                                <TypeList>
-                                  {job.categories.map((category, index) => (
-                                    <ListSpan
-                                      key={index}
-                                      className={category.slug}
-                                    >
-                                      {category.title}
-                                    </ListSpan>
-                                  ))}
-                                </TypeList>
-                              ) : (
-                                <TypeList>
-                                  <ListSpan
-                                    className={`${job.categories[0].slug}`}
-                                  >
-                                    {job.categories[0].title}
-                                  </ListSpan>
-                                </TypeList>
-                              )}
-                            </H4>
-                            <ListingIcons>
-                              <li>
-                                <GiftBox />
-                                {job.name}
+                {error ? (
+                  <Error500 err={error} />
+                ) : (
+                  <>
+                    {loading ? (
+                      <Loader />
+                    ) : (
+                      <>
+                        {jobs ? (
+                          <ul>
+                            {jobs.slice(0, 4).map((job, index) => (
+                              <li key={index}>
+                                <a
+                                  onClick={
+                                    isAuthenticated ? null : toggleSignInForm
+                                  }
+                                  href={isAuthenticated ? "/dashboard" : null}
+                                >
+                                  <ListingLogo>
+                                    <ImageWrapper
+                                      url={getOrgLogo(job.creator)}
+                                      alt={"company logo"}
+                                    />
+                                  </ListingLogo>
+                                  <ListingTitle>
+                                    <H4>
+                                      {job.title}
+                                      <TypeList>
+                                        <ListSpan className={`${job.job_type}`}>
+                                          {job.job_type}
+                                        </ListSpan>
+                                      </TypeList>
+                                    </H4>
+                                    <ListingIcons>
+                                      <li>
+                                        <GiftBox />
+                                        {job.description}
+                                      </li>
+                                      <li>
+                                        <SearchIcon />
+                                        {job.location}
+                                      </li>
+                                      <li>
+                                        <LockIcon />
+                                        {CURRENCY}
+
+                                        {job.salary}
+                                      </li>
+                                    </ListingIcons>
+                                  </ListingTitle>
+                                </a>
                               </li>
-                              <li>
-                                <SearchIcon />
-                                {job.location}
-                              </li>
-                              <li>
-                                <LockIcon />
-                                {CURRENCY}
-                                {job.maxPrice} - {CURRENCY}
-                                {job.maxPrice}
-                              </li>
-                            </ListingIcons>
-                          </ListingTitle>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
+                            ))}
+                          </ul>
+                        ) : null}
+                      </>
+                    )}
+                  </>
+                )}
               </LeftContent>
               <Center>
-                <Button
-                  onClick={() => history.push("/dashboard/jobs")}
-                  size="small"
-                  title="Show More Jobs"
-                  style={{ fontSize: 15, color: "#e6c018" }}
-                />
+                {isAuthenticated ? (
+                  <Button
+                    onClick={() => history.push("/dashboard")}
+                    size="small"
+                    title="Show More Jobs"
+                    style={{ fontSize: 15, color: "#e6c018" }}
+                  />
+                ) : (
+                  <Button
+                    onClick={() =>
+                      handleModal(
+                        "Log in to view More jobs",
+                        null,
+                        <Button
+                          onClick={toggleSignInForm}
+                          size="small"
+                          title="Login"
+                          style={{ fontSize: 15, color: "#e6c018" }}
+                        />
+                      )
+                    }
+                    size="small"
+                    title="Show More ..."
+                    style={{
+                      fontSize: 15,
+                      color: "#e6c018",
+                      backgroundColor: "#f2f2f2",
+                    }}
+                  />
+                )}
               </Center>
             </JobsLeftCol>
             <JobsRightCol>
@@ -281,7 +300,87 @@ function LandingPage({ deviceType }) {
                         content={spotlightContent}
                         perView={1}
                       /> */}
-                      {spotlightContent}
+                      {jobs.slice(0, 1).map((job, index) => (
+                        <SpotlightCard key={index}>
+                          <Link
+                            onClick={isAuthenticated ? null : toggleSignInForm}
+                            to={
+                              isAuthenticated
+                                ? `/dashboard/${categorySelector(job.job_type)}`
+                                : null
+                            }
+                          >
+                            <H4>{job.title}</H4>
+                            <br />
+                            <TypeList
+                              style={{
+                                position: `inherit`,
+                                top: `0`,
+                                maxWidth: `100%`,
+                              }}
+                            >
+                              <ListSpan className={`${job.job_type}`}>
+                                {job.job_type}
+                              </ListSpan>
+                            </TypeList>
+                          </Link>
+                          <SpotlightName>
+                            <GiftBox />
+                            {job.name}
+                          </SpotlightName>
+                          <br />
+                          <SpotlightLocation>
+                            {" "}
+                            <SearchIcon />
+                            {job.location}
+                          </SpotlightLocation>
+                          <br />
+                          <SpotlightRate>
+                            <LockIcon />
+                            {job.industry}
+                          </SpotlightRate>
+                          <br />
+                          <SpotlightSalary>
+                            <LockIcon />
+                            {CURRENCY}
+
+                            {job.salary}
+                          </SpotlightSalary>
+                          <P>{job.description}</P>
+                          <Center>
+                            {isAuthenticated ? (
+                              <Button
+                                onClick={() => history.push("/dashboard/jobs")}
+                                size="small"
+                                title="Show More Jobs"
+                                style={{ fontSize: 15, color: "#e6c018" }}
+                              />
+                            ) : (
+                              <Button
+                                onClick={() =>
+                                  handleModal(
+                                    "Log in to view More jobs",
+                                    null,
+                                    <Button
+                                      onClick={toggleSignInForm}
+                                      size="small"
+                                      title="Login"
+                                      style={{ fontSize: 15, color: "#e6c018" }}
+                                    />
+                                  )
+                                }
+                                size="small"
+                                title="Apply"
+                                style={{
+                                  fontSize: 15,
+                                  color: "#e6c018",
+                                  backgroundColor: "#f2f2f2",
+                                }}
+                              />
+                            )}
+                          </Center>
+                        </SpotlightCard>
+                      ))}
                     </div>
                   ) : null}
                   <div>

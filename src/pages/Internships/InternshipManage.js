@@ -102,8 +102,10 @@ function InternshipManage() {
             const shortlisted = res.data.results
               .filter(
                 (filteredUsers) =>
-                  filteredUsers.status === "shortlisted" ||
-                  filteredUsers.status === "Shortlisted"
+                  filteredUsers.job.toString() ===
+                    match.params.jobID.toString() &&
+                  (filteredUsers.status === "shortlisted" ||
+                    filteredUsers.status === "Shortlisted")
               )
               .reduce((arr, b) => {
                 arr.push(b.applicant);
@@ -113,8 +115,10 @@ function InternshipManage() {
             const approved = res.data.results
               .filter(
                 (filteredUsers) =>
-                  filteredUsers.status === "accepted" ||
-                  filteredUsers.status === "Accepted"
+                  filteredUsers.job.toString() ===
+                    match.params.jobID.toString() &&
+                  (filteredUsers.status === "accepted" ||
+                    filteredUsers.status === "Accepted")
               )
               .reduce((arr, b) => {
                 arr.push(b.applicant);
@@ -124,8 +128,10 @@ function InternshipManage() {
             const applied = res.data.results
               .filter(
                 (filteredUsers) =>
-                  filteredUsers.status === "applied" ||
-                  filteredUsers.status === "Applied"
+                  filteredUsers.job.toString() ===
+                    match.params.jobID.toString() &&
+                  (filteredUsers.status === "applied" ||
+                    filteredUsers.status === "Applied")
               )
               .reduce((arr, b) => {
                 arr.push(b.applicant);
@@ -135,8 +141,10 @@ function InternshipManage() {
             const rejected = res.data.results
               .filter(
                 (filteredUsers) =>
-                  filteredUsers.status === "rejected" ||
-                  filteredUsers.status === "Rejected"
+                  filteredUsers.job.toString() ===
+                    match.params.jobID.toString() &&
+                  (filteredUsers.status === "rejected" ||
+                    filteredUsers.status === "Rejected")
               )
               .reduce((arr, b) => {
                 arr.push(b.applicant);

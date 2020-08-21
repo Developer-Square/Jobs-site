@@ -24,7 +24,12 @@ import EmailVerificationModal from "containers/SignInOutForm/emailVerificationMo
 import ApplicationModal from "../common/ApplicationModal";
 import Loader from "components/Loader/Loader";
 import Error500 from "components/Error/Error500";
-import { categorySelector } from "pages/common/helpers";
+import {
+  categorySelector,
+  getApplications,
+  getOrgLogo,
+} from "pages/common/helpers";
+import { useAppState } from "contexts/app/app.provider";
 
 function Dashboard() {
   const {
@@ -34,7 +39,7 @@ function Dashboard() {
   const [jobs, setJobs] = useState(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [reload, setReload] = useState(false);
+  const reload = useAppState("isReload");
   useEffect(() => {
     setTimeout(() => {
       setLoading(true);
@@ -60,8 +65,8 @@ function Dashboard() {
             })
             .catch((err) => {
               setError(err);
-              console.log("frererefrr", err);
             });
+          getApplications();
         } catch (error) {
           setError(error);
         }
@@ -104,7 +109,6 @@ function Dashboard() {
       } catch (error) {
         setError(error);
       }
-      setReload(false);
     }, 2000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reload]);
@@ -160,7 +164,6 @@ function Dashboard() {
         height: "auto",
       },
     });
-    setReload(true);
   };
   if (error) {
     return <Error500 err={error} />;
@@ -186,7 +189,7 @@ function Dashboard() {
                     <section>
                       <ListingLogo>
                         <ImageWrapper
-                          url={job.companyLogo}
+                          url={getOrgLogo(job.creator)}
                           alt={"company logo"}
                         />
                       </ListingLogo>
@@ -310,7 +313,7 @@ function Dashboard() {
                           <li>
                             <LockIcon />
                             {CURRENCY}
-                            {job.salary} - {CURRENCY}
+
                             {job.salary}
                           </li>
                         </ListingIcons>

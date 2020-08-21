@@ -235,7 +235,7 @@ function View({ type, name, isBusiness, isIndividual }) {
                               <li>
                                 <LockIcon />
                                 {CURRENCY}
-                                {job.salary} - {CURRENCY}
+
                                 {job.salary}
                               </li>
                             </ListingIcons>

@@ -2,6 +2,7 @@ export const initialState = {
   isSticky: false,
   isSidebarSticky: true,
   currentForm: "view",
+  isReload: false,
 };
 
 export function reducer(state, { type }) {
@@ -25,6 +26,16 @@ export function reducer(state, { type }) {
       return {
         ...state,
         currentForm: "edit",
+      };
+    case "RELOAD":
+      return {
+        ...state,
+        isReload: true,
+      };
+    case "REMOVE_RELOAD":
+      return {
+        ...state,
+        isReload: false,
       };
     case "SET_STICKY":
       return {

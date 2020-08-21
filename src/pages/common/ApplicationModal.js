@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useContext, useState, useCallback } from "react";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -11,12 +12,17 @@ import { BASE_URL } from "constants/constants";
 import { addToLocalStorageArray } from "helpers";
 import { openModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import { useStickyDispatch } from "contexts/app/app.provider";
 
 function ApplicationModal(jobId) {
   const {
     authState: { profile },
   } = useContext(AuthContext);
   const [success, setSuccess] = useState(false);
+  const useDispatch = useStickyDispatch();
+  const setReload = useCallback(() => useDispatch({ type: "RELOAD" }), [
+    useDispatch,
+  ]);
   const submitApplication = (values, { setErrors, setSubmitting }) => {
     setSubmitting(true);
     const { budget, comment } = values;
@@ -50,6 +56,7 @@ function ApplicationModal(jobId) {
             height: "auto",
           },
         });
+        setReload();
       })
       .catch((err) => {
         console.log("error", err);

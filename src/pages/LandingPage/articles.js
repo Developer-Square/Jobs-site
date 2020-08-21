@@ -25,6 +25,6 @@ export const articles = [
     imgUrl: Image3,
     content:
       "Comrade, Covid-19 has given you the opportunity to gain valuable working experience as schools remain closed. Capitilize on this opportunity at TheDatabase",
-    slug: "intern volunteer",
+    slug: "internships",
   },
 ];
