@@ -154,9 +154,9 @@ function GigView() {
           {applications !== null && applications.length > 0 ? (
             <ul>
               {applications.map((app, index) => (
-                <>
+                <div key={index}>
                   {app !== null && app !== undefined ? (
-                    <li key={index}>
+                    <li>
                       <section>
                         <ListingLogo>
                           <ImageWrapper
@@ -326,7 +326,7 @@ function GigView() {
                       <div>Sorry, No applications made yet</div>
                     </>
                   )}
-                </>
+                </div>
               ))}
             </ul>
           ) : (

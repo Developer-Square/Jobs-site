@@ -77,6 +77,13 @@ const components = {
     icon: "Category",
     module: 1,
   },
+  view: {
+    component: "SingleView",
+    url: "/view/:singleJobId",
+    title: "View",
+    icon: "Category",
+    module: 1,
+  },
   addResume: {
     component: "AddResume",
     url: "/add-resume",
@@ -98,13 +105,13 @@ const components = {
     icon: "Category",
     module: 1,
   },
-  // manageJobs: {
-  //   component: "ManageJobs",
-  //   url: "/manage-jobs",
-  //   title: "Manage Jobs",
-  //   icon: "Category",
-  //   module: 1,
-  // },
+  manageProfile: {
+    component: "ProfileView",
+    url: "/profile/:profileID",
+    title: "Manage Profile",
+    icon: "Category",
+    module: 1,
+  },
   profile: {
     component: "Profile",
     url: "/profile",

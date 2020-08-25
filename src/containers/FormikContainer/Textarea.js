@@ -2,6 +2,7 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 import styled from "styled-components";
+// import RichTextEditor from "components/RichTextEditor/RichTextEditor";
 
 function Textarea(props) {
   const { label, name, ...rest } = props;
@@ -9,6 +10,15 @@ function Textarea(props) {
     <FormInput className="form-control">
       <label htmlFor={name}>{label}</label>
       <Field as="textarea" id={name} name={name} {...rest} />
+      {/* <RichTextEditor
+          disabled={disabled}
+          error={!!formErrors.descriptionJson}
+          helperText={getProductErrorMessage(formErrors.descriptionJson, intl)}
+          initial={initialDescription}
+          label={intl.formatMessage(commonMessages.description)}
+          name="description"
+          onChange={onChange}
+        /> */}
       <ErrorMessage component={TextError} name={name} />
     </FormInput>
   );

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   Button,
   Wrapper,
@@ -15,7 +15,6 @@ import // Facebook,
 // Google
 "components/AllSvgIcon";
 import { AuthContext } from "contexts/auth/auth.context";
-import { TERMS_CONDITIONS } from "constants/routes.constants";
 import { closeModal } from "@redq/reuse-modal";
 import { Formik, Form } from "formik";
 import FormikControl from "containers/FormikContainer/FormikControl";
@@ -204,9 +203,9 @@ export default function SignOutModal() {
 
                     <HelperText style={{ padding: "20px 0 30px" }}>
                       By signing up, you agree to The Database's{" "}
-                      <Link to={TERMS_CONDITIONS} onClick={() => handleTOS}>
+                      <p style={{ color: "#5918e6" }} onClick={handleTOS}>
                         Terms &amp; Condtions
-                      </Link>
+                      </p>
                     </HelperText>
 
                     <Button

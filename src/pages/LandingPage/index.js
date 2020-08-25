@@ -63,7 +63,6 @@ import { AuthContext } from "contexts/auth/auth.context";
 import { handleModal } from "pages/common/helpers";
 import AuthenticationForm from "containers/SignInOutForm/Form";
 import { openModal } from "@redq/reuse-modal";
-import { categorySelector } from "pages/common/helpers";
 
 function LandingPage({ deviceType }) {
   const {
@@ -159,7 +158,14 @@ function LandingPage({ deviceType }) {
                 {articles.map((article, index) => (
                   <Article key={index}>
                     <Figure>
-                      <Link to={article.slug}>
+                      <Link
+                        to={isAuthenticated ? `/dashboard/${article.slug}` : ""}
+                        onClick={() =>
+                          isAuthenticated
+                            ? () => history.push(`/dashboard/${article.slug}`)
+                            : toggleSignInForm
+                        }
+                      >
                         <ImageWrapper
                           url={article.imgUrl}
                           alt={`article image`}
@@ -177,7 +183,11 @@ function LandingPage({ deviceType }) {
                       <p>{article.content}</p>
                     </ArticleSection>
                     <Button
-                      onClick={() => history.push(`/dashboard/${article.slug}`)}
+                      onClick={() =>
+                        isAuthenticated
+                          ? () => history.push(`/dashboard/${article.slug}`)
+                          : toggleSignInForm
+                      }
                       size="small"
                       title="Get Started"
                       style={{ fontSize: 15, color: "#e6c018" }}
@@ -212,7 +222,11 @@ function LandingPage({ deviceType }) {
                                   onClick={
                                     isAuthenticated ? null : toggleSignInForm
                                   }
-                                  href={isAuthenticated ? "/dashboard" : null}
+                                  href={
+                                    isAuthenticated
+                                      ? `/dashboard/view/${job.id}`
+                                      : "/"
+                                  }
                                 >
                                   <ListingLogo>
                                     <ImageWrapper
@@ -305,9 +319,7 @@ function LandingPage({ deviceType }) {
                           <Link
                             onClick={isAuthenticated ? null : toggleSignInForm}
                             to={
-                              isAuthenticated
-                                ? `/dashboard/${categorySelector(job.job_type)}`
-                                : null
+                              isAuthenticated ? `/dashboard/view/${job.id}` : ""
                             }
                           >
                             <H4>{job.title}</H4>
@@ -350,9 +362,11 @@ function LandingPage({ deviceType }) {
                           <Center>
                             {isAuthenticated ? (
                               <Button
-                                onClick={() => history.push("/dashboard/jobs")}
+                                onClick={() =>
+                                  history.push(`/dashboard/view/${job.id}`)
+                                }
                                 size="small"
-                                title="Show More Jobs"
+                                title={`Apply`}
                                 style={{ fontSize: 15, color: "#e6c018" }}
                               />
                             ) : (

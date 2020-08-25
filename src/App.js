@@ -8,14 +8,14 @@ import { AuthProvider } from "contexts/auth/auth.provider";
 import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
+import BaseRouter from "routers/router";
+import { useRouterQuery } from "helpers/useRouterQuery";
+
 // External CSS import here
 import "rc-drawer/assets/index.css";
 import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
-
-import BaseRouter from "routers/router";
-import { useRouterQuery } from "helpers/useRouterQuery";
 
 export default function App() {
   const queryParams = useRouterQuery();

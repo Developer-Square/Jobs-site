@@ -17,6 +17,7 @@ export const PAGES = "/";
 export const APP = "/apps";
 export const AUTH = "/auth";
 
+export const SINGLE_VIEW = "/dashboard/view";
 export const JOBS = "/dashboard/jobs";
 export const MYJOBS = "/dashboard/my-jobs";
 export const GIGS = "/dashboard/gigs";

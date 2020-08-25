@@ -6,23 +6,35 @@ import * as Yup from "yup";
 import axios from "axios";
 import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
-import { FormWrapper, Wrapper, Container, SubHeading, Heading } from "./style";
+import {
+  FormWrapper,
+  Divider,
+  Wrapper,
+  Container,
+  SubHeading,
+  Heading,
+} from "./style";
 import { AuthContext } from "contexts/auth/auth.context";
 import { BASE_URL } from "constants/constants";
 import { addToLocalStorageArray } from "helpers";
-import { openModal } from "@redq/reuse-modal";
+import { openModal, closeModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import { useStickyDispatch } from "contexts/app/app.provider";
+import { useHistory, useLocation } from "react-router-dom";
+import { Center } from "styles/pages.style";
 
 function ApplicationModal(jobId) {
   const {
     authState: { profile },
   } = useContext(AuthContext);
+  const history = useHistory();
+  const location = useLocation();
   const [success, setSuccess] = useState(false);
   const useDispatch = useStickyDispatch();
   const setReload = useCallback(() => useDispatch({ type: "RELOAD" }), [
     useDispatch,
   ]);
+  const isViewPage = location.pathname === `/dashboard/view/${jobId}`;
   const submitApplication = (values, { setErrors, setSubmitting }) => {
     setSubmitting(true);
     const { budget, comment } = values;
@@ -82,6 +94,30 @@ function ApplicationModal(jobId) {
         {!success ? (
           <>
             <Heading>Complete Application</Heading>
+            {isViewPage ? null : (
+              <Center>
+                <SubHeading>View job for more details</SubHeading>
+                <SubHeading>
+                  <Button
+                    onClick={() => {
+                      history.push(`/dashboard/view/${jobId}`);
+                      closeModal();
+                    }}
+                    size="small"
+                    title={`View Job Details`}
+                    style={{
+                      fontSize: 15,
+                      color: "#5918e6",
+                      backgroundColor: "#e6c018",
+                      float: "right",
+                    }}
+                  />
+                </SubHeading>
+                <Divider>
+                  <span>or</span>
+                </Divider>
+              </Center>
+            )}
 
             <SubHeading>Fill in the details to complete application</SubHeading>
 

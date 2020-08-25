@@ -12,7 +12,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 import { Industries } from "pages/common/industry";
 import { useHistory } from "react-router-dom";
 import { useStickyDispatch } from "contexts/app/app.provider";
-import { openModal } from "@redq/reuse-modal";
+import { openModal, closeModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import Error500 from "components/Error/Error500";
 import Loader from "components/Loader/Loader";
@@ -113,11 +113,12 @@ function InternshipPost() {
         setSubmitting(false);
         console.log("res", res.data);
         handleModal(
-          "Job Created Successfully ✔",
+          "Internship Created Successfully ✔",
           `${res.data.title} - ${res.data.location} @ ${res.data.salary}`
         );
         setTimeout(() => {
           setLoading(false);
+          closeModal();
           history.push(`/dashboard/internships/${res.data.id}`);
         }, 2000);
       })

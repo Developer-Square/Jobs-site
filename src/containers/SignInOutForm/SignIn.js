@@ -7,7 +7,7 @@ import {
   Heading,
   SubHeading,
   OfferSection,
-  Offer,
+  Offer
   // Divider,
 } from "./SignInOutForm.style";
 import { Formik, Form } from "formik";
@@ -21,7 +21,7 @@ import axios from "axios";
 import {
   unhashPassword,
   addObjectToLocalStorageObject,
-  addToLocalStorageArray,
+  addToLocalStorageArray
 } from "helpers";
 import { BASE_URL } from "constants/constants";
 import { tokenConfig } from "helpers";
@@ -43,25 +43,25 @@ export default function SignInModal() {
     if (localStorage.getItem("thedb_auth_profile") !== null) {
       setInitialValues({
         login: JSON.parse(localStorage.getItem("thedb_auth_profile")).email,
-        password: unhashPassword(),
+        password: unhashPassword()
       });
     } else {
       setInitialValues({
         login: "",
-        password: "",
+        password: ""
       });
     }
   }, []);
 
   const toggleSignUpForm = () => {
     authDispatch({
-      type: "SIGNUP",
+      type: "SIGNUP"
     });
   };
 
   const toggleForgotPassForm = () => {
     authDispatch({
-      type: "FORGOTPASS",
+      type: "FORGOTPASS"
     });
   };
 
@@ -75,7 +75,7 @@ export default function SignInModal() {
     password: Yup.string()
       .min(8, passwordNotLongEnough)
       .max(100)
-      .required(fieldRequired),
+      .required(fieldRequired)
   });
 
   const onSubmit = (values, { setErrors, setSubmitting }) => {
@@ -88,7 +88,7 @@ export default function SignInModal() {
       try {
         axios
           .post(`${BASE_URL}/accounts/login/`, body)
-          .then(async (res) => {
+          .then(async res => {
             console.log("data received", res);
             setSubmitting(false);
             var roles;
@@ -99,15 +99,12 @@ export default function SignInModal() {
             var payload = {};
 
             let extraPayloadData = {
-              token: res.data.token,
+              token: res.data.token
             };
             // hashPassword(values.password_confirm);
             // eslint-disable-next-line no-unused-vars
             payload = { ...payload, ...extraPayloadData };
             addObjectToLocalStorageObject("thedb_auth_payload", payload);
-
-            let auth_profile = res.data;
-            addObjectToLocalStorageObject("thedb_auth_profile", auth_profile);
 
             let profile = {};
             let email = { email: values.email, secret: values.password };
@@ -116,23 +113,23 @@ export default function SignInModal() {
             if (typeof window !== "undefined") {
               localStorage.setItem("access_token", `${res.data.token}`);
               authDispatch({
-                type: "LOGIN_SUCCESS",
+                type: "LOGIN_SUCCESS"
               });
               authDispatch({
                 type: "UPDATE",
                 payload: {
                   ...state,
-                  profile,
-                },
+                  profile
+                }
               });
-              await new Promise((resolve) => setTimeout(resolve, 1000));
+              await new Promise(resolve => setTimeout(resolve, 1000));
 
               // closeModal();
             }
             // CHECK TOKEN & LOAD USER
             axios
               .get(`${BASE_URL}/accounts/profile/`, tokenConfig())
-              .then(async (res) => {
+              .then(async res => {
                 let auth_profile = res.data;
                 addObjectToLocalStorageObject(
                   "thedb_auth_profile",
@@ -142,12 +139,12 @@ export default function SignInModal() {
                   type: "UPDATE",
                   payload: {
                     ...state,
-                    profile: auth_profile,
-                  },
+                    profile: auth_profile
+                  }
                 });
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 1000));
               })
-              .catch((err) => {
+              .catch(err => {
                 if (err.response) {
                   setErrors(err.response.data);
                 } else {
@@ -158,12 +155,12 @@ export default function SignInModal() {
               });
             axios
               .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
-              .then(async (res) => {
+              .then(async res => {
                 console.log("applicant data", res.data);
-                await new Promise((resolve) => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 const applications = res.data.results
                   .filter(
-                    (filteredApplications) =>
+                    filteredApplications =>
                       filteredApplications.applicant ===
                       JSON.parse(localStorage.getItem("thedb_auth_profile"))[
                         "id"
@@ -177,7 +174,7 @@ export default function SignInModal() {
                 console.log("applications", applications);
                 addToLocalStorageArray("thedb_applications", applications);
               })
-              .catch((err) => {
+              .catch(err => {
                 console.log("error", err);
               });
             // if ((res.status = 200)) {
@@ -186,7 +183,7 @@ export default function SignInModal() {
             console.log("response", res);
             history.push("/dashboard");
           })
-          .catch((err) => {
+          .catch(err => {
             if (err.response) {
               setErrors(
                 err.response.data.detail === "Login or password invalid."
@@ -226,7 +223,7 @@ export default function SignInModal() {
           validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
-          {(formik) => {
+          {formik => {
             return (
               <Form>
                 <FormikControl

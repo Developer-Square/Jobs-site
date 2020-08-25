@@ -1,6 +1,7 @@
 // import React from "react";
 import Dashboard from "pages/Dashboard/Dashboard";
 import Profile from "pages/Profile/Profile";
+import ProfileView from "pages/Profile/ProfileView";
 import Jobs from "pages/Jobs/Jobs";
 import Gigs from "pages/Gigs/Gigs";
 import MyGigs from "pages/Gigs/MyGigs";
@@ -11,6 +12,7 @@ import MyJobs from "pages/Jobs/MyJobs";
 import GigManage from "pages/Gigs/GigManage";
 import InternshipManage from "pages/Internships/InternshipManage";
 import Applications from "pages/Applications/Applications";
+import SingleView from "pages/SingleView/SingleView";
 
 export {
   Dashboard,
@@ -25,4 +27,6 @@ export {
   GigManage,
   InternshipManage,
   Applications,
+  ProfileView,
+  SingleView,
 };

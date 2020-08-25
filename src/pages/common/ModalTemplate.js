@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { useHistory } from "react-router-dom";
 import {
   OfferSection,
   Offer,
@@ -15,7 +15,11 @@ import Error500 from "components/Error/Error500";
 import Loader from "components/Loader/Loader";
 import moment from "moment";
 import { CURRENCY } from "constants/constants";
+import Button from "components/Button/Button";
+import { closeModal } from "@redq/reuse-modal";
+
 function ModalTemplate(account, application, actions) {
+  const history = useHistory();
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -57,9 +61,26 @@ function ModalTemplate(account, application, actions) {
           <Loader />
         ) : (
           <>
-            <Heading>
-              {account.full_name} ({account.email})
-            </Heading>
+            <Heading>{account.full_name}</Heading>
+            <SubHeading>({account.email})</SubHeading>
+            <SubHeading>
+              <Button
+                onClick={() => {
+                  history.push(`/dashboard/profile/${account.id}`);
+                  closeModal();
+                }}
+                size="small"
+                title={`View Profile`}
+                style={{
+                  fontSize: 15,
+                  color: "#5918e6",
+                  backgroundColor: "#e6c018",
+                  float: "right",
+                }}
+              />
+            </SubHeading>
+            <br />
+            <br />
             <SubHeading>
               Budget {CURRENCY}
               {profile.budget}
@@ -69,7 +90,10 @@ function ModalTemplate(account, application, actions) {
               {moment(new Date()).diff(moment(profile.applied_on), "days")} days
               ago
             </SubHeading>
-            <SubHeading>Comment : {profile.comment}</SubHeading>
+            <SubHeading>
+              Comment : <br />
+              {profile.comment}
+            </SubHeading>
             <OfferSection>
               <Offer>{actions}</Offer>
             </OfferSection>

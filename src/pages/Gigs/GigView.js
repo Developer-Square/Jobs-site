@@ -155,7 +155,7 @@ function GigView() {
                   filteredJob.job_type === "Gig"
               )
               .map((job, index) => (
-                <li key={index}>
+                <li key={job.id}>
                   <section>
                     <ListingLogo>
                       <ImageWrapper
