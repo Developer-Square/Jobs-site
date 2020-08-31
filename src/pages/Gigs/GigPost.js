@@ -26,7 +26,7 @@ function GigPost() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!profile.dummy_verified) {
+    if (!profile.is_verified) {
       history.push(`/dashboard/gigs`);
     }
     setTimeout(() => {
@@ -200,8 +200,9 @@ function GigPost() {
                   />
                   <FormikControl
                     control="textarea"
-                    label="description"
+                    label="Description"
                     name="description"
+                    rte={true}
                   />
                   <Button
                     type="submit"

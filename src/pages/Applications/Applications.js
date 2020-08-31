@@ -14,7 +14,7 @@ import {
   ListSpan,
   ListingIcons,
 } from "styles/pages.style";
-import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
+import { SearchIcon, RefundIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 import { openModal } from "@redq/reuse-modal";
@@ -182,7 +182,7 @@ function GigView() {
                                   }
                                   size="small"
                                   title={`Manage Gig`}
-                                  disabled={!profile.dummy_verified}
+                                  disabled={!profile.is_verified}
                                   style={{
                                     fontSize: 15,
                                     color: "#5918e6",
@@ -203,9 +203,11 @@ function GigView() {
                                         .includes(app.id) ? (
                                         <Button
                                           onClick={() =>
-                                            profile.dummy_verified
+                                            profile.is_verified
                                               ? handleApplication(app.id)
-                                              : handleModal()
+                                              : handleModal(
+                                                  `Confrim email to Apply`
+                                                )
                                           }
                                           size="small"
                                           title={`Applied ✔`}
@@ -222,17 +224,19 @@ function GigView() {
                                       ) : (
                                         <Button
                                           onClick={() =>
-                                            profile.dummy_verified
+                                            profile.is_verified
                                               ? handleApplication(app.id)
-                                              : handleModal()
+                                              : handleModal(
+                                                  `Confrim email to Apply`
+                                                )
                                           }
                                           size="small"
                                           title={`Apply`}
-                                          // disabled={!profile.dummy_verified}
+                                          // disabled={!profile.is_verified}
                                           style={{
                                             fontSize: 15,
                                             color: "#5918e6",
-                                            backgroundColor: profile.dummy_verified
+                                            backgroundColor: profile.is_verified
                                               ? "#e6c018"
                                               : "#f2f2f2",
                                             float: "right",
@@ -245,9 +249,11 @@ function GigView() {
                                   ) : (
                                     <Button
                                       onClick={() =>
-                                        profile.dummy_verified
+                                        profile.is_verified
                                           ? handleApplication(app.id)
-                                          : handleModal()
+                                          : handleModal(
+                                              `Confrim email to Apply`
+                                            )
                                       }
                                       size="small"
                                       title={`Applied ✔`}
@@ -268,15 +274,18 @@ function GigView() {
                           </h3>
                           <ListingIcons>
                             <li>
-                              <GiftBox />
-                              {app.description}
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: app.description,
+                                }}
+                              />
                             </li>
                             <li>
                               <SearchIcon />
                               {app.location}
                             </li>
                             <li>
-                              <LockIcon />
+                              <RefundIcon />
                               {CURRENCY}
                               {app.salary} - {CURRENCY}
                               {app.salary}

@@ -24,7 +24,7 @@ import {
   TypeList,
 } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
-import { LockIcon } from "components/AllSvgIcon";
+import { RefundIcon } from "components/AllSvgIcon";
 import ModalTemplate from "pages/common/ModalTemplate";
 import { H3 } from "styles/pages.style";
 
@@ -458,6 +458,7 @@ function GigManage() {
     <CardWrapper>
       <h4>
         Manage Applications
+        {initialValues ? ` (${initialValues.title})` : " ..."}
         <Button
           onClick={isEdit ? setList : setForm}
           size="small"
@@ -548,8 +549,9 @@ function GigManage() {
                         />
                         <FormikControl
                           control="textarea"
-                          label="description"
+                          label="Description"
                           name="description"
+                          rte={true}
                         />
                         <Button
                           type="submit"
@@ -649,7 +651,7 @@ function GigManage() {
                             </h3>
                             <ListingIcons>
                               <li>
-                                <LockIcon />
+                                <RefundIcon />
                                 {applicant.email}
                               </li>
                             </ListingIcons>

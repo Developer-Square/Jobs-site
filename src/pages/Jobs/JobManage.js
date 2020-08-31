@@ -20,7 +20,7 @@ import {
   TypeList,
 } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
-import { LockIcon } from "components/AllSvgIcon";
+import { RefundIcon } from "components/AllSvgIcon";
 import { openModal } from "@redq/reuse-modal";
 import Error500 from "components/Error/Error500";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
@@ -443,6 +443,7 @@ function JobManage() {
     <CardWrapper>
       <h4>
         Manage Applications
+        {initialValues ? ` (${initialValues.title})` : " ..."}
         <Button
           onClick={isEdit ? setList : setForm}
           size="small"
@@ -534,8 +535,9 @@ function JobManage() {
                         />
                         <FormikControl
                           control="textarea"
-                          label="description"
+                          label="Description"
                           name="description"
+                          rte={true}
                         />
                         <Button
                           type="submit"
@@ -633,7 +635,7 @@ function JobManage() {
                         </h3>
                         <ListingIcons>
                           <li>
-                            <LockIcon />
+                            <RefundIcon />
                             {applicant.email}
                           </li>
                         </ListingIcons>

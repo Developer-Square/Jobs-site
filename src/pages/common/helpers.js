@@ -31,28 +31,40 @@ export const categorySelector = (category) => {
   }
 };
 
-export const getOrgLogo = async (creator_id) => {
+export const getOrgLogo = (creator_id) => {
   var orgProfile = "";
   try {
     axios
       .get(`${BASE_URL}/organization/`, tokenConfig())
       .then((res) => {
-        console.log("industry data", res.data.results);
-        let orgProfile = res.data.results.filter(
+        const filteredData = res.data.results.filter(
           (filteredProfile) => filteredProfile.user === creator_id
-        )[0].logo;
-        console.log("orgProfile", orgProfile);
-        return orgProfile;
+        )[0];
+        orgProfile = filteredData.logo
+          ? filteredData.logo
+          : axios
+              .get(`${BASE_URL}/individual/`, tokenConfig())
+              .then((res) => {
+                const filteredData = res.data.results.filter(
+                  (filteredProfile) => filteredProfile.user === creator_id
+                )[0];
+                orgProfile = filteredData.image;
+              })
+              .catch((err) => {
+                console.log("Catching Errors:", err);
+                return <Error500 err={err} />;
+              });
+        // console.log("orgProfile", orgProfile);
       })
       .catch((err) => {
         console.log("Catching Errors:", err);
         return <Error500 err={err} />;
       });
-    return orgProfile;
   } catch (error) {
     return <Error500 err={error} />;
   }
-
+  console.log("orgProfile", orgProfile);
+  return { orgProfile };
   // return "http://127.0.0.1:8000/static/img/default.jpg";
 };
 
@@ -111,4 +123,10 @@ export const getApplications = () => {
   } catch (error) {
     return <Error500 err={error} />;
   }
+};
+
+export const generateHTML = (str) => {
+  // newDOM = new DOMParser().parseFromString(str,"text/html")
+  const htmlFragment = document.createRange().createContextualFragment(str);
+  return htmlFragment;
 };

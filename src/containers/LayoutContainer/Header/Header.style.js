@@ -367,7 +367,7 @@ export const HamburgerIcon = styled.div`
   position: relative;
   > span {
     display: block;
-    background-color: ${themeGet("colors.darkBold", "#0D1136")};
+    background-color: ${themeGet("colors.lightColor", "#F7F7F7")};
     border-radius: 6px;
     height: 2px;
     margin-bottom: 6px;
@@ -408,7 +408,7 @@ export const DrawerContentWrapper = styled.div`
 export const DrawerClose = styled.div`
   display: block;
   position: absolute;
-  left: 35px;
+  right: 0;
   top: 14px;
   color: ${themeGet("colors.darkRegular", "#77798C")};
   cursor: pointer;

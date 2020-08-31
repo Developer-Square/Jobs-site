@@ -14,7 +14,7 @@ import {
   ListSpan,
   ListingIcons,
 } from "styles/pages.style";
-import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
+import { SearchIcon, RefundIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 import { openModal, closeModal } from "@redq/reuse-modal";
@@ -128,17 +128,17 @@ function GigView() {
         Gigs Listing{" "}
         <Button
           onClick={() =>
-            profile.dummy_verified
+            profile.is_verified
               ? togglePost()
               : handleModal("Confirm Email First to post a gig")
           }
           size="small"
           title="Post a Gig"
-          // disabled={!profile.dummy_verified}
+          // disabled={!profile.is_verified}
           style={{
             fontSize: 15,
             color: "#5918e6",
-            backgroundColor: profile.dummy_verified ? "#e6c018" : "#f2f2f2",
+            backgroundColor: profile.is_verified ? "#e6c018" : "#f2f2f2",
             float: "right",
           }}
         />
@@ -159,12 +159,13 @@ function GigView() {
                   <section>
                     <ListingLogo>
                       <ImageWrapper
-                        url={job.companyLogo}
+                        // url={job.picture}
                         alt={"company logo"}
+                        id={job.creator}
                       />
                     </ListingLogo>
                     <ListingTitle>
-                      <H4>
+                      <h3>
                         {job.title}
                         <TypeList>
                           <ListSpan className={`${job.job_type}`}>
@@ -181,7 +182,7 @@ function GigView() {
                               }
                               size="small"
                               title={`Manage Gig`}
-                              disabled={!profile.dummy_verified}
+                              disabled={!profile.is_verified}
                               style={{
                                 fontSize: 15,
                                 color: "#5918e6",
@@ -204,9 +205,11 @@ function GigView() {
                                         .includes(job.id) ? (
                                         <Button
                                           onClick={() =>
-                                            profile.dummy_verified
+                                            profile.is_verified
                                               ? handleApplication(job.id)
-                                              : handleModal()
+                                              : handleModal(
+                                                  `Confrim email to Apply`
+                                                )
                                           }
                                           size="small"
                                           title={`Applied ✔`}
@@ -223,17 +226,19 @@ function GigView() {
                                       ) : (
                                         <Button
                                           onClick={() =>
-                                            profile.dummy_verified
+                                            profile.is_verified
                                               ? handleApplication(job.id)
-                                              : handleModal()
+                                              : handleModal(
+                                                  `Confrim email to Apply`
+                                                )
                                           }
                                           size="small"
                                           title={`Apply`}
-                                          // disabled={!profile.dummy_verified}
+                                          // disabled={!profile.is_verified}
                                           style={{
                                             fontSize: 15,
                                             color: "#5918e6",
-                                            backgroundColor: profile.dummy_verified
+                                            backgroundColor: profile.is_verified
                                               ? "#e6c018"
                                               : "#f2f2f2",
                                             float: "right",
@@ -246,17 +251,19 @@ function GigView() {
                                   ) : (
                                     <Button
                                       onClick={() =>
-                                        profile.dummy_verified
+                                        profile.is_verified
                                           ? handleApplication(job.id)
-                                          : handleModal()
+                                          : handleModal(
+                                              `Confrim email to Apply`
+                                            )
                                       }
                                       size="small"
                                       title={`Apply`}
-                                      // disabled={!profile.dummy_verified}
+                                      // disabled={!profile.is_verified}
                                       style={{
                                         fontSize: 15,
                                         color: "#5918e6",
-                                        backgroundColor: profile.dummy_verified
+                                        backgroundColor: profile.is_verified
                                           ? "#e6c018"
                                           : "#f2f2f2",
                                         float: "right",
@@ -270,18 +277,29 @@ function GigView() {
                             </>
                           )}
                         </TypeList>
-                      </H4>
+                      </h3>
                       <ListingIcons>
                         <li>
-                          <GiftBox />
-                          {job.description}
+                          <div
+                            className={`description`}
+                            style={{
+                              height: "20px",
+                              width: "100%",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                            }}
+                            dangerouslySetInnerHTML={{
+                              __html: job.description,
+                            }}
+                          />
                         </li>
                         <li>
                           <SearchIcon />
                           {job.location}
                         </li>
                         <li>
-                          <LockIcon />
+                          <RefundIcon />
                           {CURRENCY}
 
                           {job.salary}

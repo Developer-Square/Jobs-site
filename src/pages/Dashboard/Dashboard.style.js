@@ -34,7 +34,7 @@ export const FormWrapper = styled.div`
   padding: 15px 30px;
   color: #333;
   display: block;
-  div {
+  > div {
     margin: 0 20px;
     @media (max-width: 710px) {
       margin: 0;

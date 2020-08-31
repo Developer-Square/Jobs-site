@@ -20,12 +20,13 @@ import {
   TypeList,
 } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
-import { LockIcon } from "components/AllSvgIcon";
+import { RefundIcon } from "components/AllSvgIcon";
 import Error500 from "components/Error/Error500";
 import Loader from "components/Loader/Loader";
 import { openModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import ModalTemplate from "pages/common/ModalTemplate";
+import { H3 } from "styles/pages.style";
 
 function InternshipManage() {
   const match = useRouteMatch();
@@ -425,6 +426,7 @@ function InternshipManage() {
     <CardWrapper>
       <h4>
         Manage Applications
+        {initialValues ? ` (${initialValues.title})` : " ..."}
         <Button
           onClick={isEdit ? setList : setForm}
           size="small"
@@ -504,8 +506,9 @@ function InternshipManage() {
                         />
                         <FormikControl
                           control="textarea"
-                          label="description"
+                          label="Description"
                           name="description"
+                          rte={true}
                         />
                         <Button
                           type="submit"
@@ -536,7 +539,7 @@ function InternshipManage() {
                         />
                       </ListingLogo>
                       <ListingTitle>
-                        <h3>
+                        <H3>
                           {applicant.full_name}
                           <TypeList>
                             {userApplied.includes(applicant.id) && (
@@ -600,10 +603,10 @@ function InternshipManage() {
                               />
                             )}
                           </TypeList>
-                        </h3>
+                        </H3>
                         <ListingIcons>
                           <li>
-                            <LockIcon />
+                            <RefundIcon />
                             {applicant.email}
                           </li>
                         </ListingIcons>

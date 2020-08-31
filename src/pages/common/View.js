@@ -14,7 +14,7 @@ import {
   ListSpan,
   ListingIcons,
 } from "styles/pages.style";
-import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
+import { SearchIcon, RefundIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 import { openModal } from "@redq/reuse-modal";
@@ -108,17 +108,17 @@ function View({ type, name, isBusiness, isIndividual }) {
         s Listing{" "}
         <Button
           onClick={() =>
-            profile.dummy_verified
+            profile.is_verified
               ? togglePost()
               : handleModal("Confirm Email First to post a gig")
           }
           size="small"
           title="Post a "
-          // disabled={!profile.dummy_verified}
+          // disabled={!profile.is_verified}
           style={{
             fontSize: 15,
             color: "#5918e6",
-            backgroundColor: profile.dummy_verified ? "#e6c018" : "#f2f2f2",
+            backgroundColor: profile.is_verified ? "#e6c018" : "#f2f2f2",
             float: "right",
           }}
         />
@@ -138,7 +138,7 @@ function View({ type, name, isBusiness, isIndividual }) {
                 .map((job, index) => (
                   <>
                     {job !== null && job !== undefined ? (
-                      <li key={index}>
+                      <li key={index} className={`${job.job_type}`}>
                         <section>
                           <ListingLogo>
                             <ImageWrapper
@@ -164,7 +164,7 @@ function View({ type, name, isBusiness, isIndividual }) {
                                     }
                                     size="small"
                                     title={`Manage `}
-                                    disabled={!profile.dummy_verified}
+                                    disabled={!profile.is_verified}
                                     style={{
                                       fontSize: 15,
                                       color: "#5918e6",
@@ -181,9 +181,11 @@ function View({ type, name, isBusiness, isIndividual }) {
                                       .includes(job.id) ? (
                                       <Button
                                         onClick={() =>
-                                          profile.dummy_verified
+                                          profile.is_verified
                                             ? handleApplication(job.id)
-                                            : handleModal()
+                                            : handleModal(
+                                                `Confrim email to Apply`
+                                              )
                                         }
                                         size="small"
                                         title={`Applied ✔`}
@@ -200,17 +202,19 @@ function View({ type, name, isBusiness, isIndividual }) {
                                     ) : (
                                       <Button
                                         onClick={() =>
-                                          profile.dummy_verified
+                                          profile.is_verified
                                             ? handleApplication(job.id)
-                                            : handleModal()
+                                            : handleModal(
+                                                `Confrim email to Apply`
+                                              )
                                         }
                                         size="small"
                                         title={`Apply`}
-                                        // disabled={!profile.dummy_verified}
+                                        // disabled={!profile.is_verified}
                                         style={{
                                           fontSize: 15,
                                           color: "#5918e6",
-                                          backgroundColor: profile.dummy_verified
+                                          backgroundColor: profile.is_verified
                                             ? "#e6c018"
                                             : "#f2f2f2",
                                           float: "right",
@@ -225,15 +229,18 @@ function View({ type, name, isBusiness, isIndividual }) {
                             </h3>
                             <ListingIcons>
                               <li>
-                                <GiftBox />
-                                {job.description}
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: job.description,
+                                  }}
+                                />
                               </li>
                               <li>
                                 <SearchIcon />
                                 {job.location}
                               </li>
                               <li>
-                                <LockIcon />
+                                <RefundIcon />
                                 {CURRENCY}
 
                                 {job.salary}

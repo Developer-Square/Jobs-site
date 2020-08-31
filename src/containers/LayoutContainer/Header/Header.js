@@ -22,6 +22,11 @@ const Header = ({ className, isSticky }) => {
     authState: { isAuthenticated },
     authDispatch,
   } = React.useContext(AuthContext);
+  const img = localStorage.getItem("thedb_individual_profile")
+    ? JSON.parse(localStorage.getItem("thedb_individual_profile"))["image"]
+    : localStorage.getItem("thedb_org_profile")
+    ? JSON.parse(localStorage.getItem("thedb_org_profile"))["logo"]
+    : UserImage;
   const { state, dispatch } = useContext(SearchContext);
 
   const handleLogout = () => {
@@ -98,7 +103,7 @@ const Header = ({ className, isSticky }) => {
         isAuthenticated={isAuthenticated}
         onJoin={handleJoin}
         onLogout={handleLogout}
-        avatar={UserImage}
+        avatar={img}
       />
     </HeaderWrapper>
   );

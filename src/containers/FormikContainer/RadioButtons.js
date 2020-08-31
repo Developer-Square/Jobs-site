@@ -60,7 +60,7 @@ const FormInput = styled.div`
     width: 14px;
   }
 
-  > div {
+  .error {
     color: palevioletred;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     font-style: italic;
@@ -87,8 +87,7 @@ const Fragment = styled.div`
     height: 20px;
     width: 14px;
   }
-
-  > div {
+  .error {
     color: palevioletred;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     font-style: italic;

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 export const MobileCarouselDropdown = styled.div`
   @media (min-width: 990px) {
@@ -90,11 +89,11 @@ const CategoriesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: calc(100% + 20px);
-  left: -10px;
+  /* left: -10px; */
   position: relative;
   align-items: center;
 `;
-const CategoryBox = styled(Link)`
+const CategoryBox = styled.div`
   width: calc(25% - 20px);
   align-content: center;
   justify-content: center;
@@ -105,7 +104,12 @@ const CategoryBox = styled(Link)`
   padding: 25px;
   border-radius: 4px;
   transition: 0.35s;
-  background: #5918e6;
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 0) 25%,
+    rgba(255, 255, 255, 0.2)
+  );
+  background-color: #5918e6;
   margin: 10px;
   position: relative;
   box-sizing: border-box;
@@ -140,7 +144,7 @@ const BoxIcon = styled.div`
   }
 `;
 const BoxCounter = styled.div`
-  color: #e6c018;
+  color: #ffffff;
   margin: 0 auto 0 0;
   transition: 0.35s;
   margin-bottom: 18px;
@@ -150,7 +154,7 @@ const BoxCounter = styled.div`
   top: 50%;
   background: transparent !important;
   font-size: 48px;
-  opacity: 0.18;
+  opacity: 0.48;
   font-weight: 500;
   transform: translateY(-50%);
 `;
@@ -301,6 +305,44 @@ const LeftContent = styled.div`
   margin-bottom: 35px;
   position: relative;
 
+  .full-time,
+  .fulltime {
+    color: #186fc9;
+    border-left: 4px solid #186fc9;
+    background-color: rgba(24, 111, 201, 0.07);
+  }
+  .internship,
+  .Internship {
+    color: #e1d123;
+    border-left: 4px solid #e1d123;
+    background-color: rgba(225, 209, 35, 0.07);
+  }
+  .temporary {
+    color: #e12335;
+    border-left: 4px solid #e12335;
+    background-color: rgba(225, 35, 53, 0.07);
+  }
+  .part-time,
+  .parttime {
+    color: #f1630d;
+    border-left: 4px solid #f1630d;
+    background-color: rgba(241, 99, 13, 0.07);
+  }
+  .freelance,
+  .volunteering,
+  .Volunteering {
+    color: #c018e6;
+    border-left: 4px solid #c018e6;
+    background-color: rgba(83, 180, 39, 0.07);
+  }
+  .gig,
+  .Gig {
+    color: #53b427;
+    border-left: 4px solid #53b427;
+    /* border: 1px solid #53b427; */
+    background-color: rgba(83, 180, 39, 0.07);
+  }
+
   ul {
     /* margin-bottom: 30px; */
     list-style: none;
@@ -312,12 +354,15 @@ const LeftContent = styled.div`
       line-height: 24px;
       transition: 0.3s !important;
       z-index: auto !important;
-      background-color: #fdfdfd;
+      > div {
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
       section {
         border-radius: 4px 4px 0 0;
-        background-color: #fffcee;
         display: flex;
-        padding: 25px;
+        padding: 10px 25px;
         border-left: 4px solid #eee;
         transition: 0.3s;
         position: relative;
@@ -326,13 +371,21 @@ const LeftContent = styled.div`
         margin-top: -1px;
         width: auto;
         height: auto;
-        background: #fff;
+        color: #808080;
+        .description {
+          display: block;
+          @media (max-width: 768px) {
+            display: none;
+          }
+        }
+        @media (max-width: 768px) {
+          padding: 10px;
+        }
       }
       a {
         border-radius: 4px 4px 0 0;
-        background-color: #fffcee;
         display: flex;
-        padding: 25px;
+        padding: 10px 25px;
         border-left: 4px solid #eee;
         transition: 0.3s;
         position: relative;
@@ -341,7 +394,16 @@ const LeftContent = styled.div`
         margin-top: -1px;
         width: auto;
         height: auto;
-        background: #fff;
+        color: #808080;
+        .description {
+          display: block;
+          @media (max-width: 768px) {
+            display: none;
+          }
+        }
+        @media (max-width: 768px) {
+          padding: 10px;
+        }
       }
     }
   }
@@ -368,9 +430,11 @@ const ListingTitle = styled.div`
   flex-wrap: wrap;
   padding-left: 25px;
   padding-right: 110px;
+  width: 95%;
 
   @media (max-width: 768px) {
-    padding-right: 0;
+    padding: 0 10px;
+    width: 85%;
   }
   h3 {
     @media (max-width: 768px) {
@@ -385,10 +449,15 @@ const ListingIcons = styled.ul`
   list-style-type: circle;
   list-style-position: outside;
   list-style: none outside;
+  width: 100%;
   li {
     padding: 0px;
     border-top: 0px;
     border: none;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     svg {
       color: #999;
       margin-right: 4px;
@@ -402,7 +471,7 @@ const ListingIcons = styled.ul`
 const TypeList = styled.div`
   position: absolute;
   right: 25px;
-  top: 50%;
+  /* top: 50%; */
   transform: translateY(-50%);
   text-align: right;
   max-width: 220px;

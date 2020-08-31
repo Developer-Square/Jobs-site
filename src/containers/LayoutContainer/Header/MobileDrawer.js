@@ -61,6 +61,11 @@ const MobileDrawer = () => {
   const location = useLocation();
   const path = location.pathname.replace(/\/+$/, "");
   const pathname = path[0] === "/" ? path.substr(1) : path;
+  const img = localStorage.getItem("thedb_individual_profile")
+    ? JSON.parse(localStorage.getItem("thedb_individual_profile"))["image"]
+    : localStorage.getItem("thedb_org_profile")
+    ? JSON.parse(localStorage.getItem("thedb_org_profile"))["logo"]
+    : UserImage;
 
   const isHomePage = isCategoryPage(pathname);
   // Toggle drawer
@@ -145,7 +150,7 @@ const MobileDrawer = () => {
             {isAuthenticated ? (
               <LoginView>
                 <UserAvatar>
-                  <img src={UserImage} alt="user_avatar" />
+                  <img src={img} alt="user_avatar" />
                 </UserAvatar>
                 <UserDetails>
                   <h3>{profile.full_name}</h3>

@@ -26,7 +26,7 @@ function JobPost() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   useEffect(() => {
-    if (!profile.dummy_verified) {
+    if (!profile.is_verified) {
       history.push(`/dashboard/jobs`);
     }
     setTimeout(() => {
@@ -213,8 +213,9 @@ function JobPost() {
                     />
                     <FormikControl
                       control="textarea"
-                      label="description"
+                      label="Description"
                       name="description"
+                      rte={true}
                     />
                     <Button
                       type="submit"

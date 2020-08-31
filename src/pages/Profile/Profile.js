@@ -12,7 +12,7 @@ import { BASE_URL } from "constants/constants";
 import {
   formTokenConfig,
   tokenConfig,
-  addObjectToLocalStorageObject
+  addObjectToLocalStorageObject,
 } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
@@ -22,10 +22,11 @@ import EmailVerificationModal from "containers/SignInOutForm/emailVerificationMo
 import Loader from "components/Loader/Loader";
 import Error500 from "components/Error/Error500";
 import ProfileView from "./ProfileView";
+import { Br } from "styles/pages.style";
 
 function Profile() {
   const {
-    authState: { profile }
+    authState: { profile },
   } = useContext(AuthContext);
   const [initialValues, setInitialValues] = useState();
   const [initialProfileValues, setInitialProfileValues] = useState();
@@ -33,10 +34,10 @@ function Profile() {
   const [editting, setEditting] = useState(false);
   const useDispatch = useStickyDispatch();
   const setView = useCallback(() => useDispatch({ type: "VIEW" }), [
-    useDispatch
+    useDispatch,
   ]);
   const setEdit = useCallback(() => useDispatch({ type: "EDIT" }), [
-    useDispatch
+    useDispatch,
   ]);
   const currentForm = useAppState("currentForm");
   const isEdit = currentForm === "edit";
@@ -51,10 +52,10 @@ function Profile() {
         try {
           axios
             .get(`${BASE_URL}/individual/`, tokenConfig())
-            .then(res => {
+            .then((res) => {
               console.log("res", res.data);
               const individual = res.data.results.filter(
-                filteredIndividual => filteredIndividual.user === profile.id
+                (filteredIndividual) => filteredIndividual.user === profile.id
               );
               if (individual.length > 0) {
                 addObjectToLocalStorageObject(
@@ -62,10 +63,12 @@ function Profile() {
                   individual[0]
                 );
                 setEditting(true);
+              } else {
+                setEdit();
               }
               setLoading(false);
             })
-            .catch(err => {
+            .catch((err) => {
               setError(err);
               console.log("frererefrr", err);
             });
@@ -76,10 +79,10 @@ function Profile() {
         try {
           axios
             .get(`${BASE_URL}/organization/`, tokenConfig())
-            .then(res => {
+            .then((res) => {
               console.log("res", res.data);
               const organization = res.data.results.filter(
-                filteredCompany => filteredCompany.user === profile.id
+                (filteredCompany) => filteredCompany.user === profile.id
               );
               if (organization.length > 0) {
                 addObjectToLocalStorageObject(
@@ -87,10 +90,12 @@ function Profile() {
                   organization[0]
                 );
                 setEditting(true);
+              } else {
+                setEdit();
               }
               setLoading(false);
             })
-            .catch(err => {
+            .catch((err) => {
               setError(err);
             });
         } catch (error) {
@@ -111,7 +116,7 @@ function Profile() {
         salary: "",
         description: "",
         experience: [],
-        qualifications: []
+        qualifications: [],
       });
       if (localStorage.getItem("thedb_individual_profile")) {
         setInitialProfileValues(
@@ -131,7 +136,7 @@ function Profile() {
           location: "",
           gender: "",
           status: "",
-          user: localStorage.getItem("thedb_auth_profile") ? profile.id : ""
+          user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
         });
       }
       if (localStorage.getItem("thedb_org_profile")) {
@@ -147,7 +152,7 @@ function Profile() {
           location: "",
           address: "",
           logo: "LogoImage",
-          user: profile.id
+          user: profile.id,
         });
       }
       setLoading(false);
@@ -158,13 +163,13 @@ function Profile() {
   const genderOptions = [
     { value: "", key: "Select Gender" },
     { value: "male", key: "Male" },
-    { value: "female", key: "Female" }
+    { value: "female", key: "Female" },
   ];
   const statusOptions = [
     { value: "", key: "Select Options" },
     { value: "Open", key: "Open to offers" },
     { value: "Busy", key: "Busy" },
-    { value: "Looking", key: "Actively looking" }
+    { value: "Looking", key: "Actively looking" },
   ];
 
   const emailNotLongEnough = "email must be at least 3 characters";
@@ -178,7 +183,7 @@ function Profile() {
       .min(3, emailNotLongEnough)
       .max(100)
       .email(invalidEmail)
-      .required(emailRequired)
+      .required(emailRequired),
   });
   const profileValidationSchema = Yup.object({
     title: Yup.string().required("Required"),
@@ -195,7 +200,7 @@ function Profile() {
         return moment().diff(moment(value), "years") >= 18;
       })
       .required("Required")
-      .nullable()
+      .nullable(),
   });
   const organizationValidationSchema = Yup.object({
     name: Yup.string().required("Required"),
@@ -203,8 +208,8 @@ function Profile() {
     address: Yup.string().required("Required"),
     logo: Yup.mixed().required("Required"),
     website: Yup.string().url("Please enter a valid URL, http:// or https://", {
-      allowLocal: true
-    })
+      allowLocal: true,
+    }),
   });
   const handleModal = (text, subtext) => {
     openModal({
@@ -218,8 +223,8 @@ function Profile() {
         disableDragging: true,
         className: "quick-view-modal",
         width: 458,
-        height: "auto"
-      }
+        height: "auto",
+      },
     });
   };
 
@@ -231,7 +236,7 @@ function Profile() {
       salary,
       description,
       experience,
-      qualifications
+      qualifications,
     } = values;
     const body = {
       email: email,
@@ -241,21 +246,21 @@ function Profile() {
       salary: salary,
       description: description,
       experience: experience,
-      qualifications: qualifications
+      qualifications: qualifications,
     };
     setSubmitting(true);
     setLoading(true);
     try {
       axios
         .post(`${BASE_URL}/accounts/profile/`, body, tokenConfig())
-        .then(res => {
+        .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
           addObjectToLocalStorageObject("thedb_auth_profile", res.data);
           handleModal("Profile Edited Successfully ✔", "");
           setLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
             setErrors(err.response.data);
           } else {
@@ -277,7 +282,7 @@ function Profile() {
       address,
       country,
       location,
-      website
+      website,
     } = values;
     let formData = new FormData();
     console.log("type of image", typeof logo);
@@ -297,14 +302,14 @@ function Profile() {
     try {
       axios
         .post(`${BASE_URL}/organization/`, formData, formTokenConfig())
-        .then(res => {
+        .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
           handleModal("Profile Created Successfully ✔", "");
           addObjectToLocalStorageObject("thedb_org_profile", res.data);
           setLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("res errors", err.response.data);
           if (err.response) {
             if (err.response.data.user) {
@@ -337,7 +342,7 @@ function Profile() {
       address,
       country,
       location,
-      website
+      website,
     } = values;
     let formData = new FormData();
     console.log("type of image", typeof logo);
@@ -363,14 +368,14 @@ function Profile() {
           formData,
           formTokenConfig()
         )
-        .then(res => {
+        .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
           handleModal("Profile Created Successfully ✔", "");
           addObjectToLocalStorageObject("thedb_org_profile", res.data);
           setLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log("res errors", err.response.data);
           if (err.response) {
             if (err.response.data.user) {
@@ -404,7 +409,7 @@ function Profile() {
       about,
       location,
       gender,
-      status
+      status,
     } = values;
     let formData = new FormData();
     if (typeof image !== "string") {
@@ -426,13 +431,13 @@ function Profile() {
     try {
       axios
         .post(`${BASE_URL}/individual/`, formData, formTokenConfig())
-        .then(res => {
+        .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
           handleModal("Profile Updated Successfully ✔", "");
           addObjectToLocalStorageObject("thedb_individual_profile", res.data);
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
             setErrors(err.response.data);
             console.log("errors za data");
@@ -456,7 +461,7 @@ function Profile() {
       about,
       location,
       gender,
-      status
+      status,
     } = values;
 
     let formData = new FormData();
@@ -486,13 +491,13 @@ function Profile() {
           formData,
           formTokenConfig()
         )
-        .then(res => {
+        .then((res) => {
           setSubmitting(false);
           console.log("res", res.data);
           handleModal("Profile Updated Successfully ✔", "");
           addObjectToLocalStorageObject("thedb_individual_profile", res.data);
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.response) {
             setErrors(err.response.data);
             console.log("errors za data");
@@ -524,7 +529,7 @@ function Profile() {
             fontSize: 15,
             color: "#5918e6",
             backgroundColor: "#e6c018",
-            float: "right"
+            float: "right",
           }}
         />
       </h4>
@@ -541,7 +546,7 @@ function Profile() {
                   validationSchema={validationSchema}
                   onSubmit={onSubmit}
                 >
-                  {formik => {
+                  {(formik) => {
                     return (
                       <Form>
                         <FormikControl
@@ -561,12 +566,18 @@ function Profile() {
                           type="email"
                           label="Email"
                           name="email"
-                          onClick={() =>
-                            handleModal("", "Sorry, cant edit email")
+                          onClick={
+                            profile.is_verified
+                              ? () =>
+                                  handleModal(
+                                    "Oops!",
+                                    "Sorry, cant edit email after verification"
+                                  )
+                              : null
                           }
-                          disabled={true}
-                          readOnly
+                          readOnly={profile.is_verified ? true : false}
                         />
+                        <Br />
                         <Button
                           type="submit"
                           size="small"
@@ -589,7 +600,7 @@ function Profile() {
                     validationSchema={profileValidationSchema}
                     onSubmit={editting ? onChangeSubmit : onAddSubmit}
                   >
-                    {formik => {
+                    {(formik) => {
                       return (
                         <Form>
                           <FormikControl
@@ -632,6 +643,7 @@ function Profile() {
                             control="textarea"
                             label="Additional Info"
                             name="about"
+                            rte={true}
                           />
                           <FormikControl
                             control="input"
@@ -645,7 +657,7 @@ function Profile() {
                           <Button
                             type="submit"
                             size="small"
-                            title={formik.isSubmitting ? "Adding... " : "Add"}
+                            title={formik.isSubmitting ? "Adding... " : "Done"}
                             style={{ fontSize: 15, color: "#fff" }}
                             disabled={!formik.isValid}
                           />
@@ -661,7 +673,7 @@ function Profile() {
                     validationSchema={organizationValidationSchema}
                     onSubmit={editting ? onOrgChangeSubmit : onOrgSubmit}
                   >
-                    {formik => {
+                    {(formik) => {
                       return (
                         <Form>
                           <FormikControl
@@ -698,6 +710,7 @@ function Profile() {
                             control="textarea"
                             label="About Company Info"
                             name="description"
+                            rte={true}
                           />
                           <FormikControl
                             control="input"
@@ -714,7 +727,7 @@ function Profile() {
                             title={
                               formik.isSubmitting
                                 ? "Creating Profile... "
-                                : "Add"
+                                : "Done"
                             }
                             style={{ fontSize: 15, color: "#fff" }}
                             disabled={!formik.isValid}

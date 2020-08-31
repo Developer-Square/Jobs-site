@@ -4,7 +4,6 @@ import Sidebar from "./Dashboard/Sidebar/Sidebar";
 import Topbar from "./Dashboard/Topbar/Topbar";
 import DrawerItems from "containers/DrawerItems/DrawerItems";
 import { DrawerProvider } from "contexts/drawer/drawer.provider";
-// import { DrawerContext } from "contexts/drawer/drawer.context";
 import {
   LayoutWrapper,
   ContentWrapper,
@@ -23,14 +22,6 @@ const DashboardLayout = ({ children }) => {
   let [topbarRef, { height }] = useComponentSize();
   let [sidebarRef, { width }] = useComponentSize();
   const { desktop } = useDeviceType();
-  // const { useDrawerDispatch } = useContext(DrawerContext);
-  // // Toggle drawer
-  // const toggleHandler = React.useCallback(() => {
-  //   // eslint-disable-next-line react-hooks/rules-of-hooks
-  //   useDrawerDispatch({
-  //     type: "TOGGLE",
-  //   });
-  // }, [useDrawerDispatch]);
 
   return (
     <DrawerProvider>
@@ -48,7 +39,6 @@ const DashboardLayout = ({ children }) => {
                 style={{
                   height: `calc(100vh - ${height}px)`,
                 }}
-                // onMenuItemClick={toggleHandler}
               />
             </SidedbarDesktop>
             <ContentWrapper

@@ -14,7 +14,7 @@ import {
   ListSpan,
   ListingIcons,
 } from "styles/pages.style";
-import { GiftBox, SearchIcon, LockIcon } from "components/AllSvgIcon";
+import { SearchIcon, RefundIcon } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 
 import { AuthContext } from "contexts/auth/auth.context";
@@ -130,17 +130,17 @@ function InternshipView() {
         {profile.is_individual ? null : (
           <Button
             onClick={() =>
-              profile.dummy_verified
+              profile.is_verified
                 ? togglePost()
                 : handleModal("Confirm Email First to post an internship")
             }
             size="small"
             title="Post Internship"
-            // disabled={!profile.dummy_verified}
+            // disabled={!profile.is_verified}
             style={{
               fontSize: 15,
               color: "#5918e6",
-              backgroundColor: profile.dummy_verified ? "#e6c018" : "#f2f2f2",
+              backgroundColor: profile.is_verified ? "#e6c018" : "#f2f2f2",
               float: "right",
             }}
           />
@@ -158,13 +158,14 @@ function InternshipView() {
                   filteredJob.job_type === "Internship"
               )
               .map((job, index) => (
-                <li key={index}>
+                <li key={index} className={`${job.job_type}`}>
                   {job !== null || job !== undefined ? (
                     <section>
                       <ListingLogo>
                         <ImageWrapper
-                          url={job.companyLogo}
+                          // url={job.company_logo}
                           alt={"company logo"}
+                          id={job.creator}
                         />
                       </ListingLogo>
                       <ListingTitle>
@@ -186,7 +187,7 @@ function InternshipView() {
                                 }
                                 size="small"
                                 title={`Manage Internship`}
-                                disabled={!profile.dummy_verified}
+                                disabled={!profile.is_verified}
                                 style={{
                                   fontSize: 15,
                                   color: "#5918e6",
@@ -209,9 +210,11 @@ function InternshipView() {
                                           .includes(job.id) ? (
                                           <Button
                                             onClick={() =>
-                                              profile.dummy_verified
+                                              profile.is_verified
                                                 ? handleApplication(job.id)
-                                                : handleModal()
+                                                : handleModal(
+                                                    `Confrim email to Apply`
+                                                  )
                                             }
                                             size="small"
                                             title={`Applied ✔`}
@@ -228,17 +231,19 @@ function InternshipView() {
                                         ) : (
                                           <Button
                                             onClick={() =>
-                                              profile.dummy_verified
+                                              profile.is_verified
                                                 ? handleApplication(job.id)
-                                                : handleModal()
+                                                : handleModal(
+                                                    `Confrim email to Apply`
+                                                  )
                                             }
                                             size="small"
                                             title={`Apply`}
-                                            // disabled={!profile.dummy_verified}
+                                            // disabled={!profile.is_verified}
                                             style={{
                                               fontSize: 15,
                                               color: "#5918e6",
-                                              backgroundColor: profile.dummy_verified
+                                              backgroundColor: profile.is_verified
                                                 ? "#e6c018"
                                                 : "#f2f2f2",
                                               float: "right",
@@ -251,17 +256,19 @@ function InternshipView() {
                                     ) : (
                                       <Button
                                         onClick={() =>
-                                          profile.dummy_verified
+                                          profile.is_verified
                                             ? handleApplication(job.id)
-                                            : handleModal()
+                                            : handleModal(
+                                                `Confrim email to Apply`
+                                              )
                                         }
                                         size="small"
                                         title={`Apply`}
-                                        // disabled={!profile.dummy_verified}
+                                        // disabled={!profile.is_verified}
                                         style={{
                                           fontSize: 15,
                                           color: "#5918e6",
-                                          backgroundColor: profile.dummy_verified
+                                          backgroundColor: profile.is_verified
                                             ? "#e6c018"
                                             : "#f2f2f2",
                                           float: "right",
@@ -278,15 +285,26 @@ function InternshipView() {
                         </h3>
                         <ListingIcons>
                           <li>
-                            <GiftBox />
-                            {job.description}
+                            <div
+                              className={`description`}
+                              style={{
+                                height: "20px",
+                                width: "100%",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                              }}
+                              dangerouslySetInnerHTML={{
+                                __html: job.description,
+                              }}
+                            />
                           </li>
                           <li>
                             <SearchIcon />
                             {job.location}
                           </li>
                           <li>
-                            <LockIcon />
+                            <RefundIcon />
                             {CURRENCY}
 
                             {job.salary}

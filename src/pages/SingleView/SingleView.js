@@ -246,6 +246,7 @@ const SingleView = ({ profileID }) => {
                           // src="https://39sf152pf74z2negmt1gi8ik-wpengine.netdna-ssl.com/wp-content/uploads/2015/10/Untitled-1-Recovered-150x150_036a17cc6b1cbce4285ea7c4d6a34e16.png"
                           src={org ? org.logo : user.image}
                           alt={account.full_name}
+                          id={org ? org.user : user.user}
                         />
                       </a>
                       <div className="content">
@@ -258,21 +259,26 @@ const SingleView = ({ profileID }) => {
                               </strong>
                             </a>{" "}
                             <span className="company-tagline">
-                              - {org ? org.description : `Personal posting`}
+                              -{" "}
+                              {org
+                                ? `Organization posting`
+                                : `Personal posting`}
                             </span>
                             <ListSpan className={`${job.job_type}`}>
                               {job.job_type}
                             </ListSpan>
                           </h1>
                         </ListingTitle>
-                        <span>
+                        <span style={{ display: "block" }}>
                           {org ? (
                             <a className="website" href={`${org.website}`}>
-                              <i className="fa fa-link" /> Website
+                              <i className="fa fa-link" /> Website -{" "}
+                              {org.website}
                             </a>
                           ) : (
                             <p>{account.email}</p>
                           )}
+                          <br />
                           <a href={`mailto:${account.email}`}>Send Message</a>
                         </span>
                         <br />
@@ -285,8 +291,16 @@ const SingleView = ({ profileID }) => {
                         <p>
                           <strong>Job Description</strong>
                         </p>
+                        <br />
                         <ul className="list-1">
-                          <li>{job.description}</li>
+                          <li>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: `${job.description}`,
+                              }}
+                            />
+                            {/* {generateHTML(job.description)} */}
+                          </li>
                         </ul>
 
                         <p>&nbsp;</p>
@@ -322,7 +336,9 @@ const SingleView = ({ profileID }) => {
                 <RightCol>
                   {/* Sort by */}
                   <div className="widget">
-                    <h4>Job Overview</h4>
+                    <h4 style={{ borderBottom: "0", padding: "0" }}>
+                      Job Overview
+                    </h4>
                     <div className="job-overview">
                       <ul>
                         <li>
@@ -397,7 +413,7 @@ const SingleView = ({ profileID }) => {
                                 }
                                 size="small"
                                 title={`Manage Job`}
-                                disabled={!profile.dummy_verified}
+                                disabled={!profile.is_verified}
                                 style={{
                                   fontSize: 15,
                                   color: "#5918e6",
@@ -419,9 +435,11 @@ const SingleView = ({ profileID }) => {
                                           .includes(job.id) ? (
                                           <Button
                                             onClick={() =>
-                                              profile.dummy_verified
+                                              profile.is_verified
                                                 ? handleApplication(job.id)
-                                                : handleModal()
+                                                : handleModal(
+                                                    `Confrim email to Apply`
+                                                  )
                                             }
                                             size="small"
                                             title={`Applied ✔`}
@@ -430,7 +448,7 @@ const SingleView = ({ profileID }) => {
                                               fontSize: 15,
                                               color: "#5918e6",
                                               backgroundColor: "#f2f2f2",
-                                              float: "right",
+
                                               height: "29px",
                                               margin: "0 0 0 10px",
                                             }}
@@ -438,20 +456,22 @@ const SingleView = ({ profileID }) => {
                                         ) : (
                                           <Button
                                             onClick={() =>
-                                              profile.dummy_verified
+                                              profile.is_verified
                                                 ? handleApplication(job.id)
-                                                : handleModal()
+                                                : handleModal(
+                                                    `Confrim email to Apply`
+                                                  )
                                             }
                                             size="small"
                                             title={`Apply`}
-                                            // disabled={!profile.dummy_verified}
+                                            // disabled={!profile.is_verified}
                                             style={{
                                               fontSize: 15,
                                               color: "#5918e6",
-                                              backgroundColor: profile.dummy_verified
+                                              backgroundColor: profile.is_verified
                                                 ? "#e6c018"
                                                 : "#f2f2f2",
-                                              float: "right",
+
                                               height: "29px",
                                               margin: "0 0 0 10px",
                                             }}
@@ -461,20 +481,22 @@ const SingleView = ({ profileID }) => {
                                     ) : (
                                       <Button
                                         onClick={() =>
-                                          profile.dummy_verified
+                                          profile.is_verified
                                             ? handleApplication(job.id)
-                                            : handleModal()
+                                            : handleModal(
+                                                `Confrim email to Apply `
+                                              )
                                         }
                                         size="small"
                                         title={`Apply`}
-                                        // disabled={!profile.dummy_verified}
+                                        // disabled={!profile.is_verified}
                                         style={{
                                           fontSize: 15,
                                           color: "#5918e6",
-                                          backgroundColor: profile.dummy_verified
+                                          backgroundColor: profile.is_verified
                                             ? "#e6c018"
                                             : "#f2f2f2",
-                                          float: "right",
+
                                           height: "29px",
                                           margin: "0 0 0 10px",
                                         }}
@@ -507,7 +529,11 @@ const SingleView = ({ profileID }) => {
                           <>
                             <h2>{org.address}</h2>
                             <h2>{org.country}</h2>
-                            <p>{org.description}</p>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: org.description,
+                              }}
+                            />
                           </>
                         ) : (
                           <>

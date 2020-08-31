@@ -32,7 +32,7 @@ export const FormWrapper = styled.div`
   padding: 0;
   color: #333;
   display: block;
-  div {
+  > div {
     margin: 0 20px;
     @media (max-width: 710px) {
       margin: 0;
@@ -187,8 +187,8 @@ export const Row = styled.div`
 
 export const Col12 = styled.div`
   position: relative;
-  padding-right: 15px;
-  padding-left: 15px;
+  /* padding-right: 15px;
+  padding-left: 15px; */
   width: 100%;
   float: left;
   @media (min-width: 992px) {

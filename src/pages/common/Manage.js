@@ -24,7 +24,7 @@ import {
   TypeList,
 } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
-import { LockIcon } from "components/AllSvgIcon";
+import { RefundIcon } from "components/AllSvgIcon";
 import { CURRENCY } from "constants/constants";
 import ModalTemplate from "pages/common/ModalTemplate";
 import { H3 } from "styles/pages.style";
@@ -378,8 +378,9 @@ function Manage({ type, name, isBusiness, isIndividual }) {
                         />
                         <FormikControl
                           control="textarea"
-                          label="description"
+                          label="Description"
                           name="description"
+                          rte={true}
                         />
                         <Button
                           type="submit"
@@ -403,7 +404,7 @@ function Manage({ type, name, isBusiness, isIndividual }) {
                 {applicants.length > 0 ? (
                   <>
                     {applicants.map((applicant, index) => (
-                      <li key={index}>
+                      <li key={index} className={`${job.job_type}`}>
                         <section onClick={() => applicantView(applicant)}>
                           <ListingLogo>
                             <ImageWrapper
@@ -432,7 +433,7 @@ function Manage({ type, name, isBusiness, isIndividual }) {
                             </h3>
                             <ListingIcons>
                               <li>
-                                <LockIcon />
+                                <RefundIcon />
                                 {applicant.email}
                               </li>
                             </ListingIcons>

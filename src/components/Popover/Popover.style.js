@@ -6,7 +6,7 @@ const PopoverWrapper = styled.div`
   margin-right: 10px;
 
   .popover-handler {
-    display: inline-block;
+    /* display: inline-block; */
     cursor: pointer;
   }
 

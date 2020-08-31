@@ -27,7 +27,7 @@ const FormInput = styled.div`
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
-  display: inline-block;
+  display: ;
   /* padding: 20px; */
 
   > label {
@@ -46,8 +46,7 @@ const FormInput = styled.div`
   select {
     opacity: 0.9;
   }
-
-  > div {
+  .error {
     color: palevioletred;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     font-style: italic;

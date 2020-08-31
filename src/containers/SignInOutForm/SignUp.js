@@ -104,7 +104,7 @@ export default function SignOutModal() {
           });
           // authDispatch({ type: "SIGNUP_SUCCESS" });
           await new Promise((resolve) => setTimeout(resolve, 3000));
-          authDispatch({ type: "SIGNIN" });
+          // authDispatch({ type: "SIGNIN" });
           // closeModal();
         }
         setSubmitting(false);
@@ -203,9 +203,9 @@ export default function SignOutModal() {
 
                     <HelperText style={{ padding: "20px 0 30px" }}>
                       By signing up, you agree to The Database's{" "}
-                      <p style={{ color: "#5918e6" }} onClick={handleTOS}>
+                      <strong style={{ color: "#5918e6" }} onClick={handleTOS}>
                         Terms &amp; Condtions
-                      </p>
+                      </strong>
                     </HelperText>
 
                     <Button

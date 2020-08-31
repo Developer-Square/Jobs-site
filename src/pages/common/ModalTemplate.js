@@ -75,12 +75,9 @@ function ModalTemplate(account, application, actions) {
                   fontSize: 15,
                   color: "#5918e6",
                   backgroundColor: "#e6c018",
-                  float: "right",
                 }}
               />
             </SubHeading>
-            <br />
-            <br />
             <SubHeading>
               Budget {CURRENCY}
               {profile.budget}

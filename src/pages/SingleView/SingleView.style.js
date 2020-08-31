@@ -98,7 +98,7 @@ export const LeftCol = styled.div`
       margin: 23px 0 0 0px;
       margin: 0;
       margin-top: 2px;
-      .button.send-message-to-owner {
+      .button .send-message-to-owner {
         box-shadow: 0 4px 12px rgba(38, 174, 97, 0.25);
         padding: 5px 12px;
         margin-top: 9px;

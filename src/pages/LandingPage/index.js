@@ -48,7 +48,7 @@ import { useHistory, Link } from "react-router-dom";
 import { LeftContent } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
 import { CURRENCY } from "constants/constants";
-import { GiftBox, LockIcon, SearchIcon } from "components/AllSvgIcon";
+import { RefundIcon, SearchIcon } from "components/AllSvgIcon";
 import FooterContainer from "containers/Footer/Footer";
 // import CustomCarousel from "components/Carousel/Carousel";
 import { ArrowNext } from "components/AllSvgIcon";
@@ -58,7 +58,6 @@ import { BASE_URL } from "constants/constants";
 import axios from "axios";
 import Error500 from "components/Error/Error500";
 import Loader from "components/Loader/Loader";
-import { getOrgLogo } from "pages/common/helpers";
 import { AuthContext } from "contexts/auth/auth.context";
 import { handleModal } from "pages/common/helpers";
 import AuthenticationForm from "containers/SignInOutForm/Form";
@@ -78,24 +77,41 @@ function LandingPage({ deviceType }) {
 
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
-      try {
-        axios
-          .get(`${BASE_URL}/jobs/`)
-          .then((res) => {
-            setJobs(res.data.results);
+    // function deleteCookies() {
+    //   var allCookies = document.cookie.split(";");
 
-            setLoading(false);
-          })
-          .catch((err) => {
-            setLoading(false);
-            console.log("Catching Errors:", err);
-            setError(err);
-          });
-      } catch (error) {
-        setError(error);
-      }
-    }, 2000);
+    //   // The "expire" attribute of every cookie is
+    //   // Set to "Thu, 01 Jan 1970 00:00:00 GMT"
+    //   for (var i = 0; i < allCookies.length; i++)
+    //     document.cookie =
+    //       allCookies[i] + "=;expires=" + new Date(0).toUTCString();
+    // }
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("thedb_auth_profile");
+    localStorage.removeItem("thedb_auth_payload");
+    localStorage.removeItem("thedb_auth_roles");
+    localStorage.removeItem("thedb_applications");
+    localStorage.removeItem("thedb_org_profile");
+    localStorage.removeItem("thedb_individual_profile");
+    authDispatch({ type: "SIGN_OUT" });
+
+    try {
+      axios
+        .get(`${BASE_URL}/jobs/`)
+        .then((res) => {
+          setJobs(res.data.results);
+
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log("Catching Errors:", err);
+          setError(err);
+        });
+    } catch (error) {
+      setError(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleSignInForm = () => {
@@ -160,7 +176,7 @@ function LandingPage({ deviceType }) {
                     <Figure>
                       <Link
                         to={isAuthenticated ? `/dashboard/${article.slug}` : ""}
-                        onClick={() =>
+                        onClick={
                           isAuthenticated
                             ? () => history.push(`/dashboard/${article.slug}`)
                             : toggleSignInForm
@@ -183,13 +199,15 @@ function LandingPage({ deviceType }) {
                       <p>{article.content}</p>
                     </ArticleSection>
                     <Button
-                      onClick={() =>
+                      onClick={
                         isAuthenticated
                           ? () => history.push(`/dashboard/${article.slug}`)
                           : toggleSignInForm
                       }
                       size="small"
-                      title="Get Started"
+                      title={
+                        isAuthenticated ? `View ${article.slug}` : "Get Started"
+                      }
                       style={{ fontSize: 15, color: "#e6c018" }}
                     />
                   </Article>
@@ -216,53 +234,76 @@ function LandingPage({ deviceType }) {
                       <>
                         {jobs ? (
                           <ul>
-                            {jobs.slice(0, 4).map((job, index) => (
-                              <li key={index}>
-                                <a
-                                  onClick={
-                                    isAuthenticated ? null : toggleSignInForm
-                                  }
-                                  href={
-                                    isAuthenticated
-                                      ? `/dashboard/view/${job.id}`
-                                      : "/"
-                                  }
-                                >
-                                  <ListingLogo>
-                                    <ImageWrapper
-                                      url={getOrgLogo(job.creator)}
-                                      alt={"company logo"}
-                                    />
-                                  </ListingLogo>
-                                  <ListingTitle>
-                                    <H4>
-                                      {job.title}
-                                      <TypeList>
-                                        <ListSpan className={`${job.job_type}`}>
-                                          {job.job_type}
-                                        </ListSpan>
-                                      </TypeList>
-                                    </H4>
-                                    <ListingIcons>
-                                      <li>
-                                        <GiftBox />
-                                        {job.description}
-                                      </li>
-                                      <li>
-                                        <SearchIcon />
-                                        {job.location}
-                                      </li>
-                                      <li>
-                                        <LockIcon />
-                                        {CURRENCY}
+                            {jobs
+                              .sort((a, b) =>
+                                a.posted_on < b.posted_on
+                                  ? 1
+                                  : b.posted_on < a.posted_on
+                                  ? -1
+                                  : 0
+                              )
+                              .slice(0, 4)
+                              .map((job, index) => (
+                                <li key={index} className={`${job.job_type}`}>
+                                  <a
+                                    onClick={
+                                      isAuthenticated ? null : toggleSignInForm
+                                    }
+                                    href={
+                                      isAuthenticated
+                                        ? `/dashboard/view/${job.id}`
+                                        : "/"
+                                    }
+                                  >
+                                    <ListingLogo>
+                                      <ImageWrapper
+                                        // url={job.company_logo}
+                                        alt={"company logo"}
+                                        id={job.creator}
+                                      />
+                                    </ListingLogo>
+                                    <ListingTitle>
+                                      <H4>
+                                        {job.title}
+                                        <TypeList>
+                                          <ListSpan
+                                            className={`${job.job_type}`}
+                                          >
+                                            {job.job_type}
+                                          </ListSpan>
+                                        </TypeList>
+                                      </H4>
+                                      <ListingIcons>
+                                        <li>
+                                          <div
+                                            style={{
+                                              height: "20px",
+                                              width: "100%",
+                                              textOverflow: "ellipsis",
+                                              whiteSpace: "nowrap",
+                                              overflow: "hidden",
+                                            }}
+                                            className={`description`}
+                                            dangerouslySetInnerHTML={{
+                                              __html: job.description,
+                                            }}
+                                          />
+                                        </li>
+                                        <li>
+                                          <SearchIcon />
+                                          {job.location}
+                                        </li>
+                                        <li>
+                                          <RefundIcon />
+                                          {CURRENCY}
 
-                                        {job.salary}
-                                      </li>
-                                    </ListingIcons>
-                                  </ListingTitle>
-                                </a>
-                              </li>
-                            ))}
+                                          {job.salary}
+                                        </li>
+                                      </ListingIcons>
+                                    </ListingTitle>
+                                  </a>
+                                </li>
+                              ))}
                           </ul>
                         ) : null}
                       </>
@@ -336,10 +377,7 @@ function LandingPage({ deviceType }) {
                               </ListSpan>
                             </TypeList>
                           </Link>
-                          <SpotlightName>
-                            <GiftBox />
-                            {job.name}
-                          </SpotlightName>
+                          <SpotlightName>{job.name}</SpotlightName>
                           <br />
                           <SpotlightLocation>
                             {" "}
@@ -348,17 +386,31 @@ function LandingPage({ deviceType }) {
                           </SpotlightLocation>
                           <br />
                           <SpotlightRate>
-                            <LockIcon />
+                            <RefundIcon />
                             {job.industry}
                           </SpotlightRate>
                           <br />
                           <SpotlightSalary>
-                            <LockIcon />
                             {CURRENCY}
 
                             {job.salary}
                           </SpotlightSalary>
-                          <P>{job.description}</P>
+                          <P
+                            style={{
+                              display: "block",
+                              height: "100px",
+                              width: "100%",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: job.description,
+                              }}
+                            />
+                          </P>
                           <Center>
                             {isAuthenticated ? (
                               <Button

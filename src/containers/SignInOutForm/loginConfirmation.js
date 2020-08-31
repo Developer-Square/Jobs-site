@@ -21,7 +21,7 @@ export default function LoginSuccessModal() {
       <Container style={{ paddingBottom: 30 }}>
         <Heading>Login Successful ✔</Heading>
 
-        <SubHeading>Welcomne to the database</SubHeading>
+        <SubHeading>Welcome to the database</SubHeading>
 
         <Offer style={{ padding: "20px 0 0" }}>
           Back to" <LinkButton onClick={toggleSignInForm}>Logout</LinkButton>

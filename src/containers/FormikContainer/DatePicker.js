@@ -54,8 +54,7 @@ const FormInput = styled.div`
   input[type="password"] {
     opacity: 0.9;
   }
-
-  div {
+  .error {
     color: palevioletred;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     font-style: italic;

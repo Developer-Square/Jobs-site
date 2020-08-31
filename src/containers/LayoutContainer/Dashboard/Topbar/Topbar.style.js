@@ -29,10 +29,11 @@ export const TopbarWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #fff;
+  background-color: #5918e6;
   padding: 15px 60px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06);
   position: relative;
+  color: #fff;
 
   @media only screen and (max-width: 767px) {
     padding: 20px;
@@ -103,6 +104,7 @@ export const ProfileImg = styled.div`
   overflow: hidden;
   cursor: pointer;
   flex-shrink: 0;
+  background: #ffffff;
 `;
 
 export const Image = styled.img`
@@ -128,6 +130,10 @@ export const NavLink = styled(RRNavLink)`
   border-bottom: 1px solid blue;
   transition: 0.15s ease-in-out;
   cursor: pointer;
+
+  span.label {
+    color: #fff;
+  }
 
   &:hover {
     color: #8452f1;

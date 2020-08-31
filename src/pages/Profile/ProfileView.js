@@ -164,6 +164,7 @@ const ProfileView = ({ profileID }) => {
                     <Col12 style={{ display: `${desktop ? "block" : "flex"}` }}>
                       <ImageWrapper
                         src={user ? user.image : ProfileImage}
+                        id={user.user}
                         className="img-responsive img-circle tm-border"
                         alt={account.full_name}
                         style={{
@@ -357,6 +358,7 @@ const ProfileView = ({ profileID }) => {
                   <Col12>
                     <ImageWrapper
                       src={org.logo}
+                      id={org.crea}
                       className="img-responsive img-circle tm-border"
                       alt={account.full_name}
                       style={{
@@ -379,7 +381,11 @@ const ProfileView = ({ profileID }) => {
                             </h2>
                             <h2>{org.address}</h2>
                             <h2>{org.country}</h2>
-                            <p>{org.description}</p>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: org.description,
+                              }}
+                            />
                           </Skills>
                         </Col8>
                       </Row>

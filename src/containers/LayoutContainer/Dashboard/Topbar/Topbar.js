@@ -1,40 +1,38 @@
-import React, { useState, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { Scrollbars } from "react-custom-scrollbars";
-import { DrawerContext } from "contexts/drawer/drawer.context";
-import Popover from "components/Popover/Popover";
+import { AlertDotIcon, NotificationIcon } from "components/AllSvgIcon";
+import Drawer from "components/Drawer/Drawer";
 import Notification from "components/Notification/Notification";
-import { AuthContext } from "contexts/auth/auth.context";
+import Popover from "components/Popover/Popover";
 import { SETTINGS } from "constants/constants";
-// import AuthenticationForm from "../../SignInOutForm/Form";
-import { NotificationIcon, AlertDotIcon } from "components/AllSvgIcon";
+import { PROFILE_PAGE } from "constants/routes.constants";
+import { AuthContext } from "contexts/auth/auth.context";
+import { DrawerContext } from "contexts/drawer/drawer.context";
+import Logoimage from "image/db.png";
+import UserImage from "image/user.jpg";
+import React, { useContext, useCallback } from "react";
+import { Scrollbars } from "react-custom-scrollbars";
+import { Link, useHistory } from "react-router-dom";
 import {
-  TopbarWrapper,
-  TopbarRightSide,
-  ProfileImg,
+  DrawerClose,
+  DrawerContentWrapper,
+  HamburgerIcon,
+} from "../../Header/Header.style";
+import Sidebar from "../Sidebar/Sidebar";
+import {
+  AlertDot,
+  CloseButton,
+  DrawerWrapper,
   Image,
   Logo,
   LogoImage,
-  AlertDot,
-  NotificationIconWrapper,
-  UserDropdowItem,
-  NavLink as NavBarLink,
   LogoutBtn,
-  CloseButton,
-  DrawerWrapper,
+  NavLink as NavBarLink,
+  NotificationIconWrapper,
+  ProfileImg,
+  TopbarRightSide,
+  TopbarWrapper,
+  UserDropdowItem,
 } from "./Topbar.style";
-import {
-  HamburgerIcon,
-  DrawerContentWrapper,
-  DrawerClose,
-} from "../../Header/Header.style";
-import UserImage from "image/user.jpg";
-import Drawer from "components/Drawer/Drawer";
-import Logoimage from "image/thedb.png";
-import NavLink from "components/NavLink/NavLink";
-import Sidebar from "../Sidebar/Sidebar";
-// import AuthenticationForm from "containers/SignInOutForm/Form";
-import { PROFILE_PAGE } from "constants/routes.constants";
+import { CloseIcon } from "components/AllSvgIcon";
 
 const data = [
   {
@@ -51,8 +49,13 @@ const Topbar = ({ refs }) => {
     authState: { profile },
     authDispatch,
   } = useContext(AuthContext);
+  const img = localStorage.getItem("thedb_individual_profile")
+    ? JSON.parse(localStorage.getItem("thedb_individual_profile"))["image"]
+    : localStorage.getItem("thedb_org_profile")
+    ? JSON.parse(localStorage.getItem("thedb_org_profile"))["logo"]
+    : UserImage;
   // Toggle drawer
-  const toggleHandler = React.useCallback(() => {
+  const toggleHandler = useCallback(() => {
     dispatch({
       type: "TOGGLE",
     });
@@ -78,9 +81,6 @@ const Topbar = ({ refs }) => {
     });
   };
 
-  // eslint-disable-next-line no-unused-vars
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   return (
     <TopbarWrapper ref={refs}>
       <Logo>
@@ -91,7 +91,7 @@ const Topbar = ({ refs }) => {
 
       <DrawerWrapper>
         <Drawer
-          width="316px"
+          width="250px"
           drawerHandler={
             <HamburgerIcon>
               <span />
@@ -103,13 +103,15 @@ const Topbar = ({ refs }) => {
           toggleHandler={toggleHandler}
           closeButton={
             <DrawerClose>
-              <CloseButton />
+              <CloseButton>
+                <CloseIcon />
+              </CloseButton>
             </DrawerClose>
           }
         >
           <Scrollbars autoHide>
             <DrawerContentWrapper>
-              <Sidebar onMenuItemClick={() => setIsDrawerOpen(false)} />
+              <Sidebar onMenuItemClick={toggleHandler} />
             </DrawerContentWrapper>
           </Scrollbars>
         </Drawer>
@@ -130,21 +132,23 @@ const Topbar = ({ refs }) => {
             </NotificationIconWrapper>
           }
         />
-
+        <Link style={{ color: "#fff", margin: "0 10px" }} to={PROFILE_PAGE}>
+          {profile.first_name !== "" ? profile.first_name : profile.email}
+        </Link>
         <Popover
           direction="right"
           className="user-pages-dropdown"
           handler={
             <ProfileImg>
-              <Image src={UserImage} alt="user" />
+              <Image src={img} alt="user" />
             </ProfileImg>
           }
           content={
             <UserDropdowItem>
-              <NavBarLink to={PROFILE_PAGE} exact={false}>
+              <NavBarLink to={PROFILE_PAGE} exact>
                 Profile
               </NavBarLink>
-              <NavBarLink to={SETTINGS} exact={false}>
+              <NavBarLink to={SETTINGS} exact>
                 Settings
               </NavBarLink>
               <LogoutBtn
@@ -156,13 +160,6 @@ const Topbar = ({ refs }) => {
               </LogoutBtn>
             </UserDropdowItem>
           }
-        />
-        <NavLink
-          className="menu-item"
-          href={PROFILE_PAGE}
-          label={`${
-            profile.first_name !== "" ? profile.first_name : profile.email
-          }`}
         />
       </TopbarRightSide>
     </TopbarWrapper>
