@@ -3,10 +3,10 @@ import { Route, Switch } from "react-router-dom";
 import LandingPage from "pages/LandingPage";
 import NotFound from "pages/NotFound";
 import EmailVerification from "containers/SignInOutForm/emailVerification";
-import PrivacyPolicy from "pages/tos/PrivacyPolicy";
+import PrivacyPolicy from "pages/TOS/PrivacyPolicy";
 import About from "pages/About/about";
 import { TOS, ABOUT, SDG, HELP_PAGE } from "constants/routes.constants";
-import TermsOfUse from "pages/tos/sdg";
+import TermsOfUse from "pages/TOS/SDG";
 import Help from "pages/Help/Help";
 
 const PublicRoutes = ({ deviceType }) => (
