@@ -29,12 +29,15 @@ function ResendEmail() {
         .then((res) => {
           console.log("email verification data", res.data);
           setSuccess(true);
+          setSubmitting(false);
         })
         .catch((err) => {
           console.log("error", err);
+          setSubmitting(false);
         });
     } catch (error) {
       console.log("catch error", error);
+      setSubmitting(false);
     }
   };
   const initialValues = {
@@ -52,7 +55,7 @@ function ResendEmail() {
       <Container style={{ paddingBottom: 30 }}>
         {!success ? (
           <>
-            <Heading>Complete Application</Heading>
+            <Heading>Resend Email</Heading>
 
             <SubHeading>
               {profile.email
