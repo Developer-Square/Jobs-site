@@ -82,12 +82,12 @@ function View({ type, name, isBusiness, isIndividual }) {
       },
     });
   };
-  const handleModal = (text) => {
+  const handleModal = (text, subtext, fxn) => {
     openModal({
       show: true,
       overlayClassName: "quick-view-overlay",
       closeOnClickOutside: true,
-      component: () => EmailVerificationModal(text),
+      component: () => EmailVerificationModal(text, subtext, fxn),
       closeComponent: "",
       config: {
         enableResizing: false,
@@ -184,7 +184,36 @@ function View({ type, name, isBusiness, isIndividual }) {
                                           profile.is_verified
                                             ? handleApplication(job.id)
                                             : handleModal(
-                                                `Confrim email to Apply`
+                                                `Confrim email to Apply`,
+                                                `or`,
+                                                <Button
+                                                  onClick={() =>
+                                                    openModal({
+                                                      show: true,
+                                                      overlayClassName:
+                                                        "quick-view-overlay",
+                                                      closeOnClickOutside: true,
+                                                      component: ResendEmail,
+                                                      closeComponent: "",
+                                                      config: {
+                                                        enableResizing: false,
+                                                        disableDragging: true,
+                                                        className:
+                                                          "quick-view-modal",
+                                                        width: 458,
+                                                        height: "auto",
+                                                      },
+                                                    })
+                                                  }
+                                                  size="small"
+                                                  title={`Send email again`}
+                                                  style={{
+                                                    fontSize: 15,
+                                                    color: "#fff",
+                                                    backgroundColor: "#e618a5",
+                                                    margin: "10px 10px",
+                                                  }}
+                                                />
                                               )
                                         }
                                         size="small"
@@ -205,7 +234,36 @@ function View({ type, name, isBusiness, isIndividual }) {
                                           profile.is_verified
                                             ? handleApplication(job.id)
                                             : handleModal(
-                                                `Confrim email to Apply`
+                                                `Confrim email to Apply`,
+                                                `or`,
+                                                <Button
+                                                  onClick={() =>
+                                                    openModal({
+                                                      show: true,
+                                                      overlayClassName:
+                                                        "quick-view-overlay",
+                                                      closeOnClickOutside: true,
+                                                      component: ResendEmail,
+                                                      closeComponent: "",
+                                                      config: {
+                                                        enableResizing: false,
+                                                        disableDragging: true,
+                                                        className:
+                                                          "quick-view-modal",
+                                                        width: 458,
+                                                        height: "auto",
+                                                      },
+                                                    })
+                                                  }
+                                                  size="small"
+                                                  title={`Send email again`}
+                                                  style={{
+                                                    fontSize: 15,
+                                                    color: "#fff",
+                                                    backgroundColor: "#e618a5",
+                                                    margin: "10px 10px",
+                                                  }}
+                                                />
                                               )
                                         }
                                         size="small"

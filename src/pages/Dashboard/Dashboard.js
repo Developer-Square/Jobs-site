@@ -39,6 +39,7 @@ import {
 import ApplicationModal from "../common/ApplicationModal";
 import { CardWrapper, LinkButton, Offer } from "./Dashboard.style";
 import { addToLocalStorageArray } from "helpers";
+import ResendEmail from "containers/SignInOutForm/resendEmail";
 
 function Dashboard() {
   const {
@@ -222,12 +223,12 @@ function Dashboard() {
     setForm();
     history.push(`/dashboard/${category}/${id}`);
   };
-  const handleModal = (text) => {
+  const handleModal = (text, subtext, fxn) => {
     openModal({
       show: true,
       overlayClassName: "quick-view-overlay",
       closeOnClickOutside: true,
-      component: () => EmailVerificationModal(text),
+      component: () => EmailVerificationModal(text, subtext, fxn),
       closeComponent: "",
       config: {
         enableResizing: false,
@@ -395,7 +396,37 @@ function Dashboard() {
                                                 profile.is_verified
                                                   ? handleApplication(job.id)
                                                   : handleModal(
-                                                      `Confrim email to Apply`
+                                                      `Confrim email to Apply`,
+                                                      `or`,
+                                                      <Button
+                                                        onClick={() =>
+                                                          openModal({
+                                                            show: true,
+                                                            overlayClassName:
+                                                              "quick-view-overlay",
+                                                            closeOnClickOutside: true,
+                                                            component: ResendEmail,
+                                                            closeComponent: "",
+                                                            config: {
+                                                              enableResizing: false,
+                                                              disableDragging: true,
+                                                              className:
+                                                                "quick-view-modal",
+                                                              width: 458,
+                                                              height: "auto",
+                                                            },
+                                                          })
+                                                        }
+                                                        size="small"
+                                                        title={`Send email again`}
+                                                        style={{
+                                                          fontSize: 15,
+                                                          color: "#fff",
+                                                          backgroundColor:
+                                                            "#e618a5",
+                                                          margin: "10px 10px",
+                                                        }}
+                                                      />
                                                     )
                                               }
                                               size="small"
@@ -416,7 +447,37 @@ function Dashboard() {
                                                 profile.is_verified
                                                   ? handleApplication(job.id)
                                                   : handleModal(
-                                                      `Confrim email to Apply`
+                                                      `Confrim email to Apply`,
+                                                      `or`,
+                                                      <Button
+                                                        onClick={() =>
+                                                          openModal({
+                                                            show: true,
+                                                            overlayClassName:
+                                                              "quick-view-overlay",
+                                                            closeOnClickOutside: true,
+                                                            component: ResendEmail,
+                                                            closeComponent: "",
+                                                            config: {
+                                                              enableResizing: false,
+                                                              disableDragging: true,
+                                                              className:
+                                                                "quick-view-modal",
+                                                              width: 458,
+                                                              height: "auto",
+                                                            },
+                                                          })
+                                                        }
+                                                        size="small"
+                                                        title={`Send email again`}
+                                                        style={{
+                                                          fontSize: 15,
+                                                          color: "#fff",
+                                                          backgroundColor:
+                                                            "#e618a5",
+                                                          margin: "10px 10px",
+                                                        }}
+                                                      />
                                                     )
                                               }
                                               size="small"
@@ -441,7 +502,37 @@ function Dashboard() {
                                             profile.is_verified
                                               ? handleApplication(job.id)
                                               : handleModal(
-                                                  `Confrim email to Apply`
+                                                  `Confrim email to Apply`,
+                                                  `or`,
+                                                  <Button
+                                                    onClick={() =>
+                                                      openModal({
+                                                        show: true,
+                                                        overlayClassName:
+                                                          "quick-view-overlay",
+                                                        closeOnClickOutside: true,
+                                                        component: ResendEmail,
+                                                        closeComponent: "",
+                                                        config: {
+                                                          enableResizing: false,
+                                                          disableDragging: true,
+                                                          className:
+                                                            "quick-view-modal",
+                                                          width: 458,
+                                                          height: "auto",
+                                                        },
+                                                      })
+                                                    }
+                                                    size="small"
+                                                    title={`Send email again`}
+                                                    style={{
+                                                      fontSize: 15,
+                                                      color: "#fff",
+                                                      backgroundColor:
+                                                        "#e618a5",
+                                                      margin: "10px 10px",
+                                                    }}
+                                                  />
                                                 )
                                           }
                                           size="small"
