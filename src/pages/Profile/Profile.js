@@ -135,6 +135,7 @@ function Profile() {
           about: "",
           location: "",
           gender: "",
+          mobile: "",
           status: "",
           user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
         });
@@ -151,6 +152,7 @@ function Profile() {
           country: "",
           location: "",
           address: "",
+          mobile: "",
           logo: "LogoImage",
           user: profile.id,
         });
@@ -187,7 +189,6 @@ function Profile() {
   });
   const profileValidationSchema = Yup.object({
     title: Yup.string().required("Required"),
-    // user: Yup.number().required("Required"),
     status: Yup.string().required("Required"),
     about: Yup.string().required("Required"),
     // image: Yup.mixed().required("Required"),
@@ -195,6 +196,10 @@ function Profile() {
       .max(2147483647, "Id Number too long")
       .min(10101010, "Id Number is invalid")
       .required("Required"),
+    mobile: Yup.string()
+      .max(15, "Phone Number too long")
+      .min(12, "Phone Number is invalid")
+      .required("Phone Number is Required"),
     date_of_birth: Yup.date()
       .test("Date of Birth", "Should be greather than 18", function (value) {
         return moment().diff(moment(value), "years") >= 18;
@@ -207,6 +212,10 @@ function Profile() {
     location: Yup.string().required("Required"),
     address: Yup.string().required("Required"),
     logo: Yup.mixed().required("Required"),
+    mobile: Yup.string()
+      .max(15, "Phone Number too long")
+      .min(12, "Phone Number is invalid")
+      .required("Phone Number is Required"),
     website: Yup.string().url("Please enter a valid URL, http:// or https://", {
       allowLocal: true,
     }),
@@ -280,6 +289,7 @@ function Profile() {
       description,
       logo,
       address,
+      mobile,
       country,
       location,
       website,
@@ -295,6 +305,7 @@ function Profile() {
     formData.append("country", country);
     formData.append("location", location);
     formData.append("address", address);
+    formData.append("mobile", mobile.replace(/[*?^${}()]|[-]|[ ]/g, ""));
     formData.append("user", profile.id);
     console.log("body values ", formData, values);
     setSubmitting(true);
@@ -339,6 +350,7 @@ function Profile() {
       name,
       description,
       logo,
+      mobile,
       address,
       country,
       location,
@@ -355,6 +367,7 @@ function Profile() {
     formData.append("country", country);
     formData.append("location", location);
     formData.append("address", address);
+    formData.append("mobile", mobile.replace(/[*?^${}()]|[-]|[ ]/g, ""));
     formData.append("user", profile.id);
     console.log("body values ", ...formData, logo);
     setSubmitting(true);
@@ -409,6 +422,7 @@ function Profile() {
       about,
       location,
       gender,
+      mobile,
       status,
     } = values;
     let formData = new FormData();
@@ -425,6 +439,7 @@ function Profile() {
     formData.append("about", about);
     formData.append("location", location);
     formData.append("gender", gender);
+    formData.append("mobile", mobile.replace(/[*?^${}()]|[-]|[ ]/g, ""));
     formData.append("status", status);
     console.log("val8es fdsf ", ...formData, image);
     setSubmitting(true);
@@ -461,6 +476,7 @@ function Profile() {
       about,
       location,
       gender,
+      mobile,
       status,
     } = values;
 
@@ -480,6 +496,7 @@ function Profile() {
     formData.append("location", location);
     formData.append("gender", gender);
     formData.append("status", status);
+    formData.append("mobile", mobile.replace(/[*?^${}()]|[-]|[ ]/g, ""));
     console.log("val8es fdsf ", ...formData, image);
     setSubmitting(true);
     try {
@@ -527,7 +544,7 @@ function Profile() {
           title={isEdit ? `View Profile` : `Edit Profile`}
           style={{
             fontSize: 15,
-            color: "#5918e6",
+            color: "#21277f",
             backgroundColor: "#e6c018",
             float: "right",
           }}
@@ -609,12 +626,17 @@ function Profile() {
                             label="Title"
                             name="title"
                           />
-
                           <FormikControl
                             control="input"
                             type="text"
                             label="ID Number"
                             name="id_number"
+                          />
+                          <FormikControl
+                            control="input"
+                            type="phone"
+                            label="Phone Number"
+                            name="mobile"
                           />
                           <FormikControl
                             control="date"
@@ -687,6 +709,12 @@ function Profile() {
                             type="text"
                             label="Website Domain"
                             name="website"
+                          />
+                          <FormikControl
+                            control="input"
+                            type="phone"
+                            label="Phone Number"
+                            name="mobile"
                           />
                           <FormikControl
                             control="input"

@@ -22,7 +22,7 @@ export const CardWrapper = styled.div`
   @media (min-width: 710px) {
     padding: 25px 40px;
   }
-  @media (max-width: 710px) {
+  @media (max-width: 768px) {
     padding: 0;
   }
 `;
@@ -34,7 +34,7 @@ export const FormWrapper = styled.div`
   display: block;
   > div {
     margin: 0 20px;
-    @media (max-width: 710px) {
+    @media (max-width: 768px) {
       margin: 0;
     }
   }
@@ -154,7 +154,7 @@ export const Header = styled.header`
   @media (min-width: 710px) {
     padding: 25px 40px;
   }
-  @media (max-width: 710px) {
+  @media (max-width: 768px) {
     display: flex;
   }
 `;
@@ -168,7 +168,7 @@ export const ContainerView = styled.section`
   @media (min-width: 710px) {
     padding: 25px 40px;
   }
-  @media (max-width: 710px) {
+  @media (max-width: 768px) {
     padding: 0;
   }
 `;
@@ -180,22 +180,38 @@ export const Row = styled.div`
   @media (min-width: 710px) {
     display: flex;
   }
-  @media (max-width: 710px) {
+  @media (max-width: 768px) {
     display: block;
   }
 `;
 
 export const Col12 = styled.div`
   position: relative;
-  /* padding-right: 15px;
-  padding-left: 15px; */
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
   width: 100%;
-  float: left;
   @media (min-width: 992px) {
     float: left;
   }
   @media (min-width: 768px) {
     width: 100%;
+  }
+  img {
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 2px 2px #000;
+    display: inline-block !important;
+    height: 120px;
+    width: 120px;
+    @media (max-width: 768px) {
+      border-radius: 50%;
+      border: 5px solid #fff;
+      box-shadow: 2px 2px #000;
+      max-width: 50px;
+      height: 50px;
+      margin: 15px;
+    }
   }
 `;
 export const Col8 = styled.div`
@@ -255,12 +271,24 @@ export const About = styled.div`
   background: #fff;
   box-shadow: 0px 1px 5px rgba(50, 50, 50, 0.08);
   padding: 40px;
-  min-height: 330px;
   display: block;
+  @media (min-width: 768px) {
+    min-height: 330px;
+  }
 `;
 export const ProfileDetails = styled.div`
   padding: 40px;
   display: block;
+  .tm-title {
+    font-size: 20px;
+  }
+  @media (max-width: 768px) {
+    .tm-title {
+      font-size: 13px;
+    }
+    padding: 0px 15px;
+    font-size: 12px;
+  }
 `;
 
 export const Accent = styled.div`
@@ -269,19 +297,23 @@ export const Accent = styled.div`
   color: #60a9f0;
 `;
 export const Skills = styled.div`
-  background: #5918e6;
+  background: #21277f;
   color: #f5f5f5;
   padding: 40px;
-  min-height: 330px;
   display: block;
+  @media (min-width: 768px) {
+    min-height: 330px;
+  }
 `;
 
 export const Education = styled.div`
-  background: #5918e6;
+  background: #21277f;
   color: #f5f5f5;
   padding: 40px;
-  min-height: 330px;
   display: block;
+  @media (min-width: 768px) {
+    min-height: 330px;
+  }
 `;
 
 export const EducationTitle = styled.h4`
@@ -294,23 +326,30 @@ export const Languages = styled.div`
   background: #fff;
   box-shadow: 0px 1px 5px rgba(50, 50, 50, 0.08);
   padding: 40px;
-  min-height: 330px;
   display: block;
+  @media (min-width: 768px) {
+    min-height: 330px;
+  }
 `;
 export const Contact = styled.div`
-  background: #fff;
   box-shadow: 0px 1px 5px rgba(50, 50, 50, 0.08);
   padding: 40px;
-  min-height: 330px;
   display: block;
+  background: #21277f;
+  color: #f5f5f5;
+  @media (min-width: 768px) {
+    min-height: 330px;
+  }
 `;
 
 export const Experience = styled.div`
-  background: #5918e6;
+  background: #21277f;
   color: #f5f5f5;
   padding: 40px;
-  min-height: 330px;
   display: block;
+  @media (min-width: 768px) {
+    min-height: 330px;
+  }
 `;
 
 export const Footer = styled.footer`
@@ -348,3 +387,5 @@ export const SocialIcons = styled.ul`
     }
   }
 `;
+
+export const ImageContainer = styled.div``;

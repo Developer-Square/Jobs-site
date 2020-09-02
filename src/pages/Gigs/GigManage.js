@@ -465,7 +465,7 @@ function GigManage() {
           title={isEdit ? `Manage Applications` : `Edit Post`}
           style={{
             fontSize: 15,
-            color: "#5918e6",
+            color: "#21277f",
             backgroundColor: "#e6c018",
             float: "right",
           }}
@@ -595,7 +595,7 @@ function GigManage() {
                                     style={{
                                       fontSize: 15,
                                       color: "#fff",
-                                      backgroundColor: "#5918e6",
+                                      backgroundColor: "#21277f",
                                       float: "right",
                                       height: "29px",
                                       margin: "0 0 0 10px",

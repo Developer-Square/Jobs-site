@@ -38,7 +38,6 @@ import {
   Article,
   ArticleSection,
   Figure,
-  P,
   H3,
   H4,
   Br,
@@ -252,7 +251,7 @@ function LandingPage({ deviceType }) {
                                     href={
                                       isAuthenticated
                                         ? `/dashboard/view/${job.id}`
-                                        : "/"
+                                        : null
                                     }
                                   >
                                     <ListingLogo>
@@ -395,7 +394,8 @@ function LandingPage({ deviceType }) {
 
                             {job.salary}
                           </SpotlightSalary>
-                          <P
+
+                          <div
                             style={{
                               display: "block",
                               height: "100px",
@@ -404,13 +404,10 @@ function LandingPage({ deviceType }) {
                               whiteSpace: "nowrap",
                               overflow: "hidden",
                             }}
-                          >
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: job.description,
-                              }}
-                            />
-                          </P>
+                            dangerouslySetInnerHTML={{
+                              __html: job.description,
+                            }}
+                          />
                           <Center>
                             {isAuthenticated ? (
                               <Button

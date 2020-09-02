@@ -70,6 +70,8 @@ function EditorField({
         editorClassName="editorClassName"
         placeholder={placeholder}
         onEditorStateChange={(val) => onEditorStateChange(val)}
+        // onFocus={(e) => field.onFocus(e)}
+        // onBlur={(e) => field.onBlur(e)}
         // toolbar={{
         //   options: [
         //     "inline",

@@ -150,7 +150,7 @@ export const SearchButton = styled.button`
   font-size: ${themeGet("fontSizes.2", "15")}px;
   font-family: ${themeGet("fontFamily.0", "sans-serif")};
   font-weight: 700;
-  color: #5918e6;
+  color: #21277f;
   display: flex;
   height: 48px;
   align-items: center;

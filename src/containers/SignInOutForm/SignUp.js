@@ -203,7 +203,7 @@ export default function SignOutModal() {
 
                     <HelperText style={{ padding: "20px 0 30px" }}>
                       By signing up, you agree to The Database's{" "}
-                      <strong style={{ color: "#5918e6" }} onClick={handleTOS}>
+                      <strong style={{ color: "#21277f" }} onClick={handleTOS}>
                         Terms &amp; Condtions
                       </strong>
                     </HelperText>

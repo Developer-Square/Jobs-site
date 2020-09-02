@@ -131,9 +131,24 @@ const MobileDrawer = () => {
       width="316px"
       drawerHandler={
         <HamburgerIcon>
-          <span style={classStyle} />
-          <span style={classStyle} />
-          <span style={classStyle} />
+          <span
+            style={{
+              ...classStyle,
+              backgroundColor: isSticky ? `#21277f` : `#fff`,
+            }}
+          />
+          <span
+            style={{
+              ...classStyle,
+              backgroundColor: isSticky ? `#21277f` : `#fff`,
+            }}
+          />
+          <span
+            style={{
+              ...classStyle,
+              backgroundColor: isSticky ? `#21277f` : `#fff`,
+            }}
+          />
         </HamburgerIcon>
       }
       open={state.isOpen}

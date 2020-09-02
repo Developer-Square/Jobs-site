@@ -144,7 +144,7 @@ function GigPost() {
           title="Listings"
           style={{
             fontSize: 15,
-            color: "#5918e6",
+            color: "#21277f",
             backgroundColor: "#e6c018",
             float: "right",
           }}

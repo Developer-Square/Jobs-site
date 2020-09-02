@@ -109,7 +109,7 @@ const CategoryBox = styled.div`
     rgba(255, 255, 255, 0) 25%,
     rgba(255, 255, 255, 0.2)
   );
-  background-color: #5918e6;
+  background-color: #21277f;
   margin: 10px;
   position: relative;
   box-sizing: border-box;
@@ -708,7 +708,7 @@ const H4 = styled.h4`
   font-size: 18px;
   line-height: 27px;
   margin-bottom: 5px;
-  color: #5918e6;
+  color: #21277f;
   margin-top: 2px;
   > span {
     float: right;

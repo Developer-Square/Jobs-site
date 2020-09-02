@@ -13,6 +13,7 @@ import { useRouterQuery } from "helpers/useRouterQuery";
 
 // External CSS import here
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "react-phone-input-2/lib/style.css";
 import "rc-drawer/assets/index.css";
 import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";

@@ -28,6 +28,7 @@ const Layout = ({
               isHomePage ? "home" : ""
             }`}
             pathname={pathname}
+            isSticky={isSticky}
           />
         </Sticky>
       )}

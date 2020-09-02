@@ -43,7 +43,7 @@ export const Gear = styled.div`
   height: 120px;
   margin: 0 auto;
   border-radius: 50%;
-  background: #5918e6;
+  background: #21277f;
   &:before {
     position: absolute;
     left: 5px;
@@ -64,7 +64,7 @@ export const Gear = styled.div`
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    border: 5px solid #5918e6;
+    border: 5px solid #21277f;
     box-sizing: border-box;
     background: white;
   }
@@ -91,7 +91,7 @@ export const Bar = styled.div`
   height: 30px;
   margin-top: -15px;
   border-radius: 5px;
-  background: #5918e6;
+  background: #21277f;
 
   &:before {
     position: absolute;
@@ -135,7 +135,7 @@ export const H2 = styled.h2`
 `;
 export const Wrapper = styled.div`
   background: #fff;
-  height:100vh;
+  height: 100vh;
 
   /* &.loading ${H1}, &.loading ${H2} {
     margin-top: 0px;

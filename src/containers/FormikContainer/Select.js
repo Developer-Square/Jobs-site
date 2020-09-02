@@ -26,8 +26,8 @@ export default Select;
 const FormInput = styled.div`
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
-  display: ;
+  margin: 10px;
+  display: inline-block;
   /* padding: 20px; */
 
   > label {

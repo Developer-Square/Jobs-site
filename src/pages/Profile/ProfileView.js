@@ -142,7 +142,7 @@ const ProfileView = ({ profileID }) => {
                 title={`Edit Your Profile`}
                 style={{
                   fontSize: 15,
-                  color: "#5918e6",
+                  color: "#21277f",
                   backgroundColor: "#e6c018",
                   float: "right",
                 }}
@@ -167,22 +167,16 @@ const ProfileView = ({ profileID }) => {
                         id={user.user}
                         className="img-responsive img-circle tm-border"
                         alt={account.full_name}
-                        style={{
-                          borderRadius: "50%",
-                          border: "5px solid #fff",
-                          boxShadow: "2px 2px #000",
-                          display: "inline-block !important",
-                          maxWidth: "10%",
-                          height: "auto",
-                        }}
                       />
                       <hr />
-                      <ProfileDetails style={{}}>
-                        <h1 className="tm-title bold shadow">
+                      <ProfileDetails>
+                        <h5 className="tm-title bold shadow">
                           Hi, I am {account.full_name}
-                        </h1>
-                        <h5>{`(Job Status - ${user.status})`}</h5>
-                        <h1 className="white bold shadow">{user.title}</h1>
+                        </h5>
+                        <p>
+                          <strong>{`(Job Status - ${user.status})`}</strong>
+                        </p>
+                        <h5 className="white bold shadow">{user.title}</h5>
                       </ProfileDetails>
                     </Col12>
                   </Row>
@@ -192,37 +186,29 @@ const ProfileView = ({ profileID }) => {
               <Container>
                 <Row>
                   <Col6>
+                    <Contact>
+                      <h2>Contact</h2>
+                      <p>
+                        <i className="fa fa-map-marker" /> {user.location}
+                      </p>
+                      <p>
+                        <i className="fa fa-phone" /> {user.mobile}
+                      </p>
+                      <p>
+                        <i className="fa fa-envelope" /> {account.email}
+                      </p>
+                    </Contact>
+                  </Col6>
+                  <Col6>
                     <About>
                       <h3 className="accent">{account.full_name} - Profile</h3>
                       <h2>About</h2>
-                      <p>{user.about}</p>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: user.about,
+                        }}
+                      />
                     </About>
-                  </Col6>
-                  <Col6>
-                    <Skills>
-                      <h2 className="white">Skills</h2>
-                      {user.skill.length > 0 ? (
-                        <>
-                          {user.skill.map((skill) => (
-                            <p>{skill}</p>
-                          ))}
-                        </>
-                      ) : (
-                        <p>Skills proficient in Will be added soon</p>
-                      )}
-                      {/* <strong>PHP MySQL</strong>
-                      <span className="pull-right">70%</span>
-                      <div className="progress">
-                        <div
-                          className="progress-bar progress-bar-primary"
-                          role="progressbar"
-                          aria-valuenow={70}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                          style={{ width: "70%" }}
-                        />
-                      </div> */}
-                    </Skills>
                   </Col6>
                 </Row>
               </Container>
@@ -273,21 +259,7 @@ const ProfileView = ({ profileID }) => {
               {/* contact and experience */}
               <Container>
                 <Row>
-                  <Col4>
-                    <Contact>
-                      <h2>Contact</h2>
-                      <p>
-                        <i className="fa fa-map-marker" /> {user.location}
-                      </p>
-                      <p>
-                        <i className="fa fa-phone" /> {user.phone_number}
-                      </p>
-                      <p>
-                        <i className="fa fa-envelope" /> {account.email}
-                      </p>
-                    </Contact>
-                  </Col4>
-                  <Col8>
+                  <Col12>
                     <Experience>
                       <h2 className="white">Experiences</h2>
                       {user.work.length > 0 ? (
@@ -312,7 +284,37 @@ const ProfileView = ({ profileID }) => {
                         </p>
                       </div> */}
                     </Experience>
-                  </Col8>
+                  </Col12>
+                </Row>
+              </Container>
+              <Container>
+                <Row>
+                  <Col6>
+                    <Skills>
+                      <h2 className="white">Skills</h2>
+                      {user.skill.length > 0 ? (
+                        <>
+                          {user.skill.map((skill) => (
+                            <p>{skill}</p>
+                          ))}
+                        </>
+                      ) : (
+                        <p>Skills proficient in Will be added soon</p>
+                      )}
+                      {/* <strong>PHP MySQL</strong>
+                      <span className="pull-right">70%</span>
+                      <div className="progress">
+                        <div
+                          className="progress-bar progress-bar-primary"
+                          role="progressbar"
+                          aria-valuenow={70}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          style={{ width: "70%" }}
+                        />
+                      </div> */}
+                    </Skills>
+                  </Col6>
                 </Row>
               </Container>
               {/* footer Container */}
@@ -320,7 +322,7 @@ const ProfileView = ({ profileID }) => {
                 <Container>
                   <Row>
                     <Col12>
-                      <p style={{ color: "#5918e6" }}>
+                      <p style={{ color: "#21277f" }}>
                         Copyright © 2020 {account.full_name}'s Profile
                       </p>
                       <SocialIcons>

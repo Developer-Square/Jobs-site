@@ -43,7 +43,7 @@ export const Circle = styled.div`
   height: 20px;
   position: absolute;
   border-radius: 50%;
-  background-color: #5918e6;
+  background-color: #21277f;
   left: 15%;
   transform-origin: 50%;
   animation: ${circle} 0.5s alternate infinite ease;
@@ -84,6 +84,6 @@ export const Span = styled.span`
   top: 75px;
   font-size: 20px;
   letter-spacing: 12px;
-  color: #5918e6;
+  color: #21277f;
   left: 15%;
 `;

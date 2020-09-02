@@ -39,7 +39,7 @@ export default RadioButtons;
 const FormInput = styled.div`
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
+  margin: 10px;
   display: flex;
   /* padding: 20px; */
 

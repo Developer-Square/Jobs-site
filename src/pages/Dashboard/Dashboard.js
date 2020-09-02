@@ -77,7 +77,7 @@ function Dashboard() {
                 return arr;
               }, []);
             console.log("applications", applications);
-            addToLocalStorageArray("thedb_applications", applications);
+            addToLocalStorageArray("thedb_applicants", applications);
           })
           .catch((err) => {
             console.log("error", err);
@@ -300,7 +300,7 @@ function Dashboard() {
                       <Members />
                     </BoxIcon>
                     <BoxCounter>
-                      {localStorage.getItem("thedb_applications").length}
+                      {localStorage.getItem("thedb_applicants").length}
                     </BoxCounter>
                     <BoxContent>Total Applicants</BoxContent>
                   </CategoryBox>
@@ -373,7 +373,7 @@ function Dashboard() {
                                   // disabled={!profile.is_verified}
                                   style={{
                                     fontSize: 15,
-                                    color: "#5918e6",
+                                    color: "#21277f",
                                     backgroundColor: "#e6c018",
                                     // float: "left",
                                     height: "29px",
@@ -434,7 +434,7 @@ function Dashboard() {
                                               disabled={true}
                                               style={{
                                                 fontSize: 15,
-                                                color: "#5918e6",
+                                                color: "#21277f",
                                                 backgroundColor: "#f2f2f2",
                                                 float: "right",
                                                 height: "29px",
@@ -485,7 +485,7 @@ function Dashboard() {
                                               // disabled={!profile.is_verified}
                                               style={{
                                                 fontSize: 15,
-                                                color: "#5918e6",
+                                                color: "#21277f",
                                                 backgroundColor: profile.is_verified
                                                   ? "#e6c018"
                                                   : "#f2f2f2",
@@ -540,7 +540,7 @@ function Dashboard() {
                                           // disabled={!profile.is_verified}
                                           style={{
                                             fontSize: 15,
-                                            color: "#5918e6",
+                                            color: "#21277f",
                                             backgroundColor: profile.is_verified
                                               ? "#e6c018"
                                               : "#f2f2f2",

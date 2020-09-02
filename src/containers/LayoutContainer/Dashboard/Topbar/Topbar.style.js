@@ -29,7 +29,7 @@ export const TopbarWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #5918e6;
+  background-color: #21277f;
   padding: 15px 60px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06);
   position: relative;
@@ -120,7 +120,7 @@ export const UserDropdowItem = styled.div`
 export const NavLink = styled(RRNavLink)`
   font-size: 16px;
   font-weight: 700;
-  color: #5918e6;
+  color: #21277f;
   line-height: 1.2em;
   text-decoration: none;
   display: flex;
@@ -143,7 +143,7 @@ export const NavLink = styled(RRNavLink)`
 export const LogoutBtn = styled.button`
   font-size: 16px;
   font-weight: 700;
-  color: #5918e6;
+  color: #21277f;
   background-color: transparent;
   line-height: 1.2em;
   text-decoration: none;
@@ -161,7 +161,7 @@ export const LogoutBtn = styled.button`
 `;
 
 export const CloseButton = styled.button`
-  color: #5918e6;
+  color: #21277f;
   background-color: transparent;
   outline: 0;
   border: none;

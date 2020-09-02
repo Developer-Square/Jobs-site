@@ -147,7 +147,7 @@ function MyGigs() {
             // disabled={!profile.is_verified}
             style={{
               fontSize: 15,
-              color: "#5918e6",
+              color: "#21277f",
               backgroundColor: profile.is_verified ? "#e6c018" : "#f2f2f2",
               float: "right",
             }}
@@ -197,7 +197,7 @@ function MyGigs() {
                                   disabled={!profile.is_verified}
                                   style={{
                                     fontSize: 15,
-                                    color: "#5918e6",
+                                    color: "#21277f",
                                     backgroundColor: "#e6c018",
                                     float: "right",
                                     height: "29px",
@@ -258,7 +258,7 @@ function MyGigs() {
                                               disabled={true}
                                               style={{
                                                 fontSize: 15,
-                                                color: "#5918e6",
+                                                color: "#21277f",
                                                 backgroundColor: "#f2f2f2",
                                                 float: "right",
                                                 height: "29px",
@@ -309,7 +309,7 @@ function MyGigs() {
                                               // disabled={!profile.is_verified}
                                               style={{
                                                 fontSize: 15,
-                                                color: "#5918e6",
+                                                color: "#21277f",
                                                 backgroundColor: profile.is_verified
                                                   ? "#e6c018"
                                                   : "#f2f2f2",
@@ -364,7 +364,7 @@ function MyGigs() {
                                           // disabled={!profile.is_verified}
                                           style={{
                                             fontSize: 15,
-                                            color: "#5918e6",
+                                            color: "#21277f",
                                             backgroundColor: profile.is_verified
                                               ? "#e6c018"
                                               : "#f2f2f2",

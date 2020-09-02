@@ -65,7 +65,7 @@ const FormInput = styled.div`
     border: 1px solid #f1f1f1;
     display: flex;
     justify-content: flex-start;
-    background: #5918e6ad;
+    background: #21277fad;
     flex-wrap: wrap;
     font-size: 15px;
     margin-bottom: 5px;

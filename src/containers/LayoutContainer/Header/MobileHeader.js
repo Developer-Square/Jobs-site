@@ -77,7 +77,7 @@ const SearchModal = ({ state, pathname, handleSearch }) => {
   );
 };
 
-const MobileHeader = ({ className, pathname }) => {
+const MobileHeader = ({ className, pathname, isSticky }) => {
   const { state, dispatch } = useContext(SearchContext);
 
   const [mobileHeaderRef, dimensions] = useDimensions();
@@ -129,7 +129,7 @@ const MobileHeader = ({ className, pathname }) => {
       <MobileHeaderWrapper>
         <MobileHeaderInnerWrapper className={className} ref={mobileHeaderRef}>
           <DrawerWrapper>
-            <MobileDrawer />
+            <MobileDrawer isSticky={isSticky} />
           </DrawerWrapper>
 
           <LogoWrapper>

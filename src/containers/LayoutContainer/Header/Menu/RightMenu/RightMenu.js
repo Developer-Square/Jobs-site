@@ -41,7 +41,7 @@ export const RightMenu = ({ onLogout, avatar, isAuthenticated, onJoin }) => {
           onClick={onJoin}
           size="small"
           title="Join"
-          style={{ fontSize: 15, color: "#5918e6", backgroundColor: "#e6c018" }}
+          style={{ fontSize: 15, color: "#21277f", backgroundColor: "#e6c018" }}
         />
       ) : (
         <>

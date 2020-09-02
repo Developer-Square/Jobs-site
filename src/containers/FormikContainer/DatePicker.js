@@ -36,7 +36,7 @@ export default DatePicker;
 const FormInput = styled.div`
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
+  margin: 10px;
   display: inline-block;
   /* padding: 20px; */
 
@@ -47,6 +47,10 @@ const FormInput = styled.div`
     font-size: 14px;
     line-height: 28px;
     color: #333;
+  }
+  .react-datepicker-wrapper {
+    width: 100%;
+    max-width: 400px;
   }
 
   input[type="text"],
