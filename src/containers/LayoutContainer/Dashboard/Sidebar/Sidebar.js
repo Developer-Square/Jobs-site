@@ -58,7 +58,12 @@ const sidebarMenus = [
   },
 ];
 
-export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
+export default withRouter(function Sidebar({
+  refs,
+  style,
+  onMenuItemClick,
+  isOpen,
+}) {
   const history = useHistory();
   const {
     authState: { profile },
@@ -80,9 +85,12 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
   };
   return (
     <SidebarWrapper ref={refs} style={style}>
-      <Link to="/">
-        <LogoImage src={Logoimage} alt="TheDB" />
-      </Link>
+      {isOpen ? (
+        <Link to="/">
+          <LogoImage src={Logoimage} alt="TheDB" />
+        </Link>
+      ) : null}
+
       <MenuWrapper>
         {sidebarMenus.map((menu, index) => (
           <NavLink

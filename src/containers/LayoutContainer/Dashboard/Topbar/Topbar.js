@@ -114,7 +114,7 @@ const Topbar = ({ refs }) => {
         >
           <Scrollbars autoHide>
             <DrawerContentWrapper>
-              <Sidebar onMenuItemClick={toggleHandler} />
+              <Sidebar onMenuItemClick={toggleHandler} isOpen={state.isOpen} />
             </DrawerContentWrapper>
           </Scrollbars>
         </Drawer>

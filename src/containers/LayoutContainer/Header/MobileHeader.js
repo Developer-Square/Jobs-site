@@ -21,6 +21,7 @@ import { SearchIcon, LongArrowLeft } from "components/AllSvgIcon";
 import { isCategoryPage } from "../is-home-page";
 import useDimensions from "helpers/useComponentSize";
 import Logoimage from "image/thedb.png";
+import InvertedLogoimage from "image/db.png";
 import styled from "styled-components";
 
 export const Logo = styled.div`
@@ -134,7 +135,10 @@ const MobileHeader = ({ className, pathname, isSticky }) => {
 
           <LogoWrapper>
             <Link to="/">
-              <LogoImage src={Logoimage} alt="TheDB" />
+              <LogoImage
+                src={isSticky ? Logoimage : InvertedLogoimage}
+                alt="TheDB"
+              />
             </Link>
           </LogoWrapper>
 
