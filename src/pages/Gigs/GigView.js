@@ -38,7 +38,20 @@ function GigView() {
   const [error, setError] = useState(false);
   const reload = useAppState("isReload");
   const history = useHistory();
+
+  const useDispatch = useStickyDispatch();
+  const setManage = useCallback(() => useDispatch({ type: "MANAGE" }), [
+    useDispatch,
+  ]);
+  const setPost = useCallback(() => useDispatch({ type: "POST" }), [
+    useDispatch,
+  ]);
+  const setView = useCallback(() => useDispatch({ type: "VIEW" }), [
+    useDispatch,
+  ]);
+
   useEffect(() => {
+    setView();
     setLoading(true);
     setTimeout(() => {
       axios
@@ -54,15 +67,9 @@ function GigView() {
           setError(err);
         });
     }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reload]);
 
-  const useDispatch = useStickyDispatch();
-  const setManage = useCallback(() => useDispatch({ type: "MANAGE" }), [
-    useDispatch,
-  ]);
-  const setPost = useCallback(() => useDispatch({ type: "POST" }), [
-    useDispatch,
-  ]);
   const toggleManage = (category, id) => {
     setManage();
     history.push(`/dashboard/${category}/${id}`);

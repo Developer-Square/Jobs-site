@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { withRouter, useHistory } from "react-router-dom";
+import { withRouter, useHistory, Link } from "react-router-dom";
 import {
   SidebarWrapper,
   NavLink,
   MenuWrapper,
   Svg,
   LogoutBtn,
+  LogoImage,
 } from "./Sidebar.style";
 import {
   DASHBOARD,
@@ -19,7 +20,7 @@ import {
   APPLICATIONS,
 } from "constants/routes.constants";
 import { AuthContext } from "contexts/auth/auth.context";
-
+import Logoimage from "image/thedb.png";
 import { DashboardIcon, SettingIcon, LogoutIcon } from "components/AllSvgIcon";
 import { CategoryIcon } from "components/AllSvgIcon";
 
@@ -79,6 +80,9 @@ export default withRouter(function Sidebar({ refs, style, onMenuItemClick }) {
   };
   return (
     <SidebarWrapper ref={refs} style={style}>
+      <Link to="/">
+        <LogoImage src={Logoimage} alt="TheDB" />
+      </Link>
       <MenuWrapper>
         {sidebarMenus.map((menu, index) => (
           <NavLink

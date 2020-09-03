@@ -11,6 +11,7 @@ import UserImage from "image/user.jpg";
 import React, { useContext, useCallback } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { Link, useHistory } from "react-router-dom";
+import { useDeviceType } from "helpers/useDeviceType";
 import {
   DrawerClose,
   DrawerContentWrapper,
@@ -49,6 +50,8 @@ const Topbar = ({ refs }) => {
     authState: { profile },
     authDispatch,
   } = useContext(AuthContext);
+  const userAgent = navigator.userAgent;
+  const deviceType = useDeviceType(userAgent);
   const img = localStorage.getItem("thedb_individual_profile")
     ? JSON.parse(localStorage.getItem("thedb_individual_profile"))["image"]
     : localStorage.getItem("thedb_org_profile")
@@ -118,21 +121,27 @@ const Topbar = ({ refs }) => {
       </DrawerWrapper>
 
       <TopbarRightSide>
-        <Popover
-          direction="right"
-          content={<Notification data={data} />}
-          accessibilityType={"tooltip"}
-          placement={"bottomRight"}
-          handler={
-            <NotificationIconWrapper>
-              <NotificationIcon />
-              <AlertDot>
-                <AlertDotIcon />
-              </AlertDot>
-            </NotificationIconWrapper>
-          }
-        />
-        <Link style={{ color: "#fff", margin: "0 10px" }} to={PROFILE_PAGE}>
+        {deviceType.desktop ? (
+          <Popover
+            direction="right"
+            content={<Notification data={data} />}
+            accessibilityType={"tooltip"}
+            placement={"bottomRight"}
+            handler={
+              <NotificationIconWrapper>
+                <NotificationIcon />
+                <AlertDot>
+                  <AlertDotIcon />
+                </AlertDot>
+              </NotificationIconWrapper>
+            }
+          />
+        ) : null}
+
+        <Link
+          style={{ color: "#fff", margin: "0 10px", fontSize: "13px" }}
+          to={PROFILE_PAGE}
+        >
           {profile.first_name !== "" ? profile.first_name : profile.email}
         </Link>
         <Popover

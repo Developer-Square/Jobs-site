@@ -624,6 +624,7 @@ function Profile() {
                             control="input"
                             type="text"
                             label="Title"
+                            placeholder="e.g. Student, Eng, Mr etc"
                             name="title"
                           />
                           <FormikControl
@@ -636,6 +637,7 @@ function Profile() {
                             control="input"
                             type="phone"
                             label="Phone Number"
+                            placeholder="e.g. +254 722-123123"
                             name="mobile"
                           />
                           <FormikControl
@@ -658,8 +660,9 @@ function Profile() {
                           <FormikControl
                             control="input"
                             type="text"
-                            label="Current Residence"
+                            label="Current Residence (County, Place)"
                             name="location"
+                            placeholder="e.g. Nairobi, Kasarani - Corner"
                           />
                           <FormikControl
                             control="textarea"
@@ -672,6 +675,7 @@ function Profile() {
                             type="file"
                             setFieldValue={formik.setFieldValue}
                             // value={formik.values.image}
+                            placeholder="Tell us more about yourself, include your skills too"
                             label="Profile Image"
                             name="image"
                           />
@@ -702,41 +706,48 @@ function Profile() {
                             control="input"
                             type="text"
                             label="Organization Name"
+                            placeholder="e.g. Safaricom PLC"
                             name="name"
                           />
                           <FormikControl
                             control="input"
                             type="text"
-                            label="Website Domain"
+                            label="Website Domain (Optional)"
+                            placeholder="e.g. Safaricom PLC"
                             name="website"
                           />
                           <FormikControl
                             control="input"
                             type="phone"
-                            label="Phone Number"
+                            label="Contact Person Mobile"
                             name="mobile"
+                            placeholder="e.g. +254 722-123123"
                           />
                           <FormikControl
                             control="input"
                             type="text"
                             label="Country"
+                            placeholder="e.g. Kenya"
                             name="country"
                           />
                           <FormikControl
                             control="input"
                             type="text"
                             label="Current Office Location"
+                            placeholder="e.g. Nairobi CBD"
                             name="location"
                           />
                           <FormikControl
                             control="input"
                             type="text"
                             label="Company Address"
+                            placeholder="e.g. P.O. Box 12345, 00200"
                             name="address"
                           />
                           <FormikControl
                             control="textarea"
-                            label="About Company Info"
+                            label="About Company"
+                            placeholder="Tell us more about your organization... (Company's Industry, No. of Employees, Vision and mission)"
                             name="description"
                             rte={true}
                           />

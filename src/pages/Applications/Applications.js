@@ -23,7 +23,7 @@ import ApplicationModal from "pages/common/ApplicationModal";
 import Loader from "components/Loader/Loader";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import Error500 from "components/Error/Error500";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { categorySelector } from "pages/common/helpers";
 import ResendEmail from "containers/SignInOutForm/resendEmail";
 
@@ -158,12 +158,9 @@ function GigView() {
                 <div key={index}>
                   {app !== null && app !== undefined ? (
                     <li>
-                      <section>
+                      <Link to={`/dashboard/view/${app.id}`}>
                         <ListingLogo>
-                          <ImageWrapper
-                            url={setApplications.companyLogo}
-                            alt={"company logo"}
-                          />
+                          <ImageWrapper alt={"company logo"} id={app.creator} />
                         </ListingLogo>
                         <ListingTitle>
                           <h3>
@@ -382,7 +379,7 @@ function GigView() {
                             </li>
                           </ListingIcons>
                         </ListingTitle>
-                      </section>
+                      </Link>
                     </li>
                   ) : (
                     <>

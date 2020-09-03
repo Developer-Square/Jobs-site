@@ -27,6 +27,7 @@ import ImageWrapper from "components/Image/Image";
 import { RefundIcon } from "components/AllSvgIcon";
 import ModalTemplate from "pages/common/ModalTemplate";
 import { H3 } from "styles/pages.style";
+import { H4 } from "styles/pages.style";
 
 function GigManage() {
   const match = useRouteMatch();
@@ -342,7 +343,10 @@ function GigManage() {
           overlayClassName: "quick-view-overlay",
           closeOnClickOutside: true,
           component: () =>
-            EmailVerificationModal(`${profile.full_name}${" "}${status}`),
+            EmailVerificationModal(
+              `${profile.full_name}${" "}${status}`,
+              status === "accepted" ? `Kindly contact the Applicant` : null
+            ),
           closeComponent: "",
           config: {
             enableResizing: false,
@@ -467,7 +471,6 @@ function GigManage() {
             fontSize: 15,
             color: "#21277f",
             backgroundColor: "#e6c018",
-            float: "right",
           }}
         />
       </h4>
@@ -477,8 +480,7 @@ function GigManage() {
         <>
           {currentForm === "edit" && (
             <>
-              <h4>
-                .
+              <H4>
                 <Button
                   onClick={closeApplications}
                   size="small"
@@ -487,7 +489,7 @@ function GigManage() {
                     fontSize: 15,
                     color: "#fff",
                     backgroundColor: "#c018e6",
-                    float: "left",
+                    margin: "0 10px",
                   }}
                 />
                 <Button
@@ -498,10 +500,10 @@ function GigManage() {
                     fontSize: 15,
                     color: "#fff",
                     backgroundColor: "#e6183e",
-                    float: "right",
+                    margin: "0 10px",
                   }}
                 />
-              </h4>
+              </H4>
               <FormWrapper>
                 <Formik
                   initialValues={initialValues}

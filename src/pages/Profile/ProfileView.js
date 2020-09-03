@@ -250,7 +250,6 @@ const ProfileView = ({ profileID }) => {
                       <ul>
                         <li>English</li>
                         <li>Kiswahili</li>
-                        <li>Arabic</li>
                       </ul>
                     </Languages>
                   </Col4>

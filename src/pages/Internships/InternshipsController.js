@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import { useAppState } from "contexts/app/app.provider";
 import InternshipPost from "./InternshipPost";
@@ -6,14 +7,15 @@ import InternshipManage from "./InternshipManage";
 
 export default function InternshipsController() {
   let RenderView;
+  const currentForm = useAppState("currentForm");
 
-  if (useAppState("currentForm") === "post") {
+  if (currentForm === "post") {
     RenderView = InternshipPost;
   }
-  if (useAppState("currentForm") === "view") {
+  if (currentForm === "view" || currentForm === "edit") {
     RenderView = InternshipView;
   }
-  if (useAppState("currentForm") === "manage") {
+  if (currentForm === "manage") {
     RenderView = InternshipManage;
   }
 

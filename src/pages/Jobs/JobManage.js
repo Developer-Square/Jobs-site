@@ -26,6 +26,7 @@ import Error500 from "components/Error/Error500";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import Loader from "components/Loader/Loader";
 import ModalTemplate from "pages/common/ModalTemplate";
+import { H4 } from "styles/pages.style";
 
 function JobManage() {
   const match = useRouteMatch();
@@ -328,7 +329,10 @@ function JobManage() {
           overlayClassName: "quick-view-overlay",
           closeOnClickOutside: true,
           component: () =>
-            EmailVerificationModal(`${profile.full_name}${" "}${status}`),
+            EmailVerificationModal(
+              `${profile.full_name}${" "}${status}`,
+              status === "accepted" ? `Kindly contact the Applicant` : null
+            ),
           closeComponent: "",
           config: {
             enableResizing: false,
@@ -462,8 +466,7 @@ function JobManage() {
         <>
           {currentForm === "edit" && (
             <>
-              <h4>
-                .
+              <H4>
                 <Button
                   onClick={closeApplications}
                   size="small"
@@ -472,7 +475,7 @@ function JobManage() {
                     fontSize: 15,
                     color: "#fff",
                     backgroundColor: "#c018e6",
-                    float: "left",
+                    margin: "0 10px",
                   }}
                 />
                 <Button
@@ -483,10 +486,10 @@ function JobManage() {
                     fontSize: 15,
                     color: "#fff",
                     backgroundColor: "#e6183e",
-                    float: "right",
+                    margin: "0 10px",
                   }}
                 />
-              </h4>
+              </H4>
 
               <FormWrapper>
                 <Formik

@@ -1,21 +1,21 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState, useContext, useCallback } from "react";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
-import { CardWrapper, FormWrapper } from "./Jobs.style";
-import FormikControl from "containers/FormikContainer/FormikControl";
+import { closeModal, openModal } from "@redq/reuse-modal";
 import axios from "axios";
-import { BASE_URL } from "constants/constants";
-import { tokenConfig } from "helpers";
 import Button from "components/Button/Button";
-import { AuthContext } from "contexts/auth/auth.context";
-import { Industries } from "pages/common/industry";
-import { useHistory } from "react-router-dom";
-import { useStickyDispatch } from "contexts/app/app.provider";
-import { openModal, closeModal } from "@redq/reuse-modal";
-import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import Error500 from "components/Error/Error500";
 import Loader from "components/Loader/Loader";
+import { BASE_URL } from "constants/constants";
+import FormikControl from "containers/FormikContainer/FormikControl";
+import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import { useStickyDispatch } from "contexts/app/app.provider";
+import { AuthContext } from "contexts/auth/auth.context";
+import { Form, Formik } from "formik";
+import { tokenConfig } from "helpers";
+import { Industries } from "pages/common/industry";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import * as Yup from "yup";
+import { CardWrapper, FormWrapper } from "./Jobs.style";
 
 function JobPost() {
   const history = useHistory();
@@ -77,7 +77,6 @@ function JobPost() {
     title: Yup.string().required("Required"),
     industry: Yup.string().required("Required"),
     location: Yup.string().required("Required"),
-    salary: Yup.string().required("Required"),
     description: Yup.string().required("Required"),
     job_type: Yup.string().required("Required"),
     years_of_exp: Yup.string().required("Required"),
@@ -172,19 +171,22 @@ function JobPost() {
                     <FormikControl
                       control="input"
                       type="text"
-                      label="Title"
+                      label="Job Name"
+                      placeholder="e.g. Accountant, Developer, Lawyer"
                       name="title"
                     />
                     <FormikControl
                       control="input"
                       type="text"
-                      label="Salary"
+                      label="Salary (If confidential, leave Blank)"
+                      placeholder="e.g. 80,000 or 30,000"
                       name="salary"
                     />
                     <FormikControl
                       control="input"
                       type="text"
-                      label="Location"
+                      label="Location (County, place)"
+                      placeholder="e.g. Kajiado, Rongai - Maasai Mall"
                       name="location"
                     />
                     <FormikControl
@@ -213,7 +215,8 @@ function JobPost() {
                     />
                     <FormikControl
                       control="textarea"
-                      label="Description"
+                      label="Job Description"
+                      placeholder="Tell us more about the job, no. of positions, skills required ..."
                       name="description"
                       rte={true}
                     />

@@ -6,6 +6,7 @@ export const initialState = {
 };
 
 export function reducer(state, { type }) {
+  console.log("state", state, "type", type);
   switch (type) {
     case "POST":
       return {

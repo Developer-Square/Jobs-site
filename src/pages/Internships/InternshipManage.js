@@ -27,6 +27,7 @@ import { openModal } from "@redq/reuse-modal";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
 import ModalTemplate from "pages/common/ModalTemplate";
 import { H3 } from "styles/pages.style";
+import { H4 } from "styles/pages.style";
 
 function InternshipManage() {
   const match = useRouteMatch();
@@ -310,7 +311,10 @@ function InternshipManage() {
           overlayClassName: "quick-view-overlay",
           closeOnClickOutside: true,
           component: () =>
-            EmailVerificationModal(`${profile.full_name}${" "}${status}`),
+            EmailVerificationModal(
+              `${profile.full_name}${" "}${status}`,
+              status === "accepted" ? `Kindly contact the Applicant` : null
+            ),
           closeComponent: "",
           config: {
             enableResizing: false,
@@ -426,7 +430,9 @@ function InternshipManage() {
     <CardWrapper>
       <h4>
         Manage Applications
-        {initialValues ? ` (${initialValues.title})` : " ..."}
+        {initialValues && initialValues.title
+          ? ` (${initialValues.title})`
+          : " ..."}
         <Button
           onClick={isEdit ? setList : setForm}
           size="small"
@@ -445,8 +451,7 @@ function InternshipManage() {
         <>
           {currentForm === "edit" && (
             <>
-              <h4>
-                .
+              <H4>
                 <Button
                   onClick={closeApplications}
                   size="small"
@@ -455,7 +460,7 @@ function InternshipManage() {
                     fontSize: 15,
                     color: "#fff",
                     backgroundColor: "#c018e6",
-                    float: "left",
+                    margin: "0 10px",
                   }}
                 />
                 <Button
@@ -466,10 +471,10 @@ function InternshipManage() {
                     fontSize: 15,
                     color: "#fff",
                     backgroundColor: "#e6183e",
-                    float: "right",
+                    margin: "0 10px",
                   }}
                 />
-              </h4>
+              </H4>
 
               <FormWrapper>
                 <Formik

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import { useAppState } from "contexts/app/app.provider";
 import JobPost from "./JobPost";
@@ -6,14 +7,15 @@ import JobManage from "./JobManage";
 
 export default function JobsController() {
   let RenderView;
+  const currentForm = useAppState("currentForm");
 
-  if (useAppState("currentForm") === "post") {
+  if (currentForm === "post") {
     RenderView = JobPost;
   }
-  if (useAppState("currentForm") === "view") {
+  if (currentForm === "view" || currentForm === "edit") {
     RenderView = JobView;
   }
-  if (useAppState("currentForm") === "manage") {
+  if (currentForm === "manage") {
     RenderView = JobManage;
   }
 

@@ -17,6 +17,16 @@ export const CardWrapper = styled.div`
     display: block;
     border-bottom: 1px solid #eaeaea;
     border-radius: 4px 4px 0 0;
+    @media (max-width: 768px) {
+    }
+    button {
+      @media (min-width: 710px) {
+        float: right;
+      }
+
+      @media (max-width: 768px) {
+      }
+    }
   }
 
   @media (min-width: 710px) {

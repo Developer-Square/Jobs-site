@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
 import { useAppState } from "contexts/app/app.provider";
 import GigPost from "./GigPost";
@@ -6,14 +7,15 @@ import GigManage from "./GigManage";
 
 export default function GigsController() {
   let RenderView;
+  const currentForm = useAppState("currentForm");
 
-  if (useAppState("currentForm") === "post") {
+  if (currentForm === "post") {
     RenderView = GigPost;
   }
-  if (useAppState("currentForm") === "view") {
+  if (currentForm === "view" || currentForm === "edit") {
     RenderView = GigView;
   }
-  if (useAppState("currentForm") === "manage") {
+  if (currentForm === "manage") {
     RenderView = GigManage;
   }
 

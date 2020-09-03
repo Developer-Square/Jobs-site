@@ -135,11 +135,13 @@ function ApplicationModal(jobId) {
                         control="input"
                         type="text"
                         label="Budget"
+                        placeholder="e.g. 1,000"
                         name="budget"
                       />
                       <FormikControl
                         control="textarea"
                         label="comment"
+                        placeholder="Brief statement about why you should be considered."
                         name="comment"
                       />
 

@@ -25,7 +25,6 @@ import {
 } from "styles/pages.style";
 import ImageWrapper from "components/Image/Image";
 import { RefundIcon } from "components/AllSvgIcon";
-import { CURRENCY } from "constants/constants";
 import ModalTemplate from "pages/common/ModalTemplate";
 import { H3 } from "styles/pages.style";
 
@@ -404,7 +403,7 @@ function Manage({ type, name, isBusiness, isIndividual }) {
                 {applicants.length > 0 ? (
                   <>
                     {applicants.map((applicant, index) => (
-                      <li key={index} className={`${job.job_type}`}>
+                      <li key={index}>
                         <section onClick={() => applicantView(applicant)}>
                           <ListingLogo>
                             <ImageWrapper

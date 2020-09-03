@@ -155,6 +155,20 @@ export const addToLocalStorageArray = function (name, value) {
 
   // Save back to localStorage
   localStorage.setItem(name, [existing.toString()]);
+  // localStorage.setItem(name, JSON.stringify(existing));
+};
+export const addArrayToLocalStorage = function (name, arr) {
+  // Get the existing data
+  var existing = localStorage.getItem(name);
+  console.log("all the data typeof array", typeof localStorage.getItem(name));
+
+  // If no existing data, create an array
+  // Add new data to localStorage Array
+  existing = existing ? existing.concat(arr) : arr;
+
+  // Save back to localStorage
+  // localStorage.setItem(name, existing);
+  localStorage.setItem(name, JSON.stringify(existing));
 };
 
 /**

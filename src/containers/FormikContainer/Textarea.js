@@ -92,7 +92,6 @@ const FormInput = styled.div`
     padding: 0 18px;
     box-sizing: border-box;
     transition: border-color 0.25s ease;
-    margin-bottom: 10px;
 
     &:hover,
     &:focus {

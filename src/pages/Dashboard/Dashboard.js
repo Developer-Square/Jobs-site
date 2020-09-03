@@ -3,8 +3,8 @@ import { openModal } from "@redq/reuse-modal";
 import axios from "axios";
 import {
   InkPen,
-  RefundIcon,
   Members,
+  RefundIcon,
   SearchIcon,
   SiteSettings,
 } from "components/AllSvgIcon";
@@ -14,9 +14,14 @@ import ImageWrapper from "components/Image/Image";
 import Loader from "components/Loader/Loader";
 import { BASE_URL, CURRENCY } from "constants/constants";
 import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
+import ResendEmail from "containers/SignInOutForm/resendEmail";
 import { useAppState, useStickyDispatch } from "contexts/app/app.provider";
 import { AuthContext } from "contexts/auth/auth.context";
-import { addObjectToLocalStorageObject, tokenConfig } from "helpers";
+import {
+  addObjectToLocalStorageObject,
+  addToLocalStorageArray,
+  tokenConfig,
+} from "helpers";
 import _ from "lodash";
 import { categorySelector, getApplications } from "pages/common/helpers";
 import React, { useCallback, useContext, useEffect, useState } from "react";
@@ -38,8 +43,6 @@ import {
 } from "styles/pages.style";
 import ApplicationModal from "../common/ApplicationModal";
 import { CardWrapper, LinkButton, Offer } from "./Dashboard.style";
-import { addToLocalStorageArray } from "helpers";
-import ResendEmail from "containers/SignInOutForm/resendEmail";
 
 function Dashboard() {
   const {
@@ -49,6 +52,8 @@ function Dashboard() {
   const [jobs, setJobs] = useState(null);
   const [count, setCount] = useState();
   const [error, setError] = useState(false);
+  const [applications, setApplications] = useState(null);
+  const [applicants, setApplicants] = useState(null);
   const [loading, setLoading] = useState(true);
   const reload = useAppState("isReload");
 
@@ -56,74 +61,77 @@ function Dashboard() {
     setTimeout(() => {
       setLoading(true);
 
-      if (
-        JSON.parse(localStorage.getItem("thedb_auth_profile"))["is_individual"]
-      ) {
-        console.log("1");
-        axios
-          .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
-          .then(async (res) => {
-            console.log("applicant data", res.data);
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            const applications = res.data.results
-              .filter(
-                (filteredApplications) =>
-                  filteredApplications.applicant ===
-                  JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-              )
-              // eslint-disable-next-line array-callback-return
-              .reduce((arr, b) => {
-                arr.push(b.job);
-                return arr;
-              }, []);
-            console.log("applications", applications);
-            addToLocalStorageArray("thedb_applicants", applications);
-          })
-          .catch((err) => {
-            console.log("error", err);
-          });
-      } else {
-        console.log("2");
-        axios
-          .get(`${BASE_URL}/jobs/`, tokenConfig())
-          .then(async (res) => {
-            const jobs = res.data.results
-              .filter(
-                (filteredJobs) =>
-                  filteredJobs.creator ===
-                  JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-              )
-              // eslint-disable-next-line array-callback-return
-              .reduce((arr, b) => {
-                arr.push(b.id);
-                return arr;
-              }, []);
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            axios
-              .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
-              .then(async (res) => {
-                console.log("applicant data", res.data);
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                const applications = res.data.results
-                  .filter((filteredApplications) =>
-                    jobs.includes(filteredApplications.job)
-                  )
-                  // eslint-disable-next-line array-callback-return
-                  .reduce((arr, b) => {
-                    arr.push(b.job);
-                    return arr;
-                  }, []);
-                console.log("applications", applications);
-                addToLocalStorageArray("thedb_applications", applications);
-              })
-              .catch((err) => {
-                console.log("error", err);
-              });
-          })
-          .catch((err) => {
-            console.log("error", err);
-          });
-      }
+      // if (
+      //   JSON.parse(localStorage.getItem("thedb_auth_profile"))["is_individual"]
+      // ) {
+      console.log("1");
+      axios
+        .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
+        .then(async (res) => {
+          console.log("applicant data", res.data);
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          const allApplications = res.data.results
+            .filter(
+              (filteredApplications) =>
+                filteredApplications.applicant ===
+                JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
+            )
+            // eslint-disable-next-line array-callback-return
+            .reduce((arr, b) => {
+              arr.push(b.job);
+              return arr;
+            }, []);
+          console.log("applications", allApplications, allApplications.length);
+          setApplications(allApplications);
+          // addToLocalStorageArray("thedb_applications", allApplications);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+      // } else {
+      console.log("2");
+      axios
+        .get(`${BASE_URL}/jobs/`, tokenConfig())
+        .then(async (res) => {
+          const jobs = res.data.results
+            .filter(
+              (filteredJobs) =>
+                filteredJobs.creator ===
+                JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
+            )
+            // eslint-disable-next-line array-callback-return
+            .reduce((arr, b) => {
+              arr.push(b.id);
+              return arr;
+            }, []);
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          axios
+            .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
+            .then(async (res) => {
+              console.log("applicant data", res.data);
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              const allApplicants = res.data.results
+                .filter((filteredApplications) =>
+                  jobs.includes(filteredApplications.job)
+                )
+                // eslint-disable-next-line array-callback-return
+                .reduce((arr, b) => {
+                  arr.push(b.id);
+                  addToLocalStorageArray("thedb_applicants", b.id);
+                  return arr;
+                }, []);
+              console.log("applicants", allApplicants, typeof allApplicants);
+              setApplicants(allApplicants);
+              // addToLocalStorageArray("thedb_applicants", allApplicants);
+            })
+            .catch((err) => {
+              console.log("error", err);
+            });
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+      // }
 
       if (
         JSON.parse(localStorage.getItem("thedb_auth_profile"))["is_individual"]
@@ -288,9 +296,18 @@ function Dashboard() {
                       <InkPen />
                     </BoxIcon>
                     <BoxCounter>
-                      {localStorage.getItem("thedb_applications").length}
+                      {applications ? applications.length : 0}
                     </BoxCounter>
                     <BoxContent>Total Applications</BoxContent>
+                  </CategoryBox>
+                  <CategoryBox>
+                    <BoxIcon>
+                      <Members />
+                    </BoxIcon>
+                    <BoxCounter>
+                      {applicants ? applicants.length : 0}
+                    </BoxCounter>
+                    <BoxContent>Gig Applicants</BoxContent>
                   </CategoryBox>
                 </>
               ) : (
@@ -300,21 +317,19 @@ function Dashboard() {
                       <Members />
                     </BoxIcon>
                     <BoxCounter>
-                      {localStorage.getItem("thedb_applicants").length}
+                      {applicants ? applicants.length : 0}
                     </BoxCounter>
                     <BoxContent>Total Applicants</BoxContent>
                   </CategoryBox>
-                  {profile.is_business ? null : (
-                    <CategoryBox>
-                      <BoxIcon>
-                        <SiteSettings />
-                      </BoxIcon>
-                      <BoxCounter>
-                        {count.Internship ? count.Internship : 0}
-                      </BoxCounter>
-                      <BoxContent>My Internships</BoxContent>
-                    </CategoryBox>
-                  )}
+                  <CategoryBox>
+                    <BoxIcon>
+                      <SiteSettings />
+                    </BoxIcon>
+                    <BoxCounter>
+                      {count.Internship ? count.Internship : 0}
+                    </BoxCounter>
+                    <BoxContent>My Internships</BoxContent>
+                  </CategoryBox>
                   <CategoryBox>
                     <BoxCounter>
                       {(count.parttime ? count.parttime : 0) +
@@ -384,13 +399,9 @@ function Dashboard() {
                                 <>
                                   {profile.is_individual ? (
                                     <>
-                                      {localStorage.getItem(
-                                        "thedb_applications"
-                                      ) ? (
+                                      {applications ? (
                                         <>
-                                          {localStorage
-                                            .getItem("thedb_applications")
-                                            .includes(job.id) ? (
+                                          {applications.includes(job.id) ? (
                                             <Button
                                               onClick={() =>
                                                 profile.is_verified

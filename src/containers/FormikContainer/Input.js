@@ -50,7 +50,6 @@ function Input(props) {
                   className: "input-group mb-3 phone-input",
                 }}
                 className="form-control"
-                placeholder={"Mobile Number"}
                 defaultCountry={"ke"}
                 onlyCountries={["ke", "ug", "tz"]}
                 masks={{ ke: "...-......" }}
@@ -125,7 +124,6 @@ const FormInput = styled.div`
     line-height: 19px;
     box-sizing: border-box;
     transition: border-color 0.25s ease;
-    margin-bottom: 10px;
 
     &:hover,
     &:focus {
