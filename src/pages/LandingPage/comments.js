@@ -1,6 +1,7 @@
 import ericImage from "image/eric.jpg";
 import markImage from "image/mark.jpg";
 import adrianImage from "image/adrian.jpg";
+import larryImage from "image/lawrence.jpeg";
 
 export const comments = [
   {
