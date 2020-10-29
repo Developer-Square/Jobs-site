@@ -17,22 +17,22 @@ export const comments = [
     imageUrl: adrianImage,
     comment:
       "'I praise You, Father, Lord of heaven and earth, because You have hidden these things from the wise and learned, and revealed them to little children.' - Jesus",
-    position: "CTO and Student at Strathmore",
+    position: "CTO and Stratizen",
   },
-  // {
-  //   id: 3,
-  //   name: "Diora Gabriella",
-  //   imageUrl: UserImage,
-  //   comment:
-  //     "Born and raised in Burundi, Mfurayacu Diora Gabriella is an avid entrepreneur, passionate about creating impact and making the world a better place. A 4th year International Business Management(IBM) student and long time Enactus member, Diora is also a writer and a blogger. Her motto 'passion and compassion' is what drives her in all that she does.",
-  //   position: "IT Student, Writer and Change Maker",
-  // },
+  {
+    id: 3,
+    name: "Lawrence Kamau",
+    imageUrl: larryImage,
+    comment:
+      "Lawrence is a talented engineer. He sees an infinity of opportunities in technology and uses it to build impressive solutions.",
+    position: "VP Engineering",
+  },
   {
     id: 4,
     name: "Eric Ochieng'",
     imageUrl: ericImage,
     comment:
       "God-fearing, creative and an innovative individual. Driven to be the change the youth aspire, a voice in youth unemployment and youth created jobs.",
-    position: "CFO and Student at Strathmore",
+    position: "CFO and Stratizen",
   },
 ];
