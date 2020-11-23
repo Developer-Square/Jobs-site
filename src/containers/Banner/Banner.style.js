@@ -3,7 +3,7 @@ import { themeGet } from "@styled-system/theme-get";
 
 const BannerWrapper = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: 67vh;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -14,11 +14,11 @@ const BannerWrapper = styled.div`
   background-size: cover;
 
   @media (max-width: 1400px) {
-    min-height: 80vh;
+    min-height: 67vh;
   }
 
   @media (max-width: 1200px) {
-    min-height: 70vh;
+    min-height: 67vh;
   }
 
   @media (max-width: 1050px) {
@@ -27,13 +27,13 @@ const BannerWrapper = styled.div`
 
   @media (max-width: 990px) {
     min-height: 260px;
-    height: 100vh;
+    height: 67vh;
     padding-top: 50px;
   }
 
   @media (max-width: 767px) {
     min-height: 160px;
-    height: 100vh;
+    height: 67vh;
     padding-top: 45px;
   }
 `;

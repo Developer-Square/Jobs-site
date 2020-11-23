@@ -4,7 +4,7 @@ import { SEO } from "components/seo";
 import Banner from "containers/Banner/Banner";
 import AdsSection from "components/AdsSection/AdsSection";
 import AdsSectionA from "components/AdsSection/AdsSectionA";
-import BannerImg from "image/LANDING.jpg";
+import BannerImg from "image/landing.jpg";
 import {
   Container,
   RowWrapper,
@@ -158,66 +158,6 @@ function LandingPage({ deviceType }) {
       />
       <Banner imageUrl={BannerImg} />
       <MainContentArea>
-        {/* AD BANNER SECTION. */}
-        <Container>
-          <RowWrapper>
-            <AdsSectionA />
-          </RowWrapper>
-        </Container>
-
-        <Br />
-        <Container>
-          <RowWrapper>
-            {articles ? (
-              <ArticleWrapper>
-                {articles.map((article, index) => (
-                  <Article key={index}>
-                    <Figure>
-                      <Link
-                        to={isAuthenticated ? `/dashboard/${article.slug}` : ""}
-                        onClick={
-                          isAuthenticated
-                            ? () => history.push(`/dashboard/${article.slug}`)
-                            : toggleSignInForm
-                        }
-                      >
-                        <ImageWrapper
-                          url={article.imgUrl}
-                          alt={`article image`}
-                          style={{
-                            height: "400px",
-                            objectFit: "cover",
-                            width: "100%",
-                          }}
-                        />
-                      </Link>
-                      <ArrowNext />
-                    </Figure>
-                    <ArticleSection>
-                      <Link to={article.slug}>{article.title}</Link>
-                      <p>{article.content}</p>
-                    </ArticleSection>
-                    <Button
-                      onClick={
-                        isAuthenticated
-                          ? () => history.push(`/dashboard/${article.slug}`)
-                          : toggleSignInForm
-                      }
-                      size="small"
-                      title={
-                        isAuthenticated ? `View ${article.slug}` : "Get Started"
-                      }
-                      style={{ fontSize: 15, color: "#e6c018" }}
-                    />
-                  </Article>
-                ))}
-              </ArticleWrapper>
-            ) : null}
-          </RowWrapper>
-        </Container>
-
-        {/* AD BANNER SECTION. */}
-
         <Container>
           <RowWrapper>
             <JobsLeftCol>
@@ -457,6 +397,68 @@ function LandingPage({ deviceType }) {
             <Br />
           </RowWrapper>
         </Container>
+
+        {/* AD BANNER SECTION. */}
+        <Container>
+          <RowWrapper>
+            <AdsSectionA />
+          </RowWrapper>
+        </Container>
+
+        <Br />
+        <Container>
+          <RowWrapper>
+            {articles ? (
+              <ArticleWrapper>
+                {articles.map((article, index) => (
+                  <Article key={index}>
+                    <Figure>
+                      <Link
+                        to={isAuthenticated ? `/dashboard/${article.slug}` : ""}
+                        onClick={
+                          isAuthenticated
+                            ? () => history.push(`/dashboard/${article.slug}`)
+                            : toggleSignInForm
+                        }
+                      >
+                        <ImageWrapper
+                          url={article.imgUrl}
+                          alt={`article image`}
+                          style={{
+                            height: "400px",
+                            objectFit: "cover",
+                            width: "100%",
+                          }}
+                        />
+                      </Link>
+                      <ArrowNext />
+                    </Figure>
+                    <ArticleSection>
+                      <Link to={article.slug}>{article.title}</Link>
+                      <p>{article.content}</p>
+                    </ArticleSection>
+                    <Button
+                      onClick={
+                        isAuthenticated
+                          ? () => history.push(`/dashboard/${article.slug}`)
+                          : toggleSignInForm
+                      }
+                      size="small"
+                      title={
+                        isAuthenticated ? `View ${article.slug}` : "Get Started"
+                      }
+                      style={{ fontSize: 15, color: "#e6c018" }}
+                    />
+                  </Article>
+                ))}
+              </ArticleWrapper>
+            ) : null}
+          </RowWrapper>
+        </Container>
+
+        {/* AD BANNER SECTION. */}
+
+
         {/* <Container>
           <RowContent>
             {contents.map((content, index) => (
@@ -475,11 +477,10 @@ function LandingPage({ deviceType }) {
             <div>
               <div>
                 <h3>
-                  Meet The Team
+                  Why?
                   <span>
-                    TheDatabase is a family of nine young men and women. All are
-                    youths and passionate about effecting change in the society.
-                    Below are the leaders.
+                    Here is what motivates us at TheDatabase and we share it in the hope
+                    that it will help you make the most out of your life.
                   </span>
                 </h3>
                 <Comments>

@@ -98,11 +98,8 @@ const Banner = ({ imageUrl }) => {
         <br />
         <BannerSubHeading1>Jobs Need People</BannerSubHeading1>
         <BannerSubHeading>
-          Stay on top of shifting job markets by using a platform that gives you
-          flexibility.
-        </BannerSubHeading>
-        <BannerSubHeading>
-          Get or Post a Gig, Employ or Meet Dream Employers on TheDB.
+          Browse through job listings, get one that fits your skillset, do the work and get paid. 
+          Fast and Easy!
         </BannerSubHeading>
         {isAuthenticated ? (
           <Button
