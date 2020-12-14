@@ -19,7 +19,7 @@ export default function FooterContainer() {
           </Footer.Column>
           <Footer.Column>
             <Footer.Title>About</Footer.Title>
-            <Footer.Link href={`${ABOUT}`}>Who are we?</Footer.Link>
+            {/* <Footer.Link href={`${ABOUT}`}>Who are we?</Footer.Link> */}
             <Footer.Link href={`${SDG}`}>Our SDGs</Footer.Link>
           </Footer.Column>
           <Footer.Column>
