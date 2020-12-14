@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import axios from "axios";
-import { Facebook, Google, GooglePlus, Twitter } from "components/AllSvgIcon";
+import { Facebook, Instagram, Twitter } from "components/AllSvgIcon";
 import Button from "components/Button/Button";
 import Error500 from "components/Error/Error500";
 import ImageWrapper from "components/Image/Image";
@@ -155,79 +155,99 @@ const ProfileView = ({ profileID }) => {
       {loading ? (
         <Loader />
       ) : (
-        <>
-          {user && (
-            <>
-              <Header>
+          <>
+            {user && (
+              <>
+                <Header>
+                  <Container>
+                    <Row>
+                      <Col12 style={{ display: `${desktop ? "block" : "flex"}` }}>
+                        <ImageWrapper
+                          src={user ? user.image : ProfileImage}
+                          id={user.user}
+                          className="img-responsive img-circle tm-border"
+                          alt={account.full_name}
+                        />
+                        <hr />
+                        <ProfileDetails>
+                          <h5 className="tm-title bold shadow">
+                            Hi, I am {account.full_name}
+                          </h5>
+                          <h5 className="white bold shadow">{`Title: ${user.title}`}</h5>
+                          <p>
+                            <strong>{`Status: ${user.status}`}</strong>
+                          </p>
+
+                          <SocialIcons>
+                            <li>
+                              <h2>My Socials: </h2>
+                            </li>
+                            <li>
+                              <a {...user.facebook ? { href: 'https://facebook.com/' + user.facebook } : {}}>
+                                <Facebook />
+                              </a>
+                            </li>
+                            <li>
+                              <a {...user.twitter ? { href: 'https://twitter.com/' + user.twitter } : {}}>
+                                <Twitter />
+                              </a>
+                            </li>
+                            <li>
+                              <a {...user.instagram ? { href: 'https://facebook.com/' + user.instagram } : {}}>
+                                <Instagram />
+                              </a>
+                            </li>
+                          </SocialIcons>
+                        </ProfileDetails>
+                      </Col12>
+                    </Row>
+                  </Container>
+                </Header>
+                {/* about and skills Container */}
                 <Container>
                   <Row>
-                    <Col12 style={{ display: `${desktop ? "block" : "flex"}` }}>
-                      <ImageWrapper
-                        src={user ? user.image : ProfileImage}
-                        id={user.user}
-                        className="img-responsive img-circle tm-border"
-                        alt={account.full_name}
-                      />
-                      <hr />
-                      <ProfileDetails>
-                        <h5 className="tm-title bold shadow">
-                          Hi, I am {account.full_name}
-                        </h5>
+                    <Col4>
+                      <Contact>
+                        <h2>Contact</h2>
                         <p>
-                          <strong>{`(Job Status - ${user.status})`}</strong>
+                          <i className="fa fa-map-marker" /> {user.location}
                         </p>
-                        <h5 className="white bold shadow">{user.title}</h5>
-                      </ProfileDetails>
-                    </Col12>
+                        <p>
+                          <i className="fa fa-phone" /> {user.mobile}
+                        </p>
+                        <p>
+                          <i className="fa fa-envelope" /> {account.email}
+                        </p>
+                      </Contact>
+                    </Col4>
+                    <Col8>
+                      <About>
+                        <h2>About</h2>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: user.about,
+                          }}
+                        />
+                      </About>
+                    </Col8>
                   </Row>
                 </Container>
-              </Header>
-              {/* about and skills Container */}
-              <Container>
-                <Row>
-                  <Col6>
-                    <Contact>
-                      <h2>Contact</h2>
-                      <p>
-                        <i className="fa fa-map-marker" /> {user.location}
-                      </p>
-                      <p>
-                        <i className="fa fa-phone" /> {user.mobile}
-                      </p>
-                      <p>
-                        <i className="fa fa-envelope" /> {account.email}
-                      </p>
-                    </Contact>
-                  </Col6>
-                  <Col6>
-                    <About>
-                      <h3 className="accent">{account.full_name} - Profile</h3>
-                      <h2>About</h2>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: user.about,
-                        }}
-                      />
-                    </About>
-                  </Col6>
-                </Row>
-              </Container>
-              {/* education and languages */}
-              <Container>
-                <Row>
-                  <Col8>
-                    <Education>
-                      <h2 className="white">Education</h2>
-                      {user.edu.length > 0 ? (
-                        <>
-                          {user.edu.map((level) => (
-                            <p>{level}</p>
-                          ))}
-                        </>
-                      ) : (
-                        <p>Education Will be added soon</p>
-                      )}
-                      {/* <div className="education-content">
+                {/* education and languages */}
+                <Container>
+                  <Row>
+                    <Col8>
+                      <Education>
+                        <h2 className="white">Education</h2>
+                        {user.edu.length > 0 ? (
+                          <>
+                            {user.edu.map((level) => (
+                              <p>{level}</p>
+                            ))}
+                          </>
+                        ) : (
+                            <p>Education Will be added soon</p>
+                          )}
+                        {/* <div className="education-content">
                         <Accent>New Web Design</Accent>
                         <div className="education-school">
                           <h5>School of Media</h5>
@@ -242,35 +262,35 @@ const ProfileView = ({ profileID }) => {
                           elementum.
                         </p>
                       </div> */}
-                    </Education>
-                  </Col8>
-                  <Col4>
-                    <Languages>
-                      <h2>Languages</h2>
-                      <ul>
-                        <li>English</li>
-                        <li>Kiswahili</li>
-                      </ul>
-                    </Languages>
-                  </Col4>
-                </Row>
-              </Container>
-              {/* contact and experience */}
-              <Container>
-                <Row>
-                  <Col12>
-                    <Experience>
-                      <h2 className="white">Experiences</h2>
-                      {user.work.length > 0 ? (
-                        <>
-                          {user.work.map((work) => (
-                            <p>{work}</p>
-                          ))}
-                        </>
-                      ) : (
-                        <p>Work experiences Will be added soon</p>
-                      )}
-                      {/* <div className="experience-content">
+                      </Education>
+                    </Col8>
+                    <Col4>
+                      <Languages>
+                        <h2>Languages</h2>
+                        <ul>
+                          <li>English</li>
+                          <li>Kiswahili</li>
+                        </ul>
+                      </Languages>
+                    </Col4>
+                  </Row>
+                </Container>
+                {/* contact and experience */}
+                <Container>
+                  <Row>
+                    <Col12>
+                      <Experience>
+                        <h2 className="white">Experiences</h2>
+                        {user.work.length > 0 ? (
+                          <>
+                            {user.work.map((work) => (
+                              <p>{work}</p>
+                            ))}
+                          </>
+                        ) : (
+                            <p>Work experiences Will be added soon</p>
+                          )}
+                        {/* <div className="experience-content">
                         <Accent>Website Development</Accent>
                         <h5>New Media Company</h5>
                         <span />
@@ -282,25 +302,25 @@ const ProfileView = ({ profileID }) => {
                           tincidunt ut laoreet.
                         </p>
                       </div> */}
-                    </Experience>
-                  </Col12>
-                </Row>
-              </Container>
-              <Container>
-                <Row>
-                  <Col6>
-                    <Skills>
-                      <h2 className="white">Skills</h2>
-                      {user.skill.length > 0 ? (
-                        <>
-                          {user.skill.map((skill) => (
-                            <p>{skill}</p>
-                          ))}
-                        </>
-                      ) : (
-                        <p>Skills proficient in Will be added soon</p>
-                      )}
-                      {/* <strong>PHP MySQL</strong>
+                      </Experience>
+                    </Col12>
+                  </Row>
+                </Container>
+                <Container>
+                  <Row>
+                    <Col6>
+                      <Skills>
+                        <h2 className="white">Skills</h2>
+                        {user.skill.length > 0 ? (
+                          <>
+                            {user.skill.map((skill) => (
+                              <p>{skill}</p>
+                            ))}
+                          </>
+                        ) : (
+                            <p>Skills proficient in Will be added soon</p>
+                          )}
+                        {/* <strong>PHP MySQL</strong>
                       <span className="pull-right">70%</span>
                       <div className="progress">
                         <div
@@ -312,98 +332,76 @@ const ProfileView = ({ profileID }) => {
                           style={{ width: "70%" }}
                         />
                       </div> */}
-                    </Skills>
-                  </Col6>
-                </Row>
-              </Container>
-              {/* footer Container */}
-              <Footer>
+                      </Skills>
+                    </Col6>
+                  </Row>
+                </Container>
+                {/* footer Container */}
+                <Footer>
+                  <Container>
+                    <Row>
+                      <Col12>
+                        <p style={{ color: "#21277f" }}>
+                          Copyright © 2020 {account.full_name}'s Profile
+                      </p>
+                      </Col12>
+                    </Row>
+                  </Container>
+                </Footer>
+              </>
+            )}
+            {org && (
+              <Header>
                 <Container>
                   <Row>
                     <Col12>
-                      <p style={{ color: "#21277f" }}>
-                        Copyright © 2020 {account.full_name}'s Profile
-                      </p>
-                      <SocialIcons>
-                        <li>
-                          <a href="/">
-                            <Facebook />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/">
-                            <GooglePlus />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/">
-                            <Twitter />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="/">
-                            <Google />
-                          </a>
-                        </li>
-                      </SocialIcons>
+                      <ImageWrapper
+                        src={org.logo}
+                        id={org.crea}
+                        className="img-responsive img-circle tm-border"
+                        alt={account.full_name}
+                        style={{
+                          borderRadius: "50%",
+                          border: "5px solid #fff",
+                          boxShadow: "2px 2px #000",
+                          display: "inline-block !important",
+                          maxWidth: "10%",
+                          height: "auto",
+                        }}
+                      />
+                      <hr />
+                      <Container>
+                        <Row>
+                          <Col8>
+                            <Skills>
+                              <h3 className="accent">{org.name}</h3>
+                              <h2>
+                                <Link to={`${org.website}`}>{org.website}</Link>
+                              </h2>
+                              <h2>{org.address}</h2>
+                              <h2>{org.country}</h2>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: org.description,
+                                }}
+                              />
+                            </Skills>
+                          </Col8>
+                        </Row>
+                      </Container>
                     </Col12>
                   </Row>
                 </Container>
-              </Footer>
-            </>
-          )}
-          {org && (
-            <Header>
-              <Container>
-                <Row>
-                  <Col12>
-                    <ImageWrapper
-                      src={org.logo}
-                      id={org.crea}
-                      className="img-responsive img-circle tm-border"
-                      alt={account.full_name}
-                      style={{
-                        borderRadius: "50%",
-                        border: "5px solid #fff",
-                        boxShadow: "2px 2px #000",
-                        display: "inline-block !important",
-                        maxWidth: "10%",
-                        height: "auto",
-                      }}
-                    />
-                    <hr />
-                    <Container>
-                      <Row>
-                        <Col8>
-                          <Skills>
-                            <h3 className="accent">{org.name}</h3>
-                            <h2>
-                              <Link to={`${org.website}`}>{org.website}</Link>
-                            </h2>
-                            <h2>{org.address}</h2>
-                            <h2>{org.country}</h2>
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: org.description,
-                              }}
-                            />
-                          </Skills>
-                        </Col8>
-                      </Row>
-                    </Container>
-                  </Col12>
-                </Row>
-              </Container>
-            </Header>
-          )}
-          {user === null && org === null && (
-            <Center>
-              <div>profile will be updated soon</div>
-              <div>{message ? message : null}</div>
-            </Center>
-          )}
-        </>
-      )}
+              </Header>
+            )}
+            {user === null && org === null && (
+              <Center>
+                <div>profile will be updated soon</div>
+                <div>{message ? message : null}</div>
+              </Center>
+            )}
+          </>
+        )}
     </CardWrapper>
   );
 };

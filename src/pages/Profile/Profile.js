@@ -137,6 +137,9 @@ function Profile() {
           gender: "",
           mobile: "",
           status: "",
+          facebook: "",
+          twitter: "",
+          instagram: "",
           user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
         });
       }
@@ -355,6 +358,9 @@ function Profile() {
       country,
       location,
       website,
+      facebook,
+      twitter,
+      instagram,
     } = values;
     let formData = new FormData();
     console.log("type of image", typeof logo);
@@ -368,6 +374,9 @@ function Profile() {
     formData.append("location", location);
     formData.append("address", address);
     formData.append("mobile", mobile.replace(/[*?^${}()]|[-]|[ ]/g, ""));
+    formData.append("facebook", facebook);
+    formData.append("twitter", twitter);
+    formData.append("instagram", instagram);
     formData.append("user", profile.id);
     console.log("body values ", ...formData, logo);
     setSubmitting(true);
@@ -375,8 +384,7 @@ function Profile() {
     try {
       axios
         .put(
-          `${BASE_URL}/organization/${
-            JSON.parse(localStorage.getItem("thedb_org_profile"))["id"]
+          `${BASE_URL}/organization/${JSON.parse(localStorage.getItem("thedb_org_profile"))["id"]
           }/`,
           formData,
           formTokenConfig()
@@ -424,6 +432,9 @@ function Profile() {
       gender,
       mobile,
       status,
+      facebook,
+      twitter,
+      instagram,
     } = values;
     let formData = new FormData();
     if (typeof image !== "string") {
@@ -441,6 +452,9 @@ function Profile() {
     formData.append("gender", gender);
     formData.append("mobile", mobile.replace(/[*?^${}()]|[-]|[ ]/g, ""));
     formData.append("status", status);
+    formData.append("facebook", facebook);
+    formData.append("twitter", twitter);
+    formData.append("instagram", instagram);
     console.log("val8es fdsf ", ...formData, image);
     setSubmitting(true);
     try {
@@ -478,6 +492,9 @@ function Profile() {
       gender,
       mobile,
       status,
+      facebook,
+      twitter,
+      instagram,
     } = values;
 
     let formData = new FormData();
@@ -497,13 +514,15 @@ function Profile() {
     formData.append("gender", gender);
     formData.append("status", status);
     formData.append("mobile", mobile.replace(/[*?^${}()]|[-]|[ ]/g, ""));
+    formData.append("facebook", facebook);
+    formData.append("twitter", twitter);
+    formData.append("instagram", instagram);
     console.log("val8es fdsf ", ...formData, image);
     setSubmitting(true);
     try {
       axios
         .put(
-          `${BASE_URL}/individual/${
-            JSON.parse(localStorage.getItem("thedb_individual_profile"))["id"]
+          `${BASE_URL}/individual/${JSON.parse(localStorage.getItem("thedb_individual_profile"))["id"]
           }/`,
           formData,
           formTokenConfig()
@@ -553,220 +572,53 @@ function Profile() {
       {loading ? (
         <Loader />
       ) : (
-        <>
-          {currentForm === "edit" && (
-            <>
-              {" "}
-              <FormWrapper>
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={validationSchema}
-                  onSubmit={onSubmit}
-                >
-                  {(formik) => {
-                    return (
-                      <Form>
-                        <FormikControl
-                          control="input"
-                          type="text"
-                          label="First Name"
-                          name="first_name"
-                        />
-                        <FormikControl
-                          control="input"
-                          type="text"
-                          label="Last Name"
-                          name="last_name"
-                        />
-                        <FormikControl
-                          control="input"
-                          type="email"
-                          label="Email"
-                          name="email"
-                          onClick={
-                            profile.is_verified
-                              ? () =>
+          <>
+            {currentForm === "edit" && (
+              <>
+                {" "}
+                <FormWrapper>
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={onSubmit}
+                  >
+                    {(formik) => {
+                      return (
+                        <Form>
+                          <FormikControl
+                            control="input"
+                            type="text"
+                            label="First Name"
+                            name="first_name"
+                          />
+                          <FormikControl
+                            control="input"
+                            type="text"
+                            label="Last Name"
+                            name="last_name"
+                          />
+                          <FormikControl
+                            control="input"
+                            type="email"
+                            label="Email"
+                            name="email"
+                            onClick={
+                              profile.is_verified
+                                ? () =>
                                   handleModal(
                                     "Oops!",
                                     "Sorry, cant edit email after verification"
                                   )
-                              : null
-                          }
-                          readOnly={profile.is_verified ? true : false}
-                        />
-                        <Br />
-                        <Button
-                          type="submit"
-                          size="small"
-                          title={
-                            formik.isSubmitting ? "Changing... " : "Change"
-                          }
-                          style={{ fontSize: 15, color: "#fff" }}
-                          disabled={!formik.isValid}
-                        />
-                      </Form>
-                    );
-                  }}
-                </Formik>
-              </FormWrapper>
-              <h4>Additional Details</h4>
-              {profile.is_individual ? (
-                <FormWrapper>
-                  <Formik
-                    initialValues={initialProfileValues}
-                    validationSchema={profileValidationSchema}
-                    onSubmit={editting ? onChangeSubmit : onAddSubmit}
-                  >
-                    {(formik) => {
-                      return (
-                        <Form>
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Title"
-                            placeholder="e.g. Student, Eng, Mr etc"
-                            name="title"
+                                : null
+                            }
+                            readOnly={profile.is_verified ? true : false}
                           />
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="ID Number"
-                            name="id_number"
-                          />
-                          <FormikControl
-                            control="input"
-                            type="phone"
-                            label="Phone Number"
-                            placeholder="e.g. +254 722-123123"
-                            name="mobile"
-                          />
-                          <FormikControl
-                            control="date"
-                            label="Birth Date"
-                            name="date_of_birth"
-                          />
-                          <FormikControl
-                            control="select"
-                            label="Gender"
-                            name="gender"
-                            options={genderOptions}
-                          />
-                          <FormikControl
-                            control="select"
-                            label="Status"
-                            name="status"
-                            options={statusOptions}
-                          />
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Current Residence (County, Place)"
-                            name="location"
-                            placeholder="e.g. Nairobi, Kasarani - Corner"
-                          />
-                          <FormikControl
-                            control="textarea"
-                            label="Additional Info"
-                            name="about"
-                            rte={true}
-                          />
-                          <FormikControl
-                            control="input"
-                            type="file"
-                            setFieldValue={formik.setFieldValue}
-                            // value={formik.values.image}
-                            placeholder="Tell us more about yourself, include your skills too"
-                            label="Profile Image"
-                            name="image"
-                          />
-                          {/* <Field type="file" name="image" id="image" value={null} /> */}
-                          <Button
-                            type="submit"
-                            size="small"
-                            title={formik.isSubmitting ? "Adding... " : "Done"}
-                            style={{ fontSize: 15, color: "#fff" }}
-                            disabled={!formik.isValid}
-                          />
-                        </Form>
-                      );
-                    }}
-                  </Formik>
-                </FormWrapper>
-              ) : (
-                <FormWrapper>
-                  <Formik
-                    initialValues={initialOrganizationValues}
-                    validationSchema={organizationValidationSchema}
-                    onSubmit={editting ? onOrgChangeSubmit : onOrgSubmit}
-                  >
-                    {(formik) => {
-                      return (
-                        <Form>
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Organization Name"
-                            placeholder="e.g. Safaricom PLC"
-                            name="name"
-                          />
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Website Domain (Optional)"
-                            placeholder="e.g. Safaricom PLC"
-                            name="website"
-                          />
-                          <FormikControl
-                            control="input"
-                            type="phone"
-                            label="Contact Person Mobile"
-                            name="mobile"
-                            placeholder="e.g. +254 722-123123"
-                          />
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Country"
-                            placeholder="e.g. Kenya"
-                            name="country"
-                          />
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Current Office Location"
-                            placeholder="e.g. Nairobi CBD"
-                            name="location"
-                          />
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Company Address"
-                            placeholder="e.g. P.O. Box 12345, 00200"
-                            name="address"
-                          />
-                          <FormikControl
-                            control="textarea"
-                            label="About Company"
-                            placeholder="Tell us more about your organization... (Company's Industry, No. of Employees, Vision and mission)"
-                            name="description"
-                            rte={true}
-                          />
-                          <FormikControl
-                            control="input"
-                            type="file"
-                            setFieldValue={formik.setFieldValue}
-                            // value={formik.values.logo}
-                            label="Company Logo"
-                            name="logo"
-                          />
-                          {/* <Field type="file" name="logo" id="logo" value={null} /> */}
+                          <Br />
                           <Button
                             type="submit"
                             size="small"
                             title={
-                              formik.isSubmitting
-                                ? "Creating Profile... "
-                                : "Done"
+                              formik.isSubmitting ? "Changing... " : "Change"
                             }
                             style={{ fontSize: 15, color: "#fff" }}
                             disabled={!formik.isValid}
@@ -776,12 +628,221 @@ function Profile() {
                     }}
                   </Formik>
                 </FormWrapper>
-              )}
-            </>
-          )}
-          {currentForm === "view" && <ProfileView profileID={profile.id} />}
-        </>
-      )}
+                <h4>Additional Details</h4>
+                {profile.is_individual ? (
+                  <FormWrapper>
+                    <Formik
+                      initialValues={initialProfileValues}
+                      validationSchema={profileValidationSchema}
+                      onSubmit={editting ? onChangeSubmit : onAddSubmit}
+                    >
+                      {(formik) => {
+                        return (
+                          <Form>
+                            <FormikControl
+                              control="input"
+                              type="text"
+                              label="Title"
+                              placeholder="e.g. Student, Eng, Mr etc"
+                              name="title"
+                            />
+                            <FormikControl
+                              control="input"
+                              type="text"
+                              label="ID Number"
+                              name="id_number"
+                            />
+                            <FormikControl
+                              control="input"
+                              type="phone"
+                              label="Phone Number"
+                              placeholder="e.g. +254 722-123123"
+                              name="mobile"
+                            />
+                            <FormikControl
+                              control="input"
+                              type="text"
+                              label="Facebook Username"
+                              placeholder="e.g. first_last"
+                              name="facebook"
+                            />
+                            <FormikControl
+                              control="input"
+                              type="text"
+                              label="Twitter Handle"
+                              placeholder="e.g. yourhandle"
+                              name="twitter"
+                            />
+                            <FormikControl
+                              control="input"
+                              type="text"
+                              label="Instagram Handle"
+                              placeholder="e.g. yourhandle"
+                              name="instagram"
+                            />
+                            <FormikControl
+                              control="date"
+                              label="Birth Date"
+                              name="date_of_birth"
+                            />
+                            <FormikControl
+                              control="select"
+                              label="Gender"
+                              name="gender"
+                              options={genderOptions}
+                            />
+                            <FormikControl
+                              control="select"
+                              label="Status"
+                              name="status"
+                              options={statusOptions}
+                            />
+                            <FormikControl
+                              control="input"
+                              type="text"
+                              label="Current Residence (County, Place)"
+                              name="location"
+                              placeholder="e.g. Nairobi, Kasarani - Corner"
+                            />
+                            <FormikControl
+                              control="textarea"
+                              label="Additional Info"
+                              name="about"
+                              rte={true}
+                            />
+                            <FormikControl
+                              control="input"
+                              type="file"
+                              setFieldValue={formik.setFieldValue}
+                              // value={formik.values.image}
+                              placeholder="Tell us more about yourself, include your skills too"
+                              label="Profile Image"
+                              name="image"
+                            />
+                            {/* <Field type="file" name="image" id="image" value={null} /> */}
+                            <Button
+                              type="submit"
+                              size="small"
+                              title={formik.isSubmitting ? "Adding... " : "Done"}
+                              style={{ fontSize: 15, color: "#fff" }}
+                              disabled={!formik.isValid}
+                            />
+                          </Form>
+                        );
+                      }}
+                    </Formik>
+                  </FormWrapper>
+                ) : (
+                    <FormWrapper>
+                      <Formik
+                        initialValues={initialOrganizationValues}
+                        validationSchema={organizationValidationSchema}
+                        onSubmit={editting ? onOrgChangeSubmit : onOrgSubmit}
+                      >
+                        {(formik) => {
+                          return (
+                            <Form>
+                              <FormikControl
+                                control="input"
+                                type="text"
+                                label="Organization Name"
+                                placeholder="e.g. Safaricom PLC"
+                                name="name"
+                              />
+                              <FormikControl
+                                control="input"
+                                type="text"
+                                label="Website Domain (Optional)"
+                                placeholder="e.g. Safaricom PLC"
+                                name="website"
+                              />
+                              <FormikControl
+                                control="input"
+                                type="phone"
+                                label="Contact Person Mobile"
+                                name="mobile"
+                                placeholder="e.g. +254 722-123123"
+                              />
+                              <FormikControl
+                                control="input"
+                                type="text"
+                                label="Facebook Username"
+                                placeholder="e.g. first_last"
+                                name="facebook"
+                              />
+                              <FormikControl
+                                control="input"
+                                type="text"
+                                label="Twitter Handle"
+                                placeholder="e.g. yourhandle"
+                                name="twitter"
+                              />
+                              <FormikControl
+                                control="input"
+                                type="text"
+                                label="Instagram Handle"
+                                placeholder="e.g. yourhandle"
+                                name="instagram"
+                              />
+                              <FormikControl
+                                control="input"
+                                type="text"
+                                label="Country"
+                                placeholder="e.g. Kenya"
+                                name="country"
+                              />
+                              <FormikControl
+                                control="input"
+                                type="text"
+                                label="Current Office Location"
+                                placeholder="e.g. Nairobi CBD"
+                                name="location"
+                              />
+                              <FormikControl
+                                control="input"
+                                type="text"
+                                label="Company Address"
+                                placeholder="e.g. P.O. Box 12345, 00200"
+                                name="address"
+                              />
+                              <FormikControl
+                                control="textarea"
+                                label="About Company"
+                                placeholder="Tell us more about your organization... (Company's Industry, No. of Employees, Vision and mission)"
+                                name="description"
+                                rte={true}
+                              />
+                              <FormikControl
+                                control="input"
+                                type="file"
+                                setFieldValue={formik.setFieldValue}
+                                // value={formik.values.logo}
+                                label="Company Logo"
+                                name="logo"
+                              />
+                              {/* <Field type="file" name="logo" id="logo" value={null} /> */}
+                              <Button
+                                type="submit"
+                                size="small"
+                                title={
+                                  formik.isSubmitting
+                                    ? "Creating Profile... "
+                                    : "Done"
+                                }
+                                style={{ fontSize: 15, color: "#fff" }}
+                                disabled={!formik.isValid}
+                              />
+                            </Form>
+                          );
+                        }}
+                      </Formik>
+                    </FormWrapper>
+                  )}
+              </>
+            )}
+            {currentForm === "view" && <ProfileView profileID={profile.id} />}
+          </>
+        )}
     </CardWrapper>
   );
 }
