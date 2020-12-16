@@ -166,89 +166,89 @@ function LandingPage({ deviceType }) {
                 {error ? (
                   <Error500 err={error} />
                 ) : (
-                  <>
-                    {loading ? (
-                      <Loader />
-                    ) : (
-                      <>
-                        {jobs ? (
-                          <ul>
-                            {jobs
-                              .sort((a, b) =>
-                                a.posted_on < b.posted_on
-                                  ? 1
-                                  : b.posted_on < a.posted_on
-                                  ? -1
-                                  : 0
-                              )
-                              .slice(0, 4)
-                              .map((job, index) => (
-                                <li key={index} className={`${job.job_type}`}>
-                                  <a
-                                    onClick={
-                                      isAuthenticated ? null : toggleSignInForm
-                                    }
-                                    href={
-                                      isAuthenticated
-                                        ? `/dashboard/view/${job.id}`
-                                        : null
-                                    }
-                                  >
-                                    <ListingLogo>
-                                      <ImageWrapper
-                                        // url={job.company_logo}
-                                        alt={"company logo"}
-                                        id={job.creator}
-                                      />
-                                    </ListingLogo>
-                                    <ListingTitle>
-                                      <H4>
-                                        {job.title}
-                                        <TypeList>
-                                          <ListSpan
-                                            className={`${job.job_type}`}
-                                          >
-                                            {job.job_type}
-                                          </ListSpan>
-                                        </TypeList>
-                                      </H4>
-                                      <ListingIcons>
-                                        <li>
-                                          <div
-                                            style={{
-                                              height: "20px",
-                                              width: "100%",
-                                              textOverflow: "ellipsis",
-                                              whiteSpace: "nowrap",
-                                              overflow: "hidden",
-                                            }}
-                                            className={`description`}
-                                            dangerouslySetInnerHTML={{
-                                              __html: job.description,
-                                            }}
+                    <>
+                      {loading ? (
+                        <Loader />
+                      ) : (
+                          <>
+                            {jobs ? (
+                              <ul>
+                                {jobs
+                                  .sort((a, b) =>
+                                    a.posted_on < b.posted_on
+                                      ? 1
+                                      : b.posted_on < a.posted_on
+                                        ? -1
+                                        : 0
+                                  )
+                                  .slice(0, 4)
+                                  .map((job, index) => (
+                                    <li key={index} className={`${job.job_type}`}>
+                                      <a
+                                        onClick={
+                                          isAuthenticated ? null : toggleSignInForm
+                                        }
+                                        href={
+                                          isAuthenticated
+                                            ? `/dashboard/view/${job.id}`
+                                            : null
+                                        }
+                                      >
+                                        <ListingLogo>
+                                          <ImageWrapper
+                                            // url={job.company_logo}
+                                            alt={"company logo"}
+                                            id={job.creator}
                                           />
-                                        </li>
-                                        <li>
-                                          <SearchIcon />
-                                          {job.location}
-                                        </li>
-                                        <li>
-                                          <RefundIcon />
-                                          {CURRENCY}
+                                        </ListingLogo>
+                                        <ListingTitle>
+                                          <H4>
+                                            {job.title}
+                                            <TypeList>
+                                              <ListSpan
+                                                className={`${job.job_type}`}
+                                              >
+                                                {job.job_type}
+                                              </ListSpan>
+                                            </TypeList>
+                                          </H4>
+                                          <ListingIcons>
+                                            <li>
+                                              <div
+                                                style={{
+                                                  height: "20px",
+                                                  width: "100%",
+                                                  textOverflow: "ellipsis",
+                                                  whiteSpace: "nowrap",
+                                                  overflow: "hidden",
+                                                }}
+                                                className={`description`}
+                                                dangerouslySetInnerHTML={{
+                                                  __html: job.description,
+                                                }}
+                                              />
+                                            </li>
+                                            <li>
+                                              <SearchIcon />
+                                              {job.location}
+                                            </li>
+                                            <li>
+                                              <RefundIcon />
+                                              {CURRENCY}
 
-                                          {job.salary}
-                                        </li>
-                                      </ListingIcons>
-                                    </ListingTitle>
-                                  </a>
-                                </li>
-                              ))}
-                          </ul>
-                        ) : null}
-                      </>
-                    )}
-                  </>
-                )}
+                                              {job.salary}
+                                            </li>
+                                          </ListingIcons>
+                                        </ListingTitle>
+                                      </a>
+                                    </li>
+                                  ))}
+                              </ul>
+                            ) : null}
+                          </>
+                        )}
+                    </>
+                  )}
               </LeftContent>
               <Center>
                 {isAuthenticated ? (
@@ -259,28 +259,28 @@ function LandingPage({ deviceType }) {
                     style={{ fontSize: 15, color: "#e6c018" }}
                   />
                 ) : (
-                  <Button
-                    onClick={() =>
-                      handleModal(
-                        "Log in to view More jobs",
-                        null,
-                        <Button
-                          onClick={toggleSignInForm}
-                          size="small"
-                          title="Login"
-                          style={{ fontSize: 15, color: "#e6c018" }}
-                        />
-                      )
-                    }
-                    size="small"
-                    title="Show More ..."
-                    style={{
-                      fontSize: 15,
-                      color: "#e6c018",
-                      backgroundColor: "#f2f2f2",
-                    }}
-                  />
-                )}
+                    <Button
+                      onClick={() =>
+                        handleModal(
+                          "Log in to view More jobs",
+                          null,
+                          <Button
+                            onClick={toggleSignInForm}
+                            size="small"
+                            title="Login"
+                            style={{ fontSize: 15, color: "#e6c018" }}
+                          />
+                        )
+                      }
+                      size="small"
+                      title="Show More ..."
+                      style={{
+                        fontSize: 15,
+                        color: "#e6c018",
+                        backgroundColor: "#f2f2f2",
+                      }}
+                    />
+                  )}
               </Center>
             </JobsLeftCol>
             <JobsRightCol>
@@ -359,28 +359,28 @@ function LandingPage({ deviceType }) {
                                 style={{ fontSize: 15, color: "#e6c018" }}
                               />
                             ) : (
-                              <Button
-                                onClick={() =>
-                                  handleModal(
-                                    "Log in to view More jobs",
-                                    null,
-                                    <Button
-                                      onClick={toggleSignInForm}
-                                      size="small"
-                                      title="Login"
-                                      style={{ fontSize: 15, color: "#e6c018" }}
-                                    />
-                                  )
-                                }
-                                size="small"
-                                title="Apply"
-                                style={{
-                                  fontSize: 15,
-                                  color: "#e6c018",
-                                  backgroundColor: "#f2f2f2",
-                                }}
-                              />
-                            )}
+                                <Button
+                                  onClick={() =>
+                                    handleModal(
+                                      "Log in to view More jobs",
+                                      null,
+                                      <Button
+                                        onClick={toggleSignInForm}
+                                        size="small"
+                                        title="Login"
+                                        style={{ fontSize: 15, color: "#e6c018" }}
+                                      />
+                                    )
+                                  }
+                                  size="small"
+                                  title="Apply"
+                                  style={{
+                                    fontSize: 15,
+                                    color: "#e6c018",
+                                    backgroundColor: "#f2f2f2",
+                                  }}
+                                />
+                              )}
                           </Center>
                         </SpotlightCard>
                       ))}
