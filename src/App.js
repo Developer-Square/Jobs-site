@@ -19,6 +19,8 @@ import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
 
+import CacheBuster from './CacheBuster';
+
 export default function App() {
   const queryParams = useRouterQuery();
   const [theme, componentMounted] = useDarkMode();
@@ -32,17 +34,28 @@ export default function App() {
   const query = queryParams.get("text") ? queryParams.get("text") : "";
 
   return (
-    <OriginalThemeProvider theme={themeMode}>
-      <SearchProvider query={query}>
-        <HeaderProvider>
-          <AuthProvider>
-            <StickyProvider>
-              <BaseRouter deviceType={deviceType} />
-            </StickyProvider>
-          </AuthProvider>
-        </HeaderProvider>
-        <GlobalStyle />
-      </SearchProvider>
-    </OriginalThemeProvider>
+    <CacheBuster>
+      {({ loading, isLatestVersion, refreshCacheAndReload }) => {
+        if (loading) return null;
+        if (!loading && !isLatestVersion) {
+          refreshCacheAndReload();
+        }
+
+        return (
+          <OriginalThemeProvider theme={themeMode}>
+            <SearchProvider query={query}>
+              <HeaderProvider>
+                <AuthProvider>
+                  <StickyProvider>
+                    <BaseRouter deviceType={deviceType} />
+                  </StickyProvider>
+                </AuthProvider>
+              </HeaderProvider>
+              <GlobalStyle />
+            </SearchProvider>
+          </OriginalThemeProvider>
+        );
+      }}
+    </CacheBuster>
   );
 }
