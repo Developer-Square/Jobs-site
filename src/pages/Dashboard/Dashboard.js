@@ -1,21 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { openModal } from "@redq/reuse-modal";
 import axios from "axios";
 import {
   InkPen,
   Members,
-  RefundIcon,
-  SearchIcon,
   SiteSettings,
 } from "components/AllSvgIcon";
-import Button from "components/Button/Button";
 import Error500 from "components/Error/Error500";
-import ImageWrapper from "components/Image/Image";
 import Loader from "components/Loader/Loader";
-import { BASE_URL, CURRENCY } from "constants/constants";
-import EmailVerificationModal from "containers/SignInOutForm/emailVerificationModal";
-import ResendEmail from "containers/SignInOutForm/resendEmail";
-import { useAppState, useStickyDispatch } from "contexts/app/app.provider";
+import { BASE_URL } from "constants/constants";
+import { useAppState } from "contexts/app/app.provider";
 import { AuthContext } from "contexts/auth/auth.context";
 import {
   addObjectToLocalStorageObject,
@@ -23,9 +16,8 @@ import {
   tokenConfig,
 } from "helpers";
 import _ from "lodash";
-import { categorySelector, getApplications } from "pages/common/helpers";
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { getApplications } from "pages/common/helpers";
+import React, { useContext, useEffect, useState } from "react";
 import {
   BoxContent,
   BoxCounter,
@@ -33,23 +25,14 @@ import {
   CategoriesContainer,
   CategoryBox,
   H4,
-  LeftContent,
-  ListingIcons,
-  ListingLogo,
-  ListingTitle,
-  ListSpan,
   MainContentArea,
-  TypeList,
 } from "styles/pages.style";
-import ApplicationModal from "../common/ApplicationModal";
-import { CardWrapper, LinkButton, Offer } from "./Dashboard.style";
+import { CardWrapper } from "./Dashboard.style";
 
 function Dashboard() {
   const {
     authState: { profile },
   } = useContext(AuthContext);
-  const history = useHistory();
-  const [jobs, setJobs] = useState(null);
   const [count, setCount] = useState();
   const [error, setError] = useState(false);
   const [applications, setApplications] = useState(null);
@@ -200,7 +183,7 @@ function Dashboard() {
             // results = results.push("picture": getOrgLogo(job.creator))
             console.log("testing data", results);
 
-            setJobs(results);
+
             setCount(
               _.countBy(
                 res.data.results.filter(
@@ -223,389 +206,87 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reload]);
 
-  const useDispatch = useStickyDispatch();
-  const setForm = useCallback(() => useDispatch({ type: "MANAGE" }), [
-    useDispatch,
-  ]);
-  const toggleManage = (category, id) => {
-    setForm();
-    history.push(`/dashboard/${category}/${id}`);
-  };
-  const handleModal = (text, subtext, fxn) => {
-    openModal({
-      show: true,
-      overlayClassName: "quick-view-overlay",
-      closeOnClickOutside: true,
-      component: () => EmailVerificationModal(text, subtext, fxn),
-      closeComponent: "",
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: "quick-view-modal",
-        width: 458,
-        height: "auto",
-      },
-    });
-  };
-  const handleApplication = (jobId) => {
-    openModal({
-      show: true,
-      overlayClassName: "quick-view-overlay",
-      closeOnClickOutside: true,
-      component: localStorage.getItem("thedb_individual_profile")
-        ? () => ApplicationModal(jobId)
-        : () =>
-            EmailVerificationModal(
-              `Hey ${profile.full_name}`,
-              "Complete your 'Additional Details' profile to apply for this job",
-              <Offer style={{ padding: "10px 0" }}>
-                Update{" "}
-                <LinkButton onClick={() => history.push("/dashboard/profile")}>
-                  Profile
-                </LinkButton>
-              </Offer>
-            ),
-      closeComponent: "",
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: "quick-view-modal",
-        width: 458,
-        height: "auto",
-      },
-    });
-  };
-
   if (error) {
     return <Error500 err={error} />;
   }
 
   return (
     <CardWrapper>
-      <H4>Dashboard</H4>
+      <H4>Hello, {profile.full_name}</H4>
+      <h5>Explore TheDatabase</h5>
       {loading ? (
         <Loader />
       ) : (
-        <>
-          <MainContentArea>
-            <CategoriesContainer>
-              {profile.is_individual ? (
-                <>
-                  <CategoryBox>
-                    <BoxIcon>
-                      <InkPen />
-                    </BoxIcon>
-                    <BoxCounter>
-                      {applications ? applications.length : 0}
-                    </BoxCounter>
-                    <BoxContent>Total Applications</BoxContent>
-                  </CategoryBox>
-                  <CategoryBox>
-                    <BoxIcon>
-                      <Members />
-                    </BoxIcon>
-                    <BoxCounter>
-                      {applicants ? applicants.length : 0}
-                    </BoxCounter>
-                    <BoxContent>Gig Applicants</BoxContent>
-                  </CategoryBox>
-                </>
-              ) : (
-                <>
-                  <CategoryBox>
-                    <BoxIcon>
-                      <Members />
-                    </BoxIcon>
-                    <BoxCounter>
-                      {applicants ? applicants.length : 0}
-                    </BoxCounter>
-                    <BoxContent>Total Applicants</BoxContent>
-                  </CategoryBox>
-                  <CategoryBox>
-                    <BoxIcon>
-                      <SiteSettings />
-                    </BoxIcon>
-                    <BoxCounter>
-                      {count.Internship ? count.Internship : 0}
-                    </BoxCounter>
-                    <BoxContent>My Internships</BoxContent>
-                  </CategoryBox>
-                  <CategoryBox>
-                    <BoxCounter>
-                      {(count.parttime ? count.parttime : 0) +
-                        (count.fulltime ? count.fulltime : 0) +
-                        (count.Volunteering ? count.Volunteering : 0)}
-                    </BoxCounter>
-                    <BoxIcon>
-                      <SiteSettings />
-                    </BoxIcon>
-                    <BoxContent>My Jobs</BoxContent>
-                  </CategoryBox>
-                </>
-              )}
+          <>
+            <MainContentArea>
+              <CategoriesContainer>
+                {profile.is_individual ? (
+                  <>
+                    <CategoryBox>
+                      <BoxIcon>
+                        <InkPen />
+                      </BoxIcon>
+                      <BoxCounter>
+                        {applications ? applications.length : 0}
+                      </BoxCounter>
+                      <BoxContent>My Applications</BoxContent>
+                    </CategoryBox>
+                    <CategoryBox>
+                      <BoxIcon>
+                        <Members />
+                      </BoxIcon>
+                      <BoxCounter>
+                        {applicants ? applicants.length : 0}
+                      </BoxCounter>
+                      <BoxContent>Gig Applicants</BoxContent>
+                    </CategoryBox>
+                  </>
+                ) : (
+                    <>
+                      <CategoryBox>
+                        <BoxIcon>
+                          <Members />
+                        </BoxIcon>
+                        <BoxCounter>
+                          {applicants ? applicants.length : 0}
+                        </BoxCounter>
+                        <BoxContent>Total Applicants</BoxContent>
+                      </CategoryBox>
+                      <CategoryBox>
+                        <BoxIcon>
+                          <SiteSettings />
+                        </BoxIcon>
+                        <BoxCounter>
+                          {count.Internship ? count.Internship : 0}
+                        </BoxCounter>
+                        <BoxContent>My Internships</BoxContent>
+                      </CategoryBox>
+                      <CategoryBox>
+                        <BoxCounter>
+                          {(count.parttime ? count.parttime : 0) +
+                            (count.fulltime ? count.fulltime : 0) +
+                            (count.Volunteering ? count.Volunteering : 0)}
+                        </BoxCounter>
+                        <BoxIcon>
+                          <SiteSettings />
+                        </BoxIcon>
+                        <BoxContent>My Jobs</BoxContent>
+                      </CategoryBox>
+                    </>
+                  )}
 
-              <CategoryBox>
-                <BoxIcon>
-                  <SiteSettings />
-                </BoxIcon>
-                <BoxCounter>{count.Gig ? count.Gig : 0}</BoxCounter>
-                <BoxContent>My Gigs</BoxContent>
-              </CategoryBox>
-            </CategoriesContainer>
-          </MainContentArea>
-          <LeftContent>
-            <>
-              {jobs !== null && jobs.length > 0 ? (
-                <ul>
-                  {jobs.map((job, index) => (
-                    <li key={index} className={`${job.job_type}`}>
-                      <section>
-                        <ListingLogo>
-                          <ImageWrapper
-                            // url={job.picture}
-                            alt={"company logo"}
-                            id={job.creator}
-                          />
-                        </ListingLogo>
-                        <ListingTitle>
-                          <h3>
-                            {job.title}
-                            <TypeList>
-                              <ListSpan className={`${job.job_type}`}>
-                                {job.job_type}
-                              </ListSpan>
+                <CategoryBox>
+                  <BoxIcon>
+                    <SiteSettings />
+                  </BoxIcon>
+                  <BoxCounter>{count.Gig ? count.Gig : 0}</BoxCounter>
+                  <BoxContent>My Gigs</BoxContent>
+                </CategoryBox>
+              </CategoriesContainer>
 
-                              {job.creator === profile.id ? (
-                                <Button
-                                  onClick={() =>
-                                    toggleManage(
-                                      categorySelector(job.job_type),
-                                      job.id
-                                    )
-                                  }
-                                  size="small"
-                                  title={`Manage`}
-                                  // disabled={!profile.is_verified}
-                                  style={{
-                                    fontSize: 15,
-                                    color: "#21277f",
-                                    backgroundColor: "#e6c018",
-                                    // float: "left",
-                                    height: "29px",
-                                    margin: "0 10px",
-                                  }}
-                                />
-                              ) : (
-                                <>
-                                  {profile.is_individual ? (
-                                    <>
-                                      {applications ? (
-                                        <>
-                                          {applications.includes(job.id) ? (
-                                            <Button
-                                              onClick={() =>
-                                                profile.is_verified
-                                                  ? handleApplication(job.id)
-                                                  : handleModal(
-                                                      `Confrim email to Apply`,
-                                                      `or`,
-                                                      <Button
-                                                        onClick={() =>
-                                                          openModal({
-                                                            show: true,
-                                                            overlayClassName:
-                                                              "quick-view-overlay",
-                                                            closeOnClickOutside: true,
-                                                            component: ResendEmail,
-                                                            closeComponent: "",
-                                                            config: {
-                                                              enableResizing: false,
-                                                              disableDragging: true,
-                                                              className:
-                                                                "quick-view-modal",
-                                                              width: 458,
-                                                              height: "auto",
-                                                            },
-                                                          })
-                                                        }
-                                                        size="small"
-                                                        title={`Send email again`}
-                                                        style={{
-                                                          fontSize: 15,
-                                                          color: "#fff",
-                                                          backgroundColor:
-                                                            "#e618a5",
-                                                          margin: "10px 10px",
-                                                        }}
-                                                      />
-                                                    )
-                                              }
-                                              size="small"
-                                              title={`Applied ✔`}
-                                              disabled={true}
-                                              style={{
-                                                fontSize: 15,
-                                                color: "#21277f",
-                                                backgroundColor: "#f2f2f2",
-                                                float: "right",
-                                                height: "29px",
-                                                margin: "0 0 0 10px",
-                                              }}
-                                            />
-                                          ) : (
-                                            <Button
-                                              onClick={() =>
-                                                profile.is_verified
-                                                  ? handleApplication(job.id)
-                                                  : handleModal(
-                                                      `Confrim email to Apply`,
-                                                      `or`,
-                                                      <Button
-                                                        onClick={() =>
-                                                          openModal({
-                                                            show: true,
-                                                            overlayClassName:
-                                                              "quick-view-overlay",
-                                                            closeOnClickOutside: true,
-                                                            component: ResendEmail,
-                                                            closeComponent: "",
-                                                            config: {
-                                                              enableResizing: false,
-                                                              disableDragging: true,
-                                                              className:
-                                                                "quick-view-modal",
-                                                              width: 458,
-                                                              height: "auto",
-                                                            },
-                                                          })
-                                                        }
-                                                        size="small"
-                                                        title={`Send email again`}
-                                                        style={{
-                                                          fontSize: 15,
-                                                          color: "#fff",
-                                                          backgroundColor:
-                                                            "#e618a5",
-                                                          margin: "10px 10px",
-                                                        }}
-                                                      />
-                                                    )
-                                              }
-                                              size="small"
-                                              title={`Apply`}
-                                              // disabled={!profile.is_verified}
-                                              style={{
-                                                fontSize: 15,
-                                                color: "#21277f",
-                                                backgroundColor: profile.is_verified
-                                                  ? "#e6c018"
-                                                  : "#f2f2f2",
-                                                float: "right",
-                                                height: "29px",
-                                                margin: "0 0 0 10px",
-                                              }}
-                                            />
-                                          )}
-                                        </>
-                                      ) : (
-                                        <Button
-                                          onClick={() =>
-                                            profile.is_verified
-                                              ? handleApplication(job.id)
-                                              : handleModal(
-                                                  `Confrim email to Apply`,
-                                                  `or`,
-                                                  <Button
-                                                    onClick={() =>
-                                                      openModal({
-                                                        show: true,
-                                                        overlayClassName:
-                                                          "quick-view-overlay",
-                                                        closeOnClickOutside: true,
-                                                        component: ResendEmail,
-                                                        closeComponent: "",
-                                                        config: {
-                                                          enableResizing: false,
-                                                          disableDragging: true,
-                                                          className:
-                                                            "quick-view-modal",
-                                                          width: 458,
-                                                          height: "auto",
-                                                        },
-                                                      })
-                                                    }
-                                                    size="small"
-                                                    title={`Send email again`}
-                                                    style={{
-                                                      fontSize: 15,
-                                                      color: "#fff",
-                                                      backgroundColor:
-                                                        "#e618a5",
-                                                      margin: "10px 10px",
-                                                    }}
-                                                  />
-                                                )
-                                          }
-                                          size="small"
-                                          title={`Apply`}
-                                          // disabled={!profile.is_verified}
-                                          style={{
-                                            fontSize: 15,
-                                            color: "#21277f",
-                                            backgroundColor: profile.is_verified
-                                              ? "#e6c018"
-                                              : "#f2f2f2",
-                                            float: "right",
-                                            height: "29px",
-                                            margin: "0 0 0 10px",
-                                          }}
-                                        />
-                                      )}
-                                    </>
-                                  ) : null}
-                                </>
-                              )}
-                            </TypeList>
-                          </h3>
-                          <ListingIcons>
-                            <li>
-                              <div
-                                className={`description`}
-                                style={{
-                                  height: "20px",
-                                  width: "85%",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                }}
-                                dangerouslySetInnerHTML={{
-                                  __html: job.description,
-                                }}
-                              />
-                            </li>
-                            <li>
-                              <SearchIcon />
-                              {job.location}
-                            </li>
-                            <li>
-                              <RefundIcon />
-                              {CURRENCY}
-
-                              {job.salary}
-                            </li>
-                          </ListingIcons>
-                        </ListingTitle>
-                      </section>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <div>Sorry No recent listings available</div>
-              )}
-            </>
-          </LeftContent>
-        </>
-      )}
+            </MainContentArea>
+          </>
+        )}
     </CardWrapper>
   );
 }

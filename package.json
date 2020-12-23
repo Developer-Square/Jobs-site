@@ -1,6 +1,6 @@
 {
   "name": "thedatabase",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@react-pdf/renderer": "^1.6.10",
@@ -50,6 +50,8 @@
     "yup": "^0.29.1"
   },
   "scripts": {
+    "generate-build-version": "node generate-build-version",
+    "prebuild": "npm run generate-build-version",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
