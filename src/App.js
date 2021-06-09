@@ -19,7 +19,7 @@ import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
 
-import CacheBuster from './CacheBuster';
+import CacheBuster from "./CacheBuster";
 
 export default function App() {
   const queryParams = useRouterQuery();

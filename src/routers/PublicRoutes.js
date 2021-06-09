@@ -8,6 +8,7 @@ import About from "pages/About/about";
 import { TOS, ABOUT, SDG, HELP_PAGE } from "constants/routes.constants";
 import TermsOfUse from "pages/TOS/SDG";
 import Help from "pages/Help/Help";
+import { SamplePage } from "pages/sample";
 
 const PublicRoutes = ({ deviceType }) => (
   <Fragment>
@@ -20,6 +21,7 @@ const PublicRoutes = ({ deviceType }) => (
       <Route exact path={`${ABOUT}`} component={About} />
       <Route exact path={`${SDG}`} component={TermsOfUse} />
       <Route exact path={`${HELP_PAGE}`} component={Help} />
+      <Route exact path={`/sample`} component={SamplePage} />
       <Route component={NotFound} deviceType={deviceType} />
     </Switch>
   </Fragment>

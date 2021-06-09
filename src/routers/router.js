@@ -5,6 +5,7 @@ import PrivateRoutes from "./PrivateRoutes";
 import { Modal } from "@redq/reuse-modal";
 import AppLayout from "containers/LayoutContainer/AppLayout";
 import { AuthContext } from "contexts/auth/auth.context";
+import { withApollo } from "helpers/apollo";
 
 function BaseRouter({ deviceType }) {
   const { isAuthenticated } = useContext(AuthContext);
@@ -33,4 +34,4 @@ function BaseRouter({ deviceType }) {
   );
 }
 
-export default BaseRouter;
+export default withApollo(BaseRouter);
