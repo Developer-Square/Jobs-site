@@ -5,6 +5,7 @@ import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
 import fetch from "isomorphic-unfetch";
+import { BASE_GRAPHQL_URL } from "constants/constants";
 
 let apolloClient = null;
 
@@ -130,8 +131,7 @@ function createApolloClient(initialState = {}) {
   return new ApolloClient({
     ssrMode: typeof window === "undefined", // Disables forceFetch on the server (so queries are only run once)
     link: new HttpLink({
-      uri: process.env.API_URL || "http://localhost:8000/graphql/", // Server URL (must be absolute)
-      // uri: process.env.API_URL || "https://thedb.hewani.io/graphql/", // Server URL (must be absolute)
+      uri: BASE_GRAPHQL_URL, // Server URL (must be absolute)
       credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
       fetch,
     }),

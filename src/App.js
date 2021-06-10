@@ -8,9 +8,10 @@ import { AuthProvider } from "contexts/auth/auth.provider";
 import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
+import { ServiceWorkerProvider } from "contexts/ServiceWorkerProvider";
 import BaseRouter from "routers/router";
 import { useRouterQuery } from "helpers/useRouterQuery";
-
+import { serviceWorkerTimeout } from "constants/constants";
 // External CSS import here
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-phone-input-2/lib/style.css";
@@ -43,16 +44,18 @@ export default function App() {
 
         return (
           <OriginalThemeProvider theme={themeMode}>
-            <SearchProvider query={query}>
-              <HeaderProvider>
-                <AuthProvider>
-                  <StickyProvider>
-                    <BaseRouter deviceType={deviceType} />
-                  </StickyProvider>
-                </AuthProvider>
-              </HeaderProvider>
-              <GlobalStyle />
-            </SearchProvider>
+            <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
+              <SearchProvider query={query}>
+                <HeaderProvider>
+                  <AuthProvider>
+                    <StickyProvider>
+                      <BaseRouter deviceType={deviceType} />
+                    </StickyProvider>
+                  </AuthProvider>
+                </HeaderProvider>
+                <GlobalStyle />
+              </SearchProvider>{" "}
+            </ServiceWorkerProvider>
           </OriginalThemeProvider>
         );
       }}
