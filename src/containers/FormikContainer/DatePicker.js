@@ -8,7 +8,7 @@ import styled from "styled-components";
 function DatePicker(props) {
   const { label, name, ...rest } = props;
   return (
-    <FormInput className="form-control">
+    <FormInput className="form-row form-row-wide">
       <label htmlFor={name}>{label}</label>
       <Field name={name}>
         {({ form, field }) => {
@@ -34,30 +34,6 @@ function DatePicker(props) {
 export default DatePicker;
 
 const FormInput = styled.div`
-  width: 100%;
-  max-width: 400px;
-  margin: 10px;
-  display: inline-block;
-  /* padding: 20px; */
-
-  label {
-    /* display: none; */
-
-    margin-bottom: 5px;
-    font-size: 14px;
-    line-height: 28px;
-    color: #333;
-  }
-  .react-datepicker-wrapper {
-    width: 100%;
-    max-width: 400px;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    opacity: 0.9;
-  }
   .error {
     color: palevioletred;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;

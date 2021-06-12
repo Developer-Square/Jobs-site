@@ -5,6 +5,8 @@ import Select from "./Select";
 import RadioButtons from "./RadioButtons";
 import CheckboxGroup from "./CheckboxGroup";
 import DatePicker from "./DatePicker";
+import UploadInput from "./UploadInput";
+import PhoneNumberInput from "./PhoneInput";
 
 function FormikControl(props) {
   const { control, ...rest } = props;
@@ -21,6 +23,10 @@ function FormikControl(props) {
       return <CheckboxGroup {...rest} />;
     case "date":
       return <DatePicker {...rest} />;
+    case "file":
+      return <UploadInput {...rest} />;
+    case "phone":
+      return <PhoneNumberInput {...rest} />;
     default:
       return null;
   }
