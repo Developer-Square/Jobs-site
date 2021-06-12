@@ -1,33 +1,34 @@
 import styled, { keyframes } from "styled-components";
 
 const clockwise = keyframes`
-0%{ transform: rotate(0deg);}
+  0%{ transform: rotate(0deg);}
   100%{ transform: rotate(360deg);}
-  `;
+`;
 const anticlockwise = keyframes`
-0%{ transform: rotate(360deg);}
-100%{ transform: rotate(0deg);}
+  0%{ transform: rotate(360deg);}
+  100%{ transform: rotate(0deg);}
 `;
 const clockwiseError = keyframes`
-0%{ transform: rotate(0deg);}
-20%{ transform: rotate(30deg);}
-40%{ transform: rotate(25deg);}
-60%{ transform: rotate(30deg);}
-100%{ transform: rotate(0deg);}
+  0%{ transform: rotate(0deg);}
+  20%{ transform: rotate(30deg);}
+  40%{ transform: rotate(25deg);}
+  60%{ transform: rotate(30deg);}
+  100%{ transform: rotate(0deg);}
 `;
 const anticlockwiseErrorStop = keyframes`
-0%{ transform: rotate(0deg);}
+  0%{ transform: rotate(0deg);}
   20%{ transform: rotate(-30deg);}
   60%{ transform: rotate(-30deg);}
   100%{ transform: rotate(0deg);}
 `;
 
 const anticlockwiseError = keyframes`
-0%{ transform: rotate(0deg);}
+  0%{ transform: rotate(0deg);}
   20%{ transform: rotate(-30deg);}
   40%{ transform: rotate(-25deg);}
   60%{ transform: rotate(-30deg);}
-  100%{ transform: rotate(0deg);}`;
+  100%{ transform: rotate(0deg);}
+`;
 
 export const Gears = styled.div`
   position: relative;
@@ -39,8 +40,8 @@ export const Gears = styled.div`
 export const Gear = styled.div`
   position: relative;
   z-index: 0;
-  width: 120px;
-  height: 120px;
+  width: 70px;
+  height: 70px;
   margin: 0 auto;
   border-radius: 50%;
   background: #21277f;
@@ -57,39 +58,40 @@ export const Gear = styled.div`
   }
   &:after {
     position: absolute;
-    left: 25px;
-    top: 25px;
+    left: 15px;
+    top: 15px;
     z-index: 3;
     content: "";
-    width: 70px;
-    height: 70px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 5px solid #21277f;
     box-sizing: border-box;
     background: white;
   }
   &.one {
-    left: -130px;
+    left: -67px;
+    top: -4px;
     animation: ${anticlockwiseErrorStop} 2s linear;
   }
   &.two {
-    top: -75px;
+    top: -30px;
     animation: ${anticlockwiseError} 2s linear infinite;
   }
   &.three {
-    top: -235px;
-    left: 130px;
+    top: -120px;
+    left: 77px;
     animation: ${clockwiseError} 2s linear infinite;
   }
 `;
 export const Bar = styled.div`
   position: absolute;
-  left: -15px;
+  left: -10px;
   top: 50%;
   z-index: 0;
-  width: 150px;
-  height: 30px;
-  margin-top: -15px;
+  width: 88px;
+  height: 22px;
+  margin-top: -12px;
   border-radius: 5px;
   background: #21277f;
 

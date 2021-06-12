@@ -14,26 +14,50 @@ import { HelpIcon } from "components/AllSvgIcon";
 import { RightMenuBox } from "./RightMenu.style";
 import { AuthContext } from "contexts/auth/auth.context";
 
-export const RightMenu = ({ onLogout, avatar, isAuthenticated, onJoin }) => {
+export const RightMenu = ({
+  isHomePage,
+  isSticky,
+  onLogout,
+  avatar,
+  isAuthenticated,
+  onJoin,
+}) => {
   const {
     authState: { profile },
   } = React.useContext(AuthContext);
+  const className = isHomePage ? (isSticky ? "" : "sticky") : "";
   return (
     <RightMenuBox>
       {isAuthenticated ? (
         <>
-          <NavLink className="menu-item" href={JOBS} label="Jobs" />
-          <NavLink className="menu-item" href={GIGS} label="Gigs" />
+          <NavLink
+            className={`menu-item ${className}`}
+            href={JOBS}
+            label="Jobs"
+          />
+          <NavLink
+            className={`menu-item ${className}`}
+            href={GIGS}
+            label="Gigs"
+          />
         </>
       ) : (
-        <NavLink className="menu-item" href={ABOUT} label="About" />
+        <NavLink
+          className={`menu-item ${className}`}
+          href={ABOUT}
+          label="About"
+        />
       )}
       <NavLink
-        className="menu-item"
+        className={`menu-item ${className}`}
         href={HELP_PAGE}
         label="Need Help"
         iconClass="menu-icon"
-        icon={<HelpIcon />}
+        icon={
+          <HelpIcon
+            color={isHomePage ? (isSticky ? "#21277F" : "#e6c018") : "#21277F"}
+          />
+        }
       />
 
       {!isAuthenticated ? (
@@ -41,7 +65,14 @@ export const RightMenu = ({ onLogout, avatar, isAuthenticated, onJoin }) => {
           onClick={onJoin}
           size="small"
           title="Join"
-          style={{ fontSize: 15, color: "#21277f", backgroundColor: "#e6c018" }}
+          style={{
+            fontSize: 15,
+            backgroundColor: isHomePage
+              ? isSticky
+                ? "#21277F"
+                : "#e6c018"
+              : "#21277F",
+          }}
         />
       ) : (
         <>
@@ -52,7 +83,7 @@ export const RightMenu = ({ onLogout, avatar, isAuthenticated, onJoin }) => {
             content={<AuthorizedMenu onLogout={onLogout} />}
           />
           <NavLink
-            className="menu-item"
+            className={`menu-item ${className}`}
             href={PROFILE_PAGE}
             label={`${
               profile.first_name !== "" ? profile.first_name : profile.email

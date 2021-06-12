@@ -134,19 +134,31 @@ const MobileDrawer = () => {
           <span
             style={{
               ...classStyle,
-              backgroundColor: isSticky ? `#21277f` : `#fff`,
+              backgroundColor: isHomePage
+                ? isSticky
+                  ? `#21277f`
+                  : `#fff`
+                : `#21277f`,
             }}
           />
           <span
             style={{
               ...classStyle,
-              backgroundColor: isSticky ? `#21277f` : `#fff`,
+              backgroundColor: isHomePage
+                ? isSticky
+                  ? `#21277f`
+                  : `#fff`
+                : `#21277f`,
             }}
           />
           <span
             style={{
               ...classStyle,
-              backgroundColor: isSticky ? `#21277f` : `#fff`,
+              backgroundColor: isHomePage
+                ? isSticky
+                  ? `#21277f`
+                  : `#fff`
+                : `#21277f`,
             }}
           />
         </HamburgerIcon>

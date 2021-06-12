@@ -3,6 +3,8 @@ import { ThemeProvider as OriginalThemeProvider } from "styled-components";
 import { useDarkMode } from "helpers/useDarkMode";
 import { GlobalStyle } from "styles/global-styles";
 import { lightTheme, darkTheme } from "styles/theme";
+import { positions, Provider as AlertProvider } from "react-alert";
+import { NotificationTemplate } from "components/NotificationTemplate";
 import { useDeviceType } from "helpers/useDeviceType";
 import { AuthProvider } from "contexts/auth/auth.provider";
 import { StickyProvider } from "contexts/app/app.provider";
@@ -20,8 +22,6 @@ import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
 
-import CacheBuster from "./CacheBuster";
-
 export default function App() {
   const queryParams = useRouterQuery();
   const [theme, componentMounted] = useDarkMode();
@@ -33,32 +33,27 @@ export default function App() {
   }
 
   const query = queryParams.get("text") ? queryParams.get("text") : "";
+  const notificationConfig = {
+    position: positions.TOP_RIGHT,
+    timeout: 2500,
+  };
 
   return (
-    <CacheBuster>
-      {({ loading, isLatestVersion, refreshCacheAndReload }) => {
-        if (loading) return null;
-        if (!loading && !isLatestVersion) {
-          refreshCacheAndReload();
-        }
-
-        return (
-          <OriginalThemeProvider theme={themeMode}>
-            <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-              <SearchProvider query={query}>
-                <HeaderProvider>
-                  <AuthProvider>
-                    <StickyProvider>
-                      <BaseRouter deviceType={deviceType} />
-                    </StickyProvider>
-                  </AuthProvider>
-                </HeaderProvider>
-                <GlobalStyle />
-              </SearchProvider>{" "}
-            </ServiceWorkerProvider>
-          </OriginalThemeProvider>
-        );
-      }}
-    </CacheBuster>
+    <OriginalThemeProvider theme={themeMode}>
+      <AlertProvider template={NotificationTemplate} {...notificationConfig}>
+        <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
+          <SearchProvider query={query}>
+            <HeaderProvider>
+              <AuthProvider>
+                <StickyProvider>
+                  <BaseRouter deviceType={deviceType} />
+                </StickyProvider>
+              </AuthProvider>
+            </HeaderProvider>
+            <GlobalStyle />
+          </SearchProvider>
+        </ServiceWorkerProvider>
+      </AlertProvider>
+    </OriginalThemeProvider>
   );
 }

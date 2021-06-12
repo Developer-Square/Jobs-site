@@ -51,6 +51,8 @@ export const useTimer = (seconds) => {
 export const normalizeErrors = (errors) => {
   if (typeof errors !== "object") return null;
   return Object.keys(errors).reduce((acc, val) => {
+    console.log(acc);
+    console.log(val);
     const oB = (values, number) => {
       if (values || number) {
         const check = values + "[" + number + "].message";
@@ -58,7 +60,12 @@ export const normalizeErrors = (errors) => {
       }
       return null;
     };
-    acc[val] = _.get(errors, oB(val, 0), null);
+    let arr = [];
+    for (let i = 0; i < errors[val].length; i++) {
+      const element = _.get(errors, oB(val, i), null);
+      arr.push(`${i === 0 ? "" : "😍"}${element}`);
+    }
+    acc[val] = arr.toString().replace(",", "").replace("😍", ",");
     return acc;
   }, {});
 };

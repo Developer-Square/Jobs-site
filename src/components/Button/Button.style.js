@@ -21,8 +21,8 @@ const ButtonStyle = styled.button`
       ? "#222222"
       : "#ffffff"};
   border-radius: ${(props) =>
-    props.radius ? props.radius : themeGet("radius.3", "6")}px;
-  font-family: 'Lato', sans-serif;
+    props.radius ? props.radius : themeGet("radius.0", 3)}px;
+  font-family: "Lato", sans-serif;
   font-size: ${themeGet("fontSizes.2", "15")}px;
   text-decoration: none;
   padding-top: 0;
@@ -49,12 +49,12 @@ const ButtonStyle = styled.button`
     outline: none;
   }
 
-  &.disabled{
+  &.disabled {
     color: ${themeGet("colors.labelColor", "#767676")};
     background-color: ${themeGet("colors.borderColor", "#E6E6E6")};
     border-color: ${themeGet("colors.borderColor", "#E6E6E6")};
 
-    &:hover{
+    &:hover {
       color: ${themeGet("colors.labelColor", "#767676")};
       background-color: ${themeGet("colors.borderColor", "#E6E6E6")};
       border-color: ${themeGet("colors.borderColor", "#E6E6E6")};
@@ -63,7 +63,8 @@ const ButtonStyle = styled.button`
 
   /* Material style goes here */
   &.is-material {
-    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
+      0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
   }
 
   /* When button on loading stage */

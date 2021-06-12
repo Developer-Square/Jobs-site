@@ -5,7 +5,7 @@ import styled from "styled-components";
 function Select(props) {
   const { label, name, options, ...rest } = props;
   return (
-    <FormInput className="form-control">
+    <FormInput className={`form-row form-row-wide`}>
       <label htmlFor={name}>{label}</label>
       <Field as="select" id={name} name={name} {...rest}>
         {options.map((option) => {
@@ -45,10 +45,5 @@ const FormInput = styled.div`
   textarea,
   select {
     opacity: 0.9;
-  }
-  .error {
-    color: palevioletred;
-    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-    font-style: italic;
   }
 `;

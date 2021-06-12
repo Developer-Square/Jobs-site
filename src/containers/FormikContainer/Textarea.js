@@ -9,7 +9,7 @@ function Textarea(props) {
   const { label, name, rte, value, ...rest } = props;
   console.log("rte", rte);
   return (
-    <FormInput className="form-control">
+    <FormInput className={`form-row form-row-wide`}>
       <label htmlFor={name}>{label}</label>
       {rte ? (
         <Field
@@ -54,11 +54,7 @@ const FormInput = styled.div`
   select {
     opacity: 0.9;
   }
-  .error {
-    color: palevioletred;
-    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-    font-style: italic;
-  }
+
   .rdw-editor-toolbar {
     padding: 6px 5px 0;
     border-radius: 2px;

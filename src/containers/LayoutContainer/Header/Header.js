@@ -104,6 +104,8 @@ const Header = ({ className, isSticky }) => {
         onJoin={handleJoin}
         onLogout={handleLogout}
         avatar={img}
+        isSticky={isSticky}
+        isHomePage={showSearch}
       />
     </HeaderWrapper>
   );

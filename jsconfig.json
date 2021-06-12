@@ -4,9 +4,9 @@
     "target": "es6",
     "baseUrl": "src",
     "paths": {
-      "*": [
-        "src/*"
-      ]
+      "*": ["src/*"],
+      "@styles": ["src/styles/index.js"],
+      "@styles/*": ["./src/styles/*"]
     }
   },
   "include": ["src/**/*"]

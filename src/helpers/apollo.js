@@ -3,7 +3,8 @@ import { Helmet } from "react-helmet";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
-import { HttpLink } from "apollo-link-http";
+import { onError } from "apollo-link-error";
+import { createHttpLink } from "apollo-link-http";
 import fetch from "isomorphic-unfetch";
 import { BASE_GRAPHQL_URL } from "constants/constants";
 
@@ -123,6 +124,60 @@ function initializeApollo(initialState = null) {
   return _apolloClient;
 }
 
+function getToken() {
+  const pureJSON = localStorage.getItem("thedb_access_token");
+  const accessToken = JSON.parse(localStorage.getItem(pureJSON));
+  if (accessToken === null || accessToken === undefined) {
+    return null;
+  } else {
+    return localStorage.getItem("thedb_access_token");
+  }
+}
+
+const httpLink = createHttpLink({
+  // headers: !getToken()    ? ""    : { authorization: localStorage.getItem("kiu_auth_access_token") },
+
+  uri: BASE_GRAPHQL_URL, // Server URL (must be absolute)
+  credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
+
+  request: async (operation) => {
+    // Get JWT token from local storage
+    const token = getToken() ? "" : getToken();
+
+    // Pass token to headers
+    operation.setContext({
+      headers: {
+        Authorization: token ? `JWT ${token}` : "",
+      },
+    });
+  },
+  fetch,
+});
+
+const errorLink = onError((error) => {
+  const {
+    graphQLErrors = [],
+    networkError = {},
+    operation = {},
+    forward,
+  } = error || {};
+  // const { getContext } = operation || {};
+  // const { scope, headers = {} } = getContext() || {};
+  const { message: networkErrorMessage = "" } = networkError || {};
+  const { message: graphQLErrorsMessage = "" } = graphQLErrors || [];
+  const graphQLFailed = (message) =>
+    typeof message === "string" &&
+    message.startsWith("Problem with GraphQL API");
+  const networkFailed = (message) =>
+    typeof message === "string" &&
+    message.startsWith("NetworkError when attempting to fetch resource");
+
+  if (graphQLFailed(graphQLErrorsMessage)) return forward(operation);
+  if (networkFailed(networkErrorMessage)) return forward(operation);
+});
+
+const link = errorLink.concat(httpLink);
+
 /**
  * Creates and configures the ApolloClient
  * @param  {Object} [initialState={}]
@@ -130,11 +185,7 @@ function initializeApollo(initialState = null) {
 function createApolloClient(initialState = {}) {
   return new ApolloClient({
     ssrMode: typeof window === "undefined", // Disables forceFetch on the server (so queries are only run once)
-    link: new HttpLink({
-      uri: BASE_GRAPHQL_URL, // Server URL (must be absolute)
-      credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
-      fetch,
-    }),
+    link,
     cache: new InMemoryCache().restore(initialState),
   });
 }

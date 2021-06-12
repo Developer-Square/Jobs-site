@@ -1,0 +1,7 @@
+export const emailNotLongEnough = "email must be at least 3 characters";
+export const emailRequired = "Please enter an email address";
+export const invalidEmail = "email must be a valid email";
+export const nameNotLongEnough = "user name must be at least 4 characters";
+export const passwordNotLongEnough = "password must be at least 8 characters";
+export const passwordDoNotMatch = "passwords must match";
+export const fieldRequired = "This field is required";

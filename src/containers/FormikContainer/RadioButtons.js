@@ -59,12 +59,6 @@ const FormInput = styled.div`
     height: 10px;
     width: 14px;
   }
-
-  .error {
-    color: palevioletred;
-    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-    font-style: italic;
-  }
 `;
 const Fragment = styled.div`
   margin: 0 auto;
@@ -86,10 +80,5 @@ const Fragment = styled.div`
     opacity: 0.9;
     height: 20px;
     width: 14px;
-  }
-  .error {
-    color: palevioletred;
-    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-    font-style: italic;
   }
 `;
