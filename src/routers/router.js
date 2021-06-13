@@ -9,7 +9,7 @@ import { withApollo } from "helpers/apollo";
 
 function BaseRouter({ deviceType }) {
   const { isAuthenticated } = useContext(AuthContext);
-  const authentication = (deviceType) =>
+  const authentication = () =>
     isAuthenticated ? (
       <Redirect to="/dashboard" deviceType={deviceType} />
     ) : (
@@ -20,14 +20,14 @@ function BaseRouter({ deviceType }) {
       <Switch>
         <Route
           path="/dashboard"
-          component={PrivateRoutes}
-          deviceType={deviceType}
+          render={(props) => (
+            <PrivateRoutes deviceType={deviceType} {...props} />
+          )}
         />
 
         <AppLayout deviceType={deviceType}>
-          <Modal>
-            <Route path="" render={authentication} />
-          </Modal>
+          <Route path="/" render={authentication} />
+          <Modal />
         </AppLayout>
       </Switch>
     </>

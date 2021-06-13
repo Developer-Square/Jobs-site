@@ -6,6 +6,7 @@ const components = {
     title: "Admin",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   users: {
     component: "FormikCOntainer",
@@ -13,6 +14,7 @@ const components = {
     title: "FormikContainer",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   dashboard: {
     component: "Dashboard",
@@ -20,6 +22,7 @@ const components = {
     title: "Dashboard",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   manager: {
     component: "Manager",
@@ -27,6 +30,7 @@ const components = {
     title: "Manager",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   customers: {
     component: "Customers",
@@ -34,6 +38,7 @@ const components = {
     title: "Customers",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   service1: {
     component: "Service1",
@@ -41,6 +46,7 @@ const components = {
     title: "Service1",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   service2: {
     component: "Service2",
@@ -48,6 +54,7 @@ const components = {
     title: "Service2",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   messages: {
     component: "Messages",
@@ -55,6 +62,7 @@ const components = {
     title: "messages",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   jobAlerts: {
     component: "JobAlerts",
@@ -62,6 +70,7 @@ const components = {
     title: "Job Alerts",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   gigAlerts: {
     component: "gigAlerts",
@@ -69,6 +78,7 @@ const components = {
     title: "Gig Alerts",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   bookmarks: {
     component: "Bookmarks",
@@ -76,6 +86,7 @@ const components = {
     title: "Bookmarks",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   view: {
     component: "SingleView",
@@ -83,6 +94,7 @@ const components = {
     title: "View",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   addResume: {
     component: "AddResume",
@@ -90,6 +102,7 @@ const components = {
     title: "Add Resume",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   manageResume: {
     component: "ManageResume",
@@ -97,6 +110,7 @@ const components = {
     title: "Manage Resume",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   submitJob: {
     component: "SubmitJob",
@@ -104,6 +118,7 @@ const components = {
     title: "Submit Job",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   manageProfile: {
     component: "ProfileView",
@@ -111,6 +126,7 @@ const components = {
     title: "Manage Profile",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   profile: {
     component: "Profile",
@@ -118,6 +134,7 @@ const components = {
     title: "Profile",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   jobs: {
     component: "Jobs",
@@ -125,6 +142,7 @@ const components = {
     title: "Gigs",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   gigs: {
     component: "Gigs",
@@ -132,6 +150,7 @@ const components = {
     title: "Gigs",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   internships: {
     component: "Internships",
@@ -139,6 +158,7 @@ const components = {
     title: "Internships",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   applications: {
     component: "Applications",
@@ -146,6 +166,7 @@ const components = {
     title: "Applications",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   myJobs: {
     component: "MyJobs",
@@ -153,6 +174,7 @@ const components = {
     title: "My Jobs",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   myGigs: {
     component: "MyGigs",
@@ -160,6 +182,7 @@ const components = {
     title: "My Gigs",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   myInternships: {
     component: "MyInternships",
@@ -167,6 +190,7 @@ const components = {
     title: "My Internships",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   manageJobs: {
     component: "JobManage",
@@ -174,6 +198,7 @@ const components = {
     title: "Gigs",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   manageGigs: {
     component: "GigManage",
@@ -181,6 +206,7 @@ const components = {
     title: "Gigs",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
   manageInternships: {
     component: "InternshipManage",
@@ -188,12 +214,14 @@ const components = {
     title: "Internships",
     icon: "Category",
     module: 1,
+    dashboard_item: true,
   },
 };
 
 // modules for grouping.
 const modules = {
   0: {
+    component: "Dashboard",
     title: "Dashboard",
     icon: "home",
     isExpendable: true,
@@ -203,6 +231,21 @@ const modules = {
 // component's access to roles.
 const rolesConfig = {
   admin: {
+    routes: [...Object.values(components)],
+  },
+  individual: {
+    routes: [...Object.values(components)],
+  },
+  business: {
+    routes: [...Object.values(components)],
+  },
+  employer: {
+    routes: [components.manageJobs, components.submitJob],
+  },
+  seeker: {
+    routes: [components.addResume, components.manageResume],
+  },
+  institution: {
     routes: [...Object.values(components)],
   },
   manager: {
@@ -223,12 +266,7 @@ const rolesConfig = {
       components.gigAlerts,
     ],
   },
-  employer: {
-    routes: [components.manageJobs, components.submitJob],
-  },
-  employee: {
-    routes: [components.addResume, components.manageResume],
-  },
+
   common: {
     routes: [
       {
@@ -237,6 +275,7 @@ const rolesConfig = {
         title: "Home",
         icon: "Category",
         module: 1,
+        dashboard_item: true,
       },
       {
         component: "Profile",
@@ -244,6 +283,7 @@ const rolesConfig = {
         title: "Profile",
         icon: "Category",
         module: 1,
+        dashboard_item: true,
       },
       components.dashboard,
       components.messages,

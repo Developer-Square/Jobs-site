@@ -45,7 +45,7 @@ const Authentication = () => {
 
       <div className="container">
         <div className="my-account">
-          <ul class="tabs-nav">
+          <ul className="tabs-nav">
             <li className={authState.currentForm === "signIn" ? "active" : ""}>
               <a
                 onClick={() =>
@@ -53,7 +53,6 @@ const Authentication = () => {
                     type: "SIGNIN",
                   })
                 }
-                href
               >
                 Login
               </a>
@@ -65,7 +64,6 @@ const Authentication = () => {
                     type: "SIGNUP",
                   })
                 }
-                href
               >
                 Register
               </a>

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 
 const Footer = () => {
@@ -130,7 +131,7 @@ const Footer = () => {
         </div>
         {/* Back To Top Button */}
         <div id="backtotop">
-          <a href> </a>
+          <a href="#"> </a>
         </div>
       </div>
     </>

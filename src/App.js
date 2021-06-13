@@ -3,7 +3,7 @@ import { ThemeProvider as OriginalThemeProvider } from "styled-components";
 import { useDarkMode } from "helpers/useDarkMode";
 import { GlobalStyle } from "styles/global-styles";
 import { lightTheme, darkTheme } from "styles/theme";
-import { positions, Provider as AlertProvider } from "react-alert";
+import { Provider as AlertProvider } from "react-alert";
 import { NotificationTemplate } from "components/NotificationTemplate";
 import { useDeviceType } from "helpers/useDeviceType";
 import { AuthProvider } from "contexts/auth/auth.provider";
@@ -34,26 +34,32 @@ export default function App() {
 
   const query = queryParams.get("text") ? queryParams.get("text") : "";
   const notificationConfig = {
-    position: positions.TOP_RIGHT,
-    timeout: 2500,
+    timeout: 5000,
+    position: "top right",
+    containerStyle: {
+      top: 0,
+    },
   };
 
   return (
     <OriginalThemeProvider theme={themeMode}>
-      <AlertProvider template={NotificationTemplate} {...notificationConfig}>
-        <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-          <SearchProvider query={query}>
-            <HeaderProvider>
-              <AuthProvider>
-                <StickyProvider>
+      <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
+        <SearchProvider query={query}>
+          <HeaderProvider>
+            <AuthProvider>
+              <StickyProvider>
+                <AlertProvider
+                  template={NotificationTemplate}
+                  {...notificationConfig}
+                >
                   <BaseRouter deviceType={deviceType} />
-                </StickyProvider>
-              </AuthProvider>
-            </HeaderProvider>
-            <GlobalStyle />
-          </SearchProvider>
-        </ServiceWorkerProvider>
-      </AlertProvider>
+                </AlertProvider>
+              </StickyProvider>
+            </AuthProvider>
+          </HeaderProvider>
+          <GlobalStyle />
+        </SearchProvider>
+      </ServiceWorkerProvider>
     </OriginalThemeProvider>
   );
 }

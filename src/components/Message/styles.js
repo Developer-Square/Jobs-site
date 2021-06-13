@@ -9,15 +9,19 @@ const borderColors = (theme) => ({
 });
 
 export const Wrapper = styled.div`
-  width: ${themeGet("message.width", "25rem")};
-  padding: ${themeGet("message.padding", "1rem 1.5rem")};
   background-color: ${themeGet("message.backgroundColor", "#fff")};
-  box-shadow: 0px 6px 15px 3px rgba(0, 0, 0, 0.25);
-  position: fixed;
-  bottom: ${themeGet("spacing.spacer", "1rem")};
-  right: ${themeGet("spacing.spacer", "1rem")};
+  padding: ${themeGet("message.padding", "1rem 1.5rem")};
+  text-transform: uppercase;
+  border-radius: 3px;
   border-left: 0.4rem solid;
   border-color: ${(props) => borderColors()[props.status]};
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 6px 15px 3px rgba(0, 0, 0, 0.25);
+  font-family: Arial;
+  width: ${themeGet("message.width", "25rem")};
+  box-sizing: border-box;
+  pointer-events: all;
 `;
 
 export const TopWrapper = styled.div`
@@ -33,6 +37,7 @@ export const Title = styled.p`
 `;
 
 export const CloseButton = styled.button`
+  background-color: ${(props) => borderColors()[props.status]};
   cursor: pointer;
 
   path {
@@ -41,7 +46,7 @@ export const CloseButton = styled.button`
 
   &:hover {
     path {
-      fill: ${(props) => borderColors()[props.status]};
+      fill: #fff;
     }
   }
 `;

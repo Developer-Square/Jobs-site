@@ -5,7 +5,7 @@ import { LayoutWrapper } from "./Layout.style";
 import logoImage from "image/thedb.png";
 import styled from "styled-components";
 import { AuthContext } from "contexts/auth/auth.context";
-import { useHistory, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const LogoImage = styled.img`
   display: block;
@@ -19,7 +19,6 @@ const Layout = ({ className, children }) => {
     authState: { isAuthenticated },
     authDispatch,
   } = React.useContext(AuthContext);
-  const history = useHistory();
   const location = useLocation();
   const path = location.pathname.replace(/\/+$/, "");
   const pathname = path[0] === "/" ? path.substr(1) : path;
@@ -30,58 +29,58 @@ const Layout = ({ className, children }) => {
           <div className="container">
             <div className="sixteen columns">
               {/* Logo */}
-              <div id="logo">
+              <div id="logo" style={{ width: "auto" }}>
                 <h1>
-                  <a href="/">
+                  <Link to="/">
                     <LogoImage src={logoImage} alt="TheDB" />
-                  </a>
+                  </Link>
                 </h1>
               </div>
               {/* Menu */}
               <nav id="navigation" className="menu">
                 <ul id="responsive">
                   <li>
-                    <a id={pathname === "" ? "current" : ""} href="/">
+                    <Link id={pathname === "" ? "current" : ""} to="/">
                       Home
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       id={pathname === "pricing" ? "current" : ""}
-                      href="/pricing"
+                      to="/pricing"
                     >
                       Pricing
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       id={pathname === "contact-us" ? "current" : ""}
-                      href="/contact-us"
+                      to="/contact-us"
                     >
                       Contact
-                    </a>
+                    </Link>
                   </li>
 
                   <li>
-                    <a
+                    <Link
                       id={
                         pathname === "vacancies" || pathname === "categories"
                           ? "current"
                           : ""
                       }
-                      href
+                      to={"#"}
                     >
                       Browse Listings
-                    </a>
+                    </Link>
                     <ul>
                       <li>
-                        <a href="/vacancies">Browse Vacancies</a>
+                        <Link to="/vacancies">Browse Vacancies</Link>
                       </li>
                       {/* <li>
-                        <a href="browse-resumes.html">Browse Resumes</a>
+                        <Link href="browse-resumes.html">Browse Resumes</Link>
                       </li> */}
                       <li>
-                        <a href="/categories">Browse Categories</a>
+                        <Link to="/categories">Browse Categories</Link>
                       </li>
                     </ul>
                   </li>
@@ -90,77 +89,77 @@ const Layout = ({ className, children }) => {
                   {isAuthenticated ? (
                     <>
                       <li>
-                        <a href>Dashboard</a>
+                        <Link href>Dashboard</Link>
                         <ul>
                           <li>
-                            <a href="dashboard.html">Dashboard</a>
+                            <Link to={`/dashboard`}>Dashboard</Link>
                           </li>
                           <li>
-                            <a href="dashboard-messages.html">Messages</a>
+                            <Link to={`/dashboard/messages`}>Messages</Link>
                           </li>
                           <li>
-                            <a href="dashboard-manage-resumes.html">
+                            <Link to={`/dashboard/manage/resume`}>
                               Manage Resumes
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a href="dashboard-add-resume.html">Add Resume</a>
+                            <Link to={`/dashboard/resume`}>Add Resume</Link>
                           </li>
                           <li>
-                            <a href="dashboard-job-alerts.html">Job Alerts</a>
+                            <Link to={`/dashboard/alert`}>Job Alerts</Link>
                           </li>
                           <li>
-                            <a href="dashboard-manage-jobs.html">Manage Jobs</a>
+                            <Link to={`/dashboard/manage/jobs`}>
+                              Manage Jobs
+                            </Link>
                           </li>
                           <li>
-                            <a href="dashboard-manage-applications.html">
+                            <Link to={`/dashboard/applications`}>
                               Manage Applications
-                            </a>
+                            </Link>
                           </li>
                           <li>
-                            <a href="dashboard-add-job.html">Add Job</a>
+                            <Link to={`/dashboard/vacancy`}>Add Job</Link>
                           </li>
                           <li>
-                            <a href="dashboard-my-profile.html">My Profile</a>
+                            <Link to={`/dashboard/profile`}>My Profile</Link>
                           </li>
                           <li>
-                            <a href="dashboard-my-profile.html">Logout</a>
+                            <Link to={`/`}>Logout</Link>
                           </li>
                         </ul>
                       </li>
                       <li>
-                        <a href>
+                        <Link onClick={() => console.log("to log out")}>
                           <i class="fa fa-lock"></i> Log Out
-                        </a>
+                        </Link>
                       </li>
                     </>
                   ) : (
                     <>
                       <li>
-                        <a
+                        <Link
                           onClick={() => {
                             authDispatch({
                               type: "SIGNUP",
                             });
-                            history.push(`/auth`);
                           }}
-                          href
+                          to={`/auth`}
                         >
                           <i className="fa fa-user" /> Sign Up
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a
+                        <Link
                           onClick={() => {
                             authDispatch({
                               type: "SIGNIN",
                             });
-                            history.push(`/auth`);
                           }}
-                          href
+                          to={`/auth`}
                         >
                           <i className="fa fa-lock" /> Log In
-                        </a>
+                        </Link>
                       </li>
                     </>
                   )}
@@ -168,9 +167,9 @@ const Layout = ({ className, children }) => {
               </nav>
               {/* Navigation */}
               <div id="mobile-navigation">
-                <a href="#menu" className="menu-trigger">
+                <Link to="#menu" className="menu-trigger">
                   <i className="fa fa-reorder" />
-                </a>
+                </Link>
               </div>
             </div>
           </div>

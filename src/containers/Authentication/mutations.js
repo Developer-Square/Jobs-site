@@ -53,6 +53,7 @@ export const PASSWORD_RESET = gql`
 export const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
     tokenAuth(input: { email: $email, password: $password }) {
+      refreshToken
       success
       errors
       unarchiving
@@ -61,6 +62,13 @@ export const LOGIN_MUTATION = gql`
         id
         email
         username
+        isVerified
+        verified
+        fullName
+        isStaff
+        isActive
+        isIndividual
+        isBusiness
       }
     }
   }

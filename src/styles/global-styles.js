@@ -85,4 +85,14 @@ export const GlobalStyle = createGlobalStyle`
     border: 0;
   }
 
+  #__react-alert__ {
+    > div {
+      z-index: 999;
+      top: 0;
+      > div {
+        margin: 5px;
+      }
+    }
+  }
+
 `;

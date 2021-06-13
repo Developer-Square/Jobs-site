@@ -51,8 +51,6 @@ export const useTimer = (seconds) => {
 export const normalizeErrors = (errors) => {
   if (typeof errors !== "object") return null;
   return Object.keys(errors).reduce((acc, val) => {
-    console.log(acc);
-    console.log(val);
     const oB = (values, number) => {
       if (values || number) {
         const check = values + "[" + number + "].message";
