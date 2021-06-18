@@ -18,8 +18,7 @@ export const PASSWORD_RESET = `${baseUrl}pw-reset`;
 export const EMAIL_VERIFY = `${baseUrl}email-verify`;
 export const WELCOME = `${baseUrl}welcome`;
 
-export const LANDING = ``;
-export const PAGES = `${baseUrl}`;
+export const LANDING = `${baseUrl}`;
 export const APP = `${baseUrl}apps`;
 export const AUTH = `${baseUrl}auth`;
 

@@ -1,17 +1,22 @@
 import React from "react";
-import { Wrapper, Circle, Shadow, Span } from "./Loader.style";
+import {
+  LoaderContainer,
+  LoaderWrapper,
+  Spinner,
+  Bounce1,
+  Bounce2,
+} from "./Loader.style";
 
 function Loader() {
   return (
-    <Wrapper>
-      <Circle />
-      <Circle />
-      <Circle />
-      <Shadow />
-      <Shadow />
-      <Shadow />
-      <Span>Loading</Span>
-    </Wrapper>
+    <LoaderContainer>
+      <LoaderWrapper>
+        <Spinner>
+          <Bounce1 />
+          <Bounce2 />
+        </Spinner>
+      </LoaderWrapper>
+    </LoaderContainer>
   );
 }
 export default Loader;

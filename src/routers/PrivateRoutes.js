@@ -6,16 +6,17 @@ import * as Routes from "./PrivateRoutes.config";
 // import Navigation from "containers/Navigation/Navigation";
 import PrivateRoute from "./PrivateRoute";
 import { Modal } from "@redq/reuse-modal";
-import DashboardLayout from "containers/LayoutContainer/DashboardLayout";
+import DashboardLayout from "layouts/DashboardLayout";
 import NotFound from "pages/NotFound";
-
 class PrivateRoutes extends Component {
   state = { allowedRoutes: [] };
 
   componentDidMount() {
-    let authRoles = localStorage.getItem("thedb_auth_roles");
-    let roles = JSON.parse(authRoles);
-
+    /*
+      TODO: Replace hardcoded roles with API,
+      contextAPI, localStorage, or get from server.
+     */
+    let roles = JSON.parse(localStorage.getItem("thedb_auth_roles"));
     if (roles) {
       roles = ["common", ...roles];
       let allowedRoutes = roles.reduce((acc, role) => {
@@ -32,7 +33,7 @@ class PrivateRoutes extends Component {
   render() {
     const handler = (children) => {
       return children.map((child, i) => {
-        if (!child.children) {
+        if (!child.children || child.children.length === 0) {
           return (
             <PrivateRoute
               exact
@@ -43,7 +44,9 @@ class PrivateRoutes extends Component {
             />
           );
         }
-        return <Switch>{handler(child.children)}</Switch>;
+        return (
+          <Switch key={`${child.url}${i}`}>{handler(child.children)}</Switch>
+        );
       });
     };
     return (

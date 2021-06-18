@@ -5,3 +5,5 @@ export const nameNotLongEnough = "user name must be at least 4 characters";
 export const passwordNotLongEnough = "password must be at least 8 characters";
 export const passwordDoNotMatch = "passwords must match";
 export const fieldRequired = "This field is required";
+export const mustContainLetter = "Must Contain Atleast One Letter";
+export const mustContainNumber = "Must Contain Atleast One Number";

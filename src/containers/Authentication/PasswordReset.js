@@ -9,14 +9,12 @@ import { normalizeErrors } from "helpers";
 import { passwordResetSchema } from "./validation.schema";
 
 const showSuccessNotification = (data, alert) => {
-  const successful = maybe(() => !data.passwordReset.errors.length);
+  const successful = maybe(() => data.passwordReset.success);
 
   if (successful) {
     alert.show(
       {
-        title: data.passwordReset.requiresConfirmation
-          ? "Please check your e-mail for further instructions"
-          : "New user has been created",
+        title: "Password Has been reset",
       },
       { type: "success", timeout: 5000 }
     );
@@ -42,19 +40,18 @@ const PasswordReset = () => {
           console.log("to handle submit action");
           resetPassword({
             variables: values,
-          });
-          if (data) {
+          }).then(({ data }) => {
             if (data.passwordReset) {
-              if (data.passwordReset?.success) {
+              if (data?.passwordReset?.success) {
                 console.log("data received", data);
-                history.push("/activate");
+                history.push("/auth");
               } else {
                 setErrors(
                   normalizeErrors(maybe(() => data.passwordReset.errors, []))
                 );
               }
             }
-          }
+          });
         }
         return (
           <>
@@ -68,16 +65,16 @@ const PasswordReset = () => {
                   <Form className="password-reset">
                     <FormikControl
                       control="input"
-                      type="email"
-                      label="Email"
-                      name="email"
-                      icon="ln ln-icon-Mail"
+                      type="password"
+                      label="Password"
+                      name="newPassword1"
+                      icon="ln ln-icon-Lock-2"
                     />
                     <FormikControl
                       control="input"
                       type="password"
                       label="Password"
-                      name="password"
+                      name="newPassword2"
                       icon="ln ln-icon-Lock-2"
                     />
 

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import LandingPage from "pages/LandingPage";
 import NotFound from "pages/NotFound";
 import EmailVerification from "containers/SignInOutForm/emailVerification";
@@ -16,24 +16,33 @@ import Vacancies from "pages/Vacancies";
 import Categories from "pages/Categories";
 import Pricing from "pages/Pricing";
 import Contact from "pages/Contact";
+import PublicRoute from "./PublicRoute";
 
 const AuthRoutes = (props) => {
   const { match } = props;
   return (
     <Switch>
-      <Route exact path={`${match.path}`} component={Authentication} />
-      <Route
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${match.path}`}
+        component={Authentication}
+      />
+      <PublicRoute
+        restricted={false}
         exact
         path={`${match.path}/email-verify`}
         component={EmailVerification}
       />
-      <Route
+      <PublicRoute
+        restricted={false}
         exact
         path={`${match.path}/password-reset/:resetToken`}
         component={PasswordReset}
       />
-      {/* <Route exact path={`${match.path}/activate`} component={EmailVerification} /> */}
-      <Route
+      {/* <PublicRoute restricted={false} exact path={`${match.path}/activate`} component={EmailVerification} /> */}
+      <PublicRoute
+        restricted={false}
         exact
         path={`${match.path}/activate/:emailToken`}
         component={EmailActivation}
@@ -44,21 +53,74 @@ const AuthRoutes = (props) => {
 const PublicRoutes = ({ deviceType }) => (
   <Fragment>
     <Switch>
-      <Route exact path={`/`}>
+      <PublicRoute restricted={false} exact path={ROUTE.LANDING}>
         <LandingPage deviceType={deviceType} />
-      </Route>
-      <Route path={`/auth`} component={AuthRoutes} />
+      </PublicRoute>
+      <PublicRoute
+        restricted={false}
+        path={ROUTE.AUTH}
+        component={AuthRoutes}
+      />
 
-      <Route exact path={`${ROUTE.TOS}`} component={PrivacyPolicy} />
-      <Route exact path={`${ROUTE.ABOUT}`} component={About} />
-      <Route exact path={`${ROUTE.SDG}`} component={TermsOfUse} />
-      <Route exact path={`${ROUTE.HELP_PAGE}`} component={Help} />
-      <Route exact path={`/sample`} component={SamplePage} />
-      <Route exact path={`${ROUTE.VACANCIES}`} component={Vacancies} />
-      <Route exact path={`${ROUTE.CATEGORIES}`} component={Categories} />
-      <Route exact path={`${ROUTE.CONTACT}`} component={Contact} />
-      <Route exact path={`${ROUTE.PRICING}`} component={Pricing} />
-      <Route component={NotFound} deviceType={deviceType} />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.TOS}`}
+        component={PrivacyPolicy}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.ABOUT}`}
+        component={About}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.SDG}`}
+        component={TermsOfUse}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.HELP_PAGE}`}
+        component={Help}
+      />
+      <PublicRoute
+        restricted={true}
+        exact
+        path={`/sample`}
+        component={SamplePage}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.VACANCIES}`}
+        component={Vacancies}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.CATEGORIES}`}
+        component={Categories}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.CONTACT}`}
+        component={Contact}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.PRICING}`}
+        component={Pricing}
+      />
+      <PublicRoute
+        restricted={false}
+        component={NotFound}
+        deviceType={deviceType}
+      />
     </Switch>
   </Fragment>
 );

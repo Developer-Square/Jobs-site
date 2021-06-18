@@ -4,6 +4,7 @@ import CategoriesSection from "./CategoriesSection";
 import Vacancies from "./VacanciesSection";
 // import CounterSection from "./CounterSection";
 import InfoSection from "./InfoSection";
+// import Loader from "components/Loader/Loader";
 
 function LandingPage({ deviceType }) {
   return (
@@ -18,6 +19,7 @@ function LandingPage({ deviceType }) {
           </div>
         </div>
       </div>
+      {/* <Loader /> */}
 
       {/* <CounterSection /> */}
       <CategoriesSection />

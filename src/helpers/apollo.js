@@ -3,10 +3,16 @@ import { Helmet } from "react-helmet";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import { ApolloLink } from "apollo-link";
 import { onError } from "apollo-link-error";
-import { createHttpLink } from "apollo-link-http";
+
 import fetch from "isomorphic-unfetch";
 import { BASE_GRAPHQL_URL } from "constants/constants";
+import { setContext } from "apollo-link-context";
+import { BatchHttpLink } from "apollo-link-batch-http";
+import { createUploadLink } from "apollo-upload-client";
+import { isJwtError, JWTError } from "./error.apollo";
+import { removeTokens } from "helpers";
 
 let apolloClient = null;
 
@@ -125,34 +131,55 @@ function initializeApollo(initialState = null) {
 }
 
 function getToken() {
-  const pureJSON = localStorage.getItem("thedb_access_token");
-  const accessToken = JSON.parse(localStorage.getItem(pureJSON));
+  const accessToken = localStorage.getItem("access_token");
   if (accessToken === null || accessToken === undefined) {
-    return null;
+    return false;
   } else {
-    return localStorage.getItem("thedb_access_token");
+    return accessToken;
   }
 }
 
-const httpLink = createHttpLink({
-  // headers: !getToken()    ? ""    : { authorization: localStorage.getItem("kiu_auth_access_token") },
-
+const linkOptions = {
+  // credentials: "include", // Additional fetch() options like `credentials` or `headers`
   uri: BASE_GRAPHQL_URL, // Server URL (must be absolute)
-  credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
-
-  request: async (operation) => {
-    // Get JWT token from local storage
-    const token = getToken() ? "" : getToken();
-
-    // Pass token to headers
-    operation.setContext({
-      headers: {
-        Authorization: token ? `JWT ${token}` : "",
-      },
-    });
-  },
+};
+const uploadLink = createUploadLink(linkOptions);
+const batchLink = new BatchHttpLink({
+  batchInterval: 100,
+  ...linkOptions,
   fetch,
 });
+
+const link = ApolloLink.split(
+  (operation) => operation.getContext().useBatching,
+  batchLink,
+  uploadLink
+);
+
+export const invalidateTokenLink = onError((error) => {
+  if (
+    (error.networkError && error.networkError.statusCode === 401) ||
+    error.graphQLErrors?.some(isJwtError)
+  ) {
+    if (error.graphQLErrors[0].extensions.code !== JWTError.expired) {
+      removeTokens();
+    }
+  }
+});
+
+export const tokenLink = setContext((_, context) => {
+  const authToken = getToken();
+
+  return {
+    ...context,
+    headers: {
+      ...context.headers,
+      Authorization: authToken ? `JWT ${authToken}` : null,
+    },
+  };
+});
+
+const authLink = invalidateTokenLink.concat(tokenLink);
 
 const errorLink = onError((error) => {
   const {
@@ -176,8 +203,6 @@ const errorLink = onError((error) => {
   if (networkFailed(networkErrorMessage)) return forward(operation);
 });
 
-const link = errorLink.concat(httpLink);
-
 /**
  * Creates and configures the ApolloClient
  * @param  {Object} [initialState={}]
@@ -185,7 +210,7 @@ const link = errorLink.concat(httpLink);
 function createApolloClient(initialState = {}) {
   return new ApolloClient({
     ssrMode: typeof window === "undefined", // Disables forceFetch on the server (so queries are only run once)
-    link,
+    link: errorLink.concat(authLink.concat(link)),
     cache: new InMemoryCache().restore(initialState),
   });
 }

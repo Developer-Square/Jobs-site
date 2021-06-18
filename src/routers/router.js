@@ -3,30 +3,32 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import PublicRoutes from "./PublicRoutes";
 import PrivateRoutes from "./PrivateRoutes";
 import { Modal } from "@redq/reuse-modal";
-import AppLayout from "containers/LayoutContainer/AppLayout";
+import AppLayout from "layouts/AppLayout";
 import { AuthContext } from "contexts/auth/auth.context";
 import { withApollo } from "helpers/apollo";
 
 function BaseRouter({ deviceType }) {
-  const { isAuthenticated } = useContext(AuthContext);
-  const authentication = () =>
+  const {
+    authState: { isAuthenticated },
+  } = useContext(AuthContext);
+  const authentication = (props) =>
     isAuthenticated ? (
-      <Redirect to="/dashboard" deviceType={deviceType} />
+      <PrivateRoutes deviceType={deviceType} {...props} />
     ) : (
-      <PublicRoutes deviceType={deviceType} />
+      <Redirect to="/auth" deviceType={deviceType} />
     );
   return (
     <>
       <Switch>
-        <Route
-          path="/dashboard"
-          render={(props) => (
-            <PrivateRoutes deviceType={deviceType} {...props} />
-          )}
-        />
+        <Route path="/dashboard" render={authentication} />
 
         <AppLayout deviceType={deviceType}>
-          <Route path="/" render={authentication} />
+          <Route
+            path="/"
+            render={(props) => (
+              <PublicRoutes deviceType={deviceType} {...props} />
+            )}
+          />
           <Modal />
         </AppLayout>
       </Switch>

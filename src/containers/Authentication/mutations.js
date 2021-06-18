@@ -119,5 +119,6 @@ export const TypedAccountRegistrationMutation = TypedMutation(SIGNUP_MUTATION);
 export const TypedPasswordResetEmailMutation = TypedMutation(
   SEND_PASSWORD_RESET_EMAIL
 );
+export const TypedPasswordChangeMutation = TypedMutation(PASSWORD_CHANGE);
 export const TypedPasswordResetMutation = TypedMutation(PASSWORD_RESET);
 export const TypedVerifyEmailMutation = TypedMutation(VERIFY_EMAIL_MUTATION);

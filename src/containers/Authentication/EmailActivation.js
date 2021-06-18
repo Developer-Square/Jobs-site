@@ -9,27 +9,30 @@ import { AuthContext } from "contexts/auth/auth.context";
 import { HelperText, Heading, SubHeading } from "./Authentication.style";
 
 const showSuccessNotification = (data, alert) => {
-  const successful = maybe(() => !data.sendPasswordResetEmail.errors.length);
+  const successful = maybe(() => data.verifyAccount.success);
   const nonFieldErr = normalizeErrors(
     maybe(() => data.verifyAccount.errors, [])
   );
-
+  if (successful) {
+    alert.show(
+      {
+        title: "Verification Successful",
+      },
+      { type: "success", timeout: 5000 }
+    );
+    alert.show(
+      {
+        title: "Login to Access Dashboard",
+      },
+      { type: "neutral", timeout: 5000 }
+    );
+  }
   if (nonFieldErr) {
     alert.show(
       {
         title: nonFieldErr?.nonFieldErrors,
       },
       { type: "error", timeout: 5000 }
-    );
-  }
-  if (successful) {
-    alert.show(
-      {
-        title: data.sendPasswordResetEmail.requiresConfirmation
-          ? "Please check your e-mail for further instructions"
-          : "New user has been created",
-      },
-      { type: "success", timeout: 5000 }
     );
   }
 };
@@ -67,15 +70,17 @@ const EmailActivation = () => {
         function confirmActivation() {
           verifyAccount({
             variables: { token: token },
+          }).then(({ data }) => {
+            if (data?.verifyAccount?.success) {
+              authDispatch({
+                type: "SIGNIN",
+              });
+              history.push("/auth");
+            }
           });
         }
         console.log(maybe(() => data.verifyAccount.errors, []));
-        if (data?.verifyAccount) {
-          if (data.verifyAccount?.success) {
-            console.log("data received", data);
-            history.push("/auth");
-          }
-        }
+
         return (
           <>
             <div

@@ -39,36 +39,6 @@ const Login = () => {
         },
         { type: "success", timeout: 5000 }
       );
-      console.log("data received", data);
-      var roles = [];
-
-      if (data.tokenAuth.user.isStaff) {
-        roles.push("admin");
-      }
-      if (data.tokenAuth.user.isIndividual) {
-        roles.push("seeker");
-      }
-      if (data.tokenAuth.user.isBusiness) {
-        roles.push("business");
-      }
-      // if (data.tokenAuth.user.isEmployer) {
-      //   roles.push("employer");
-      // }
-      // if (data.tokenAuth.user.isInstitution) {
-      //   roles.push("institution");
-      // }
-      addArrayToLocalStorage("thedb_auth_roles", roles);
-      localStorage.setItem("access_token", data.tokenAuth.token);
-      addObjectToLocalStorageObject("thedb_auth_payload", {
-        refreshToken: data.tokenAuth.refreshToken,
-        token: data.tokenAuth.token,
-      });
-      addObjectToLocalStorageObject("thedb_auth_profile", data.tokenAuth.user);
-      if (location.state !== undefined) {
-        history.push(location.state.referrer);
-      } else {
-        history.push("/dashboard");
-      }
     } else {
       const nonFieldErr = normalizeErrors(
         maybe(() => data.tokenAuth.errors, [])
@@ -86,12 +56,54 @@ const Login = () => {
     <TypedAccountLoginMutation
       onCompleted={(data, errors) => showNotification(data, errors, alert)}
     >
-      {(registerUser, { loading, data }) => {
-        function onSubmit(values) {
+      {(registerUser, { loading }) => {
+        function onSubmit(values, { setErrors, setSubmitting }) {
           registerUser({
             variables: values,
-          }).then(() => {
-            console.log("handling the then");
+          }).then(({ data }) => {
+            const successful = maybe(() => data.tokenAuth.success);
+            if (successful) {
+              var roles = [];
+
+              if (data.tokenAuth.user.isStaff) {
+                roles.push("admin");
+              }
+              if (data.tokenAuth.user.isIndividual) {
+                roles.push("seeker");
+              }
+              if (data.tokenAuth.user.isBusiness) {
+                roles.push("business");
+              }
+              // if (data.tokenAuth.user.isEmployer) {
+              //   roles.push("employer");
+              // }
+              // if (data.tokenAuth.user.isInstitution) {
+              //   roles.push("institution");
+              // }
+              addArrayToLocalStorage("thedb_auth_roles", roles);
+              localStorage.setItem("access_token", data.tokenAuth.token);
+              localStorage.setItem(
+                "refresh_token",
+                data.tokenAuth.refreshToken
+              );
+              addObjectToLocalStorageObject("thedb_auth_payload", {
+                refreshToken: data.tokenAuth.refreshToken,
+                token: data.tokenAuth.token,
+              });
+              addObjectToLocalStorageObject(
+                "thedb_auth_profile",
+                data.tokenAuth.user
+              );
+              if (location.state !== undefined) {
+                history.push(location.state.referrer);
+              } else {
+                history.push("/dashboard");
+              }
+              setSubmitting(false);
+            } else {
+              setErrors(normalizeErrors(data.tokenAuth.errors));
+              setSubmitting(false);
+            }
           });
         }
         return (

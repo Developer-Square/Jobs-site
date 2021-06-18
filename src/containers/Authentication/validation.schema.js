@@ -12,9 +12,10 @@ const username = Yup.string()
   .required(msg.fieldRequired);
 const password = Yup.string()
   .min(8, msg.passwordNotLongEnough)
+  .matches(/^.*[a-zA-Z].*$/, msg.mustContainLetter)
+  .matches(/^.*\d.*$/, msg.mustContainNumber)
   .max(100)
   .required(msg.fieldRequired);
-
 const passwordConfirm = (pass) => {
   return Yup.string()
     .oneOf([Yup.ref(pass), null], msg.passwordDoNotMatch)
@@ -37,6 +38,11 @@ export const passwordResetEmailSchema = Yup.object().shape({
 });
 
 export const passwordResetSchema = Yup.object({
+  newPassword1: password,
+  newPassword2: passwordConfirm("newPassword1"),
+});
+export const passwordChangeSchema = Yup.object({
+  oldPassword: password,
   newPassword1: password,
   newPassword2: passwordConfirm("newPassword1"),
 });

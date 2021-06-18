@@ -13,15 +13,19 @@ import { HelperText } from "./Authentication.style";
 import { TOS } from "constants/routes.constants";
 
 const showSuccessNotification = (data, alert) => {
-  const successful = maybe(() => !data.register.errors.length);
+  const successful = maybe(() => data.register.success);
   console.log(normalizeErrors(maybe(() => data.register.errors, [])));
 
   if (successful) {
     alert.show(
       {
-        title: data.register.requiresConfirmation
-          ? "Please check your e-mail for further instructions"
-          : "New user has been created",
+        title: "Registration Successful",
+      },
+      { type: "success", timeout: 5000 }
+    );
+    alert.show(
+      {
+        title: "Please check your e-mail for further instructions",
       },
       { type: "success", timeout: 5000 }
     );
@@ -53,7 +57,7 @@ const Register = () => {
               if (data.register) {
                 if (data.register.success) {
                   console.log("data received", data);
-                  history.push("/activate");
+                  history.push("/auth/activate");
                 } else {
                   // setErrors(normalizeErrors(data.register.errors));
                   setErrors(

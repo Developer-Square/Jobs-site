@@ -3,6 +3,11 @@ import _ from "lodash";
 import CryptoJS from "crypto-js";
 import AES from "crypto-js/aes";
 
+export const removeTokens = () => {
+  localStorage.removeItem("access_token");
+  sessionStorage.removeItem("access_token");
+};
+
 export const formTokenConfig = (getState) => {
   // const token = getState().auth.token;
   const token = localStorage.getItem("access_token");

@@ -1,25 +1,9 @@
-import React from "react";
-import useComponentSize from "helpers/useComponentSize";
+import React, { useContext } from "react";
 import Sidebar from "./Dashboard/Sidebar/Sidebar";
-import Topbar from "./Dashboard/Topbar/Topbar";
-import DrawerItems from "containers/DrawerItems/DrawerItems";
-import { DrawerProvider } from "contexts/drawer/drawer.provider";
-import {
-  LayoutWrapper,
-  ContentWrapper,
-  ContentInnerWrapper,
-} from "./Dashboard/Layout.style";
-import { useDeviceType } from "helpers/useDeviceType";
 import styled from "styled-components";
 import logoImage from "image/thedb.png";
 import { Link, useLocation } from "react-router-dom";
-import { groupBy } from "utils/groupBy";
-
-const SidedbarDesktop = styled.div`
-  @media only screen and (max-width: 1199px) {
-    display: none;
-  }
-`;
+import { AuthContext } from "contexts/auth/auth.context";
 
 export const LogoImage = styled.img`
   display: block;
@@ -28,13 +12,13 @@ export const LogoImage = styled.img`
   max-height: 50px;
 `;
 const DashboardLayout = (props) => {
-  let [topbarRef, { height }] = useComponentSize();
-  let [sidebarRef, { width }] = useComponentSize();
-  const { desktop } = useDeviceType();
+  const {
+    authState: { profile },
+  } = useContext(AuthContext);
   const location = useLocation();
-  const path = location.pathname.replace(/\/+$/, "");
-  const pathname = path[0] === "/" ? path.substr(1) : path;
-  console.log(groupBy(props.routes, "category"));
+  const pathLocation = location.pathname.replace(/\/+$/, "");
+  const pathname =
+    pathLocation[0] === "/" ? pathLocation.substr(1) : pathLocation;
 
   return (
     <div>
@@ -126,72 +110,12 @@ const DashboardLayout = (props) => {
       {/* Titlebar
 ================================================== */}
       {/* Dashboard */}
-      <div id="dashboard">
-        {/* Navigation
-	================================================== */}
+      <div id="dashboard" style={{ display: "inherit" }}>
         {/* Responsive Navigation Trigger */}
         <Link to="#" className="dashboard-responsive-nav-trigger">
           <i className="fa fa-reorder" /> Dashboard Navigation
         </Link>
-        <div className="dashboard-nav">
-          <div className="dashboard-nav-inner">
-            <ul data-submenu-title="Start">
-              <li className="active">
-                <Link to="/dashboard">Dashboard</Link>
-              </li>
-              <li>
-                <Link to="/notifications">
-                  Messages <span className="nav-tag">2</span>
-                </Link>
-              </li>
-            </ul>
-            <ul data-submenu-title="Management">
-              <li>
-                <Link>For Employers</Link>
-                <ul>
-                  <li>
-                    <Link to="dashboard-manage-jobs.html">
-                      Manage Jobs <span className="nav-tag">5</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="dashboard-manage-applications.html">
-                      Manage Applications <span className="nav-tag">4</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="dashboard-add-job.html">Add Job</Link>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Link>For Candidates</Link>
-                <ul>
-                  <li>
-                    <Link to="dashboard-manage-resumes.html">
-                      Manage Resumes <span className="nav-tag">2</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="dashboard-job-alerts.html">Job Alerts</Link>
-                  </li>
-                  <li>
-                    <Link to="dashboard-add-resume.html">Add Resume</Link>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            <ul data-submenu-title="Account">
-              <li>
-                <Link to="dashboard-my-profile.html">My Profile</Link>
-              </li>
-              <li>
-                <Link to="index.html">Logout</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-        {/* Navigation / End */}
+        <Sidebar path={props.path} routes={props.routes} />
         {/* Content
 	================================================== */}
         <div className="dashboard-content">
@@ -199,7 +123,11 @@ const DashboardLayout = (props) => {
           <div id="titlebar">
             <div className="row">
               <div className="col-md-12">
-                <h2>Howdy, Tom!</h2>
+                <h2>
+                  {pathname === "dashboard"
+                    ? `Hello, ${profile.username}!`
+                    : pathname}
+                </h2>
                 {/* Breadcrumbs */}
                 <nav id="breadcrumbs">
                   <ul>
@@ -221,7 +149,6 @@ const DashboardLayout = (props) => {
             {/* Copyrights */}
             <div className="col-md-12">
               <div className="copyrights">
-                {" "}
                 © Copyright {new Date().getFullYear()}{" "}
                 <Link to="/">TheDatabase</Link>. All Rights Reserved.
               </div>
