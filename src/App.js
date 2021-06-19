@@ -4,6 +4,8 @@ import { useDarkMode } from "helpers/useDarkMode";
 import { GlobalStyle } from "styles/global-styles";
 import { lightTheme, darkTheme } from "styles/theme";
 import { Provider as AlertProvider } from "react-alert";
+import { useHistory, useLocation } from "react-router-dom";
+import { ReactHooksWrapper, setHook } from "hooks";
 import { NotificationTemplate } from "components/NotificationTemplate";
 import { useDeviceType } from "helpers/useDeviceType";
 import { AuthProvider } from "contexts/auth/auth.provider";
@@ -31,6 +33,7 @@ export default function App() {
   if (!componentMounted) {
     return <div />;
   }
+  setHook("historyhook", useHistory).setHook("locationhook", useLocation);
 
   const query = queryParams.get("text") ? queryParams.get("text") : "";
   const notificationConfig = {
@@ -59,6 +62,7 @@ export default function App() {
           </HeaderProvider>
           <GlobalStyle />
         </SearchProvider>
+        <ReactHooksWrapper />
       </ServiceWorkerProvider>
     </OriginalThemeProvider>
   );

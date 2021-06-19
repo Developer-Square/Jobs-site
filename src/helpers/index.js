@@ -5,7 +5,11 @@ import AES from "crypto-js/aes";
 
 export const removeTokens = () => {
   localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("thedb_auth_payload");
   sessionStorage.removeItem("access_token");
+  sessionStorage.removeItem("refresh_token");
+  sessionStorage.removeItem("thedb_auth_payload");
 };
 
 export const formTokenConfig = (getState) => {

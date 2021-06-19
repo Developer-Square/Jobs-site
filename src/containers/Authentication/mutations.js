@@ -114,6 +114,18 @@ export const RESEND_ACTIVATION_EMAIL_MUTATION = gql`
   }
 `;
 
+export const GET_TOKEN_MUTATION = gql`
+  mutation RefreshTokenMutation($refreshToken: String!) {
+    refreshToken(input: { refreshToken: $refreshToken }) {
+      errors
+      success
+      refreshToken
+      token
+      payload
+    }
+  }
+`;
+
 export const TypedAccountLoginMutation = TypedMutation(LOGIN_MUTATION);
 export const TypedAccountRegistrationMutation = TypedMutation(SIGNUP_MUTATION);
 export const TypedPasswordResetEmailMutation = TypedMutation(

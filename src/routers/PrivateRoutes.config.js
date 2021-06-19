@@ -1,6 +1,7 @@
 // import React from "react";
 import Dashboard from "pages/Dashboard/Dashboard";
 import Profile from "pages/Profile/Profile";
+import AddVacancy from "pages/Vacancy/AddVacancy";
 import ProfileView from "pages/Profile/ProfileView";
 import Jobs from "pages/Jobs/Jobs";
 import Gigs from "pages/Gigs/Gigs";
@@ -17,6 +18,7 @@ import SingleView from "pages/SingleView/SingleView";
 export {
   Dashboard,
   Profile,
+  AddVacancy,
   Jobs,
   MyJobs,
   Gigs,

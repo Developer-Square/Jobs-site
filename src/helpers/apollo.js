@@ -4,15 +4,20 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloLink } from "apollo-link";
+import { fromPromise, Observable } from "apollo-link";
 import { onError } from "apollo-link-error";
-
 import fetch from "isomorphic-unfetch";
 import { BASE_GRAPHQL_URL } from "constants/constants";
 import { setContext } from "apollo-link-context";
 import { BatchHttpLink } from "apollo-link-batch-http";
 import { createUploadLink } from "apollo-upload-client";
-import { isJwtError, JWTError } from "./error.apollo";
-import { removeTokens } from "helpers";
+import AuthService, {
+  getRefreshToken,
+  getToken,
+} from "containers/Authentication/auth.service";
+
+const auth = new AuthService();
+console.log(auth.fetchToken());
 
 let apolloClient = null;
 
@@ -130,15 +135,6 @@ function initializeApollo(initialState = null) {
   return _apolloClient;
 }
 
-function getToken() {
-  const accessToken = localStorage.getItem("access_token");
-  if (accessToken === null || accessToken === undefined) {
-    return false;
-  } else {
-    return accessToken;
-  }
-}
-
 const linkOptions = {
   // credentials: "include", // Additional fetch() options like `credentials` or `headers`
   uri: BASE_GRAPHQL_URL, // Server URL (must be absolute)
@@ -156,17 +152,6 @@ const link = ApolloLink.split(
   uploadLink
 );
 
-export const invalidateTokenLink = onError((error) => {
-  if (
-    (error.networkError && error.networkError.statusCode === 401) ||
-    error.graphQLErrors?.some(isJwtError)
-  ) {
-    if (error.graphQLErrors[0].extensions.code !== JWTError.expired) {
-      removeTokens();
-    }
-  }
-});
-
 export const tokenLink = setContext((_, context) => {
   const authToken = getToken();
 
@@ -179,40 +164,134 @@ export const tokenLink = setContext((_, context) => {
   };
 });
 
-const authLink = invalidateTokenLink.concat(tokenLink);
+const authLink = tokenLink;
+// const authLink = invalidateTokenLink.concat(tokenLink);
 
-const errorLink = onError((error) => {
-  const {
-    graphQLErrors = [],
-    networkError = {},
-    operation = {},
-    forward,
-  } = error || {};
-  // const { getContext } = operation || {};
-  // const { scope, headers = {} } = getContext() || {};
-  const { message: networkErrorMessage = "" } = networkError || {};
-  const { message: graphQLErrorsMessage = "" } = graphQLErrors || [];
-  const graphQLFailed = (message) =>
-    typeof message === "string" &&
-    message.startsWith("Problem with GraphQL API");
-  const networkFailed = (message) =>
-    typeof message === "string" &&
-    message.startsWith("NetworkError when attempting to fetch resource");
-
-  if (graphQLFailed(graphQLErrorsMessage)) return forward(operation);
-  if (networkFailed(networkErrorMessage)) return forward(operation);
-});
+export const _promiseToObservable = (promiseFunc) =>
+  new Observable((subscriber) => {
+    promiseFunc.then(
+      (value) => {
+        if (subscriber.closed) return;
+        subscriber.next(value);
+        subscriber.complete();
+      },
+      (err) => subscriber.error(err)
+    );
+    return subscriber; // this line can removed, as per next comment
+  });
 
 /**
  * Creates and configures the ApolloClient
  * @param  {Object} [initialState={}]
  */
-function createApolloClient(initialState = {}) {
-  return new ApolloClient({
+export function createApolloClient(initialState = {}) {
+  const client = new ApolloClient({
     ssrMode: typeof window === "undefined", // Disables forceFetch on the server (so queries are only run once)
-    link: errorLink.concat(authLink.concat(link)),
+    link: ApolloLink.from([
+      onError((error = {}) => {
+        const {
+          graphQLErrors = [],
+          networkError = {},
+          operation = {},
+          forward,
+          location,
+          ...rest
+        } = error || {};
+        console.log(rest);
+        // const { getContext } = operation || {};
+        // const { scope, headers = {} } = getContext() || {};
+        const { message: networkErrorMessage = "" } = networkError;
+        const { message: graphQLErrorsMessage = "" } = graphQLErrors;
+        const graphQLFailed = (message) =>
+          typeof message === "string" &&
+          message.startsWith("Problem with GraphQL API");
+        const networkFailed = (message) =>
+          typeof message === "string" &&
+          message.startsWith("NetworkError when attempting to fetch resource");
+
+        if (graphQLFailed(graphQLErrorsMessage)) return forward(operation);
+        if (networkFailed(networkErrorMessage)) return forward(operation);
+        if (networkError) {
+          console.log(`[Network error]: `, networkError);
+          // if you would also like to retry automatically on
+          // network errors, we recommend that you use
+          // apollo-link-retry
+        }
+        // TODO --- On error message invalid token clear local storage
+        if (graphQLErrors && graphQLErrors.filter((e) => e).length > 0) {
+          for (let err of graphQLErrors) {
+            let isRefreshing = false;
+            let pendingRequests = [];
+
+            const resolvePendingRequests = () => {
+              pendingRequests.map((callback) => callback());
+              pendingRequests = [];
+            };
+            switch (err.extensions.exception.code) {
+              case "JSONWebTokenExpired" || "UNAUTHENTICATED":
+                const token = getToken();
+                const refreshToken = getRefreshToken();
+                if (token && refreshToken) {
+                  let forward$;
+                  if (!isRefreshing) {
+                    isRefreshing = true;
+                    forward$ = fromPromise(
+                      auth
+                        .fetchToken(client)
+                        .then(({ data: { refreshToken } }) => {
+                          console.log("Promise data: ", refreshToken);
+                          resolvePendingRequests();
+                          return refreshToken.token;
+                        })
+                        .catch((error) => {
+                          // Handle token refresh errors e.g clear stored tokens, redirect to login, ...
+                          console.log("Error after setting token: ", error);
+                          pendingRequests = [];
+                        })
+                        .finally(() => {
+                          console.log("Finally");
+                          isRefreshing = false;
+                        })
+                    );
+                  } else {
+                    // Will only emit once the Promise is resolved
+                    forward$ = fromPromise(
+                      new Promise((resolve) => {
+                        pendingRequests.push(() => resolve());
+                      })
+                    );
+                  }
+                  return forward$.flatMap(() => {
+                    console.log("Forwarding!");
+                    const oldHeaders = operation.getContext().headers;
+                    operation.setContext({
+                      headers: {
+                        ...oldHeaders,
+                        authorization: getToken(),
+                      },
+                    });
+                    return forward(operation);
+                  });
+                } else {
+                  // If there's no token, then sign out user
+                  console.log("There's no token, sign out the user");
+                  window.location.replace("/auth");
+                }
+
+                break;
+              default:
+                break;
+            }
+          }
+        }
+      }),
+      authLink,
+      link,
+    ]),
     cache: new InMemoryCache().restore(initialState),
+    connectToDevTools: process.env.NODE_ENV !== "production",
   });
+  return client;
 }
 
 export function useApollo(initialState) {

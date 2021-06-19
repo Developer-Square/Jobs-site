@@ -55,6 +55,16 @@ const components = {
     children: [],
     dashboard_item: true,
   },
+  addVacancy: {
+    component: "AddVacancy",
+    url: "/add-job",
+    title: "Add Job",
+    icon: "Category",
+    module: 1,
+    category: management,
+    children: [],
+    dashboard_item: true,
+  },
   submitResume: {
     component: "SubmitResume",
     url: "/submit-resume",
@@ -93,33 +103,34 @@ const rolesConfig = {
     routes: [...Object.values(components)],
   },
   individual: {
-    routes: [...Object.values(components)],
+    routes: [],
   },
   business: {
-    routes: [...Object.values(components)],
+    routes: [],
   },
   employer: {
-    routes: [...Object.values(components)],
+    routes: [],
   },
   seeker: {
-    routes: [...Object.values(components)],
+    routes: [],
   },
   institution: {
-    routes: [...Object.values(components)],
+    routes: [],
   },
   manager: {
-    routes: [components.dashboard],
+    routes: [],
   },
   main: {
-    routes: [components.dashboard],
+    routes: [],
   },
 
   common: {
     routes: [
       components.profile,
       components.dashboard,
-      components.messages,
-      components.bookmarks,
+      // components.messages,
+      // components.bookmarks,
+      components.addVacancy,
     ],
   },
 };

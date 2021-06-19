@@ -89,7 +89,7 @@ const Layout = (props) => {
                   {isAuthenticated ? (
                     <>
                       <li>
-                        <Link href>Dashboard</Link>
+                        <Link to={""}>Dashboard</Link>
                         <ul>
                           <li>
                             <Link to={`/dashboard`}>Dashboard</Link>
@@ -130,7 +130,7 @@ const Layout = (props) => {
                         </ul>
                       </li>
                       <li>
-                        <Link onClick={() => console.log("to log out")}>
+                        <Link to={""} onClick={() => console.log("to log out")}>
                           <i className="fa fa-lock"></i> Log Out
                         </Link>
                       </li>
