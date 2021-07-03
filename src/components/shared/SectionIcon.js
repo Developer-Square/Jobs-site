@@ -1,5 +1,5 @@
 import { Link } from "react-scroll";
-// import { Tooltip } from '@material-ui/core';
+import { Tooltip } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import React, { memo } from "react";
 import * as styles from "./SectionIcon.module.css";
@@ -9,24 +9,24 @@ const SectionIcon = ({ section, containerId, tooltipPlacement }) => {
   const { id, icon: Icon } = section;
 
   return (
-    // <Tooltip
-    //   title={t(`builder.sections.${id}`)}
-    //   placement={tooltipPlacement}
-    //   arrow
-    // >
-    <Link
-      spy
-      smooth
-      to={id}
-      offset={-18}
-      duration={500}
-      containerId={containerId}
-      activeClass="text-primary-900"
-      className={styles.icon}
+    <Tooltip
+      title={t(`builder.sections.${id}`)}
+      placement={tooltipPlacement}
+      arrow
     >
-      <Icon size="18px" />
-    </Link>
-    // </Tooltip>
+      <Link
+        spy
+        smooth
+        to={id}
+        offset={-18}
+        duration={500}
+        containerId={containerId}
+        activeClass="text-primary-900"
+        className={styles.icon}
+      >
+        <Icon size="18px" />
+      </Link>
+    </Tooltip>
   );
 };
 

@@ -14,8 +14,8 @@ import GigManage from "pages/Gigs/GigManage";
 import InternshipManage from "pages/Internships/InternshipManage";
 import Applications from "pages/Applications/Applications";
 import SingleView from "pages/SingleView/SingleView";
-// import ResumeDashboard from "pages/Resume/dashboard";
-// import ResumeBuilder from "pages/Resume/builder";
+import ResumeDashboard from "pages/Resume/ResumeDashboard";
+import ResumeBuilder from "pages/Resume/ResumeBuilder";
 
 export {
   Dashboard,
@@ -33,6 +33,6 @@ export {
   Applications,
   ProfileView,
   SingleView,
-  // ResumeDashboard,
-  // ResumeBuilder,
+  ResumeDashboard,
+  ResumeBuilder,
 };

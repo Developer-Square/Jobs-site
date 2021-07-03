@@ -1,9 +1,10 @@
 import { toast } from "react-toastify";
-import React, { createContext, memo, useContext, useRef } from "react";
-import firebase from "gatsby-plugin-firebase";
+import React, { createContext, memo, useRef } from "react";
+// import firebase from "gatsby-plugin-firebase";
 import { isFileImage } from "utils";
-import { useDispatch, useSelector } from "contexts/resume/resume.provider";
-import UserContext from "contexts/user/user.provider";
+import { useDispatch } from "contexts/resume/resume.provider";
+// import { useDispatch, useSelector } from "contexts/resume/resume.provider";
+// import UserContext from "contexts/user/user.provider";
 
 const defaultState = {
   uploadPhotograph: async () => {},
@@ -14,9 +15,9 @@ const StorageContext = createContext(defaultState);
 const StorageProvider = ({ children }) => {
   const toastId = useRef(null);
 
-  const { user } = useContext(UserContext);
+  // const { user } = useContext(UserContext);
 
-  const id = useSelector("id");
+  // const id = useSelector("id");
   const dispatch = useDispatch();
 
   const uploadPhotograph = async (file) => {
@@ -38,10 +39,12 @@ const StorageProvider = ({ children }) => {
       return null;
     }
 
-    const uploadTask = firebase
-      .storage()
-      .ref(`/users/${user.uid}/photographs/${id}`)
-      .put(file);
+    // const uploadTask = firebase
+    //   .storage()
+    //   .ref(`/users/${user.uid}/photographs/${id}`)
+    //   .put(file);
+
+    const uploadTask = toast("to handle image Upload");
 
     let progress = 0;
     toastId.current = toast("Firing up engines...", {

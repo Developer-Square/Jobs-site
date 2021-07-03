@@ -1,7 +1,6 @@
 import { Element } from "react-scroll";
 import React, { Fragment, memo } from "react";
 import * as styles from "./RightSidebar.module.css";
-import About from "./sections/About";
 import Actions from "./sections/Actions";
 import Colors from "./sections/Colors";
 import FontSize from "./sections/FontSize";
@@ -11,6 +10,8 @@ import RightNavbar from "./RightNavbar";
 import Settings from "./sections/Settings";
 import Templates from "./sections/Templates";
 import sections from "data/rightSections";
+
+const About = <Fragment />;
 
 const getComponent = (id) => {
   switch (id) {

@@ -4,42 +4,37 @@ import {
   MdFontDownload,
   MdFormatSize,
   MdImportExport,
-  MdInfo,
   MdSettings,
   MdStyle,
-} from 'react-icons/md';
+} from "react-icons/md";
 
 export default [
   {
-    id: 'templates',
+    id: "templates",
     icon: MdStyle,
   },
   {
-    id: 'layout',
+    id: "layout",
     icon: MdDashboard,
   },
   {
-    id: 'colors',
+    id: "colors",
     icon: MdColorLens,
   },
   {
-    id: 'fonts',
+    id: "fonts",
     icon: MdFontDownload,
   },
   {
-    id: 'font-size',
+    id: "font-size",
     icon: MdFormatSize,
   },
   {
-    id: 'actions',
+    id: "actions",
     icon: MdImportExport,
   },
   {
-    id: 'settings',
+    id: "settings",
     icon: MdSettings,
-  },
-  {
-    id: 'about',
-    icon: MdInfo,
   },
 ];

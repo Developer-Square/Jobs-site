@@ -1,25 +1,25 @@
 import { Link } from "react-router-dom";
-// import { Tooltip } from "@material-ui/core";
-// import { useTranslation } from "react-i18next";
+import { Tooltip } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 import React, { memo } from "react";
 import Avatar from "components/shared/Avatar";
-import Logo from "components/logo/Logo";
+import Logo from "components/Logo/Logo";
 import * as styles from "./LeftNavbar.module.css";
 import SectionIcon from "components/shared/SectionIcon";
 import sections from "data/leftSections";
 
 const LeftNavbar = () => {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <div className={styles.container}>
-      {/* <Tooltip title={t("builder.tooltips.backToDashboard")} placement="right"> */}
-      <div>
-        <Link to="/dashboard/resume">
-          <Logo size="40px" />
-        </Link>
-      </div>
-      {/* </Tooltip> */}
+      <Tooltip title={t("builder.tooltips.backToDashboard")} placement="right">
+        <div>
+          <Link to="/app/dashboard">
+            <Logo size="40px" />
+          </Link>
+        </div>
+      </Tooltip>
 
       <hr className="my-6" />
 

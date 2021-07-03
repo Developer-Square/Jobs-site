@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useState } from "react";
 import * as styles from "./Actions.module.css";
 import { useDispatch, useSelector } from "contexts/resume/resume.provider";
-import Button from "components/Button/Button";
+import Button from "components/shared/Button";
 import Heading from "components/shared/Heading";
 import Input from "components/shared/Input";
 import ModalContext from "contexts/modal/modal.provider";

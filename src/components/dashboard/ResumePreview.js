@@ -1,5 +1,5 @@
 import { MdMoreHoriz, MdOpenInNew } from "react-icons/md";
-// import { Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem } from "@material-ui/core";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import React, { useContext, useState } from "react";
@@ -65,24 +65,24 @@ const ResumePreview = ({ resume }) => {
           aria-haspopup="true"
           onClick={handleMenuClick}
         />
-        {/* <Menu
+        <Menu
           keepMounted
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
           <MenuItem onClick={handleDuplicate}>
-            {t('dashboard.buttons.duplicate')}
+            {t("dashboard.buttons.duplicate")}
           </MenuItem>
           <MenuItem onClick={handleRename}>
-            {t('dashboard.buttons.rename')}
+            {t("dashboard.buttons.rename")}
           </MenuItem>
           <MenuItem onClick={handleDelete}>
             <span className="text-red-600 font-medium">
-              {t('shared.buttons.delete')}
+              {t("shared.buttons.delete")}
             </span>
           </MenuItem>
-        </Menu> */}
+        </Menu>
       </div>
       <div className={styles.meta}>
         <span>{resume.name}</span>

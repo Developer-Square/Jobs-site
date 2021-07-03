@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "contexts/resume/resume.provider";
 import BaseModal from "./BaseModal";
-import Button from "../components/shared/Button";
+import Button from "components/shared/Button";
 import ModalContext from "contexts/modal/modal.provider";
 import { getModalText } from "utils";
 
@@ -42,7 +42,7 @@ const DataModal = ({
 
   useEffect(() => {
     data && setValues(data) && setEditMode(true);
-  }, [data]);
+  }, [data, setValues]);
 
   const onSubmit = async (newData) => {
     setLoading(true);

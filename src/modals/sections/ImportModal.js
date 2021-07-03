@@ -1,9 +1,9 @@
-// import { Tooltip } from "@material-ui/core";
+import { Tooltip } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "contexts/resume/resume.provider";
 import BaseModal from "../BaseModal";
-import Button from "../../components/shared/Button";
+import Button from "components/shared/Button";
 import ModalContext from "contexts/modal/modal.provider";
 
 const ImportModal = () => {
@@ -102,11 +102,11 @@ const ImportModal = () => {
 
         <p className="leading-loose">{t("modals.import.linkedIn.text")}</p>
 
-        {/* <Tooltip title="Coming Soon" placement="right" arrow> */}
-        <div className="mt-5 inline-block">
-          <Button className="opacity-50">{t("modals.import.button")}</Button>
-        </div>
-        {/* </Tooltip> */}
+        <Tooltip title="Coming Soon" placement="right" arrow>
+          <div className="mt-5 inline-block">
+            <Button className="opacity-50">{t("modals.import.button")}</Button>
+          </div>
+        </Tooltip>
       </div>
     </BaseModal>
   );

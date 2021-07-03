@@ -6,7 +6,7 @@ import React, { memo, useContext } from "react";
 import * as styles from "./List.module.css";
 import { formatDateRange, reorder } from "utils";
 import { useDispatch, useSelector } from "contexts/resume/resume.provider";
-import Button from "components/Button/Button";
+import Button from "components/shared/Button";
 import EmptyList from "./EmptyList";
 import ListItem from "./ListItem";
 import ModalContext from "contexts/modal/modal.provider";

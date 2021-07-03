@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { DrawerContext } from "./drawer.context";
-import { useCreateContext } from "../create-context";
+import { CreateContext } from "../create-context";
 
 const initialState = {
   isOpen: false,
@@ -32,9 +32,9 @@ function reducer(state, action) {
 }
 export const DrawerProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [useDrawerState, useDrawerDispatch, DrawerProviderz] = useCreateContext(
+  const [useDrawerState, useDrawerDispatch, DrawerProviderz] = CreateContext(
     initialState,
-    reducer
+    reducer,
   );
   return (
     <DrawerContext.Provider
@@ -51,10 +51,7 @@ export const DrawerProvider = ({ children }) => {
   );
 };
 
-const [
-  useDrawerState,
-  useDrawerDispatch,
-  DashboardDrawerProvider,
-] = useCreateContext(initialState, reducer);
+const [useDrawerState, useDrawerDispatch, DashboardDrawerProvider] =
+  CreateContext(initialState, reducer);
 
 export { useDrawerState, useDrawerDispatch, DashboardDrawerProvider };

@@ -1,5 +1,5 @@
 import { MdFileUpload } from "react-icons/md";
-// import { Tooltip } from "@material-ui/core";
+import { Tooltip } from "@material-ui/core";
 import React, { memo, useContext, useRef } from "react";
 import { handleKeyUp } from "utils";
 import Input from "./Input";
@@ -21,24 +21,24 @@ const PhotoUpload = () => {
 
   return (
     <div className="flex items-center">
-      {/* <Tooltip title={`Upload Photograph`} placement="right-start"> */}
-      <div
-        role="button"
-        tabIndex="0"
-        className={styles.circle}
-        onClick={handleIconClick}
-        onKeyUp={(e) => handleKeyUp(e, handleIconClick)}
-      >
-        <MdFileUpload size="22px" />
-        <input
-          name="file"
-          type="file"
-          ref={fileInputRef}
-          className="hidden"
-          onChange={handleImageUpload}
-        />
-      </div>
-      {/* </Tooltip> */}
+      <Tooltip title={`Upload Photograph`} placement="right-start">
+        <div
+          role="button"
+          tabIndex="0"
+          className={styles.circle}
+          onClick={handleIconClick}
+          onKeyUp={(e) => handleKeyUp(e, handleIconClick)}
+        >
+          <MdFileUpload size="22px" />
+          <input
+            name="file"
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+        </div>
+      </Tooltip>
 
       <Input
         name="photograph"

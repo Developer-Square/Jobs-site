@@ -5,7 +5,7 @@ import React, { memo, useContext, useState } from "react";
 import * as styles from "./Settings.module.css";
 import { languages } from "../../../../i18n";
 import { useDispatch } from "contexts/resume/resume.provider";
-import Button from "components/Button/Button";
+import Button from "components/shared/Button";
 import Heading from "components/shared/Heading";
 import Input from "components/shared/Input";
 import SettingsContext from "contexts/settings/settings.provider";

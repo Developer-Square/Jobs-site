@@ -1,12 +1,13 @@
-import { navigate } from "gatsby";
 import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useState } from "react";
 import BaseModal from "./BaseModal";
-import Button from "../components/shared/Button";
+import Button from "components/shared/Button";
 import ModalContext from "contexts/modal/modal.provider";
 import UserContext from "contexts/user/user.provider";
+import { useHistory } from "react-router-dom";
 
 const AuthModal = () => {
+  const navigate = useHistory();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoadingGoogle, setLoadingGoogle] = useState(false);
@@ -35,7 +36,7 @@ const AuthModal = () => {
   };
 
   const handleGotoApp = () => {
-    navigate("/app/dashboard");
+    navigate.push("/dashboard");
     setOpen(false);
   };
 

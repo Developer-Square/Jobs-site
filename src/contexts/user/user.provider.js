@@ -1,10 +1,11 @@
-import { pick } from "lodash";
+// import { pick } from "lodash";
 import { toast } from "react-toastify";
 import React, { createContext, memo, useEffect, useState } from "react";
-import useAuthState from "hooks/useAuthState";
+// import useAuthState from "hooks/useAuthState";
 import { useHistory } from "react-router-dom";
-import { useMutation, useQuery } from "react-apollo";
-import { GET_USER_DETAILs } from "./queries";
+import { useQuery } from "react-apollo";
+import { GET_USER_DETAILS } from "./query";
+import { AuthContext } from "contexts/auth/auth.context";
 
 const defaultUser = {
   uid: null,
@@ -27,12 +28,11 @@ const UserContext = createContext(defaultState);
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const navigate = useHistory();
-  const [me] = useQuery(GET_USER_DETAILs);
+  const { data, loading, error } = useQuery(GET_USER_DETAILS);
   // eslint-disable-next-line no-undef
   const { authDispatch } = React.useContext(AuthContext);
 
   const getUser = async () => {
-    const { data, loading, error } = await me();
     setUser(data);
     return { user, loading, error };
   };

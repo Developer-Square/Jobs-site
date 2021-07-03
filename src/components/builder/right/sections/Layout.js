@@ -4,7 +4,7 @@ import React, { memo, useState } from "react";
 import * as styles from "./Layout.module.css";
 import { move, reorder } from "utils";
 import { useDispatch, useSelector } from "contexts/resume/resume.provider";
-import Button from "components/Button/Button";
+import Button from "components/shared/Button";
 import Heading from "components/shared/Heading";
 
 const Layout = ({ id }) => {

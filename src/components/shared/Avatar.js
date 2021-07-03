@@ -1,7 +1,7 @@
-// import { Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem } from "@material-ui/core";
 // import { toUrl } from 'gatsby-source-gravatar';
 import { useTranslation } from "react-i18next";
-import React, { memo, useContext, useMemo, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 import cx from "classnames";
 import UserContext from "contexts/user/user.provider";
 import { handleKeyUp } from "utils";
@@ -41,14 +41,14 @@ const Avatar = ({ className }) => {
           className={cx(styles.container, className)}
         />
       </div>
-      {/* <Menu
+      <Menu
         keepMounted
         anchorEl={anchorEl}
         onClose={handleClose}
         open={Boolean(anchorEl)}
       >
-        <MenuItem onClick={handleLogout}>{t('shared.buttons.logout')}</MenuItem>
-      </Menu> */}
+        <MenuItem onClick={handleLogout}>{t("shared.buttons.logout")}</MenuItem>
+      </Menu>
     </div>
   );
 };

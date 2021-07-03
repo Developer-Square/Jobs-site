@@ -1,72 +1,73 @@
-import { AiFillSafetyCertificate, AiOutlineTwitter } from 'react-icons/ai';
-import { BsTools } from 'react-icons/bs';
-import { FaAward, FaProjectDiagram, FaUserFriends } from 'react-icons/fa';
+/* eslint-disable import/no-anonymous-default-export */
+import { AiFillSafetyCertificate, AiOutlineTwitter } from "react-icons/ai";
+import { BsTools } from "react-icons/bs";
+import { FaAward, FaProjectDiagram, FaUserFriends } from "react-icons/fa";
 import {
   IoLogoGameControllerB,
   IoMdBriefcase,
   IoMdDocument,
-} from 'react-icons/io';
-import { MdPerson, MdSchool, MdTranslate } from 'react-icons/md';
-import ModalEvents from '../constants/ModalEvents';
+} from "react-icons/io";
+import { MdPerson, MdSchool, MdTranslate } from "react-icons/md";
+import ModalEvents from "../constants/ModalEvents";
 
 export default [
   {
-    id: 'profile',
+    id: "profile",
     icon: MdPerson,
     fixed: true,
   },
   {
-    id: 'social',
+    id: "social",
     icon: AiOutlineTwitter,
     event: ModalEvents.SOCIAL_MODAL,
     fixed: true,
   },
   {
-    id: 'objective',
+    id: "objective",
     icon: IoMdDocument,
   },
   {
-    id: 'work',
+    id: "work",
     icon: IoMdBriefcase,
     event: ModalEvents.WORK_MODAL,
   },
   {
-    id: 'education',
+    id: "education",
     icon: MdSchool,
     event: ModalEvents.EDUCATION_MODAL,
   },
   {
-    id: 'projects',
+    id: "projects",
     icon: FaProjectDiagram,
     event: ModalEvents.PROJECT_MODAL,
   },
   {
-    id: 'awards',
+    id: "awards",
     icon: FaAward,
     event: ModalEvents.AWARD_MODAL,
   },
   {
-    id: 'certifications',
+    id: "certifications",
     icon: AiFillSafetyCertificate,
     event: ModalEvents.CERTIFICATION_MODAL,
   },
   {
-    id: 'skills',
+    id: "skills",
     icon: BsTools,
     event: ModalEvents.SKILL_MODAL,
   },
   {
-    id: 'hobbies',
+    id: "hobbies",
     icon: IoLogoGameControllerB,
     event: ModalEvents.HOBBY_MODAL,
   },
   {
-    id: 'languages',
+    id: "languages",
     icon: MdTranslate,
     event: ModalEvents.LANGUAGE_MODAL,
   },
   {
-    id: 'references',
+    id: "references",
     icon: FaUserFriends,
     event: ModalEvents.REFERENCE_MODAL,
   },

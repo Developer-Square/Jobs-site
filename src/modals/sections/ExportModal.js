@@ -1,15 +1,16 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { FaPrint } from "react-icons/fa";
 import { clone } from "lodash";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useState } from "react";
 import download from "downloadjs";
-import firebase from "gatsby-plugin-firebase";
+// import firebase from "gatsby-plugin-firebase";
 import { useSelector } from "contexts/resume/resume.provider";
 import BaseModal from "../BaseModal";
-import Button from "../../components/shared/Button";
+import Button from "components/shared/Button";
 import ModalContext from "contexts/modal/modal.provider";
-import { b64toBlob } from "../../utils";
+import { b64toBlob } from "utils";
 
 const ExportModal = () => {
   const state = useSelector();
@@ -36,7 +37,8 @@ const ExportModal = () => {
     isSinglePDF ? setLoadingSingle(true) : setLoadingMulti(true);
 
     try {
-      const printResume = firebase.functions().httpsCallable("printResume");
+      // const printResume = firebase.functions().httpsCallable("printResume");
+      const printResume = toast("to handle printResume");
       const { data } = await printResume({
         id: state.id,
         type: isSinglePDF ? "single" : "multi",

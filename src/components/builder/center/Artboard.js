@@ -13,14 +13,16 @@ import Pikachu from "templates/Pikachu";
 const Artboard = () => {
   const state = useSelector();
   const { t } = useTranslation();
-  const { id, name, metadata } = state;
+  const { id, metadata } = state;
+  // const { id, name, metadata } = state;
   const { template } = metadata;
 
   return (
     <>
       <Helmet>
         <title>
-          {name} | {t("shared.appName")}
+          {t("shared.appName")}
+          {/* {name} | {t("shared.appName")} */}
         </title>
         <link
           rel="canonical"

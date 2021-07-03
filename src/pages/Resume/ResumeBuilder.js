@@ -3,16 +3,18 @@ import React, { memo, useContext, useEffect, useMemo, useState } from "react";
 import * as styles from "./builder.module.css";
 import { useDispatch } from "contexts/resume/resume.provider";
 import Artboard from "components/builder/center/Artboard";
-import Button from "components/Button/Button";
+import Button from "components/shared/Button";
 import DatabaseContext from "contexts/database/database.provider";
 import LeftSidebar from "components/builder/left/LeftSidebar";
 import LoadingScreen from "components/LoadingScreen";
 import RightSidebar from "components/builder/right/RightSidebar";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-const Builder = ({ id }) => {
+const ResumeBuilder = ({ id }) => {
   const navigate = useHistory();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const { getResume } = useContext(DatabaseContext);
 
@@ -23,10 +25,13 @@ const Builder = ({ id }) => {
 
   useEffect(() => {
     (async () => {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
       const resume = await getResume(id);
 
       if (!resume) {
-        navigate.push("/dashboard");
+        // navigate.push("/dashboard");
         toast.error(
           "The resume you were looking for does not exist anymore... or maybe it never did?",
         );
@@ -41,11 +46,9 @@ const Builder = ({ id }) => {
               Resume Builder has to offer.
             </p>
 
-            <Button
-              className="mt-4"
-              title="Load Demo Data"
-              onClick={handleLoadDemoData}
-            />
+            <Button className="mt-4" onClick={handleLoadDemoData}>
+              {t("builder.actions.loadDemoData.button")}
+            </Button>
           </div>
         ));
       }
@@ -53,7 +56,7 @@ const Builder = ({ id }) => {
       dispatch({ type: "set_data", payload: resume });
       return setLoading(false);
     })();
-  }, [dispatch, getResume, handleLoadDemoData, id, navigate]);
+  }, [dispatch, getResume, handleLoadDemoData, id, navigate, t]);
 
   return useMemo(() => {
     if (loading) {
@@ -76,4 +79,4 @@ const Builder = ({ id }) => {
   }, [loading]);
 };
 
-export default memo(Builder);
+export default memo(ResumeBuilder);

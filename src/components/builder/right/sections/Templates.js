@@ -5,7 +5,6 @@ import { handleKeyUp } from "utils";
 import { useDispatch, useSelector } from "contexts/resume/resume.provider";
 import Heading from "components/shared/Heading";
 import templateOptions from "data/templateOptions";
-import * as templateImages from "templates";
 
 const Templates = ({ id }) => {
   const dispatch = useDispatch();
@@ -37,7 +36,7 @@ const Templates = ({ id }) => {
               [styles.selected]: template === x.id,
             })}
           >
-            <img alt={x.name} src={`${templateImages[x.name]}.png`} />
+            <img alt={x.name} src={`${x.image}`} />
 
             <span>{x.name}</span>
           </div>

@@ -1,6 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/anchor-has-content */
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -8,6 +5,10 @@ import { QueryParamProvider } from "use-query-params";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import "./index.css";
+import "./styles/forms.css";
+import "./styles/shadows.css";
+import "./styles/toastify.css";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -17,7 +18,7 @@ ReactDOM.render(
       </QueryParamProvider>
     </Router>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
 
 // If you want your app to work offline and load faster, you can change

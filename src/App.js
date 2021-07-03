@@ -1,6 +1,6 @@
-// import "i18n";
+import "./i18n";
 
-import React, { memo } from "react";
+import React from "react";
 import { ThemeProvider as OriginalThemeProvider } from "styled-components";
 import { useDarkMode } from "helpers/useDarkMode";
 import { GlobalStyle } from "styles/global-styles";
@@ -15,6 +15,12 @@ import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
 import { ServiceWorkerProvider } from "contexts/ServiceWorkerProvider";
+import { DatabaseProvider } from "contexts/database/database.provider";
+import { ModalProvider } from "contexts/modal/modal.provider";
+import { ResumeProvider } from "contexts/resume/resume.provider";
+import { SettingsProvider } from "contexts/settings/settings.provider";
+import { StorageProvider } from "contexts/storage/storage.provider";
+import { UserProvider } from "contexts/user/user.provider";
 import BaseRouter from "routers/router";
 import { useRouterQuery } from "helpers/useRouterQuery";
 import { serviceWorkerTimeout } from "constants/constants";
@@ -25,6 +31,15 @@ import "rc-drawer/assets/index.css";
 import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
+import { withApollo } from "helpers/apollo";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+
+const MUItheme = createMuiTheme({
+  typography: {
+    fontWeightRegular: 500,
+    fontFamily: ["Montserrat", "sans-serif"].join(","),
+  },
+});
 
 function App() {
   const queryParams = useRouterQuery();
@@ -47,26 +62,40 @@ function App() {
   };
 
   return (
-    <OriginalThemeProvider theme={themeMode}>
-      <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-        <SearchProvider query={query}>
-          <HeaderProvider>
-            <AuthProvider>
-              <StickyProvider>
-                <AlertProvider
-                  template={NotificationTemplate}
-                  {...notificationConfig}
-                >
-                  <BaseRouter deviceType={deviceType} />
-                </AlertProvider>
-              </StickyProvider>
-            </AuthProvider>
-          </HeaderProvider>
-          <GlobalStyle />
-        </SearchProvider>
-        <ReactHooksWrapper />
-      </ServiceWorkerProvider>
-    </OriginalThemeProvider>
+    <SettingsProvider>
+      <OriginalThemeProvider theme={themeMode}>
+        <MuiThemeProvider theme={MUItheme}>
+          <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
+            <SearchProvider query={query}>
+              <HeaderProvider>
+                <AuthProvider>
+                  <ModalProvider>
+                    <UserProvider>
+                      <DatabaseProvider>
+                        <ResumeProvider>
+                          <StickyProvider>
+                            <AlertProvider
+                              template={NotificationTemplate}
+                              {...notificationConfig}
+                            >
+                              <StorageProvider>
+                                <BaseRouter deviceType={deviceType} />
+                              </StorageProvider>
+                            </AlertProvider>
+                          </StickyProvider>
+                        </ResumeProvider>
+                      </DatabaseProvider>
+                    </UserProvider>
+                  </ModalProvider>
+                </AuthProvider>
+              </HeaderProvider>
+              <GlobalStyle />
+            </SearchProvider>
+            <ReactHooksWrapper />
+          </ServiceWorkerProvider>
+        </MuiThemeProvider>
+      </OriginalThemeProvider>
+    </SettingsProvider>
   );
 }
-export default memo(App);
+export default withApollo(App);

@@ -1,10 +1,10 @@
 import { Draggable } from "react-beautiful-dnd";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { MdMoreVert } from "react-icons/md";
-// import { Menu, MenuItem } from "@material-ui/core";
+import { Menu, MenuItem } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
 import React, { memo, useState } from "react";
-// import Switch from "@material-ui/core/Switch";
+import Switch from "@material-ui/core/Switch";
 import { useDispatch } from "contexts/resume/resume.provider";
 import * as styles from "./ListItem.module.css";
 
@@ -107,14 +107,14 @@ const ListItem = ({
             )}
           </div>
           <div className={styles.toggleButton}>
-            {/* <Switch
+            <Switch
               checked={toggleSwitchState}
               onChange={handleToggleUse}
               color="primary"
               name="toggleSwitch"
               className="toggle-button"
               inputProps={{ "aria-label": "primary checkbox" }}
-            /> */}
+            />
 
             <div className={styles.menu}>
               <MdMoreVert
@@ -123,7 +123,7 @@ const ListItem = ({
                 onClick={handleClick}
                 className="cursor-context-menu"
               />
-              {/* <Menu
+              <Menu
                 keepMounted
                 anchorEl={anchorEl}
                 onClose={handleClose}
@@ -145,7 +145,7 @@ const ListItem = ({
                     {t("shared.buttons.delete")}
                   </span>
                 </MenuItem>
-              </Menu> */}
+              </Menu>
             </div>
           </div>
         </div>
