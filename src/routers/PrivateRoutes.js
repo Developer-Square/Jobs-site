@@ -52,7 +52,7 @@ class PrivateRoutes extends Component {
     return (
       <DashboardLayout
         routes={this.state.allowedRoutes.filter(
-          (filteredRoute) => filteredRoute.dashboard_item
+          (filteredRoute) => filteredRoute.dashboardItem,
         )}
         path={this.props.match.path}
       >

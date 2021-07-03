@@ -23,12 +23,7 @@ const AddVacancy = () => {
               {/* Title */}
               <div className="form">
                 <h5>Job Title</h5>
-                <input
-                  className="search-field"
-                  type="text"
-                  placeholder
-                  defaultValue
-                />
+                <input className="search-field" type="text" defaultValue />
               </div>
               {/* Job Type */}
               <div className="form">
@@ -189,10 +184,6 @@ const AddVacancy = () => {
         <a href="#" className="button margin-top-30">
           Preview <i className="fa fa-arrow-circle-right" />
         </a>
-      </div>
-      {/* Copyrights */}
-      <div className="col-md-12">
-        <div className="copyrights">© 2019 WorkScout. All Rights Reserved.</div>
       </div>
     </div>
   );

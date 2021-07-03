@@ -2,24 +2,7 @@ import { removeTokens } from "helpers";
 import { GET_TOKEN_MUTATION } from "containers/Authentication/mutations";
 import { addObjectToLocalStorageObject } from "helpers";
 import { getHook } from "hooks";
-import { useAlert } from "react-alert";
-import React, { Fragment } from "react";
-
-export const ShowNotification = (props) => {
-  const alert = useAlert();
-  console.log(props);
-  const f = () => {
-    console.log("almost handling notification");
-    alert.show(
-      {
-        title: "Login again to continue",
-      },
-      { type: "error", timeout: 5000 }
-    );
-    return <Fragment />;
-  };
-  return f();
-};
+import { toast } from "react-toastify";
 
 export function getRefreshToken() {
   const refreshToken = localStorage.getItem("refresh_token");
@@ -46,8 +29,6 @@ export class AuthService {
   fetchToken(f) {
     const historyHook = getHook("historyHook");
 
-    console.log(f);
-    console.log("this.props", this.props);
     if (f) {
       if (f.mutate) {
         console.log("at f.mutate");
@@ -63,7 +44,9 @@ export class AuthService {
               console.log("response", res);
 
               const {
-                data: { success, token, refreshToken },
+                data: {
+                  refreshToken: { success, token, refreshToken },
+                },
               } = res;
               if (success) {
                 removeTokens();
@@ -74,17 +57,15 @@ export class AuthService {
                   token: token,
                 });
               } else {
-                // ShowNotification();
-                alert("Login again to continue");
+                toast("Login again to continue");
                 historyHook.push("/auth");
               }
 
-              return res;
+              return token;
             })
             .catch((err) => {
               console.log(err);
-              // ShowNotification();
-              alert("Login again to continue");
+              toast("Login again to continue");
               historyHook.push("/auth");
             });
         } else {
@@ -95,9 +76,6 @@ export class AuthService {
         throw new Error(`Provide "Apollo Client" to fetch refreshToken`);
       }
     }
-
-    console.log(f);
-    console.log("this.props");
     return null;
   }
 }

@@ -1,4 +1,6 @@
-import React from "react";
+// import "i18n";
+
+import React, { memo } from "react";
 import { ThemeProvider as OriginalThemeProvider } from "styled-components";
 import { useDarkMode } from "helpers/useDarkMode";
 import { GlobalStyle } from "styles/global-styles";
@@ -24,7 +26,7 @@ import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
 
-export default function App() {
+function App() {
   const queryParams = useRouterQuery();
   const [theme, componentMounted] = useDarkMode();
   const userAgent = navigator.userAgent;
@@ -33,7 +35,7 @@ export default function App() {
   if (!componentMounted) {
     return <div />;
   }
-  setHook("historyhook", useHistory).setHook("locationhook", useLocation);
+  setHook("historyHook", useHistory).setHook("locationHook", useLocation);
 
   const query = queryParams.get("text") ? queryParams.get("text") : "";
   const notificationConfig = {
@@ -67,3 +69,4 @@ export default function App() {
     </OriginalThemeProvider>
   );
 }
+export default memo(App);

@@ -5,13 +5,13 @@ import { groupBy } from "utils/groupBy";
 export default withRouter(function Sidebar(props) {
   const menuItems = groupBy(props.routes, "category");
   const history = useHistory();
-  const menuHandler = (section) => {
+  const menuHandler = (section, parent = null) => {
     return section.map((menuItem) => {
       if (!menuItem.children || menuItem.children.length === 0) {
-        return (
+        return menuItem.dashboardItem ? (
           <li key={menuItem.title}>
             <Link
-              to={`${props.path}${menuItem.url}`}
+              to={`${props.path}${parent ? parent.url : ""}${menuItem.url}`}
               exact={menuItem.exact}
               onClick={() =>
                 history.push(`${props.path}${menuItem.url}`, menuItem)
@@ -20,12 +20,12 @@ export default withRouter(function Sidebar(props) {
               {menuItem.title}
             </Link>
           </li>
-        );
+        ) : null;
       }
       return (
         <li key={menuItem.title}>
           <Link>{menuItem.title}</Link>
-          <ul>{menuHandler(menuItem.children)}</ul>
+          <ul>{menuHandler(menuItem.children, menuItem)}</ul>
         </li>
       );
     });

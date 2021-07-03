@@ -61,14 +61,17 @@ export const LOGIN_MUTATION = gql`
       user {
         id
         email
+        avatar
         username
-        isVerified
         verified
-        fullName
+        firstName
+        lastName
         isStaff
         isActive
-        isIndividual
-        isBusiness
+        isSeeker
+        isEmployer
+        isInstitution
+        avatar
       }
     }
   }
@@ -91,7 +94,6 @@ export const SIGNUP_MUTATION = gql`
     ) {
       success
       errors
-      token
     }
   }
 `;
@@ -129,7 +131,7 @@ export const GET_TOKEN_MUTATION = gql`
 export const TypedAccountLoginMutation = TypedMutation(LOGIN_MUTATION);
 export const TypedAccountRegistrationMutation = TypedMutation(SIGNUP_MUTATION);
 export const TypedPasswordResetEmailMutation = TypedMutation(
-  SEND_PASSWORD_RESET_EMAIL
+  SEND_PASSWORD_RESET_EMAIL,
 );
 export const TypedPasswordChangeMutation = TypedMutation(PASSWORD_CHANGE);
 export const TypedPasswordResetMutation = TypedMutation(PASSWORD_RESET);

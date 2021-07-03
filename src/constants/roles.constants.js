@@ -13,7 +13,7 @@ const components = {
     module: 1,
     category: admin,
     children: [],
-    dashboard_item: true,
+    dashboardItem: true,
   },
   dashboard: {
     component: "Dashboard",
@@ -23,7 +23,7 @@ const components = {
     module: 1,
     category: start,
     children: [],
-    dashboard_item: true,
+    dashboardItem: true,
   },
   messages: {
     component: "Messages",
@@ -33,7 +33,7 @@ const components = {
     module: 1,
     category: start,
     children: [],
-    dashboard_item: true,
+    dashboardItem: true,
   },
   bookmarks: {
     component: "Bookmarks",
@@ -43,7 +43,7 @@ const components = {
     module: 1,
     category: management,
     children: [],
-    dashboard_item: true,
+    dashboardItem: true,
   },
   manageResume: {
     component: "ManageResume",
@@ -53,7 +53,7 @@ const components = {
     module: 1,
     category: management,
     children: [],
-    dashboard_item: true,
+    dashboardItem: true,
   },
   addVacancy: {
     component: "AddVacancy",
@@ -63,7 +63,42 @@ const components = {
     module: 1,
     category: management,
     children: [],
-    dashboard_item: true,
+    dashboardItem: true,
+  },
+  resume: {
+    component: "ResumeDashboard",
+    url: "/resume",
+    title: "Resume",
+    icon: "Category",
+    module: 1,
+    category: management,
+    children: [
+      {
+        component: "ResumeBuilder",
+        url: "/builder/:resumeID",
+        title: "Add Resume",
+        icon: "Category",
+        module: 1,
+        dashboardItem: true,
+      },
+      {
+        component: "ResumeDashboard",
+        url: "/manage",
+        title: "Manage Resumes",
+        icon: "Category",
+        module: 1,
+        dashboardItem: true,
+      },
+      {
+        component: "Resume",
+        url: "/view/:resumeID",
+        title: "View Resume",
+        icon: "Category",
+        module: 1,
+        dashboardItem: false,
+      },
+    ],
+    dashboardItem: true,
   },
   submitResume: {
     component: "SubmitResume",
@@ -73,7 +108,7 @@ const components = {
     module: 1,
     category: management,
     children: [],
-    dashboard_item: true,
+    dashboardItem: true,
   },
   profile: {
     component: "Profile",
@@ -83,7 +118,7 @@ const components = {
     module: 1,
     category: account,
     children: [],
-    dashboard_item: true,
+    dashboardItem: true,
   },
 };
 
@@ -131,6 +166,7 @@ const rolesConfig = {
       // components.messages,
       // components.bookmarks,
       components.addVacancy,
+      components.resume,
     ],
   },
 };

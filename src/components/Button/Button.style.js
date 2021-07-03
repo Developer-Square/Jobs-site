@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import { alignItems, boxShadow } from "styled-system";
 import { themeGet } from "@styled-system/theme-get";
-import { buttonStyle, colorStyle, buttonSize } from "../utils/customVariant";
+import {
+  buttonStyle,
+  colorStyle,
+  buttonSize,
+} from "components/utils/customVariant";
 
 const ButtonStyle = styled.button`
   /* button default style */

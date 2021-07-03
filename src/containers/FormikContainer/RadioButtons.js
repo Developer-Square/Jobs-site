@@ -4,10 +4,25 @@ import TextError from "./TextError";
 import styled from "styled-components";
 
 function RadioButtons(props) {
-  const { label, name, options, ...rest } = props;
+  const { label, name, options, icon, ...rest } = props;
   return (
     <FormInput className="form-control">
-      <label>{label}</label>
+      {rest.iconPosition ? (
+        <>
+          {rest.iconPosition === "left" ? (
+            <>
+              <i className={icon} />
+              {label}
+            </>
+          ) : (
+            <>
+              {label} <i className={icon} />
+            </>
+          )}
+        </>
+      ) : (
+        label
+      )}
       <Field name={name}>
         {({ field }) => {
           return options.map((option) => {
@@ -15,6 +30,9 @@ function RadioButtons(props) {
               <Fragment key={option.value}>
                 <label>
                   <input
+                    style={{
+                      marginTop: "3px",
+                    }}
                     type="radio"
                     id={option.key}
                     {...field}

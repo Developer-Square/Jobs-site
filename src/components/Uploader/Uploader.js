@@ -61,10 +61,12 @@ const img = {
   height: "100%",
 };
 
-function Uploader({ onChange, imageURL }) {
+function Uploader(props) {
+  const { onChange, imageURL, action, directUpload, ...rest } = props;
   const [files, setFiles] = useState(
-    imageURL ? [{ name: "demo", preview: imageURL }] : []
+    imageURL ? [{ name: "demo", preview: imageURL }] : [],
   );
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
     multiple: false,
@@ -74,17 +76,31 @@ function Uploader({ onChange, imageURL }) {
           acceptedFiles.map((file) =>
             Object.assign(file, {
               preview: URL.createObjectURL(file),
-            })
-          )
+            }),
+          ),
         );
         onChange(acceptedFiles);
+        if (directUpload) {
+          action(acceptedFiles);
+        }
       },
-      [onChange]
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [onChange],
     ),
   });
 
   const thumbs = files.map((file) => (
-    <Thumb key={file.name}>
+    <Thumb
+      style={
+        rest.version && rest.version === "profile"
+          ? {
+              width: "auto",
+              height: "100px",
+            }
+          : {}
+      }
+      key={file.name}
+    >
       <div style={thumbInner}>
         <img
           src={typeof file === "string" ? file : file.preview}
@@ -100,19 +116,35 @@ function Uploader({ onChange, imageURL }) {
       // Make sure to revoke the data uris to avoid memory leaks
       files.forEach((file) => URL.revokeObjectURL(file.preview));
     },
-    [files]
+    [files],
   );
 
   return (
     <section className="container uploader">
-      <Container {...getRootProps()}>
-        <input {...getInputProps()} />
-        <UploadIcon />
-        <Text>
-          <TextHighlighted>Drag/Upload</TextHighlighted> your image here.
-        </Text>
-      </Container>
-      {thumbs && <ThumbsContainer>{thumbs}</ThumbsContainer>}
+      {rest.version && rest.version === "profile" ? (
+        <div className="edit-profile-photo" {...getRootProps()}>
+          {thumbs}
+          <div className="change-photo-btn">
+            <div className="photoUpload">
+              <span>
+                <i className="fa fa-upload" /> Upload Photo
+              </span>
+              <input {...getInputProps()} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <Container {...getRootProps()}>
+            <input {...getInputProps()} />
+            <UploadIcon />
+            <Text>
+              <TextHighlighted>Drag/Upload</TextHighlighted> your image here.
+            </Text>
+          </Container>
+          {thumbs && <ThumbsContainer>{thumbs}</ThumbsContainer>}
+        </>
+      )}
     </section>
   );
 }

@@ -7,27 +7,26 @@ import { maybe } from "core/utils";
 import { TypedAccountRegistrationMutation } from "./mutations";
 import Button from "components/Button/Button";
 import { normalizeErrors } from "helpers";
-import { useHistory } from "react-router";
 import { registerSchema } from "./validation.schema";
 import { HelperText } from "./Authentication.style";
 import { TOS } from "constants/routes.constants";
+import { useHistory, useRouteMatch, Link } from "react-router-dom";
 
 const showSuccessNotification = (data, alert) => {
   const successful = maybe(() => data.register.success);
-  console.log(normalizeErrors(maybe(() => data.register.errors, [])));
 
   if (successful) {
     alert.show(
       {
         title: "Registration Successful",
       },
-      { type: "success", timeout: 5000 }
+      { type: "success", timeout: 5000 },
     );
     alert.show(
       {
         title: "Please check your e-mail for further instructions",
       },
-      { type: "success", timeout: 5000 }
+      { type: "success", timeout: 5000 },
     );
   }
 };
@@ -35,14 +34,42 @@ const showSuccessNotification = (data, alert) => {
 const Register = () => {
   const alert = useAlert();
   const history = useHistory();
+  const match = useRouteMatch();
+  const [isSeeker, setIsSeeker] = React.useState(false);
+  const [isBusiness, setIsBusiness] = React.useState(false);
+  const [isInstitution, setIsInstitution] = React.useState(false);
+  const [switchTab, setSwitchTab] = React.useState(false);
+
+  React.useEffect(() => {
+    if (match.params.userType) {
+      setSwitchTab(false);
+      if (match.params.userType === "business") {
+        setIsSeeker(false);
+        setIsBusiness(true);
+        setIsInstitution(false);
+      } else if (match.params.userType === "seeker") {
+        setIsSeeker(true);
+        setIsBusiness(false);
+        setIsInstitution(false);
+      } else if (match.params.userType === "institution") {
+        setIsSeeker(false);
+        setIsBusiness(false);
+        setIsInstitution(true);
+      }
+    } else {
+      setSwitchTab(true);
+    }
+  }, [match.params.userType]);
 
   const initialValues = {
     username: "",
     email: "",
+    isSeeker: isSeeker,
+    isBusiness: isBusiness,
+    isInstitution: isInstitution,
     password1: "",
     password2: "",
   };
-
   return (
     <TypedAccountRegistrationMutation
       onCompleted={(data) => showSuccessNotification(data, alert)}
@@ -61,23 +88,54 @@ const Register = () => {
                 } else {
                   // setErrors(normalizeErrors(data.register.errors));
                   setErrors(
-                    normalizeErrors(maybe(() => data.register.errors, []))
+                    normalizeErrors(maybe(() => data.register.errors, [])),
                   );
                 }
               }
             }
           });
         }
-        return (
+        return switchTab ? (
+          <div className="register">
+            <div
+              style={{
+                textAlign: "center",
+                padding: "30px 0",
+              }}
+            >
+              <h4>Hi there, Welcome...</h4>
+              <h5>Select an option to get started.</h5>
+            </div>
+
+            <div style={{ display: "flex", margin: "5px" }}>
+              <Button
+                style={{ margin: "0 5px", width: "100%" }}
+                title={`Job Seeker`}
+                onClick={() => history.push(`/auth/seeker`)}
+              />
+              <Button
+                style={{ margin: "0 5px", width: "100%" }}
+                title={`Institution`}
+                onClick={() => history.push(`/auth/institution`)}
+              />
+              <Button
+                style={{ margin: "0 5px", width: "100%" }}
+                title={`Business`}
+                onClick={() => history.push(`/auth/business`)}
+              />
+            </div>
+          </div>
+        ) : (
           <Formik
             initialValues={initialValues}
             validationSchema={registerSchema}
-            //   onSubmit={onSubmit}
             onSubmit={onSubmit}
           >
             {(formik) => {
               return (
                 <Form className="register">
+                  <Link to={"/auth"}>{`<`} Select Different Option </Link>
+
                   <FormikControl
                     control="input"
                     type="email"

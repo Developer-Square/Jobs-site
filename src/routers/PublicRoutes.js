@@ -31,6 +31,12 @@ const AuthRoutes = (props) => {
       <PublicRoute
         restricted={false}
         exact
+        path={`${match.path}/:userType([A-Za-z0-9]+)`}
+        component={Authentication}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
         path={`${match.path}/email-verify`}
         component={EmailVerification}
       />

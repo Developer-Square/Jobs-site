@@ -1,13 +1,26 @@
-import React from "react";
+import "./i18n";
+
+import React, { memo } from "react";
 import { ThemeProvider as OriginalThemeProvider } from "styled-components";
 import { useDarkMode } from "helpers/useDarkMode";
 import { GlobalStyle } from "styles/global-styles";
 import { lightTheme, darkTheme } from "styles/theme";
+import { Provider as AlertProvider } from "react-alert";
+import { useHistory, useLocation } from "react-router-dom";
+import { ReactHooksWrapper, setHook } from "hooks";
+import { NotificationTemplate } from "components/NotificationTemplate";
 import { useDeviceType } from "helpers/useDeviceType";
 import { AuthProvider } from "contexts/auth/auth.provider";
 import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
+import { DatabaseProvider } from "contexts/database/database.provider";
+import { ModalProvider } from "contexts/modal/modal.provider";
+import { ResumeProvider } from "contexts/resume/resume.provider";
+import { SettingsProvider } from "contexts/settings/settings.provider";
+import { StorageProvider } from "contexts/storage/storage.provider";
+import { UserProvider } from "contexts/user/user.provider";
+
 import { ServiceWorkerProvider } from "contexts/ServiceWorkerProvider";
 import BaseRouter from "routers/router";
 import { useRouterQuery } from "helpers/useRouterQuery";
@@ -20,9 +33,7 @@ import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
 
-import CacheBuster from "./CacheBuster";
-
-export default function App() {
+function App() {
   const queryParams = useRouterQuery();
   const [theme, componentMounted] = useDarkMode();
   const userAgent = navigator.userAgent;
@@ -31,34 +42,50 @@ export default function App() {
   if (!componentMounted) {
     return <div />;
   }
+  setHook("historyHook", useHistory).setHook("locationHook", useLocation);
 
   const query = queryParams.get("text") ? queryParams.get("text") : "";
+  const notificationConfig = {
+    timeout: 5000,
+    position: "top right",
+    containerStyle: {
+      top: 0,
+    },
+  };
 
   return (
-    <CacheBuster>
-      {({ loading, isLatestVersion, refreshCacheAndReload }) => {
-        if (loading) return null;
-        if (!loading && !isLatestVersion) {
-          refreshCacheAndReload();
-        }
-
-        return (
-          <OriginalThemeProvider theme={themeMode}>
-            <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-              <SearchProvider query={query}>
-                <HeaderProvider>
-                  <AuthProvider>
-                    <StickyProvider>
-                      <BaseRouter deviceType={deviceType} />
-                    </StickyProvider>
-                  </AuthProvider>
-                </HeaderProvider>
-                <GlobalStyle />
-              </SearchProvider>{" "}
-            </ServiceWorkerProvider>
-          </OriginalThemeProvider>
-        );
-      }}
-    </CacheBuster>
+    <SettingsProvider>
+      <OriginalThemeProvider theme={themeMode}>
+        <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
+          <SearchProvider query={query}>
+            <HeaderProvider>
+              <AuthProvider>
+                <ModalProvider>
+                  <UserProvider>
+                    <DatabaseProvider>
+                      <ResumeProvider>
+                        <StickyProvider>
+                          <AlertProvider
+                            template={NotificationTemplate}
+                            {...notificationConfig}
+                          >
+                            <StorageProvider>
+                              <BaseRouter deviceType={deviceType} />
+                            </StorageProvider>
+                          </AlertProvider>
+                        </StickyProvider>
+                      </ResumeProvider>
+                    </DatabaseProvider>
+                  </UserProvider>
+                </ModalProvider>
+              </AuthProvider>
+            </HeaderProvider>
+            <GlobalStyle />
+          </SearchProvider>
+          <ReactHooksWrapper />
+        </ServiceWorkerProvider>
+      </OriginalThemeProvider>
+    </SettingsProvider>
   );
 }
+export default memo(App);

@@ -82,14 +82,14 @@ table.manage-table td.action a:hover,
 .dashboard-nav ul li.active,
 .dashboard-nav ul li:hover {
 	border-color: #21277f;
-	background-color: rgba(38, 174, 97, 0.05);
+	background-color: rgba(18 23 127 / 0.05);
 }
 
 .dashboard-nav ul li.active-submenu a:after,
 .dashboard-nav ul li.active a:after,
 .dashboard-nav ul li:hover a:after {
     color: #21277f;
-	background-color: rgba(38, 174, 97, 0.15);
+	background-color: rgb(18 23 127 / 15%);
 }
 .message-bubble.me .message-text {
 	color: #21277f;

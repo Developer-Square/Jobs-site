@@ -2,7 +2,6 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 import styled from "styled-components";
-import { themeGet } from "@styled-system/theme-get";
 import PhoneInput from "react-phone-input-2";
 
 function PhoneNumberInput(props) {
@@ -11,8 +10,22 @@ function PhoneNumberInput(props) {
   return (
     <FormInput className={`form-row form-row-wide`}>
       <label htmlFor={name}>
-        {label}
-        <i className={`ln ${icon}`}></i>
+        {rest.iconPosition ? (
+          <>
+            {rest.iconPosition === "left" ? (
+              <>
+                <i className={icon} />
+                {label}
+              </>
+            ) : (
+              <>
+                {label} <i className={icon} />
+              </>
+            )}
+          </>
+        ) : (
+          label
+        )}
         <Field name={name}>
           {({ form, field }) => {
             const { setFieldValue } = form;
@@ -51,37 +64,14 @@ function PhoneNumberInput(props) {
 export default PhoneNumberInput;
 
 const FormInput = styled.div`
-  .react-tel-input .country-list {
-    max-width: 400px;
-    width: 2000%;
-  }
   .react-tel-input .form-control {
     width: 100%;
     height: 48px;
-    border-radius: 6px;
-    background-color: ${themeGet("colors.lightColor", "#F7F7F7")};
-    border: 1px solid ${themeGet("colors.borderColor", "#E6E6E6")};
+    border-radius: 3px;
     font-family: "Lato", sans-serif;
-    font-size: ${themeGet("fontSizes.2", "15")}px;
-    font-weight: ${themeGet("fontWeights.3", "400")};
-    color: ${themeGet("colors.darkBold", "#6c3a1f")};
     line-height: 19px;
     box-sizing: border-box;
     transition: border-color 0.25s ease;
-
-    &:hover,
-    &:focus {
-      outline: 0;
-    }
-
-    &:focus {
-      border-color: ${themeGet("colors.primary", "#6c3a1f")};
-    }
-
-    &::placeholder {
-      color: ${themeGet("colors.darkRegular", "#77798c")};
-      font-size: 14px;
-    }
 
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {

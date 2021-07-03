@@ -19,12 +19,12 @@ const DashboardLayout = (props) => {
   const pathLocation = location.pathname.replace(/\/+$/, "");
   const pathname =
     pathLocation[0] === "/" ? pathLocation.substr(1) : pathLocation;
-
+  const resume = pathLocation.split("/").includes("resume");
   return (
     <div>
-      {/* Header
-================================================== */}
-      <header className="dashboard-header">
+      <header
+        className={resume ? "dashboard-header alternative" : "dashboard-header"}
+      >
         <div className="container">
           <div className="sixteen columns">
             {/* Logo */}
@@ -36,7 +36,10 @@ const DashboardLayout = (props) => {
               </h1>
             </div>
             {/* Menu */}
-            <nav id="navigation" className="menu">
+            <nav
+              id="navigation"
+              className={resume ? "menu sf-js-enabled sf-arrows" : "menu"}
+            >
               <ul id="responsive">
                 <li>
                   <Link id={pathname === "" ? "current" : ""} to="/">
@@ -126,7 +129,7 @@ const DashboardLayout = (props) => {
                 <h2>
                   {pathname === "dashboard"
                     ? `Hello, ${profile.username}!`
-                    : pathname}
+                    : pathname.replace("/", " > ")}
                 </h2>
                 {/* Breadcrumbs */}
                 <nav id="breadcrumbs">

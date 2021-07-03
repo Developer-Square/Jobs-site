@@ -144,12 +144,6 @@ const Dashboard = () => {
             </ul>
           </div>
         </div>
-        {/* Copyrights */}
-        <div className="col-md-12">
-          <div className="copyrights">
-            © 2019 WorkScout. All Rights Reserved.
-          </div>
-        </div>
       </div>
     </div>
   );

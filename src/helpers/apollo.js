@@ -84,7 +84,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
                   ...pageProps,
                   apolloClient,
                 }}
-              />
+              />,
             );
           } catch (error) {
             // Prevent Apollo Client GraphQL errors from crashing SSR.
@@ -149,7 +149,7 @@ const batchLink = new BatchHttpLink({
 const link = ApolloLink.split(
   (operation) => operation.getContext().useBatching,
   batchLink,
-  uploadLink
+  uploadLink,
 );
 
 export const tokenLink = setContext((_, context) => {
@@ -175,7 +175,7 @@ export const _promiseToObservable = (promiseFunc) =>
         subscriber.next(value);
         subscriber.complete();
       },
-      (err) => subscriber.error(err)
+      (err) => subscriber.error(err),
     );
     return subscriber; // this line can removed, as per next comment
   });
@@ -251,23 +251,25 @@ export function createApolloClient(initialState = {}) {
                         .finally(() => {
                           console.log("Finally");
                           isRefreshing = false;
-                        })
+                        }),
                     );
                   } else {
                     // Will only emit once the Promise is resolved
                     forward$ = fromPromise(
                       new Promise((resolve) => {
                         pendingRequests.push(() => resolve());
-                      })
+                      }),
                     );
                   }
                   return forward$.flatMap(() => {
                     console.log("Forwarding!");
                     const oldHeaders = operation.getContext().headers;
+                    const token = getToken();
+
                     operation.setContext({
                       headers: {
                         ...oldHeaders,
-                        authorization: getToken(),
+                        Authorization: token ? `JWT ${token}` : null,
                       },
                     });
                     return forward(operation);

@@ -12,8 +12,22 @@ function Input(props) {
   return (
     <FormInput className={`form-row form-row-wide`}>
       <label htmlFor={name}>
-        {label}
-        <i className={icon}></i>
+        {rest.iconPosition ? (
+          <>
+            {rest.iconPosition === "left" ? (
+              <>
+                <i className={icon} />
+                {label}
+              </>
+            ) : (
+              <>
+                {label} <i className={icon} />
+              </>
+            )}
+          </>
+        ) : (
+          label
+        )}
         <Field
           className={`input-text`}
           placeholder={label}

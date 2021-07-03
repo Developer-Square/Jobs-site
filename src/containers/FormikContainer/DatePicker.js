@@ -6,10 +6,25 @@ import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 
 function DatePicker(props) {
-  const { label, name, ...rest } = props;
+  const { label, name, icon, ...rest } = props;
   return (
     <FormInput className="form-row form-row-wide">
-      <label htmlFor={name}>{label}</label>
+      {rest.iconPosition ? (
+        <>
+          {rest.iconPosition === "left" ? (
+            <>
+              <i className={icon} />
+              {label}
+            </>
+          ) : (
+            <>
+              {label} <i className={icon} />
+            </>
+          )}
+        </>
+      ) : (
+        label
+      )}
       <Field name={name}>
         {({ form, field }) => {
           const { setFieldValue } = form;

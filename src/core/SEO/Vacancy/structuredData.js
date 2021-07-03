@@ -1,18 +1,5 @@
-// const getVariantsStructuredData = (variants) => {
-//   const inStock = "https://schema.org/InStock";
-//   const outOfStock = "https://schema.org/OutOfStock";
-//   return variants.map((variant) => ({
-//     "@type": "Offer",
-//     availability: variant.isAvailable ? inStock : outOfStock,
-//     itemCondition: "https://schema.org/NewCondition",
-//     price: variant.pricing.price.gross.amount.toFixed(2),
-//     priceCurrency: variant.pricing.price.gross.currency,
-//     sku: variant.sku,
-//   }));
-// };
-
 export const structuredData = (vacancy) => {
-  const images = vacancy.images.map((image) => new URL(image.url).pathname);
+  // const images = vacancy.images.map((image) => new URL(image.url).pathname);
   // const { variants } = vacancy;
 
   return JSON.stringify({
@@ -20,9 +7,9 @@ export const structuredData = (vacancy) => {
     "@type": "Internship",
     // "@type": "Vacancy",
     description: !vacancy.seoDescription
-      ? `${vacancy.description}`
+      ? `${vacancy.description_plaintext}`
       : `${vacancy.seoDescription}`,
-    image: images,
+    image: vacancy.creator.avatar.url,
     name: !vacancy.seoTitle ? `${vacancy.name}` : `${vacancy.seoTitle}`,
     // offers: getVariantsStructuredData(variants),
     url: window.location.href,
