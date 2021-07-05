@@ -33,17 +33,20 @@ const UserProvider = ({ children }) => {
   const { authDispatch } = React.useContext(AuthContext);
 
   const getUser = async () => {
-    setUser(data);
-    return { user, loading, error };
+    if (data) {
+      await setUser(data.me);
+      return { user, loading, error };
+    }
   };
 
   useEffect(() => {
-    const localUser = JSON.parse(localStorage.getItem("thedb_auth_profile"));
-    if (localUser) {
-      setUser(localUser);
-    } else {
-      getUser();
-    }
+    // const localUser = JSON.parse(localStorage.getItem("thedb_auth_profile"));
+    // if (localUser) {
+    //   setUser(localUser);
+    // } else {
+    //   getUser();
+    // }
+    getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

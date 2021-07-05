@@ -77,7 +77,7 @@ const Login = () => {
               if (data.tokenAuth.user.isInstitution) {
                 roles.push("institution");
               }
-              console.log(roles)
+              console.log(roles);
               addArrayToLocalStorage("thedb_auth_roles", roles);
               localStorage.setItem("access_token", data.tokenAuth.token);
               localStorage.setItem(

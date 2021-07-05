@@ -5,7 +5,7 @@ import React, { createContext, memo, useState } from "react";
 // import { getUnsplashPhoto } from "utils";
 // import initialState from "data/initialState.json";
 // import { useMutation, useQuery } from "react-apollo";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 const DEBOUNCE_WAIT_TIME = 4000;
 
@@ -32,7 +32,8 @@ const DatabaseProvider = ({ children }) => {
   //   variables: { id },
   // });
   // const [createResume] = useMutation();
-  const createResume = toast("To Handle create resume");
+  // const createResume = toast("To Handle create resume");
+  const createResume = console.log("To Handle create resume");
 
   const getResume = async (id) => {
     try {

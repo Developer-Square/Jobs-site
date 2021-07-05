@@ -17,6 +17,7 @@ import Categories from "pages/Categories";
 import Pricing from "pages/Pricing";
 import Contact from "pages/Contact";
 import PublicRoute from "./PublicRoute";
+import VacancyView from "pages/Vacancy/VacancyView";
 
 const AuthRoutes = (props) => {
   const { match } = props;
@@ -103,6 +104,12 @@ const PublicRoutes = ({ deviceType }) => (
         exact
         path={`${ROUTE.VACANCIES}`}
         component={Vacancies}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.VACANCIES}/:vacancyID`}
+        component={VacancyView}
       />
       <PublicRoute
         restricted={false}

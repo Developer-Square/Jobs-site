@@ -10,5 +10,6 @@
       "@styles/*": ["./src/styles/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["dist", "build", "node_modules"]
 }

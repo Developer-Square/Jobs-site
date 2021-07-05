@@ -24,7 +24,7 @@ const Templates = ({ id }) => {
     <section>
       <Heading id={id} />
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-2 gap-4">
         {templateOptions.map((x) => (
           <div
             key={x.id}

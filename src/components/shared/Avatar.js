@@ -6,7 +6,7 @@ import cx from "classnames";
 import UserContext from "contexts/user/user.provider";
 import { handleKeyUp } from "utils";
 import * as styles from "./Avatar.module.css";
-import photoURL from "image/thedb.png";
+import photoURL from "image/user.jpg";
 
 const Avatar = ({ className }) => {
   const { t } = useTranslation();
@@ -37,7 +37,7 @@ const Avatar = ({ className }) => {
       >
         <img
           src={photoURL}
-          alt={user.displayName || "Anonymous User"}
+          alt={user?.username || "Anonymous User"}
           className={cx(styles.container, className)}
         />
       </div>

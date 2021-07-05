@@ -1,7 +1,7 @@
 import React from "react";
 import VacancyFilter from "./VacancyFilter";
 
-const Vacancies = () => {
+const Vacancy = () => {
   return (
     <div>
       <div id="titlebar">
@@ -294,4 +294,4 @@ const Vacancies = () => {
   );
 };
 
-export default Vacancies;
+export default Vacancy;

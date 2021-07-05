@@ -7,7 +7,8 @@ export const homePageQuery = gql`
       edges {
         node {
           id
-          fullName
+          firstName
+          lastName
           isStaff
           isActive
         }

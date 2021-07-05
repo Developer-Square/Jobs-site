@@ -7,7 +7,6 @@
 }
 
 .template img {
-  height: 240px;
 
   @apply w-full object-cover border border-transparent rounded;
   @apply transition-opacity duration-200 ease-in-out;

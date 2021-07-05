@@ -23,17 +23,17 @@ const PasswordChange = () => {
         {
           title: "Password Changed",
         },
-        { type: "success", timeout: 5000 }
+        { type: "success", timeout: 5000 },
       );
     } else {
       const nonFieldErr = normalizeErrors(
-        maybe(() => data.passwordChange.errors, [])
+        maybe(() => data.passwordChange.errors, []),
       );
       alert.show(
         {
           title: nonFieldErr?.nonFieldErrors,
         },
-        { type: "error", timeout: 5000 }
+        { type: "error", timeout: 5000 },
       );
     }
   };
@@ -88,7 +88,7 @@ const PasswordChange = () => {
                     fullwidth
                     isLoading={loading}
                     title={loading ? "changing... " : "Change Password"}
-                    style={{ color: "#ffffff", margin: "16px 0" }}
+                    style={{ color: "#ffffff" }}
                     //   {...(loading && { disabled: true })}
                   />
                 </Form>

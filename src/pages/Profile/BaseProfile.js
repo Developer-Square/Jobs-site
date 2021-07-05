@@ -23,13 +23,18 @@ const BaseProfile = () => {
     firstName: "",
     lastName: "",
   };
-  const handleMemberAvatarUpdate = (data, errors) => {
+  const handleAvatarUpdate = (data, errors) => {
     if (errors) {
       console.log("Server Error kwa login", errors[0].message);
       return errors[0].message;
     }
     const successful = maybe(() => data.userAvatarUpdate.success);
-
+    alert.show(
+      {
+        title: "Update Successful",
+      },
+      { type: "success", timeout: 5000 },
+    );
     if (successful) {
       alert.show(
         {
@@ -120,60 +125,9 @@ const BaseProfile = () => {
               return (
                 <Form>
                   <div className="my-profile">
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="First Name"
-                      placeholder="First Name"
-                      name="firstName"
-                    />
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="Last Name"
-                      placeholder="Last Name"
-                      name="lastName"
-                    />
-                    {/* <FormikControl
-                      control="input"
-                      type="text"
-                      label="Facebook"
-                      placeholder="https://www.facebook.com/"
-                      name="facebook"
-                      icon="fa fa-facebook-square"
-                      iconPosition="left"
-                    />
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="Twitter Handle"
-                      placeholder="https://www.twitter.com/"
-                      name="twitter"
-                      icon="fa fa-twitter"
-                      iconPosition="left"
-                    />
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="LinkedIn"
-                      placeholder="https://www.linkedin.com/"
-                      name="linkedin"
-                      icon="fa fa-linkedin-square"
-                      iconPosition="left"
-                    /> 
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="Instagram"
-                      placeholder="https://www.instagram.com/"
-                      name="instagram"
-                      icon="fa fa-instagram"
-                      iconPosition="left"
-                    />*/}
-
                     <TypedAvatarUpdateMutation
                       onCompleted={(data, errors) =>
-                        handleMemberAvatarUpdate(data, errors, alert)
+                        handleAvatarUpdate(data, errors, alert)
                       }
                     >
                       {(updateAvatar) => {
@@ -184,7 +138,7 @@ const BaseProfile = () => {
                               variables: { image: f },
                             })
                               .then((res) => {
-                                handleMemberAvatarUpdate(res.data, null, alert);
+                                handleAvatarUpdate(res.data, null, alert);
                               })
                               .catch((err) => console.log(err));
                           }
@@ -204,6 +158,31 @@ const BaseProfile = () => {
                         );
                       }}
                     </TypedAvatarUpdateMutation>
+
+                    <FormikControl
+                      control="input"
+                      type="text"
+                      label="First Name"
+                      placeholder="First Name"
+                      name="firstName"
+                    />
+                    <FormikControl
+                      control="input"
+                      type="text"
+                      label="Last Name"
+                      placeholder="Last Name"
+                      name="lastName"
+                    />
+                    {/* 
+                    <FormikControl
+                      control="input"
+                      type="text"
+                      label="Instagram"
+                      placeholder="https://www.instagram.com/"
+                      name="instagram"
+                      icon="fa fa-instagram"
+                      iconPosition="left"
+                    />*/}
 
                     <Button
                       type="submit"

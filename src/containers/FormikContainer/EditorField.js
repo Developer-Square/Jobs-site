@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { EditorState, ContentState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
-import draftToHtml from "draftjs-to-html";
+// import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 
 // function uploadImageCallBack(file) {
@@ -44,7 +44,7 @@ function EditorField({
     const contentBlock = htmlToDraft(field.value);
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(
-        contentBlock.contentBlocks
+        contentBlock.contentBlocks,
       );
       const editorState = EditorState.createWithContent(contentState);
       setEditorState(editorState);
@@ -55,8 +55,9 @@ function EditorField({
     setEditorState(editorState);
     form.setFieldValue(
       field.name,
-      //   convertToRaw(editorState.getCurrentContent())
-      draftToHtml(convertToRaw(editorState.getCurrentContent()))
+      // convertToRaw(editorState.getCurrentContent()),
+      // draftToHtml(convertToRaw(editorState.getCurrentContent()))
+      JSON.stringify(convertToRaw(editorState.getCurrentContent())),
     );
   }
 

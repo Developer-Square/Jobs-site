@@ -122,18 +122,28 @@ function Uploader(props) {
   return (
     <section className="container uploader">
       {rest.version && rest.version === "profile" ? (
-        <div className="edit-profile-photo" {...getRootProps()}>
-          {thumbs}
-          <div className="change-photo-btn">
-            <div className="photoUpload">
-              <span>
-                <i className="fa fa-upload" /> Upload Photo
-              </span>
-              <input {...getInputProps()} />
-            </div>
-          </div>
+        <div className="">
+          <label
+            className="upload-btn"
+            style={{ margin: 0, color: "#fff", marginRight: "10px" }}
+          >
+            <input {...getInputProps()} />
+            <i className="fa fa-upload" /> Browse
+          </label>
+          <span className="fake-input">No file selected</span>
         </div>
       ) : (
+        // <div className="edit-profile-photo" {...getRootProps()}>
+        //   {thumbs}
+        //   <div className="change-photo-btn">
+        //     <div className="photoUpload">
+        //       <span>
+        //         <i className="fa fa-upload" /> Upload Photo
+        //       </span>
+        //       <input {...getInputProps()} />
+        //     </div>
+        //   </div>
+        // </div>
         <>
           <Container {...getRootProps()}>
             <input {...getInputProps()} />

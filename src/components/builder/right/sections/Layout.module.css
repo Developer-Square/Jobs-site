@@ -1,5 +1,5 @@
 .droppable {
-  @apply p-6 bg-primary-100 col-span-1 rounded;
+  @apply p-4 bg-primary-100 col-span-1 rounded;
 }
 
 .draggable {

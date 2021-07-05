@@ -8,11 +8,11 @@ const Banner = () => {
   const useDispatch = useStickyDispatch();
   const setSticky = useCallback(
     () => useDispatch({ type: "SET_STICKY" }),
-    [useDispatch]
+    [useDispatch],
   );
   const removeSticky = useCallback(
     () => useDispatch({ type: "REMOVE_STICKY" }),
-    [useDispatch]
+    [useDispatch],
   );
 
   const onWaypointPositionChange = ({ currentPosition }) => {
@@ -39,11 +39,9 @@ const Banner = () => {
               type="text"
               className="ico-01"
               placeholder="job title, keywords or company name"
-            />
-            <input
-              type="text"
-              className="ico-02"
-              placeholder="city, province or region"
+              style={{
+                width: "90%;",
+              }}
             />
             <button style={{ backgroundColor: "#e6c018" }}>
               <i className="fa fa-search" />
@@ -52,7 +50,7 @@ const Banner = () => {
             <div className="browse-jobs">
               Browse job offers by{" "}
               <a href="browse-categories.html"> category</a> or{" "}
-              <a href="/">location</a>
+              <a href="/">job titles</a>
             </div>
             {/* Announce */}
             <div className="announce">

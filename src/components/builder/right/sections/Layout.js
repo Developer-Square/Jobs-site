@@ -70,7 +70,7 @@ const Layout = ({ id }) => {
         {t("builder.layout.text", { count: blocks.length })}
       </p>
 
-      <div className={`grid gap-8 grid-cols-${blocks.length}`}>
+      <div className={`grid gap-2 grid-cols-${blocks.length}`}>
         <DragDropContext onDragEnd={onDragEnd}>
           {blocks.map((el, ind) => (
             <Droppable key={ind} droppableId={`${ind}`}>

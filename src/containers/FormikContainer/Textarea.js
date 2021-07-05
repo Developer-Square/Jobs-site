@@ -7,7 +7,6 @@ import EditorField from "./EditorField";
 
 function Textarea(props) {
   const { label, name, rte, value, ...rest } = props;
-  console.log("rte", rte);
   return (
     <FormInput className={`form-row form-row-wide`}>
       <label htmlFor={name}>{label}</label>
@@ -61,7 +60,7 @@ const FormInput = styled.div`
     border: 1px solid #f1f1f1;
     display: flex;
     justify-content: flex-start;
-    background: #21277fad;
+    background: #e6e6e6;
     flex-wrap: wrap;
     font-size: 15px;
     margin-bottom: 5px;

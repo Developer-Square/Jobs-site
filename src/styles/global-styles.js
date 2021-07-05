@@ -87,7 +87,7 @@ export const GlobalStyle = createGlobalStyle`
 
   #__react-alert__ {
     > div {
-      z-index: 999;
+      z-index: 9999;
       top: 0;
       > div {
         margin: 5px;
