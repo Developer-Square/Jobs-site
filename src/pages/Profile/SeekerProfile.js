@@ -12,6 +12,7 @@ import { GET_INDUSTRIES } from "common/queries";
 import Loader from "components/Loader/Loader";
 import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
+import moment from "moment";
 
 const SeekerProfile = () => {
   const alert = useAlert();
@@ -30,7 +31,7 @@ const SeekerProfile = () => {
       setInitialValues({
         title: "",
         idNumber: "",
-        // dateOfBirth: new Date(2003, 1, 1),
+        dateOfBirth: "",
         description: "",
         location: "",
         gender: { value: "", label: "Select Gender" },
@@ -109,6 +110,7 @@ const SeekerProfile = () => {
           console.log(values);
           const gender = values.gender.value;
           const status = values.status.value;
+          const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
           const industries = values.industries.reduce((arr, b) => {
             arr.push(b.value);
             return arr;
@@ -119,6 +121,7 @@ const SeekerProfile = () => {
               gender: gender,
               status: status,
               industries: industries,
+              dateOfBirth: dateOfBirth,
             },
           }).then(({ data }) => {
             console.log(data);

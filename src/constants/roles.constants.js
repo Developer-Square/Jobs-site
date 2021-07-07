@@ -56,7 +56,7 @@ const components = {
     dashboardItem: true,
   },
   addVacancy: {
-    component: "AddVacancy",
+    component: "Vacancy",
     url: "/add-job",
     title: "Add Job",
     icon: "Category",
@@ -64,6 +64,16 @@ const components = {
     category: management,
     children: [],
     dashboardItem: true,
+  },
+  updateVacancy: {
+    component: "Vacancy",
+    url: "/edit-job/:vacancyUpdateID",
+    title: "Update Job",
+    icon: "Category",
+    module: 1,
+    category: management,
+    children: [],
+    dashboardItem: false,
   },
   resumeBuilder: {
     component: "ResumeBuilder",
@@ -176,6 +186,7 @@ const rolesConfig = {
       // components.messages,
       // components.bookmarks,
       components.addVacancy,
+      components.updateVacancy,
       components.resumeBuilder,
       components.resume,
     ],

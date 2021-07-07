@@ -1,78 +1,39 @@
 import * as Yup from "yup";
-import * as msg from "./common";
-import moment from "moment";
-
-export const email = Yup.string()
-  .min(3, msg.emailNotLongEnough)
-  .max(100)
-  .email(msg.invalidEmail)
-  .required(msg.emailRequired);
-
-export const username = Yup.string()
-  .min(3, msg.nameNotLongEnough)
-  .max(100)
-  .required(msg.fieldRequired);
-
-export const requiredString = Yup.string().required(msg.fieldRequired);
-
-export const website = Yup.string().url(
-  "Please enter a valid URL, http:// or https://",
-  { allowLocal: true },
-);
-
-export const date_of_birth = Yup.date()
-  .test("Date of Birth", "Should be greather than 18", function (value) {
-    return moment().diff(moment(value), "years") >= 18;
-  })
-  .required("Required")
-  .nullable();
-
-export const id_number = Yup.number()
-  .max(2147483647, "Id Number too long")
-  .min(10101010, "Id Number is invalid")
-  .required("Required");
-
-export const select = Yup.object({
-  value: requiredString,
-  label: requiredString,
-});
-
-export const mobile = Yup.string()
-  .max(15, "Phone Number too long")
-  .min(12, "Phone Number is invalid")
-  .required("Phone Number is Required");
+import * as schema from "common/yupFieldValidation";
 
 export const baseProfileSchema = Yup.object().shape({
-  firstName: username,
-  lastName: username,
+  firstName: schema.username,
+  lastName: schema.username,
 });
 
 export const seekerProfileSchema = Yup.object().shape({
-  title: requiredString,
-  status: select,
-  description: requiredString,
-  idNumber: id_number,
+  title: schema.requiredString,
+  status: schema.select,
+  description: schema.requiredString,
+  idNumber: schema.id_number,
   // mobile: mobile,
-  // dateOfBirth: date_of_birth,
+  dateOfBirth: schema.date_of_birth,
 });
 
 export const employerProfileSchema = Yup.object().shape({
-  name: requiredString,
-  location: requiredString,
-  address: requiredString,
-  mobile: mobile,
-  website: website,
-  workForce: requiredString,
-  lookingFor: requiredString,
-  regNo: requiredString,
+  name: schema.requiredString,
+  location: schema.requiredString,
+  description: schema.requiredString,
+  // mobile: schema.mobile,
+  website: schema.website,
+  workForce: schema.select,
+  lookingFor: schema.requiredString,
+  country: schema.requiredString,
+  regNo: schema.requiredString,
 });
 
 export const institutionProfileSchema = Yup.object().shape({
-  name: requiredString,
-  location: requiredString,
-  address: requiredString,
-  mobile: mobile,
-  website: website,
-  institutionCount: requiredString,
-  regNo: requiredString,
+  studentCount: schema.select,
+  description: schema.requiredString,
+  name: schema.requiredString,
+  // mobile: schema.mobile,
+  location: schema.requiredString,
+  country: schema.requiredString,
+  website: schema.website,
+  regNo: schema.requiredString,
 });

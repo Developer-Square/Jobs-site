@@ -1,7 +1,7 @@
 // import React from "react";
 import Dashboard from "pages/Dashboard/Dashboard";
 import Profile from "pages/Profile/Profile";
-import AddVacancy from "pages/Vacancy/AddVacancy";
+import Vacancy from "pages/Vacancy/Vacancy";
 import ProfileView from "pages/Profile/ProfileView";
 import Jobs from "pages/Jobs/Jobs";
 import Gigs from "pages/Gigs/Gigs";
@@ -20,7 +20,7 @@ import ResumeBuilder from "pages/Resume/ResumeBuilder";
 export {
   Dashboard,
   Profile,
-  AddVacancy,
+  Vacancy,
   Jobs,
   MyJobs,
   Gigs,

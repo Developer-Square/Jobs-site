@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import { TypedQuery } from "core/queries";
 
 export const GET_INDUSTRIES = gql`
   query AllIndustries {
@@ -16,3 +17,5 @@ export const GET_INDUSTRIES = gql`
     }
   }
 `;
+
+export const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);

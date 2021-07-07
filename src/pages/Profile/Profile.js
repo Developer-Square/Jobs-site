@@ -25,7 +25,10 @@ function Profile() {
         {/* Change Password */}
         <div className="col-lg-6 col-md-12">
           <div className="dashboard-list-box margin-top-0">
-            <h4 className="gray">DANGER ZONE! - Change Password</h4>
+            <h4 className="gray">
+              <strong style={{ color: "red" }}>DANGER ZONE!</strong> - Change
+              Password
+            </h4>
             <div className="dashboard-list-box-static">
               {/* Change Password */}
               <div className="my-account">

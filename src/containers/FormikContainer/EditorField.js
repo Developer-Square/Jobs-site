@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { EditorState, ContentState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
-// import draftToHtml from "draftjs-to-html";
+import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 
 // function uploadImageCallBack(file) {
@@ -41,7 +41,8 @@ function EditorField({
     if (!field.value) {
       return;
     }
-    const contentBlock = htmlToDraft(field.value);
+
+    const contentBlock = htmlToDraft(draftToHtml(JSON.parse(field.value)));
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(
         contentBlock.contentBlocks,

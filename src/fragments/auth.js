@@ -2,33 +2,73 @@ import gql from "graphql-tag";
 
 import { addressFragment } from "./address";
 
-// export const institutionFragment = gql`
-//   fragment Institution on InstitutionNode {
-//     descriptionPlaintext
-//     Id
-//     Name
-//     website
-//     country
-//     location
-//     mobile
-//     regNo
-//   }
-// `;
-// export const employerFragment = gql`
-//   fragment Employer on EmployerNode {
-//     descriptionPlaintext
-//     Id
-//     Name
-//     website
-//     country
-//     location
-//     mobile
-//     regNo
-//   }
-// `;
+export const institutionFragment = gql`
+  fragment Institution on InstitutionNode {
+    id
+    studentCount
+    description
+    descriptionPlaintext
+    name
+    website
+    country
+    location
+    mobile
+    regNo
+    logo {
+      url
+      alt
+    }
+  }
+`;
+export const employerFragment = gql`
+  fragment Employer on EmployerNode {
+    id
+    workForce
+    description
+    descriptionPlaintext
+    name
+    website
+    country
+    location
+    mobile
+    regNo
+    lookingFor
+    industries {
+      name
+      id
+    }
+    logo {
+      url
+      alt
+    }
+  }
+`;
+export const seekerFragment = gql`
+  fragment Seeker on SeekerNode {
+    title
+    idNumber
+    dateOfBirth
+    description
+    location
+    gender
+    mobile
+    status
+    industries(first: 20) {
+      edges {
+        node {
+          name
+          id
+        }
+      }
+    }
+  }
+`;
 
 export const userFragment = gql`
   ${addressFragment}
+  ${institutionFragment}
+  ${employerFragment}
+  ${seekerFragment}
   fragment User on User {
     id
     email
@@ -38,36 +78,15 @@ export const userFragment = gql`
     isSeeker
     isEmployer
     isInstitution
+    numberOfJobsBookmarked
     seeker {
-      title
-      idNumber
-      dateOfBirth
-      location
-      gender
-      status
+      ...Seeker
     }
     employer {
-      lookingFor
-      workForce
-      descriptionPlaintext
-      id
-      name
-      website
-      country
-      location
-      mobile
-      regNo
+      ...Employer
     }
     institution {
-      studentCount
-      descriptionPlaintext
-      id
-      name
-      website
-      country
-      location
-      mobile
-      regNo
+      ...Institution
     }
     avatar {
       url

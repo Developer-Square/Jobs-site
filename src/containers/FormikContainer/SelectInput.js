@@ -57,7 +57,7 @@ const FormInput = styled.div`
   .css-2b097c-container {
   }
   .css-yk16xz-control {
-    padding: 6px;
+    padding: 2px;
     outline: none;
     font-size: 14px;
     color: #909090;

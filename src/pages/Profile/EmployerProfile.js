@@ -1,64 +1,238 @@
 import React from "react";
+import { useAlert } from "react-alert";
+
+import Loader from "components/Loader/Loader";
+import NetworkStatus from "components/NetworkStatus";
+import OfflinePlaceholder from "components/OfflinePlaceholder";
+
+import { TypedIndustriesQuery } from "common/queries";
+import { MetaWrapper } from "components/Meta";
+
+import { cleanSelectData, setFieldErrors, showNotification } from "helpers";
+import {
+  TypedEmployerProfileMutation,
+  TypedEmployerUpdateMutation,
+} from "./mutations";
+import { TypedEmployerWorkForceQuery } from "./queries";
+import { objDiff } from "utils";
+import { isEmpty } from "lodash";
+import UserContext from "contexts/user/user.provider";
+import EmployerForm from "./EmployerForm";
 
 const EmployerProfile = () => {
+  const alert = useAlert();
+  const { user } = React.useContext(UserContext);
+  const [updating, setUpdating] = React.useState(false);
+
+  const initialData = {
+    workForce: null,
+    description: "",
+    name: "",
+    website: "https://",
+    country: "",
+    location: "",
+    mobile: "",
+    regNo: 0,
+    lookingFor: "",
+    industries: [],
+  };
+
+  // console.log(getDBIdFromGraphqlId("RW1wbG95ZXJOb2RlOjE=", "EmployerNode"));
+  // console.log(getGraphqlIdFromDBId(1, "EmployerNode"));
+
+  const cleanIndustries = (data) => {
+    return data.reduce((arr, b) => {
+      arr.push({
+        value: b.id,
+        label: b.name,
+      });
+      return arr;
+    }, []);
+  };
+
+  const cleanFormData = (data, oldData) => {
+    const workForce = data.workForce.value;
+    const industries = data.industries.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
+
+    const originalObject = {
+      ...oldData,
+      workForce: workForce,
+      industries: industries,
+    };
+    const newObject = {
+      ...data,
+      workForce: workForce,
+      industries: industries,
+    };
+
+    const id = updating ? { id: user?.employer?.id } : {};
+    const formData = isEmpty(objDiff(originalObject, newObject, "id"))
+      ? null
+      : {
+          ...newObject,
+          ...id,
+        };
+
+    return formData;
+  };
+  const cleanInitialValues = (data, industries, workForce) => {
+    const obj = {
+      workForce: workForce.find(({ value }) => value === data?.workForce),
+      description: data.description,
+      name: data.name,
+      website: data.website,
+      country: data.country,
+      location: data.location,
+      mobile: data.mobile,
+      regNo: data.regNo,
+      lookingFor: data.lookingFor,
+      industries: data.industries.reduce((acc, ind) => {
+        acc.push({ value: ind.id, label: ind.name });
+        return acc;
+      }, []),
+    };
+    return obj;
+  };
+  if (!user) {
+    return <Loader />;
+  }
+
   return (
-    <div>
-      <h2>Employer Profile</h2>
-      <div className="dashboard-list-box margin-top-30">
-        <h4>Company Details</h4>
-        <div className="dashboard-list-box-content">
-          <div className="submit-page">
-            {/* Company Name */}
-            <div className="form">
-              <h5>Company Name</h5>
-              <input type="text" placeholder="Enter the name of the company" />
-            </div>
-            {/* Website */}
-            <div className="form">
-              <h5>
-                Website <span>(optional)</span>
-              </h5>
-              <input type="text" placeholder="http://" />
-            </div>
-            {/* Teagline */}
-            <div className="form">
-              <h5>
-                Tagline <span>(optional)</span>
-              </h5>
-              <input type="text" placeholder="Briefly describe your company" />
-            </div>
-            {/* Video */}
-            <div className="form">
-              <h5>
-                Video <span>(optional)</span>
-              </h5>
-              <input
-                type="text"
-                placeholder="A link to a video about your company"
-              />
-            </div>
-            {/* Twitter */}
-            <div className="form">
-              <h5>
-                Twitter Username <span>(optional)</span>
-              </h5>
-              <input type="text" placeholder="@yourcompany" />
-            </div>
-            {/* Logo */}
-            <div className="form">
-              <h5>
-                Logo <span>(optional)</span>
-              </h5>
-              <label className="upload-btn">
-                <input type="file" multiple />
-                <i className="fa fa-upload" /> Browse
-              </label>
-              <span className="fake-input">No file selected</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <NetworkStatus>
+      {(isOnline) => (
+        <TypedEmployerWorkForceQuery>
+          {(employerWorkForce) => {
+            if (employerWorkForce.loading) {
+              return <Loader />;
+            }
+            let workForceCount = [];
+            if (employerWorkForce.data) {
+              workForceCount = cleanSelectData(
+                employerWorkForce.data.__type.enumValues,
+              );
+            }
+            if (!isOnline) {
+              return <OfflinePlaceholder />;
+            }
+            return (
+              <TypedIndustriesQuery>
+                {(industriesData) => {
+                  if (industriesData.loading) {
+                    return <Loader />;
+                  }
+                  let industries = [];
+                  if (industriesData.data) {
+                    industries = cleanIndustries(
+                      industriesData.data.allIndustries,
+                    );
+                  }
+                  let initialValues = initialData;
+                  if (user?.isEmployer && user.employer) {
+                    setUpdating(true);
+                    initialValues = cleanInitialValues(
+                      user?.employer,
+                      industries,
+                      workForceCount,
+                    );
+                  } else {
+                    setUpdating(false);
+                  }
+
+                  return (
+                    <MetaWrapper
+                      meta={{
+                        description: user.employer
+                          ? "Employer Profile creation"
+                          : user?.employer?.descriptionPlaintext,
+                        title: user.username,
+                      }}
+                    >
+                      <TypedEmployerProfileMutation
+                        onCompleted={(data, errors) =>
+                          showNotification(
+                            data.employerCreate,
+                            errors,
+                            alert,
+                            "accountErrors",
+                            "Profile Created",
+                          )
+                        }
+                      >
+                        {(employerCreate) => {
+                          return (
+                            <TypedEmployerUpdateMutation
+                              onCompleted={(data, errors) =>
+                                showNotification(
+                                  data.employerPatch,
+                                  errors,
+                                  alert,
+                                  "accountErrors",
+                                  "Profile Updated",
+                                )
+                              }
+                            >
+                              {(employerUpdate) => {
+                                function onSubmit(values, { setErrors }) {
+                                  const variables = {
+                                    variables: cleanFormData(
+                                      values,
+                                      initialValues,
+                                    ),
+                                  };
+                                  if (!cleanFormData(values, initialValues)) {
+                                    showNotification(
+                                      null,
+                                      null,
+                                      alert,
+                                      null,
+                                      "No Chages Were Made",
+                                    );
+                                  } else {
+                                    const mutationFn = updating
+                                      ? employerUpdate(variables)
+                                      : employerCreate(variables);
+                                    mutationFn.then(({ data }) => {
+                                      if (data) {
+                                        setFieldErrors(
+                                          updating
+                                            ? data.employerUpdate
+                                            : data.employerCreate,
+                                          setErrors,
+                                        );
+                                      }
+                                    });
+                                  }
+                                }
+                                return (
+                                  <EmployerForm
+                                    initialValues={initialValues}
+                                    onSubmit={onSubmit}
+                                    loading={
+                                      updating
+                                        ? employerUpdate.loading
+                                        : employerCreate.loading
+                                    }
+                                    industries={industries}
+                                    workForce={workForceCount}
+                                  />
+                                );
+                              }}
+                            </TypedEmployerUpdateMutation>
+                          );
+                        }}
+                      </TypedEmployerProfileMutation>
+                    </MetaWrapper>
+                  );
+                }}
+              </TypedIndustriesQuery>
+            );
+          }}
+        </TypedEmployerWorkForceQuery>
+      )}
+    </NetworkStatus>
   );
 };
 

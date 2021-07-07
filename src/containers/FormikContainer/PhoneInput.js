@@ -66,7 +66,7 @@ export default PhoneNumberInput;
 const FormInput = styled.div`
   .react-tel-input .form-control {
     width: 100%;
-    height: 48px;
+    height: 44px;
     border-radius: 3px;
     font-family: "Lato", sans-serif;
     line-height: 19px;

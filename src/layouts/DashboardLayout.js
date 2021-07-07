@@ -4,6 +4,7 @@ import styled from "styled-components";
 import logoImage from "image/thedb.png";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "contexts/auth/auth.context";
+import { indexOf, isEmpty } from "lodash";
 
 export const LogoImage = styled.img`
   display: block;
@@ -21,6 +22,30 @@ const DashboardLayout = (props) => {
   const pathname =
     pathLocation[0] === "/" ? pathLocation.substr(1) : pathLocation;
   const builder = pathLocation.split("/").includes("builder");
+  const getPath = (arr, a, b = 0, val = "") => {
+    if (arr && !isEmpty(arr)) {
+      if (a === 0) {
+        return "/";
+      }
+      if (a === b || arr.length === a || arr.length === b) {
+        return val;
+      } else {
+        return getPath(arr, a, b + 1, `${val}/${arr[b]}`);
+      }
+    } else {
+      return "/";
+    }
+  };
+  const pathValues = pathLocation.split("/").reduce((arr, p) => {
+    const rootPathIndex = indexOf(pathname.split("/"), p);
+    console.log(rootPathIndex);
+    arr.push({
+      name: (p.charAt(0).toUpperCase() + p.slice(1)).replace("-", " "),
+      path: getPath(pathLocation.split("/"), rootPathIndex),
+    });
+    return arr;
+  }, []);
+  console.log(pathValues);
   return (
     <div>
       {builder ? (
@@ -131,19 +156,24 @@ const DashboardLayout = (props) => {
               <div id="titlebar">
                 <div className="row">
                   <div className="col-md-12">
-                    <h2>
-                      {pathname === "dashboard"
-                        ? `Hello, ${profile.username}!`
-                        : pathname.replace("/", " > ")}
-                    </h2>
                     {/* Breadcrumbs */}
                     <nav id="breadcrumbs">
                       <ul>
                         <li>
                           <Link to="/">Home</Link>
                         </li>
+                        {pathValues.map((singlePath, i) => (
+                          <li>
+                            <Link to={singlePath.url}>{singlePath.name}</Link>
+                          </li>
+                        ))}
+
                         <li>
-                          <Link to="/dashboard">Dashboard</Link>
+                          <Link to="/dashboard">
+                            {pathname === "dashboard"
+                              ? `Hello, ${profile.username}!`
+                              : pathname.replace("/", " > ").replace("-", " ")}
+                          </Link>
                         </li>
                       </ul>
                     </nav>

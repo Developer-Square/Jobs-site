@@ -2,7 +2,7 @@ import { TypedQuery } from "core/queries";
 import gql from "graphql-tag";
 
 export const VACANCY_DETAIL_QUERY = gql`
-  query UserList($id: ID!) {
+  query VacancyDetail($id: ID!) {
     vacancy(id: $id) {
       __typename
       id
@@ -14,6 +14,9 @@ export const VACANCY_DETAIL_QUERY = gql`
       positions
       yearsOfExp
       salary
+      applicationEmail
+      payRate
+      closingDate
       location
       createdAt
       industry {
@@ -66,3 +69,29 @@ export const JobYearsOfExp = gql`
 `;
 
 export const TypedJobYearsOfExpQuery = TypedQuery(JobYearsOfExp);
+
+export const JobJobType = gql`
+  query JobJobType {
+    __type(name: "JobJobType") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+
+export const TypedJobJobTypeQuery = TypedQuery(JobJobType);
+
+export const JobPayRate = gql`
+  query JobPayRate {
+    __type(name: "JobPayRate") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+
+export const TypedJobPayRateQuery = TypedQuery(JobPayRate);

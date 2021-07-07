@@ -27,17 +27,30 @@ const UserContext = createContext(defaultState);
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  // const [jobTypes, setJobTypes] = useState(null);
+  // const [industries, setIndustries] = useState(null);
+  // const [experience, setExperience] = useState(null);
+  // const [qualifications, setQualifications] = useState(null);
+  // const [rates, setRates] = useState(null);
+  // const [applicationStatus, setApplicationStatus] = useState(null);
+  // const [workForce, setWorkForce] = useState(null);
+
   const navigate = useHistory();
   const { data, loading, error } = useQuery(GET_USER_DETAILS);
   // eslint-disable-next-line no-undef
   const { authDispatch } = React.useContext(AuthContext);
+  console.log(user);
 
   const getUser = async () => {
     if (data) {
       await setUser(data.me);
+      console.log(data);
       return { user, loading, error };
     }
   };
+  if (!user) {
+    getUser();
+  }
 
   useEffect(() => {
     // const localUser = JSON.parse(localStorage.getItem("thedb_auth_profile"));
@@ -46,7 +59,6 @@ const UserProvider = ({ children }) => {
     // } else {
     //   getUser();
     // }
-    getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

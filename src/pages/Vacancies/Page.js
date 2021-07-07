@@ -1,5 +1,6 @@
 import React from "react";
 import Vacancy from "./Vacancy";
+
 const Page = ({ displayLoader, hasNextPage, onLoadMore, vacancies }) => {
   return (
     <Vacancy
