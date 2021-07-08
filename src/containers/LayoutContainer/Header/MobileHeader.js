@@ -136,7 +136,13 @@ const MobileHeader = ({ className, pathname, isSticky }) => {
           <LogoWrapper>
             <Link to="/">
               <LogoImage
-                src={isSticky ? Logoimage : InvertedLogoimage}
+                src={
+                  isHomePage
+                    ? isSticky
+                      ? Logoimage
+                      : InvertedLogoimage
+                    : Logoimage
+                }
                 alt="TheDB"
               />
             </Link>

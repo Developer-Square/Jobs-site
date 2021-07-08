@@ -2,6 +2,17 @@ import { useEffect, useState } from "react";
 import _ from "lodash";
 import CryptoJS from "crypto-js";
 import AES from "crypto-js/aes";
+import { maybe } from "core/utils";
+import { toast } from "react-toastify";
+
+export const removeTokens = () => {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("thedb_auth_payload");
+  sessionStorage.removeItem("access_token");
+  sessionStorage.removeItem("refresh_token");
+  sessionStorage.removeItem("thedb_auth_payload");
+};
 
 export const formTokenConfig = (getState) => {
   // const token = getState().auth.token;
@@ -58,7 +69,12 @@ export const normalizeErrors = (errors) => {
       }
       return null;
     };
-    acc[val] = _.get(errors, oB(val, 0), null);
+    let arr = [];
+    for (let i = 0; i < errors[val].length; i++) {
+      const element = _.get(errors, oB(val, i), null);
+      arr.push(`${i === 0 ? "" : "😍"}${element}`);
+    }
+    acc[val] = arr.toString().replace(",", "").replace("😍", ",");
     return acc;
   }, {});
 };
@@ -244,4 +260,79 @@ export const millisecondsToDaysHoursMinutesSeconds = (milliSeconds) => {
   }
 
   return { days: days, hours: hours, minutes: minutes, seconds: seconds };
+};
+
+export const showNotification = (
+  data,
+  errors,
+  alert,
+  errorField,
+  successMessage,
+) => {
+  let a = alert;
+  let b = true;
+  if (!alert) {
+    a = toast;
+    b = false;
+    // throw new Error("Alert Provider/Hook not provided");
+  }
+  if (data) {
+    console.log(errors);
+    if (errors) {
+      console.log("Server Error kwa login", errors[0].message);
+      return errors[0].message;
+    }
+
+    const successful = maybe(() => data.success);
+
+    if (successful) {
+      if (b) {
+        a.show(
+          {
+            title: successMessage,
+          },
+          { type: "success", timeout: 5000 },
+        );
+      } else {
+        a(successMessage);
+      }
+    } else {
+      const err = maybe(() => data.vacancyErrors, []);
+
+      if (err) {
+        const nonFieldErr = normalizeErrors(maybe(() => data[errorField], []));
+        if (b) {
+          a.show(
+            {
+              title: nonFieldErr?.nonFieldErrors,
+            },
+            { type: "error", timeout: 5000 },
+          );
+        } else {
+          a.error(nonFieldErr?.nonFieldErrors);
+        }
+      }
+    }
+  } else {
+    toast(successMessage);
+  }
+};
+
+export const cleanSelectData = (data) => {
+  return data.reduce((arr, b) => {
+    arr.push({
+      value: b.name,
+      label: b.description,
+    });
+    return arr;
+  }, []);
+};
+
+export const setFieldErrors = (data, setErrors) => {
+  if (data) {
+    if (!data.success) {
+      return setErrors(normalizeErrors(maybe(() => data.vacancyErrors, [])));
+    }
+  }
+  return null;
 };

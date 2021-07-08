@@ -2,7 +2,6 @@ import React from "react";
 import Footer from "components/Footer/Footer";
 import { Facebook, Twitter, YouTube, Instagram } from "components/AllSvgIcon";
 import { TOS, HELP_PAGE } from "constants/routes.constants";
-import { ABOUT } from "constants/routes.constants";
 import { SDG } from "constants/routes.constants";
 
 export default function FooterContainer() {

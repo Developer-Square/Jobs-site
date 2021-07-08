@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ButtonStyle from "./Button.style";
 
 const Button = ({
@@ -19,6 +20,7 @@ const Button = ({
   className,
   fullwidth,
   style,
+  children,
   ...props
 }) => {
   // Checking button loading state
@@ -35,6 +37,8 @@ const Button = ({
 
   // set icon position
   const position = iconPosition || "right";
+  const { t } = useTranslation();
+  const Icon = icon;
 
   return (
     <ButtonStyle
@@ -53,9 +57,18 @@ const Button = ({
       size={size}
       {...props}
     >
-      {position === "left" && buttonIcon}
-      {title && !isLoading && <span className="btn-text">{title}</span>}
-      {position === "right" && buttonIcon}
+      {children ? (
+        <>
+          {icon && <Icon size="14" className="mr-3" />}
+          {isLoading ? t("shared.buttons.loading") : children}
+        </>
+      ) : (
+        <>
+          {position === "left" && buttonIcon}
+          {title && !isLoading && <span className="btn-text">{title}</span>}
+          {position === "right" && buttonIcon}
+        </>
+      )}
     </ButtonStyle>
   );
 };
