@@ -1,30 +1,35 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useAlert } from "react-alert";
 import { useRouteMatch, useHistory } from "react-router-dom";
-import { TypedVerifyEmailMutation } from "./mutations";
+import {
+  TypedVerifyEmailMutation,
+  TypedResendAactivationEmailMutation,
+} from "./mutations";
 import { maybe } from "core/utils";
 import { normalizeErrors } from "helpers";
 import Button from "components/Button/Button";
 import { AuthContext } from "contexts/auth/auth.context";
 import { HelperText, Heading, SubHeading } from "./Authentication.style";
-
+import { Form, Formik } from "formik";
+import FormikControl from "containers/FormikContainer/FormikControl";
+import { emailActivationSchema } from "./validation.schema";
 const showSuccessNotification = (data, alert) => {
   const successful = maybe(() => data.verifyAccount.success);
   const nonFieldErr = normalizeErrors(
-    maybe(() => data.verifyAccount.errors, [])
+    maybe(() => data.verifyAccount.errors, []),
   );
   if (successful) {
     alert.show(
       {
         title: "Verification Successful",
       },
-      { type: "success", timeout: 5000 }
+      { type: "success", timeout: 5000 },
     );
     alert.show(
       {
         title: "Login to Access Dashboard",
       },
-      { type: "neutral", timeout: 5000 }
+      { type: "neutral", timeout: 5000 },
     );
   }
   if (nonFieldErr) {
@@ -32,7 +37,7 @@ const showSuccessNotification = (data, alert) => {
       {
         title: nonFieldErr?.nonFieldErrors,
       },
-      { type: "error", timeout: 5000 }
+      { type: "error", timeout: 5000 },
     );
   }
 };
@@ -47,11 +52,6 @@ const EmailActivation = () => {
     authDispatch({
       type: "ACTIVATE_ACCOUNT",
     });
-    return () => {
-      authDispatch({
-        type: "SIGNIN",
-      });
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -62,7 +62,7 @@ const EmailActivation = () => {
     history.push(`/auth`);
   };
 
-  return (
+  return match.params.emailToken ? (
     <TypedVerifyEmailMutation
       onCompleted={(data) => showSuccessNotification(data, alert)}
     >
@@ -127,7 +127,7 @@ const EmailActivation = () => {
                       )}
                     </h1>
                     {maybe(
-                      () => !data?.sendPasswordResetEmail?.errors?.length
+                      () => !data?.sendPasswordResetEmail?.errors?.length,
                     ) ? null : (
                       <HelperText>
                         <p class=" lost_password">
@@ -145,6 +145,92 @@ const EmailActivation = () => {
         );
       }}
     </TypedVerifyEmailMutation>
+  ) : (
+    <TypedResendAactivationEmailMutation>
+      {(resendActivationEmail, { loading, data }) => {
+        function onSubmit({ values }) {
+          resendActivationEmail({
+            variables: values,
+          }).then(({ data }) => {
+            if (data?.resendActivationEmail?.success) {
+              alert.show(
+                {
+                  title: "Email Sent Successfully",
+                },
+                { type: "success", timeout: 5000 },
+              );
+            } else {
+              console.log(maybe(() => data.resendActivationEmail.errors, []));
+            }
+          });
+        }
+
+        return (
+          <>
+            <div
+              id="titlebar"
+              className="photo-bg"
+              style={{
+                backgroundImage: "url(images/all-categories-photo.jpg)",
+              }}
+            >
+              <div className="container">
+                <div className="ten columns">
+                  <h2>Account Activation</h2>
+                </div>
+              </div>
+            </div>
+            <div className="container">
+              <div className="my-account">
+                <div className="tabs-container">
+                  <div
+                    className="tab-content"
+                    style={{
+                      width: "fit-content",
+                      margin: "0 auto",
+                    }}
+                  >
+                    <SubHeading>Not yet Received Email?</SubHeading>
+                    <SubHeading>
+                      Enter your Email to resend the activation Link
+                    </SubHeading>
+                    <Formik
+                      initialValues={{ email: "" }}
+                      validationSchema={emailActivationSchema}
+                      onSubmit={onSubmit}
+                    >
+                      {(formik) => {
+                        return (
+                          <Form className="login">
+                            <FormikControl
+                              control="input"
+                              type="email"
+                              label="Email"
+                              name="email"
+                              icon="ln ln-icon-Mail"
+                            />
+
+                            <Button
+                              type="submit"
+                              disabled={!formik.isValid}
+                              fullwidth
+                              isLoading={loading}
+                              title={loading ? "Resending... " : "Send"}
+                              style={{ color: "#ffffff", margin: "16px 0" }}
+                              //   {...(loading && { disabled: true })}
+                            />
+                          </Form>
+                        );
+                      }}
+                    </Formik>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        );
+      }}
+    </TypedResendAactivationEmailMutation>
   );
 };
 

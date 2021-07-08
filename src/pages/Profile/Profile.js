@@ -41,6 +41,7 @@ function Profile() {
         </div>
       </div>
       {/* Extended Profile*/}
+
       {profile.isInstitution && <InstitutionProfile />}
       {profile.isSeeker && <SeekerProfile />}
       {profile.isEmployer && <EmployerProfile />}

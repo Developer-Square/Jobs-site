@@ -12,7 +12,7 @@ export const seekerProfileSchema = Yup.object().shape({
   description: schema.requiredString,
   idNumber: schema.id_number,
   // mobile: mobile,
-  dateOfBirth: schema.date_of_birth,
+  // dateOfBirth: schema.date_of_birth,
 });
 
 export const employerProfileSchema = Yup.object().shape({

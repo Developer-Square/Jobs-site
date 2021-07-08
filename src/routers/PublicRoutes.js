@@ -32,7 +32,7 @@ const AuthRoutes = (props) => {
       <PublicRoute
         restricted={false}
         exact
-        path={`${match.path}/:userType([A-Za-z0-9]+)`}
+        path={`${match.path}/p/:userType([A-Za-z0-9]+)`}
         component={Authentication}
       />
       <PublicRoute
@@ -48,6 +48,12 @@ const AuthRoutes = (props) => {
         component={PasswordReset}
       />
       {/* <PublicRoute restricted={false} exact path={`${match.path}/activate`} component={EmailVerification} /> */}
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${match.path}/activate`}
+        component={EmailActivation}
+      />
       <PublicRoute
         restricted={false}
         exact

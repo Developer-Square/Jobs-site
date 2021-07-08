@@ -83,6 +83,9 @@ export const SIGNUP_MUTATION = gql`
     $username: String!
     $password1: String!
     $password2: String!
+    $isEmployer: Boolean!
+    $isSeeker: Boolean!
+    $isInstitution: Boolean!
   ) {
     register(
       input: {
@@ -90,6 +93,9 @@ export const SIGNUP_MUTATION = gql`
         username: $username
         password1: $password1
         password2: $password2
+        isEmployer: $isEmployer
+        isSeeker: $isSeeker
+        isInstitution: $isInstitution
       }
     ) {
       success
@@ -136,3 +142,6 @@ export const TypedPasswordResetEmailMutation = TypedMutation(
 export const TypedPasswordChangeMutation = TypedMutation(PASSWORD_CHANGE);
 export const TypedPasswordResetMutation = TypedMutation(PASSWORD_RESET);
 export const TypedVerifyEmailMutation = TypedMutation(VERIFY_EMAIL_MUTATION);
+export const TypedResendAactivationEmailMutation = TypedMutation(
+  RESEND_ACTIVATION_EMAIL_MUTATION,
+);

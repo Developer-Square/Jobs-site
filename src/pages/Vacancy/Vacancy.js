@@ -131,7 +131,7 @@ const Vacancy = () => {
       {(isOnline) => (
         <TypedJobJobTypeQuery>
           {(jobData) => {
-            if (jobData.loading) return;
+            if (jobData.loading) return <div />;
             let jobType = [];
             if (jobData.data) {
               jobType = cleanSelectData(jobData.data.__type.enumValues);
@@ -139,7 +139,7 @@ const Vacancy = () => {
             return (
               <TypedJobMinQualificationQuery>
                 {(qualificationData) => {
-                  if (qualificationData.loading) return;
+                  if (qualificationData.loading) return <div />;
                   let qualification = [];
                   if (qualificationData.data) {
                     qualification = cleanSelectData(
@@ -149,7 +149,7 @@ const Vacancy = () => {
                   return (
                     <TypedJobPayRateQuery>
                       {(rateData) => {
-                        if (rateData.loading) return;
+                        if (rateData.loading) return <div />;
                         let payRate = [];
                         if (rateData.data) {
                           payRate = cleanSelectData(
@@ -159,7 +159,7 @@ const Vacancy = () => {
                         return (
                           <TypedJobYearsOfExpQuery>
                             {(yearsData) => {
-                              if (yearsData.loading) return;
+                              if (yearsData.loading) return <div />;
                               let years = [];
                               if (yearsData.data) {
                                 years = cleanSelectData(
@@ -169,7 +169,7 @@ const Vacancy = () => {
                               return (
                                 <TypedIndustriesQuery>
                                   {(industriesData) => {
-                                    if (industriesData.loading) return;
+                                    if (industriesData.loading) return <div />;
                                     let industries = [];
                                     if (industriesData.data) {
                                       industries = cleanIndustries(

@@ -1,9 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import Sidebar from "./Dashboard/Sidebar/Sidebar";
 import styled from "styled-components";
 import logoImage from "image/thedb.png";
 import { Link, useLocation } from "react-router-dom";
-import { AuthContext } from "contexts/auth/auth.context";
 import { indexOf, isEmpty } from "lodash";
 
 export const LogoImage = styled.img`
@@ -13,11 +12,7 @@ export const LogoImage = styled.img`
   max-height: 50px;
 `;
 const DashboardLayout = (props) => {
-  const {
-    authState: { profile },
-  } = useContext(AuthContext);
   const location = useLocation();
-  console.log(props);
   const pathLocation = location.pathname.replace(/\/+$/, "");
   const pathname =
     pathLocation[0] === "/" ? pathLocation.substr(1) : pathLocation;
@@ -36,7 +31,7 @@ const DashboardLayout = (props) => {
       return "/";
     }
   };
-  const pathValues = pathLocation.split("/").reduce((arr, p) => {
+  const pathValues = pathname.split("/").reduce((arr, p) => {
     const rootPathIndex = indexOf(pathname.split("/"), p);
     console.log(rootPathIndex);
     arr.push({
@@ -163,18 +158,27 @@ const DashboardLayout = (props) => {
                           <Link to="/">Home</Link>
                         </li>
                         {pathValues.map((singlePath, i) => (
-                          <li>
-                            <Link to={singlePath.url}>{singlePath.name}</Link>
+                          <li key={i}>
+                            <Link
+                              to={{
+                                pathname: location.path,
+                                pageProps: {
+                                  title: singlePath.name,
+                                },
+                              }}
+                            >
+                              {singlePath.name}
+                            </Link>
                           </li>
                         ))}
 
-                        <li>
+                        {/* <li>
                           <Link to="/dashboard">
                             {pathname === "dashboard"
                               ? `Hello, ${profile.username}!`
                               : pathname.replace("/", " > ").replace("-", " ")}
                           </Link>
-                        </li>
+                        </li> */}
                       </ul>
                     </nav>
                   </div>

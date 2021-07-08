@@ -24,10 +24,24 @@ const showSuccessNotification = (data, alert) => {
     );
     alert.show(
       {
-        title: "Please check your e-mail for further instructions",
+        title: "Check your e-mail for further instructions",
       },
       { type: "success", timeout: 5000 },
     );
+  } else {
+    const err = maybe(() => data.register.errors, []);
+
+    if (err) {
+      const nonFieldErr = normalizeErrors(
+        maybe(() => data.register.errors, []),
+      );
+      alert.show(
+        {
+          title: nonFieldErr?.nonFieldErrors,
+        },
+        { type: "error", timeout: 5000 },
+      );
+    }
   }
 };
 
@@ -36,7 +50,7 @@ const Register = () => {
   const history = useHistory();
   const match = useRouteMatch();
   const [isSeeker, setIsSeeker] = React.useState(false);
-  const [isBusiness, setIsBusiness] = React.useState(false);
+  const [isEmployer, setIsEmployer] = React.useState(false);
   const [isInstitution, setIsInstitution] = React.useState(false);
   const [switchTab, setSwitchTab] = React.useState(false);
 
@@ -45,15 +59,15 @@ const Register = () => {
       setSwitchTab(false);
       if (match.params.userType === "business") {
         setIsSeeker(false);
-        setIsBusiness(true);
+        setIsEmployer(true);
         setIsInstitution(false);
       } else if (match.params.userType === "seeker") {
         setIsSeeker(true);
-        setIsBusiness(false);
+        setIsEmployer(false);
         setIsInstitution(false);
       } else if (match.params.userType === "institution") {
         setIsSeeker(false);
-        setIsBusiness(false);
+        setIsEmployer(false);
         setIsInstitution(true);
       }
     } else {
@@ -65,7 +79,7 @@ const Register = () => {
     username: "",
     email: "",
     isSeeker: isSeeker,
-    isBusiness: isBusiness,
+    isEmployer: isEmployer,
     isInstitution: isInstitution,
     password1: "",
     password2: "",
@@ -74,24 +88,18 @@ const Register = () => {
     <TypedAccountRegistrationMutation
       onCompleted={(data) => showSuccessNotification(data, alert)}
     >
-      {(registerUser, { loading, data }) => {
+      {(registerUser, { loading }) => {
         function onSubmit(values, { setErrors }) {
           registerUser({
             variables: values,
-          }).then(() => {
+          }).then(({ data }) => {
             console.log(data);
-            if (data) {
-              if (data.register) {
-                if (data.register.success) {
-                  console.log("data received", data);
-                  history.push("/auth/activate");
-                } else {
-                  // setErrors(normalizeErrors(data.register.errors));
-                  setErrors(
-                    normalizeErrors(maybe(() => data.register.errors, [])),
-                  );
-                }
-              }
+            if (data.register.success) {
+              console.log("data received", data);
+              history.push("/auth/activate");
+            } else {
+              // setErrors(normalizeErrors(data.register.errors));
+              setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
             }
           });
         }
@@ -111,17 +119,17 @@ const Register = () => {
               <Button
                 style={{ margin: "0 5px", width: "100%" }}
                 title={`Job Seeker`}
-                onClick={() => history.push(`/auth/seeker`)}
+                onClick={() => history.push(`/auth/p/seeker`)}
               />
               <Button
                 style={{ margin: "0 5px", width: "100%" }}
                 title={`Institution`}
-                onClick={() => history.push(`/auth/institution`)}
+                onClick={() => history.push(`/auth/p/institution`)}
               />
               <Button
                 style={{ margin: "0 5px", width: "100%" }}
                 title={`Business`}
-                onClick={() => history.push(`/auth/business`)}
+                onClick={() => history.push(`/auth/p/business`)}
               />
             </div>
           </div>

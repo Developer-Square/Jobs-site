@@ -1,10 +1,9 @@
 import React from "react";
-import { withRouter, Link, useHistory, useLocation } from "react-router-dom";
+import { withRouter, Link, useLocation } from "react-router-dom";
 import { groupBy } from "utils/groupBy";
 
 export default withRouter(function Sidebar(props) {
   const menuItems = groupBy(props.routes, "category");
-  const history = useHistory();
   const location = useLocation();
   console.log(location);
 
@@ -14,13 +13,12 @@ export default withRouter(function Sidebar(props) {
         return menuItem.dashboardItem ? (
           <li key={menuItem.title}>
             <Link
-              onClick={() =>
-                history.push(
-                  `${props.path}${parent ? parent.url : ""}${menuItem.url}`,
-                  { state: menuItem },
-                )
-              }
-              to={`${props.path}${parent ? parent.url : ""}${menuItem.url}`}
+              to={{
+                pathname: `${props.path}${parent ? parent.url : ""}${
+                  menuItem.url
+                }`,
+                pageProps: menuItem,
+              }}
               exact={menuItem.exact}
             >
               {menuItem.title}

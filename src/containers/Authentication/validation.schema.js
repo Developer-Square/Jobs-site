@@ -36,6 +36,9 @@ export const loginSchema = Yup.object().shape({
 export const passwordResetEmailSchema = Yup.object().shape({
   email: email,
 });
+export const emailActivationSchema = Yup.object().shape({
+  email: email,
+});
 
 export const passwordResetSchema = Yup.object({
   newPassword1: password,

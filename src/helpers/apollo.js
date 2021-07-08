@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { Helmet } from "react-helmet";
+import { toast } from "react-toastify";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -197,7 +198,7 @@ export function createApolloClient(initialState = {}) {
           location,
           ...rest
         } = error || {};
-        console.log(rest);
+        console.log(graphQLErrors, networkError, operation, rest);
         // const { getContext } = operation || {};
         // const { scope, headers = {} } = getContext() || {};
         const { message: networkErrorMessage = "" } = networkError;
@@ -281,7 +282,13 @@ export function createApolloClient(initialState = {}) {
                 }
 
                 break;
+
+              case "GraphQLError":
+                toast.error("Internal Server Error");
+                break;
+
               default:
+                toast.error(err.extensions.exception.code);
                 break;
             }
           }

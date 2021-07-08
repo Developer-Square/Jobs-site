@@ -7,7 +7,7 @@ import { maybe } from "core/utils";
 import { TypedAccountLoginMutation } from "./mutations";
 import Button from "components/Button/Button";
 import { normalizeErrors } from "helpers";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { loginSchema } from "./validation.schema";
 import { AuthContext } from "contexts/auth/auth.context";
 import { addObjectToLocalStorageObject, addArrayToLocalStorage } from "helpers";
@@ -16,7 +16,6 @@ const Login = () => {
   const { authDispatch } = useContext(AuthContext);
   const alert = useAlert();
   const history = useHistory();
-  const location = useLocation();
 
   const initialValues = {
     email: "",
@@ -92,11 +91,13 @@ const Login = () => {
                 "thedb_auth_profile",
                 data.tokenAuth.user,
               );
-              if (location.state !== undefined) {
-                history.push(location.state.referrer);
-              } else {
-                history.push("/dashboard");
-              }
+              console.log("should rediret to dashboard");
+              history.push("/dashboard");
+              // if (location.state !== undefined) {
+              //   history.push(location.state.referrer);
+              // } else {
+              //   history.push("/dashboard");
+              // }
               setSubmitting(false);
             } else {
               setErrors(normalizeErrors(data.tokenAuth.errors));

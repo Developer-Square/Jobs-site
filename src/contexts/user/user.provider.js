@@ -27,6 +27,10 @@ const UserContext = createContext(defaultState);
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const {
+    authState: { isAuthenticated },
+    authDispatch,
+  } = React.useContext(AuthContext);
   // const [jobTypes, setJobTypes] = useState(null);
   // const [industries, setIndustries] = useState(null);
   // const [experience, setExperience] = useState(null);
@@ -37,8 +41,6 @@ const UserProvider = ({ children }) => {
 
   const navigate = useHistory();
   const { data, loading, error } = useQuery(GET_USER_DETAILS);
-  // eslint-disable-next-line no-undef
-  const { authDispatch } = React.useContext(AuthContext);
   console.log(user);
 
   const getUser = async () => {
@@ -48,11 +50,11 @@ const UserProvider = ({ children }) => {
       return { user, loading, error };
     }
   };
-  if (!user) {
-    getUser();
-  }
 
   useEffect(() => {
+    if (!user && isAuthenticated) {
+      getUser();
+    }
     // const localUser = JSON.parse(localStorage.getItem("thedb_auth_profile"));
     // if (localUser) {
     //   setUser(localUser);
