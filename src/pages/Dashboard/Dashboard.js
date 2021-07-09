@@ -1,294 +1,152 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import axios from "axios";
-import {
-  InkPen,
-  Members,
-  SiteSettings,
-} from "components/AllSvgIcon";
-import Error500 from "components/Error/Error500";
-import Loader from "components/Loader/Loader";
-import { BASE_URL } from "constants/constants";
-import { useAppState } from "contexts/app/app.provider";
-import { AuthContext } from "contexts/auth/auth.context";
-import {
-  addObjectToLocalStorageObject,
-  addToLocalStorageArray,
-  tokenConfig,
-} from "helpers";
-import _ from "lodash";
-import { getApplications } from "pages/common/helpers";
-import React, { useContext, useEffect, useState } from "react";
-import {
-  BoxContent,
-  BoxCounter,
-  BoxIcon,
-  CategoriesContainer,
-  CategoryBox,
-  H4,
-  MainContentArea,
-} from "styles/pages.style";
-import { CardWrapper } from "./Dashboard.style";
-
-function Dashboard() {
-  const {
-    authState: { profile },
-  } = useContext(AuthContext);
-  const [count, setCount] = useState();
-  const [error, setError] = useState(false);
-  const [applications, setApplications] = useState(null);
-  const [applicants, setApplicants] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const reload = useAppState("isReload");
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(true);
-
-      // if (
-      //   JSON.parse(localStorage.getItem("thedb_auth_profile"))["is_individual"]
-      // ) {
-      console.log("1");
-      axios
-        .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
-        .then(async (res) => {
-          console.log("applicant data", res.data);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          const allApplications = res.data.results
-            .filter(
-              (filteredApplications) =>
-                filteredApplications.applicant ===
-                JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-            )
-            // eslint-disable-next-line array-callback-return
-            .reduce((arr, b) => {
-              arr.push(b.job);
-              return arr;
-            }, []);
-          console.log("applications", allApplications, allApplications.length);
-          setApplications(allApplications);
-          // addToLocalStorageArray("thedb_applications", allApplications);
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-      // } else {
-      console.log("2");
-      axios
-        .get(`${BASE_URL}/jobs/`, tokenConfig())
-        .then(async (res) => {
-          const jobs = res.data.results
-            .filter(
-              (filteredJobs) =>
-                filteredJobs.creator ===
-                JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-            )
-            // eslint-disable-next-line array-callback-return
-            .reduce((arr, b) => {
-              arr.push(b.id);
-              return arr;
-            }, []);
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          axios
-            .get(`${BASE_URL}/jobs/applications/`, tokenConfig())
-            .then(async (res) => {
-              console.log("applicant data", res.data);
-              await new Promise((resolve) => setTimeout(resolve, 1000));
-              const allApplicants = res.data.results
-                .filter((filteredApplications) =>
-                  jobs.includes(filteredApplications.job)
-                )
-                // eslint-disable-next-line array-callback-return
-                .reduce((arr, b) => {
-                  arr.push(b.id);
-                  addToLocalStorageArray("thedb_applicants", b.id);
-                  return arr;
-                }, []);
-              console.log("applicants", allApplicants, typeof allApplicants);
-              setApplicants(allApplicants);
-              // addToLocalStorageArray("thedb_applicants", allApplicants);
-            })
-            .catch((err) => {
-              console.log("error", err);
-            });
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-      // }
-
-      if (
-        JSON.parse(localStorage.getItem("thedb_auth_profile"))["is_individual"]
-      ) {
-        try {
-          axios
-            .get(`${BASE_URL}/individual/`, tokenConfig())
-            .then((res) => {
-              console.log("res individual", res.data);
-              const individual = res.data.results.filter(
-                (filteredIndividual) =>
-                  filteredIndividual.user ===
-                  JSON.parse(localStorage.getItem("thedb_auth_profile"))["id"]
-              );
-              if (individual.length > 0) {
-                addObjectToLocalStorageObject(
-                  "thedb_individual_profile",
-                  individual[0]
-                );
-              }
-            })
-            .catch((err) => {
-              setError(err);
-            });
-          getApplications();
-        } catch (error) {
-          setError(error);
-        }
-      } else {
-        try {
-          axios
-            .get(`${BASE_URL}/organization/`, tokenConfig())
-            .then((res) => {
-              console.log("res org", res.data);
-              const organization = res.data.results.filter(
-                (filteredCompany) => filteredCompany.user === profile.id
-              );
-              if (organization.length > 0) {
-                addObjectToLocalStorageObject(
-                  "thedb_org_profile",
-                  organization[0]
-                );
-              }
-            })
-            .catch((err) => {
-              setError(err);
-            });
-        } catch (error) {
-          setError(error);
-        }
-      }
-      try {
-        axios
-          .get(`${BASE_URL}/jobs/`, tokenConfig())
-          .then((res) => {
-            console.log("industry data", res.data.results);
-            var results = res.data.results;
-            // var results = res.data.results.reduce((acc, d) => {
-            //   acc.push({
-            //     ...d,
-            //     picture: getOrgLogo(d.creator),
-            //   });
-            //   return acc;
-            // }, []);
-
-            // results = results.push("picture": getOrgLogo(job.creator))
-            console.log("testing data", results);
-
-
-            setCount(
-              _.countBy(
-                res.data.results.filter(
-                  (filteredJob) => filteredJob.creator === profile.id
-                ),
-                "job_type"
-              )
-            );
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log(err);
-            setError(err);
-            setLoading(false);
-          });
-      } catch (error) {
-        setError(error);
-      }
-    }, 2000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reload]);
-
-  if (error) {
-    return <Error500 err={error} />;
-  }
-
+import React from "react";
+import { Link } from "react-router-dom";
+const Dashboard = () => {
   return (
-    <CardWrapper>
-      <H4>Hello, {profile.full_name}</H4>
-      <h5>Explore TheDatabase</h5>
-      {loading ? (
-        <Loader />
-      ) : (
-          <>
-            <MainContentArea>
-              <CategoriesContainer>
-                {profile.is_individual ? (
-                  <>
-                    <CategoryBox>
-                      <BoxIcon>
-                        <InkPen />
-                      </BoxIcon>
-                      <BoxCounter>
-                        {applications ? applications.length : 0}
-                      </BoxCounter>
-                      <BoxContent>My Applications</BoxContent>
-                    </CategoryBox>
-                    <CategoryBox>
-                      <BoxIcon>
-                        <Members />
-                      </BoxIcon>
-                      <BoxCounter>
-                        {applicants ? applicants.length : 0}
-                      </BoxCounter>
-                      <BoxContent>Gig Applicants</BoxContent>
-                    </CategoryBox>
-                  </>
-                ) : (
-                    <>
-                      <CategoryBox>
-                        <BoxIcon>
-                          <Members />
-                        </BoxIcon>
-                        <BoxCounter>
-                          {applicants ? applicants.length : 0}
-                        </BoxCounter>
-                        <BoxContent>Total Applicants</BoxContent>
-                      </CategoryBox>
-                      <CategoryBox>
-                        <BoxIcon>
-                          <SiteSettings />
-                        </BoxIcon>
-                        <BoxCounter>
-                          {count.Internship ? count.Internship : 0}
-                        </BoxCounter>
-                        <BoxContent>My Internships</BoxContent>
-                      </CategoryBox>
-                      <CategoryBox>
-                        <BoxCounter>
-                          {(count.parttime ? count.parttime : 0) +
-                            (count.fulltime ? count.fulltime : 0) +
-                            (count.Volunteering ? count.Volunteering : 0)}
-                        </BoxCounter>
-                        <BoxIcon>
-                          <SiteSettings />
-                        </BoxIcon>
-                        <BoxContent>My Jobs</BoxContent>
-                      </CategoryBox>
-                    </>
-                  )}
-
-                <CategoryBox>
-                  <BoxIcon>
-                    <SiteSettings />
-                  </BoxIcon>
-                  <BoxCounter>{count.Gig ? count.Gig : 0}</BoxCounter>
-                  <BoxContent>My Gigs</BoxContent>
-                </CategoryBox>
-              </CategoriesContainer>
-
-            </MainContentArea>
-          </>
-        )}
-    </CardWrapper>
+    <div>
+      {/* Content */}
+      <div className="row">
+        {/* Item */}
+        <div className="col-lg-3 col-md-6">
+          <div className="dashboard-stat color-1">
+            <div className="dashboard-stat-content">
+              <h4 className="counter">3</h4> <span>Active Job Listings</span>
+            </div>
+            <div className="dashboard-stat-icon">
+              <i className="ln ln-icon-File-Link" />
+            </div>
+          </div>
+        </div>
+        {/* Item */}
+        <div className="col-lg-3 col-md-6">
+          <div className="dashboard-stat color-2">
+            <div className="dashboard-stat-content">
+              <h4 className="counter">527</h4> <span>Total Job Views</span>
+            </div>
+            <div className="dashboard-stat-icon">
+              <i className="ln ln-icon-Bar-Chart" />
+            </div>
+          </div>
+        </div>
+        {/* Item */}
+        <div className="col-lg-3 col-md-6">
+          <div className="dashboard-stat color-3">
+            <div className="dashboard-stat-content">
+              <h4 className="counter">17</h4> <span>Total Applications</span>
+            </div>
+            <div className="dashboard-stat-icon">
+              <i className="ln ln-icon-Business-ManWoman" />
+            </div>
+          </div>
+        </div>
+        {/* Item */}
+        <div className="col-lg-3 col-md-6">
+          <div className="dashboard-stat color-4">
+            <div className="dashboard-stat-content">
+              <h4 className="counter">36</h4> <span>Times Bookmarked</span>
+            </div>
+            <div className="dashboard-stat-icon">
+              <i className="ln ln-icon-Add-UserStar " />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row">
+        {/* Recent Activity */}
+        <div className="col-lg-6 col-md-12">
+          <div className="dashboard-list-box margin-top-20">
+            <h4>Recent Activities</h4>
+            <ul>
+              <li>
+                Your listing{" "}
+                <strong>
+                  <Link to="#">
+                    Marketing Coordinator - SEO / SEM Experience{" "}
+                  </Link>
+                </strong>{" "}
+                has been approved!
+                <Link to="#" className="close-list-item">
+                  <i className="fa fa-close" />
+                </Link>
+              </li>
+              <li>
+                Kathy Brown has sent you{" "}
+                <strong>
+                  <Link to="#">private message</Link>
+                </strong>
+                !
+                <Link to="#" className="close-list-item">
+                  <i className="fa fa-close" />
+                </Link>
+              </li>
+              <li>
+                Someone bookmarked your{" "}
+                <strong>
+                  <Link to="#">Restaurant Team Member - Crew</Link>
+                </strong>
+                !
+                <Link to="#" className="close-list-item">
+                  <i className="fa fa-close" />
+                </Link>
+              </li>
+              <li>
+                You have new application for{" "}
+                <strong>
+                  <Link to="#">Power Systems User Experience Designer</Link>
+                </strong>
+                !
+                <Link to="#" className="close-list-item">
+                  <i className="fa fa-close" />
+                </Link>
+              </li>
+              <li>
+                Someone bookmarked your{" "}
+                <strong>
+                  <Link to="#">Core PHP Developer for Site Maintenance</Link>
+                </strong>{" "}
+                listing!
+                <Link to="#" className="close-list-item">
+                  <i className="fa fa-close" />
+                </Link>
+              </li>
+              <li>
+                Your job listing{" "}
+                <strong>
+                  <Link to="#">Core PHP Developer for Site Maintenance</Link>
+                </strong>{" "}
+                is expiring!
+                <Link to="#" className="close-list-item">
+                  <i className="fa fa-close" />
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        {/* Recent Activity */}
+        <div className="col-lg-6 col-md-12">
+          <div className="dashboard-list-box with-icons margin-top-20">
+            <h4>Your Packages</h4>
+            <ul className="dashboard-packages">
+              <li>
+                <i className="list-box-icon fa fa-shopping-cart" />
+                <strong>Basic</strong>
+                <span>You have 2 listings posted</span>
+              </li>
+              <li>
+                <i className="list-box-icon fa fa-shopping-cart" />
+                <strong>Extended</strong>
+                <span>You have 2 listings posted</span>
+              </li>
+              <li>
+                <i className="list-box-icon fa fa-shopping-cart" />
+                <strong>Professional</strong>
+                <span>You have 5 listings posted</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
 export default Dashboard;

@@ -214,18 +214,20 @@ export default function SignInModal() {
         >
           {(formik) => {
             return (
-              <Form>
+              <Form className="login">
                 <FormikControl
                   control="input"
                   type="email"
                   label="Email"
                   name="login"
+                  icon="ln ln-icon-Mail"
                 />
                 <FormikControl
                   control="input"
                   type="password"
                   label="Password"
                   name="password"
+                  icon="ln ln-icon-Lock-2"
                 />
 
                 <Button

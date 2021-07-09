@@ -1,4 +1,9 @@
 // component's config object.
+const start = "Start";
+const management = "Management";
+const account = "Account";
+const admin = "Admin";
+
 const components = {
   admin: {
     component: "Admin",
@@ -6,13 +11,9 @@ const components = {
     title: "Admin",
     icon: "Category",
     module: 1,
-  },
-  users: {
-    component: "FormikCOntainer",
-    url: "/test",
-    title: "FormikContainer",
-    icon: "Category",
-    module: 1,
+    category: admin,
+    children: [],
+    dashboardItem: true,
   },
   dashboard: {
     component: "Dashboard",
@@ -20,34 +21,9 @@ const components = {
     title: "Dashboard",
     icon: "Category",
     module: 1,
-  },
-  manager: {
-    component: "Manager",
-    url: "/manager",
-    title: "Manager",
-    icon: "Category",
-    module: 1,
-  },
-  customers: {
-    component: "Customers",
-    url: "/customers",
-    title: "Customers",
-    icon: "Category",
-    module: 1,
-  },
-  service1: {
-    component: "Service1",
-    url: "/service1",
-    title: "Service1",
-    icon: "Category",
-    module: 1,
-  },
-  service2: {
-    component: "Service2",
-    url: "/service2",
-    title: "Service2",
-    icon: "Category",
-    module: 1,
+    category: start,
+    children: [],
+    dashboardItem: true,
   },
   messages: {
     component: "Messages",
@@ -55,20 +31,9 @@ const components = {
     title: "messages",
     icon: "Category",
     module: 1,
-  },
-  jobAlerts: {
-    component: "JobAlerts",
-    url: "/job-alerts",
-    title: "Job Alerts",
-    icon: "Category",
-    module: 1,
-  },
-  gigAlerts: {
-    component: "gigAlerts",
-    url: "/gig-alerts",
-    title: "Gig Alerts",
-    icon: "Category",
-    module: 1,
+    category: start,
+    children: [],
+    dashboardItem: true,
   },
   bookmarks: {
     component: "Bookmarks",
@@ -76,20 +41,9 @@ const components = {
     title: "Bookmarks",
     icon: "Category",
     module: 1,
-  },
-  view: {
-    component: "SingleView",
-    url: "/view/:singleJobId",
-    title: "View",
-    icon: "Category",
-    module: 1,
-  },
-  addResume: {
-    component: "AddResume",
-    url: "/add-resume",
-    title: "Add Resume",
-    icon: "Category",
-    module: 1,
+    category: management,
+    children: [],
+    dashboardItem: true,
   },
   manageResume: {
     component: "ManageResume",
@@ -97,20 +51,84 @@ const components = {
     title: "Manage Resume",
     icon: "Category",
     module: 1,
+    category: management,
+    children: [],
+    dashboardItem: true,
   },
-  submitJob: {
-    component: "SubmitJob",
-    url: "/submit-job",
-    title: "Submit Job",
+  addVacancy: {
+    component: "Vacancy",
+    url: "/add-job",
+    title: "Add Job",
     icon: "Category",
     module: 1,
+    category: management,
+    children: [],
+    dashboardItem: true,
   },
-  manageProfile: {
-    component: "ProfileView",
-    url: "/profile/:profileID",
-    title: "Manage Profile",
+  updateVacancy: {
+    component: "Vacancy",
+    url: "/edit-job/:vacancyUpdateID",
+    title: "Update Job",
     icon: "Category",
     module: 1,
+    category: management,
+    children: [],
+    dashboardItem: false,
+  },
+  resumeBuilder: {
+    component: "ResumeBuilder",
+    url: "/resume/builder/:resumeID",
+    title: "Add Resume",
+    icon: "Category",
+    module: 1,
+    category: management,
+    dashboardItem: false,
+  },
+
+  resume: {
+    component: "ResumeDashboard",
+    url: "/resume",
+    title: "Resume",
+    icon: "Category",
+    module: 1,
+    category: management,
+    children: [
+      {
+        component: "ResumeBuilder",
+        url: "/builder/:resumeID",
+        title: "Add Resume",
+        icon: "Category",
+        module: 1,
+        dashboardItem: true,
+      },
+      {
+        component: "ResumeDashboard",
+        url: "",
+        title: "Add/Manage Resumes",
+        icon: "Category",
+        module: 1,
+        dashboardItem: true,
+      },
+      // {
+      //   component: "Resume",
+      //   url: "/view/:resumeID",
+      //   title: "View Resume",
+      //   icon: "Category",
+      //   module: 1,
+      //   dashboardItem: false,
+      // },
+    ],
+    dashboardItem: true,
+  },
+  submitResume: {
+    component: "SubmitResume",
+    url: "/submit-resume",
+    title: "Submit Resume",
+    icon: "Category",
+    module: 1,
+    category: management,
+    children: [],
+    dashboardItem: true,
   },
   profile: {
     component: "Profile",
@@ -118,82 +136,16 @@ const components = {
     title: "Profile",
     icon: "Category",
     module: 1,
-  },
-  jobs: {
-    component: "Jobs",
-    url: "/jobs",
-    title: "Gigs",
-    icon: "Category",
-    module: 1,
-  },
-  gigs: {
-    component: "Gigs",
-    url: "/gigs",
-    title: "Gigs",
-    icon: "Category",
-    module: 1,
-  },
-  internships: {
-    component: "Internships",
-    url: "/internships",
-    title: "Internships",
-    icon: "Category",
-    module: 1,
-  },
-  applications: {
-    component: "Applications",
-    url: "/applications",
-    title: "Applications",
-    icon: "Category",
-    module: 1,
-  },
-  myJobs: {
-    component: "MyJobs",
-    url: "/my-jobs",
-    title: "My Jobs",
-    icon: "Category",
-    module: 1,
-  },
-  myGigs: {
-    component: "MyGigs",
-    url: "/my-gigs",
-    title: "My Gigs",
-    icon: "Category",
-    module: 1,
-  },
-  myInternships: {
-    component: "MyInternships",
-    url: "/my-internships",
-    title: "My Internships",
-    icon: "Category",
-    module: 1,
-  },
-  manageJobs: {
-    component: "JobManage",
-    url: "/jobs/:jobID",
-    title: "Gigs",
-    icon: "Category",
-    module: 1,
-  },
-  manageGigs: {
-    component: "GigManage",
-    url: "/gigs/:jobID",
-    title: "Gigs",
-    icon: "Category",
-    module: 1,
-  },
-  manageInternships: {
-    component: "InternshipManage",
-    url: "/internships/:jobID",
-    title: "Internships",
-    icon: "Category",
-    module: 1,
+    category: account,
+    children: [],
+    dashboardItem: true,
   },
 };
 
 // modules for grouping.
 const modules = {
   0: {
+    component: "Dashboard",
     title: "Dashboard",
     icon: "home",
     isExpendable: true,
@@ -205,51 +157,38 @@ const rolesConfig = {
   admin: {
     routes: [...Object.values(components)],
   },
-  manager: {
-    routes: [
-      components.dashboard,
-      components.manager,
-      components.customers,
-      components.service1,
-      components.service2,
-    ],
+  individual: {
+    routes: [],
   },
-  main: {
-    routes: [
-      components.dashboard,
-      components.messages,
-      components.bookmarks,
-      components.jobAlerts,
-      components.gigAlerts,
-    ],
+  business: {
+    routes: [],
   },
   employer: {
-    routes: [components.manageJobs, components.submitJob],
+    routes: [],
   },
-  employee: {
-    routes: [components.addResume, components.manageResume],
+  seeker: {
+    routes: [],
   },
+  institution: {
+    routes: [],
+  },
+  manager: {
+    routes: [],
+  },
+  main: {
+    routes: [],
+  },
+
   common: {
     routes: [
-      {
-        component: "Home",
-        url: "",
-        title: "Home",
-        icon: "Category",
-        module: 1,
-      },
-      {
-        component: "Profile",
-        url: "/profile",
-        title: "Profile",
-        icon: "Category",
-        module: 1,
-      },
+      components.profile,
       components.dashboard,
-      components.messages,
-      components.bookmarks,
-      components.jobAlerts,
-      components.gigAlerts,
+      // components.messages,
+      // components.bookmarks,
+      components.addVacancy,
+      components.updateVacancy,
+      components.resumeBuilder,
+      components.resume,
     ],
   },
 };

@@ -1,6 +1,7 @@
 // import React from "react";
 import Dashboard from "pages/Dashboard/Dashboard";
 import Profile from "pages/Profile/Profile";
+import Vacancy from "pages/Vacancy/Vacancy";
 import ProfileView from "pages/Profile/ProfileView";
 import Jobs from "pages/Jobs/Jobs";
 import Gigs from "pages/Gigs/Gigs";
@@ -13,10 +14,13 @@ import GigManage from "pages/Gigs/GigManage";
 import InternshipManage from "pages/Internships/InternshipManage";
 import Applications from "pages/Applications/Applications";
 import SingleView from "pages/SingleView/SingleView";
+import ResumeDashboard from "pages/Resume/ResumeDashboard";
+import ResumeBuilder from "pages/Resume/ResumeBuilder";
 
 export {
   Dashboard,
   Profile,
+  Vacancy,
   Jobs,
   MyJobs,
   Gigs,
@@ -29,4 +33,6 @@ export {
   Applications,
   ProfileView,
   SingleView,
+  ResumeDashboard,
+  ResumeBuilder,
 };

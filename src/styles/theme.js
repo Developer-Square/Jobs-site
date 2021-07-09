@@ -1,4 +1,7 @@
 import colors from "./colors";
+import baseStyled from "styled-components";
+
+import * as C from "./styleConstants";
 
 export const lightTheme = {
   body: "rgba(255,255,255,1)",
@@ -9,6 +12,7 @@ export const lightTheme = {
   textSecondary: "rgba(58,52,51,0.7)",
   background: "#e3d0b6",
   backgroundVariant: "rgba(251,249,249,1)",
+  baseFontSize: "1rem",
   border: "rgba(58,52,51,0.12)",
   borderLight: "rgba(58,52,51,0.05)",
   boxShadow: "rgba(241, 226, 206, 0.8)",
@@ -168,6 +172,30 @@ export const lightTheme = {
       paddingRight: "20px",
       fontSize: "14px",
     },
+  },
+  message: {
+    backgroundColor: C.white,
+    contentMargin: `${C.spacer}rem 0 0`,
+    letterSpacing: "0.5px",
+    padding: "1rem 1.5rem",
+    titleMargin: `0 ${C.spacer * 1.5}rem 0 0`,
+    titleTransform: "uppercase",
+    titleWeight: C.extraBoldFontWeight,
+    width: "25rem",
+  },
+  spacing: {
+    /**
+     * 30px in default theme
+     */
+    fieldSpacer: C.fieldSpacer,
+    /**
+     * 30px in default theme
+     */
+    gutter: "1.875rem",
+    /**
+     * 16px in default theme
+     */
+    spacer: `${C.spacer}rem`,
   },
 };
 
@@ -340,4 +368,30 @@ export const darkTheme = {
       fontSize: "14px",
     },
   },
+  message: {
+    backgroundColor: C.white,
+    contentMargin: `${C.spacer}rem 0 0`,
+    letterSpacing: "0.5px",
+    padding: "1rem 1.5rem",
+    titleMargin: `0 ${C.spacer * 1.5}rem 0 0`,
+    titleTransform: "uppercase",
+    titleWeight: C.extraBoldFontWeight,
+    width: "25rem",
+  },
+  spacing: {
+    /**
+     * 30px in default theme
+     */
+    fieldSpacer: C.fieldSpacer,
+    /**
+     * 30px in default theme
+     */
+    gutter: "1.875rem",
+    /**
+     * 16px in default theme
+     */
+    spacer: `${C.spacer}rem`,
+  },
 };
+
+export const styled = baseStyled;

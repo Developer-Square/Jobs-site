@@ -1,6 +1,7 @@
 import React, { useContext, createContext } from "react";
 
-export function useCreateContext(defaultValue, reducer) {
+export function CreateContext(defaultValue, reducer) {
+  const t = true;
   const defaultDispatch = () => defaultValue;
   const stateCtx = createContext(defaultValue);
   const dispatchCtx = createContext(defaultDispatch);
@@ -22,5 +23,9 @@ export function useCreateContext(defaultValue, reducer) {
       </dispatchCtx.Provider>
     );
   }
-  return [useStateCtx, useDispatchCtx, Provider];
+  if (t) {
+    return [useStateCtx, useDispatchCtx, Provider];
+  }
+
+  return <React.Fragment />;
 }

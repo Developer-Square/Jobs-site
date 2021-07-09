@@ -1,43 +1,7 @@
 import React from "react";
 import { Redirect, Route, withRouter } from "react-router-dom";
-// import decode from "jwt-decode";
-// import { millisecondsToDaysHoursMinutesSeconds } from "helpers";
+import { checkAuth } from "./utils";
 
-const checkAuth = () => {
-  const payload = localStorage.getItem("thedb_auth_profile");
-  if (payload === undefined || payload === null) {
-    return false;
-  }
-  // const accessToken = payload.token;
-  // const refreshToken = payload.refreshToken;
-
-  // if (!accessToken || !refreshToken) {
-  //   return false;
-  // }
-
-  // try {
-  //   const { exp } = decode(accessToken);
-
-  //   console.log("exp", exp);
-
-  //   const {
-  //     days,
-  //     hours,
-  //     minutes,
-  //     seconds,
-  //   } = millisecondsToDaysHoursMinutesSeconds(exp);
-  //   alert(
-  //     `Token Expires in: ${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`
-  //   );
-
-  //   if (exp * 1000 < new Date().getTime()) {
-  //     return false;
-  //   }
-  // } catch (error) {
-  //   alert(`${JSON.stringify(error, null, 2)}`);
-  // }
-  return true;
-};
 const PrivateRoute = ({ component: Component, path, ...rest }) => {
   return (
     <Route
@@ -47,8 +11,9 @@ const PrivateRoute = ({ component: Component, path, ...rest }) => {
           <Component {...props} />
         ) : (
           <Redirect
+            push
             to={{
-              pathname: "/login",
+              pathname: "/auth",
               state: { referrer: `dashboard/${path}` },
             }}
           />

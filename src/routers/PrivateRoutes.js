@@ -6,8 +6,10 @@ import * as Routes from "./PrivateRoutes.config";
 // import Navigation from "containers/Navigation/Navigation";
 import PrivateRoute from "./PrivateRoute";
 import { Modal } from "@redq/reuse-modal";
-import DashboardLayout from "containers/LayoutContainer/DashboardLayout";
+import DashboardLayout from "layouts/DashboardLayout";
 import NotFound from "pages/NotFound";
+import Wrapper from "components/shared/Wrapper";
+
 class PrivateRoutes extends Component {
   state = { allowedRoutes: [] };
 
@@ -16,18 +18,14 @@ class PrivateRoutes extends Component {
       TODO: Replace hardcoded roles with API,
       contextAPI, localStorage, or get from server.
      */
-    let roles = localStorage.getItem("thedb_auth_roles");
+    let roles = JSON.parse(localStorage.getItem("thedb_auth_roles"));
     if (roles) {
-      roles = ["common", roles];
-      console.log("roles", roles);
+      roles = ["common", ...roles];
       let allowedRoutes = roles.reduce((acc, role) => {
-        console.log("role", role);
-        return [acc, rolesConfig[role].routes];
+        return [...acc, ...rolesConfig[role].routes];
       }, []);
-      console.log("allowed routes", allowedRoutes[1]);
-
       // For removing duplicate entries, compare with 'url'.
-      allowedRoutes = uniqBy(allowedRoutes[1], "url");
+      allowedRoutes = uniqBy(allowedRoutes, "url");
       this.setState({ allowedRoutes });
     } else {
       this.props.history.push("/");
@@ -35,27 +33,39 @@ class PrivateRoutes extends Component {
   }
 
   render() {
+    const handler = (children) => {
+      return children.map((child, i) => {
+        if (!child.children || child.children.length === 0) {
+          return (
+            <PrivateRoute
+              exact
+              key={`${child.title}-${child.url}(${i})`}
+              component={Routes[child.component]}
+              path={`${this.props.match.path}${child.url}`}
+              {...this.props}
+            />
+          );
+        }
+        return (
+          <Switch key={`${child.url}${i}`}>{handler(child.children)}</Switch>
+        );
+      });
+    };
     return (
-      <DashboardLayout>
+      <DashboardLayout
+        routes={this.state.allowedRoutes.filter(
+          (filteredRoute) => filteredRoute.dashboardItem,
+        )}
+        path={this.props.match.path}
+      >
         <Modal>
-          {/* <Navigation
-            routes={this.state.allowedRoutes}
-            path={this.props.match.path}
-          /> */}
-          <Switch>
-            {this.state.allowedRoutes.map((route) => (
-              <PrivateRoute
-                // routes={this.state.allowedRoutes}
-                // pathUrl={this.props.match.path}
-                exact
-                key={route.url}
-                component={Routes[route.component]}
-                path={`${this.props.match.path}${route.url}`}
-              />
-            ))}
-            {/* <Route component={NotFound} /> */}
-            <Route component={NotFound} />
-          </Switch>
+          <Wrapper>
+            <Switch>
+              {handler(this.state.allowedRoutes)}
+
+              <Route component={NotFound} />
+            </Switch>{" "}
+          </Wrapper>
         </Modal>
       </DashboardLayout>
     );

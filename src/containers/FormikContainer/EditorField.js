@@ -41,10 +41,11 @@ function EditorField({
     if (!field.value) {
       return;
     }
-    const contentBlock = htmlToDraft(field.value);
+
+    const contentBlock = htmlToDraft(draftToHtml(JSON.parse(field.value)));
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(
-        contentBlock.contentBlocks
+        contentBlock.contentBlocks,
       );
       const editorState = EditorState.createWithContent(contentState);
       setEditorState(editorState);
@@ -55,8 +56,9 @@ function EditorField({
     setEditorState(editorState);
     form.setFieldValue(
       field.name,
-      //   convertToRaw(editorState.getCurrentContent())
-      draftToHtml(convertToRaw(editorState.getCurrentContent()))
+      // convertToRaw(editorState.getCurrentContent()),
+      // draftToHtml(convertToRaw(editorState.getCurrentContent()))
+      JSON.stringify(convertToRaw(editorState.getCurrentContent())),
     );
   }
 

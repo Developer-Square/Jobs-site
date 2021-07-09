@@ -14,7 +14,6 @@ export const RightMenuBox = styled.div`
     a {
       font-family: "Lato", sans-serif;
       font-size: ${themeGet("fontSizes.2", "15")}px;
-      color: #e6c018;
       line-height: 1.2em;
       display: block;
       transition: 0.15s ease-in-out;
@@ -32,6 +31,11 @@ export const RightMenuBox = styled.div`
       &.current-page {
         color: ${themeGet("colors.primary", "#009E7F")};
       }
+    }
+  }
+  .sticky {
+    a {
+      color: #e6c018;
     }
   }
 

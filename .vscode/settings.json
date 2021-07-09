@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "editor.formatOnSave": true,
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#2f7c47",
@@ -19,3 +20,14 @@
     },
     "peacock.color": "#215732"
 }
+=======
+  "files.associations": {
+    "*.js": "javascriptreact"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "editor.formatOnSave": true,
+  "css.validate": false
+}
+>>>>>>> 1b2870c6f0597dd5f3d5e00ac02fc362cef735dc

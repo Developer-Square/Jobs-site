@@ -87,3 +87,74 @@ export const Span = styled.span`
   color: #21277f;
   left: 15%;
 `;
+
+export const LoaderContainer = styled.div`
+  div {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+`;
+
+export const LoaderWrapper = styled.div`
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  text-align: center;
+  position: absolute;
+  z-index: 99;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  // top: 50%;
+  top: 100px;
+  transform: translateY(-50%);
+`;
+export const Spinner = styled.div`
+  width: 40px;
+  height: 40px;
+  position: relative;
+`;
+
+const skBounce = keyframes`
+0% {
+  transform: scale(0.0);
+}
+50% {
+  transform: scale(1.0);
+}
+100% {
+  transform: scale(0.0);
+}
+`;
+
+export const Bounce1 = styled.div`
+  background-color: #26ae61;
+
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  animation: ${skBounce} 2s infinite ease-in-out;
+`;
+export const Bounce2 = styled.div`
+  background-color: #26ae61;
+
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation-delay: -1s;
+  animation: ${skBounce} 2s infinite ease-in-out;
+`;
