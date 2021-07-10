@@ -3,26 +3,26 @@ import Checkbox from '@material-ui/core/Checkbox';
 import styled from 'styled-components'
 import { Link } from "react-router-dom";
 
-import { registerSchema } from "./validation.schema";
+import { signUpSchema } from "./validation.schema";
 import { HelperText } from "./Authentication.style";
 import FormikControl from "../FormikContainer/FormikControl"
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
 
 
-export const SeekerSignUp = ({ initialValues, onSubmit, switchTabs, checked, handleChange, loading, history }) => {
+export const SeekerSignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history }) => {
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={registerSchema}
+      validationSchema={signUpSchema}
       onSubmit={onSubmit}
     >
       {(formik) => {
         return (
-          <Form className="register">
+          <Form className="register" noValidate>
             <Spacer>
-              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Select Different Option </Link>
+              <Link to={"/auth"} onClick={() => setSwitchTab('')}>{`<`} Select Different Option </Link>
             </Spacer>
 
             <FormikControl
@@ -48,7 +48,7 @@ export const SeekerSignUp = ({ initialValues, onSubmit, switchTabs, checked, han
             />
             
             <TermsSection>
-            <Checkbox checked={checked} onChange={handleChange} color="primary" style={{ paddingTop: "17px" }} />
+            <Checkbox checked={checked} required={true} onChange={handleChange} color="primary" style={{ paddingTop: "17px" }} />
 
             <HelperText style={{ padding: "20px 0px 10px", width: "200px" }}>
               I agree to the
@@ -64,16 +64,47 @@ export const SeekerSignUp = ({ initialValues, onSubmit, switchTabs, checked, han
 
             <Button
               type="submit"
-              // disabled={!formik.isValid}
+              disabled={!formik.isValid}
               fullwidth
               loading={loading}
               title={loading ? "Signing Up ... " : "Sign Up"}
               style={{ color: "#ffffff" }}
-              onClick={() => switchTabs('', 'forward')}
               //   {...(loading && { disabled: true })}
             />
           </Form>
         );
+      }}
+    </Formik>
+  )
+}
+
+export const OTPForm = ({switchTabs, loading}) => {
+  return (
+    <Formik>
+      {(formik) => {
+        return (
+          <Form>
+            <Spacer>
+              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Select Different Option </Link>
+            </Spacer>
+            <FormikControl
+              control="input"
+              type="number"
+              label="OTP Code"
+              name="otpcode"
+              icon="ln ln-icon-Lock-2"
+            />
+
+            <Button
+              type="submit"
+              // disabled={!formik.isValid}
+              fullwidth
+              loading={loading}
+              title={loading ? "Verifying ... " : "Verify"}
+              onClick={() => switchTabs('', 'forward')}
+            />
+          </Form>
+        )
       }}
     </Formik>
   )

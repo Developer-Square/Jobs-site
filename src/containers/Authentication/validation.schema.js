@@ -10,6 +10,7 @@ const username = Yup.string()
   .min(3, msg.nameNotLongEnough)
   .max(100)
   .required(msg.fieldRequired);
+
 const password = Yup.string()
   .min(8, msg.passwordNotLongEnough)
   .matches(/^.*[a-zA-Z].*$/, msg.mustContainLetter)
@@ -22,12 +23,28 @@ const passwordConfirm = (pass) => {
     .required(msg.fieldRequired);
 };
 
+const fullname = Yup.string()
+  .min(5, msg.fullNameNotLongEnough)
+  .max(100)
+  .required(msg.fieldRequired);
+
+const phonenumber = Yup.string()
+  .min(15, msg.phoneNumberNotLongEnough)
+  .max(16)
+  .required(msg.fieldRequired);
+
 export const registerSchema = Yup.object().shape({
   email: email,
   username: username,
   password1: password,
   password2: passwordConfirm("password1"),
 });
+
+export const signUpSchema = Yup.object().shape({
+  fullname: fullname,
+  // phonenumber: phonenumber,
+  password: password
+})
 
 export const loginSchema = Yup.object().shape({
   email: email,

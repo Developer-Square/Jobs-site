@@ -14,23 +14,12 @@ import { AuthContext } from "contexts/auth/auth.context";
 const Authentication = () => {
   const { authState, authDispatch } = useContext(AuthContext);
   const [activeStep, setActiveStep] = React.useState(0);
+  const [switchTab, setSwitchTab] = React.useState('');
 
-  // // Swithches to the next form or previous form
-  // const getStepContent = (step) => {
-  //   switch (step) {
-  //     case 0:
-  //       return '';
-  //     case 1:
-  //       return 'What is an ad group anyways?';
-  //     case 2:
-  //       return 'This is the bit I really care about!';
-  //     default:
-  //       return 'Unknown step';
-  //   }
-  // }
+
 
   // Provides the step header for each step i.e. the first one is SignUp.
-  const steps = ['Account Type', 'Sign Up', 'OTP Verification', 'Complete Registration'];
+  const steps = ['Sign Up', 'OTP Verification', 'Complete Registration'];
 
   let RenderForm;
 
@@ -40,21 +29,10 @@ const Authentication = () => {
 
   if (authState.currentForm === "signUp") {
     RenderForm = Register;
-    // RenderForm = <Register  />;
   }
   if (authState.currentForm === "forgotPass") {
     RenderForm = PasswordResetEmail;
   }
-
-  
- 
-
-  // if (authState.currentForm === "emailConfirm") {
-  //   RenderForm = EmailConfirmationModal;
-  // }
-  // if (authState.currentForm === "loginSuccess") {
-  //   RenderForm = LoginSuccessModal;
-  // }
 
   return (
     <>
@@ -98,17 +76,21 @@ const Authentication = () => {
               </a>
             </li>
           </ul>
-          <Stepper activeStep={activeStep}>
+          {/* Hide the stepper header on the signin form and on the first step of
+          the sign up form */}
+          {authState.currentForm !== "signIn" && switchTab !== '' ? (
+            <Stepper activeStep={activeStep}>
               {steps.map((label, index) => (
                 <Step key={index}>
                   <StepLabel>{label}</StepLabel>
                 </Step>
               ))}
             </Stepper>
+          ): null}
 
           <TabsContainer>
             <div className="tab-content">
-              <RenderForm activeStep={activeStep} setActiveStep={setActiveStep} />
+              <RenderForm activeStep={activeStep} switchTab={switchTab} setSwitchTab={setSwitchTab} setActiveStep={setActiveStep} />
             </div>
           </TabsContainer>
         </div>

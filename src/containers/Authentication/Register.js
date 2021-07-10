@@ -1,14 +1,12 @@
 import React from "react";
 import { useAlert } from "react-alert";
-import { Form, Formik } from "formik";
 import styled from "styled-components";
 
-import FormikControl from "containers/FormikContainer/FormikControl";
 import { maybe } from "core/utils";
 import Button from "components/Button/Button";
 import { normalizeErrors } from "helpers";
 import { useHistory, useRouteMatch, Link } from "react-router-dom";
-import {SeekerProfileDetails, SeekerSignUp} from './RegistrationSteps'
+import {OTPForm, SeekerProfileDetails, SeekerSignUp} from './RegistrationSteps'
 
 
 import { TypedAccountRegistrationMutation } from "./mutations";
@@ -47,20 +45,18 @@ const showSuccessNotification = (data, alert) => {
   }
 };
 
-const Register = ({activeStep, setActiveStep}) => {
+const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const alert = useAlert();
   const history = useHistory();
   const match = useRouteMatch();
   const [isSeeker, setIsSeeker] = React.useState(false);
   const [isEmployer, setIsEmployer] = React.useState(false);
   const [isInstitution, setIsInstitution] = React.useState(false);
-  const [switchTab, setSwitchTab] = React.useState('');
   const [checked, setChecked] = React.useState(false)
 
 
   React.useEffect(() => {
     if (match.params) {
-      setSwitchTab(match.params.userType);
       if (match.params.userType === "business") {
         setIsSeeker(false);
         setIsEmployer(true);
@@ -78,16 +74,12 @@ const Register = ({activeStep, setActiveStep}) => {
       setSwitchTab('');
     }
     // eslint-disable-next-line
-  }, [match.params.userType]);
+  }, [match.params.userType, switchTab]);
 
   const initialValues = {
-    username: "",
-    email: "",
-    isSeeker: isSeeker,
-    isEmployer: isEmployer,
-    isInstitution: isInstitution,
-    password1: "",
-    password2: "",
+    phonenumber: "",
+    fullname: "",
+    password: "",
   }
 
   const genderOptions = [
@@ -104,12 +96,13 @@ const Register = ({activeStep, setActiveStep}) => {
   const switchTabs = (type, direction) => {
     if (direction === 'forward') {
       setActiveStep(currStep => currStep + 1)
-    } else {
+    } else if (direction === 'back') {
       setActiveStep(currStep => currStep - 1)
     }
 
     if (type === 'seeker') {
       history.push(`/auth/p/seeker`)
+      setSwitchTab('seeker')
     }
   }
 
@@ -124,20 +117,28 @@ const Register = ({activeStep, setActiveStep}) => {
     >
       {(registerUser, { loading }) => {
         function onSubmit(values, { setErrors }) {
-          registerUser({
-            variables: values,
-          }).then(({ data }) => {
-            console.log(data);
-            if (data.register.success) {
-              console.log("data received", data);
-              history.push("/auth/activate");
-            } else {
-              // setErrors(normalizeErrors(data.register.errors));
-              setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-            }
-          });
+          switchTabs('', 'forward');
+
+          // registerUser({
+          //   variables: values,
+          // }).then(({ data }) => {
+          //   if (data.register.success) {
+          //     console.log("data received", data);
+          //     history.push("/auth/activate");
+          //   } else {
+          //     // setErrors(normalizeErrors(data.register.errors));
+          //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+          //   }
+          // });
         }
-        return activeStep === 0 ? (
+        return activeStep === 0 && switchTab === 'seeker' ? (
+          <SeekerSignUp initialValues={initialValues} onSubmit={onSubmit} setSwitchTab={setSwitchTab} checked={checked} handleChange={handleChange} loading={loading} history={history} />
+          
+        ) : activeStep === 1 ? (
+          <OTPForm loading={loading} switchTabs={switchTabs} />
+        ) : activeStep === 2 ? (
+          <SeekerProfileDetails switchTabs={switchTabs} statusOptions={statusOptions} genderOptions={genderOptions} loading={loading} industries={[]}/>
+        ) : (
           <div className="register">
             <div
               style={{
@@ -154,7 +155,7 @@ const Register = ({activeStep, setActiveStep}) => {
               <Button
                 style={{ margin: "0 5px", width: "100%" }}
                 title={`Job Seeker`}
-                onClick={() => switchTabs('seeker', 'forward')}
+                onClick={() => switchTabs('seeker')}
               />
               <Button
                 style={{ margin: "0 5px", width: "100%" }}
@@ -168,40 +169,7 @@ const Register = ({activeStep, setActiveStep}) => {
               />
             </div>
           </div>
-        ) : activeStep === 1 ? (
-          <SeekerSignUp initialValues={initialValues} onSubmit={onSubmit} switchTabs={switchTabs} checked={checked} handleChange={handleChange} loading={loading} history={history} />
-          // Add registration for organization
-        ) : activeStep === 2 ? (
-          <Formik>
-            {(formik) => {
-              return (
-                <Form>
-                  <Spacer>
-                    <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Select Different Option </Link>
-                  </Spacer>
-                  <FormikControl
-                    control="input"
-                    type="number"
-                    label="OTP Code"
-                    name="otpcode"
-                    icon="ln ln-icon-Lock-2"
-                  />
-
-                  <Button
-                    type="submit"
-                    // disabled={!formik.isValid}
-                    fullwidth
-                    loading={loading}
-                    title={loading ? "Verifying ... " : "Verify"}
-                    onClick={() => switchTabs('', 'forward')}
-                  />
-                </Form>
-              )
-            }}
-          </Formik>
-        ) : activeStep === 3 ? (
-          <SeekerProfileDetails switchTabs={switchTabs} statusOptions={statusOptions} genderOptions={genderOptions} loading={loading} industries={[]}/>
-        ) : null;
+        );
       }}
     </TypedAccountRegistrationMutation>
   );
