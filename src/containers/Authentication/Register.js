@@ -5,8 +5,8 @@ import styled from "styled-components";
 import { maybe } from "core/utils";
 import Button from "components/Button/Button";
 import { normalizeErrors } from "helpers";
-import { useHistory, useRouteMatch, Link } from "react-router-dom";
-import {OTPForm, SeekerProfileDetails, SeekerSignUp} from './RegistrationSteps'
+import { useHistory, useRouteMatch } from "react-router-dom";
+import {OTPForm, FurtherInformation, SeekerProfileDetails, SeekerSignUp, Billing} from './RegistrationSteps'
 
 
 import { TypedAccountRegistrationMutation } from "./mutations";
@@ -54,6 +54,30 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [isInstitution, setIsInstitution] = React.useState(false);
   const [checked, setChecked] = React.useState(false)
 
+  // const initialValues = {
+  //   phonenumber: "",
+  //   fullname: "",
+  //   password: "",
+  // }
+
+  const initialValues = {
+    fullname: 'Ryan test',
+    email: 'ryantest@gmail.com',
+    phonenumber: '254796867328',
+    password: 'ryantest1'
+  }
+
+  const schoolOptions = [ 
+    { value: "AFRICAN NAZARENE", label: "African Nazarene" },
+    { value: "STRATHMORE UNIVERSITY", label: "Strathmore University" }
+  ]
+
+  const interests = [
+    { value: "CODING", label: "Coding" },
+    { value: "GRAPHIC DESIGN", label: "Graphic Design" },
+    { value: "ONLINE WRITING", label: "Online Writing" },
+    { value: "CATERING", label: "Catering" },
+  ]
 
   React.useEffect(() => {
     if (match.params) {
@@ -74,23 +98,8 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       setSwitchTab('');
     }
     // eslint-disable-next-line
-  }, [match.params.userType, switchTab]);
+  }, [match.params.userType, switchTab, initialValues]);
 
-  const initialValues = {
-    phonenumber: "",
-    fullname: "",
-    password: "",
-  }
-
-  const genderOptions = [
-    { value: "MALE", label: "Male" },
-    { value: "FEMALE", label: "Female" },
-  ];
-  const statusOptions = [
-    { value: "OPEN", label: "Open to offers" },
-    { value: "BUSY", label: "Busy" },
-    { value: "LOOKING", label: "Actively looking" },
-  ];
 
   // Switches between different steps i.e. from step 1 to step 2
   const switchTabs = (type, direction) => {
@@ -137,7 +146,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         ) : activeStep === 1 ? (
           <OTPForm loading={loading} switchTabs={switchTabs} />
         ) : activeStep === 2 ? (
-          <SeekerProfileDetails switchTabs={switchTabs} statusOptions={statusOptions} genderOptions={genderOptions} loading={loading} industries={[]}/>
+          <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} />
+        ) : activeStep === 3 ? (
+          <Billing switchTabs={switchTabs} loading={loading} />
         ) : (
           <div className="register">
             <div
@@ -174,9 +185,5 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     </TypedAccountRegistrationMutation>
   );
 };
-
-const Spacer = styled.div`
-  margin: 15px 0;
-`
 
 export default Register;

@@ -1,16 +1,19 @@
 import { Form, Formik } from "formik";
-import Checkbox from '@material-ui/core/Checkbox';
+import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components'
 import { Link } from "react-router-dom";
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 import { signUpSchema } from "./validation.schema";
 import { HelperText } from "./Authentication.style";
 import FormikControl from "../FormikContainer/FormikControl"
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
+import { Typography } from "@material-ui/core";
 
 
-export const SeekerSignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history }) => {
+export const SeekerSignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history, fillFields }) => {
 
   return (
     <Formik
@@ -24,6 +27,15 @@ export const SeekerSignUp = ({ initialValues, onSubmit, setSwitchTab, checked, h
             <Spacer>
               <Link to={"/auth"} onClick={() => setSwitchTab('')}>{`<`} Select Different Option </Link>
             </Spacer>
+
+            {/* Email validation not working */}
+            <FormikControl
+              control="input"
+              type="text"
+              label="Email"
+              name="email"
+              icon="ln ln-icon-Mail"
+            />
 
             <FormikControl
               control="phone"
@@ -48,7 +60,16 @@ export const SeekerSignUp = ({ initialValues, onSubmit, setSwitchTab, checked, h
             />
             
             <TermsSection>
-            <Checkbox checked={checked} required={true} onChange={handleChange} color="primary" style={{ paddingTop: "17px" }} />
+              <div>
+                <FormikControl 
+                  control="single-checkbox" 
+                  value="terms"
+                  checked={checked} 
+                  onChange={handleChange} 
+                  color="primary" 
+                  style={{ marginTop: "16px" }}
+                />
+              </div>
 
             <HelperText style={{ padding: "20px 0px 10px", width: "200px" }}>
               I agree to the
@@ -61,6 +82,7 @@ export const SeekerSignUp = ({ initialValues, onSubmit, setSwitchTab, checked, h
             </HelperText>
             </TermsSection>
             
+            <Spacer marginTopBottom="17px 0" />
 
             <Button
               type="submit"
@@ -85,7 +107,7 @@ export const OTPForm = ({switchTabs, loading}) => {
         return (
           <Form>
             <Spacer>
-              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Select Different Option </Link>
+              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
             </Spacer>
             <FormikControl
               control="input"
@@ -97,7 +119,7 @@ export const OTPForm = ({switchTabs, loading}) => {
 
             <Button
               type="submit"
-              // disabled={!formik.isValid}
+              disabled={!formik.isValid}
               fullwidth
               loading={loading}
               title={loading ? "Verifying ... " : "Verify"}
@@ -110,72 +132,16 @@ export const OTPForm = ({switchTabs, loading}) => {
   )
 }
 
-export const SeekerProfileDetails = ({statusOptions, genderOptions, loading, industries, switchTabs}) => {
-  
+export const SeekerProfileDetails = ({ loading, switchTabs}) => {
   return (
     <Formik>
       {(formik) => {
         return (
           <Form>
              <Spacer>
-                <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Select Different Option </Link>
+                <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
               </Spacer>
-            <FormikControl
-              control="input"
-              type="text"
-              label="Title"
-              placeholder="e.g. Student, Eng, Mr etc"
-              name="title"
-            />
-            <FormikControl
-              control="input"
-              type="number"
-              label="ID Number"
-              placeholder="ID Number"
-              name="idNumber"
-            />
 
-            <FormikControl
-              control="select"
-              label="Status"
-              name="status"
-              style={{ margin: 0 }}
-              options={statusOptions}
-              defaultValue={{
-                value: "",
-                label: "Select Options",
-              }}
-            />
-              <FormikControl
-              control="select"
-              label="Gender"
-              name="gender"
-              style={{ margin: 0 }}
-              options={genderOptions}
-              defaultValue={{ value: "", label: "Select Gender" }}
-            />
-            <FormikControl
-              control="input"
-              type="text"
-              label="Current Residence (County, Place)"
-              name="location"
-              placeholder="e.g. Nairobi, Kasarani - Corner"
-            />
-            <FormikControl
-              control="select"
-              label="Interests"
-              name="industries"
-              style={{ margin: 0 }}
-              options={industries}
-              isMulti={true}
-            />
-            <FormikControl
-              control="textarea"
-              label="Additional Info"
-              name="description"
-              rte={true}
-              fullWidth
-            />
             <Button
               type="submit"
               disabled={!formik.isValid}
@@ -191,11 +157,117 @@ export const SeekerProfileDetails = ({statusOptions, genderOptions, loading, ind
   )
 }
 
+export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests }) => {
+  return (
+    <Formik>
+      {(formik) => {
+        return (
+          <Form>
+            <Spacer>
+              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
+            </Spacer>
+            <FormikControl
+              control="select"
+              options={schoolOptions}
+              label="Institution/School"
+              name="school"
+              icon="ln ln-icon-Lock-2"
+            />
+
+            <FormikControl
+              control="input"
+              type="text"
+              label="Course"
+              name="course"
+              icon="ln ln-icon-Lock-2"
+            />
+
+            <FormikControl
+              control="react-select"
+              options={interests}
+              label="Interests"
+              name="interests"
+              isMulti
+              className="basic-multi-select"
+              classNamePrefix="select"
+              icon="ln ln-icon-Lock-2"
+            />
+            {/* This is here as the dropdown appears behind the submit button
+            hence we need to add some extra space */}
+            <Spacer marginTopBottom="100px 0" />
+
+            <Button
+              type="submit"
+              disabled={!formik.isValid}
+              fullwidth
+              loading={loading}
+              title={loading ? "Saving ... " : "Save"}
+              onClick={() => switchTabs('', 'forward')}
+            />
+          </Form>
+        )
+      }}
+    </Formik>
+  )
+}
+
+export const Billing = () => {
+  const useStyles = makeStyles({
+    root: {
+      minWidth: 235,
+      marginRight: 10,
+      minHeight: 150,
+      cursor: "pointer",
+    }
+  })
+
+  const classNames = useStyles()
+
+  const options = [
+    {tier: "Basic", title: "Explore"},
+    {tier: "Standard", title: "Get Started"},
+    {tier: "Premium", title: "Get Started"},
+  ]
+  return (
+    <>
+      <Title>Choose your tier: </Title>
+      <PricingTier>
+        {options.map((option, index) => (
+          <div>
+          {/* Add action to take them to dashboard */}
+            <Card key={index} onClick={() => {}} className={classNames.root}>
+              <CardContent>
+                <Typography variant="h5">
+                  {option.tier}
+                </Typography>
+              </CardContent>
+            </Card>
+            <Title>{option.title}</Title>
+          </div>
+        ))}
+
+      </PricingTier>
+    </>
+  )
+}
+
 const TermsSection = styled.div`
   display: flex;
   justify-content: center;
 `
 
 const Spacer = styled.div`
-  margin: 15px 0;
+  margin: ${props => props.marginTopBottom ? props.marginTopBottom : "15px 0"};
+`
+
+const PricingTier = styled.div`
+  display: flex;
+`
+
+const Title = styled.p`
+  margin: 12px 0;
+  font-size: 15px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
 `

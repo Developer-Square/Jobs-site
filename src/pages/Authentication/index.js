@@ -19,7 +19,7 @@ const Authentication = () => {
 
 
   // Provides the step header for each step i.e. the first one is SignUp.
-  const steps = ['Sign Up', 'OTP Verification', 'Complete Registration'];
+  const steps = ['Sign Up', 'OTP Verification', 'Further information', 'Billing'];
 
   let RenderForm;
 

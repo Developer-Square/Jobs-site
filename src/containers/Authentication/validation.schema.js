@@ -1,11 +1,7 @@
 import * as Yup from "yup";
 import * as msg from "./common";
 
-const email = Yup.string()
-  .min(3, msg.emailNotLongEnough)
-  .max(100)
-  .email(msg.invalidEmail)
-  .required(msg.emailRequired);
+
 const username = Yup.string()
   .min(3, msg.nameNotLongEnough)
   .max(100)
@@ -22,6 +18,12 @@ const passwordConfirm = (pass) => {
     .oneOf([Yup.ref(pass), null], msg.passwordDoNotMatch)
     .required(msg.fieldRequired);
 };
+
+const email = Yup.string()
+  .min(3, msg.emailNotLongEnough)
+  .max(100)
+  .email(msg.invalidEmail)
+  .required(msg.fieldRequired);
 
 const fullname = Yup.string()
   .min(5, msg.fullNameNotLongEnough)
@@ -41,6 +43,7 @@ export const registerSchema = Yup.object().shape({
 });
 
 export const signUpSchema = Yup.object().shape({
+  email: email,
   fullname: fullname,
   // phonenumber: phonenumber,
   password: password
