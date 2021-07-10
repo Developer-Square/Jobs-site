@@ -30,10 +30,24 @@ const fullname = Yup.string()
   .max(100)
   .required(msg.fieldRequired);
 
+const OTP = Yup.string()
+.min(6, msg.OTPCodeExactLength)
+.max(6, msg.OTPCodeExactLength)
+.required(msg.fieldRequired);
+
 const phonenumber = Yup.string()
   .min(15, msg.phoneNumberNotLongEnough)
   .max(16)
   .required(msg.fieldRequired);
+
+const interests = Yup.object().shape({
+  value: Yup.string().required(msg.fieldRequired),
+  label: Yup.string().required(msg.fieldRequired)
+})
+
+const companyName = Yup.string().required(msg.fieldRequired)
+const location = Yup.string().required(msg.fieldRequired)
+
 
 export const registerSchema = Yup.object().shape({
   email: email,
@@ -49,10 +63,25 @@ export const signUpSchema = Yup.object().shape({
   password: password
 })
 
+export const OTPVerficationSchema = Yup.object().shape({
+  otpcode: OTP,
+});
+
+export const furtherInformationSchema = Yup.object().shape({
+  interests: interests
+})
+
+export const bioSchema = Yup.object().shape({
+  company: companyName,
+  location: location,
+  industries: interests,
+})
+
 export const loginSchema = Yup.object().shape({
   email: email,
   password: password,
 });
+
 export const passwordResetEmailSchema = Yup.object().shape({
   email: email,
 });

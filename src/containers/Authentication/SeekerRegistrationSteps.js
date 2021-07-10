@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
-import { signUpSchema } from "./validation.schema";
+import { signUpSchema, OTPVerficationSchema, furtherInformationSchema } from "./validation.schema";
 import { HelperText } from "./Authentication.style";
 import FormikControl from "../FormikContainer/FormikControl"
 import Button from "components/Button/Button";
@@ -13,7 +13,7 @@ import { TOS } from "constants/routes.constants";
 import { Typography } from "@material-ui/core";
 
 
-export const SeekerSignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history, fillFields }) => {
+export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history, fillFields }) => {
 
   return (
     <Formik
@@ -100,12 +100,12 @@ export const SeekerSignUp = ({ initialValues, onSubmit, setSwitchTab, checked, h
   )
 }
 
-export const OTPForm = ({switchTabs, loading}) => {
+export const OTPForm = ({switchTabs, loading, initialValues, onSubmit}) => {
   return (
-    <Formik>
+    <Formik initialValues={initialValues} validationSchema={OTPVerficationSchema} onSubmit={onSubmit}>
       {(formik) => {
         return (
-          <Form>
+          <Form noValidate>
             <Spacer>
               <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
             </Spacer>
@@ -123,7 +123,6 @@ export const OTPForm = ({switchTabs, loading}) => {
               fullwidth
               loading={loading}
               title={loading ? "Verifying ... " : "Verify"}
-              onClick={() => switchTabs('', 'forward')}
             />
           </Form>
         )
@@ -132,34 +131,9 @@ export const OTPForm = ({switchTabs, loading}) => {
   )
 }
 
-export const SeekerProfileDetails = ({ loading, switchTabs}) => {
+export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSubmit }) => {
   return (
-    <Formik>
-      {(formik) => {
-        return (
-          <Form>
-             <Spacer>
-                <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
-              </Spacer>
-
-            <Button
-              type="submit"
-              disabled={!formik.isValid}
-              fullwidth
-              loading={loading}
-              title={loading ? "Saving... " : "Complete"}
-              className="button margin-top-15"
-            />
-          </Form>
-         )
-      }}
-    </Formik>
-  )
-}
-
-export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests }) => {
-  return (
-    <Formik>
+    <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSubmit}>
       {(formik) => {
         return (
           <Form>
@@ -202,7 +176,6 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
               fullwidth
               loading={loading}
               title={loading ? "Saving ... " : "Save"}
-              onClick={() => switchTabs('', 'forward')}
             />
           </Form>
         )
@@ -211,7 +184,7 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
   )
 }
 
-export const Billing = () => {
+export const Billing = ({ switchTabs }) => {
   const useStyles = makeStyles({
     root: {
       minWidth: 235,
@@ -230,6 +203,9 @@ export const Billing = () => {
   ]
   return (
     <>
+      <Spacer>
+        <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
+      </Spacer>
       <Title>Choose your tier: </Title>
       <PricingTier>
         {options.map((option, index) => (
