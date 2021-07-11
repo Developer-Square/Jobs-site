@@ -36,8 +36,7 @@ const OTP = Yup.string()
 .required(msg.fieldRequired);
 
 const phonenumber = Yup.string()
-  .min(15, msg.phoneNumberNotLongEnough)
-  .max(16)
+  .min(12, msg.phoneNumberNotLongEnough)
   .required(msg.fieldRequired);
 
 const interests = Yup.array().test({
@@ -47,6 +46,7 @@ const interests = Yup.array().test({
 
 const companyName = Yup.string().required(msg.fieldRequired)
 const location = Yup.string().required(msg.fieldRequired)
+const terms = Yup.boolean().oneOf([true], 'Must accept terms and conditions')
 
 
 export const registerSchema = Yup.object().shape({
@@ -59,8 +59,9 @@ export const registerSchema = Yup.object().shape({
 export const signUpSchema = Yup.object().shape({
   email: email,
   fullname: fullname,
-  // phonenumber: phonenumber,
-  password: password
+  phonenumber: phonenumber,
+  password: password,
+  terms: terms
 })
 
 export const OTPVerficationSchema = Yup.object().shape({

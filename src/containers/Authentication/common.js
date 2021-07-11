@@ -8,5 +8,6 @@ export const fieldRequired = "This field is required";
 export const mustContainLetter = "Must Contain Atleast One Letter";
 export const mustContainNumber = "Must Contain Atleast One Number";
 export const fullNameNotLongEnough = "full name must be at least 5 characters";
-export const phoneNumberNotLongEnough = "phone number must be at least 9 characters";
+export const phoneNumberNotLongEnough = "phone number must be at least 9 characters excluding 254";
+export const phoneNumberNotValid = "phone number is not valid";
 export const OTPCodeExactLength = "The OTP code must be 6 characters long";

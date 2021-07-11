@@ -8,7 +8,6 @@ import CheckboxGroup from "./CheckboxGroup";
 import DateInput from "./DateInput";
 import UploadInput from "./UploadInput";
 import PhoneNumberInput from "./PhoneInput";
-import ReactSelect from './ReactSelect'
 import SingleCheckbox from './SingleCheckbox'
 
 
@@ -34,8 +33,6 @@ function FormikControl(props) {
       return <UploadInput {...rest} />;
     case "phone":
       return <PhoneNumberInput {...rest} />;
-    case "react-select":
-      return <ReactSelect {...rest} />;
     default:
       return null;
   }

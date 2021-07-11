@@ -22,7 +22,7 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
       onSubmit={onSubmit}
     >
       {(formik) => {
-        // console.log(formik)
+        console.log(formik)
         return (
           <Form className="register" noValidate>
             <Spacer>
@@ -64,9 +64,8 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
               <div>
                 <FormikControl 
                   control="single-checkbox" 
-                  value="terms"
-                  checked={checked} 
-                  onChange={handleChange} 
+                  name="terms"
+                  checked={false} 
                   color="primary" 
                   style={{ marginTop: "16px" }}
                 />
@@ -135,7 +134,6 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
   return (
     <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSubmit}>
       {(formik) => {
-        console.log(formik)
         return (
           <Form>
             <Spacer>

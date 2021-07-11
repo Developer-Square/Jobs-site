@@ -3,20 +3,22 @@ import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 
 function SingleCheckbox(props) {
-  const { label, name, value, checked, ...rest} = props;
+  const { label, name, checked, ...rest} = props;
   return (
     <div className="form-control">
       <label>{label}</label>
       <Field name={name}>
-        {({ field }) => {
+        {({ field, form }) => {
+          const { setFieldValue } = form;
+          const { checked } = field;
             return (
               <React.Fragment>
                 <input
                   type="checkbox"
-                  id={value}
+                  id={name}
+                  onChange={() => setFieldValue(name, !checked)}
                   {...field}
                   {...rest}
-                  value={value}
                   checked={checked}
                 />
                 {/* <label htmlFor={value}>{name}</label> */}

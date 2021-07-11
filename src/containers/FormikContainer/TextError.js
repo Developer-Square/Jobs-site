@@ -4,7 +4,6 @@ import { styled } from "styles";
 function TextError(props) {
   let errorValue;
   const { children } = props;
-  console.log(children);
 
   // Set the error value when children is an object
   if (children && typeof children === 'object') {

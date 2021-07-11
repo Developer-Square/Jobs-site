@@ -51,19 +51,19 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const match = useRouteMatch();
   const [isSeeker, setIsSeeker] = React.useState(false)
   const [isEmployer, setIsEmplolyer] = React.useState(false)
-  const [checked, setChecked] = React.useState(false)
 
   const initialValues = {
-    fullname: 'Ryan test',
-    email: 'ryantest@gmail.com',
-    phonenumber: '254796867328',
-    password: 'ryantest1',
+    fullname: '',
+    email: '',
+    phonenumber: '',
+    password: '',
     otpcode: '333333',
     school: '',
     interests: [{value: 'COMPUTER SCIENCE', label: 'Computer Science'}],
     course: '',
     isEmployer,
-    isSeeker
+    isSeeker,
+    terms: false
   }
 
   const bioInitialValues = {
@@ -120,10 +120,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     }
   }
 
-  // Changes the value in the checkbox
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
 
   return (
     <TypedAccountRegistrationMutation
@@ -149,7 +145,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         // eslint-disable-next-line
         return activeStep === 0 && switchTab === 'seeker' || activeStep === 0 && switchTab === 'business' ? (
           // Using the SignUp Form for both seeker and business tabs as the fields are similar.
-          <SignUp initialValues={initialValues} onSubmit={onSubmit} setSwitchTab={setSwitchTab} checked={checked} handleChange={handleChange} loading={loading} history={history} />
+          <SignUp initialValues={initialValues} onSubmit={onSubmit} setSwitchTab={setSwitchTab} loading={loading} history={history} />
         // eslint-disable-next-line
         ) : activeStep === 1 && switchTab === 'seeker' || activeStep === 1 && switchTab === 'business' ? (
           // Using the OTP Form for both seeker and business tabs as the fields are similar.
