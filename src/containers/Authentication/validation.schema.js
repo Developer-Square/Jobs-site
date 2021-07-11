@@ -40,10 +40,10 @@ const phonenumber = Yup.string()
   .max(16)
   .required(msg.fieldRequired);
 
-const interests = Yup.object().shape({
-  value: Yup.string().required(msg.fieldRequired),
-  label: Yup.string().required(msg.fieldRequired)
-})
+const interests = Yup.array().test({
+  message: msg.fieldRequired,
+  test: arr => arr.length > 0
+});
 
 const companyName = Yup.string().required(msg.fieldRequired)
 const location = Yup.string().required(msg.fieldRequired)
@@ -68,7 +68,7 @@ export const OTPVerficationSchema = Yup.object().shape({
 });
 
 export const furtherInformationSchema = Yup.object().shape({
-  interests: interests
+  interests: interests,
 })
 
 export const bioSchema = Yup.object().shape({

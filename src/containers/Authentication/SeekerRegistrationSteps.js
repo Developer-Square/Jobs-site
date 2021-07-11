@@ -22,6 +22,7 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
       onSubmit={onSubmit}
     >
       {(formik) => {
+        // console.log(formik)
         return (
           <Form className="register" noValidate>
             <Spacer>
@@ -91,7 +92,6 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
               loading={loading}
               title={loading ? "Signing Up ... " : "Sign Up"}
               style={{ color: "#ffffff" }}
-              //   {...(loading && { disabled: true })}
             />
           </Form>
         );
@@ -135,6 +135,7 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
   return (
     <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSubmit}>
       {(formik) => {
+        console.log(formik)
         return (
           <Form>
             <Spacer>
@@ -157,11 +158,11 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
             />
 
             <FormikControl
-              control="react-select"
+              control="select"
+              isMulti
               options={interests}
               label="Interests"
               name="interests"
-              isMulti
               className="basic-multi-select"
               classNamePrefix="select"
               icon="ln ln-icon-Lock-2"
@@ -209,7 +210,7 @@ export const Billing = ({ switchTabs }) => {
       <Title>Choose your tier: </Title>
       <PricingTier>
         {options.map((option, index) => (
-          <div>
+          <div key={index}>
           {/* Add action to take them to dashboard */}
             <Card key={index} onClick={() => {}} className={classNames.root}>
               <CardContent>

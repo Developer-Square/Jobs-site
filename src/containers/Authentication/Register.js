@@ -49,13 +49,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const alert = useAlert();
   const history = useHistory();
   const match = useRouteMatch();
+  const [isSeeker, setIsSeeker] = React.useState(false)
+  const [isEmployer, setIsEmplolyer] = React.useState(false)
   const [checked, setChecked] = React.useState(false)
-
-  // const initialValues = {
-  //   phonenumber: "",
-  //   fullname: "",
-  //   password: "",
-  // }
 
   const initialValues = {
     fullname: 'Ryan test',
@@ -63,9 +59,11 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     phonenumber: '254796867328',
     password: 'ryantest1',
     otpcode: '333333',
-    school: {value: 'AFRICAN NAZARENE', label: 'African Nazarene'},
-    interests: {value: 'COMPUTER SCIENCE', label: 'Computer Science'},
+    school: '',
+    interests: [{value: 'COMPUTER SCIENCE', label: 'Computer Science'}],
     course: '',
+    isEmployer,
+    isSeeker
   }
 
   const bioInitialValues = {
@@ -94,7 +92,13 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   ]
 
   React.useEffect(() => {
-
+    if (match.params) {
+      if (match.params.userType === 'seeker') {
+        setIsSeeker(currSeeker => currSeeker = true);
+      } else if (match.params.userType === 'business') {
+        setIsEmplolyer(currEmployer => currEmployer = true);
+      }
+    }
     // eslint-disable-next-line
   }, [match.params.userType, switchTab, initialValues]);
 
@@ -127,6 +131,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     >
       {(registerUser, { loading }) => {
         function onSubmit(values, { setErrors }) {
+          // console.log(values);
           switchTabs('', 'forward');
 
           // registerUser({

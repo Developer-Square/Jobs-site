@@ -2,11 +2,22 @@ import React from "react";
 import { styled } from "styles";
 
 function TextError(props) {
+  let errorValue;
+  const { children } = props;
+  console.log(children);
+
+  // Set the error value when children is an object
+  if (children && typeof children === 'object') {
+    errorValue = children['label'];
+  } else {
+    errorValue = children;
+  }
+
   return (
     <ErrorContainer>
       <div
         dangerouslySetInnerHTML={{
-          __html: props.children,
+          __html: errorValue,
         }}
       />
       {/* {typeof props.children === String ? props.children: props.children.map((err, i)=>{

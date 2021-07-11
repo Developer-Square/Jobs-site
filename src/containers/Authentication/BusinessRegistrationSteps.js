@@ -11,7 +11,6 @@ export const Bio = ({initialValues, onSubmit, loading, industries, switchTabs}) 
     return (
         <Formik initialValues={initialValues} validationSchema={bioSchema} onSubmit={onSubmit}>
         {(formik) => {
-            console.log(formik)
         return (
             <Form noValidate>
                 <Spacer>
