@@ -47,7 +47,6 @@ function PhoneNumberInput(props) {
                 value={value}
                 onBlur={(e) => field.onBlur(e)}
                 onChange={(val) => setFieldValue(name, val)}
-                {...field}
                 {...rest}
               />
             );
