@@ -1,11 +1,7 @@
 import * as Yup from "yup";
 import * as msg from "./common";
 
-const email = Yup.string()
-  .min(3, msg.emailNotLongEnough)
-  .max(100)
-  .email(msg.invalidEmail)
-  .required(msg.emailRequired);
+
 const username = Yup.string()
   .min(3, msg.nameNotLongEnough)
   .max(100)
