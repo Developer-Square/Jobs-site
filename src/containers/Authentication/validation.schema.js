@@ -1,12 +1,15 @@
 import * as Yup from "yup";
 import * as msg from "./common";
 
-
+const email = Yup.string()
+  .min(3, msg.emailNotLongEnough)
+  .max(100)
+  .email(msg.invalidEmail)
+  .required(msg.emailRequired);
 const username = Yup.string()
   .min(3, msg.nameNotLongEnough)
   .max(100)
   .required(msg.fieldRequired);
-
 const password = Yup.string()
   .min(8, msg.passwordNotLongEnough)
   .matches(/^.*[a-zA-Z].*$/, msg.mustContainLetter)
@@ -82,7 +85,6 @@ export const loginSchema = Yup.object().shape({
   email: email,
   password: password,
 });
-
 export const passwordResetEmailSchema = Yup.object().shape({
   email: email,
 });

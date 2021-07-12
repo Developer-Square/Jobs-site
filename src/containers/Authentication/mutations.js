@@ -74,7 +74,7 @@ export const LOGIN_MUTATION = gql`
         avatar
       }
     }
-  }#
+  }
 `;
 
 export const SIGNUP_MUTATION = gql`

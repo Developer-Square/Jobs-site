@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-// import Button from '@material-ui/core/Button';
 
 import Login from "containers/Authentication/Login";
 import PasswordResetEmail from "containers/Authentication/PasswordResetEmail";

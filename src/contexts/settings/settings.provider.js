@@ -1,6 +1,6 @@
 import React, { createContext, memo, useEffect, useState } from "react";
 import i18next from "i18next";
-// import themeConfig from "data/themeConfig";
+import themeConfig from "data/themeConfig";
 
 const languageStorageItemKey = "language";
 
@@ -17,21 +17,21 @@ const SettingsProvider = ({ children }) => {
   const [theme, setTheme] = useState(defaultState.theme);
   const [language, setLanguage] = useState(defaultState.theme);
 
-  // useEffect(() => {
-  //   const prefTheme = localStorage.getItem("theme") || defaultState.theme;
-  //   const prefLanguage =
-  //     localStorage.getItem(languageStorageItemKey) || defaultState.language;
-  //   setTheme(prefTheme);
-  //   setLanguage(prefLanguage);
-  // }, []);
+  useEffect(() => {
+    const prefTheme = localStorage.getItem("theme") || defaultState.theme;
+    const prefLanguage =
+      localStorage.getItem(languageStorageItemKey) || defaultState.language;
+    setTheme(prefTheme);
+    setLanguage(prefLanguage);
+  }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem("theme", theme);
-  //   const colorConfig = themeConfig[theme];
-  //   for (const [key, value] of Object.entries(colorConfig)) {
-  //     document.documentElement.style.setProperty(key, value);
-  //   }
-  // }, [theme]);
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    const colorConfig = themeConfig[theme];
+    for (const [key, value] of Object.entries(colorConfig)) {
+      document.documentElement.style.setProperty(key, value);
+    }
+  }, [theme]);
 
   useEffect(() => {
     localStorage.setItem(languageStorageItemKey, language);

@@ -166,7 +166,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
                 padding: "30px 0",
               }}
             >
-
               <h4>Hi there, Welcome...</h4>
               <h5>Select an option to get started.</h5>
             </div>

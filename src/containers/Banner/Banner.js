@@ -2,7 +2,7 @@
 import React, { useCallback } from "react";
 import { Waypoint } from "react-waypoint";
 import { useStickyDispatch } from "contexts/app/app.provider";
-// import bgImg from "image/landing.jpg";
+import bgImg from "image/landing.jpg";
 
 const Banner = () => {
   const useDispatch = useStickyDispatch();
@@ -25,7 +25,7 @@ const Banner = () => {
     <div
       id="banner"
       className="with-transparent-header parallax background"
-      // style={{ backgroundImage: `url(${bgImg})` }}
+      style={{ backgroundImage: `url(${bgImg})` }}
       data-img-width={2000}
       data-img-height={1330}
       data-diff={300}
