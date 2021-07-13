@@ -1,11 +1,7 @@
 import * as Yup from "yup";
 import * as msg from "./common";
 
-const email = Yup.string()
-  .min(3, msg.emailNotLongEnough)
-  .max(100)
-  .email(msg.invalidEmail)
-  .required(msg.emailRequired);
+
 const username = Yup.string()
   .min(3, msg.nameNotLongEnough)
   .max(100)
@@ -22,12 +18,64 @@ const passwordConfirm = (pass) => {
     .required(msg.fieldRequired);
 };
 
+const email = Yup.string()
+  .min(3, msg.emailNotLongEnough)
+  .max(100)
+  .email(msg.invalidEmail)
+  .required(msg.fieldRequired);
+
+const fullname = Yup.string()
+  .min(5, msg.fullNameNotLongEnough)
+  .max(100)
+  .required(msg.fieldRequired);
+
+const OTP = Yup.string()
+.min(6, msg.OTPCodeExactLength)
+.max(6, msg.OTPCodeExactLength)
+.required(msg.fieldRequired);
+
+const phonenumber = Yup.string()
+  .min(12, msg.phoneNumberNotLongEnough)
+  .required(msg.fieldRequired);
+
+const interests = Yup.array().test({
+  message: msg.fieldRequired,
+  test: arr => arr.length > 0
+});
+
+const companyName = Yup.string().required(msg.fieldRequired)
+const location = Yup.string().required(msg.fieldRequired)
+const terms = Yup.boolean().oneOf([true], 'Must accept terms and conditions')
+
+
 export const registerSchema = Yup.object().shape({
   email: email,
   username: username,
   password1: password,
   password2: passwordConfirm("password1"),
 });
+
+export const signUpSchema = Yup.object().shape({
+  email: email,
+  fullname: fullname,
+  phonenumber: phonenumber,
+  password: password,
+  terms: terms
+})
+
+export const OTPVerficationSchema = Yup.object().shape({
+  otpcode: OTP,
+});
+
+export const furtherInformationSchema = Yup.object().shape({
+  interests: interests,
+})
+
+export const bioSchema = Yup.object().shape({
+  company: companyName,
+  location: location,
+  industries: interests,
+})
 
 export const loginSchema = Yup.object().shape({
   email: email,

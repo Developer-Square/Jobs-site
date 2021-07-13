@@ -6,7 +6,6 @@ import PhoneInput from "react-phone-input-2";
 
 function PhoneNumberInput(props) {
   const { label, name, type, file, setFieldValue, icon, ...rest } = props;
-
   return (
     <FormInput className={`form-row form-row-wide`}>
       <label htmlFor={name}>
@@ -48,7 +47,6 @@ function PhoneNumberInput(props) {
                 value={value}
                 onBlur={(e) => field.onBlur(e)}
                 onChange={(val) => setFieldValue(name, val)}
-                {...field}
                 {...rest}
               />
             );

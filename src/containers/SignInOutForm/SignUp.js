@@ -1,16 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import {
-  Button,
-  Wrapper,
-  Container,
-  Heading,
-  SubHeading,
-  HelperText,
-  Offer,
-  // Divider,
-  LinkButton,
-} from "./SignInOutForm.style";
 import // Facebook,
 // Google
 "components/AllSvgIcon";
@@ -24,6 +13,19 @@ import { BASE_URL } from "constants/constants";
 import { TOS } from "constants/routes.constants";
 import Loader from "components/Loader/Loader";
 import Error500 from "components/Error/Error500";
+
+import {
+  Button,
+  Wrapper,
+  Container,
+  Heading,
+  SubHeading,
+  HelperText,
+  Offer,
+  // Divider,
+  LinkButton,
+} from "./SignInOutForm.style";
+
 
 export default function SignOutModal() {
   const { authDispatch } = useContext(AuthContext);
@@ -42,6 +44,7 @@ export default function SignOutModal() {
   const passwordNotLongEnough = "password must be at least 8 characters";
   const passwordDoNotMatch = "passwords must match";
   const fieldRequired = "This field is required";
+
 
   const initialValues = {
     full_name: "",

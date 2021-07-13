@@ -1118,7 +1118,7 @@ table.manage-table td.action a:hover { color: #505050; }
 /* My Account
 ------------------------------------- */
 .my-account {
-	width: 430px;
+	width: 700px;
 	float: left;
 	display: inline;
 	margin: 0 auto !important;

@@ -1,16 +1,16 @@
 import React from "react";
 import { useAlert } from "react-alert";
 
-import { Form, Formik } from "formik";
-import FormikControl from "containers/FormikContainer/FormikControl";
 import { maybe } from "core/utils";
-import { TypedAccountRegistrationMutation } from "./mutations";
 import Button from "components/Button/Button";
 import { normalizeErrors } from "helpers";
-import { registerSchema } from "./validation.schema";
-import { HelperText } from "./Authentication.style";
-import { TOS } from "constants/routes.constants";
-import { useHistory, useRouteMatch, Link } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
+import {Bio} from './BusinessRegistrationSteps'
+
+
+import { TypedAccountRegistrationMutation } from "./mutations";
+
 
 const showSuccessNotification = (data, alert) => {
   const successful = maybe(() => data.register.success);
@@ -45,65 +45,120 @@ const showSuccessNotification = (data, alert) => {
   }
 };
 
-const Register = () => {
+const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const alert = useAlert();
   const history = useHistory();
   const match = useRouteMatch();
-  const [isSeeker, setIsSeeker] = React.useState(false);
-  const [isEmployer, setIsEmployer] = React.useState(false);
-  const [isInstitution, setIsInstitution] = React.useState(false);
-  const [switchTab, setSwitchTab] = React.useState(false);
-
-  React.useEffect(() => {
-    if (match.params.userType) {
-      setSwitchTab(false);
-      if (match.params.userType === "business") {
-        setIsSeeker(false);
-        setIsEmployer(true);
-        setIsInstitution(false);
-      } else if (match.params.userType === "seeker") {
-        setIsSeeker(true);
-        setIsEmployer(false);
-        setIsInstitution(false);
-      } else if (match.params.userType === "institution") {
-        setIsSeeker(false);
-        setIsEmployer(false);
-        setIsInstitution(true);
-      }
-    } else {
-      setSwitchTab(true);
-    }
-  }, [match.params.userType]);
+  const [isSeeker, setIsSeeker] = React.useState(false)
+  const [isEmployer, setIsEmplolyer] = React.useState(false)
 
   const initialValues = {
-    username: "",
-    email: "",
-    isSeeker: isSeeker,
-    isEmployer: isEmployer,
-    isInstitution: isInstitution,
-    password1: "",
-    password2: "",
-  };
+    fullname: '',
+    email: '',
+    phonenumber: '',
+    password: '',
+    otpcode: '333333',
+    school: '',
+    interests: [{value: 'COMPUTER SCIENCE', label: 'Computer Science'}],
+    course: '',
+    isEmployer,
+    isSeeker,
+    terms: false
+  }
+
+  const bioInitialValues = {
+    company: 'Andela LLC',
+    location: 'Nairobi, Kenya',
+    industries: {value: 'PETROLEUM Industry', label: 'Petroleum Industry'}
+  }
+
+  const schoolOptions = [ 
+    { value: "AFRICAN NAZARENE", label: "African Nazarene" },
+    { value: "STRATHMORE UNIVERSITY", label: "Strathmore University" }
+  ]
+
+  const interests = [
+    { value: "CODING", label: "Coding" },
+    { value: "GRAPHIC DESIGN", label: "Graphic Design" },
+    { value: "ONLINE WRITING", label: "Online Writing" },
+    { value: "CATERING", label: "Catering" },
+  ]
+
+  const industries = [
+    { value: "CODING", label: "Coding" },
+    { value: "GRAPHIC DESIGN", label: "Graphic Design" },
+    { value: "ONLINE WRITING", label: "Online Writing" },
+    { value: "CATERING", label: "Catering" },
+  ]
+
+  React.useEffect(() => {
+    if (match.params) {
+      if (match.params.userType === 'seeker') {
+        setIsSeeker(currSeeker => currSeeker = true);
+      } else if (match.params.userType === 'business') {
+        setIsEmplolyer(currEmployer => currEmployer = true);
+      }
+    }
+    // eslint-disable-next-line
+  }, [match.params.userType, switchTab, initialValues]);
+
+
+  // Switches between different steps i.e. from step 1 to step 2
+  const switchTabs = (type, direction) => {
+    if (direction === 'forward') {
+      setActiveStep(currStep => currStep + 1)
+    } else if (direction === 'back') {
+      setActiveStep(currStep => currStep - 1)
+    }
+
+    if (type === 'seeker') {
+      history.push(`/auth/p/seeker`)
+      setSwitchTab(type);
+    } else if (type === 'business') {
+      history.push('/auth/p/business')
+      setSwitchTab(type)
+    }
+  }
+
+
   return (
     <TypedAccountRegistrationMutation
       onCompleted={(data) => showSuccessNotification(data, alert)}
     >
       {(registerUser, { loading }) => {
         function onSubmit(values, { setErrors }) {
-          registerUser({
-            variables: values,
-          }).then(({ data }) => {
-            console.log(data);
-            if (data.register.success) {
-              console.log("data received", data);
-              history.push("/auth/activate");
-            } else {
-              // setErrors(normalizeErrors(data.register.errors));
-              setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-            }
-          });
+          // console.log(values);
+          switchTabs('', 'forward');
+
+          // registerUser({
+          //   variables: values,
+          // }).then(({ data }) => {
+          //   if (data.register.success) {
+          //     console.log("data received", data);
+          //     history.push("/auth/activate");
+          //   } else {
+          //     // setErrors(normalizeErrors(data.register.errors));
+          //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+          //   }
+          // });
         }
-        return switchTab ? (
+        // eslint-disable-next-line
+        return activeStep === 0 && switchTab === 'seeker' || activeStep === 0 && switchTab === 'business' ? (
+          // Using the SignUp Form for both seeker and business tabs as the fields are similar.
+          <SignUp initialValues={initialValues} onSubmit={onSubmit} setSwitchTab={setSwitchTab} loading={loading} history={history} />
+        // eslint-disable-next-line
+        ) : activeStep === 1 && switchTab === 'seeker' || activeStep === 1 && switchTab === 'business' ? (
+          // Using the OTP Form for both seeker and business tabs as the fields are similar.
+          <OTPForm loading={loading} switchTabs={switchTabs} initialValues={initialValues} onSubmit={onSubmit} />
+        ) : activeStep === 2 && switchTab === 'seeker' ? (
+          <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} initialValues={initialValues} />
+        ) : activeStep === 2 && switchTab === 'business' ? (
+          <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} />
+        // eslint-disable-next-line
+        ) : activeStep === 3 && switchTab === 'seeker' || activeStep === 3 && switchTab === 'business' ? (
+          // Using the Billing Form for both seeker and business tabs as the fields are similar.
+          <Billing switchTabs={switchTabs} loading={loading} />
+        ) : (
           <div className="register">
             <div
               style={{
@@ -119,82 +174,16 @@ const Register = () => {
               <Button
                 style={{ margin: "0 5px", width: "100%" }}
                 title={`Job Seeker`}
-                onClick={() => history.push(`/auth/p/seeker`)}
+                onClick={() => switchTabs('seeker')}
               />
-              <Button
-                style={{ margin: "0 5px", width: "100%" }}
-                title={`Institution`}
-                onClick={() => history.push(`/auth/p/institution`)}
-              />
+
               <Button
                 style={{ margin: "0 5px", width: "100%" }}
                 title={`Business`}
-                onClick={() => history.push(`/auth/p/business`)}
+                onClick={() => switchTabs('business')}
               />
             </div>
           </div>
-        ) : (
-          <Formik
-            initialValues={initialValues}
-            validationSchema={registerSchema}
-            onSubmit={onSubmit}
-          >
-            {(formik) => {
-              return (
-                <Form className="register">
-                  <Link to={"/auth"}>{`<`} Select Different Option </Link>
-
-                  <FormikControl
-                    control="input"
-                    type="email"
-                    label="Email"
-                    name="email"
-                    icon="ln ln-icon-Mail"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Username"
-                    name="username"
-                    icon="ln ln-icon-Male"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="password"
-                    label="Password"
-                    name="password1"
-                    icon="ln ln-icon-Lock-2"
-                  />
-                  <FormikControl
-                    control="input"
-                    type="password"
-                    label="Confirm Password"
-                    name="password2"
-                    icon="ln ln-icon-Lock-2"
-                  />
-                  <HelperText style={{ padding: "20px 0px 10px" }}>
-                    By signing up, you agree to The Database's{" "}
-                    <strong
-                      style={{ color: "#21277f" }}
-                      onClick={() => history.push(`${TOS}`)}
-                    >
-                      Terms &amp; Condtions
-                    </strong>
-                  </HelperText>
-
-                  <Button
-                    type="submit"
-                    disabled={!formik.isValid}
-                    fullwidth
-                    loading={loading}
-                    title={loading ? "Creating Account ... " : "Register"}
-                    style={{ color: "#ffffff" }}
-                    //   {...(loading && { disabled: true })}
-                  />
-                </Form>
-              );
-            }}
-          </Formik>
         );
       }}
     </TypedAccountRegistrationMutation>
