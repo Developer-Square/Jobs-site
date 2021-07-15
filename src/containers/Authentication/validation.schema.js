@@ -1,11 +1,6 @@
 import * as Yup from "yup";
 import * as msg from "./common";
 
-
-const username = Yup.string()
-  .min(3, msg.nameNotLongEnough)
-  .max(100)
-  .required(msg.fieldRequired);
 const password = Yup.string()
   .min(8, msg.passwordNotLongEnough)
   .matches(/^.*[a-zA-Z].*$/, msg.mustContainLetter)
@@ -48,18 +43,13 @@ const location = Yup.string().required(msg.fieldRequired)
 const terms = Yup.boolean().oneOf([true], 'Must accept terms and conditions')
 
 
-export const registerSchema = Yup.object().shape({
-  email: email,
-  username: username,
-  password1: password,
-  password2: passwordConfirm("password1"),
-});
 
 export const signUpSchema = Yup.object().shape({
   email: email,
-  fullname: fullname,
-  phonenumber: phonenumber,
-  password: password,
+  username: fullname,
+  phone: phonenumber,
+  password1: password,
+  password2: passwordConfirm("password1"),
   terms: terms
 })
 

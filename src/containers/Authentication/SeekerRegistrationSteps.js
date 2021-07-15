@@ -1,3 +1,4 @@
+import React from 'react';
 import { Form, Formik } from "formik";
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components'
@@ -22,7 +23,6 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
       onSubmit={onSubmit}
     >
       {(formik) => {
-        console.log(formik)
         return (
           <Form className="register" noValidate>
             <Spacer>
@@ -37,29 +37,35 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
               name="email"
               icon="ln ln-icon-Mail"
             />
-
             <FormikControl
               control="phone"
               type="number"
               label="Phone number"
-              name="phonenumber"
+              name="phone"
               icon="ln ln-icon-Mail"
             />
             <FormikControl
               control="input"
               type="text"
               label="Full name"
-              name="fullname"
+              name="username"
               icon="ln ln-icon-Male"
             />
             <FormikControl
               control="input"
               type="password"
               label="Password"
-              name="password"
+              name="password1"
               icon="ln ln-icon-Lock-2"
             />
-            
+            <FormikControl
+              control="input"
+              type="password"
+              label="Confirm Password"
+              name="password2"
+              icon="ln ln-icon-Lock-2"
+            />
+
             <TermsSection>
               <div>
                 <FormikControl 
@@ -86,7 +92,7 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
 
             <Button
               type="submit"
-              disabled={!formik.isValid}
+              // disabled={!formik.isValid}
               fullwidth
               loading={loading}
               title={loading ? "Signing Up ... " : "Sign Up"}
@@ -99,15 +105,29 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
   )
 }
 
-export const OTPForm = ({switchTabs, loading, initialValues, onSubmit}) => {
+export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert}) => {
+  const [smsResend, setSmsResend] = React.useState(false);
+  const resendSms = () => {
+    let values = localStorage.getItem('registerValues');
+    values = JSON.parse(values);
+    const result = onSignInSubmit(values.phone);
+    
+    if (result) {
+      setSmsResend(true);
+      alert.show(
+        {
+          title: 'OTP code has been resent, check your phone',
+        },
+        { type: 'error', timeout: 5000 },
+      )
+    }
+  }
+
   return (
     <Formik initialValues={initialValues} validationSchema={OTPVerficationSchema} onSubmit={onSubmit}>
       {(formik) => {
         return (
           <Form noValidate>
-            <Spacer>
-              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
-            </Spacer>
             <FormikControl
               control="input"
               type="number"
@@ -115,6 +135,10 @@ export const OTPForm = ({switchTabs, loading, initialValues, onSubmit}) => {
               name="otpcode"
               icon="ln ln-icon-Lock-2"
             />
+
+            <Spacer>
+              <p>Didn't receive the code? <Resend smsResend={smsResend} onClick={resendSms}>Resend</Resend></p>
+            </Spacer>
 
             <Button
               type="submit"
@@ -225,6 +249,13 @@ export const Billing = ({ switchTabs }) => {
     </>
   )
 }
+
+const Resend = styled.div`
+  display: inline-block;
+  color: ${ props => props.smsResend ? 'rgba(0, 0, 0, 0.38)' : '#21277f'};
+  font-weight: bold;
+  cursor: pointer;
+`
 
 const TermsSection = styled.div`
   display: flex;

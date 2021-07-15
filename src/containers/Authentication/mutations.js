@@ -83,6 +83,7 @@ export const SIGNUP_MUTATION = gql`
     $username: String!
     $password1: String!
     $password2: String!
+    $phone: String!
     $isEmployer: Boolean!
     $isSeeker: Boolean!
     $isInstitution: Boolean!
@@ -93,6 +94,7 @@ export const SIGNUP_MUTATION = gql`
         username: $username
         password1: $password1
         password2: $password2
+        phone: $phone
         isEmployer: $isEmployer
         isSeeker: $isSeeker
         isInstitution: $isInstitution

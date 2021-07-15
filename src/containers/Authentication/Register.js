@@ -1,9 +1,9 @@
 import React from "react";
 import { useAlert } from "react-alert";
+import firebase from "firebase";
 
-import { maybe } from "core/utils";
 import Button from "components/Button/Button";
-import { normalizeErrors } from "helpers";
+import { showSuccessNotification } from "helpers";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
 import {Bio} from './BusinessRegistrationSteps'
@@ -11,59 +11,35 @@ import {Bio} from './BusinessRegistrationSteps'
 
 import { TypedAccountRegistrationMutation } from "./mutations";
 
-
-const showSuccessNotification = (data, alert) => {
-  const successful = maybe(() => data.register.success);
-
-  if (successful) {
-    alert.show(
-      {
-        title: "Registration Successful",
-      },
-      { type: "success", timeout: 5000 },
-    );
-    alert.show(
-      {
-        title: "Check your e-mail for further instructions",
-      },
-      { type: "success", timeout: 5000 },
-    );
-  } else {
-    const err = maybe(() => data.register.errors, []);
-
-    if (err) {
-      const nonFieldErr = normalizeErrors(
-        maybe(() => data.register.errors, []),
-      );
-      alert.show(
-        {
-          title: nonFieldErr?.nonFieldErrors,
-        },
-        { type: "error", timeout: 5000 },
-      );
-    }
-  }
-};
-
 const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const alert = useAlert();
   const history = useHistory();
   const match = useRouteMatch();
-  const [isSeeker, setIsSeeker] = React.useState(false)
-  const [isEmployer, setIsEmplolyer] = React.useState(false)
+  const [isSeeker, setIsSeeker] = React.useState(false);
+  const [isEmployer, setIsEmplolyer] = React.useState(false);
+  const [isInstitution] = React.useState(false);
+  const [firebaseResult, setFirebaseResult] = React.useState('');
 
   const initialValues = {
-    fullname: '',
-    email: '',
-    phonenumber: '',
-    password: '',
-    otpcode: '333333',
+    username: 'Ryan test22',
+    email: 'ryantest22@gmail.com',
+    phone: '254745613316',
+    password1: 'Passwor1',
+    password2: 'Passwor1',
+    isEmployer,
+    isSeeker,
+    isInstitution,
+    terms: false
+  }
+
+  const otpCodeValue = {
+    otpcode: '',
+  }
+
+  const schoolInterestsInitialValues = {
     school: '',
     interests: [{value: 'COMPUTER SCIENCE', label: 'Computer Science'}],
     course: '',
-    isEmployer,
-    isSeeker,
-    terms: false
   }
 
   const bioInitialValues = {
@@ -98,8 +74,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       } else if (match.params.userType === 'business') {
         setIsEmplolyer(currEmployer => currEmployer = true);
       }
-    }
-    // eslint-disable-next-line
+    }    // eslint-disable-next-line
   }, [match.params.userType, switchTab, initialValues]);
 
 
@@ -119,7 +94,102 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       setSwitchTab(type)
     }
   }
+  // Returns true if every item in the object returned by the
+  // Object.values has an item length of more than one
+  // First remove the boolean values.
+  const IsNotEmpty = value => {
+    return Object.values(value).filter(item => typeof item !== 'boolean' && typeof item !==  'number').every(item => item.length > 0)
+  }
 
+  // Prepare data for sending i.e. add the '+' to international phonenumbers.
+  const prepareData = (data) => {
+    // Remove the terms and conditions value as it is not needed
+    // in the api request.
+    delete data.terms;
+    Object.keys(data).map(key => {
+      // Attach the '+' to the beginning of the phone number
+      // if its not there already.
+      if (key === 'phone') {
+        if (!data['phone'].includes('+')) {
+          data['phone'] = '+' + data['phone'];
+        }
+      }
+
+      // Remove the space from the full name value.
+      if (key === 'username') {
+        data['username'] = data['username'].replace(/ /g, "")
+      }
+      return null;
+    })
+    return data;
+  }
+
+  const onSignInSubmit = (phone) => {
+    const appVerifier = window.recaptchaVerifier;
+    firebase.auth().signInWithPhoneNumber(phone, appVerifier)
+    .then((confirmationResult) => {
+      // SMS sent. Prompt user to type the code from the message, then sign the
+      // user in with confirmationResult.confirm(code).
+      window.confirmationResult = confirmationResult;
+      setFirebaseResult(confirmationResult);
+      // Return true so that we can know the function resolved in the resendSms
+      // function. resendSms() is in the OTPForm. 
+      return true;
+    }).catch((error) => {
+      // Error; SMS not sent
+      showSuccessNotification('firebase', alert, error);
+    });
+  }
+
+  // Send the phone number to firebase for otp verification.
+  const triggerFirebaseSignIn = (phone) => {
+    // First hide the reCAPTCHA then submit the phone number.
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+      'size': 'invisible',
+    });
+    onSignInSubmit(phone);
+  };
+
+  const sendVerifactionCode = (code) => {
+    firebaseResult.confirm(code).then((result) => {
+      // User signed in successfully.
+      const user = result.user;
+      // If the object has values then proceed.
+      if (Object.values(user).length > 0) {
+        alert.show(
+          {
+            title: 'Phone number verified successfully',
+          },
+          { type: 'success', timeout: 5000 },
+        );
+        switchTabs('', 'forward')
+      }
+    }).catch((error) => {
+      // User couldn't sign in (bad verification code?)
+      showSuccessNotification('firebase', alert, error);
+    });
+  }
+
+  // Send the user's details to the api.
+  const registerUserFn = (registerUser, values, setErrors) => {
+    const sentData = prepareData(values);
+    localStorage.setItem('registerValues', JSON.stringify(sentData));
+    triggerFirebaseSignIn(sentData.phone);
+    switchTabs('', 'forward');
+
+    // registerUser({
+    //   variables: sentData,
+    // }).then(({ data }) => {
+
+    //   if (data.register.success) {
+    //     triggerFirebaseSignIn(sentData.phone);
+    //     localStorage.setItem('registerValues', sentData);
+    //     switchTabs('', 'forward');
+    //   } else {
+    //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+    //   }
+    // })
+  }
 
   return (
     <TypedAccountRegistrationMutation
@@ -127,31 +197,34 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     >
       {(registerUser, { loading }) => {
         function onSubmit(values, { setErrors }) {
-          // console.log(values);
-          switchTabs('', 'forward');
-
-          // registerUser({
-          //   variables: values,
-          // }).then(({ data }) => {
-          //   if (data.register.success) {
-          //     console.log("data received", data);
-          //     history.push("/auth/activate");
-          //   } else {
-          //     // setErrors(normalizeErrors(data.register.errors));
-          //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-          //   }
-          // });
+          // Check if the object values are populated before sending.
+          if (IsNotEmpty(values)) {
+            // Check if we're on the first step of the registration form.
+            if (values.hasOwnProperty('email')) {
+              registerUserFn(registerUser,values, setErrors)
+            }
+            // Check if we're on the second step of the registration form.
+            else if (values.hasOwnProperty('otpcode')) {
+              sendVerifactionCode(values.otpcode.toString());
+            }
+          }
         }
         // eslint-disable-next-line
         return activeStep === 0 && switchTab === 'seeker' || activeStep === 0 && switchTab === 'business' ? (
-          // Using the SignUp Form for both seeker and business tabs as the fields are similar.
-          <SignUp initialValues={initialValues} onSubmit={onSubmit} setSwitchTab={setSwitchTab} loading={loading} history={history} />
+          <>
+            {/* Using the SignUp Form for both seeker and business tabs as the fields are similar. */}
+            <SignUp initialValues={initialValues} onSubmit={onSubmit} setSwitchTab={setSwitchTab} loading={loading} history={history} />
+            <div id="sign-in-button"></div>
+          </>
         // eslint-disable-next-line
         ) : activeStep === 1 && switchTab === 'seeker' || activeStep === 1 && switchTab === 'business' ? (
-          // Using the OTP Form for both seeker and business tabs as the fields are similar.
-          <OTPForm loading={loading} switchTabs={switchTabs} initialValues={initialValues} onSubmit={onSubmit} />
+          <>
+            {/* Using the OTP Form for both seeker and business tabs as the fields are similar. */}
+            <OTPForm loading={loading} switchTabs={switchTabs} initialValues={otpCodeValue} onSubmit={onSubmit} onSignInSubmit={onSignInSubmit} alert={alert} />
+            <div id="sign-in-button"></div>
+          </>
         ) : activeStep === 2 && switchTab === 'seeker' ? (
-          <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} initialValues={initialValues} />
+          <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} initialValues={schoolInterestsInitialValues} />
         ) : activeStep === 2 && switchTab === 'business' ? (
           <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} />
         // eslint-disable-next-line

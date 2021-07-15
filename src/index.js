@@ -2,6 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { QueryParamProvider } from "use-query-params";
+import firebase from "firebase/app";
+import "firebase/auth";
+
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -9,6 +12,17 @@ import "./index.css";
 import "./styles/forms.css";
 import "./styles/shadows.css";
 import "./styles/toastify.css";
+
+firebase.initializeApp({
+  apiKey: "AIzaSyBHmpqs28AFeWL4FJ7tv5-CHYNQ-iihUj8",
+  authDomain: "thedatabase-1589992992254.firebaseapp.com",
+  databaseURL: "https://thedatabase-1589992992254.firebaseio.com",
+  projectId: "thedatabase-1589992992254",
+  storageBucket: "thedatabase-1589992992254.appspot.com",
+  messagingSenderId: "948225711672",
+  appId: "1:948225711672:web:5d6cc0a2a7c2cc55b510cd",
+  measurementId: "G-HCW4TBKKJX"
+})
 
 ReactDOM.render(
   <React.StrictMode>

@@ -59,6 +59,7 @@ export const useTimer = (seconds) => {
   return counter;
 };
 
+
 export const normalizeErrors = (errors) => {
   if (typeof errors !== "object") return null;
   return Object.keys(errors).reduce((acc, val) => {
@@ -69,6 +70,7 @@ export const normalizeErrors = (errors) => {
       }
       return null;
     };
+
     let arr = [];
     for (let i = 0; i < errors[val].length; i++) {
       const element = _.get(errors, oB(val, i), null);
@@ -78,6 +80,54 @@ export const normalizeErrors = (errors) => {
     return acc;
   }, {});
 };
+
+export const showSuccessNotification = (data, alert, error) => {
+  console.log(error);
+  // Display the errors from firebase.
+  if ( data === 'firebase') {
+      alert.show(
+        {
+          title: error.message,
+        },
+        { type: "error", timeout: 5000 },
+      );
+  } 
+  // Display errors from the backend.
+  else { 
+    const successful = maybe(() => data.register.success);
+
+    if (successful) {
+      alert.show(
+        {
+          title: "Registration Successful",
+        },
+        { type: "success", timeout: 5000 },
+      );
+      alert.show(
+        {
+          title: "Check your e-mail for further instructions",
+        },
+        { type: "success", timeout: 5000 },
+      );
+    } else {
+      const err = maybe(() => data.register.errors, []);
+      // TODO: Fix normalize errors functions to only show nonFieldErrors.
+      if (err) {
+        const nonFieldErr = normalizeErrors(
+          maybe(() => data.register.errors, []),
+        );
+        alert.show(
+          {
+            // To get the first item in the object
+            title: Object.values(nonFieldErr)[0],
+          },
+          { type: "error", timeout: 5000 },
+        );
+      }
+    } 
+  }
+};
+
 
 export const formatError = (error) =>
   error && error[0].toUpperCase() + error.slice(1);
