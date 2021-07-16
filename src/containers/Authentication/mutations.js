@@ -136,6 +136,50 @@ export const GET_TOKEN_MUTATION = gql`
   }
 `;
 
+export const CREATE_EMPLOYER = gql`
+  mutation EmployerCreate(
+    $name: String
+    $country: String
+    $location: String
+  ) {
+    employerCreate(
+      input: {
+        name: $name
+        country: $country
+        location: $location
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      employer {
+        ...Employer
+      }
+    }
+  }
+`
+
+export const SEEKER_PROFILE_MUTATION = gql`
+  mutation SeekerCreate(
+    $industries: [ID]!
+  ) {
+    seekerCreate(
+      input: {
+        industries: $industries
+      }
+    ) {
+      success
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
 export const TypedAccountLoginMutation = TypedMutation(LOGIN_MUTATION);
 export const TypedAccountRegistrationMutation = TypedMutation(SIGNUP_MUTATION);
 export const TypedPasswordResetEmailMutation = TypedMutation(
@@ -147,3 +191,5 @@ export const TypedVerifyEmailMutation = TypedMutation(VERIFY_EMAIL_MUTATION);
 export const TypedResendAactivationEmailMutation = TypedMutation(
   RESEND_ACTIVATION_EMAIL_MUTATION,
 );
+
+export const TypedCreateEmployerMutation = TypedMutation(CREATE_EMPLOYER);

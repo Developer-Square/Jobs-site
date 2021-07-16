@@ -3,13 +3,13 @@ import { useAlert } from "react-alert";
 import firebase from "firebase";
 
 import Button from "components/Button/Button";
-import { showSuccessNotification } from "helpers";
+import { showSuccessNotification, normalizeErrors } from "helpers";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
 import {Bio} from './BusinessRegistrationSteps'
-
-
-import { TypedAccountRegistrationMutation } from "./mutations";
+import { TypedAccountRegistrationMutation, TypedAccountLoginMutation } from "./mutations";
+import { maybe } from "misc";
+import { storeLoginDetails } from "utils/storeLoginCredentials";
 
 const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const alert = useAlert();
@@ -153,7 +153,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     onSignInSubmit(phone);
   };
 
-  const sendVerifactionCode = (code) => {
+  const sendVerifactionCode = (code, userLogin, setErrors) => {
     firebaseResult.confirm(code).then((result) => {
       // User signed in successfully.
       const user = result.user;
@@ -165,7 +165,23 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
           },
           { type: 'success', timeout: 5000 },
         );
-        switchTabs('', 'forward')
+
+        // When the verification is successfull, login the user.
+        let values = localStorage.getItem('registerValues');
+        values = JSON.parse(values);
+
+        userLogin({
+          variables: {
+            email: values.email,
+            password: values.password1
+          }
+        }).then(({data}) => {
+          console.log(data);
+          const successful = maybe(() => data.tokenAuth.success);
+          storeLoginDetails(successful, '', data, setErrors);
+        })
+
+        // switchTabs('', 'forward')
       }
     }).catch((error) => {
       // User couldn't sign in (bad verification code?)
@@ -176,22 +192,22 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   // Send the user's details to the api.
   const registerUserFn = async (registerUser, values, setErrors) => {
     const sentData = await prepareData(values);
-    localStorage.setItem('registerValues', JSON.stringify(sentData));
-    triggerFirebaseSignIn(sentData.phone);
-    switchTabs('', 'forward');
+    // localStorage.setItem('registerValues', JSON.stringify(sentData));
+    // triggerFirebaseSignIn(sentData.phone);
+    // switchTabs('', 'forward');
 
-    // registerUser({
-    //   variables: sentData,
-    // }).then(({ data }) => {
+    registerUser({
+      variables: sentData,
+    }).then(({ data }) => {
 
-    //   if (data.register.success) {
-    //     triggerFirebaseSignIn(sentData.phone);
-    //     localStorage.setItem('registerValues', sentData);
-    //     switchTabs('', 'forward');
-    //   } else {
-    //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-    //   }
-    // })
+      if (data.register.success) {
+        triggerFirebaseSignIn(sentData.phone);
+        localStorage.setItem('registerValues', JSON.stringify(sentData));
+        switchTabs('', 'forward');
+      } else {
+        setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+      }
+    })
   }
 
   return (
@@ -206,10 +222,10 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
             if (values.hasOwnProperty('email')) {
               registerUserFn(registerUser,values, setErrors)
             }
-            // Check if we're on the second step of the registration form.
-            else if (values.hasOwnProperty('otpcode')) {
-              sendVerifactionCode(values.otpcode.toString());
-            }
+            // // Check if we're on the second step of the registration form.
+            // else if (values.hasOwnProperty('otpcode')) {
+            //   sendVerifactionCode(values.otpcode.toString());
+            // }
           }
         }
         // eslint-disable-next-line
@@ -221,11 +237,23 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
           </>
         // eslint-disable-next-line
         ) : activeStep === 1 && switchTab === 'seeker' || activeStep === 1 && switchTab === 'business' ? (
-          <>
-            {/* Using the OTP Form for both seeker and business tabs as the fields are similar. */}
-            <OTPForm loading={loading} switchTabs={switchTabs} initialValues={otpCodeValue} onSubmit={onSubmit} onSignInSubmit={onSignInSubmit} alert={alert} resendRequest={resendRequest} />
-            <div id="sign-in-button"></div>
-          </>
+          <TypedAccountLoginMutation>
+            {userLogin => {
+              function onVerificationSubmit(values, { setErrors }) {
+                // Check if the object values are populated before sending.
+                if (IsNotEmpty(values)) {
+                  sendVerifactionCode(values.otpcode.toString(), userLogin, setErrors);
+                }
+              }
+              return(
+                <>
+                  {/* Using the OTP Form for both seeker and business tabs as the fields are similar. */}
+                  <OTPForm loading={loading} switchTabs={switchTabs} initialValues={otpCodeValue} onSubmit={onVerificationSubmit} onSignInSubmit={onSignInSubmit} alert={alert} resendRequest={resendRequest} />
+                  <div id="sign-in-button"></div>
+                </>
+              )
+            }}
+          </TypedAccountLoginMutation>
         ) : activeStep === 2 && switchTab === 'seeker' ? (
           <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} initialValues={schoolInterestsInitialValues} />
         ) : activeStep === 2 && switchTab === 'business' ? (

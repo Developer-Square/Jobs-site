@@ -120,6 +120,7 @@ export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert
         { type: 'success', timeout: 5000 },
       )
     }
+    // eslint-disable-next-line
   }, [resendRequest])
 
   const resendSms = () => {
