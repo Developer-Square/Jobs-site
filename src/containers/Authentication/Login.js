@@ -10,7 +10,7 @@ import { normalizeErrors } from "helpers";
 import { useHistory } from "react-router-dom";
 import { loginSchema } from "./validation.schema";
 import { AuthContext } from "contexts/auth/auth.context";
-import { storeLoginDetails } from "utils/storeLoginCredentials";
+import { storeLoginDetails } from "utils";
 
 const Login = () => {
   const { authDispatch } = useContext(AuthContext);

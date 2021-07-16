@@ -9,7 +9,7 @@ import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistration
 import {Bio} from './BusinessRegistrationSteps'
 import { TypedAccountRegistrationMutation, TypedAccountLoginMutation } from "./mutations";
 import { maybe } from "misc";
-import { storeLoginDetails } from "utils/storeLoginCredentials";
+import { storeLoginDetails } from "utils";
 
 const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const alert = useAlert();
@@ -176,12 +176,12 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
             password: values.password1
           }
         }).then(({data}) => {
-          console.log(data);
+          console.log(data)
           const successful = maybe(() => data.tokenAuth.success);
           storeLoginDetails(successful, '', data, setErrors);
         })
 
-        // switchTabs('', 'forward')
+        switchTabs('', 'forward')
       }
     }).catch((error) => {
       // User couldn't sign in (bad verification code?)
@@ -192,22 +192,22 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   // Send the user's details to the api.
   const registerUserFn = async (registerUser, values, setErrors) => {
     const sentData = await prepareData(values);
-    // localStorage.setItem('registerValues', JSON.stringify(sentData));
-    // triggerFirebaseSignIn(sentData.phone);
-    // switchTabs('', 'forward');
+    localStorage.setItem('registerValues', JSON.stringify(sentData));
+    triggerFirebaseSignIn(sentData.phone);
+    switchTabs('', 'forward');
 
-    registerUser({
-      variables: sentData,
-    }).then(({ data }) => {
+    // registerUser({
+    //   variables: sentData,
+    // }).then(({ data }) => {
 
-      if (data.register.success) {
-        triggerFirebaseSignIn(sentData.phone);
-        localStorage.setItem('registerValues', JSON.stringify(sentData));
-        switchTabs('', 'forward');
-      } else {
-        setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-      }
-    })
+    //   if (data.register.success) {
+    //     triggerFirebaseSignIn(sentData.phone);
+    //     localStorage.setItem('registerValues', JSON.stringify(sentData));
+    //     switchTabs('', 'forward');
+    //   } else {
+    //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+    //   }
+    // })
   }
 
   return (
@@ -222,10 +222,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
             if (values.hasOwnProperty('email')) {
               registerUserFn(registerUser,values, setErrors)
             }
-            // // Check if we're on the second step of the registration form.
-            // else if (values.hasOwnProperty('otpcode')) {
-            //   sendVerifactionCode(values.otpcode.toString());
-            // }
           }
         }
         // eslint-disable-next-line
@@ -257,7 +253,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         ) : activeStep === 2 && switchTab === 'seeker' ? (
           <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} initialValues={schoolInterestsInitialValues} />
         ) : activeStep === 2 && switchTab === 'business' ? (
-          <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} />
+          <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} alert={alert} />
         // eslint-disable-next-line
         ) : activeStep === 3 && switchTab === 'seeker' || activeStep === 3 && switchTab === 'business' ? (
           // Using the Billing Form for both seeker and business tabs as the fields are similar.

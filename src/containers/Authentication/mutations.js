@@ -180,6 +180,31 @@ export const SEEKER_PROFILE_MUTATION = gql`
   }
 `;
 
+export const accountErrorFragment = gql`
+  fragment AccountErrorFragment on AccountError {
+    code
+    field
+  }
+`;
+
+const AVATAR_UPDATE_MUTATION = gql`
+  ${accountErrorFragment}
+  mutation AvatarUpdate($image: Upload!) {
+    userAvatarUpdate(image: $image) {
+      errors: accountErrors {
+        ...AccountErrorFragment
+      }
+      success
+      user {
+        id
+        avatar {
+          url
+        }
+      }
+    }
+  }
+`;
+
 export const TypedAccountLoginMutation = TypedMutation(LOGIN_MUTATION);
 export const TypedAccountRegistrationMutation = TypedMutation(SIGNUP_MUTATION);
 export const TypedPasswordResetEmailMutation = TypedMutation(
@@ -191,5 +216,6 @@ export const TypedVerifyEmailMutation = TypedMutation(VERIFY_EMAIL_MUTATION);
 export const TypedResendAactivationEmailMutation = TypedMutation(
   RESEND_ACTIVATION_EMAIL_MUTATION,
 );
-
 export const TypedCreateEmployerMutation = TypedMutation(CREATE_EMPLOYER);
+export const TypedAvatarUpdateMutation = TypedMutation(AVATAR_UPDATE_MUTATION);
+

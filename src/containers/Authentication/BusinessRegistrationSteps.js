@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import FormikControl from "../FormikContainer/FormikControl"
 import Button from "components/Button/Button";
 import { bioSchema } from './validation.schema'
+import { handleAvatarUpdate } from 'utils';
+import { TypedAvatarUpdateMutation } from './mutations';
 
-export const Bio = ({initialValues, onSubmit, loading, industries, switchTabs}) => {
+export const Bio = ({initialValues, onSubmit, loading, industries, switchTabs, alert}) => {
     return (
         <Formik initialValues={initialValues} validationSchema={bioSchema} onSubmit={onSubmit}>
         {(formik) => {
@@ -44,12 +46,39 @@ export const Bio = ({initialValues, onSubmit, loading, industries, switchTabs}) 
                     icon="ln ln-icon-Lock-2"
                 />
 
-                <FormikControl
-                    control="file"
-                    label="Logo"
-                    name="logo"
-                    icon="ln ln-icon-Lock-2"
-                />
+                <TypedAvatarUpdateMutation
+                    onCompleted={(data, errors) =>
+                    handleAvatarUpdate(data, errors, alert)
+                    }
+                >
+                    {(updateAvatar) => {
+                    const handleAvatarChange = (file) => {
+                        for (let i = 0; i < file.length; i++) {
+                        const f = file[i];
+                        updateAvatar({
+                            variables: { image: f },
+                        })
+                            .then((res) => {
+                            handleAvatarUpdate(res.data, null, alert);
+                            })
+                            .catch((err) => console.log(err));
+                        }
+                    };
+
+                    return (
+                        <FormikControl
+                        control="file"
+                        type="file"
+                        setFieldValue={formik.setFieldValue}
+                        version="profile"
+                        directUpload={true}
+                        action={handleAvatarChange}
+                        label="Logo"
+                        name="avatar"
+                        />
+                    );
+                    }}
+                </TypedAvatarUpdateMutation>
 
                 <Button
                     type="submit"
