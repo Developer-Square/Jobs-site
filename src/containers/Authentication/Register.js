@@ -19,6 +19,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [isEmployer, setIsEmplolyer] = React.useState(false);
   const [isInstitution] = React.useState(false);
   const [firebaseResult, setFirebaseResult] = React.useState('');
+  const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
     username: 'Ryan test22',
@@ -124,7 +125,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     return data;
   }
 
-  const onSignInSubmit = (phone) => {
+  const onSignInSubmit = (phone, resend) => {
     const appVerifier = window.recaptchaVerifier;
     firebase.auth().signInWithPhoneNumber(phone, appVerifier)
     .then((confirmationResult) => {
@@ -132,9 +133,11 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       // user in with confirmationResult.confirm(code).
       window.confirmationResult = confirmationResult;
       setFirebaseResult(confirmationResult);
-      // Return true so that we can know the function resolved in the resendSms
+      // Set setResendRequest to true so that we can know the function resolved in the resendSms
       // function. resendSms() is in the OTPForm. 
-      return true;
+      if (resend) {
+        setResendRequest(true)  
+      }
     }).catch((error) => {
       // Error; SMS not sent
       showSuccessNotification('firebase', alert, error);
@@ -171,8 +174,8 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   // Send the user's details to the api.
-  const registerUserFn = (registerUser, values, setErrors) => {
-    const sentData = prepareData(values);
+  const registerUserFn = async (registerUser, values, setErrors) => {
+    const sentData = await prepareData(values);
     localStorage.setItem('registerValues', JSON.stringify(sentData));
     triggerFirebaseSignIn(sentData.phone);
     switchTabs('', 'forward');
@@ -220,7 +223,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         ) : activeStep === 1 && switchTab === 'seeker' || activeStep === 1 && switchTab === 'business' ? (
           <>
             {/* Using the OTP Form for both seeker and business tabs as the fields are similar. */}
-            <OTPForm loading={loading} switchTabs={switchTabs} initialValues={otpCodeValue} onSubmit={onSubmit} onSignInSubmit={onSignInSubmit} alert={alert} />
+            <OTPForm loading={loading} switchTabs={switchTabs} initialValues={otpCodeValue} onSubmit={onSubmit} onSignInSubmit={onSignInSubmit} alert={alert} resendRequest={resendRequest} />
             <div id="sign-in-button"></div>
           </>
         ) : activeStep === 2 && switchTab === 'seeker' ? (

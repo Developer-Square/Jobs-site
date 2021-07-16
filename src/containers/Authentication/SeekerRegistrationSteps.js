@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Form, Formik } from "formik";
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components'
@@ -105,22 +105,27 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
   )
 }
 
-export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert}) => {
+export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert, resendRequest}) => {
   const [smsResend, setSmsResend] = React.useState(false);
-  const resendSms = () => {
-    let values = localStorage.getItem('registerValues');
-    values = JSON.parse(values);
-    const result = onSignInSubmit(values.phone);
-    
-    if (result) {
+
+  useEffect(() => {
+    // Disable the resend sms link when a request to
+    // send the otp code has been sent.
+    if (resendRequest) {
       setSmsResend(true);
       alert.show(
         {
           title: 'OTP code has been resent, check your phone',
         },
-        { type: 'error', timeout: 5000 },
+        { type: 'success', timeout: 5000 },
       )
     }
+  }, [resendRequest])
+
+  const resendSms = () => {
+    let values = localStorage.getItem('registerValues');
+    values = JSON.parse(values);
+    onSignInSubmit(values.phone, true);
   }
 
   return (
@@ -254,6 +259,7 @@ const Resend = styled.div`
   display: inline-block;
   color: ${ props => props.smsResend ? 'rgba(0, 0, 0, 0.38)' : '#21277f'};
   font-weight: bold;
+  pointer-events: ${props => props.smsResend ? 'none': 'all'};
   cursor: pointer;
 `
 
