@@ -164,11 +164,15 @@ export const CREATE_EMPLOYER = gql`
 
 export const SEEKER_PROFILE_MUTATION = gql`
   mutation SeekerCreate(
+    $institution: String
+    $course: String
     $industries: [ID]!
   ) {
     seekerCreate(
       input: {
         industries: $industries
+        course: $course
+        institution: $institution
       }
     ) {
       success
@@ -218,4 +222,7 @@ export const TypedResendAactivationEmailMutation = TypedMutation(
 );
 export const TypedCreateEmployerMutation = TypedMutation(CREATE_EMPLOYER);
 export const TypedAvatarUpdateMutation = TypedMutation(AVATAR_UPDATE_MUTATION);
+export const TypedSeekerProfileMutation = TypedMutation(
+  SEEKER_PROFILE_MUTATION,
+);
 

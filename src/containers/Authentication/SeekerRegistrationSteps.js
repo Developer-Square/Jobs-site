@@ -160,9 +160,9 @@ export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert
   )
 }
 
-export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSubmit }) => {
+export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSeekerProfileSubmit }) => {
   return (
-    <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSubmit}>
+    <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSeekerProfileSubmit}>
       {(formik) => {
         return (
           <Form>

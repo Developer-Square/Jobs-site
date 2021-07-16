@@ -7,9 +7,10 @@ import { showSuccessNotification, normalizeErrors } from "helpers";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
 import {Bio} from './BusinessRegistrationSteps'
-import { TypedAccountRegistrationMutation, TypedAccountLoginMutation } from "./mutations";
+import { TypedAccountRegistrationMutation, TypedAccountLoginMutation, TypedSeekerProfileMutation } from "./mutations";
 import { maybe } from "misc";
 import { storeLoginDetails } from "utils";
+import { showSeekerProfileNotification } from "utils";
 
 const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const alert = useAlert();
@@ -22,8 +23,8 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test22',
-    email: 'ryantest22@gmail.com',
+    username: 'Ryan test34',
+    email: 'ryantest34@gmail.com',
     phone: '254745613316',
     password1: 'Passwor1',
     password2: 'Passwor1',
@@ -34,7 +35,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const otpCodeValue = {
-    otpcode: '',
+    otpcode: '696969',
   }
 
   const schoolInterestsInitialValues = {
@@ -210,6 +211,34 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     // })
   }
 
+  const seekerProfileCreate = (values, seekerCreate, setErrors) => {
+    // const interests = values.interests.reduce((arr, b) => {
+    //   arr.push(b.value);
+    //   return arr;
+    // }, []);
+    // send empty array now for testing purposes
+    const interests = ['SW5kdXN0cnk6MQ=='].toString();
+    seekerCreate({
+        variables: {
+          ...values,
+        institution: values.school.value,
+        industries: interests
+      }
+    }).then(({ data }) => {
+      if (data) {
+        if (data.seekerCreate) {
+          switchTabs('', 'forward');
+          
+          if (!data.seekerCreate.success) {
+            setErrors(
+              normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
+            );
+          }
+        }
+      }
+    });
+  }
+
   return (
     <TypedAccountRegistrationMutation
       onCompleted={(data) => showSuccessNotification(data, alert)}
@@ -218,10 +247,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         function onSubmit(values, { setErrors }) {
           // Check if the object values are populated before sending.
           if (IsNotEmpty(values)) {
-            // Check if we're on the first step of the registration form.
-            if (values.hasOwnProperty('email')) {
               registerUserFn(registerUser,values, setErrors)
-            }
           }
         }
         // eslint-disable-next-line
@@ -251,7 +277,18 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
             }}
           </TypedAccountLoginMutation>
         ) : activeStep === 2 && switchTab === 'seeker' ? (
-          <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} initialValues={schoolInterestsInitialValues} />
+
+          <TypedSeekerProfileMutation onCompleted={(data, errors) => showSeekerProfileNotification(data, errors, alert)} >
+            {(seekerCreate, { loading }) => { 
+            function onSeekerProfileSubmit(values, { setErrors }) {
+              seekerProfileCreate(values, seekerCreate, setErrors);
+            }
+            return(
+              <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSeekerProfileSubmit={onSeekerProfileSubmit} initialValues={schoolInterestsInitialValues} />
+            )}
+            }
+          </TypedSeekerProfileMutation>
+
         ) : activeStep === 2 && switchTab === 'business' ? (
           <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} alert={alert} />
         // eslint-disable-next-line

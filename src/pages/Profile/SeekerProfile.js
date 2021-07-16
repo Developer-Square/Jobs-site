@@ -13,6 +13,7 @@ import Loader from "components/Loader/Loader";
 import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
 import moment from "moment";
+import { showSeekerProfileNotification } from "utils";
 
 const SeekerProfile = () => {
   const alert = useAlert();
@@ -54,38 +55,6 @@ const SeekerProfile = () => {
     { value: "LOOKING", label: "Actively looking" },
   ];
 
-  const showNotification = (data, errors, alert) => {
-    console.log(errors);
-    if (errors) {
-      console.log("Server Error kwa login", errors[0].message);
-      return errors[0].message;
-    }
-
-    const successful = maybe(() => data.seekerCreate.success);
-
-    if (successful) {
-      alert.show(
-        {
-          title: "Profile Created",
-        },
-        { type: "success", timeout: 5000 },
-      );
-    } else {
-      const err = maybe(() => data.seekerCreate.errors, []);
-
-      if (err) {
-        const nonFieldErr = normalizeErrors(
-          maybe(() => data.seekerCreate.errors, []),
-        );
-        alert.show(
-          {
-            title: nonFieldErr?.nonFieldErrors,
-          },
-          { type: "error", timeout: 5000 },
-        );
-      }
-    }
-  };
   if (data && industries.length === 0) {
     const cleanedData = data.allIndustries.reduce((arr, b) => {
       arr.push({
@@ -103,7 +72,7 @@ const SeekerProfile = () => {
 
   return (
     <TypedSeekerProfileMutation
-      onCompleted={(data, errors) => showNotification(data, errors, alert)}
+      onCompleted={(data, errors) => showSeekerProfileNotification(data, errors, alert)}
     >
       {(seekerCreate, { loading }) => {
         function onSubmit(values, { setErrors, setSubmitting }) {

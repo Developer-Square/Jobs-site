@@ -3,6 +3,46 @@ import { isArray, isEqual, isObject, transform } from "lodash";
 import dayjs from "dayjs";
 import { Base64 } from "js-base64";
 import { addObjectToLocalStorageObject, addArrayToLocalStorage, normalizeErrors } from "helpers";
+import { maybe } from "misc";
+
+/**
+ * @param  {} data
+ * @param  {} errors
+ * @param  {} alert
+ */
+export const showSeekerProfileNotification = (data, errors, alert) => {
+  console.log(errors);
+  if (errors) {
+    console.log("Server Error kwa login", errors[0].message);
+    return errors[0].message;
+  }
+
+  const successful = maybe(() => data.seekerCreate.success);
+
+  if (successful) {
+    alert.show(
+      {
+        title: "Profile Created",
+      },
+      { type: "success", timeout: 5000 },
+    );
+  } else {
+    const err = maybe(() => data.seekerCreate.errors, []);
+
+    if (err) {
+      const nonFieldErr = normalizeErrors(
+        maybe(() => data.seekerCreate.errors, []),
+      );
+      alert.show(
+        {
+          title: nonFieldErr?.nonFieldErrors,
+        },
+        { type: "error", timeout: 5000 },
+      );
+    }
+  }
+};
+
 /**
  * @param  {} data
  * @param  {} errors
