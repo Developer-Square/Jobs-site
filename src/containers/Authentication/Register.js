@@ -3,11 +3,11 @@ import { useAlert } from "react-alert";
 import firebase from "firebase";
 
 import Button from "components/Button/Button";
-import { showSuccessNotification, normalizeErrors } from "helpers";
+import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty, prepareData } from "helpers";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
 import {Bio} from './BusinessRegistrationSteps'
-import { TypedAccountRegistrationMutation, TypedAccountLoginMutation, TypedSeekerProfileMutation } from "./mutations";
+import { TypedAccountRegistrationMutation, TypedAccountLoginMutation, TypedSeekerProfileMutation, TypedEmployerProfileMutation } from "./mutations";
 import { maybe } from "misc";
 import { storeLoginDetails } from "utils";
 import { showSeekerProfileNotification } from "utils";
@@ -23,9 +23,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test34',
-    email: 'ryantest34@gmail.com',
-    phone: '254745613316',
+    username: 'Ryan test37',
+    email: 'ryantest37@gmail.com',
+    phone: '254745613319',
     password1: 'Passwor1',
     password2: 'Passwor1',
     isEmployer,
@@ -47,7 +47,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const bioInitialValues = {
     company: 'Andela LLC',
     location: 'Nairobi, Kenya',
-    industries: {value: 'PETROLEUM Industry', label: 'Petroleum Industry'}
+    industries: [{value: 'PETROLEUM Industry', label: 'Petroleum Industry'}]
   }
 
   const schoolOptions = [ 
@@ -95,35 +95,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       history.push('/auth/p/business')
       setSwitchTab(type)
     }
-  }
-  // Returns true if every item in the object returned by the
-  // Object.values has an item length of more than one
-  // First remove the boolean values.
-  const IsNotEmpty = value => {
-    return Object.values(value).filter(item => typeof item !== 'boolean' && typeof item !==  'number').every(item => item.length > 0)
-  }
-
-  // Prepare data for sending i.e. add the '+' to international phonenumbers.
-  const prepareData = (data) => {
-    // Remove the terms and conditions value as it is not needed
-    // in the api request.
-    delete data.terms;
-    Object.keys(data).map(key => {
-      // Attach the '+' to the beginning of the phone number
-      // if its not there already.
-      if (key === 'phone') {
-        if (!data['phone'].includes('+')) {
-          data['phone'] = '+' + data['phone'];
-        }
-      }
-
-      // Remove the space from the full name value.
-      if (key === 'username') {
-        data['username'] = data['username'].replace(/ /g, "")
-      }
-      return null;
-    })
-    return data;
   }
 
   const onSignInSubmit = (phone, resend) => {
@@ -217,7 +188,8 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     //   return arr;
     // }, []);
     // send empty array now for testing purposes
-    const interests = ['SW5kdXN0cnk6MQ=='].toString();
+    const interests = ['SW5kdXN0cnk6Mg=='].toString();
+    console.log(values);
     seekerCreate({
         variables: {
           ...values,
@@ -228,10 +200,46 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       if (data) {
         if (data.seekerCreate) {
           switchTabs('', 'forward');
-          
+
           if (!data.seekerCreate.success) {
             setErrors(
               normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
+            );
+          }
+        }
+      }
+    });
+  }
+
+  const employerProfileCreate = (values, employerCreate, setErrors) => {
+    let country;
+    const data = values.location.split(',');
+
+    // Check if the user provided a county as the second arguement.
+    if (data[1]) {
+      // Perform a slice to get rid of the whitespace infront of the 
+      // country string.
+      country = data[1].slice(1);
+    } else {
+      country = data[0]
+    }
+
+    const industries = ['SW5kdXN0cnk6Mg=='].toString();
+    employerCreate({
+        variables: {
+          ...values,
+          country,
+          industries, 
+          name: values.company,
+        }
+    }).then(({ data }) => {
+      if (data) {
+        if (data.employerCreate) {
+          switchTabs('', 'forward');
+
+          if (!data.employerCreate.success) {
+            setErrors(
+              normalizeErrors(maybe(() => data.employerCreate.errors, [])),
             );
           }
         }
@@ -259,29 +267,34 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
           </>
         // eslint-disable-next-line
         ) : activeStep === 1 && switchTab === 'seeker' || activeStep === 1 && switchTab === 'business' ? (
-          <TypedAccountLoginMutation>
-            {userLogin => {
-              function onVerificationSubmit(values, { setErrors }) {
-                // Check if the object values are populated before sending.
-                if (IsNotEmpty(values)) {
-                  sendVerifactionCode(values.otpcode.toString(), userLogin, setErrors);
+          <>
+            <TypedAccountLoginMutation>
+              {userLogin => {
+                function onVerificationSubmit(values, { setErrors }) {
+                  // Check if the object values are populated before sending.
+                  if (IsNotEmpty(values)) {
+                    sendVerifactionCode(values.otpcode.toString(), userLogin, setErrors);
+                  }
                 }
-              }
-              return(
-                <>
-                  {/* Using the OTP Form for both seeker and business tabs as the fields are similar. */}
-                  <OTPForm loading={loading} switchTabs={switchTabs} initialValues={otpCodeValue} onSubmit={onVerificationSubmit} onSignInSubmit={onSignInSubmit} alert={alert} resendRequest={resendRequest} />
-                  <div id="sign-in-button"></div>
-                </>
-              )
-            }}
-          </TypedAccountLoginMutation>
+                return(
+                  <>
+                    {/* Using the OTP Form for both seeker and business tabs as the fields are similar. */}
+                    <OTPForm loading={loading} switchTabs={switchTabs} initialValues={otpCodeValue} onSubmit={onVerificationSubmit} onSignInSubmit={onSignInSubmit} alert={alert} resendRequest={resendRequest} />
+                  </>
+                )
+              }}
+            </TypedAccountLoginMutation>
+            <div id="sign-in-button"></div>
+          </>
         ) : activeStep === 2 && switchTab === 'seeker' ? (
 
           <TypedSeekerProfileMutation onCompleted={(data, errors) => showSeekerProfileNotification(data, errors, alert)} >
             {(seekerCreate, { loading }) => { 
             function onSeekerProfileSubmit(values, { setErrors }) {
-              seekerProfileCreate(values, seekerCreate, setErrors);
+              console.log(values)
+              if (IsNotEmpty(values)) {
+                seekerProfileCreate(values, seekerCreate, setErrors);
+              }
             }
             return(
               <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSeekerProfileSubmit={onSeekerProfileSubmit} initialValues={schoolInterestsInitialValues} />
@@ -290,7 +303,28 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
           </TypedSeekerProfileMutation>
 
         ) : activeStep === 2 && switchTab === 'business' ? (
-          <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onSubmit={onSubmit} alert={alert} />
+          <TypedEmployerProfileMutation
+            onCompleted={(data, errors) =>
+              showNotification(
+                data.employerCreate,
+                errors,
+                alert,
+                "accountErrors",
+                "Profile Created",
+              )
+          }
+          >
+            {(employerCreate) => {
+              function onEmployerProfileSubmit(values, { setErrors }) {
+                if (IsNotEmpty(values)) {
+                  employerProfileCreate(values, employerCreate, setErrors);
+                }
+              }
+              return (
+                <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onEmployerProfileSubmit={onEmployerProfileSubmit} alert={alert} />
+              )
+            }}
+          </TypedEmployerProfileMutation>
         // eslint-disable-next-line
         ) : activeStep === 3 && switchTab === 'seeker' || activeStep === 3 && switchTab === 'business' ? (
           // Using the Billing Form for both seeker and business tabs as the fields are similar.

@@ -209,6 +209,32 @@ const AVATAR_UPDATE_MUTATION = gql`
   }
 `;
 
+export const EMPLOYER_PROFILE_MUTATION = gql`
+  mutation EmployerCreate(
+    $name: String
+    $country: String
+    $location: String
+  ) {
+    employerCreate(
+      input: {
+        name: $name
+        country: $country
+        location: $location
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const TypedEmployerProfileMutation = TypedMutation(
+  EMPLOYER_PROFILE_MUTATION,
+);
 export const TypedAccountLoginMutation = TypedMutation(LOGIN_MUTATION);
 export const TypedAccountRegistrationMutation = TypedMutation(SIGNUP_MUTATION);
 export const TypedPasswordResetEmailMutation = TypedMutation(

@@ -9,9 +9,9 @@ import { bioSchema } from './validation.schema'
 import { handleAvatarUpdate } from 'utils';
 import { TypedAvatarUpdateMutation } from './mutations';
 
-export const Bio = ({initialValues, onSubmit, loading, industries, switchTabs, alert}) => {
+export const Bio = ({initialValues, onEmployerProfileSubmit, loading, industries, switchTabs, alert}) => {
     return (
-        <Formik initialValues={initialValues} validationSchema={bioSchema} onSubmit={onSubmit}>
+        <Formik initialValues={initialValues} validationSchema={bioSchema} onSubmit={onEmployerProfileSubmit}>
         {(formik) => {
         return (
             <Form noValidate>
@@ -36,7 +36,7 @@ export const Bio = ({initialValues, onSubmit, loading, industries, switchTabs, a
                 />
 
                 <FormikControl
-                    control="react-select"
+                    control="select"
                     options={industries}
                     label="Industries"
                     name="industries"

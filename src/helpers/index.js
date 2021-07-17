@@ -5,6 +5,37 @@ import AES from "crypto-js/aes";
 import { maybe } from "core/utils";
 import { toast } from "react-toastify";
 
+
+// Returns true if every item in the object returned by the
+// Object.values has an item length of more than one
+// First remove the boolean values.
+export const IsNotEmpty = value => {
+  return Object.values(value).filter(item => typeof item !== 'boolean' && typeof item !==  'number' && typeof item !== 'object').every(item => item.length > 0)
+}
+
+// Prepare data for sending i.e. add the '+' to international phonenumbers.
+export const prepareData = (data) => {
+  // Remove the terms and conditions value as it is not needed
+  // in the api request.
+  delete data.terms;
+  Object.keys(data).map(key => {
+    // Attach the '+' to the beginning of the phone number
+    // if its not there already.
+    if (key === 'phone') {
+      if (!data['phone'].includes('+')) {
+        data['phone'] = '+' + data['phone'];
+      }
+    }
+
+    // Remove the space from the full name value.
+    if (key === 'username') {
+      data['username'] = data['username'].replace(/ /g, "")
+    }
+    return null;
+  })
+  return data;
+}
+
 export const removeTokens = () => {
   localStorage.removeItem("access_token");
   localStorage.removeItem("refresh_token");
