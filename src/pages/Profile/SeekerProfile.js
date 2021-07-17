@@ -93,7 +93,6 @@ const SeekerProfile = () => {
               dateOfBirth: dateOfBirth,
             },
           }).then(({ data }) => {
-            console.log(data);
             if (data) {
               if (data.seekerCreate) {
                 if (!data.seekerCreate.success) {

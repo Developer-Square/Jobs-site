@@ -9,6 +9,7 @@ import DateInput from "./DateInput";
 import UploadInput from "./UploadInput";
 import PhoneNumberInput from "./PhoneInput";
 import SingleCheckbox from './SingleCheckbox'
+import CreatableSelectInput from './CreatableSelect'
 
 
 
@@ -21,6 +22,8 @@ function FormikControl(props) {
       return <Textarea {...rest} />;
     case "select":
       return <SelectInput {...rest} />;
+    case "create-select":
+      return <CreatableSelectInput {...rest} />;
     case "radio":
       return <RadioButtons {...rest} />;
     case "checkbox":

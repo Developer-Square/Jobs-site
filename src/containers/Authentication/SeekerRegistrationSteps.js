@@ -170,7 +170,7 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
               <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
             </Spacer>
             <FormikControl
-              control="select"
+              control="create-select"
               options={schoolOptions}
               label="Institution/School"
               name="school"

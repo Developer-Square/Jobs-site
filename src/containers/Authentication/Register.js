@@ -4,13 +4,13 @@ import firebase from "firebase";
 
 import Button from "components/Button/Button";
 import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
-import { prepareData } from './auth-helpers'
+import { getIndustries, prepareData } from './auth-helpers'
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
 import {Bio} from './BusinessRegistrationSteps'
 import { TypedAccountRegistrationMutation, TypedAccountLoginMutation, TypedSeekerProfileMutation, TypedEmployerProfileMutation } from "./mutations";
 import { maybe } from "misc";
-import { TypedIndustriesQuery } from "./queries";
+import { TypedIndustriesQuery, TypedInstitutionQuery } from "./queries";
 import Loader from "components/Loader/Loader";
 import { cleanIndustries, cleanInitialValues } from './auth-helpers'
 import { storeLoginDetails, showSeekerProfileNotification } from "utils";
@@ -43,7 +43,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
 
   const schoolInterestsInitialValues = {
     school: '',
-    interests: [{value: 'COMPUTER SCIENCE', label: 'Computer Science'}],
+    interests: [],
     course: '',
   }
 
@@ -52,18 +52,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     location: 'Nairobi, Kenya',
     industries: []
   }
-
-  const schoolOptions = [ 
-    { value: "AFRICAN NAZARENE", label: "African Nazarene" },
-    { value: "STRATHMORE UNIVERSITY", label: "Strathmore University" }
-  ]
-
-  const interests = [
-    { value: "CODING", label: "Coding" },
-    { value: "GRAPHIC DESIGN", label: "Graphic Design" },
-    { value: "ONLINE WRITING", label: "Online Writing" },
-    { value: "CATERING", label: "Catering" },
-  ]
 
   React.useEffect(() => {
     if (match.params) {
@@ -179,13 +167,12 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {
-    // const interests = values.interests.reduce((arr, b) => {
-    //   arr.push(b.value);
-    //   return arr;
-    // }, []);
-    // send empty array now for testing purposes
-    const interests = ['SW5kdXN0cnk6Mg=='].toString();
-    console.log(values);
+    const interests = values.interests.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
+    // // send empty array now for testing purposes
+    // const interests = ['SW5kdXN0cnk6Mg=='].toString();
     seekerCreate({
         variables: {
           ...values,
@@ -284,20 +271,49 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
             <div id="sign-in-button"></div>
           </>
         ) : activeStep === 2 && switchTab === 'seeker' ? (
-
-          <TypedSeekerProfileMutation onCompleted={(data, errors) => showSeekerProfileNotification(data, errors, alert)} >
-            {(seekerCreate, { loading }) => { 
-            function onSeekerProfileSubmit(values, { setErrors }) {
-              console.log(values)
-              if (IsNotEmpty(values)) {
-                seekerProfileCreate(values, seekerCreate, setErrors);
+          <TypedInstitutionQuery>
+            {(institutions) => {
+              if (institutions.loading) {
+                return <Loader />;
               }
-            }
-            return(
-              <FurtherInformation schoolOptions={schoolOptions} interests={interests} loading={loading} switchTabs={switchTabs} onSeekerProfileSubmit={onSeekerProfileSubmit} initialValues={schoolInterestsInitialValues} />
-            )}
-            }
-          </TypedSeekerProfileMutation>
+              let schoolOptions = [];
+              if (IsNotEmpty(institutions.data)) {
+                schoolOptions = cleanIndustries(
+                  institutions.data.allInstitutions
+                );
+              }
+              let initialValues = schoolInterestsInitialValues;
+              let interests;
+              initialValues = cleanInitialValues(
+                schoolOptions, interests
+              );
+              return ( 
+                <TypedIndustriesQuery>
+                  {(industriesData) => {
+                    if (industriesData.loading) {
+                      return <Loader />;
+                    }
+
+                    let industries = getIndustries(industriesData, schoolInterestsInitialValues);
+                    return ( 
+                      <TypedSeekerProfileMutation onCompleted={(data, errors) => showSeekerProfileNotification(data, errors, alert)} >
+                        {(seekerCreate, { loading }) => { 
+                        function onSeekerProfileSubmit(values, { setErrors }) {
+                          if (IsNotEmpty(values.interests)) {
+                            seekerProfileCreate(values, seekerCreate, setErrors);
+                          }
+                        }
+                        return(
+                          <FurtherInformation schoolOptions={schoolOptions} interests={industries} loading={loading} switchTabs={switchTabs} onSeekerProfileSubmit={onSeekerProfileSubmit} initialValues={schoolInterestsInitialValues} />
+                        )}
+                        }
+                      </TypedSeekerProfileMutation>
+                    ) 
+                    }}
+                </TypedIndustriesQuery>
+            )
+          }}
+          </TypedInstitutionQuery>
 
         ) : activeStep === 2 && switchTab === 'business' ? (
           <TypedIndustriesQuery>
@@ -305,16 +321,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
               if (industriesData.loading) {
                 return <Loader />;
               }
-              let industries = [];
-              if (IsNotEmpty(industriesData.data)) {
-                industries = cleanIndustries(
-                  industriesData.data.allIndustries
-                );
-              }
-              let initialValues = bioInitialValues;
-              initialValues = cleanInitialValues(
-                industries
-              );
+              let industries = getIndustries(industriesData, bioInitialValues);
               
               return ( 
                 <TypedEmployerProfileMutation

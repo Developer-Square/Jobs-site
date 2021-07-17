@@ -18,5 +18,15 @@ export const homePageQuery = gql`
 
 export const TypedHomePageQuery = TypedQuery(homePageQuery);
 
+export const institutionsQuery = gql`
+  query Institutions {
+    allInstitutions {
+      id
+      name
+    }
+  }
+`
+export const TypedInstitutionQuery = TypedQuery(institutionsQuery);
+
 export const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
 

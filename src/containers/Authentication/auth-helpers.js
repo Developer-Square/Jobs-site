@@ -1,3 +1,4 @@
+import { IsNotEmpty } from 'helpers';
 
 // Prepare data for sending i.e. add the '+' to international phonenumbers.
 export const prepareData = (data) => {
@@ -22,9 +23,9 @@ export const prepareData = (data) => {
     return data;
   }
 
-export const cleanInitialValues = (data) => {
+export const cleanInitialValues = (data, key) => {
     const obj = {
-        industries: data.reduce((acc, ind) => {
+        key: data.reduce((acc, ind) => {
         acc.push({ value: ind.id, label: ind.name });
         return acc;
         }, []),
@@ -41,3 +42,17 @@ export const cleanIndustries = (data) => {
       return arr;
     }, []);
   };
+
+export const getIndustries = (industriesData, values) => {
+    let industries = [];
+    if (IsNotEmpty(industriesData.data)) {
+        industries = cleanIndustries(
+            industriesData.data.allIndustries
+        );
+    }
+    let initialValues = values;
+    initialValues = cleanInitialValues(
+    industries, industries
+    );
+    return industries
+}
