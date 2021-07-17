@@ -1,4 +1,5 @@
 import { TypedQuery } from "core/queries";
+import { GET_INDUSTRIES } from "common/queries";
 import gql from "graphql-tag";
 
 export const homePageQuery = gql`
@@ -16,3 +17,6 @@ export const homePageQuery = gql`
 `;
 
 export const TypedHomePageQuery = TypedQuery(homePageQuery);
+
+export const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
+

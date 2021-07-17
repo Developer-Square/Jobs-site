@@ -3,14 +3,17 @@ import { useAlert } from "react-alert";
 import firebase from "firebase";
 
 import Button from "components/Button/Button";
-import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty, prepareData } from "helpers";
+import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
+import { prepareData } from './auth-helpers'
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
 import {Bio} from './BusinessRegistrationSteps'
 import { TypedAccountRegistrationMutation, TypedAccountLoginMutation, TypedSeekerProfileMutation, TypedEmployerProfileMutation } from "./mutations";
 import { maybe } from "misc";
-import { storeLoginDetails } from "utils";
-import { showSeekerProfileNotification } from "utils";
+import { TypedIndustriesQuery } from "./queries";
+import Loader from "components/Loader/Loader";
+import { cleanIndustries, cleanInitialValues } from './auth-helpers'
+import { storeLoginDetails, showSeekerProfileNotification } from "utils";
 
 const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const alert = useAlert();
@@ -23,9 +26,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test37',
-    email: 'ryantest37@gmail.com',
-    phone: '254745613319',
+    username: 'Ryan test41',
+    email: 'ryantest41@gmail.com',
+    phone: '254745613323',
     password1: 'Passwor1',
     password2: 'Passwor1',
     isEmployer,
@@ -47,7 +50,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const bioInitialValues = {
     company: 'Andela LLC',
     location: 'Nairobi, Kenya',
-    industries: [{value: 'PETROLEUM Industry', label: 'Petroleum Industry'}]
+    industries: []
   }
 
   const schoolOptions = [ 
@@ -56,13 +59,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   ]
 
   const interests = [
-    { value: "CODING", label: "Coding" },
-    { value: "GRAPHIC DESIGN", label: "Graphic Design" },
-    { value: "ONLINE WRITING", label: "Online Writing" },
-    { value: "CATERING", label: "Catering" },
-  ]
-
-  const industries = [
     { value: "CODING", label: "Coding" },
     { value: "GRAPHIC DESIGN", label: "Graphic Design" },
     { value: "ONLINE WRITING", label: "Online Writing" },
@@ -247,6 +243,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     });
   }
 
+
   return (
     <TypedAccountRegistrationMutation
       onCompleted={(data) => showSuccessNotification(data, alert)}
@@ -303,28 +300,48 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
           </TypedSeekerProfileMutation>
 
         ) : activeStep === 2 && switchTab === 'business' ? (
-          <TypedEmployerProfileMutation
-            onCompleted={(data, errors) =>
-              showNotification(
-                data.employerCreate,
-                errors,
-                alert,
-                "accountErrors",
-                "Profile Created",
-              )
-          }
-          >
-            {(employerCreate) => {
-              function onEmployerProfileSubmit(values, { setErrors }) {
-                if (IsNotEmpty(values)) {
-                  employerProfileCreate(values, employerCreate, setErrors);
-                }
+          <TypedIndustriesQuery>
+            {(industriesData) => {
+              if (industriesData.loading) {
+                return <Loader />;
               }
-              return (
-                <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onEmployerProfileSubmit={onEmployerProfileSubmit} alert={alert} />
+              let industries = [];
+              if (IsNotEmpty(industriesData.data)) {
+                industries = cleanIndustries(
+                  industriesData.data.allIndustries
+                );
+              }
+              let initialValues = bioInitialValues;
+              initialValues = cleanInitialValues(
+                industries
+              );
+              
+              return ( 
+                <TypedEmployerProfileMutation
+                  onCompleted={(data, errors) =>
+                    showNotification(
+                      data.employerCreate,
+                      errors,
+                      alert,
+                      "accountErrors",
+                      "Profile Created",
+                    )
+                  }
+                >
+                  {(employerCreate) => {
+                    function onEmployerProfileSubmit(values, { setErrors }) {
+                      if (IsNotEmpty(values)) {
+                        employerProfileCreate(values, employerCreate, setErrors);
+                      }
+                    }
+                    return (
+                      <Bio initialValues={bioInitialValues} industries={industries} loading={loading} switchTabs={switchTabs} onEmployerProfileSubmit={onEmployerProfileSubmit} alert={alert} />
+                    )
+                  }}
+                </TypedEmployerProfileMutation>
               )
             }}
-          </TypedEmployerProfileMutation>
+          </TypedIndustriesQuery>
         // eslint-disable-next-line
         ) : activeStep === 3 && switchTab === 'seeker' || activeStep === 3 && switchTab === 'business' ? (
           // Using the Billing Form for both seeker and business tabs as the fields are similar.
