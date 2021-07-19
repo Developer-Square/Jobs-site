@@ -5,7 +5,18 @@ import styled from "styled-components";
 import CreatableSelect from "react-select/creatable";
 
 function CreatableSelectInput(props) {
-  const { label, name, options, icon, style, ...rest } = props;
+  const { label, name, options, icon, style, showButton, hideButton, ...rest } = props;
+
+  const handleChange = (name, val, setFieldValue) => {
+    hideButton('blur')
+    setFieldValue(name, val)
+  }
+
+  // Hide the submit button whenever the select input is active and vice versa.
+  const handleButton = (data) => {
+    hideButton(data);
+  }
+
   return (
     <FormInput className={`form-row form-row-wide`} style={style}>
       <label htmlFor={name}>
@@ -34,7 +45,9 @@ function CreatableSelectInput(props) {
                 isClearable
                 options={options}
                 value={value}
-                onChange={(val) => setFieldValue(name, val)}
+                onFocus={() => handleButton('focus')}
+                onBlur={() => handleButton('blur')}
+                onChange={(val) => handleChange(name, val, setFieldValue)}
                 // {...field}
                 {...rest}
               />

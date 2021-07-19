@@ -10,6 +10,15 @@ import { handleAvatarUpdate } from 'utils';
 import { TypedAvatarUpdateMutation } from './mutations';
 
 export const Bio = ({initialValues, onEmployerProfileSubmit, loading, industries, switchTabs, alert}) => {
+    const [showButton, setShowButton] = React.useState(true);
+
+    const handleButton = (data) => {
+        if (data === 'focus') {
+            setShowButton(false);
+        } else {
+            setShowButton(true);
+        }
+    }
     return (
         <Formik initialValues={initialValues} validationSchema={bioSchema} onSubmit={onEmployerProfileSubmit}>
         {(formik) => {
@@ -38,10 +47,12 @@ export const Bio = ({initialValues, onEmployerProfileSubmit, loading, industries
                 <FormikControl
                     control="select"
                     options={industries}
+                    showButton={showButton}
+                    hideButton={(data) => handleButton(data)}
                     label="Industries"
                     name="industries"
                     isMulti
-                    className="basic-multi-select"
+                    id="basic-multi-select"
                     classNamePrefix="select"
                     icon="ln ln-icon-Lock-2"
                 />
@@ -66,27 +77,32 @@ export const Bio = ({initialValues, onEmployerProfileSubmit, loading, industries
                     };
 
                     return (
-                        <FormikControl
-                        control="file"
-                        type="file"
-                        setFieldValue={formik.setFieldValue}
-                        version="profile"
-                        directUpload={true}
-                        action={handleAvatarChange}
-                        label="Logo"
-                        name="avatar"
-                        />
+                        <>
+                            {showButton ? (
+                                <FormikControl
+                                control="file"
+                                type="file"
+                                setFieldValue={formik.setFieldValue}
+                                version="profile"
+                                directUpload={true}
+                                action={handleAvatarChange}
+                                label="Logo"
+                                name="avatar"
+                                />
+                            ) : null}
+                     </>
                     );
                     }}
                 </TypedAvatarUpdateMutation>
-
-                <Button
-                    type="submit"
-                    disabled={!formik.isValid}
-                    fullwidth
-                    loading={loading}
-                    title={loading ? "Verifying ... " : "Verify"}
-                />
+                {showButton ? (
+                    <Button
+                        type="submit"
+                        disabled={!formik.isValid}
+                        fullwidth
+                        loading={loading}
+                        title={loading ? "Verifying ... " : "Verify"}
+                    />
+                ) : null}
             </Form>
         )
         }}

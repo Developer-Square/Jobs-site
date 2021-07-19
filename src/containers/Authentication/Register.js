@@ -171,8 +171,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       arr.push(b.value);
       return arr;
     }, []);
-    // // send empty array now for testing purposes
-    // const interests = ['SW5kdXN0cnk6Mg=='].toString();
+    // TODO: Check whether values.school.value is in institutions if not send a mutation.
     seekerCreate({
         variables: {
           ...values,
@@ -207,7 +206,11 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       country = data[0]
     }
 
-    const industries = ['SW5kdXN0cnk6Mg=='].toString();
+    const industries = values.industries.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
+
     employerCreate({
         variables: {
           ...values,

@@ -161,6 +161,15 @@ export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert
 }
 
 export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSeekerProfileSubmit }) => {
+  const [showButton, setShowButton] = React.useState(true);
+
+  const handleButton = (data) => {
+    if (data === 'focus') {
+      setShowButton(false);
+    } else {
+      setShowButton(true);
+    }
+  }
   return (
     <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSeekerProfileSubmit}>
       {(formik) => {
@@ -171,6 +180,8 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
             </Spacer>
             <FormikControl
               control="create-select"
+              id="createSelect"
+              hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
               options={schoolOptions}
               label="Institution/School"
               name="school"
@@ -189,23 +200,25 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
               control="select"
               isMulti
               options={interests}
+              showButton={showButton}
+              hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
               label="Interests"
               name="interests"
-              className="basic-multi-select"
+              id="basic-multi-select"
               classNamePrefix="select"
               icon="ln ln-icon-Lock-2"
             />
             {/* This is here as the dropdown appears behind the submit button
             hence we need to add some extra space */}
             <Spacer marginTopBottom="100px 0" />
-
-            <Button
+            {showButton ? (<Button
               type="submit"
               disabled={!formik.isValid}
               fullwidth
               loading={loading}
               title={loading ? "Saving ... " : "Save"}
-            />
+            />) : null }
+            
           </Form>
         )
       }}

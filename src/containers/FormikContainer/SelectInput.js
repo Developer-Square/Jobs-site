@@ -5,7 +5,25 @@ import styled from "styled-components";
 import Select from "react-select";
 
 function SelectInput(props) {
-  const { label, name, options, icon, style, ...rest } = props;
+  const { label, name, options, icon, style, hideButton, ...rest } = props;
+
+  const handleChange = (name, val, setFieldValue) => {
+    const inputOrganization = document.getElementById('react-select-3-input');
+    const inputSeeker = document.getElementById('react-select-5-input');
+
+    // Check if the select input is still the focused element.
+    if (document.activeElement === inputOrganization || document.activeElement === inputSeeker) {
+      inputOrganization.blur();
+      inputSeeker.blur();
+    }
+    handleButton('blur');
+    setFieldValue(name, val);
+  }
+
+  // Hide the submit button whenever the select input is active and vice versa.
+  const handleButton = (data) => {
+    hideButton(data);
+  }
   return (
     <FormInput className={`form-row form-row-wide`} style={style}>
       <label htmlFor={name}>
@@ -33,7 +51,9 @@ function SelectInput(props) {
               <Select
                 options={options}
                 value={value}
-                onChange={(val) => setFieldValue(name, val)}
+                onFocus={() => handleButton('focus')}
+                onBlur={() => handleButton('blur')}
+                onChange={(val) => handleChange(name, val, setFieldValue)}
                 // {...field}
                 {...rest}
               />
