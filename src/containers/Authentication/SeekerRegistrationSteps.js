@@ -14,6 +14,9 @@ import { TOS } from "constants/routes.constants";
 import { Typography } from "@material-ui/core";
 import { TypedCreateSelectableInstitutionMutation } from './mutations'
 import { showSuccessNotification, IsNotEmpty } from "helpers";
+import { TypedPlansListQuery } from './queries';
+import Loader from "components/Loader/Loader";
+
 
 
 
@@ -174,25 +177,36 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
     }
   }
 
-  const submitCreateInstitution = (values, createInstitution) => {
-    // Prepare the data to be sent in the format expected in the backend.
-    values.name = values.value;
-    values.text = "";
-    values.chatroom = "";
-
-    createInstitution({
-      variables: values,
-    }).then(({ data }) => {
-
-      if (data.createSelectableInstitution.success) {
-        alert.show(
-          {
-            title: "Institution created successfully",
-          },
-          { type: "success", timeout: 5000 },
-        );
+  const submitCreateInstitution = (values, createInstitution, options) => {
+    let optionInBackend = false;
+    // Check whether the institution provided is already among the backend
+    // options.
+    options.map(option => {
+      if (option.value === values.value) {
+        optionInBackend = true
       }
-    }).catch((err) => console.log(err));
+    });
+    
+    if (!optionInBackend) {
+      // Prepare the data to be sent in the format expected in the backend.
+      values.name = values.value;
+      values.text = "";
+      values.chatroom = "";
+
+      createInstitution({
+        variables: values,
+      }).then(({ data }) => {
+
+        if (data.createSelectableInstitution.success) {
+          alert.show(
+            {
+              title: "Institution created successfully",
+            },
+            { type: "success", timeout: 5000 },
+          );
+        }
+      }).catch((err) => console.log(err));
+    }
   }
   return (
     <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSeekerProfileSubmit}>
@@ -206,9 +220,11 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
             <TypedCreateSelectableInstitutionMutation onCompleted={(data) => showSuccessNotification(data, alert)}>
               {(createInstitution) => {
                 function onSubmit(values) {
-                  if (IsNotEmpty(values)) {
-                    submitCreateInstitution(values, createInstitution)
-                  }
+                  if (values) { 
+                    if (IsNotEmpty(values.value)) {
+                      submitCreateInstitution(values, createInstitution, schoolOptions)
+                    }
+                }
                 }
                 return (
                   <FormikControl
@@ -265,7 +281,7 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
   )
 }
 
-export const Billing = ({ switchTabs }) => {
+export const Billing = ({ switchTabs, isSeeker }) => {
   const useStyles = makeStyles({
     root: {
       minWidth: 235,
@@ -277,33 +293,52 @@ export const Billing = ({ switchTabs }) => {
 
   const classNames = useStyles()
 
-  const options = [
-    {tier: "Basic", title: "Explore"},
-    {tier: "Standard", title: "Get Started"},
-    {tier: "Premium", title: "Get Started"},
-  ]
   return (
     <>
-      <Spacer>
-        <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
-      </Spacer>
-      <Title>Choose your tier: </Title>
-      <PricingTier>
-        {options.map((option, index) => (
-          <div key={index}>
-          {/* Add action to take them to dashboard */}
-            <Card key={index} onClick={() => {}} className={classNames.root}>
-              <CardContent>
-                <Typography variant="h5">
-                  {option.tier}
-                </Typography>
-              </CardContent>
-            </Card>
-            <Title>{option.title}</Title>
-          </div>
-        ))}
+      <TypedPlansListQuery>
+        {(plansList) => {
+          if (plansList.loading) {
+            return <Loader />;
+          }
 
-      </PricingTier>
+          let plans;
+          const {allPlanLists} = plansList.data
+          if (allPlanLists.length > 0) {
+            // If the user is a seeker then only add the options available
+            // to them.
+            console.log(isSeeker);
+            if (isSeeker) {
+              plans = allPlanLists.slice(4);
+            } else {
+              plans = allPlanLists.slice(0, 3);
+            }
+          }
+     
+        return (
+          <>
+            <Spacer>
+              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
+            </Spacer>
+            <Title>Choose your tier: </Title>
+            <PricingTier>
+              {plans ? plans.map((option, index) => (
+                <div key={index}>
+                {/* Add action to take them to dashboard */}
+                  <Card key={index} onClick={() => {}} className={classNames.root}>
+                    <CardContent>
+                      <Typography variant="h5">
+                        {option.title}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </div>
+              )): null}
+
+            </PricingTier>
+          </>
+          )
+        }}
+      </TypedPlansListQuery>
     </>
   )
 }

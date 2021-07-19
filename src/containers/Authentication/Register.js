@@ -26,9 +26,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test41',
-    email: 'ryantest41@gmail.com',
-    phone: '254745613323',
+    username: 'Ryan test42',
+    email: 'ryantest42@gmail.com',
+    phone: '254745613324',
     password1: 'Passwor1',
     password2: 'Passwor1',
     isEmployer,
@@ -56,9 +56,10 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   React.useEffect(() => {
     if (match.params) {
       if (match.params.userType === 'seeker') {
-        setIsSeeker(currSeeker => currSeeker = true);
+        setIsEmplolyer(currEmployer => currEmployer = false);
       } else if (match.params.userType === 'business') {
         setIsEmplolyer(currEmployer => currEmployer = true);
+        setIsSeeker(currSeeker => currSeeker = false);
       }
     }    // eslint-disable-next-line
   }, [match.params.userType, switchTab, initialValues]);
@@ -167,70 +168,72 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {
-    const interests = values.interests.reduce((arr, b) => {
-      arr.push(b.value);
-      return arr;
-    }, []);
-    // TODO: Check whether values.school.value is in institutions if not send a mutation.
-    seekerCreate({
-        variables: {
-          ...values,
-        institution: values.school.value,
-        industries: interests
-      }
-    }).then(({ data }) => {
-      if (data) {
-        if (data.seekerCreate) {
-          switchTabs('', 'forward');
+    switchTabs('', 'forward');
 
-          if (!data.seekerCreate.success) {
-            setErrors(
-              normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
-            );
-          }
-        }
-      }
-    });
+    // const interests = values.interests.reduce((arr, b) => {
+    //   arr.push(b.value);
+    //   return arr;
+    // }, []);
+    // seekerCreate({
+    //     variables: {
+    //       ...values,
+    //     institution: values.school.value,
+    //     industries: interests
+    //   }
+    // }).then(({ data }) => {
+    //   if (data) {
+    //     if (data.seekerCreate) {
+    //       switchTabs('', 'forward');
+
+    //       if (!data.seekerCreate.success) {
+    //         setErrors(
+    //           normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
+    //         );
+    //       }
+    //     }
+    //   }
+    // });
   }
 
   const employerProfileCreate = (values, employerCreate, setErrors) => {
-    let country;
-    const data = values.location.split(',');
+    switchTabs('', 'forward');
+    // let country;
+    // const data = values.location.split(',');
 
-    // Check if the user provided a county as the second arguement.
-    if (data[1]) {
-      // Perform a slice to get rid of the whitespace infront of the 
-      // country string.
-      country = data[1].slice(1);
-    } else {
-      country = data[0]
-    }
+    // // Check if the user provided a county as the second arguement.
+    // if (data[1]) {
+    //   // Perform a slice to get rid of the whitespace infront of the 
+    //   // country string.
+    //   country = data[1].slice(1);
+    // } else {
+    //   country = data[0]
+    // }
 
-    const industries = values.industries.reduce((arr, b) => {
-      arr.push(b.value);
-      return arr;
-    }, []);
+    // const industries = values.industries.reduce((arr, b) => {
+    //   arr.push(b.value);
+    //   return arr;
+    // }, []);
 
-    employerCreate({
-        variables: {
-          ...values,
-          country,
-          industries, 
-          name: values.company,
-        }
-    }).then(({ data }) => {
-      if (data) {
-        if (data.employerCreate) {
-          switchTabs('', 'forward');
+    // employerCreate({
+    //     variables: {
+    //       ...values,
+    //       country,
+    //       industries, 
+    //       name: values.company,
+    //     }
+    // }).then(({ data }) => {
+    //   if (data) {
+    //     if (data.employerCreate) {
+    //       switchTabs('', 'forward');
 
-          if (!data.employerCreate.success) {
-            setErrors(
-              normalizeErrors(maybe(() => data.employerCreate.errors, [])),
-            );
-          }
-        }
-      }
-    });
+    //       if (!data.employerCreate.success) {
+    //         setErrors(
+    //           normalizeErrors(maybe(() => data.employerCreate.errors, [])),
+    //         );
+    //       }
+    //     }
+    //   }
+    // });
   }
 
 
@@ -356,7 +359,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         // eslint-disable-next-line
         ) : activeStep === 3 && switchTab === 'seeker' || activeStep === 3 && switchTab === 'business' ? (
           // Using the Billing Form for both seeker and business tabs as the fields are similar.
-          <Billing switchTabs={switchTabs} loading={loading} />
+          <Billing switchTabs={switchTabs} isSeeker={isSeeker} loading={loading} />
         ) : (
           <div className="register">
             <div

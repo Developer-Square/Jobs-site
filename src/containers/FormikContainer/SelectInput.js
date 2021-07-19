@@ -12,10 +12,14 @@ function SelectInput(props) {
     const inputSeeker = document.getElementById('react-select-5-input');
 
     // Check if the select input is still the focused element.
-    if (document.activeElement === inputOrganization || document.activeElement === inputSeeker) {
+    if (document.activeElement === inputOrganization ) {
       inputOrganization.blur();
+    }
+
+    if (document.activeElement === inputSeeker) {
       inputSeeker.blur();
     }
+
     handleButton('blur');
     setFieldValue(name, val);
   }
