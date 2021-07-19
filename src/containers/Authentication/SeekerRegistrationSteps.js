@@ -1,3 +1,4 @@
+import React, {useEffect} from 'react';
 import { Form, Formik } from "formik";
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components'
@@ -11,6 +12,9 @@ import FormikControl from "../FormikContainer/FormikControl"
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
 import { Typography } from "@material-ui/core";
+import { TypedCreateSelectableInstitutionMutation } from './mutations'
+import { showSuccessNotification, IsNotEmpty } from "helpers";
+
 
 
 export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history, fillFields }) => {
@@ -22,7 +26,6 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
       onSubmit={onSubmit}
     >
       {(formik) => {
-        console.log(formik)
         return (
           <Form className="register" noValidate>
             <Spacer>
@@ -37,29 +40,35 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
               name="email"
               icon="ln ln-icon-Mail"
             />
-
             <FormikControl
               control="phone"
               type="number"
               label="Phone number"
-              name="phonenumber"
+              name="phone"
               icon="ln ln-icon-Mail"
             />
             <FormikControl
               control="input"
               type="text"
               label="Full name"
-              name="fullname"
+              name="username"
               icon="ln ln-icon-Male"
             />
             <FormikControl
               control="input"
               type="password"
               label="Password"
-              name="password"
+              name="password1"
               icon="ln ln-icon-Lock-2"
             />
-            
+            <FormikControl
+              control="input"
+              type="password"
+              label="Confirm Password"
+              name="password2"
+              icon="ln ln-icon-Lock-2"
+            />
+
             <TermsSection>
               <div>
                 <FormikControl 
@@ -86,7 +95,7 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
 
             <Button
               type="submit"
-              disabled={!formik.isValid}
+              // disabled={!formik.isValid}
               fullwidth
               loading={loading}
               title={loading ? "Signing Up ... " : "Sign Up"}
@@ -99,15 +108,35 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
   )
 }
 
-export const OTPForm = ({switchTabs, loading, initialValues, onSubmit}) => {
+export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert, resendRequest}) => {
+  const [smsResend, setSmsResend] = React.useState(false);
+
+  useEffect(() => {
+    // Disable the resend sms link when a request to
+    // send the otp code has been sent.
+    if (resendRequest) {
+      setSmsResend(true);
+      alert.show(
+        {
+          title: 'OTP code has been resent, check your phone',
+        },
+        { type: 'success', timeout: 5000 },
+      )
+    }
+    // eslint-disable-next-line
+  }, [resendRequest])
+
+  const resendSms = () => {
+    let values = localStorage.getItem('registerValues');
+    values = JSON.parse(values);
+    onSignInSubmit(values.phone, true);
+  }
+
   return (
     <Formik initialValues={initialValues} validationSchema={OTPVerficationSchema} onSubmit={onSubmit}>
       {(formik) => {
         return (
           <Form noValidate>
-            <Spacer>
-              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
-            </Spacer>
             <FormikControl
               control="input"
               type="number"
@@ -115,6 +144,10 @@ export const OTPForm = ({switchTabs, loading, initialValues, onSubmit}) => {
               name="otpcode"
               icon="ln ln-icon-Lock-2"
             />
+
+            <Spacer>
+              <p>Didn't receive the code? <Resend smsResend={smsResend} onClick={resendSms}>Resend</Resend></p>
+            </Spacer>
 
             <Button
               type="submit"
@@ -130,22 +163,69 @@ export const OTPForm = ({switchTabs, loading, initialValues, onSubmit}) => {
   )
 }
 
-export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSubmit }) => {
+export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSeekerProfileSubmit, alert }) => {
+  const [showButton, setShowButton] = React.useState(true);
+
+  const handleButton = (data) => {
+    if (data === 'focus') {
+      setShowButton(false);
+    } else {
+      setShowButton(true);
+    }
+  }
+
+  const submitCreateInstitution = (values, createInstitution) => {
+    // Prepare the data to be sent in the format expected in the backend.
+    values.name = values.value;
+    values.text = "";
+    values.chatroom = "";
+
+    createInstitution({
+      variables: values,
+    }).then(({ data }) => {
+
+      if (data.createSelectableInstitution.success) {
+        alert.show(
+          {
+            title: "Institution created successfully",
+          },
+          { type: "success", timeout: 5000 },
+        );
+      }
+    }).catch((err) => console.log(err));
+  }
   return (
-    <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSubmit}>
+    <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSeekerProfileSubmit}>
       {(formik) => {
         return (
           <Form>
             <Spacer>
               <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
             </Spacer>
-            <FormikControl
-              control="select"
-              options={schoolOptions}
-              label="Institution/School"
-              name="school"
-              icon="ln ln-icon-Lock-2"
-            />
+
+            <TypedCreateSelectableInstitutionMutation onCompleted={(data) => showSuccessNotification(data, alert)}>
+              {(createInstitution) => {
+                function onSubmit(values) {
+                  if (IsNotEmpty(values)) {
+                    submitCreateInstitution(values, createInstitution)
+                  }
+                }
+                return (
+                  <FormikControl
+                    control="create-select"
+                    id="createSelect"
+                    hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
+                    options={schoolOptions}
+                    setFieldValue={formik.setFieldValue}
+                    action={onSubmit}
+                    directUpload={true}
+                    label="Institution/School"
+                    name="school"
+                    icon="ln ln-icon-Lock-2"
+                  />
+                )
+              }}
+            </TypedCreateSelectableInstitutionMutation>
 
             <FormikControl
               control="input"
@@ -159,23 +239,25 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
               control="select"
               isMulti
               options={interests}
+              showButton={showButton}
+              hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
               label="Interests"
               name="interests"
-              className="basic-multi-select"
+              id="basic-multi-select"
               classNamePrefix="select"
               icon="ln ln-icon-Lock-2"
             />
             {/* This is here as the dropdown appears behind the submit button
             hence we need to add some extra space */}
             <Spacer marginTopBottom="100px 0" />
-
-            <Button
+            {showButton ? (<Button
               type="submit"
               disabled={!formik.isValid}
               fullwidth
               loading={loading}
               title={loading ? "Saving ... " : "Save"}
-            />
+            />) : null }
+            
           </Form>
         )
       }}
@@ -225,6 +307,14 @@ export const Billing = ({ switchTabs }) => {
     </>
   )
 }
+
+const Resend = styled.div`
+  display: inline-block;
+  color: ${ props => props.smsResend ? 'rgba(0, 0, 0, 0.38)' : '#21277f'};
+  font-weight: bold;
+  pointer-events: ${props => props.smsResend ? 'none': 'all'};
+  cursor: pointer;
+`
 
 const TermsSection = styled.div`
   display: flex;

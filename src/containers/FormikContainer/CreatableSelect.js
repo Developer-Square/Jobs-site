@@ -2,28 +2,23 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 import styled from "styled-components";
-import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 
-function SelectInput(props) {
-  const { label, name, options, icon, style, hideButton, ...rest } = props;
+function CreatableSelectInput(props) {
+  const { label, name, options, icon, style, showButton, hideButton, action, ...rest } = props;
 
   const handleChange = (name, val, setFieldValue) => {
-    const inputOrganization = document.getElementById('react-select-3-input');
-    const inputSeeker = document.getElementById('react-select-5-input');
-
-    // Check if the select input is still the focused element.
-    if (document.activeElement === inputOrganization || document.activeElement === inputSeeker) {
-      inputOrganization.blur();
-      inputSeeker.blur();
-    }
-    handleButton('blur');
+    hideButton('blur')
     setFieldValue(name, val);
+    // Call the onSubmit function.
+    action(val);
   }
 
   // Hide the submit button whenever the select input is active and vice versa.
   const handleButton = (data) => {
     hideButton(data);
   }
+
   return (
     <FormInput className={`form-row form-row-wide`} style={style}>
       <label htmlFor={name}>
@@ -48,7 +43,8 @@ function SelectInput(props) {
             const { setFieldValue } = form;
             const { value } = field;
             return (
-              <Select
+              <CreatableSelect
+                isClearable
                 options={options}
                 value={value}
                 onFocus={() => handleButton('focus')}
@@ -66,7 +62,7 @@ function SelectInput(props) {
   );
 }
 
-export default SelectInput;
+export default CreatableSelectInput;
 
 const FormInput = styled.div`
   .error {

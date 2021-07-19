@@ -10,7 +10,7 @@ import { normalizeErrors } from "helpers";
 import { useHistory } from "react-router-dom";
 import { loginSchema } from "./validation.schema";
 import { AuthContext } from "contexts/auth/auth.context";
-import { addObjectToLocalStorageObject, addArrayToLocalStorage } from "helpers";
+import { storeLoginDetails } from "utils";
 
 const Login = () => {
   const { authDispatch } = useContext(AuthContext);
@@ -23,7 +23,6 @@ const Login = () => {
   };
 
   const showNotification = (data, errors, alert) => {
-    console.log(errors);
     if (errors) {
       console.log("Server Error kwa login", errors[0].message);
       return errors[0].message;
@@ -61,48 +60,7 @@ const Login = () => {
             variables: values,
           }).then(({ data }) => {
             const successful = maybe(() => data.tokenAuth.success);
-            if (successful) {
-              localStorage.removeItem("thedb_auth_roles");
-              var roles = [];
-              if (data.tokenAuth.user.isStaff) {
-                roles.push("admin");
-              }
-              if (data.tokenAuth.user.isSeeker) {
-                roles.push("seeker");
-              }
-              if (data.tokenAuth.user.isEmployer) {
-                roles.push("employer");
-              }
-              if (data.tokenAuth.user.isInstitution) {
-                roles.push("institution");
-              }
-              console.log(roles);
-              addArrayToLocalStorage("thedb_auth_roles", roles);
-              localStorage.setItem("access_token", data.tokenAuth.token);
-              localStorage.setItem(
-                "refresh_token",
-                data.tokenAuth.refreshToken,
-              );
-              addObjectToLocalStorageObject("thedb_auth_payload", {
-                refreshToken: data.tokenAuth.refreshToken,
-                token: data.tokenAuth.token,
-              });
-              addObjectToLocalStorageObject(
-                "thedb_auth_profile",
-                data.tokenAuth.user,
-              );
-              console.log("should rediret to dashboard");
-              history.push("/dashboard");
-              // if (location.state !== undefined) {
-              //   history.push(location.state.referrer);
-              // } else {
-              //   history.push("/dashboard");
-              // }
-              setSubmitting(false);
-            } else {
-              setErrors(normalizeErrors(data.tokenAuth.errors));
-              setSubmitting(false);
-            }
+            storeLoginDetails(successful, history, data, setErrors, setSubmitting, 'login')
           });
         }
         return (

@@ -12,6 +12,7 @@ import { normalizeErrors } from "helpers";
 import { baseProfileSchema } from "./validation.schema";
 import LogoImage from "image/thedb.png";
 import { AuthContext } from "contexts/auth/auth.context";
+import { handleAvatarUpdate } from "utils";
 
 const BaseProfile = () => {
   const alert = useAlert();
@@ -23,41 +24,7 @@ const BaseProfile = () => {
     firstName: "",
     lastName: "",
   };
-  const handleAvatarUpdate = (data, errors) => {
-    if (errors) {
-      console.log("Server Error kwa login", errors[0].message);
-      return errors[0].message;
-    }
-    const successful = maybe(() => data.userAvatarUpdate.success);
-    alert.show(
-      {
-        title: "Update Successful",
-      },
-      { type: "success", timeout: 5000 },
-    );
-    if (successful) {
-      alert.show(
-        {
-          title: "Avatar Update Successful",
-        },
-        { type: "success", timeout: 5000 },
-      );
-    } else {
-      const err = maybe(() => data.userAvatarUpdate.errors, []);
 
-      if (err) {
-        const nonFieldErr = normalizeErrors(
-          maybe(() => data.userAvatarUpdate.errors, []),
-        );
-        alert.show(
-          {
-            title: nonFieldErr?.nonFieldErrors,
-          },
-          { type: "error", timeout: 5000 },
-        );
-      }
-    }
-  };
   const showNotification = (data, errors, alert) => {
     console.log(errors);
     if (errors) {

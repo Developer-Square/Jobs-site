@@ -2,6 +2,131 @@ import { clone, get, isEmpty } from "lodash";
 import { isArray, isEqual, isObject, transform } from "lodash";
 import dayjs from "dayjs";
 import { Base64 } from "js-base64";
+import { addObjectToLocalStorageObject, addArrayToLocalStorage, normalizeErrors } from "helpers";
+import { maybe } from "misc";
+
+/**
+ * @param  {} data
+ * @param  {} errors
+ * @param  {} alert
+ */
+export const showSeekerProfileNotification = (data, errors, alert) => {
+  console.log(errors);
+  if (errors) {
+    console.log("Server Error kwa login", errors[0].message);
+    return errors[0].message;
+  }
+
+  const successful = maybe(() => data.seekerCreate.success);
+
+  if (successful) {
+    alert.show(
+      {
+        title: "Profile Created",
+      },
+      { type: "success", timeout: 5000 },
+    );
+  } else {
+    const err = maybe(() => data.seekerCreate.errors, []);
+
+    if (err) {
+      const nonFieldErr = normalizeErrors(
+        maybe(() => data.seekerCreate.errors, []),
+      );
+      alert.show(
+        {
+          title: nonFieldErr?.nonFieldErrors,
+        },
+        { type: "error", timeout: 5000 },
+      );
+    }
+  }
+};
+
+/**
+ * @param  {} data
+ * @param  {} errors
+ */
+export const handleAvatarUpdate = (data, errors) => {
+  if (errors) {
+    console.log("Server Error kwa login", errors[0].message);
+    return errors[0].message;
+  }
+  const successful = maybe(() => data.userAvatarUpdate.success);
+
+  if (successful) {
+    alert.show(
+      {
+        title: "Avatar Update Successful",
+      },
+      { type: "success", timeout: 5000 },
+    );
+  } else {
+    const err = maybe(() => data.userAvatarUpdate.errors, []);
+
+    if (err) {
+      const nonFieldErr = normalizeErrors(
+        maybe(() => data.userAvatarUpdate.errors, []),
+      );
+      alert.show(
+        {
+          title: nonFieldErr?.nonFieldErrors,
+        },
+        { type: "error", timeout: 5000 },
+      );
+    }
+  }
+};
+
+/**
+ * @param  {} data
+ * Store a user's credentials in localstorage or display an error.
+ */
+export const storeLoginDetails = (successful, history, data, setErrors, setSubmitting, location) => {
+    if (successful) {
+        localStorage.removeItem("thedb_auth_roles");
+        var roles = [];
+        if (data.tokenAuth.user.isStaff) {
+          roles.push("admin");
+        }
+        if (data.tokenAuth.user.isSeeker) {
+          roles.push("seeker");
+        }
+        if (data.tokenAuth.user.isEmployer) {
+          roles.push("employer");
+        }
+        if (data.tokenAuth.user.isInstitution) {
+          roles.push("institution");
+        }
+        addArrayToLocalStorage("thedb_auth_roles", roles);
+        localStorage.setItem("access_token", data.tokenAuth.token);
+        localStorage.setItem(
+          "refresh_token",
+          data.tokenAuth.refreshToken,
+        );
+        addObjectToLocalStorageObject("thedb_auth_payload", {
+          refreshToken: data.tokenAuth.refreshToken,
+          token: data.tokenAuth.token,
+        });
+        addObjectToLocalStorageObject(
+          "thedb_auth_profile",
+          data.tokenAuth.user,
+        );
+
+        // If the function is being called from the login component
+        // then setSubmiting to false and move to the dashboard.
+        if (location === 'login') {
+            history.push("/dashboard");
+            setSubmitting(false);
+        }
+
+      } else {
+        setErrors(normalizeErrors(data.tokenAuth.errors));
+        if (location === 'login') {
+            setSubmitting(false);
+        }
+      }
+}
 
 export const getDBIdFromGraphqlId = (graphqlId, schema) => {
   // This is temporary solution, we will use slugs in the future

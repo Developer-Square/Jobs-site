@@ -6,10 +6,21 @@ import { Link } from "react-router-dom";
 import FormikControl from "../FormikContainer/FormikControl"
 import Button from "components/Button/Button";
 import { bioSchema } from './validation.schema'
+import { handleAvatarUpdate } from 'utils';
+import { TypedAvatarUpdateMutation } from './mutations';
 
-export const Bio = ({initialValues, onSubmit, loading, industries, switchTabs}) => {
+export const Bio = ({initialValues, onEmployerProfileSubmit, loading, industries, switchTabs, alert}) => {
+    const [showButton, setShowButton] = React.useState(true);
+
+    const handleButton = (data) => {
+        if (data === 'focus') {
+            setShowButton(false);
+        } else {
+            setShowButton(true);
+        }
+    }
     return (
-        <Formik initialValues={initialValues} validationSchema={bioSchema} onSubmit={onSubmit}>
+        <Formik initialValues={initialValues} validationSchema={bioSchema} onSubmit={onEmployerProfileSubmit}>
         {(formik) => {
         return (
             <Form noValidate>
@@ -34,30 +45,64 @@ export const Bio = ({initialValues, onSubmit, loading, industries, switchTabs}) 
                 />
 
                 <FormikControl
-                    control="react-select"
+                    control="select"
                     options={industries}
+                    showButton={showButton}
+                    hideButton={(data) => handleButton(data)}
                     label="Industries"
                     name="industries"
                     isMulti
-                    className="basic-multi-select"
+                    id="basic-multi-select"
                     classNamePrefix="select"
                     icon="ln ln-icon-Lock-2"
                 />
 
-                <FormikControl
-                    control="file"
-                    label="Logo"
-                    name="logo"
-                    icon="ln ln-icon-Lock-2"
-                />
+                <TypedAvatarUpdateMutation
+                    onCompleted={(data, errors) =>
+                    handleAvatarUpdate(data, errors, alert)
+                    }
+                >
+                    {(updateAvatar) => {
+                    const handleAvatarChange = (file) => {
+                        for (let i = 0; i < file.length; i++) {
+                        const f = file[i];
+                        updateAvatar({
+                            variables: { image: f },
+                        })
+                        .then((res) => {
+                            handleAvatarUpdate(res.data, null, alert);
+                        })
+                        .catch((err) => console.log(err));
+                        }
+                    };
 
-                <Button
-                    type="submit"
-                    disabled={!formik.isValid}
-                    fullwidth
-                    loading={loading}
-                    title={loading ? "Verifying ... " : "Verify"}
-                />
+                    return (
+                        <>
+                            {showButton ? (
+                                <FormikControl
+                                control="file"
+                                type="file"
+                                setFieldValue={formik.setFieldValue}
+                                version="profile"
+                                directUpload={true}
+                                action={handleAvatarChange}
+                                label="Logo"
+                                name="avatar"
+                                />
+                            ) : null}
+                     </>
+                    );
+                    }}
+                </TypedAvatarUpdateMutation>
+                {showButton ? (
+                    <Button
+                        type="submit"
+                        disabled={!formik.isValid}
+                        fullwidth
+                        loading={loading}
+                        title={loading ? "Verifying ... " : "Verify"}
+                    />
+                ) : null}
             </Form>
         )
         }}
