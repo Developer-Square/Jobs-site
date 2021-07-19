@@ -12,6 +12,9 @@ import FormikControl from "../FormikContainer/FormikControl"
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
 import { Typography } from "@material-ui/core";
+import { TypedCreateSelectableInstitutionMutation } from './mutations'
+import { showSuccessNotification, IsNotEmpty } from "helpers";
+
 
 
 export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history, fillFields }) => {
@@ -160,7 +163,7 @@ export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert
   )
 }
 
-export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSeekerProfileSubmit }) => {
+export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSeekerProfileSubmit, alert }) => {
   const [showButton, setShowButton] = React.useState(true);
 
   const handleButton = (data) => {
@@ -170,6 +173,27 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
       setShowButton(true);
     }
   }
+
+  const submitCreateInstitution = (values, createInstitution) => {
+    // Prepare the data to be sent in the format expected in the backend.
+    values.name = values.value;
+    values.text = "";
+    values.chatroom = "";
+
+    createInstitution({
+      variables: values,
+    }).then(({ data }) => {
+
+      if (data.createSelectableInstitution.success) {
+        alert.show(
+          {
+            title: "Institution created successfully",
+          },
+          { type: "success", timeout: 5000 },
+        );
+      }
+    }).catch((err) => console.log(err));
+  }
   return (
     <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSeekerProfileSubmit}>
       {(formik) => {
@@ -178,15 +202,30 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
             <Spacer>
               <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
             </Spacer>
-            <FormikControl
-              control="create-select"
-              id="createSelect"
-              hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
-              options={schoolOptions}
-              label="Institution/School"
-              name="school"
-              icon="ln ln-icon-Lock-2"
-            />
+
+            <TypedCreateSelectableInstitutionMutation onCompleted={(data) => showSuccessNotification(data, alert)}>
+              {(createInstitution) => {
+                function onSubmit(values) {
+                  if (IsNotEmpty(values)) {
+                    submitCreateInstitution(values, createInstitution)
+                  }
+                }
+                return (
+                  <FormikControl
+                    control="create-select"
+                    id="createSelect"
+                    hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
+                    options={schoolOptions}
+                    setFieldValue={formik.setFieldValue}
+                    action={onSubmit}
+                    directUpload={true}
+                    label="Institution/School"
+                    name="school"
+                    icon="ln ln-icon-Lock-2"
+                  />
+                )
+              }}
+            </TypedCreateSelectableInstitutionMutation>
 
             <FormikControl
               control="input"

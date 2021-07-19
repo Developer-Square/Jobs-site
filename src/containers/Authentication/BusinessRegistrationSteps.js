@@ -69,10 +69,10 @@ export const Bio = ({initialValues, onEmployerProfileSubmit, loading, industries
                         updateAvatar({
                             variables: { image: f },
                         })
-                            .then((res) => {
+                        .then((res) => {
                             handleAvatarUpdate(res.data, null, alert);
-                            })
-                            .catch((err) => console.log(err));
+                        })
+                        .catch((err) => console.log(err));
                         }
                     };
 

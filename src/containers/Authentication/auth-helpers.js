@@ -51,6 +51,7 @@ export const getIndustries = (industriesData, values) => {
         );
     }
     let initialValues = values;
+    // eslint-disable-next-line
     initialValues = cleanInitialValues(
     industries, industries
     );

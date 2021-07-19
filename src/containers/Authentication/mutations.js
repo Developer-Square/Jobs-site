@@ -232,6 +232,26 @@ export const EMPLOYER_PROFILE_MUTATION = gql`
   }
 `;
 
+export const CREATE_SELECTABLE_INSTITUTION = gql`
+  mutation CreateInstitution(
+    $name: String!
+    $chatroom: String!
+    $text: String!
+    ) {
+    createSelectableInstitution(input: {
+      name: $name
+      chatroom: $chatroom
+      text: $text
+    }) {
+      success
+      vacancyErrors {
+        message
+        code
+      }
+    }
+  }
+`
+
 export const TypedEmployerProfileMutation = TypedMutation(
   EMPLOYER_PROFILE_MUTATION,
 );
@@ -251,4 +271,5 @@ export const TypedAvatarUpdateMutation = TypedMutation(AVATAR_UPDATE_MUTATION);
 export const TypedSeekerProfileMutation = TypedMutation(
   SEEKER_PROFILE_MUTATION,
 );
+export const TypedCreateSelectableInstitutionMutation = TypedMutation(CREATE_SELECTABLE_INSTITUTION);
 

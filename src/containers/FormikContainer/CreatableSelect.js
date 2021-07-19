@@ -5,11 +5,13 @@ import styled from "styled-components";
 import CreatableSelect from "react-select/creatable";
 
 function CreatableSelectInput(props) {
-  const { label, name, options, icon, style, showButton, hideButton, ...rest } = props;
+  const { label, name, options, icon, style, showButton, hideButton, action, ...rest } = props;
 
   const handleChange = (name, val, setFieldValue) => {
     hideButton('blur')
-    setFieldValue(name, val)
+    setFieldValue(name, val);
+    // Call the onSubmit function.
+    action(val);
   }
 
   // Hide the submit button whenever the select input is active and vice versa.

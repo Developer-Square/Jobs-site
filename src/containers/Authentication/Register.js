@@ -287,6 +287,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
               }
               let initialValues = schoolInterestsInitialValues;
               let interests;
+              // eslint-disable-next-line
               initialValues = cleanInitialValues(
                 schoolOptions, interests
               );
@@ -307,7 +308,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
                           }
                         }
                         return(
-                          <FurtherInformation schoolOptions={schoolOptions} interests={industries} loading={loading} switchTabs={switchTabs} onSeekerProfileSubmit={onSeekerProfileSubmit} initialValues={schoolInterestsInitialValues} />
+                          <FurtherInformation schoolOptions={schoolOptions} interests={industries} loading={loading} switchTabs={switchTabs} onSeekerProfileSubmit={onSeekerProfileSubmit} initialValues={schoolInterestsInitialValues} alert={alert} />
                         )}
                         }
                       </TypedSeekerProfileMutation>
