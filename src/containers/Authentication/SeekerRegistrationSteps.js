@@ -14,8 +14,9 @@ import { TOS } from "constants/routes.constants";
 import { Typography } from "@material-ui/core";
 import { TypedCreateSelectableInstitutionMutation } from './mutations'
 import { showSuccessNotification, IsNotEmpty } from "helpers";
-import { TypedPlansListQuery } from './queries';
+import { TypedPlansQuery } from './queries';
 import Loader from "components/Loader/Loader";
+import { PaymentModal } from 'modals/PaymentModal';
 
 
 
@@ -282,6 +283,7 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
 }
 
 export const Billing = ({ switchTabs, isSeeker }) => {
+  const [show, setShow] = React.useState(false);
   const useStyles = makeStyles({
     root: {
       minWidth: 235,
@@ -293,29 +295,34 @@ export const Billing = ({ switchTabs, isSeeker }) => {
 
   const classNames = useStyles()
 
+  const handleModalShow = () => {
+    setShow(!show);
+  }
+
   return (
     <>
-      <TypedPlansListQuery>
+      <TypedPlansQuery>
         {(plansList) => {
           if (plansList.loading) {
             return <Loader />;
           }
 
           let plans;
-          const {allPlanLists} = plansList.data
-          if (allPlanLists.length > 0) {
+          const {allPlans} = plansList.data
+          if (allPlans.length > 0) {
             // If the user is a seeker then only add the options available
             // to them.
             console.log(isSeeker);
             if (isSeeker) {
-              plans = allPlanLists.slice(4);
+              plans = allPlans.slice(4);
             } else {
-              plans = allPlanLists.slice(0, 3);
+              plans = allPlans.slice(0, 3);
             }
           }
      
         return (
           <>
+            <PaymentModal open={show} onClose={handleModalShow} />
             <Spacer>
               <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
             </Spacer>
@@ -324,7 +331,7 @@ export const Billing = ({ switchTabs, isSeeker }) => {
               {plans ? plans.map((option, index) => (
                 <div key={index}>
                 {/* Add action to take them to dashboard */}
-                  <Card key={index} onClick={() => {}} className={classNames.root}>
+                  <Card key={index} onClick={() => handleModalShow()} className={classNames.root}>
                     <CardContent>
                       <Typography variant="h5">
                         {option.title}
@@ -338,7 +345,7 @@ export const Billing = ({ switchTabs, isSeeker }) => {
           </>
           )
         }}
-      </TypedPlansListQuery>
+      </TypedPlansQuery>
     </>
   )
 }

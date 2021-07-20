@@ -26,9 +26,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test42',
-    email: 'ryantest42@gmail.com',
-    phone: '254745613324',
+    username: 'Ryan test43',
+    email: 'ryantest43@gmail.com',
+    phone: '254745613325',
     password1: 'Passwor1',
     password2: 'Passwor1',
     isEmployer,
@@ -56,6 +56,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   React.useEffect(() => {
     if (match.params) {
       if (match.params.userType === 'seeker') {
+        setIsSeeker(currSeeker => currSeeker = true);
         setIsEmplolyer(currEmployer => currEmployer = false);
       } else if (match.params.userType === 'business') {
         setIsEmplolyer(currEmployer => currEmployer = true);

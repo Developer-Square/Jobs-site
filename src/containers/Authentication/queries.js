@@ -28,15 +28,15 @@ export const institutionsQuery = gql`
 `
 export const TypedInstitutionQuery = TypedQuery(institutionsQuery);
 
-export const plansListQuery = gql`
-  query PlansList {
-    allPlanLists {
+export const plansQuery = gql`
+  query Plans {
+    allPlans {
       title
     }
   }
 `
 
-export const TypedPlansListQuery = TypedQuery(plansListQuery);
+export const TypedPlansQuery = TypedQuery(plansQuery);
 
 export const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
 
