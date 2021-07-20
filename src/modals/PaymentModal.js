@@ -11,7 +11,7 @@ import { signUpSchema } from "../containers/Authentication/validation.schema";
 import Button from "components/Button/Button";
 
 
-export const PaymentModal = ({onClose, open}) => {
+export const PaymentModal = ({onClose, open, moreInfo}) => {
     const [loading, setLoading] = React.useState(false);
 
     const getPhoneNumber = () => {
@@ -31,7 +31,7 @@ export const PaymentModal = ({onClose, open}) => {
   
     return (
       <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-        <DialogTitle id="simple-dialog-title">Payment options</DialogTitle>
+        <DialogTitle id="simple-dialog-title">{moreInfo ? 'Trial Period' : 'Payment options'}</DialogTitle>
         {/* <IconButton aria-label="close" onClick={handleClose}>
           here
         </IconButton> */}
@@ -43,21 +43,38 @@ export const PaymentModal = ({onClose, open}) => {
                 return (
                     <Form noValidate>
                         <Container>
-                            <Title>Will you be making transactions using this number: </Title>
-                            <FormikControl
-                                control="input"
-                                type="text"
-                                label="Mpesa Number"
-                                name="phone"
-                                icon="ln ln-icon-Mail"
-                            />
-                            <Button
-                                type="submit"
-                                disabled={!formik.isValid}
-                                fullwidth
-                                loading={loading}
-                                title={loading ? "Confirming ... " : "Confirm"}
-                            />
+                          {/* Re-using the payment modal to remind the seeker/employer to pay for the denied services */}
+                            {moreInfo ? (
+                              <>
+                                <Title>The trial period does not include viewing job details. Upgrade to premium to enjoy everything that our site provides.</Title>
+                                <Button
+                                  type="submit"
+                                  disabled={!formik.isValid}
+                                  fullwidth
+                                  loading={loading}
+                                  title={loading ? "Upgrading ... " : "Upgrade"}
+                                />
+                              </>
+                            ): (
+                              <>
+                                <Title>Will you be making transactions using this number: </Title>
+                                <FormikControl
+                                    control="input"
+                                    type="text"
+                                    label="Mpesa Number"
+                                    name="phone"
+                                    icon="ln ln-icon-Mail"
+                                />
+                                <Button
+                                    type="submit"
+                                    disabled={!formik.isValid}
+                                    fullwidth
+                                    loading={loading}
+                                    title={loading ? "Confirming ... " : "Confirm"}
+                                />
+                              </>
+                            )}
+                            
                         </Container>
                     </Form>
                 )

@@ -312,7 +312,6 @@ export const Billing = ({ switchTabs, isSeeker }) => {
           if (allPlans.length > 0) {
             // If the user is a seeker then only add the options available
             // to them.
-            console.log(isSeeker);
             if (isSeeker) {
               plans = allPlans.slice(4);
             } else {
@@ -322,7 +321,7 @@ export const Billing = ({ switchTabs, isSeeker }) => {
      
         return (
           <>
-            <PaymentModal open={show} onClose={handleModalShow} />
+            <PaymentModal open={show} onClose={handleModalShow} moreInfo={false} />
             <Spacer>
               <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
             </Spacer>
