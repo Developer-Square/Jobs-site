@@ -9,6 +9,7 @@ const Vacancies = () => {
   const history = useHistory();
   const [verified, setVerified] = React.useState(false);
   const [show, setShow] = React.useState(false);
+  const [isSeeker, setIsSeeker] = React.useState(false);
 
   useEffect(() => {
     checkVerified()
@@ -22,6 +23,12 @@ const Vacancies = () => {
       setVerified(curr => curr = true);
     } else {
       setVerified(curr => curr = false);
+    }
+    
+    if (profileDetails.isSeeker) {
+      setIsSeeker(curr => curr = true);
+    } else {
+      setIsSeeker(curr => curr = false);
     }
   }
 
@@ -47,11 +54,14 @@ const Vacancies = () => {
             <span>We found 1,412 jobs matching:</span>
             <h2>Web, Software &amp; IT</h2>
           </div>
-          <div className="six columns">
-            <a href="dashboard-add-job.html" className="button">
-              Post a Job, It’s Free!
-            </a>
-          </div>
+          {!isSeeker ? (
+            <div className="six columns">
+              <a href="dashboard-add-job.html" className="button">
+                Post a Job, It’s Free!
+              </a>
+            </div>
+          ): null}
+
         </div>
       </div>
 

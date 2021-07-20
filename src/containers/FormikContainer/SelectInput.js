@@ -6,6 +6,7 @@ import Select from "react-select";
 
 function SelectInput(props) {
   const { label, name, options, icon, style, hideButton, ...rest } = props;
+  console.log(hideButton);
 
   const handleChange = (name, val, setFieldValue) => {
     const inputOrganization = document.getElementById('react-select-3-input');
