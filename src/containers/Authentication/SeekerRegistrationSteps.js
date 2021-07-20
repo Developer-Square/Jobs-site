@@ -182,6 +182,7 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
     let optionInBackend = false;
     // Check whether the institution provided is already among the backend
     // options.
+    // eslint-disable-next-line
     options.map(option => {
       if (option.value === values.value) {
         optionInBackend = true
