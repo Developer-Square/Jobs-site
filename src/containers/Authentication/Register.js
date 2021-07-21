@@ -3,7 +3,8 @@ import { useAlert } from "react-alert";
 import firebase from "firebase";
 
 import Button from "components/Button/Button";
-import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
+import { showSuccessNotification, showNotification, IsNotEmpty } from "helpers";
+// import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
 import { getIndustries, prepareData } from './auth-helpers'
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
