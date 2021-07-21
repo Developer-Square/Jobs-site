@@ -150,22 +150,22 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   // Send the user's details to the api.
   const registerUserFn = async (registerUser, values, setErrors) => {
     const sentData = await prepareData(values);
-    // localStorage.setItem('registerValues', JSON.stringify(sentData));
-    // triggerFirebaseSignIn(sentData.phone);
-    // switchTabs('', 'forward');
+    localStorage.setItem('registerValues', JSON.stringify(sentData));
+    triggerFirebaseSignIn(sentData.phone);
+    switchTabs('', 'forward');
 
-    registerUser({
-      variables: sentData,
-    }).then(({ data }) => {
+    // registerUser({
+    //   variables: sentData,
+    // }).then(({ data }) => {
 
-      if (data.register.success) {
-        triggerFirebaseSignIn(sentData.phone);
-        localStorage.setItem('registerValues', JSON.stringify(sentData));
-        switchTabs('', 'forward');
-      } else {
-        setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-      }
-    })
+    //   if (data.register.success) {
+    //     triggerFirebaseSignIn(sentData.phone);
+    //     localStorage.setItem('registerValues', JSON.stringify(sentData));
+    //     switchTabs('', 'forward');
+    //   } else {
+    //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+    //   }
+    // })
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {

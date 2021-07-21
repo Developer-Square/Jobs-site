@@ -39,6 +39,7 @@ const VacancyForm = ({
                     />
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Minimum Education Qualification"
                       name="minQualification"
                       style={{ margin: 0 }}
@@ -56,6 +57,7 @@ const VacancyForm = ({
                     />
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Pay Rate"
                       name="payRate"
                       style={{ margin: 0 }}
@@ -66,6 +68,7 @@ const VacancyForm = ({
                   <div className="form grid grid-cols-2 gap-6">
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Job Type"
                       name="jobType"
                       style={{ margin: 0 }}
@@ -74,6 +77,7 @@ const VacancyForm = ({
                     />
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Years of Experience required"
                       name="yearsOfExp"
                       style={{ margin: 0 }}
@@ -116,6 +120,7 @@ const VacancyForm = ({
                   <div className="form">
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Industry"
                       name="industry"
                       style={{ margin: 0 }}

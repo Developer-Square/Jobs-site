@@ -17,10 +17,12 @@ const Vacancies = () => {
     let profileDetails = localStorage.getItem('thedb_auth_profile');
     profileDetails = JSON.parse(profileDetails)
     
-    if (profileDetails.verified) {
-      setVerified(curr => curr = true);
-    } else {
-      setVerified(curr => curr = false);
+    if(profileDetails) { 
+      if (profileDetails.verified) {
+        setVerified(curr => curr = true);
+      } else {
+        setVerified(curr => curr = false);
+      }
     }
   }
 

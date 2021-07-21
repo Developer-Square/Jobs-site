@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-import IconButton from '@material-ui/core/IconButton';
+// import IconButton from '@material-ui/core/IconButton';
 // import CloseIcon from '@material-ui/icons/Close';
 import { Form, Formik } from "formik";
 
@@ -19,7 +19,9 @@ export const PaymentModal = ({onClose, open, moreInfo}) => {
         values = localStorage.getItem('registerValues');
         values = JSON.parse(values);
         
-        return values.phone;
+        if (values) {
+          return values.phone
+        }
     }
     const initialValues = {
         phone: getPhoneNumber()
@@ -28,6 +30,11 @@ export const PaymentModal = ({onClose, open, moreInfo}) => {
     const handleClose = () => {
       onClose();
     };
+
+    // TODO: Add a mutation just like in Register.js
+    const onSubmit = () => {
+      setLoading(true);
+    }
   
     return (
       <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
@@ -38,6 +45,7 @@ export const PaymentModal = ({onClose, open, moreInfo}) => {
         <Formik
             initialValues={initialValues}
             validationSchema={signUpSchema}
+            onSubmit={onSubmit}
         >
             {(formik) => {
                 return (
