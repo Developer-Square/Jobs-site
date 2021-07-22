@@ -1,14 +1,17 @@
-import React from "react";
-import { toast } from "react-toastify";
+import React, {useContext, useEffect} from "react";
 import VacancyFilter from "./VacancyFilter";
 import { TypedVacanciesQuery } from './queries'
 import Loader from "components/Loader/Loader";
 import { NoResult } from "components/VacancyLoader/VacancyLoader.style";
-import { IsNotEmpty } from "helpers";
+import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 
 
-const Vacancy = () => {
+const Vacancy = ({ onFiltersChange }) => {
   const [sortString, setSortString] = React.useState('');
+  const [availableVacancies, setAvailableVacancies] = React.useState([]);
+  const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
+  console.log(vacancyState, "vacancyState");
+
   return (
     <TypedVacanciesQuery variables={{first: 10}} errorPolicy="all" loaderFull>
       {(vacancyData) => {
@@ -38,6 +41,12 @@ const Vacancy = () => {
           const {edges} = vacancyData.data.vacancies;
           if (edges.length > 0) {
             jobs = edges.map((edge) => edge.node);
+            if (vacancyState.jobsData.length === 0) {
+              vacancyDispatch({
+                type: "ADD_DATA",
+                payload: jobs
+              });
+            }
           }
         // console.log("data", vacancyData.data.vacancies.edges);
         return (
@@ -131,7 +140,7 @@ const Vacancy = () => {
                   </div>
                 </div>
               </div>
-              <VacancyFilter setSortString={setSortString} />
+              <VacancyFilter setSortString={setSortString} onFiltersChange={onFiltersChange}/>
             </div>
           </div>
         )

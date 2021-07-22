@@ -48,6 +48,7 @@ export const View = ({ match, deviceType }) => {
       if (attributeFilters[name].includes(value)) {
         if (filters.attributes[`${name}`].length === 1) {
           const att = { ...attributeFilters };
+          console.log(att);
           delete att[`${name}`];
           setAttributeFilters({
             ...att,

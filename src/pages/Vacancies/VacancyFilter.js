@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 
-const VacancyFilter = ({ setSortString, getVacancies }) => {
+const VacancyFilter = ({ setSortString, onFiltersChange }) => {
 
   /**
    * @param  {} e
@@ -13,8 +13,8 @@ const VacancyFilter = ({ setSortString, getVacancies }) => {
       const sortOption = document.getElementById('sortSelect');
       setSortString(sortOption.value);
 
-      if (sortOption.value === 'recent') {
-        getVacancies({ first: 10 })
+      if (sortOption.value === 'salary') {
+        
       }
     }
   }

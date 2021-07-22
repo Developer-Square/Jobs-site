@@ -11,6 +11,7 @@ import { ReactHooksWrapper, setHook } from "hooks";
 import { NotificationTemplate } from "components/NotificationTemplate";
 import { useDeviceType } from "helpers/useDeviceType";
 import { AuthProvider } from "contexts/auth/auth.provider";
+import { VacancyProvider } from "contexts/vacancies/vacancies.provider";
 import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
@@ -69,6 +70,7 @@ function App() {
             <SearchProvider query={query}>
               <HeaderProvider>
                 <AuthProvider>
+                  <VacancyProvider>
                   <ModalProvider>
                     <UserProvider>
                       <DatabaseProvider>
@@ -87,6 +89,7 @@ function App() {
                       </DatabaseProvider>
                     </UserProvider>
                   </ModalProvider>
+                  </VacancyProvider>
                 </AuthProvider>
               </HeaderProvider>
               <GlobalStyle />
