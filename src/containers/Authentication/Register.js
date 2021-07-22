@@ -3,8 +3,8 @@ import { useAlert } from "react-alert";
 import firebase from "firebase";
 
 import Button from "components/Button/Button";
-import { showSuccessNotification, showNotification, IsNotEmpty } from "helpers";
-// import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
+// import { showSuccessNotification, showNotification, IsNotEmpty } from "helpers";
+import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
 import { getIndustries, prepareData } from './auth-helpers'
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
@@ -27,9 +27,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test44',
-    email: 'ryantest44@gmail.com',
-    phone: '254745613326',
+    username: 'Ryan test46',
+    email: 'ryantest46@gmail.com',
+    phone: '254745613328',
     password1: 'Passwor1',
     password2: 'Passwor1',
     isEmployer,
@@ -151,22 +151,22 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   // Send the user's details to the api.
   const registerUserFn = async (registerUser, values, setErrors) => {
     const sentData = await prepareData(values);
-    localStorage.setItem('registerValues', JSON.stringify(sentData));
-    triggerFirebaseSignIn(sentData.phone);
-    switchTabs('', 'forward');
+    // localStorage.setItem('registerValues', JSON.stringify(sentData));
+    // triggerFirebaseSignIn(sentData.phone);
+    // switchTabs('', 'forward');
 
-    // registerUser({
-    //   variables: sentData,
-    // }).then(({ data }) => {
+    registerUser({
+      variables: sentData,
+    }).then(({ data }) => {
 
-    //   if (data.register.success) {
-    //     triggerFirebaseSignIn(sentData.phone);
-    //     localStorage.setItem('registerValues', JSON.stringify(sentData));
-    //     switchTabs('', 'forward');
-    //   } else {
-    //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-    //   }
-    // })
+      if (data.register.success) {
+        triggerFirebaseSignIn(sentData.phone);
+        localStorage.setItem('registerValues', JSON.stringify(sentData));
+        switchTabs('', 'forward');
+      } else {
+        setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+      }
+    })
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {

@@ -12,7 +12,7 @@ import { SamplePage } from "pages/sample";
 import Authentication from "pages/Authentication";
 import PasswordReset from "containers/Authentication/PasswordReset";
 import EmailActivation from "containers/Authentication/EmailActivation";
-import Vacancies from "pages/Vacancies";
+import Vacancies from "pages/Vacancies/Vacancy";
 import Categories from "pages/Categories";
 import Pricing from "pages/Pricing";
 import Contact from "pages/Contact";

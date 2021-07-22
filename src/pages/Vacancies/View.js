@@ -8,7 +8,6 @@ import Page from "./Page";
 import { TypedVacanciesQuery } from "./queries";
 import { NoResult } from "components/VacancyLoader/VacancyLoader.style";
 import Loader from "components/Loader/Loader";
-import { useLocation } from "react-router";
 
 const VACANCIES_PER_PAGE = 10;
 export const FilterQuerySet = {
@@ -38,6 +37,7 @@ export const View = ({ match, deviceType }) => {
     "filters",
     FilterQuerySet,
   );
+  console.log("attribute", attributeFilters);
 
   const clearFilters = () => {
     setAttributeFilters({});
