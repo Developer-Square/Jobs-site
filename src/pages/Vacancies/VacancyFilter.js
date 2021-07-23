@@ -1,6 +1,8 @@
 import React, {useEffect} from "react";
+import styled from 'styled-components';
+import Button from "components/Button/Button";
 
-const VacancyFilter = ({ setSortString, onFiltersChange }) => {
+const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
 
   /**
    * @param  {} e
@@ -11,12 +13,47 @@ const VacancyFilter = ({ setSortString, onFiltersChange }) => {
       // TODO: Add sorting by location.
     } else {
       const sortOption = document.getElementById('sortSelect');
-      setSortString(sortOption.value);
+      // setSortString(sortOption.value);
 
       if (sortOption.value === 'salary') {
         
       }
     }
+  }
+
+  const addJobTypes = (checked, value) => {
+    if (checked && !sortTypes.includes(value)) {
+      setSortTypes([...sortTypes, value])
+      sortTypes.push(value);
+    } else {
+      let newSortTypes = sortTypes.filter(types => types !== value);
+      setSortTypes([...newSortTypes])
+    }
+  }
+
+  
+  /**
+   * @param  {} type
+   * Add the selected job types into one array, then use the array to sort
+   * the jobs.
+   */
+  const handleJobTypes = (type) => {
+    const {value, checked} = type.target;
+
+    if (value === 'check-1') {
+      addJobTypes(checked, 'any')
+    } else if (value === 'check-2') {
+      addJobTypes(checked, 'FULL_TIME');
+    } else if (value === 'check-3') {
+      addJobTypes(checked, 'PART_TIME');
+    } else if (value === 'check-4') {
+      addJobTypes(checked, 'VOLUNTEERING');
+    } else if (value === 'check-5') {
+      addJobTypes(checked, 'GIG');
+    }
+
+    // Call the sorting function.
+    jobTypeSort()
   }
 
   return (
@@ -72,6 +109,7 @@ const VacancyFilter = ({ setSortString, onFiltersChange }) => {
                   name="check"
                   defaultValue="check-1"
                   defaultChecked
+                  onChange={(e) => handleJobTypes(e)}
                 />
                 <label htmlFor="check-1">Any Type</label>
               </li>
@@ -81,6 +119,7 @@ const VacancyFilter = ({ setSortString, onFiltersChange }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-2"
+                  onChange={(e) => handleJobTypes(e)}
                 />
                 <label htmlFor="check-2">
                   Full-Time <span>(312)</span>
@@ -92,6 +131,7 @@ const VacancyFilter = ({ setSortString, onFiltersChange }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-3"
+                  onChange={(e) => handleJobTypes(e)}
                 />
                 <label htmlFor="check-3">
                   Part-Time <span>(269)</span>
@@ -103,6 +143,7 @@ const VacancyFilter = ({ setSortString, onFiltersChange }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-4"
+                  onChange={(e) => handleJobTypes(e)}
                 />
                 <label htmlFor="check-4">
                   Internship <span>(46)</span>
@@ -114,6 +155,7 @@ const VacancyFilter = ({ setSortString, onFiltersChange }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-5"
+                  onChange={(e) => handleJobTypes(e)}
                 />
                 <label htmlFor="check-5">
                   Freelance <span>(119)</span>
@@ -192,8 +234,21 @@ const VacancyFilter = ({ setSortString, onFiltersChange }) => {
               </li>
             </ul>
           </div>
+          <Spacer>
+            <Button
+                type="submit"
+                // loading={loading}
+                // title={loading ? "Signing Up ... " : "Sign Up"}
+                title={'Apply filters'}
+                style={{ color: "#ffffff" }}
+              />
+          </Spacer>
         </div>
   );
 };
+
+const Spacer = styled.div`
+  margin: 15px 0;
+`
 
 export default VacancyFilter;

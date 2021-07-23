@@ -7,10 +7,30 @@ import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 
 
 const Vacancy = ({ onFiltersChange }) => {
-  const [sortString, setSortString] = React.useState('');
+  const [sortTypes, setSortTypes] = React.useState([]);
   const [availableVacancies, setAvailableVacancies] = React.useState([]);
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
   console.log(vacancyState, "vacancyState");
+
+  const jobTypeSort = () => {
+    let sortedJobs = [];
+    console.log("sortTypes", sortTypes);
+
+    vacancyState.jobsData.map(vacancy => {
+      if (sortTypes.includes(vacancy.jobType)) {
+        sortedJobs.push(vacancy)
+      }
+      return;
+    })
+    console.log("sortedJobs", sortedJobs);
+
+    if (sortedJobs) {
+      vacancyDispatch({
+        type: "SORT_JOBS",
+        payload: sortedJobs
+      })
+    }
+  }
 
   return (
     <TypedVacanciesQuery variables={{first: 10}} errorPolicy="all" loaderFull>
@@ -71,7 +91,7 @@ const Vacancy = ({ onFiltersChange }) => {
                 <div className="padding-right">
                   <div className="listings-container">
                     {/* Listings */}
-                    {jobs.length > 0 ? jobs.map((job, index) => (
+                    {vacancyState.sortedJobs.length > 0 ? vacancyState.sortedJobs.map((job, index) => (
                       <a href="job-page-alt.html" key={index} className="listing full-time">
                         <div className="listing-logo">
                           <img
@@ -140,7 +160,7 @@ const Vacancy = ({ onFiltersChange }) => {
                   </div>
                 </div>
               </div>
-              <VacancyFilter setSortString={setSortString} onFiltersChange={onFiltersChange}/>
+              <VacancyFilter sortTypes={sortTypes} setSortTypes={setSortTypes} jobTypeSort={jobTypeSort}/>
             </div>
           </div>
         )
