@@ -4,8 +4,10 @@ import React, { createContext, memo, useState } from "react";
 // import UserContext from "contexts/user/user.provider";
 // import { getUnsplashPhoto } from "utils";
 // import initialState from "data/initialState.json";
-// import { useMutation, useQuery } from "react-apollo";
-// import { toast } from "react-toastify";
+import { useLazyQuery, useMutation } from "react-apollo";
+import { toast } from "react-toastify";
+import { DUPLICATE_RESUME, DELETE_RESUME } from "graphql/mutations";
+import { FETCH_RESUME } from "graphql/queries";
 
 const DEBOUNCE_WAIT_TIME = 4000;
 
@@ -23,41 +25,36 @@ const defaultState = {
 const DatabaseContext = createContext(defaultState);
 
 const DatabaseProvider = ({ children }) => {
-  // const dictionary = "abcdefghijklmnopqrstuvwxyz1234567890".split("");
-  // const uuid = new ShortUniqueId({ dictionary });
-
+  const [refetchResumes, setRefetchResumes] = useState(false);
   const [isUpdating, setUpdating] = useState(false);
-  // const { user } = useContext(UserContext);
-  // const refr = useQuery(GET_RESUME, {
-  //   variables: { id },
-  // });
-  // const [createResume] = useMutation();
-  // const createResume = toast("To Handle create resume");
-  const createResume = console.log("To Handle create resume");
+  const [duplicateResumeMutation] = useMutation(DUPLICATE_RESUME);
+  const [deleteResumeMutation] = useMutation(DELETE_RESUME);
+  const [resume, { data }] = useLazyQuery(FETCH_RESUME);
+
+  const createResume = () => console.log("To Handle create resume");
 
   const getResume = async (id) => {
     try {
-      // const snapshot = await firebase
-      //   .database()
-      //   .ref(`resumes/${id}`)
-      //   .once("value");
-      // return snapshot.val();
+      await resume({
+        variables: {
+          id: id,
+        },
+      });
+      return data?.resume;
     } catch (error) {
       return null;
     }
   };
 
   const duplicateResume = async (originalResume) => {
-    // const id = uuid();
-    // const preview = await getUnsplashPhoto();
-    // const createdAt = firebase.database.ServerValue.TIMESTAMP;
-    // const resume = {
-    //   ...originalResume,
-    //   // id,
-    //   name: `${originalResume.name} Copy`,
-    //   preview,
-    // };
-    // firebase.database().ref(`resumes/${id}`).set(resume);
+    const { data } = await duplicateResumeMutation({
+      variables: { id: originalResume.id },
+    });
+    if (data?.duplicateResume?.success) {
+      setRefetchResumes(true);
+      toast.success(`${data?.duplicateResume?.resume?.name} Created`);
+    }
+    setRefetchResumes(false);
   };
 
   const updateResume = async (resume) => {
@@ -77,12 +74,19 @@ const DatabaseProvider = ({ children }) => {
   const debouncedUpdateResume = debounce(updateResume, DEBOUNCE_WAIT_TIME);
 
   const deleteResume = async (id) => {
-    // await firebase.database().ref(`/resumes/${id}`).remove();
+    const { data } = await deleteResumeMutation({
+      variables: { id: id },
+    });
+    if (data?.resumeDelete?.success) {
+      setRefetchResumes(true);
+    }
+    setRefetchResumes(false);
   };
 
   return (
     <DatabaseContext.Provider
       value={{
+        refetchResumes,
         isUpdating,
         getResume,
         createResume,

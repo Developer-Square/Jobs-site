@@ -1,4 +1,3 @@
-import { TypedMutation } from "core/mutations";
 import {
   seekerFragment,
   employerFragment,
@@ -14,8 +13,6 @@ export const BASE_PROFILE_MUTATION = gql`
     }
   }
 `;
-
-export const TypedBaseProfileMutation = TypedMutation(BASE_PROFILE_MUTATION);
 
 export const SEEKER_PROFILE_MUTATION = gql`
   ${seekerFragment}
@@ -55,9 +52,6 @@ export const SEEKER_PROFILE_MUTATION = gql`
   }
 `;
 
-export const TypedSeekerProfileMutation = TypedMutation(
-  SEEKER_PROFILE_MUTATION,
-);
 export const SEEKER_UPDATE_MUTATION = gql`
   ${seekerFragment}
   mutation SeekerCreate(
@@ -97,8 +91,6 @@ export const SEEKER_UPDATE_MUTATION = gql`
     }
   }
 `;
-
-export const TypedSeekerUpdateMutation = TypedMutation(SEEKER_UPDATE_MUTATION);
 
 export const EMPLOYER_PROFILE_MUTATION = gql`
   ${employerFragment}
@@ -142,10 +134,6 @@ export const EMPLOYER_PROFILE_MUTATION = gql`
     }
   }
 `;
-
-export const TypedEmployerProfileMutation = TypedMutation(
-  EMPLOYER_PROFILE_MUTATION,
-);
 
 export const EMPLOYER_UPDATE_MUTATION = gql`
   ${employerFragment}
@@ -192,10 +180,6 @@ export const EMPLOYER_UPDATE_MUTATION = gql`
   }
 `;
 
-export const TypedEmployerUpdateMutation = TypedMutation(
-  EMPLOYER_UPDATE_MUTATION,
-);
-
 export const INSTITUTION_PROFILE_MUTATION = gql`
   ${institutionFragment}
   mutation InstitutionCreate(
@@ -235,9 +219,6 @@ export const INSTITUTION_PROFILE_MUTATION = gql`
   }
 `;
 
-export const TypedInstitutionProfileMutation = TypedMutation(
-  INSTITUTION_PROFILE_MUTATION,
-);
 export const INSTITUTION_UPDATE_MUTATION = gql`
   ${institutionFragment}
   mutation InstitutionUpdate(
@@ -279,17 +260,13 @@ export const INSTITUTION_UPDATE_MUTATION = gql`
   }
 `;
 
-export const TypedInstitutionUpdateMutation = TypedMutation(
-  INSTITUTION_UPDATE_MUTATION,
-);
-
 export const accountErrorFragment = gql`
   fragment AccountErrorFragment on AccountError {
     code
     field
   }
 `;
-const AVATAR_UPDATE_MUTATION = gql`
+export const AVATAR_UPDATE_MUTATION = gql`
   ${accountErrorFragment}
   mutation AvatarUpdate($image: Upload!) {
     userAvatarUpdate(image: $image) {
@@ -306,4 +283,3 @@ const AVATAR_UPDATE_MUTATION = gql`
     }
   }
 `;
-export const TypedAvatarUpdateMutation = TypedMutation(AVATAR_UPDATE_MUTATION);

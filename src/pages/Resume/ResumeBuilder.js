@@ -1,22 +1,33 @@
-import { toast } from "react-toastify";
 import React, { memo, useContext, useEffect, useMemo, useState } from "react";
-import * as styles from "./builder.module.css";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import { useHistory, useRouteMatch } from "react-router-dom";
+
 import { useDispatch } from "contexts/resume/resume.provider";
+import DatabaseContext from "contexts/database/database.provider";
+
 import Artboard from "components/builder/center/Artboard";
 import Button from "components/shared/Button";
-import DatabaseContext from "contexts/database/database.provider";
 import LeftSidebar from "components/builder/left/LeftSidebar";
 import LoadingScreen from "components/LoadingScreen";
 import RightSidebar from "components/builder/right/RightSidebar";
-import { useHistory } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+
+import * as styles from "./builder.module.css";
+import { getGraphqlIdFromDBId } from "utils";
 
 const ResumeBuilder = ({ id }) => {
+  const [resumeId, setResumeId] = useState(null);
+  const match = useRouteMatch();
   const navigate = useHistory();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const { getResume } = useContext(DatabaseContext);
+
+  useEffect(() => {
+    setResumeId(getGraphqlIdFromDBId(match.params.resumeID, "ResumeNode"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleLoadDemoData = () => {
@@ -25,13 +36,11 @@ const ResumeBuilder = ({ id }) => {
 
   useEffect(() => {
     (async () => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-      const resume = await getResume(id);
+      const resume = await getResume(resumeId);
+      console.log(resume);
 
       if (!resume) {
-        // navigate.push("/dashboard");
+        navigate.push("/dashboard/resume");
         toast.error(
           "The resume you were looking for does not exist anymore... or maybe it never did?",
         );
@@ -56,7 +65,8 @@ const ResumeBuilder = ({ id }) => {
       dispatch({ type: "set_data", payload: resume });
       return setLoading(false);
     })();
-  }, [dispatch, getResume, handleLoadDemoData, id, navigate, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resumeId]);
 
   return useMemo(() => {
     if (loading) {

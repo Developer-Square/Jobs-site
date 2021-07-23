@@ -3,8 +3,8 @@ import { toast } from "react-toastify";
 import React, { createContext, memo, useEffect, useState } from "react";
 // import useAuthState from "hooks/useAuthState";
 import { useHistory } from "react-router-dom";
-import { useQuery } from "react-apollo";
-import { GET_USER_DETAILS } from "./query";
+import { useLazyQuery } from "react-apollo";
+import { GET_USER_DETAILS } from "graphql/queries";
 import { AuthContext } from "contexts/auth/auth.context";
 
 const defaultUser = {
@@ -40,14 +40,17 @@ const UserProvider = ({ children }) => {
   // const [workForce, setWorkForce] = useState(null);
 
   const navigate = useHistory();
-  const { data, loading, error } = useQuery(GET_USER_DETAILS);
-  console.log(user);
+  const [fetchUser] = useLazyQuery(GET_USER_DETAILS);
 
   const getUser = async () => {
-    if (data) {
-      await setUser(data.me);
-      console.log(data);
-      return { user, loading, error };
+    if (!user) {
+      const { data } = await fetchUser;
+      if (data?.me) {
+        setUser(data?.me);
+        return data.me;
+      }
+    } else {
+      return user;
     }
   };
 

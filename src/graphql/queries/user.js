@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-import { userFragment } from "fragments/auth";
+import { userFragment } from "graphql/fragments";
 
 export const GET_USER_DETAILS = gql`
   ${userFragment}
