@@ -1,9 +1,15 @@
 import React from "react";
 import styled from 'styled-components';
 import Button from "components/Button/Button";
+import SearchForm from 'containers/Search/SearchForm'
 
 
-const VacancyFilter = ({ sortTypes, setSortTypes, rate, setRate, ratePerHour, loading, sortByValue,setSortByValue, loadFilterValues, setGetJobs, getJobs }) => {
+const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs }) => {
+  const [searchString, setSearchString] = React.useState('');
+  const [sortTypes, setSortTypes] = React.useState([]);
+  const [sortByValue, setSortByValue] = React.useState({direction: '', field: ''});
+
+  console.log('searchString', searchString);
   /**
    * @param  {} e
    * A function that will handle all api calls for the vacancy filter.
@@ -103,7 +109,6 @@ const VacancyFilter = ({ sortTypes, setSortTypes, rate, setRate, ratePerHour, lo
     }
 
     const handleSubmit = () => {
-      console.log("sortByOption", getJobs);
       // Call the sorting functions.
       // ratePerHour();
 
@@ -113,6 +118,15 @@ const VacancyFilter = ({ sortTypes, setSortTypes, rate, setRate, ratePerHour, lo
             first: 10
           }}
         )
+      } else if (searchString.length > 0) {
+        loadFilterValues(
+          {variables: { 
+            first: 10, 
+            filter: {
+              search: searchString,
+            } 
+          }
+        });
       } else {
         loadFilterValues(
           {variables: { 
@@ -128,13 +142,7 @@ const VacancyFilter = ({ sortTypes, setSortTypes, rate, setRate, ratePerHour, lo
 
   return (
         <div className="five columns">
-          {/* Search */}
-          <div className="widget">
-            <h4>Search</h4>
-            <form action="#" method="get">
-              <input type="text" placeholder="Search input..." />
-            </form>
-          </div>
+          <SearchForm setSearchString={setSearchString} />
           {/* Sort by */}
           <div className="widget">
             <h4>Sort by</h4>

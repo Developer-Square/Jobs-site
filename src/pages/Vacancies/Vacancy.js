@@ -9,11 +9,9 @@ import { VACANCIES_QUERY } from './queries'
  
 
 const Vacancy = () => {
-  const [sortTypes, setSortTypes] = React.useState([]);
   const [rate, setRate] = React.useState([]);
   const [jobTypes, setJobTypes] = React.useState([]);
   const [getJobs, setGetJobs] = React.useState('');
-  const [sortByValue, setSortByValue] = React.useState({direction: '', field: ''});
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
 
   const cleanVacanciesData = (edges, update) => {
@@ -62,7 +60,6 @@ const Vacancy = () => {
   )
 
   console.log(vacancyState, "vacancyState");
-  // console.log(sortByValue, "vacancyState");
 
   const ratePerHour = () => {
     if (rate.length > 0) {
@@ -228,7 +225,7 @@ const Vacancy = () => {
                   </div>
                 </div>
               </div>
-              <VacancyFilter sortTypes={sortTypes} setSortTypes={setSortTypes} rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} sortByValue={sortByValue} getJobs={getJobs} setGetJobs={setGetJobs} setSortByValue={setSortByValue} loadFilterValues={loadFilterValues} />
+              <VacancyFilter rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} getJobs={getJobs} setGetJobs={setGetJobs} loadFilterValues={loadFilterValues} />
             </div>
           </div>
         )
