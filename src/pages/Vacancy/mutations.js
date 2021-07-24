@@ -57,11 +57,6 @@ export const CREATE_VACANCY_MUTATION = gql`
           }
         }
       }
-      vacancyErrors {
-        message
-        field
-        code
-      }
     }
   }
 `;

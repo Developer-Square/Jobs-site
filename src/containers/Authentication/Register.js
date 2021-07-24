@@ -27,9 +27,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test46',
-    email: 'ryantest46@gmail.com',
-    phone: '254745613328',
+    username: 'Ryan test50',
+    email: 'ryantest50@gmail.com',
+    phone: '254745613332',
     password1: 'Passwor1',
     password2: 'Passwor1',
     isEmployer,
@@ -135,7 +135,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
             password: values.password1
           }
         }).then(({data}) => {
-          console.log(data)
           const successful = maybe(() => data.tokenAuth.success);
           storeLoginDetails(successful, '', data, setErrors);
         })
@@ -170,72 +169,72 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {
-    switchTabs('', 'forward');
+    // switchTabs('', 'forward');
 
-    // const interests = values.interests.reduce((arr, b) => {
-    //   arr.push(b.value);
-    //   return arr;
-    // }, []);
-    // seekerCreate({
-    //     variables: {
-    //       ...values,
-    //     institution: values.school.value,
-    //     industries: interests
-    //   }
-    // }).then(({ data }) => {
-    //   if (data) {
-    //     if (data.seekerCreate) {
-    //       switchTabs('', 'forward');
+    const interests = values.interests.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
+    seekerCreate({
+        variables: {
+          ...values,
+        institution: values.school.value,
+        industries: interests
+      }
+    }).then(({ data }) => {
+      if (data) {
+        if (data.seekerCreate) {
+          switchTabs('', 'forward');
 
-    //       if (!data.seekerCreate.success) {
-    //         setErrors(
-    //           normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
-    //         );
-    //       }
-    //     }
-    //   }
-    // });
+          if (!data.seekerCreate.success) {
+            setErrors(
+              normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
+            );
+          }
+        }
+      }
+    });
   }
 
   const employerProfileCreate = (values, employerCreate, setErrors) => {
-    switchTabs('', 'forward');
-    // let country;
-    // const data = values.location.split(',');
+    // switchTabs('', 'forward');
+    let country;
+    const data = values.location.split(',');
 
-    // // Check if the user provided a county as the second arguement.
-    // if (data[1]) {
-    //   // Perform a slice to get rid of the whitespace infront of the 
-    //   // country string.
-    //   country = data[1].slice(1);
-    // } else {
-    //   country = data[0]
-    // }
+    // Check if the user provided a county as the second arguement.
+    if (data[1]) {
+      // Perform a slice to get rid of the whitespace infront of the 
+      // country string.
+      country = data[1].slice(1);
+    } else {
+      country = data[0]
+    }
 
-    // const industries = values.industries.reduce((arr, b) => {
-    //   arr.push(b.value);
-    //   return arr;
-    // }, []);
+    const industries = values.industries.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
 
-    // employerCreate({
-    //     variables: {
-    //       ...values,
-    //       country,
-    //       industries, 
-    //       name: values.company,
-    //     }
-    // }).then(({ data }) => {
-    //   if (data) {
-    //     if (data.employerCreate) {
-    //       switchTabs('', 'forward');
+    employerCreate({
+        variables: {
+          ...values,
+          country,
+          industries, 
+          name: values.company,
+        }
+    }).then(({ data }) => {
+      if (data) {
+        if (data.employerCreate) {
+          switchTabs('', 'forward');
 
-    //       if (!data.employerCreate.success) {
-    //         setErrors(
-    //           normalizeErrors(maybe(() => data.employerCreate.errors, [])),
-    //         );
-    //       }
-    //     }
-    //   }
-    // });
+          if (!data.employerCreate.success) {
+            setErrors(
+              normalizeErrors(maybe(() => data.employerCreate.errors, [])),
+            );
+          }
+        }
+      }
+    });
   }
 
 

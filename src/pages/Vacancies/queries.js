@@ -38,6 +38,7 @@ export const VACANCIES_QUERY = gql`
           minQualification
           positions
           yearsOfExp
+          payRate
           salary
           location
           createdAt

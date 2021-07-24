@@ -1,8 +1,8 @@
-import React, {useEffect} from "react";
+import React from "react";
 import styled from 'styled-components';
 import Button from "components/Button/Button";
 
-const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
+const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ratePerHour, loading }) => {
 
   /**
    * @param  {} e
@@ -21,10 +21,18 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
     }
   }
 
+  const addRateTypes = (checked, value) => {
+    if (checked && !rate.includes(value)) {
+      setRate([...rate, value]);
+    } else {
+      let newRateTypes = rate.filter(rateObj => rateObj.name !== value.name);
+      setRate([...newRateTypes]);
+    }
+  }
+
   const addJobTypes = (checked, value) => {
     if (checked && !sortTypes.includes(value)) {
       setSortTypes([...sortTypes, value])
-      sortTypes.push(value);
     } else {
       let newSortTypes = sortTypes.filter(types => types !== value);
       setSortTypes([...newSortTypes])
@@ -47,14 +55,42 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
     } else if (value === 'check-3') {
       addJobTypes(checked, 'PART_TIME');
     } else if (value === 'check-4') {
-      addJobTypes(checked, 'VOLUNTEERING');
+      addJobTypes(checked, 'INTERNSHIP');
     } else if (value === 'check-5') {
       addJobTypes(checked, 'GIG');
     }
 
-    // Call the sorting function.
-    jobTypeSort()
+
   }
+
+    /**
+   * @param  {} type
+   * Add the selected rate into one array, then use the array to sort
+   * the jobs.
+   */
+     const handleRateTypes = (type) => {
+      const {value, checked} = type.target;
+  
+      if (value === 'check-6') {
+        addRateTypes(checked, {name: value, lowerLimit: 'any', upperLimit: 'any'});
+      } else if (value === 'check-7') {
+        addRateTypes(checked, {name: value, lowerLimit: 0, upperLimit: 25});
+      } else if (value === 'check-8') {
+        addRateTypes(checked, {name: value, lowerLimit: 26, upperLimit: 50});
+      } else if (value === 'check-9') {
+        addRateTypes(checked, {name: value, lowerLimit: 51, upperLimit: 100});
+      } else if (value === 'check-10') {
+        addRateTypes(checked, {name: value, lowerLimit: 101, upperLimit: 200});
+      } else if (value === 'check-11') {
+        addRateTypes(checked, {name: value, lowerLimit: 201, upperLimit: 201});
+      }
+    }
+
+    const handleSubmit = () => {
+      // Call the sorting functions.
+      jobTypeSort()
+      ratePerHour()
+    }
 
   return (
         <div className="five columns">
@@ -174,6 +210,7 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
                   name="check"
                   defaultValue="check-6"
                   defaultChecked
+                  onChange={(e) => handleRateTypes(e)}
                 />
                 <label htmlFor="check-6">Any Rate</label>
               </li>
@@ -183,6 +220,7 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-7"
+                  onChange={(e) => handleRateTypes(e)}
                 />
                 <label htmlFor="check-7">
                   $0 - $25 <span>(231)</span>
@@ -194,6 +232,7 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-8"
+                  onChange={(e) => handleRateTypes(e)}
                 />
                 <label htmlFor="check-8">
                   $25 - $50 <span>(297)</span>
@@ -205,6 +244,7 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-9"
+                  onChange={(e) => handleRateTypes(e)}
                 />
                 <label htmlFor="check-9">
                   $50 - $100 <span>(78)</span>
@@ -216,6 +256,7 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-10"
+                  onChange={(e) => handleRateTypes(e)}
                 />
                 <label htmlFor="check-10">
                   $100 - $200 <span>(98)</span>
@@ -227,6 +268,7 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
                   type="checkbox"
                   name="check"
                   defaultValue="check-11"
+                  onChange={(e) => handleRateTypes(e)}
                 />
                 <label htmlFor="check-11">
                   $200+ <span>(21)</span>
@@ -237,9 +279,10 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort }) => {
           <Spacer>
             <Button
                 type="submit"
-                // loading={loading}
-                // title={loading ? "Signing Up ... " : "Sign Up"}
-                title={'Apply filters'}
+                onClick={handleSubmit}
+                disabled={loading}
+                loading={loading}
+                title={loading ? "Applying filter ... " : "Apply filters"}
                 style={{ color: "#ffffff" }}
               />
           </Spacer>
