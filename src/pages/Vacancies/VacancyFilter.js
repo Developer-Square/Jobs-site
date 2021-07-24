@@ -1,12 +1,9 @@
-import React, {useContext} from "react";
+import React from "react";
 import styled from 'styled-components';
 import Button from "components/Button/Button";
-import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 
 
-const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ratePerHour, loading, sortByValue,setSortByValue, loadFilterValues }) => {
-  const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
-  let sortByOption;
+const VacancyFilter = ({ sortTypes, setSortTypes, rate, setRate, ratePerHour, loading, sortByValue,setSortByValue, loadFilterValues, setGetJobs, getJobs }) => {
   /**
    * @param  {} e
    * A function that will handle all api calls for the vacancy filter.
@@ -33,8 +30,10 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ra
           direction: 'DESC',
           field: sortOption.value.toUpperCase().slice(1)
         })
+      } else if (sortOption.value === '-updated_at') {
+        setGetJobs(curr => curr = sortOption.value);
       } else {
-        sortByOption = sortOption.value;
+        setGetJobs(curr => curr = sortOption.value);
       }
   }
 
@@ -103,29 +102,17 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ra
       }
     }
 
-    const handleDispatch = (jobs) => {
-      vacancyDispatch({
-        type: "SORT_JOBS",
-        payload: jobs
-      });
-    }
-
     const handleSubmit = () => {
-      console.log("sortByOption", sortByOption);
+      console.log("sortByOption", getJobs);
       // Call the sorting functions.
-      // jobTypeSort();
       // ratePerHour();
 
-      // Reverse the vacancies array inorder to display the latests results
-      // and present it as it is when we want the oldest results.
-      if (sortByOption === 'updated_at') {
-        if (vacancyState.jobsData.length > 0) {
-          handleDispatch(vacancyState.jobsData);
-        }
-      } else if (sortByOption === '-updated_at') {
-        if (vacancyState.jobsData.length > 0) {
-          handleDispatch(vacancyState.jobsData.reverse());
-        }
+      if (getJobs === 'updated_at' || getJobs === '-updated_at') {
+        loadFilterValues(
+          {variables: {
+            first: 10
+          }}
+        )
       } else {
         loadFilterValues(
           {variables: { 

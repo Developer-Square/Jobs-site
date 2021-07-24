@@ -12,6 +12,7 @@ const Vacancy = () => {
   const [sortTypes, setSortTypes] = React.useState([]);
   const [rate, setRate] = React.useState([]);
   const [jobTypes, setJobTypes] = React.useState([]);
+  const [getJobs, setGetJobs] = React.useState('');
   const [sortByValue, setSortByValue] = React.useState({direction: '', field: ''});
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
 
@@ -27,10 +28,20 @@ const Vacancy = () => {
           payload: jobs
         });
       } else if (update) {
-        vacancyDispatch({
-          type: "SORT_JOBS",
-          payload: jobs
-        });
+        // Reverse the vacancies array inorder to display the latests results
+        // and present it as it is when we want the oldest results.
+        if (getJobs === '-updated_at') {
+          jobs = jobs.reverse();
+          vacancyDispatch({
+            type: "SORT_JOBS",
+            payload: jobs
+          });
+        } else {
+          vacancyDispatch({
+            type: "SORT_JOBS",
+            payload: jobs
+          });
+        }
       }
     }
   }
@@ -50,43 +61,8 @@ const Vacancy = () => {
     fetchPolicy: 'cache-and-network' },
   )
 
-  // const [loadNormalData, { loading, data }] = useLazyQuery(
-  //   VACANCIES_QUERY,
-  //   { variables: { first: 10 },
-  //   onCompleted: () => onCompleted(loading, data),
-  //   fetchPolicy: 'cache-and-network' },
-  // )
-
   console.log(vacancyState, "vacancyState");
-  console.log(sortByValue, "vacancyState");
-
-  const jobTypeSort = () => {
-    // Fetch the requested sort data i.e. Full Time jobs
-    // loadFilterValues();
-
-    let sortedJobs = [];
-    // If the user selects the any option then return all the
-    // vacant jobs.
-    if (sortTypes.includes('any')) {
-      sortedJobs = vacancyState.jobsData;
-    } else { 
-      vacancyState.jobsData.map(vacancy => {
-        if (sortTypes.includes(vacancy.jobType)) {
-          sortedJobs.push(vacancy)
-        }
-        return;
-      })
-    }
-    console.log("sortTypes", sortTypes);
-    console.log("sortedJobs", sortedJobs);
-
-    if (sortedJobs) {
-      vacancyDispatch({
-        type: "SORT_JOBS",
-        payload: sortedJobs
-      })
-    }
-  }
+  // console.log(sortByValue, "vacancyState");
 
   const ratePerHour = () => {
     if (rate.length > 0) {
@@ -101,7 +77,7 @@ const Vacancy = () => {
         if (rateObj.upperLimit > upperLimit) {
           upperLimit = rateObj.upperLimit;
         }
-        return;
+        return null;
       })
     
 
@@ -121,7 +97,7 @@ const Vacancy = () => {
               sortedJobs.push(vacancy);
             }
           }
-          return;
+          return null;
         })
       }
 
@@ -252,7 +228,7 @@ const Vacancy = () => {
                   </div>
                 </div>
               </div>
-              <VacancyFilter sortTypes={sortTypes} setSortTypes={setSortTypes} jobTypeSort={jobTypeSort} rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} sortByValue={sortByValue} setSortByValue={setSortByValue} loadFilterValues={loadFilterValues} />
+              <VacancyFilter sortTypes={sortTypes} setSortTypes={setSortTypes} rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} sortByValue={sortByValue} getJobs={getJobs} setGetJobs={setGetJobs} setSortByValue={setSortByValue} loadFilterValues={loadFilterValues} />
             </div>
           </div>
         )

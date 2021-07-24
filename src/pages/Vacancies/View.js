@@ -37,7 +37,6 @@ export const View = ({ match, deviceType }) => {
     "filters",
     FilterQuerySet,
   );
-  console.log("attribute", attributeFilters);
 
   const clearFilters = () => {
     setAttributeFilters({});
@@ -48,7 +47,6 @@ export const View = ({ match, deviceType }) => {
       if (attributeFilters[name].includes(value)) {
         if (filters.attributes[`${name}`].length === 1) {
           const att = { ...attributeFilters };
-          console.log(att);
           delete att[`${name}`];
           setAttributeFilters({
             ...att,
@@ -120,6 +118,7 @@ export const View = ({ match, deviceType }) => {
       {(isOnline) => (
         <TypedVacanciesQuery variables={variables} errorPolicy="all" loaderFull>
           {(vacancyData) => {
+            console.log(vacancyData)
             if (vacancyData.loading) {
               return <Loader />;
             }
@@ -164,6 +163,7 @@ export const View = ({ match, deviceType }) => {
                   vacancies={vacancyData.data.vacancies}
                   onFiltersChange={onFiltersChange}
                   onLoadMore={handleLoadMore}
+                  sort={sort}
                   onOrder={(value) => {
                     setSort(value.value);
                   }}
