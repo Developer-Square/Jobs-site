@@ -1,24 +1,41 @@
-import React from "react";
+import React, {useContext} from "react";
 import styled from 'styled-components';
 import Button from "components/Button/Button";
+import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 
-const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ratePerHour, loading }) => {
 
+const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ratePerHour, loading, sortByValue,setSortByValue, loadFilterValues }) => {
+  const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
+  let sortByOption;
   /**
    * @param  {} e
    * A function that will handle all api calls for the vacancy filter.
    */
-  const handleApiCall = (e, type) => {
-    if (type === 'location') {
-      // TODO: Add sorting by location.
-    } else {
+  const handleSortByInput = () => {
       const sortOption = document.getElementById('sortSelect');
-      // setSortString(sortOption.value);
-
       if (sortOption.value === 'salary') {
-        
+        setSortByValue({
+          direction: 'ASC',
+          field: sortOption.value.toUpperCase()
+        })
+      } else if (sortOption.value === '-salary') {
+        setSortByValue({
+          direction: 'DESC',
+          field: sortOption.value.toUpperCase().slice(1)
+        })
+      } else if (sortOption.value === 'title') {
+        setSortByValue({
+          direction: 'ASC',
+          field: sortOption.value.toUpperCase()
+        })
+      } else if (sortOption.value === '-title') {
+        setSortByValue({
+          direction: 'DESC',
+          field: sortOption.value.toUpperCase().slice(1)
+        })
+      } else {
+        sortByOption = sortOption.value;
       }
-    }
   }
 
   const addRateTypes = (checked, value) => {
@@ -86,14 +103,51 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ra
       }
     }
 
+    const handleDispatch = (jobs) => {
+      vacancyDispatch({
+        type: "SORT_JOBS",
+        payload: jobs
+      });
+    }
+
     const handleSubmit = () => {
+      console.log("sortByOption", sortByOption);
       // Call the sorting functions.
-      jobTypeSort()
-      ratePerHour()
+      // jobTypeSort();
+      // ratePerHour();
+
+      // Reverse the vacancies array inorder to display the latests results
+      // and present it as it is when we want the oldest results.
+      if (sortByOption === 'updated_at') {
+        if (vacancyState.jobsData.length > 0) {
+          handleDispatch(vacancyState.jobsData);
+        }
+      } else if (sortByOption === '-updated_at') {
+        if (vacancyState.jobsData.length > 0) {
+          handleDispatch(vacancyState.jobsData.reverse());
+        }
+      } else {
+        loadFilterValues(
+          {variables: { 
+            first: 10, 
+            sortBy: {
+              direction: sortByValue.direction,
+              field: sortByValue.field
+            } 
+          }
+        });
+      }
     }
 
   return (
         <div className="five columns">
+          {/* Search */}
+          <div className="widget">
+            <h4>Search</h4>
+            <form action="#" method="get">
+              <input type="text" placeholder="Search input..." />
+            </form>
+          </div>
           {/* Sort by */}
           <div className="widget">
             <h4>Sort by</h4>
@@ -102,7 +156,7 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ra
               data-placeholder="Choose Category"
               className="chosen-select-no-single"
               id="sortSelect"
-              onChange={handleApiCall}
+              onChange={handleSortByInput}
             >
               <option selected="selected" value="salary">
               Salary Low-High
@@ -110,29 +164,9 @@ const VacancyFilter = ({ sortTypes, setSortTypes, jobTypeSort, rate, setRate, ra
               <option value="-salary">Salary High-Low</option>
               <option value="title">Name Increasing</option>
               <option value="-title">Name Decreasing</option>
-              <option value="updated_at">Last updated Ascending</option>
-              <option value="-updated_at">Last updated Descending</option>
+              <option value="updated_at">Oldest jobs</option>
+              <option value="-updated_at">Newest jobs</option>
             </select>
-          </div>
-          {/* Location */}
-          <div className="widget">
-            <h4>Location</h4>
-            <form action="#" method="get">
-              <input type="text" onChange={(e) => handleApiCall(e, 'location')} placeholder="State / Province" />
-              <input type="text" placeholder="City" />
-              <input type="text" className="miles" placeholder="Miles" />
-              <label htmlFor="zip-code" className="from">
-                from
-              </label>
-              <input
-                type="text"
-                id="zip-code"
-                className="zip-code"
-                placeholder="Zip-Code"
-              />
-              <br />
-              <button className="button">Filter</button>
-            </form>
           </div>
           {/* Job Type */}
           <div className="widget">

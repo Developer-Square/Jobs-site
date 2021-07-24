@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import {useLazyQuery} from 'react-apollo'
 import VacancyFilter from "./VacancyFilter";
 import { TypedVacanciesQuery } from './queries'
@@ -11,26 +11,58 @@ import { VACANCIES_QUERY } from './queries'
 const Vacancy = () => {
   const [sortTypes, setSortTypes] = React.useState([]);
   const [rate, setRate] = React.useState([]);
+  const [jobTypes, setJobTypes] = React.useState([]);
+  const [sortByValue, setSortByValue] = React.useState({direction: '', field: ''});
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
 
-  const onCompleted = () => {
-    console.log('Completed request successfully');
+  const cleanVacanciesData = (edges, update) => {
+    let jobs;
+
+    if (edges.length > 0) {
+      jobs = edges.map((edge) => edge.node);
+      // Update the context api once the data is fetched successfully.
+      if (vacancyState.jobsData.length === 0) {
+        vacancyDispatch({
+          type: "ADD_DATA",
+          payload: jobs
+        });
+      } else if (update) {
+        vacancyDispatch({
+          type: "SORT_JOBS",
+          payload: jobs
+        });
+      }
+    }
   }
 
-  const [loadVacancies, { called, loading, data }] = useLazyQuery(
+  const onCompleted = (loading, data) => {
+    if (!loading) {
+      cleanVacanciesData(data.vacancies.edges, true);
+      setJobTypes(data?.__type?.enumValues)
+    }
+  }
+
+  // For the sortByInput.
+  const [loadFilterValues, { loading, data }] = useLazyQuery(
     VACANCIES_QUERY,
-    { variables: { first: 10, filter: {
-      search: sortTypes[0]
-    } },
-    onCompleted: onCompleted,
+    {
+    onCompleted: () => onCompleted(loading, data),
     fetchPolicy: 'cache-and-network' },
   )
 
+  // const [loadNormalData, { loading, data }] = useLazyQuery(
+  //   VACANCIES_QUERY,
+  //   { variables: { first: 10 },
+  //   onCompleted: () => onCompleted(loading, data),
+  //   fetchPolicy: 'cache-and-network' },
+  // )
+
   console.log(vacancyState, "vacancyState");
+  console.log(sortByValue, "vacancyState");
 
   const jobTypeSort = () => {
     // Fetch the requested sort data i.e. Full Time jobs
-    loadVacancies();
+    // loadFilterValues();
 
     let sortedJobs = [];
     // If the user selects the any option then return all the
@@ -112,41 +144,23 @@ const Vacancy = () => {
         if (vacancyData.data && vacancyData.data.vacancies === null) {
           return <NoResult />;
         }
+        const {edges} = vacancyData.data.vacancies;
+
+        // Arrange the data in the proper form then dispatch it to the context API.
+        cleanVacanciesData(edges);
+
+        setJobTypes(vacancyData?.data?.__type?.enumValues);
         
-        const handleLoadMore = () =>
-          vacancyData.loadMore(
-            (prev, next) => ({
-              ...prev,
-              products: {
-                ...prev.vacancies,
-                edges: [...prev.vacancies.edges, ...next.vacancies.edges],
-                pageInfo: next.vacancies.pageInfo,
-              },
-            }),
-            {
-              after: vacancyData.data.vacancies.pageInfo.endCursor,
-            },
-          );
+        /**
+         * @param  {} data
+         * @param  {} jobTypes
+         * Maps out the specific jobType description with the right job.
+         */
+        const findJobTypeDescription = (data, jobTypes) => {
+          let job = jobTypes.find(({name}) => name === data.jobType);
+          return job.description
+        }
 
-          let jobs;
-          let jobTypes = vacancyData?.data?.__type?.enumValues
-
-          const findJobTypeDescription = (data) => {
-            let job = jobTypes.find(({name}) => name === data.jobType);
-            return job.description
-          }
-
-          const {edges} = vacancyData.data.vacancies;
-          if (edges.length > 0) {
-            jobs = edges.map((edge) => edge.node);
-            // Update the context api once the data is fetched successfully.
-            if (vacancyState.jobsData.length === 0) {
-              vacancyDispatch({
-                type: "ADD_DATA",
-                payload: jobs
-              });
-            }
-          }
         return (
           <div>
             <div id="titlebar">
@@ -180,7 +194,7 @@ const Vacancy = () => {
                         <div className="listing-title">
                           <h4>
                             {job.title}
-                            <span className="listing-type">{findJobTypeDescription(job)}</span>
+                            <span className="listing-type">{findJobTypeDescription(job, jobTypes)}</span>
                           </h4>
                           <ul className="listing-icons">
                             <li>
@@ -238,7 +252,7 @@ const Vacancy = () => {
                   </div>
                 </div>
               </div>
-              <VacancyFilter sortTypes={sortTypes} setSortTypes={setSortTypes} jobTypeSort={jobTypeSort} rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading}/>
+              <VacancyFilter sortTypes={sortTypes} setSortTypes={setSortTypes} jobTypeSort={jobTypeSort} rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} sortByValue={sortByValue} setSortByValue={setSortByValue} loadFilterValues={loadFilterValues} />
             </div>
           </div>
         )
