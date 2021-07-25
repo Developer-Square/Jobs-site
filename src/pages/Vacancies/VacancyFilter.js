@@ -1,13 +1,15 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useContext} from "react";
 import styled from 'styled-components';
 import Button from "components/Button/Button";
 import SearchForm from 'containers/Search/SearchForm'
 import { IsNotEmpty } from 'helpers/index'
+import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 
 
 const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue }) => {
   const [searchString, setSearchString] = React.useState('');
   const [sortTypes, setSortTypes] = React.useState([]);
+  const { vacancyState } = useContext(VacancyContext);
   
   const getDefaultValues = async () => {
     handleSortByInput();
@@ -24,22 +26,27 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
   useEffect(() => {
     // Set the default value.
     getDefaultValues();
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
-    // Fetch according to the default filters.
-    if (IsNotEmpty(sortByValue) && sortTypes[0] === 'any' && rate[0].lowerLimit === 'any') {
-      loadFilterValues(
-        {variables: { 
-          first: 10, 
-          sortBy: {
-            direction: sortByValue.direction,
-            field: sortByValue.field
-          } 
-        }
-        }
-      );
+    // Only fetch if context API is empty.
+    if (vacancyState.jobsData.length === 0) { 
+      // Fetch according to the default filters.
+      if (IsNotEmpty(sortByValue) && sortTypes[0] === 'any' && rate[0].lowerLimit === 'any') {
+        loadFilterValues(
+          {variables: { 
+            first: 10, 
+            sortBy: {
+              direction: sortByValue.direction,
+              field: sortByValue.field
+            } 
+          }
+          }
+        );
+      }
     }
+    // eslint-disable-next-line
   }, [sortByValue, sortTypes, rate])
 
   /**
@@ -137,7 +144,10 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
 
   const handleSubmit = () => {
     // Call the sorting functions.
-    ratePerHour();
+    // Only sort by rate after the API calls are done.
+    if (rate.lowerLimit !== 'any') {
+      ratePerHour();
+    }
 
     if (getJobs === 'updated_at' || getJobs === '-updated_at') {
       loadFilterValues(
@@ -145,21 +155,33 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
           first: 10
         }}
       );
-    } else if (searchString.length > 0) {
+    }
+    
+    if (searchString.length > 0 && IsNotEmpty(sortByValue)) {
       loadFilterValues(
         {variables: { 
           first: 10, 
           filter: {
             search: searchString,
-          } 
+          },
+          sortBy: {
+            direction: sortByValue.direction,
+            field: sortByValue.field
+          }  
         }
       });
-    } else if (sortTypes.length > 0) {
+    } 
+    
+    if (sortTypes.length > 0 && IsNotEmpty(sortByValue)) {
       // Fetch everything without sorting if the any option is selected.
       if (sortTypes.includes('any')) {
         loadFilterValues(
           {variables: {
-            first: 10
+            first: 10,
+            sortBy: {
+              direction: sortByValue.direction,
+              field: sortByValue.field
+            } 
           }}
         );
       } else {
@@ -168,20 +190,14 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
             first: 10, 
             filter: {
               jobType: sortTypes[0],
-            } 
+            },
+            sortBy: {
+              direction: sortByValue.direction,
+              field: sortByValue.field
+            }  
           }
         });
       }
-    } else if (IsNotEmpty(sortByValue)) {
-      loadFilterValues(
-        {variables: { 
-          first: 10, 
-          sortBy: {
-            direction: sortByValue.direction,
-            field: sortByValue.field
-          } 
-        }
-      });
     }
   }
 

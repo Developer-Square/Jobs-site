@@ -1,12 +1,9 @@
 import React, {useContext, useEffect} from "react";
 import {useLazyQuery} from 'react-apollo'
 import VacancyFilter from "./VacancyFilter";
-import { TypedVacanciesQuery } from './queries'
 import Loader from "components/Loader/Loader";
-import { NoResult } from "components/VacancyLoader/VacancyLoader.style";
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 import { VACANCIES_QUERY } from './queries'
-import { IsNotEmpty } from 'helpers/index'
  
 
 const Vacancy = () => {
@@ -67,54 +64,48 @@ const Vacancy = () => {
     VACANCIES_QUERY,
     {
     onCompleted: () => onCompleted(loading, data),
-    fetchPolicy: 'cache-and-network' },
+    fetchPolicy: 'cache-and-network',
+   },
   )
 
   console.log(vacancyState, "vacancyState");
 
   const ratePerHour = () => {
     let sortedJobs = [];
-    
+
     if (rate.length > 0) {
       let upperLimit = rate[0].upperLimit;
       let lowerLimit = rate[0].lowerLimit;
-      // If the user selects the any option then return all the
-      // vacant jobs.
-      if (rate.includes('any')) {
-        sortedJobs = vacancyState.jobsData;
-      } else {
-        // Map over all the rates to find the lowest limit and highest upper limit.
-        rate.map(rateObj => {
-          if (rateObj.lowerLimit < lowerLimit) {
-            lowerLimit = rateObj.lowerLimit;
-          }
-          
-          if (rateObj.upperLimit > upperLimit) {
-            upperLimit = rateObj.upperLimit;
-          }
-          return null;
-        })
-
-        vacancyState.jobsData.map(vacancy => {
-          if (vacancy.payRate === 'HOUR') {
-            // Add the jobs that are offer 200+ hourly payments.
-            if (upperLimit === 201 && vacancy.salary > upperLimit) {
-              sortedJobs.push(vacancy);
-            }
-            if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
-              sortedJobs.push(vacancy);
-            }
-          }
-          return null;
-        })
-  
-        if (sortedJobs) {
-          vacancyDispatch({
-            type: "SORT_JOBS",
-            payload: sortedJobs
-          })
+      // Map over all the rates to find the lowest limit and highest upper limit.
+      rate.map(rateObj => {
+        if (rateObj.lowerLimit < lowerLimit) {
+          lowerLimit = rateObj.lowerLimit;
         }
+        
+        if (rateObj.upperLimit > upperLimit) {
+          upperLimit = rateObj.upperLimit;
+        }
+        return null;
+      })
 
+      vacancyState.jobsData.map(vacancy => {
+        if (vacancy.payRate === 'HOUR') {
+          // Add the jobs that are offer 200+ hourly payments.
+          if (upperLimit === 201 && vacancy.salary > upperLimit) {
+            sortedJobs.push(vacancy);
+          }
+          if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
+            sortedJobs.push(vacancy);
+          }
+        }
+        return null;
+      })
+
+      if (sortedJobs) {
+        vacancyDispatch({
+          type: "SORT_JOBS",
+          payload: sortedJobs
+        })
       }
     }
   }
