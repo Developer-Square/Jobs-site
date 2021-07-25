@@ -10,8 +10,10 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
   const [searchString, setSearchString] = React.useState('');
   const [sortTypes, setSortTypes] = React.useState([]);
   const { vacancyState } = useContext(VacancyContext);
+
+  console.log("sortByValue", sortByValue);
   
-  const getDefaultValues = async () => {
+  const getDefaultValues = () => {
     handleSortByInput();
     const checkboxes = Array.from(document.getElementsByName('check'))
     checkboxes.map(check => {
@@ -55,6 +57,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
    */
   const handleSortByInput = () => {
       const sortOption = document.getElementById('sortSelect');
+      console.log('here');
       if (sortOption.value === 'salary') {
         setSortByValue({
           direction: 'ASC',
@@ -142,6 +145,21 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     }
   }
 
+  const callLoadFilters = (filterKey, filterValue) => {
+    loadFilterValues(
+      {variables: { 
+        first: 10, 
+        filter: {
+          [filterKey]: filterValue,
+        },
+        sortBy: {
+          direction: sortByValue.direction,
+          field: sortByValue.field
+        }  
+      }
+    });
+  }
+
   const handleSubmit = () => {
     // Call the sorting functions.
     // Only sort by rate after the API calls are done.
@@ -158,45 +176,12 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     }
     
     if (searchString.length > 0 && IsNotEmpty(sortByValue)) {
-      loadFilterValues(
-        {variables: { 
-          first: 10, 
-          filter: {
-            search: searchString,
-          },
-          sortBy: {
-            direction: sortByValue.direction,
-            field: sortByValue.field
-          }  
-        }
-      });
+      callLoadFilters('search', searchString)
     } 
     
     if (sortTypes.length > 0 && IsNotEmpty(sortByValue)) {
-      // Fetch everything without sorting if the any option is selected.
-      if (sortTypes.includes('any')) {
-        loadFilterValues(
-          {variables: {
-            first: 10,
-            sortBy: {
-              direction: sortByValue.direction,
-              field: sortByValue.field
-            } 
-          }}
-        );
-      } else {
-        loadFilterValues(
-          {variables: { 
-            first: 10, 
-            filter: {
-              jobType: sortTypes[0],
-            },
-            sortBy: {
-              direction: sortByValue.direction,
-              field: sortByValue.field
-            }  
-          }
-        });
+      if (!sortTypes.includes('any')) {
+        callLoadFilters('jobType', sortTypes[0])
       }
     }
   }
