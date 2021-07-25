@@ -1,9 +1,10 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import {useLazyQuery} from 'react-apollo'
 import VacancyFilter from "./VacancyFilter";
 import Loader from "components/Loader/Loader";
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 import { VACANCIES_QUERY } from './queries'
+import PaginationItem from "./PaginationItem";
  
 
 const Vacancy = () => {
@@ -12,9 +13,6 @@ const Vacancy = () => {
   const [getJobs, setGetJobs] = React.useState('');
   const [sortByValue, setSortByValue] = React.useState({direction: '', field: ''});
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
-
-  useEffect(() => {
-  }, [])
 
   const cleanVacanciesData = (edges, update) => {
     let jobs;
@@ -174,41 +172,7 @@ const Vacancy = () => {
               )) : <Loader />}
             </div>
             <div className="clearfix" />
-            <div className="pagination-container">
-              <nav className="pagination">
-                <ul>
-                  <li>
-                    <a href className="current-page">
-                      1
-                    </a>
-                  </li>
-                  <li>
-                    <a href>2</a>
-                  </li>
-                  <li>
-                    <a href>3</a>
-                  </li>
-                  <li className="blank">...</li>
-                  <li>
-                    <a href>22</a>
-                  </li>
-                </ul>
-              </nav>
-              <nav className="pagination-next-prev">
-                <ul>
-                  <li>
-                    <a href className="prev">
-                      Previous
-                    </a>
-                  </li>
-                  <li>
-                    <a href className="next">
-                      Next
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
+            <PaginationItem loading={loading} data={data} loadFilterValues={loadFilterValues} sortByValue={sortByValue}/>
           </div>
         </div>
         <VacancyFilter rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} getJobs={getJobs} setGetJobs={setGetJobs} loadFilterValues={loadFilterValues} sortByValue={sortByValue} setSortByValue={setSortByValue} />

@@ -11,7 +11,6 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
   const [sortTypes, setSortTypes] = React.useState([]);
   const { vacancyState } = useContext(VacancyContext);
 
-  console.log("sortByValue", sortByValue);
   
   const getDefaultValues = () => {
     handleSortByInput();
@@ -57,7 +56,6 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
    */
   const handleSortByInput = () => {
       const sortOption = document.getElementById('sortSelect');
-      console.log('here');
       if (sortOption.value === 'salary') {
         setSortByValue({
           direction: 'ASC',
