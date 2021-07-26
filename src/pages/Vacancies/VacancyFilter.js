@@ -10,7 +10,7 @@ import { getGraphqlIdFromDBId, getDBIdFromGraphqlId } from "core/utils";
 const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue}) => {
   const [searchString, setSearchString] = React.useState('');
   const [sortTypes, setSortTypes] = React.useState([]);
-  const [filterObj, setFilterObj] = React.useState({search: '', jobType: [],});
+  const [filterObj, setFilterObj] = React.useState({search: '', jobTypes: [],});
   const { vacancyState } = useContext(VacancyContext);
   
   const getDefaultValues = () => {
@@ -114,19 +114,19 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
       setSortTypes([...sortTypes, value])
       setFilterObj({
         ...filterObj,
-        jobType: value
+        jobTypes: [...filterObj.jobTypes, value]
       })
     } else if (value === 'any') {
       setFilterObj({
         ...filterObj,
-        jobType: ''
+        jobTypes: []
       });
     } else {
       let newSortTypes = sortTypes.filter(filterTypes);
       setSortTypes([...newSortTypes])
       setFilterObj({
         ...filterObj,
-        jobType: '' 
+        jobTypes: filterObj.jobTypes.filter(filterTypes)
       })
     }
   }
