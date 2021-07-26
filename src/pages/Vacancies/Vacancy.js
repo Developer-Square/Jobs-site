@@ -11,8 +11,48 @@ const Vacancy = () => {
   const [rate, setRate] = React.useState([]);
   const [jobTypes, setJobTypes] = React.useState([]);
   const [getJobs, setGetJobs] = React.useState('');
+  const [sortOrder, setSortOrder] = React.useState([]);
   const [sortByValue, setSortByValue] = React.useState({direction: '', field: ''});
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
+
+  const ratePerHour = () => {
+    let sortedJobs = [];
+    if (rate.length > 0) {
+      let upperLimit = rate[0].upperLimit;
+      let lowerLimit = rate[0].lowerLimit;
+      // Map over all the rates to find the lowest limit and highest upper limit.
+      rate.map(rateObj => {
+        if (rateObj.lowerLimit < lowerLimit) {
+          lowerLimit = rateObj.lowerLimit;
+        }
+        
+        if (rateObj.upperLimit > upperLimit) {
+          upperLimit = rateObj.upperLimit;
+        }
+        return null;
+      })
+      
+      vacancyState.sortedJobs.map(vacancy => {
+        if (vacancy.payRate === 'HOUR') {
+          // Add the jobs that are offer 200+ hourly payments.
+          if (upperLimit === 201 && vacancy.salary > upperLimit) {
+            sortedJobs.push(vacancy);
+          }
+          if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
+            sortedJobs.push(vacancy);
+          }
+        }
+        return null;
+      })
+
+      if (sortedJobs) {
+        vacancyDispatch({
+          type: "SORT_JOBS",
+          payload: sortedJobs
+        })
+      }
+    }
+  }
 
   const cleanVacanciesData = (edges, update) => {
     let jobs;
@@ -41,6 +81,11 @@ const Vacancy = () => {
           });
         }
       }
+      // Sort the object according the rate per hour sorting 
+      // if there's any option selected.
+      if (rate.length) {
+        ratePerHour()
+      }
     } else {
       // Dispatch an empty array when there are no results
       vacancyDispatch({
@@ -58,55 +103,17 @@ const Vacancy = () => {
   }
 
   // For the sortByInput.
-  const [loadFilterValues, { loading, data }] = useLazyQuery(
+  const [loadFilterValues, { loading, data}] = useLazyQuery(
     VACANCIES_QUERY,
     {
     onCompleted: () => onCompleted(loading, data),
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-and-network'
    },
   )
 
   console.log(vacancyState, "vacancyState");
 
-  const ratePerHour = () => {
-    let sortedJobs = [];
 
-    if (rate.length > 0) {
-      let upperLimit = rate[0].upperLimit;
-      let lowerLimit = rate[0].lowerLimit;
-      // Map over all the rates to find the lowest limit and highest upper limit.
-      rate.map(rateObj => {
-        if (rateObj.lowerLimit < lowerLimit) {
-          lowerLimit = rateObj.lowerLimit;
-        }
-        
-        if (rateObj.upperLimit > upperLimit) {
-          upperLimit = rateObj.upperLimit;
-        }
-        return null;
-      })
-
-      vacancyState.jobsData.map(vacancy => {
-        if (vacancy.payRate === 'HOUR') {
-          // Add the jobs that are offer 200+ hourly payments.
-          if (upperLimit === 201 && vacancy.salary > upperLimit) {
-            sortedJobs.push(vacancy);
-          }
-          if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
-            sortedJobs.push(vacancy);
-          }
-        }
-        return null;
-      })
-
-      if (sortedJobs) {
-        vacancyDispatch({
-          type: "SORT_JOBS",
-          payload: sortedJobs
-        })
-      }
-    }
-  }
 
   /**
  * @param  {} data
@@ -115,7 +122,7 @@ const Vacancy = () => {
  */
   const findJobTypeDescription = (data, jobTypes) => {
     let job = jobTypes.find(({name}) => name === data.jobType);
-    return job.description
+    return job ? job.description : null;
   } 
 
   return (
@@ -175,7 +182,7 @@ const Vacancy = () => {
             <PaginationItem loading={loading} data={data} loadFilterValues={loadFilterValues} sortByValue={sortByValue}/>
           </div>
         </div>
-        <VacancyFilter rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} getJobs={getJobs} setGetJobs={setGetJobs} loadFilterValues={loadFilterValues} sortByValue={sortByValue} setSortByValue={setSortByValue} />
+        <VacancyFilter rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} getJobs={getJobs} setGetJobs={setGetJobs} loadFilterValues={loadFilterValues} sortByValue={sortByValue} setSortByValue={setSortByValue} sortOrder={sortOrder} setSortOrder={setSortOrder} />
       </div>
     </div>
   );

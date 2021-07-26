@@ -4,13 +4,14 @@ import Button from "components/Button/Button";
 import SearchForm from 'containers/Search/SearchForm'
 import { IsNotEmpty } from 'helpers/index'
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
+import { getGraphqlIdFromDBId, getDBIdFromGraphqlId } from "core/utils";
 
 
-const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue }) => {
+const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue}) => {
   const [searchString, setSearchString] = React.useState('');
   const [sortTypes, setSortTypes] = React.useState([]);
+  const [filterObj, setFilterObj] = React.useState({search: '', jobType: [],});
   const { vacancyState } = useContext(VacancyContext);
-
   
   const getDefaultValues = () => {
     handleSortByInput();
@@ -27,6 +28,8 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
   useEffect(() => {
     // Set the default value.
     getDefaultValues();
+    const result = getGraphqlIdFromDBId(31, 'Industry')
+    const result2 = getDBIdFromGraphqlId('SW5kdXN0cnk6MzE=', 'Industry')
     // eslint-disable-next-line
   }, [])
 
@@ -34,7 +37,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     // Only fetch if context API is empty.
     if (vacancyState.jobsData.length === 0) { 
       // Fetch according to the default filters.
-      if (IsNotEmpty(sortByValue) && sortTypes[0] === 'any' && rate[0].lowerLimit === 'any') {
+      if (IsNotEmpty(sortByValue)) {
         loadFilterValues(
           {variables: { 
             first: 10, 
@@ -48,56 +51,83 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
       }
     }
     // eslint-disable-next-line
-  }, [sortByValue, sortTypes, rate])
+  }, [sortByValue])
 
   /**
    * @param  {} e
    * A function that will handle all api calls for the vacancy filter.
    */
   const handleSortByInput = () => {
-      const sortOption = document.getElementById('sortSelect');
-      if (sortOption.value === 'salary') {
-        setSortByValue({
-          direction: 'ASC',
-          field: sortOption.value.toUpperCase()
-        });
-      } else if (sortOption.value === '-salary') {
-        setSortByValue({
-          direction: 'DESC',
-          field: sortOption.value.toUpperCase().slice(1)
-        });
-      } else if (sortOption.value === 'title') {
-        setSortByValue({
-          direction: 'ASC',
-          field: sortOption.value.toUpperCase()
-        });
-      } else if (sortOption.value === '-title') {
-        setSortByValue({
-          direction: 'DESC',
-          field: sortOption.value.toUpperCase().slice(1)
-        });
-      } else if (sortOption.value === '-updated_at') {
-        setGetJobs(curr => curr = sortOption.value);
-      } else {
-        setGetJobs(curr => curr = sortOption.value);
-      }
+    let sortOption = document.getElementById('sortSelect');
+    
+    if (sortOption.style.display === 'none') {
+      sortOption = document.getElementById('sortSelect_chosen');
+    }
+    // Clear the field incase the user selects a different option other than
+    // newest jobs or oldest jobs.
+    setGetJobs('');
+
+    if (sortOption.value === 'salary') {
+      setSortByValue({
+        direction: 'ASC',
+        field: sortOption.value.toUpperCase()
+      });
+    } else if (sortOption.value === '-salary') {
+      setSortByValue({
+        direction: 'DESC',
+        field: sortOption.value.toUpperCase().slice(1)
+      });
+    } else if (sortOption.value === 'title') {
+      setSortByValue({
+        direction: 'ASC',
+        field: sortOption.value.toUpperCase()
+      });
+    } else if (sortOption.value === '-title') {
+      setSortByValue({
+        direction: 'DESC',
+        field: sortOption.value.toUpperCase().slice(1)
+      });
+    } else if (sortOption.value === '-updated_at') {
+      setGetJobs(curr => curr = sortOption.value);
+    } else {
+      setGetJobs(curr => curr = sortOption.value);
+    }
   }
 
   const addRateTypes = (checked, value) => {
-    if (checked && !rate.includes(value)) {
+    const filterRates = rateObj => rateObj.name !== value.name;
+    if (checked && value.lowerLimit !== 'any') {
       setRate([...rate, value]);
+    } else if (value.lowerLimit === 'any') {
+      setRate([]);
     } else {
-      let newRateTypes = rate.filter(rateObj => rateObj.name !== value.name);
+      let newRateTypes = rate.filter(filterRates);
       setRate([...newRateTypes]);
     }
   }
 
   const addJobTypes = (checked, value) => {
-    if (checked && !sortTypes.includes(value)) {
+    const filterTypes = types => types !== value;
+      // Don't add the any option to the filterObj.
+      // To solve the double UI issue.
+    if (checked && value !== 'any') {
       setSortTypes([...sortTypes, value])
+      setFilterObj({
+        ...filterObj,
+        jobType: value
+      })
+    } else if (value === 'any') {
+      setFilterObj({
+        ...filterObj,
+        jobType: ''
+      });
     } else {
-      let newSortTypes = sortTypes.filter(types => types !== value);
+      let newSortTypes = sortTypes.filter(filterTypes);
       setSortTypes([...newSortTypes])
+      setFilterObj({
+        ...filterObj,
+        jobType: '' 
+      })
     }
   }
 
@@ -143,13 +173,21 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     }
   }
 
-  const callLoadFilters = (filterKey, filterValue) => {
+  const clean = (obj) => {
+    for (let propName in obj) {
+      if (obj[propName] === '' || obj[propName].length === 0) {
+        delete obj[propName];
+      }
+    }
+    return obj;
+  }
+
+  const callLoadFilters = () => {
+    const cleanedFilterObj = clean(filterObj);
     loadFilterValues(
       {variables: { 
         first: 10, 
-        filter: {
-          [filterKey]: filterValue,
-        },
+        filter: cleanedFilterObj,
         sortBy: {
           direction: sortByValue.direction,
           field: sortByValue.field
@@ -161,7 +199,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
   const handleSubmit = () => {
     // Call the sorting functions.
     // Only sort by rate after the API calls are done.
-    if (rate.lowerLimit !== 'any') {
+    if (rate.lowerLimit !== 'any' && Object.values(filterObj).length === 0) {
       ratePerHour();
     }
 
@@ -173,20 +211,14 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
       );
     }
     
-    if (searchString.length > 0 && IsNotEmpty(sortByValue)) {
-      callLoadFilters('search', searchString)
-    } 
-    
-    if (sortTypes.length > 0 && IsNotEmpty(sortByValue)) {
-      if (!sortTypes.includes('any')) {
-        callLoadFilters('jobType', sortTypes[0])
-      }
+    if ((searchString.length > 0 && IsNotEmpty(sortByValue)) || (sortTypes.length > 0 && IsNotEmpty(sortByValue))) {
+      callLoadFilters()
     }
   }
 
   return (
         <div className="five columns">
-          <SearchForm setSearchString={setSearchString} />
+          <SearchForm setSearchString={setSearchString} filterObj={filterObj} setFilterObj={setFilterObj} />
           {/* Sort by */}
           <div className="widget">
             <h4>Sort by</h4>

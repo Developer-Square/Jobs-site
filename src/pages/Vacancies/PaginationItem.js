@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const PaginationBtn = ({text, handlePageChange}) => {
     return (
@@ -10,6 +10,28 @@ const PaginationBtn = ({text, handlePageChange}) => {
 
 function PaginationItem({ loading, data, loadFilterValues, sortByValue }) {
     let pageInfo;
+    let pages;
+    const [pagesArray, setPagesArray] = React.useState([]);
+
+    useEffect(() => {
+        if (data) {
+            if (data.totalCount % 10 === 0) {
+                // eslint-disable-next-line
+                pages = data.vacancies.totalCount / 10
+            } else {
+                // eslint-disable-next-line
+                pages = (Math.floor(data.vacancies.totalCount / 10)) + 1
+            }
+        }
+        // Populate the pagesArray with the page numbers that are expected.
+        if (pages) {
+            let array = [];
+            for(let i = 0; i < pages; i++) {
+                array.push(i + 1);
+            }
+            setPagesArray(array);
+        }
+    }, [data])
 
     if (data) {
         pageInfo = data.vacancies.pageInfo;
@@ -46,21 +68,24 @@ function PaginationItem({ loading, data, loadFilterValues, sortByValue }) {
         <div className="pagination-container">
         <nav className="pagination">
           <ul>
-            <li>
-              <a href className="current-page">
-                1
-              </a>
-            </li>
-            <li>
-              <a href>2</a>
-            </li>
-            <li>
-              <a href>3</a>
-            </li>
-            <li className="blank">...</li>
-            <li>
-              <a href>22</a>
-            </li>
+              {pagesArray.length ? pagesArray.map((page, index) => (
+                <li key={index}>
+                    {/* Only add the current-page class to the first item, the first item will
+                    always have an index of zero which is falsy. */}
+                    <a href className={!index ? "current-page" : ""}>
+                        {page}
+                    </a>
+                </li> 
+              )) : 'Loading ...'}
+            {pagesArray.length > 3 ? (
+                <>
+                    <li className="blank">...</li>
+                    <li>
+                        <a href>22</a>
+                    </li>
+                </>
+            ): null}
+ 
           </ul>
         </nav>
         <nav className="pagination-next-prev">

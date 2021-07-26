@@ -1,8 +1,12 @@
 import React from 'react'
 
-function SearchForm({setSearchString}) {
+function SearchForm({setSearchString, filterObj, setFilterObj}) {
     const handleInputChange = (value) => {
         setSearchString(value);
+        setFilterObj({
+            ...filterObj,
+            search: value
+        })
     }
     return (
         <>

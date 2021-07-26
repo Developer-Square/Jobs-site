@@ -2,6 +2,7 @@
 import React from "react";
 import LogoImage from "image/thedb.png";
 import moment from "moment";
+import draftToHtml from "draftjs-to-html";
 
 const Page = ({
   yearsData = [],
@@ -14,7 +15,7 @@ const Page = ({
     ({ name }) => name === data?.minQualification,
   );
   const yearsType = yearsData.find(({ name }) => name === data?.yearsOfExp);
-  console.log("years", moment(new Date()).fromNow());
+  console.log("years", data.description);
   return (
     <div>
       <div id="titlebar">
@@ -61,11 +62,11 @@ const Page = ({
               <div className="clearfix" />
             </div>
             <div
-              dangerouslySetInnerHTML={{
-                __html: JSON.parse(data?.description),
-              }}
+              // dangerouslySetInnerHTML={{
+              //   __html: JSON.parse(data?.description),
+              // }}
             />
-
+            {draftToHtml(data.description)}
             {/* <p className="margin-reset">
               The Food Service Specialist ensures outstanding customer service
               is provided to food customers and that all food offerings meet the
