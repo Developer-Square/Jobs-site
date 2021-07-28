@@ -1,19 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { FaPrint } from "react-icons/fa";
-import { clone } from "lodash";
+// import { clone } from "lodash";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useState } from "react";
-import download from "downloadjs";
+// import download from "downloadjs";
 // import firebase from "gatsby-plugin-firebase";
-import { useSelector } from "contexts/resume/resume.provider";
+// import { useSelector } from "contexts/resume/resume.provider";
 import BaseModal from "../BaseModal";
 import Button from "components/shared/Button";
 import ModalContext from "contexts/modal/modal.provider";
-import { b64toBlob } from "utils";
+// import { b64toBlob } from "utils";
 
 const ExportModal = () => {
-  const state = useSelector();
+  // const state = useSelector();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoadingSingle, setLoadingSingle] = useState(false);
@@ -37,14 +37,15 @@ const ExportModal = () => {
     isSinglePDF ? setLoadingSingle(true) : setLoadingMulti(true);
 
     try {
+      toast("Featur Coming Soon");
+
       // const printResume = firebase.functions().httpsCallable("printResume");
-      const printResume = toast("to handle printResume");
-      const { data } = await printResume({
-        id: state.id,
-        type: isSinglePDF ? "single" : "multi",
-      });
-      const blob = b64toBlob(data, "application/pdf");
-      download(blob, `RxResume-${state.id}.pdf`, "application/pdf");
+      // const { data } = await printResume({
+      //   id: state.id,
+      //   type: isSinglePDF ? "single" : "multi",
+      // });
+      // const blob = b64toBlob(data, "application/pdf");
+      // download(blob, `RxResume-${state.id}.pdf`, "application/pdf");
     } catch (error) {
       toast(t("builder.toasts.printError"));
     } finally {
@@ -53,16 +54,18 @@ const ExportModal = () => {
   };
 
   const handleExportToJson = () => {
-    const backupObj = clone(state);
-    delete backupObj.id;
-    delete backupObj.user;
-    delete backupObj.name;
-    delete backupObj.createdAt;
-    delete backupObj.updatedAt;
-    const data = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(backupObj, null, "\t"),
-    )}`;
-    download(data, `RxResume-${state.id}.json`, "text/json");
+    // const backupObj = clone(state);
+    // delete backupObj.id;
+    // delete backupObj.user;
+    // delete backupObj.name;
+    // delete backupObj.createdAt;
+    // delete backupObj.updatedAt;
+    // const data = `data:text/json;charset=utf-8,${encodeURIComponent(
+    //   JSON.stringify(backupObj, null, "\t"),
+    // )}`;
+    // download(data, `RxResume-${state.id}.json`, "text/json");
+
+    toast("Featur Coming Soon");
   };
 
   return (

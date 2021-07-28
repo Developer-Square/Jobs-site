@@ -25,7 +25,7 @@ const ContactD = () => {
     <div
       className="my-4 relative w-full border-2 grid gap-2 text-center text-xs py-5"
       style={{
-        borderColor: data.metadata.colors.primary,
+        borderColor: data.resumemetadata.primaryColor,
       }}
     >
       <div
@@ -34,20 +34,21 @@ const ContactD = () => {
           top: "-11px",
           left: "50%",
           marginLeft: "-10px",
-          color: data.metadata.colors.primary,
+          color: data.resumemetadata.primaryColor,
         }}
       >
         <MdFlare size="20px" />
       </div>
 
-      {hasAddress(data.profile.address) && (
+      {hasAddress(data.owner.defaultAddress) && (
         <div>
           <h6 className="capitalize font-semibold">Address</h6>
           <div className="flex flex-col text-xs">
-            <span>{data.profile.address.line1}</span>
-            <span>{data.profile.address.line2}</span>
+            <span>{data.owner?.defaultAddress?.streetAddress1}</span>
+            <span>{data.owner?.defaultAddress?.streetAddress2}</span>
             <span>
-              {data.profile.address.city} {data.profile.address.pincode}
+              {data.owner?.defaultAddress.city}{" "}
+              {data.owner?.defaultAddress.postalCode}
             </span>
           </div>
         </div>
@@ -55,21 +56,21 @@ const ContactD = () => {
 
       <ContactItem
         label={`Phone Number`}
-        value={data.profile.phone}
+        value={data.owner?.phone}
         icon="phone"
-        link={`tel:${data.profile.phone}`}
+        link={`tel:${data.owner?.phone}`}
       />
       <ContactItem
         label={`Website`}
-        value={data.profile.website}
+        value={data.owner?.website}
         icon="website"
-        link={data.profile.website}
+        link={data.owner?.website}
       />
       <ContactItem
         label={`Email Address`}
-        value={data.profile.email}
+        value={data.owner?.email}
         icon="email"
-        link={`mailto:${data.profile.email}`}
+        link={`mailto:${data.owner?.email}`}
       />
 
       <BirthDateA />
@@ -82,7 +83,7 @@ const ContactD = () => {
                 key={x.id}
                 value={x.username}
                 label={x.network}
-                link={x.url}
+                link={x.link}
               />
             ),
         )}

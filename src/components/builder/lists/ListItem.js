@@ -86,7 +86,7 @@ const ListItem = ({
       {(dragProvided) => (
         <div
           ref={dragProvided.innerRef}
-          className={styles.listItem}
+          className={styles["list-item"]}
           data-testid={`${dataTestIdPrefix}${path}`}
           {...dragProvided.draggableProps}
           {...dragProvided.dragHandleProps}
@@ -106,7 +106,7 @@ const ListItem = ({
               </span>
             )}
           </div>
-          <div className={styles.toggleButton}>
+          <div className={styles["toggle-button"]}>
             <Switch
               checked={toggleSwitchState}
               onChange={handleToggleUse}
@@ -116,7 +116,7 @@ const ListItem = ({
               inputProps={{ "aria-label": "primary checkbox" }}
             />
 
-            <div className={styles.menu}>
+            <div className={styles["menu"]}>
               <MdMoreVert
                 size="18px"
                 aria-haspopup="true"

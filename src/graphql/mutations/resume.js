@@ -1,5 +1,6 @@
 import gql from "graphql-tag";
-import { simpleResumeFragment } from "graphql/fragments";
+import { resumeFragment } from "graphql/fragments";
+import { simpleResumeFragment, awardItemFragment } from "graphql/fragments";
 
 export const DUPLICATE_RESUME = gql`
   ${simpleResumeFragment}
@@ -63,6 +64,120 @@ export const RESUME_UPDATE_MUTATION = gql`
       }
       resume {
         ...Resume
+      }
+    }
+  }
+`;
+
+export const UPDATE_RESUME = gql`
+  ${resumeFragment}
+  mutation ResumePatch(
+    $id: ID!
+    $public: Boolean
+    $isActive: Boolean
+    $name: String
+    $objective: PatchResumeInputCreateObjective
+    $education: PatchResumeInputCreateEducation
+    $skill: PatchResumeInputCreateSkill
+    $hobby: PatchResumeInputCreateHobby
+    $work: PatchResumeInputCreateWork
+    $award: PatchResumeInputCreateAward
+    $certification: PatchResumeInputCreateCertification
+    $language: PatchResumeInputCreateLanguage
+    $resumemetadata: PatchResumeInputCreateResumemetadata
+    $project: PatchResumeInputCreateProject
+    $reference: PatchResumeInputCreateReference
+    $social: PatchResumeInputCreateSocial
+  ) {
+    resumePatch(
+      id: $id
+      input: {
+        name: $name
+        isActive: $isActive
+        public: $public
+        objective: $objective
+        education: $education
+        skill: $skill
+        hobby: $hobby
+        work: $work
+        award: $award
+        certification: $certification
+        language: $language
+        resumemetadata: $resumemetadata
+        project: $project
+        reference: $reference
+        social: $social
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      resume {
+        ...Resume
+      }
+    }
+  }
+`;
+export const AWARD_MUTATION = gql`
+  ${awardItemFragment}
+  mutation AwardItemCreate(
+    $organization: String
+    $title: String
+    $date: Date
+    $award_pk: String
+    $descriptionPlaintext: String
+  ) {
+    awardItemCreate(
+      input: {
+        award: $award
+        organization: $organization
+        title: $title
+        date: $date
+        award_pk: $award_pk
+        descriptionPlaintext: $descriptionPlaintext
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      awardItem {
+        ...AwardItem
+      }
+    }
+  }
+`;
+
+export const AWARD_UPDATE_MUTATION = gql`
+  ${awardItemFragment}
+  mutation AwardItemUpdate(
+    $id: ID!
+    $organization: String
+    $title: String
+    $date: Date
+  ) {
+    awardItemPatch(
+      id: $id
+      input: {
+        award: $award
+        organization: $organization
+        title: $title
+        date: $date
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      awardItem {
+        ...AwardItem
       }
     }
   }

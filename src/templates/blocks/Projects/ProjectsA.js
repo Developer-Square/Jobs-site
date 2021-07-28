@@ -17,12 +17,12 @@ const ProjectItem = ({ item, language }) => {
             </a>
           )}
         </div>
-        {item.date && (
+        {item.startDate && (
           <h6 className="text-xs font-medium text-right">
             (
             {formatDateRange(
               {
-                startDate: item.date,
+                startDate: item.startDate,
                 endDate: item.endDate,
                 language,
               },
@@ -32,9 +32,9 @@ const ProjectItem = ({ item, language }) => {
           </h6>
         )}
       </div>
-      {item.summary && (
+      {item.descriptionPlaintext && (
         <ReactMarkdown className="markdown mt-2 text-sm">
-          {item.summary}
+          {item.descriptionPlaintext}
         </ReactMarkdown>
       )}
     </div>
@@ -44,17 +44,17 @@ const ProjectItem = ({ item, language }) => {
 const ProjectsA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
-  return safetyCheck(data.projects) ? (
+  return safetyCheck(data.project) ? (
     <div>
-      <Heading>{data.projects.heading}</Heading>
+      <Heading>{data.project.heading}</Heading>
       <div className="grid gap-4">
-        {data.projects.items.map(
+        {data.project.items.map(
           (x) =>
             isItemVisible(x) && (
               <ProjectItem
                 key={x.id}
                 item={x}
-                language={data.metadata.language}
+                language={data.resumemetadata.language}
               />
             ),
         )}

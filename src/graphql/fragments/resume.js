@@ -1,35 +1,80 @@
 import gql from "graphql-tag";
-
 import { addressFragment } from "graphql/fragments";
 
-export const educationFragment = gql`
-  fragment Education on EducationNode {
+export const educationItemFragment = gql`
+  fragment EducationItem on EducationItem {
     id
-    heading
     slug
-    description
     uuid
     createdAt
     updatedAt
     isDeleted
     isActive
+    description
     descriptionPlaintext
-    heading
     institution
     fieldOfStudy
     gpa
     level
+    order
+    degree
     schoolStart
     schoolEnd
+    education {
+      id
+      heading
+    }
+  }
+`;
+
+export const educationFragment = gql`
+  ${educationItemFragment}
+  fragment Education on EducationNode {
+    id
+    visible
+    heading
+    slug
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    description
+    descriptionPlaintext
+    items {
+      ...EducationItem
+    }
     resume {
       id
       name
+    }
+  }
+`;
+
+export const skillItemFragment = gql`
+  fragment SkillItem on SkillItem {
+    slug
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    id
+    name
+    order
+    level
+    proficiency
+    skill {
+      id
+      heading
     }
   }
 `;
 export const skillsFragment = gql`
+  ${skillItemFragment}
   fragment Skill on SkillNode {
     slug
+    visible
     description
     uuid
     createdAt
@@ -39,17 +84,38 @@ export const skillsFragment = gql`
     descriptionPlaintext
     id
     heading
-    name
-    proficiency
+    items {
+      ...SkillItem
+    }
     resume {
       id
       name
+    }
+  }
+`;
+
+export const hobbyItemFragment = gql`
+  fragment HobbyItem on HobbyItem {
+    slug
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    id
+    order
+    name
+    hobby {
+      id
+      heading
     }
   }
 `;
 export const hobbiesFragment = gql`
+  ${hobbyItemFragment}
   fragment Hobby on HobbyNode {
     slug
+    visible
     description
     uuid
     createdAt
@@ -59,15 +125,17 @@ export const hobbiesFragment = gql`
     descriptionPlaintext
     id
     heading
-    name
+    items {
+      ...HobbyItem
+    }
     resume {
       id
       name
     }
   }
 `;
-export const workFragment = gql`
-  fragment Work on WorkNode {
+export const workItemFragment = gql`
+  fragment WorkItem on WorkItem {
     slug
     description
     uuid
@@ -77,21 +145,86 @@ export const workFragment = gql`
     isActive
     descriptionPlaintext
     id
-    heading
+    order
     company
     position
     workStart
     workEnd
     achievements
     website
+    work {
+      id
+      heading
+    }
+  }
+`;
+export const workFragment = gql`
+  ${workItemFragment}
+  fragment Work on WorkNode {
+    slug
+    visible
+    description
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    descriptionPlaintext
+    id
+    heading
+    items {
+      ...WorkItem
+    }
     resume {
       id
       name
+    }
+  }
+`;
+
+export const awardItemFragment = gql`
+  fragment AwardItem on AwardItem {
+    slug
+    description
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    descriptionPlaintext
+    id
+    order
+    organization
+    title
+    date
+    award {
+      id
+      heading
     }
   }
 `;
 export const awardsFragment = gql`
+  ${awardItemFragment}
   fragment Award on AwardNode {
+    slug
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    id
+    heading
+    items {
+      ...AwardItem
+    }
+    resume {
+      id
+      name
+    }
+  }
+`;
+export const certificationItemFragment = gql`
+  fragment CertificationItem on CertificationItem {
     slug
     description
     uuid
@@ -101,19 +234,21 @@ export const awardsFragment = gql`
     isActive
     descriptionPlaintext
     id
-    heading
-    organization
+    order
+    issuer
     title
     date
-    resume {
+    certification {
       id
-      name
+      heading
     }
   }
 `;
 export const certificationsFragment = gql`
+  ${certificationItemFragment}
   fragment Certification on CertificationNode {
     slug
+    visible
     description
     uuid
     createdAt
@@ -123,17 +258,17 @@ export const certificationsFragment = gql`
     descriptionPlaintext
     id
     heading
-    issuer
-    title
-    date
+    items {
+      ...CertificationItem
+    }
     resume {
       id
       name
     }
   }
 `;
-export const languagesFragment = gql`
-  fragment Language on LanguageNode {
+export const languageItemFragment = gql`
+  fragment LanguageItem on LanguageItem {
     slug
     description
     uuid
@@ -143,9 +278,33 @@ export const languagesFragment = gql`
     isActive
     descriptionPlaintext
     id
-    heading
     level
-    title
+    name
+    order
+    fluency
+    language {
+      id
+      heading
+    }
+  }
+`;
+export const languagesFragment = gql`
+  ${languageItemFragment}
+  fragment Language on LanguageNode {
+    slug
+    visible
+    description
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    descriptionPlaintext
+    id
+    heading
+    items {
+      ...LanguageItem
+    }
     resume {
       id
       name
@@ -177,6 +336,7 @@ export const resumemetadataFragment = gql`
   ${layoutFragment}
   fragment ResumeMetaData on ResumeMetaDataNode {
     slug
+    visible
     description
     uuid
     createdAt
@@ -189,9 +349,10 @@ export const resumemetadataFragment = gql`
     primaryColor
     textColor
     font
+    template
     fontSize
     language
-    allLayouts {
+    layouts {
       ...Layout
     }
     resume {
@@ -200,31 +361,74 @@ export const resumemetadataFragment = gql`
     }
   }
 `;
-export const projectsFragment = gql`
-  fragment Project on ProjectNode {
+export const projectItemFragment = gql`
+  fragment ProjectItem on ProjectItem {
     slug
-    description
     uuid
     createdAt
     updatedAt
     isDeleted
     isActive
-    descriptionPlaintext
     id
-    heading
     title
     startDate
     endDate
     link
+    order
+    description
+    descriptionPlaintext
+    project {
+      id
+      heading
+    }
+  }
+`;
+export const projectsFragment = gql`
+  ${projectItemFragment}
+  fragment Project on ProjectNode {
+    slug
+    uuid
+    visible
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    id
+    heading
+    items {
+      ...ProjectItem
+    }
     resume {
       id
       name
+    }
+  }
+`;
+export const referenceItemFragment = gql`
+  fragment ReferenceItem on ReferenceItem {
+    slug
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    id
+    order
+    email
+    position
+    fullName
+    phone
+    reference {
+      id
+      heading
     }
   }
 `;
 export const referencesFragment = gql`
+  ${referenceItemFragment}
   fragment Reference on ReferenceNode {
     slug
+    visible
     description
     uuid
     createdAt
@@ -234,19 +438,39 @@ export const referencesFragment = gql`
     descriptionPlaintext
     id
     heading
-    email
-    position
-    fullName
-    mobile
+    items {
+      ...ReferenceItem
+    }
     resume {
       id
       name
     }
   }
 `;
+export const socialItemFragment = gql`
+  fragment SocialItem on SocialItem {
+    slug
+    uuid
+    createdAt
+    updatedAt
+    isDeleted
+    isActive
+    id
+    order
+    link
+    network
+    username
+    social {
+      id
+      heading
+    }
+  }
+`;
 export const socialsFragment = gql`
+  ${socialItemFragment}
   fragment Social on SocialNode {
     slug
+    visible
     description
     uuid
     createdAt
@@ -256,14 +480,9 @@ export const socialsFragment = gql`
     descriptionPlaintext
     id
     heading
-    owner {
-      id
-      phone
-      fullName
+    items {
+      ...SocialItem
     }
-    link
-    network
-    username
     resume {
       id
       name
@@ -286,7 +505,11 @@ export const simpleResumeFragment = gql`
     isActive
     descriptionPlaintext
     id
-    objective
+    objective {
+      visible
+      heading
+      descriptionPlaintext
+    }
     public
     name
     addresses {
@@ -323,40 +546,74 @@ export const resumeFragment = gql`
     isActive
     descriptionPlaintext
     id
-    objective
+    objective {
+      id
+      visible
+      heading
+      descriptionPlaintext
+    }
+    owner {
+      firstName
+      lastName
+      fullName
+      email
+      phone
+      avatar {
+        url
+        alt
+      }
+      seeker {
+        dateOfBirth
+        title
+      }
+      defaultAddress {
+        companyName
+        streetAddress1
+        streetAddress2
+        city
+        cityArea
+        postalCode
+        country {
+          code
+          country
+        }
+        countryArea
+        phone
+      }
+    }
     public
     name
-    allEducation {
+    education {
       ...Education
     }
-    allSkills {
+    skill {
       ...Skill
     }
-    allHobbies {
+    hobby {
       ...Hobby
     }
-    allWork {
+    work {
       ...Work
     }
-    allAwards {
+    award {
       ...Award
     }
-    allCertifications {
+    certification {
       ...Certification
     }
-    allLanguages {
+    language {
       ...Language
     }
-    allResumemetadata {
+    resumemetadata {
       ...ResumeMetaData
     }
-    allProjects {
+    project {
       ...Project
     }
-    allReferences {
+    reference {
       ...Reference
     }
-    allSocials {
+    social {
       ...Social
     }
     addresses {

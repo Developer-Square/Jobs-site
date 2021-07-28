@@ -1,92 +1,79 @@
-import React, { memo, useContext, useEffect, useMemo, useState } from "react";
+import React, { memo, useMemo } from "react";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
-import { useDispatch } from "contexts/resume/resume.provider";
-import DatabaseContext from "contexts/database/database.provider";
-
-import Artboard from "components/builder/center/Artboard";
-import Button from "components/shared/Button";
-import LeftSidebar from "components/builder/left/LeftSidebar";
 import LoadingScreen from "components/LoadingScreen";
-import RightSidebar from "components/builder/right/RightSidebar";
-
-import * as styles from "./builder.module.css";
+import OfflinePlaceholder from "components/OfflinePlaceholder";
+import { MetaWrapper } from "components/Meta";
+import NetworkStatus from "components/NetworkStatus";
+import { TypedQuery } from "core/queries";
+import { FETCH_RESUME } from "graphql/queries";
 import { getGraphqlIdFromDBId } from "utils";
 
-const ResumeBuilder = ({ id }) => {
-  const [resumeId, setResumeId] = useState(null);
+import ResumeBuilderView from "./ResumeBuilderView";
+
+export const TypedResumeQuery = TypedQuery(FETCH_RESUME);
+const ResumeBuilder = () => {
   const match = useRouteMatch();
   const navigate = useHistory();
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
-  const { getResume } = useContext(DatabaseContext);
+  const [resumeID, setResumeID] = React.useState(
+    getGraphqlIdFromDBId(match.params.resumeID, "ResumeNode"),
+  );
 
-  useEffect(() => {
-    setResumeId(getGraphqlIdFromDBId(match.params.resumeID, "ResumeNode"));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleLoadDemoData = () => {
-    dispatch({ type: "load_demo_data" });
-  };
-
-  useEffect(() => {
-    (async () => {
-      const resume = await getResume(resumeId);
-      console.log(resume);
-
-      if (!resume) {
-        navigate.push("/dashboard/resume");
-        toast.error(
-          "The resume you were looking for does not exist anymore... or maybe it never did?",
-        );
-        return null;
-      }
-
-      if (resume.createdAt === resume.updatedAt) {
-        toast.dark(() => (
-          <div className="py-2">
-            <p className="leading-loose">
-              Not sure where to begin? Try loading demo data to see what Our
-              Resume Builder has to offer.
-            </p>
-
-            <Button className="mt-4" onClick={handleLoadDemoData}>
-              {t("builder.actions.loadDemoData.button")}
-            </Button>
-          </div>
-        ));
-      }
-
-      dispatch({ type: "set_data", payload: resume });
-      return setLoading(false);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resumeId]);
+  React.useEffect(() => {
+    if (match.params.resumeID) {
+      setResumeID(getGraphqlIdFromDBId(match.params.resumeID, "ResumeNode"));
+    }
+  }, [match.params.resumeID]);
 
   return useMemo(() => {
-    if (loading) {
-      return <LoadingScreen />;
-    }
-
     return (
-      <div className={styles.container}>
-        <div className={styles.left}>
-          <LeftSidebar />
-        </div>
-        <div className={styles.center}>
-          <Artboard />
-        </div>
-        <div className={styles.right}>
-          <RightSidebar />
-        </div>
-      </div>
+      <NetworkStatus>
+        {(isOnline) => (
+          <TypedResumeQuery
+            variables={{
+              id: resumeID,
+            }}
+            errorPolicy="all"
+            loaderFull
+          >
+            {(resumeData) => {
+              if (resumeData.loading) {
+                return <LoadingScreen />;
+              }
+
+              if (resumeData.data && resumeData.data.resume === null) {
+                navigate.push("/dashboard/resume");
+                toast.error(
+                  "The resume you were looking for does not exist anymore... or maybe it never did?",
+                );
+              }
+
+              if (!isOnline) {
+                return <OfflinePlaceholder />;
+              }
+
+              return (
+                <MetaWrapper
+                  meta={{
+                    description: resumeData.data.resume.seoDescription,
+                    title: resumeData.data.resume.seoTitle,
+                    type: "resume CV",
+                  }}
+                >
+                  <ResumeBuilderView
+                    resume={resumeData.data.resume}
+                    resumeID={resumeID}
+                  />
+                </MetaWrapper>
+              );
+            }}
+          </TypedResumeQuery>
+        )}
+      </NetworkStatus>
     );
-  }, [loading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resumeID]);
 };
 
 export default memo(ResumeBuilder);

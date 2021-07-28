@@ -6,7 +6,11 @@ import React, { createContext, memo, useState } from "react";
 // import initialState from "data/initialState.json";
 import { useLazyQuery, useMutation } from "react-apollo";
 import { toast } from "react-toastify";
-import { DUPLICATE_RESUME, DELETE_RESUME } from "graphql/mutations";
+import {
+  DUPLICATE_RESUME,
+  DELETE_RESUME,
+  UPDATE_RESUME,
+} from "graphql/mutations";
 import { FETCH_RESUME } from "graphql/queries";
 
 const DEBOUNCE_WAIT_TIME = 4000;
@@ -29,7 +33,8 @@ const DatabaseProvider = ({ children }) => {
   const [isUpdating, setUpdating] = useState(false);
   const [duplicateResumeMutation] = useMutation(DUPLICATE_RESUME);
   const [deleteResumeMutation] = useMutation(DELETE_RESUME);
-  const [resume, { data }] = useLazyQuery(FETCH_RESUME);
+  const [resume, resumeDataResponse] = useLazyQuery(FETCH_RESUME);
+  const [resumePatch] = useMutation(UPDATE_RESUME);
 
   const createResume = () => console.log("To Handle create resume");
 
@@ -40,8 +45,10 @@ const DatabaseProvider = ({ children }) => {
           id: id,
         },
       });
-      return data?.resume;
+      console.log(resumeDataResponse);
+      return resumeDataResponse?.data?.resume;
     } catch (error) {
+      console.log("getResume error", error);
       return null;
     }
   };
@@ -59,16 +66,20 @@ const DatabaseProvider = ({ children }) => {
 
   const updateResume = async (resume) => {
     setUpdating(true);
-
-    // await firebase
-    //   .database()
-    //   .ref(`resumes/${resume.id}`)
-    //   .update({
-    //     ...resume,
-    //     // updatedAt: firebase.database.ServerValue.TIMESTAMP,
-    //   });
-
-    setUpdating(false);
+    try {
+      await resumePatch({
+        variables: {
+          ...resume,
+        },
+      }).then(({ data }) => {
+        return data?.resume;
+      });
+      setUpdating(false);
+    } catch (error) {
+      console.log("updateResume error", error);
+      setUpdating(false);
+      return null;
+    }
   };
 
   const debouncedUpdateResume = debounce(updateResume, DEBOUNCE_WAIT_TIME);

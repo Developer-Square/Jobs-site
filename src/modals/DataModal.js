@@ -46,8 +46,6 @@ const DataModal = ({
 
   const onSubmit = async (newData) => {
     console.log(objDiff(values, newData, "id"));
-    console.log(newData);
-    console.log(values);
     setLoading(true);
 
     const errors = await validateForm();

@@ -8,6 +8,7 @@ export const HOME = `${baseUrl}home`;
 export const TOS = `${baseUrl}terms-and-conditions`;
 export const SDG = `${baseUrl}sustainable-development-goals`;
 export const VACANCIES = `${baseUrl}vacancies`;
+export const RESUME = `${baseUrl}r`;
 export const CATEGORIES = `${baseUrl}categories`;
 export const PRICING = `${baseUrl}pricing`;
 

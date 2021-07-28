@@ -14,17 +14,28 @@ import { RESUME_MUTATION, RESUME_UPDATE_MUTATION } from "graphql/mutations";
 import { showNotification } from "helpers";
 import { withRouter } from "react-router-dom";
 import { useAlert } from "react-alert";
+import { getUnsplashPhoto } from "utils";
 
 export const TypedResumeMutation = TypedMutation(RESUME_MUTATION);
 export const TypedResumeUpdateMutation = TypedMutation(RESUME_UPDATE_MUTATION);
 
-const initialValues = {
-  name: "",
-};
-
 const ResumeModal = () => {
   const { t } = useTranslation();
   const alert = useAlert();
+  const [initialValues, setInitialValues] = React.useState({
+    name: "",
+    preview: "",
+  });
+
+  React.useEffect(() => {
+    (async () => {
+      await getUnsplashPhoto().then((res) => {
+        console.log("sometjhing", res);
+        setInitialValues({ name: "", preview: res });
+      });
+    })();
+  }, []);
+
   // const { createResume, updateResume } = useContext(DatabaseContext);
 
   const schema = Yup.object().shape({
@@ -32,6 +43,9 @@ const ResumeModal = () => {
       .min(5, t("shared.forms.validation.min", { number: 5 }))
       .required(t("shared.forms.validation.required")),
   });
+  // if (!imgPreview) {
+  //   setInitialValues({ name: "", preview: img });
+  // }
 
   return (
     <TypedResumeMutation
