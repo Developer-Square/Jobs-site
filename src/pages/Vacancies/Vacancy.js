@@ -96,6 +96,7 @@ const Vacancy = () => {
   }
 
   const onCompleted = (loading, data) => {
+    console.log("data", data);
     if (!loading) {
       cleanVacanciesData(data.vacancies.edges, true);
       setJobTypes(data?.__type?.enumValues)

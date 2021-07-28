@@ -4,7 +4,6 @@ import Button from "components/Button/Button";
 import SearchForm from 'containers/Search/SearchForm'
 import { IsNotEmpty } from 'helpers/index'
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
-import { getGraphqlIdFromDBId, getDBIdFromGraphqlId } from "core/utils";
 
 
 const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue}) => {
@@ -28,8 +27,6 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
   useEffect(() => {
     // Set the default value.
     getDefaultValues();
-    const result = getGraphqlIdFromDBId(31, 'Industry')
-    const result2 = getDBIdFromGraphqlId('SW5kdXN0cnk6MzE=', 'Industry')
     // eslint-disable-next-line
   }, [])
 
