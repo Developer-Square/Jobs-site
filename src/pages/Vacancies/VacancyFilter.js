@@ -11,6 +11,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
   const [sortTypes, setSortTypes] = React.useState([]);
   const [filterObj, setFilterObj] = React.useState({search: '', jobTypes: [],});
   const { vacancyState } = useContext(VacancyContext);
+  let sortBy;
   
   const getDefaultValues = () => {
     handleSortByInput();
@@ -47,47 +48,65 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
         );
       }
     }
+
     // eslint-disable-next-line
-  }, [sortByValue])
+  }, [sortByValue, sortBy])
+
+  window.onload = function () {
+    sortBy = document.querySelector('#sortSelect_chosen');
+    if (sortBy) {
+      sortBy.addEventListener('click', (e) => {
+        handleSortByInput(e);
+      })
+    }
+  }
 
   /**
    * @param  {} e
    * A function that will handle all api calls for the vacancy filter.
    */
-  const handleSortByInput = () => {
+  const handleSortByInput = (e) => {
     let sortOption = document.getElementById('sortSelect');
     
-    if (sortOption.style.display === 'none') {
-      sortOption = document.getElementById('sortSelect_chosen');
+    if (sortOption.style.display === 'none' && e) {
+      sortOption = e.target;
     }
+
     // Clear the field incase the user selects a different option other than
     // newest jobs or oldest jobs.
     setGetJobs('');
-
-    if (sortOption.value === 'salary') {
+    if (sortOption.value === 'salary' || sortOption.innerHTML === 'Salary Low-High') {
       setSortByValue({
         direction: 'ASC',
-        field: sortOption.value.toUpperCase()
+        field: 'SALARY'
       });
-    } else if (sortOption.value === '-salary') {
+    } else if (sortOption.value === '-salary' || sortOption.innerHTML === 'Salary High-Low') {
       setSortByValue({
         direction: 'DESC',
-        field: sortOption.value.toUpperCase().slice(1)
+        field: 'SALARY'
       });
-    } else if (sortOption.value === 'title') {
+    } else if (sortOption.value === 'title' || sortOption.innerHTML === 'Name Increasing') {
       setSortByValue({
         direction: 'ASC',
-        field: sortOption.value.toUpperCase()
+        field: 'TITLE'
       });
-    } else if (sortOption.value === '-title') {
+    } else if (sortOption.value === '-title' || sortOption.innerHTML === 'Name Decreasing') {
       setSortByValue({
         direction: 'DESC',
-        field: sortOption.value.toUpperCase().slice(1)
+        field: 'TITLE'
       });
-    } else if (sortOption.value === '-updated_at') {
-      setGetJobs(curr => curr = sortOption.value);
+    } else if (sortOption.value === '-updated_at' || sortOption.innerHTML === 'Newest jobs') {
+      if (sortOption.innerHTML) {
+        setGetJobs(curr => curr = sortOption.innerHTML)
+      } else {
+        setGetJobs(curr => curr = sortOption.value);
+      }
     } else {
-      setGetJobs(curr => curr = sortOption.value);
+      if (sortOption.innerHTML) {
+        setGetJobs(curr => curr = sortOption.innerHTML)
+      } else {
+        setGetJobs(curr => curr = sortOption.value);
+      }
     }
   }
 
@@ -200,7 +219,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
       ratePerHour();
     }
 
-    if (getJobs === 'updated_at' || getJobs === '-updated_at') {
+    if (getJobs === 'updated_at' || getJobs === '-updated_at' || getJobs === 'Newest jobs' || getJobs === 'Oldest jobs') {
       loadFilterValues(
         {variables: {
           first: 10
@@ -208,7 +227,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
       );
     }
     
-    if ((searchString.length > 0 && IsNotEmpty(sortByValue)) || (sortTypes.length > 0 && IsNotEmpty(sortByValue))) {
+    if ((searchString.length > 0 && IsNotEmpty(sortByValue)) || (sortTypes.length > 0 && IsNotEmpty(sortByValue))  || IsNotEmpty(sortByValue)) {
       callLoadFilters()
     }
   }

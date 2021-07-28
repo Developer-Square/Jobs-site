@@ -8,7 +8,6 @@ function PaginationItem({ data, loadFilterValues }) {
     // const [pageInfo, setPageInfo] = React.useState({});
     const [activeIndex, setActiveIndex] = React.useState(0);
 
-
     useEffect(() => {
         if (data) {
             if (data.totalCount % 10 === 0) {
@@ -28,10 +27,9 @@ function PaginationItem({ data, loadFilterValues }) {
             }
             setPagesArray(array);
         }
-
     }, [data])
 
-    window.onload = function(){
+    window.onload = function() {
         // For the pagination section.
         // This javascript is only to change the "actpage" attribut on the .cdp div
         var paginationPage = parseInt($('.cdp').attr('actpage'), 10);
@@ -41,6 +39,7 @@ function PaginationItem({ data, loadFilterValues }) {
             if (go === '+1') {
                 paginationPage++;   
             } 
+
             // The previous button.
             else if (go === '-1') {
                 paginationPage--;
@@ -72,12 +71,12 @@ function PaginationItem({ data, loadFilterValues }) {
 
     return (
         <div className="pagination-container">
-        <div class="content_detail__pagination cdp" actpage="1">
-            <a href="#!-1" class="cdp_i" onClick={() => handleNumberClick(activeIndex - 1)}>prev</a>
+        <div className="content_detail__pagination cdp" actpage="1">
+            <a href="#!-1" className="cdp_i" onClick={() => handleNumberClick(activeIndex - 1)}>prev</a>
                 {pagesArray.length ? pagesArray.map((page, index) => (
                     <a href={`#!${page}`} key={index} class="cdp_i" onClick={() => handleNumberClick(index)}>{page}</a>
                 )) : null}
-            <a href="#!+1" class="cdp_i" onClick={() => handleNumberClick(activeIndex + 1)}>next</a>
+            <a href="#!+1" className="cdp_i" onClick={() => handleNumberClick(activeIndex + 1)}>next</a>
         </div>
       </div>
     )

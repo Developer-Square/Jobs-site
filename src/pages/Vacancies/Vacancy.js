@@ -68,7 +68,7 @@ const Vacancy = () => {
       } else if (update) {
         // Reverse the vacancies array inorder to display the latests results
         // and present it as it is when we want the oldest results.
-        if (getJobs === '-updated_at') {
+        if (getJobs === '-updated_at' || getJobs === 'Newest jobs') {
           jobs = jobs.reverse();
           vacancyDispatch({
             type: "SORT_JOBS",
@@ -96,7 +96,6 @@ const Vacancy = () => {
   }
 
   const onCompleted = (loading, data) => {
-    console.log("data", data);
     if (!loading) {
       cleanVacanciesData(data.vacancies.edges, true);
       setJobTypes(data?.__type?.enumValues)
@@ -112,7 +111,7 @@ const Vacancy = () => {
    },
   )
 
-  console.log(vacancyState, "vacancyState");
+  // console.log(vacancyState, "vacancyState");
 
 
 
