@@ -6,11 +6,10 @@ export const STAFF_MEMBERS = "/staff-members";
 export const SITE_SETTINGS = "/site-settings";
 // **************** ROUTE CONSTANT END **************************
 
-export const BASE_URL = process.env.BASE_URL || "http://localhost:8000/API/v1";
-export const BASE_GRAPHQL_URL = process.env.BASE_GRAPHQL_URL || "http://localhost:8000/graphql/";
-
-// export const BASE_URL = process.env.BASE_URL || "https://thedb.hewani.io/API/v1";
-// export const BASE_GRAPHQL_URL = process.env.BASE_GRAPHQL_URL || "https://thedb.hewani.io/graphql/";
+export const BASE_URL =
+  process.env.BASE_URL || "https://thedb.hewani.io/API/v1";
+export const BASE_GRAPHQL_URL =
+  process.env.BASE_GRAPHQL_URL || "https://thedb.hewani.io/graphql/";
 
 export const CURRENCY = "Ksh.";
 export const serviceWorkerTimeout =
