@@ -5,6 +5,9 @@ import Loader from "components/Loader/Loader";
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 import { VACANCIES_QUERY } from './queries'
 import PaginationItem from "./PaginationItem";
+import LogoImage from "image/thedb.png";
+import { getDBIdFromGraphqlId, checkDate, checkJobType, findJobTypeDescription } from 'utils';
+
  
 
 const Vacancy = () => {
@@ -111,20 +114,8 @@ const Vacancy = () => {
    },
   )
 
-  // console.log(vacancyState, "vacancyState");
-
-
-
-  /**
- * @param  {} data
- * @param  {} jobTypes
- * Maps out the specific jobType description with the right job.
- */
-  const findJobTypeDescription = (data, jobTypes) => {
-    let job = jobTypes.find(({name}) => name === data.jobType);
-    return job ? job.description : null;
-  } 
-
+  console.log(vacancyState, "vacancyState");
+  
   return (
     <div>
       <div id="titlebar">
@@ -148,11 +139,11 @@ const Vacancy = () => {
             <div className="listings-container">
               {/* Listings */}
               {vacancyState.sortedJobs.length > 0 ? vacancyState.sortedJobs.map((job, index) => (
-                <a href="job-page-alt.html" key={index} className="listing full-time">
+                <a href={`vacancies/${getDBIdFromGraphqlId(job.id, 'Vacancy')}`} key={index} className={`listing ${checkJobType(findJobTypeDescription(job, jobTypes))}`}>
                   <div className="listing-logo">
                     <img
-                      src="images/job-list-logo-01.png"
-                      alt="TheDB_company_logo"
+                      src={job.postedBy.logo?.url || LogoImage}
+                      alt={job.postedBy.logo?.alt || "TheDB_company_logo"}
                     />
                   </div>
                   <div className="listing-title">
@@ -162,16 +153,16 @@ const Vacancy = () => {
                     </h4>
                     <ul className="listing-icons">
                       <li>
-                        <i className="ln ln-icon-Management" /> King
+                        <i className="ln ln-icon-Management" /> {job.postedBy.name}
                       </li>
                       <li>
-                        <i className="ln ln-icon-Map2" /> Sydney
+                        <i className="ln ln-icon-Map2" /> {job.location}
                       </li>
                       <li>
-                        <i className="ln ln-icon-Money-2" /> ${job.salary}
+                        <i className="ln ln-icon-Money-2" /> {job.amount.currency} {job.amount.amount}
                       </li>
                       <li>
-                        <div className="listing-date new">new</div>
+                        <div className={`listing-date ${checkDate(job.createdAt)}`}>{checkDate(job.createdAt)}</div>
                       </li>
                     </ul>
                   </div>

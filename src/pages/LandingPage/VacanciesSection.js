@@ -1,19 +1,65 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import styled from 'styled-components';
 import { useHistory } from "react-router-dom";
+import {useLazyQuery} from 'react-apollo'
 import { PaymentModal } from 'modals/PaymentModal'
-import { getGraphqlIdFromDBId } from 'utils'
+import { landingVacancyLimit } from 'constants/constants'
+import { VACANCIES_QUERY } from './queries'
+import { VacancyContext } from 'contexts/vacancies/vacancies.context'
+import { getDBIdFromGraphqlId, checkDate, checkJobType, findJobTypeDescription } from 'utils';
+import LogoImage from "image/thedb.png";
+import Loader from "components/Loader/Loader";
 
 
 const Vacancies = () => {
   const history = useHistory();
   const [verified, setVerified] = React.useState(false);
   const [show, setShow] = React.useState(false);
+  const [jobTypes, setJobTypes] = React.useState([]);
+  const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
+
+
+  const cleanVacanciesData = (edges) => {
+    let jobs;
+
+    if (edges.length > 0) {
+      jobs = edges.map((edge) => edge.node);
+      if (vacancyState.jobsData.length === 0) {
+        vacancyDispatch({
+          type: "ADD_DATA",
+          payload: jobs
+        });
+      }
+    }
+  }
+
+  const onCompleted = (loading, data) => {
+    if (!loading) {
+      cleanVacanciesData(data.vacancies.edges);
+      setJobTypes(data?.__type?.enumValues)
+    }
+  }
+
+  const [loadFilterValues, { loading, data}] = useLazyQuery(
+    VACANCIES_QUERY,
+    {
+    onCompleted: () => onCompleted(loading, data),
+    fetchPolicy: 'cache-and-network'
+    },
+  )
 
   useEffect(() => {
     checkVerified()
-    const res = getGraphqlIdFromDBId(1, 'Vacancy');
-    console.log(res);
+    // Only fetch if context API is empty.
+    if (vacancyState.jobsData.length === 0) { 
+      loadFilterValues(
+        {variables: { 
+          first: landingVacancyLimit,
+        }
+        }
+      );
+    }
+    // eslint-disable-next-line
   }, [])
 
   const checkVerified = () => {
@@ -31,7 +77,7 @@ const Vacancies = () => {
 
   const handleClick = (route) => {
     if (!verified) {
-      history.push(`route/${route}`);
+      history.push(`vacancies/${getDBIdFromGraphqlId(route, 'Vacancy')}`);
     } else {
       handleModalShow()
     }
@@ -50,134 +96,34 @@ const Vacancies = () => {
         <div className="padding-right">
           <h3 className="margin-bottom-25">Recent Jobs</h3>
           <div className="listings-container">
-            {/* Listing */}
-            <JobContainer className="listing full-time" onClick={() => handleClick('/vacancies/')}>
-              <div className="listing-logo">
-                <img src="images/job-list-logo-01.png" alt="vacancy-img" />
-              </div>
-              <div className="listing-title">
-                <h4>
-                  Marketing Coordinator - SEO / SEM Experience{" "}
-                  <span className="listing-type">Full-Time</span>
-                </h4>
-                <ul className="listing-icons">
-                  <li>
-                    <i className="ln ln-icon-Management" /> King
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Map2" /> 7th Avenue, New York, NY,
-                    United States
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Money-2" /> $5000 - $7000
-                  </li>
-                  <li>
-                    <div className="listing-date new">new</div>
-                  </li>
-                </ul>
-              </div>
-            </JobContainer>
-            {/* Listing */}
-            <JobContainer className="listing part-time" onClick={() => handleClick('job-page-alt.html')}>
-              <div className="listing-logo">
-                <img src="images/job-list-logo-02.png" alt="vacancy-img" />
-              </div>
-              <div className="listing-title">
-                <h4>
-                  Core PHP Developer for Site Maintenance{" "}
-                  <span className="listing-type">Part-Time</span>
-                </h4>
-                <ul className="listing-icons">
-                  <li>
-                    <i className="ln ln-icon-Management" /> Cubico
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Map2" /> Sydney
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Money-2" /> $125 / hour
-                  </li>
-                  <li>
-                    <div className="listing-date">3d ago</div>
-                  </li>
-                </ul>
-              </div>
-            </JobContainer>
-            {/* Listing */}
-            <JobContainer className="listing full-time" onClick={() => handleClick('job-page-alt.html')}>
-              <div className="listing-logo">
-                <img src="images/job-list-logo-01.png" alt="vacancy-img" />
-              </div>
-              <div className="listing-title">
-                <h4>
-                  Restaurant Team Member - Crew{" "}
-                  <span className="listing-type">Full-Time</span>
-                </h4>
-                <ul className="listing-icons">
-                  <li>
-                    <i className="ln ln-icon-Management" /> King
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Map2" /> Sydney
-                  </li>
-                  <li>
-                    <div className="listing-date">3d ago</div>
-                  </li>
-                </ul>
-              </div>
-            </JobContainer>
-            {/* Listing */}
-            <JobContainer className="listing internship" onClick={() => handleClick('job-page-alt.html')}>
-              <div className="listing-logo">
-                <img src="images/job-list-logo-04.png" alt="vacancy-img" />
-              </div>
-              <div className="listing-title">
-                <h4>
-                  Power Systems User Experience Designer{" "}
-                  <span className="listing-type">Internship</span>
-                </h4>
-                <ul className="listing-icons">
-                  <li>
-                    <i className="ln ln-icon-Management" /> Hexagon
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Map2" /> London
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Money-2" /> $55 / hour
-                  </li>
-                  <li>
-                    <div className="listing-date">4d ago</div>
-                  </li>
-                </ul>
-              </div>
-            </JobContainer>
-            {/* Listing */}
-            <JobContainer className="listing freelance" onClick={() => handleClick('job-page-alt.html')}>
-              <div className="listing-logo">
-                <img src="images/job-list-logo-05.png" alt="vacancy-img" />
-              </div>
-              <div className="listing-title">
-                <h4>
-                  iPhone / Android Music App Development{" "}
-                  <span className="listing-type">Freelance</span>
-                </h4>
-                <ul className="listing-icons">
-                  <li>
-                    <i className="ln ln-icon-Management" /> Hexagon
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Map2" /> London
-                  </li>
-                  <li>
-                    <i className="ln ln-icon-Money-2" /> $85 / hour
-                  </li>
-                  <li>
-                    <div className="listing-date">4d ago</div>
-                  </li>
-                </ul>
-              </div>
-            </JobContainer>
+            {vacancyState.sortedJobs.length ? vacancyState.sortedJobs.map((job, index) => (
+              // Listing
+            <JobContainer className={`listing ${checkJobType(findJobTypeDescription(job, jobTypes))}`} key={index} onClick={() => handleClick(job.id)}>
+            <div className="listing-logo">
+              <img src={job.postedBy.logo?.url || LogoImage} alt={job.postedBy.logo?.alt || "TheDB_company_logo"} />
+            </div>
+            <div className="listing-title">
+              <h4>
+                {job.title}
+                <span className="listing-type">{findJobTypeDescription(job, jobTypes)}</span>
+              </h4>
+              <ul className="listing-icons">
+                <li>
+                  <i className="ln ln-icon-Management" /> {job.postedBy.name}
+                </li>
+                <li>
+                  <i className="ln ln-icon-Map2" /> {job.location}
+                </li>
+                <li>
+                  <i className="ln ln-icon-Money-2" /> {job.amount.currency} {job.amount.amount}
+                </li>
+                <li>
+                <div className={`listing-date ${checkDate(job.createdAt)}`}>{checkDate(job.createdAt)}</div>
+                </li>
+              </ul>
+            </div>
+          </JobContainer>
+            )) : <Loader />}
           </div>
           <a href="browse-jobs.html" className="button centered">
             <i className="fa fa-plus-circle" /> Show More Jobs

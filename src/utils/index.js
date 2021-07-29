@@ -1,9 +1,51 @@
 import { clone, get, isEmpty } from "lodash";
 import { isArray, isEqual, isObject, transform } from "lodash";
+import moment from 'moment';
 import dayjs from "dayjs";
 import { Base64 } from "js-base64";
 import { addObjectToLocalStorageObject, addArrayToLocalStorage, normalizeErrors } from "helpers";
 import { maybe } from "misc";
+
+  /**
+ * @param  {} data
+ * @param  {} jobTypes
+ * Maps out the specific jobType description with the right job.
+ */
+export const findJobTypeDescription = (data, jobTypes) => {
+  let job = jobTypes.find(({name}) => name === data.jobType);
+  return job ? job.description : null;
+}
+
+/**
+ * @param  {} data
+ * Checks the job type then returns the required className according
+ * to the job type provided.
+ */
+export const checkJobType = (data) => {
+  if (data) {
+    if (data !== 'Gig') {
+      let result = data.replace(/\s/g, '-').toLowerCase();
+      return result;
+    } else {
+      return 'freelance';
+    }
+  }
+}
+
+/**
+ * @param  {} date
+ * Check how long ago the job was posted.
+ */
+export const checkDate = (date) => {
+  const result = moment(date).fromNow();
+  const numberChecker = result.match(/(\d+)/);
+  const days = parseInt(numberChecker[0], 10);
+  
+  if (days === 1) {
+    return 'new'
+  }
+  return result 
+}
 
 /**
  * @param  {} data

@@ -27,9 +27,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test54',
-    email: 'ryantest54@gmail.com',
-    phone: '254745613336',
+    username: 'Ryan test55',
+    email: 'ryantest55@gmail.com',
+    phone: '254745613337',
     password1: 'Passwor1',
     password2: 'Passwor1',
     isEmployer,

@@ -16,3 +16,4 @@ export const CURRENCY = "Ksh.";
 export const serviceWorkerTimeout =
   parseInt(process.env.SERVICE_WORKER_TIMEOUT, 10) || 60 * 1000;
 export const vacancyLimit = 3;
+export const landingVacancyLimit = 5;
