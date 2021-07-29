@@ -1,9 +1,18 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-export const SEO = ({ title, description, canonical, css, js, image }) => (
+export const SEO = ({
+  title,
+  link,
+  description,
+  canonical,
+  css,
+  js,
+  image,
+}) => (
   <Helmet>
     <title>{title}</title>
+    {link && <link rel="canonical" href={link} />}
     <meta name="description" content={description} />
     <meta
       name="viewport"

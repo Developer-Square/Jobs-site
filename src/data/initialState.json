@@ -1,19 +1,32 @@
 {
-  "profile": {
+  "owner": {
     "heading": "Profile",
-    "photograph": "",
     "firstName": "",
     "lastName": "",
-    "subtitle": "",
-    "birthDate": "",
-    "address": {
-      "line1": "",
-      "line2": "",
-      "city": "",
-      "pincode": ""
+    "fullName": "",
+    "email": "",
+    "avatar": {
+      "url": "",
+      "alt": ""
     },
-    "website": "",
-    "email": ""
+    "seeker": {
+      "dateOfBirth": ""
+    },
+    "defaultAddress": {
+      "companyName": "",
+      "streetAddress1": "",
+      "streetAddress2": "",
+      "cityArea": "",
+      "postalCode": "",
+      "country": {
+        "country": "",
+        "code": ""
+      },
+      "countryArea": "",
+      "phone": ""
+    },
+
+    "website": ""
   },
   "social": {
     "heading": "Social Network",
@@ -23,7 +36,7 @@
   "objective": {
     "heading": "Objective",
     "visible": true,
-    "body": ""
+    "descriptionPlaintext": ""
   },
   "work": {
     "heading": "Work Experience",
@@ -35,87 +48,103 @@
     "visible": true,
     "items": []
   },
-  "projects": {
+  "project": {
     "heading": "Projects",
     "visible": true,
     "items": []
   },
-  "awards": {
+  "award": {
     "heading": "Awards",
     "visible": true,
     "items": []
   },
-  "certifications": {
+  "certification": {
     "heading": "Certifications",
     "visible": true,
     "items": []
   },
-  "skills": {
+  "skill": {
     "heading": "Skills",
     "visible": true,
     "items": []
   },
-  "hobbies": {
+  "hobby": {
     "heading": "Hobbies",
     "visible": true,
     "items": []
   },
-  "languages": {
+  "language": {
     "heading": "Languages",
     "visible": true,
     "items": []
   },
-  "references": {
+  "reference": {
     "heading": "References",
     "visible": true,
     "items": []
   },
-  "metadata": {
+  "resumemetadata": {
     "language": "en",
     "template": "onyx",
     "font": "Montserrat",
     "fontSize": 9,
-    "layout": {
-      "onyx": [
-        ["objective", "work", "education", "projects"],
-        ["hobbies", "languages", "awards", "certifications"],
-        ["skills", "references"]
-      ],
-      "pikachu": [
-        ["skills", "languages", "hobbies", "awards", "certifications"],
-        ["work", "education", "projects", "references"]
-      ],
-      "gengar": [
-        ["objective", "skills"],
-        ["awards", "certifications", "languages", "references", "hobbies"],
-        ["work", "education", "projects"]
-      ],
-      "castform": [
-        ["awards", "certifications", "languages", "hobbies"],
-        ["objective", "work", "education", "skills", "projects", "references"]
-      ],
-      "glalie": [
-        ["awards", "certifications", "hobbies"],
-        [
-          "objective",
-          "work",
-          "education",
-          "skills",
-          "projects",
-          "languages",
-          "references"
+    "layouts": [
+      {
+        "name": "onyx",
+        "collection": [
+          ["objective", "work", "education", "projects"],
+          ["hobbies", "languages", "awards", "certifications"],
+          ["skills", "references"]
         ]
-      ],
-      "celebi": [
-        ["awards", "certifications", "languages", "hobbies"],
-        ["objective", "work", "education", "skills", "projects", "references"]
-      ]
-    },
-    "colors": {
-      "text": "#444444",
-      "primary": "#5875DB",
-      "background": "#FFFFFF"
-    }
+      },
+      {
+        "name": "pikachu",
+        "collection": [
+          ["skills", "languages", "hobbies", "awards", "certifications"],
+          ["work", "education", "projects", "references"]
+        ]
+      },
+      {
+        "name": "gengar",
+        "collection": [
+          ["objective", "skills"],
+          ["awards", "certifications", "languages", "references", "hobbies"],
+          ["work", "education", "projects"]
+        ]
+      },
+      {
+        "name": "castform",
+        "collection": [
+          ["awards", "certifications", "languages", "hobbies"],
+          ["objective", "work", "education", "skills", "projects", "references"]
+        ]
+      },
+      {
+        "name": "glalie",
+        "collection": [
+          ["awards", "certifications", "hobbies"],
+          [
+            "objective",
+            "work",
+            "education",
+            "skills",
+            "projects",
+            "languages",
+            "references"
+          ]
+        ]
+      },
+      {
+        "name": "celebi",
+        "collection": [
+          ["awards", "certifications", "languages", "hobbies"],
+          ["objective", "work", "education", "skills", "projects", "references"]
+        ]
+      }
+    ],
+    "textColor": "#444444",
+    "backgroundColor": "#FFFFFF",
+    "primaryColor": "#5875DB"
   },
   "public": true
 }

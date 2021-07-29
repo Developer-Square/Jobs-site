@@ -8,7 +8,7 @@ const AwardItem = ({ item, language }) => (
     <div className="flex justify-between items-center">
       <div className="flex flex-col text-left mr-2">
         <h6 className="font-semibold text-sm">{item.title}</h6>
-        <span className="text-xs">{item.awarder}</span>
+        <span className="text-xs">{item.organization}</span>
       </div>
       {item.date && (
         <h6 className="text-xs font-medium text-right">
@@ -29,15 +29,15 @@ const AwardsA = () => {
 
   return safetyCheck(data.awards) ? (
     <div>
-      <Heading>{data.awards.heading}</Heading>
+      <Heading>{data.award.heading}</Heading>
       <div className="grid gap-4">
-        {data.awards.items.map(
+        {data.award.items.map(
           (x) =>
             isItemVisible(x) && (
               <AwardItem
                 key={x.id}
                 item={x}
-                language={data.metadata.language}
+                language={data.resumemetadata.language}
               />
             ),
         )}

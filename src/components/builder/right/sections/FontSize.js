@@ -11,7 +11,7 @@ const FontSizes = ({ id }) => {
   const max = min + steps - 1;
 
   const dispatch = useDispatch();
-  const fontSize = useSelector("metadata.fontSize");
+  const fontSize = useSelector("resumemetadata.fontSize");
   const [scale, setScale] = useState(fontSize || 7);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const FontSizes = ({ id }) => {
     dispatch({
       type: "on_input",
       payload: {
-        path: "metadata.fontSize",
+        path: "resumemetadata.fontSize",
         value,
       },
     });

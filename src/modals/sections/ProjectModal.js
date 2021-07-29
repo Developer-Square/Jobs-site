@@ -10,8 +10,8 @@ import ModalEvents from "../../constants/ModalEvents";
 const initialValues = {
   title: "",
   link: "",
-  date: "",
-  summary: "",
+  startDate: "",
+  descriptionPlaintext: "",
 };
 
 const ProjectModal = () => {
@@ -20,8 +20,8 @@ const ProjectModal = () => {
   const schema = Yup.object().shape({
     title: Yup.string().required(t("shared.forms.validation.required")),
     link: Yup.string().url(t("shared.forms.validation.url")),
-    date: Yup.date().max(new Date()),
-    summary: Yup.string(),
+    startDate: Yup.date().max(new Date()),
+    descriptionPlaintext: Yup.string(),
   });
 
   return (
@@ -33,7 +33,7 @@ const ProjectModal = () => {
       {(formik) => (
         <DataModal
           name={t("builder.sections.project")}
-          path="projects.items"
+          path="project.items"
           event={ModalEvents.PROJECT_MODAL}
         >
           <div className="grid grid-cols-2 gap-8">
@@ -53,14 +53,14 @@ const ProjectModal = () => {
             <Input
               type="date"
               label={t("shared.forms.startDate")}
-              placeholder="6th August 208"
-              {...getFieldProps(formik, schema, "date")}
+              placeholder="6th August 2008"
+              {...getFieldProps(formik, schema, "startDate")}
             />
 
             <Input
               type="date"
               label={t("shared.forms.endDate")}
-              placeholder="6th August 208"
+              placeholder="6th August 2008"
               {...getFieldProps(formik, schema, "endDate")}
             />
 
@@ -68,7 +68,7 @@ const ProjectModal = () => {
               type="textarea"
               label={t("shared.forms.summary")}
               className="col-span-2"
-              {...getFieldProps(formik, schema, "summary")}
+              {...getFieldProps(formik, schema, "descriptionPlaintext")}
             />
           </div>
         </DataModal>

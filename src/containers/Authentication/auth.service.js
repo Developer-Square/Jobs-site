@@ -31,17 +31,14 @@ export class AuthService {
 
     if (f) {
       if (f.mutate) {
-        console.log("at f.mutate");
         const fetchRefreshToken = f.mutate({
           mutation: GET_TOKEN_MUTATION,
           variables: { refreshToken: getRefreshToken() },
         });
         if (getRefreshToken()) {
-          console.log("refreshing token");
           return fetchRefreshToken
             .then((res) => {
               // extract token from the response data and return it
-              console.log("response", res);
 
               const {
                 data: {
@@ -64,7 +61,6 @@ export class AuthService {
               return token;
             })
             .catch((err) => {
-              console.log(err);
               toast("Login again to continue");
               historyHook.push("/auth");
             });

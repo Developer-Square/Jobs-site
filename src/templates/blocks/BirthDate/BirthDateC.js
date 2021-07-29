@@ -8,18 +8,18 @@ const BirthDateC = () => {
   const { data } = useContext(PageContext);
   const Icon = get(Icons, "birthday");
 
-  if (data.profile.birthDate) {
+  if (data.owner?.seeker?.dateOfBirth) {
     return (
       <div className="text-xs flex items-center">
         <Icon
           size="10px"
           className="mr-2"
-          style={{ color: data.metadata.colors.background }}
+          style={{ color: data.resumemetadata.backgroundColor }}
         />
         <span className="font-medium break-all">
           {formatDate({
-            date: data.profile.birthDate,
-            language: data.metadata.language,
+            date: data.owner?.seeker?.dateOfBirth,
+            language: data.resumemetadata.language,
             includeDay: true,
           })}
         </span>

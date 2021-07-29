@@ -32,9 +32,10 @@ import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
 import { withApollo } from "helpers/apollo";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import { MuiThemeProvider } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 
-const MUItheme = createMuiTheme({
+const MUItheme = createTheme({
   typography: {
     fontWeightRegular: 500,
     fontFamily: ["Montserrat", "sans-serif"].join(","),

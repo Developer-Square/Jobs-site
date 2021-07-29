@@ -24,16 +24,17 @@ const ContactC = () => {
 
   return (
     <div className="text-xs grid gap-2">
-      {hasAddress(data.profile.address) && (
+      {hasAddress(data.owner.defaultAddress) && (
         <div>
           <h6 className="capitalize font-semibold">
             {t("shared.forms.address")}
           </h6>
           <div className="flex flex-col text-xs">
-            <span>{data.profile.address.line1}</span>
-            <span>{data.profile.address.line2}</span>
+            <span>{data.owner?.defaultAddress?.streetAddress1}</span>
+            <span>{data.owner?.defaultAddress?.streetAddress2}</span>
             <span>
-              {data.profile.address.city} {data.profile.address.pincode}
+              {data.owner?.defaultAddress?.city}{" "}
+              {data.owner?.defaultAddress?.postalCode}
             </span>
           </div>
         </div>
@@ -41,21 +42,21 @@ const ContactC = () => {
 
       <ContactItem
         label={`Phone Number`}
-        value={data.profile.phone}
+        value={data.owner?.phone}
         icon="phone"
-        link={`tel:${data.profile.phone}`}
+        link={`tel:${data.owner?.phone}`}
       />
       <ContactItem
         label={`Website`}
-        value={data.profile.website}
+        value={data.owner?.website}
         icon="website"
-        link={data.profile.website}
+        link={data.owner?.website}
       />
       <ContactItem
         label={`Email Address`}
-        value={data.profile.email}
+        value={data.owner?.email}
         icon="email"
-        link={`mailto:${data.profile.email}`}
+        link={`mailto:${data.owner?.email}`}
       />
 
       <BirthDateA />
@@ -68,7 +69,7 @@ const ContactC = () => {
                 key={x.id}
                 value={x.username}
                 label={x.network}
-                link={x.url}
+                link={x.link}
               />
             ),
         )}

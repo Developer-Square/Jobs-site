@@ -1,29 +1,29 @@
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import { useTranslation } from 'react-i18next';
-import React, { memo } from 'react';
-import { getFieldProps } from '../../utils';
-import DataModal from '../DataModal';
-import Input from '../../components/shared/Input';
-import ModalEvents from '../../constants/ModalEvents';
+import * as Yup from "yup";
+import { Formik } from "formik";
+import { useTranslation } from "react-i18next";
+import React, { memo } from "react";
+import { getFieldProps } from "../../utils";
+import DataModal from "../DataModal";
+import Input from "../../components/shared/Input";
+import ModalEvents from "../../constants/ModalEvents";
 
 const initialValues = {
-  name: '',
-  position: '',
-  phone: '',
-  email: '',
-  summary: '',
+  fullName: "",
+  position: "",
+  phone: "",
+  email: "",
+  descriptionPlaintext: "",
 };
 
 const ReferenceModal = () => {
   const { t } = useTranslation();
 
   const schema = Yup.object().shape({
-    name: Yup.string().required(t('shared.forms.validation.required')),
-    position: Yup.string().required(t('shared.forms.validation.required')),
+    fullName: Yup.string().required(t("shared.forms.validation.required")),
+    position: Yup.string().required(t("shared.forms.validation.required")),
     phone: Yup.string(),
-    email: Yup.string().email(t('shared.forms.validation.email')),
-    summary: Yup.string(),
+    email: Yup.string().email(t("shared.forms.validation.email")),
+    descriptionPlaintext: Yup.string(),
   });
 
   return (
@@ -34,40 +34,40 @@ const ReferenceModal = () => {
     >
       {(formik) => (
         <DataModal
-          name={t('builder.sections.reference')}
-          path="references.items"
+          name={t("builder.sections.reference")}
+          path="reference.items"
           event={ModalEvents.REFERENCE_MODAL}
         >
           <div className="grid grid-cols-2 gap-8">
             <Input
-              label={t('shared.forms.name')}
+              label={t("shared.forms.name")}
               placeholder="Jane Doe"
-              {...getFieldProps(formik, schema, 'name')}
+              {...getFieldProps(formik, schema, "fullName")}
             />
 
             <Input
-              label={t('shared.forms.position')}
+              label={t("shared.forms.position")}
               placeholder="Assistant Manager"
-              {...getFieldProps(formik, schema, 'position')}
+              {...getFieldProps(formik, schema, "position")}
             />
 
             <Input
-              label={t('shared.forms.phone')}
+              label={t("shared.forms.phone")}
               placeholder="+1 (708) 756-6065"
-              {...getFieldProps(formik, schema, 'phone')}
+              {...getFieldProps(formik, schema, "phone")}
             />
 
             <Input
-              label={t('shared.forms.email')}
+              label={t("shared.forms.email")}
               placeholder="janedoe@example.com"
-              {...getFieldProps(formik, schema, 'email')}
+              {...getFieldProps(formik, schema, "email")}
             />
 
             <Input
               type="textarea"
-              label={t('shared.forms.summary')}
+              label={t("shared.forms.summary")}
               className="col-span-2"
-              {...getFieldProps(formik, schema, 'summary')}
+              {...getFieldProps(formik, schema, "descriptionPlaintext")}
             />
           </div>
         </DataModal>

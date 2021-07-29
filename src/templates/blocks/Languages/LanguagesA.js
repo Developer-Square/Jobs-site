@@ -12,11 +12,11 @@ const LanguageItem = ({ id, name, fluency }) => (
 const LanguagesA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
-  return safetyCheck(data.languages) ? (
+  return safetyCheck(data.language) ? (
     <div>
-      <Heading>{data.languages.heading}</Heading>
+      <Heading>{data.language.heading}</Heading>
       <div className="grid grid-cols-2 gap-2">
-        {data.languages.items.map((x) => isItemVisible(x) && LanguageItem(x))}
+        {data.language.items.map((x) => isItemVisible(x) && LanguageItem(x))}
       </div>
     </div>
   ) : null;

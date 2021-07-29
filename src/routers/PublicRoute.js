@@ -1,6 +1,8 @@
-import { AuthContext } from "contexts/auth/auth.context";
-import React, { useContext } from "react";
+import React, { useContext, Suspense } from "react";
 import { Route, Redirect } from "react-router-dom";
+import { AuthContext } from "contexts/auth/auth.context";
+
+import Loader from "components/Loader/Loader";
 
 const PublicRoute = ({ component: Component, restricted, ...rest }) => {
   const {
@@ -14,7 +16,9 @@ const PublicRoute = ({ component: Component, restricted, ...rest }) => {
       render={(props) =>
         restricted ? (
           isAuthenticated ? (
-            <Component {...props} />
+            <Suspense fallback={<Loader />}>
+              <Component {...props} />
+            </Suspense>
           ) : (
             <Redirect
               push
@@ -26,7 +30,9 @@ const PublicRoute = ({ component: Component, restricted, ...rest }) => {
             />
           )
         ) : (
-          <Component {...props} />
+          <Suspense fallback={<Loader />}>
+            <Component {...props} />
+          </Suspense>
         )
       }
     />
