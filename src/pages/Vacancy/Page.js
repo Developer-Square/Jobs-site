@@ -2,6 +2,7 @@
 import React from "react";
 import LogoImage from "image/thedb.png";
 import moment from "moment";
+import DraftRenderer from "components/DraftRenderer/DraftRenderer";
 
 const Page = ({
   yearsData = [],
@@ -60,11 +61,7 @@ const Page = ({
               </div>
               <div className="clearfix" />
             </div>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: JSON.parse(data?.description),
-              }}
-            />
+            <DraftRenderer content={JSON.parse(data?.description)} />
 
             {/* <p className="margin-reset">
               The Food Service Specialist ensures outstanding customer service
@@ -146,21 +143,21 @@ const Page = ({
                   </div>
                 </li>
                 <li>
-                  <i className="fa fa-clock-o" />
+                  <i className="fa fa-user" />
                   <div>
                     <strong>Positions:</strong>
                     <span>{data.positions}</span>
                   </div>
                 </li>
                 <li>
-                  <i className="fa fa-money" />
+                  <i className="fa fa-certificate" />
                   <div>
                     <strong>Minimun Qualification</strong>
                     <span>{qualificationType.description}</span>
                   </div>
                 </li>
                 <li>
-                  <i className="fa fa-money" />
+                  <i className="fa fa-clock-o" />
                   <div>
                     <strong>Years of Experience</strong>
                     <span>{yearsType.description}</span>
