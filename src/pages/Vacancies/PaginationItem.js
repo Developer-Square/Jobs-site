@@ -76,7 +76,7 @@ function PaginationItem({ data, loadFilterValues, loading }) {
             <div className="content_detail__pagination cdp" actpage="1">
             <a href="#!-1" className="cdp_i" onClick={() => handleNumberClick(activeIndex - 1)}>{loading ? 'Loading ...' : 'prev'}</a>
                 {pagesArray.length ? pagesArray.map((page, index) => (
-                    <a href={`#!${page}`} key={index} class="cdp_i">{loading ? '...' : page}</a>
+                    <a href={`#!${page}`} key={index} class="cdp_i" onClick={() => handleNumberClick(index)}>{loading ? '...' : page}</a>
                 )) : null}
             <a href="#!+1" className="cdp_i" onClick={() => handleNumberClick(activeIndex + 1)}>{loading ? 'Loading ...' : 'next'}</a>
             </div>
