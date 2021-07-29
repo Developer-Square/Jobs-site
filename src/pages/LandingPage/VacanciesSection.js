@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from 'styled-components';
 import { useHistory } from "react-router-dom";
 import { PaymentModal } from 'modals/PaymentModal'
+import { getGraphqlIdFromDBId } from 'utils'
 
 
 const Vacancies = () => {
@@ -11,6 +12,8 @@ const Vacancies = () => {
 
   useEffect(() => {
     checkVerified()
+    const res = getGraphqlIdFromDBId(1, 'Vacancy');
+    console.log(res);
   }, [])
 
   const checkVerified = () => {
@@ -27,7 +30,7 @@ const Vacancies = () => {
   }
 
   const handleClick = (route) => {
-    if (verified) {
+    if (!verified) {
       history.push(`route/${route}`);
     } else {
       handleModalShow()
@@ -48,7 +51,7 @@ const Vacancies = () => {
           <h3 className="margin-bottom-25">Recent Jobs</h3>
           <div className="listings-container">
             {/* Listing */}
-            <JobContainer className="listing full-time" onClick={() => handleClick('job-page-alt.html')}>
+            <JobContainer className="listing full-time" onClick={() => handleClick('/vacancies/')}>
               <div className="listing-logo">
                 <img src="images/job-list-logo-01.png" alt="vacancy-img" />
               </div>

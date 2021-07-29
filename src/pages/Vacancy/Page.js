@@ -62,11 +62,11 @@ const Page = ({
               <div className="clearfix" />
             </div>
             <div
-              // dangerouslySetInnerHTML={{
-              //   __html: JSON.parse(data?.description),
-              // }}
+              dangerouslySetInnerHTML={{
+                __html: draftToHtml(data.description),
+              }}
             />
-            {draftToHtml(data.description)}
+            {}
             {/* <p className="margin-reset">
               The Food Service Specialist ensures outstanding customer service
               is provided to food customers and that all food offerings meet the

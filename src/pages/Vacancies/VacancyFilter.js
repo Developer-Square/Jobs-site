@@ -4,6 +4,7 @@ import Button from "components/Button/Button";
 import SearchForm from 'containers/Search/SearchForm'
 import { IsNotEmpty } from 'helpers/index'
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
+import { vacancyLimit } from 'constants/constants'
 
 
 const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue}) => {
@@ -38,7 +39,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
       if (IsNotEmpty(sortByValue)) {
         loadFilterValues(
           {variables: { 
-            first: 10, 
+            first: vacancyLimit, 
             sortBy: {
               direction: sortByValue.direction,
               field: sortByValue.field
@@ -202,7 +203,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     const cleanedFilterObj = clean(filterObj);
     loadFilterValues(
       {variables: { 
-        first: 10, 
+        first: vacancyLimit, 
         filter: cleanedFilterObj,
         sortBy: {
           direction: sortByValue.direction,
@@ -222,7 +223,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     if (getJobs === 'updated_at' || getJobs === '-updated_at' || getJobs === 'Newest jobs' || getJobs === 'Oldest jobs') {
       loadFilterValues(
         {variables: {
-          first: 10
+          first: vacancyLimit
         }}
       );
     }
