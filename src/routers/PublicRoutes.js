@@ -19,6 +19,7 @@ import Contact from "pages/Contact";
 import PublicRoute from "./PublicRoute";
 import VacancyView from "pages/Vacancy/VacancyView";
 
+
 const AuthRoutes = (props) => {
   const { match } = props;
   return (
