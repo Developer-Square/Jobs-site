@@ -214,6 +214,7 @@ export const awardsFragment = gql`
     isActive
     id
     heading
+    visible
     items {
       ...AwardItem
     }

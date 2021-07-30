@@ -22,8 +22,6 @@ const ResumeBuilderView = ({ resume, resumeID }) => {
   };
   React.useEffect(() => {
     (async () => {
-      console.log(resume);
-
       if (!resume) {
         navigate.push("/dashboard/resume");
         toast.error(

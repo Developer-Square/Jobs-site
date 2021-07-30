@@ -27,7 +27,7 @@ const AwardItem = ({ item, language }) => (
 const AwardsA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
-  return safetyCheck(data.awards) ? (
+  return safetyCheck(data.award) ? (
     <div>
       <Heading>{data.award.heading}</Heading>
       <div className="grid gap-4">

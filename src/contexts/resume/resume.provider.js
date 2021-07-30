@@ -334,31 +334,96 @@ const ResumeProvider = ({ children }) => {
         case "set_data":
           console.log("calling set data");
           newState = payload;
-          // debouncedUpdateResume(newState);
           return newState;
 
         case "reset_data":
           console.log("calling reset data");
           temp = clone(state);
-          newState = initialState;
-          newState.id = temp.id;
-          newState.user = temp.user;
-          newState.name = temp.name;
-          newState.preview = temp.preview;
-          newState.createdAt = temp.createdAt;
-          newState.updatedAt = temp.updatedAt;
-          debouncedUpdateResume(newState);
-          return newState;
+          returnState = initialState;
+          initialState.owner = state.owner;
+          newState = state;
+          const toOmit = [
+            "addresses",
+            "allLayouts",
+            "description",
+            "descriptionPlaintext",
+            "isActive",
+            "isDeleted",
+            "metadata",
+            "name",
+            "privateMetadata",
+            "public",
+            "seoDescription",
+            "seoTitle",
+            "createdAt",
+            "resumemetadata",
+            "__typename",
+            "profile",
+            "updatedAt",
+            "uuid",
+            "slug",
+            "name",
+            "objective",
+            "owner",
+            "id",
+          ];
+
+          for (let i = 0; i < toOmit.length; i++) {
+            delete newState[toOmit[i]];
+          }
+
+          variables = Object.values(newState).reduce((obj, val) => {
+            const delValues = val.items.reduce((arr, a) => {
+              arr.push(a.id);
+              return arr;
+            }, []);
+            const newObj = setWith(clone(val), `itemsRemove`, delValues, clone);
+            const anotherObj = objDiff(val, newObj);
+            const objName = Object.keys(newState).find(
+              (key) => newState[key] === val,
+            );
+            obj[objName] = anotherObj;
+            return obj;
+          }, {});
+
+          variables["id"] = temp.id;
+          variables["name"] = temp.name;
+          variables["description"] = temp.description;
+          variables["descriptionPlaintext"] = temp.descriptionPlaintext;
+          variables["isActive"] = temp.isActive;
+          variables["metadata"] = temp.metadata;
+          variables["privateMetadata"] = temp.privateMetadata;
+          variables["public"] = temp.public;
+          variables["seoDescription"] = temp.seoDescription;
+          variables["seoTitle"] = temp.seoTitle;
+          variables["objective"] = temp.objective;
+          delete variables.objective.id;
+          delete variables.objective.__typename;
+
+          debouncedUpdateResume(variables);
+          return returnState;
 
         case "load_demo_data":
           console.log("calling load demo data");
           newState = merge(clone(state), demoState);
-          newState.resumemetadata.layouts = demoState.resumemetadata.layouts;
-          debouncedUpdateResume(newState);
-          return newState;
+          returnState = newState;
+          variables = demoState;
+          variables.description = state.description;
+          variables.descriptionPlaintext = state.descriptionPlaintext;
+          variables.isActive = state.isActive;
+          variables.metadata = state.metadata;
+          variables.name = state.name;
+          variables.privateMetadata = state.privateMetadata;
+          variables.public = state.public;
+          variables.seoDescription = state.seoDescription;
+          variables.seoTitle = state.seoTitle;
+          variables.id = state.id;
+          delete variables.resumemetadata;
+          delete variables.profile;
+          debouncedUpdateResume(variables);
+          return returnState;
 
         default:
-          throw new Error();
       }
     },
     [debouncedUpdateResume],
