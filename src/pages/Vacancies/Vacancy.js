@@ -7,7 +7,7 @@ import { VACANCIES_QUERY } from './queries'
 import PaginationItem from "./PaginationItem";
 import LogoImage from "image/thedb.png";
 import { getDBIdFromGraphqlId, checkDate, checkJobType, findJobTypeDescription } from 'utils';
-
+import { vacancyLimit } from 'constants/constants'
  
 
 const Vacancy = () => {
@@ -17,6 +17,9 @@ const Vacancy = () => {
   const [sortOrder, setSortOrder] = React.useState([]);
   const [sortByValue, setSortByValue] = React.useState({direction: '', field: ''});
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
+  const [afterValue, setAfterValue] = React.useState('');
+  const [filterObj, setFilterObj] = React.useState({search: '', jobTypes: [],});
+
 
   const ratePerHour = () => {
     let sortedJobs = [];
@@ -114,6 +117,31 @@ const Vacancy = () => {
    },
   )
 
+  const clean = (obj) => {
+    for (let propName in obj) {
+      if (obj[propName] === '' || obj[propName].length === 0) {
+        delete obj[propName];
+      }
+    }
+    return obj;
+  }
+  
+  // Make the api call
+  const callLoadFilters = () => {
+    const cleanedFilterObj = clean(filterObj);
+    loadFilterValues(
+      {variables: { 
+        first: vacancyLimit, 
+        filter: cleanedFilterObj,
+        after: afterValue,
+        sortBy: {
+          direction: sortByValue.direction,
+          field: sortByValue.field
+        }  
+      }
+    });
+  }
+
   console.log(vacancyState, "vacancyState");
   
   return (
@@ -170,10 +198,10 @@ const Vacancy = () => {
               )) : <Loader />}
             </div>
             <div className="clearfix" />
-            <PaginationItem loading={loading} data={data} loadFilterValues={loadFilterValues} sortByValue={sortByValue}/>
+            <PaginationItem loading={loading} data={data} loadFilterValues={loadFilterValues} sortByValue={sortByValue} setAfterValue={setAfterValue} callLoadFilters={callLoadFilters} />
           </div>
         </div>
-        <VacancyFilter rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} getJobs={getJobs} setGetJobs={setGetJobs} loadFilterValues={loadFilterValues} sortByValue={sortByValue} setSortByValue={setSortByValue} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+        <VacancyFilter rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} getJobs={getJobs} setGetJobs={setGetJobs} loadFilterValues={loadFilterValues} sortByValue={sortByValue} setSortByValue={setSortByValue} sortOrder={sortOrder} setSortOrder={setSortOrder} callLoadFilters={callLoadFilters} filterObj={filterObj} setFilterObj={setFilterObj} />
       </div>
     </div>
   );

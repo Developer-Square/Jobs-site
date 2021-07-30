@@ -7,10 +7,10 @@ import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 import { vacancyLimit } from 'constants/constants'
 
 
-const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue}) => {
+const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue, callLoadFilters, setFilterObj, filterObj}) => {
   const [searchString, setSearchString] = React.useState('');
+
   const [sortTypes, setSortTypes] = React.useState([]);
-  const [filterObj, setFilterObj] = React.useState({search: '', jobTypes: [],});
   const { vacancyState } = useContext(VacancyContext);
   let sortBy;
   
@@ -190,28 +190,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     }
   }
 
-  const clean = (obj) => {
-    for (let propName in obj) {
-      if (obj[propName] === '' || obj[propName].length === 0) {
-        delete obj[propName];
-      }
-    }
-    return obj;
-  }
 
-  const callLoadFilters = () => {
-    const cleanedFilterObj = clean(filterObj);
-    loadFilterValues(
-      {variables: { 
-        first: vacancyLimit, 
-        filter: cleanedFilterObj,
-        sortBy: {
-          direction: sortByValue.direction,
-          field: sortByValue.field
-        }  
-      }
-    });
-  }
 
   const handleSubmit = () => {
     // Call the sorting functions.

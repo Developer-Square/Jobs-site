@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import $ from 'jquery';
 import './Pagination.scss';
 import { vacancyLimit } from 'constants/constants'
+import { getGraphqlIdFromDBId } from 'utils'
 
-function PaginationItem({ data, loadFilterValues, loading }) {
+function PaginationItem({ data, loading, setAfterValue, callLoadFilters }) {
     let pages;
     const [pagesArray, setPagesArray] = React.useState([]);
     const [activeIndex, setActiveIndex] = React.useState(0);
-    console.log(pagesArray);
 
     useEffect(() => {
         if (data) {
@@ -50,22 +50,16 @@ function PaginationItem({ data, loadFilterValues, loading }) {
         });
     };
 
-    const callLoadFilters = (filterKey, filterValue, firstKey) => {
-        loadFilterValues({
-            variables: {
-                [firstKey]: vacancyLimit,
-                [filterKey]: filterValue
-            }
-        })
-    }
-
     const handleNumberClick = (requestedPage) => {
         if (activeIndex !== requestedPage && requestedPage >= 0) {
             setActiveIndex(requestedPage)
-            const results = requestedPage * vacancyLimit + 1;
-            const cleanedResults = [results];
-            let encoded = Buffer.from(JSON.stringify(cleanedResults)).toString("base64");
-            callLoadFilters('after', encoded, 'first');
+            const results = requestedPage * vacancyLimit;
+            // const cleanedResults = [results];
+            let encoded = getGraphqlIdFromDBId(results, 'Vacancy');
+            // Only include the following line if sorting without sortByValue.
+            // let encoded = Buffer.from(JSON.stringify(cleanedResults)).toString("base64");
+            setAfterValue(encoded)
+            callLoadFilters();
         }
     }
 
@@ -74,14 +68,15 @@ function PaginationItem({ data, loadFilterValues, loading }) {
     return (
         <div className="pagination-container">
             <div className="content_detail__pagination cdp" actpage="1">
-            <a href="#!-1" className="cdp_i" onClick={() => handleNumberClick(activeIndex - 1)}>{loading ? 'Loading ...' : 'prev'}</a>
+            {pagesArray.length ? (<a href="#!-1" className="cdp_i" onClick={() => handleNumberClick(activeIndex - 1)} >{loading ? 'Loading ...' : 'prev'}</a>): null}
                 {pagesArray.length ? pagesArray.map((page, index) => (
                     <a href={`#!${page}`} key={index} class="cdp_i" onClick={() => handleNumberClick(index)}>{loading ? '...' : page}</a>
                 )) : null}
-            <a href="#!+1" className="cdp_i" onClick={() => handleNumberClick(activeIndex + 1)}>{loading ? 'Loading ...' : 'next'}</a>
+            {pagesArray.length ? (<a href="#!+1" className="cdp_i" onClick={() => handleNumberClick(activeIndex + 1)}>{loading ? 'Loading ...' : 'next'}</a>) : null}
             </div>
       </div>
     )
 }
+
 
 export default PaginationItem
