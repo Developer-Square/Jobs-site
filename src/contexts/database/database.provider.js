@@ -1,9 +1,5 @@
 import { debounce } from "lodash";
 import React, { createContext, memo, useState } from "react";
-// import ShortUniqueId from "short-unique-id";
-// import UserContext from "contexts/user/user.provider";
-// import { getUnsplashPhoto } from "utils";
-// import initialState from "data/initialState.json";
 import { useLazyQuery, useMutation } from "react-apollo";
 import { toast } from "react-toastify";
 import {
@@ -72,7 +68,7 @@ const DatabaseProvider = ({ children }) => {
           ...resume,
         },
       }).then(({ data }) => {
-        return data?.resume;
+        return data?.resumePatch?.resume;
       });
       setUpdating(false);
     } catch (error) {
