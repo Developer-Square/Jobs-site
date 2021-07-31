@@ -3,8 +3,8 @@ import { useAlert } from "react-alert";
 import firebase from "firebase";
 
 import Button from "components/Button/Button";
-import { showSuccessNotification, showNotification, IsNotEmpty } from "helpers";
-// import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
+// import { showSuccessNotification, showNotification, IsNotEmpty } from "helpers";
+import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
 import { getIndustries, prepareData } from './auth-helpers'
 import { useHistory, useRouteMatch } from "react-router-dom";
 import {OTPForm, FurtherInformation, SignUp, Billing} from './SeekerRegistrationSteps'
@@ -27,11 +27,11 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test44',
-    email: 'ryantest44@gmail.com',
-    phone: '254745613326',
-    password1: 'Passwor1',
-    password2: 'Passwor1',
+    username: '',
+    email: '',
+    phone: '',
+    password1: '',
+    password2: '',
     isEmployer,
     isSeeker,
     isInstitution,
@@ -39,7 +39,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const otpCodeValue = {
-    otpcode: '696969',
+    otpcode: '',
   }
 
   const schoolInterestsInitialValues = {
@@ -49,8 +49,8 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const bioInitialValues = {
-    company: 'Andela LLC',
-    location: 'Nairobi, Kenya',
+    company: '',
+    location: '',
     industries: []
   }
 
@@ -151,91 +151,85 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   // Send the user's details to the api.
   const registerUserFn = async (registerUser, values, setErrors) => {
     const sentData = await prepareData(values);
-    localStorage.setItem('registerValues', JSON.stringify(sentData));
-    triggerFirebaseSignIn(sentData.phone);
-    switchTabs('', 'forward');
 
-    // registerUser({
-    //   variables: sentData,
-    // }).then(({ data }) => {
+    registerUser({
+      variables: sentData,
+    }).then(({ data }) => {
 
-    //   if (data.register.success) {
-    //     triggerFirebaseSignIn(sentData.phone);
-    //     localStorage.setItem('registerValues', JSON.stringify(sentData));
-    //     switchTabs('', 'forward');
-    //   } else {
-    //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-    //   }
-    // })
+      if (data.register.success) {
+        triggerFirebaseSignIn(sentData.phone);
+        localStorage.setItem('registerValues', JSON.stringify(sentData));
+        switchTabs('', 'forward');
+      } else {
+        setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+      }
+    })
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {
-    switchTabs('', 'forward');
+    const interests = values.interests.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
+    seekerCreate({
+        variables: {
+          ...values,
+        institution: values.school.value,
+        industries: interests
+      }
+    }).then(({ data }) => {
+      if (data) {
+        if (data.seekerCreate) {
+          switchTabs('', 'forward');
 
-    // const interests = values.interests.reduce((arr, b) => {
-    //   arr.push(b.value);
-    //   return arr;
-    // }, []);
-    // seekerCreate({
-    //     variables: {
-    //       ...values,
-    //     institution: values.school.value,
-    //     industries: interests
-    //   }
-    // }).then(({ data }) => {
-    //   if (data) {
-    //     if (data.seekerCreate) {
-    //       switchTabs('', 'forward');
-
-    //       if (!data.seekerCreate.success) {
-    //         setErrors(
-    //           normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
-    //         );
-    //       }
-    //     }
-    //   }
-    // });
+          if (!data.seekerCreate.success) {
+            setErrors(
+              normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
+            );
+          }
+        }
+      }
+    });
   }
 
   const employerProfileCreate = (values, employerCreate, setErrors) => {
-    switchTabs('', 'forward');
-    // let country;
-    // const data = values.location.split(',');
+    let country;
+    const data = values.location.split(',');
 
-    // // Check if the user provided a county as the second arguement.
-    // if (data[1]) {
-    //   // Perform a slice to get rid of the whitespace infront of the 
-    //   // country string.
-    //   country = data[1].slice(1);
-    // } else {
-    //   country = data[0]
-    // }
+    // Check if the user provided a county as the second arguement.
+    if (data[1]) {
+      // Perform a slice to get rid of the whitespace infront of the 
+      // country string.
+      country = data[1].slice(1);
+    } else {
+      country = data[0]
+    }
 
-    // const industries = values.industries.reduce((arr, b) => {
-    //   arr.push(b.value);
-    //   return arr;
-    // }, []);
+    const industries = values.industries.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
 
-    // employerCreate({
-    //     variables: {
-    //       ...values,
-    //       country,
-    //       industries, 
-    //       name: values.company,
-    //     }
-    // }).then(({ data }) => {
-    //   if (data) {
-    //     if (data.employerCreate) {
-    //       switchTabs('', 'forward');
+    employerCreate({
+        variables: {
+          ...values,
+          country,
+          industries, 
+          name: values.company,
+        }
+    }).then(({ data }) => {
+      if (data) {
+        if (data.employerCreate) {
+          switchTabs('', 'forward');
 
-    //       if (!data.employerCreate.success) {
-    //         setErrors(
-    //           normalizeErrors(maybe(() => data.employerCreate.errors, [])),
-    //         );
-    //       }
-    //     }
-    //   }
-    // });
+          if (!data.employerCreate.success) {
+            setErrors(
+              normalizeErrors(maybe(() => data.employerCreate.errors, [])),
+            );
+          }
+        }
+      }
+    });
   }
 
 
