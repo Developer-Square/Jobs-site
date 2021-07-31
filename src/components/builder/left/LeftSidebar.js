@@ -28,19 +28,19 @@ const getComponent = (id) => {
       return Work;
     case "education":
       return Education;
-    case "projects":
+    case "project":
       return Projects;
-    case "awards":
+    case "award":
       return Awards;
-    case "certifications":
+    case "certification":
       return Certifications;
-    case "skills":
+    case "skill":
       return Skills;
-    case "hobbies":
+    case "hobby":
       return Hobbies;
-    case "languages":
+    case "language":
       return Languages;
-    case "references":
+    case "reference":
       return References;
     default:
       throw new Error();

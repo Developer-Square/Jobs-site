@@ -11,11 +11,11 @@ const HobbyA = ({ id, name }) => (
 const HobbiesA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
-  return safetyCheck(data.hobbies) ? (
+  return safetyCheck(data.hobby) ? (
     <div>
-      <Heading>{data.hobbies.heading}</Heading>
+      <Heading>{data.hobby.heading}</Heading>
       <div className="grid gap-2">
-        {data.hobbies.items.map((x) => isItemVisible(x) && HobbyA(x))}
+        {data.hobby.items.map((x) => isItemVisible(x) && HobbyA(x))}
       </div>
     </div>
   ) : null;

@@ -5,15 +5,15 @@ import PageContext from "contexts/page/page.provider";
 const BirthDateA = () => {
   const { data } = useContext(PageContext);
 
-  if (data.profile.birthDate) {
+  if (data.owner?.seeker?.dateOfBirth) {
     return (
       <div className="text-xs">
         <h6 className="capitalize font-semibold">Date of Birth</h6>
         <div>
           <span>
             {formatDate({
-              date: data.profile.birthDate,
-              language: data.metadata.language,
+              date: data.owner?.seeker?.dateOfBirth,
+              language: data.resumemetadata.language,
               includeDay: true,
             })}
           </span>

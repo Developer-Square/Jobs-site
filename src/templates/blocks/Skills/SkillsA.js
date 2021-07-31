@@ -12,11 +12,11 @@ const SkillItem = ({ id, name, level }) => (
 const SkillsA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
-  return safetyCheck(data.skills) ? (
+  return safetyCheck(data.skill) ? (
     <div>
-      <Heading>{data.skills.heading}</Heading>
+      <Heading>{data.skill.heading}</Heading>
       <div className="grid grid-cols-2 gap-y-2 gap-x-4">
-        {data.skills.items.map((x) => isItemVisible(x) && SkillItem(x))}
+        {data.skill.items.map((x) => isItemVisible(x) && SkillItem(x))}
       </div>
     </div>
   ) : null;

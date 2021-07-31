@@ -8,13 +8,13 @@ import templateOptions from "data/templateOptions";
 
 const Templates = ({ id }) => {
   const dispatch = useDispatch();
-  const template = useSelector("metadata.template");
+  const template = useSelector("resumemetadata.template");
 
   const handleClick = (value) => {
     dispatch({
       type: "on_input",
       payload: {
-        path: "metadata.template",
+        path: "resumemetadata.template",
         value,
       },
     });

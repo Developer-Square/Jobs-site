@@ -1,21 +1,24 @@
-// import React from "react";
-import Dashboard from "pages/Dashboard/Dashboard";
-import Profile from "pages/Profile/Profile";
-import Vacancy from "pages/Vacancy/Vacancy";
-import ProfileView from "pages/Profile/ProfileView";
-import Jobs from "pages/Jobs/Jobs";
-import Gigs from "pages/Gigs/Gigs";
-import MyGigs from "pages/Gigs/MyGigs";
-import Internships from "pages/Internships/Internships";
-import JobManage from "pages/Jobs/JobManage";
-import MyInternships from "pages/Internships/MyInternships";
-import MyJobs from "pages/Jobs/MyJobs";
-import GigManage from "pages/Gigs/GigManage";
-import InternshipManage from "pages/Internships/InternshipManage";
-import Applications from "pages/Applications/Applications";
-import SingleView from "pages/SingleView/SingleView";
-import ResumeDashboard from "pages/Resume/ResumeDashboard";
-import ResumeBuilder from "pages/Resume/ResumeBuilder";
+import { lazy } from "react";
+
+const Dashboard = lazy(() => import("pages/Dashboard/Dashboard"));
+const Profile = lazy(() => import("pages/Profile/Profile"));
+const Vacancy = lazy(() => import("pages/Vacancy/Vacancy"));
+const ProfileView = lazy(() => import("pages/Profile/ProfileView"));
+const Jobs = lazy(() => import("pages/Jobs/Jobs"));
+const Gigs = lazy(() => import("pages/Gigs/Gigs"));
+const MyGigs = lazy(() => import("pages/Gigs/MyGigs"));
+const Internships = lazy(() => import("pages/Internships/Internships"));
+const JobManage = lazy(() => import("pages/Jobs/JobManage"));
+const MyInternships = lazy(() => import("pages/Internships/MyInternships"));
+const MyJobs = lazy(() => import("pages/Jobs/MyJobs"));
+const GigManage = lazy(() => import("pages/Gigs/GigManage"));
+const InternshipManage = lazy(() =>
+  import("pages/Internships/InternshipManage"),
+);
+const Applications = lazy(() => import("pages/Applications/Applications"));
+const SingleView = lazy(() => import("pages/SingleView/SingleView"));
+const ResumeDashboard = lazy(() => import("pages/Resume/ResumeDashboard"));
+const ResumeBuilder = lazy(() => import("pages/Resume/ResumeBuilder"));
 
 export {
   Dashboard,

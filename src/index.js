@@ -12,6 +12,7 @@ import "./index.css";
 import "./styles/forms.css";
 import "./styles/shadows.css";
 import "./styles/toastify.css";
+import "./styles/global.css";
 
 firebase.initializeApp({
   apiKey: "AIzaSyBHmpqs28AFeWL4FJ7tv5-CHYNQ-iihUj8",
@@ -21,8 +22,8 @@ firebase.initializeApp({
   storageBucket: "thedatabase-1589992992254.appspot.com",
   messagingSenderId: "948225711672",
   appId: "1:948225711672:web:5d6cc0a2a7c2cc55b510cd",
-  measurementId: "G-HCW4TBKKJX"
-})
+  measurementId: "G-HCW4TBKKJX",
+});
 
 ReactDOM.render(
   <React.StrictMode>

@@ -27,17 +27,17 @@ const CertificationItem = ({ item, language }) => (
 const CertificationsA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
-  return safetyCheck(data.certifications) ? (
+  return safetyCheck(data.certification) ? (
     <div>
-      <Heading>{data.certifications.heading}</Heading>
+      <Heading>{data.certification.heading}</Heading>
       <div className="grid gap-4">
-        {data.certifications.items.map(
+        {data.certification.items.map(
           (x) =>
             isItemVisible(x) && (
               <CertificationItem
                 key={x.id}
                 item={x}
-                language={data.metadata.language}
+                language={data.resumemetadata.language}
               />
             ),
         )}

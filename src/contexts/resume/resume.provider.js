@@ -21,6 +21,7 @@ import i18next from "i18next";
 import demoState from "data/demoState.json";
 import DatabaseContext from "contexts/database/database.provider";
 import initialState from "data/initialState.json";
+import { objDiff } from "utils";
 
 const ResumeContext = createContext({});
 
@@ -33,54 +34,110 @@ const ResumeProvider = ({ children }) => {
       let index;
       let items;
       let temp;
+      let diff;
+      let val = [];
+      let variables;
+      let returnState;
 
       switch (type) {
         case "on_add_item":
+          console.log("add item");
           delete payload.value.temp;
           items = get(state, payload.path, []);
-          newState = setWith(
+          if (items === null) {
+            items = [];
+          }
+          console.log(items);
+          val.push(payload.value);
+          newState = setWith(clone(state), `${payload.path}Add`, val, clone);
+          returnState = setWith(
             clone(state),
             payload.path,
             [...items, payload.value],
             clone,
           );
-          debouncedUpdateResume(newState);
-          return newState;
+          diff = objDiff(state, newState, [
+            "id",
+            "name",
+            "public",
+            "title",
+            "heading",
+            "descriptionPlaintext",
+            "description",
+          ]);
+          delete diff[payload.path.split(".")[0]].id;
+
+          debouncedUpdateResume(diff);
+          return returnState;
 
         case "on_edit_item":
+          console.log("edit item");
           delete payload.value.temp;
           items = get(state, payload.path);
           index = findIndex(items, ["id", payload.value.id]);
-          newState = setWith(
+          val.push(
+            objDiff(
+              items.find(({ id }) => id === payload?.value?.id),
+              payload.value,
+              ["id"],
+            ),
+          );
+          newState = setWith(clone(state), `${payload.path}Update`, val, clone);
+          returnState = setWith(
             clone(state),
             `${payload.path}[${index}]`,
             payload.value,
             clone,
           );
-          debouncedUpdateResume(newState);
-          return newState;
+          diff = objDiff(state, newState, [
+            "id",
+            "name",
+            "public",
+            "title",
+            "heading",
+            "descriptionPlaintext",
+            "description",
+          ]);
+          delete diff[payload.path.split(".")[0]].id;
+          variables = setWith(
+            clone(diff),
+            `${payload.path}Update.id`,
+            payload.value.id,
+            clone,
+          );
+          variables.id = newState.id;
+          debouncedUpdateResume(variables);
+          return returnState;
 
         case "on_delete_item":
+          console.log("calling on delete");
           items = get(state, payload.path);
           index = findIndex(items, ["id", payload.value.id]);
           items.splice(index, 1);
-          newState = setWith(clone(state), payload.path, items, clone);
+          newState = setWith(
+            clone(state),
+            `${payload.path}Remove`,
+            items,
+            clone,
+          );
           debouncedUpdateResume(newState);
           return newState;
 
         case "on_toggle_use_item":
+          console.log("calling on toggle use item");
           items = get(state, payload.path);
           index = findIndex(items, ["id", payload.value.id]);
-          if ("isVisible" in items[index]) {
-            items[index].isVisible = !items[index].isVisible;
+          if ("isActive" in items[index]) {
+            items[index].isActive = !items[index].isActive;
           } else {
-            items[index].isVisible = false;
+            items[index].isActive = false;
           }
           newState = setWith(clone(state), payload.path, items, clone);
           debouncedUpdateResume(newState);
           return newState;
 
         case "on_move_item_up":
+          console.log("calling on move item up");
           items = get(state, payload.path);
           index = findIndex(items, ["id", payload.value.id]);
           items = arrayMove(items, index, index - 1);
@@ -89,6 +146,7 @@ const ResumeProvider = ({ children }) => {
           return newState;
 
         case "on_move_item_down":
+          console.log("calling on move item down");
           items = get(state, payload.path);
           index = findIndex(items, ["id", payload.value.id]);
           items = arrayMove(items, index, index + 1);
@@ -97,7 +155,8 @@ const ResumeProvider = ({ children }) => {
           return newState;
 
         case "change_language":
-          newState = set(clone(state), "metadata.language", payload);
+          console.log("calling change language");
+          newState = set(clone(state), "resumemetadata.language", payload);
           items = get(
             i18next.getDataByLanguage(payload),
             "translation.builder.sections",
@@ -106,15 +165,36 @@ const ResumeProvider = ({ children }) => {
             has(newState, `${key}.heading`) &&
               set(newState, `${key}.heading`, items[key]);
           });
-          debouncedUpdateResume(newState);
-          return newState;
+          newState = setWith(clone(state), payload.path, payload.value, clone);
+          returnState = newState;
+          variables = objDiff(state, newState, [
+            "id",
+            "name",
+            "public",
+            "title",
+            "heading",
+            "descriptionPlaintext",
+            "description",
+            "primaryColor",
+            "backgroundColor",
+            "textColor",
+            "fontSize",
+            "font",
+          ]);
+          debouncedUpdateResume(variables);
+          return returnState;
 
         case "reset_layout":
-          temp = get(state, "metadata.template");
-          items = get(initialState, `metadata.layout.${temp}`);
+          console.log("calling reset layout");
+          temp = get(state, "resumemetadata.template");
+          index = findIndex(get(state, "resumemetadata.template"), [
+            "name",
+            temp,
+          ]);
+          items = get(initialState, `resumemetadata.layouts[${index}]`);
           newState = setWith(
             clone(state),
-            `metadata.layout.${temp}`,
+            `resumemetadata.layoutsAdd`,
             items,
             clone,
           );
@@ -122,15 +202,32 @@ const ResumeProvider = ({ children }) => {
           return newState;
 
         case "on_input":
+          console.log("add on input");
           newState = setWith(clone(state), payload.path, payload.value, clone);
-          debouncedUpdateResume(newState);
-          return newState;
+          returnState = newState;
+          variables = objDiff(state, newState, [
+            "id",
+            "name",
+            "public",
+            "title",
+            "heading",
+            "descriptionPlaintext",
+            "description",
+            "primaryColor",
+            "backgroundColor",
+            "textColor",
+            "fontSize",
+            "font",
+          ]);
+          delete variables[payload.path.split(".")[0]].id;
+          debouncedUpdateResume(variables);
+          return returnState;
 
         case "on_import":
+          console.log("calling on import ");
           temp = clone(state);
           newState = payload;
           newState.id = temp.id;
-          newState.user = temp.user;
           newState.name = temp.name;
           newState.createdAt = temp.createdAt;
           newState.updatedAt = temp.updatedAt;
@@ -138,28 +235,28 @@ const ResumeProvider = ({ children }) => {
           return newState;
 
         case "on_import_jsonresume":
+          console.log("calling on import json data");
           temp = clone(state);
           newState = initialState;
           newState.id = temp.id;
-          newState.user = temp.user;
           newState.name = temp.name;
           newState.preview = temp.preview;
           newState.createdAt = temp.createdAt;
           newState.updatedAt = temp.updatedAt;
-          newState.profile = {
-            address: {
-              city: get(payload, "basics.location.city"),
-              line1: get(payload, "basics.location.address"),
-              line2: get(payload, "basics.location.region"),
-              pincode: get(payload, "basics.location.postalCode"),
-            },
-            email: get(payload, "basics.email"),
-            firstName: get(payload, "basics.name"),
-            phone: get(payload, "basics.phone"),
-            photograph: get(payload, "basics.picture"),
-            subtitle: get(payload, "basics.label"),
-            website: get(payload, "basics.website"),
-          };
+          // newState.profile = {
+          //   address: {
+          //     city: get(payload, "basics.location.city"),
+          //     line1: get(payload, "basics.location.address"),
+          //     line2: get(payload, "basics.location.region"),
+          //     pincode: get(payload, "basics.location.postalCode"),
+          //   },
+          //   email: get(payload, "basics.email"),
+          //   firstName: get(payload, "basics.name"),
+          //   phone: get(payload, "basics.phone"),
+          //   photograph: get(payload, "basics.picture"),
+          //   subtitle: get(payload, "basics.label"),
+          //   website: get(payload, "basics.website"),
+          // };
           newState.social.items = get(payload, "basics.profiles")
             ? payload.basics.profiles.map((x) => ({
                 id: uuidv4(),
@@ -168,7 +265,10 @@ const ResumeProvider = ({ children }) => {
                 url: x.url,
               }))
             : [];
-          newState.objective.body = get(payload, "basics.summary");
+          newState.objective.descriptionPlaintext = get(
+            payload,
+            "basics.summary",
+          );
           newState.work.items = payload.work
             ? payload.work.map((x) => ({
                 id: uuidv4(),
@@ -192,8 +292,8 @@ const ResumeProvider = ({ children }) => {
                 summary: x.courses.join("\n"),
               }))
             : [];
-          newState.awards.items = payload.awards
-            ? payload.awards.map((x) => ({
+          newState.award.items = payload.award
+            ? payload.award.map((x) => ({
                 id: uuidv4(),
                 awarder: x.awarder,
                 date: x.date,
@@ -201,61 +301,129 @@ const ResumeProvider = ({ children }) => {
                 title: x.title,
               }))
             : [];
-          newState.skills.items = payload.skills
-            ? payload.skills.map((x) => ({
+          newState.skill.items = payload.skill
+            ? payload.skill.map((x) => ({
                 id: uuidv4(),
                 level: "Fundamental Awareness",
                 name: x.name,
               }))
             : [];
-          newState.hobbies.items = payload.interests
-            ? payload.interests.map((x) => ({
+          newState.hobby.items = payload.hobby
+            ? payload.hobby.map((x) => ({
                 id: uuidv4(),
                 name: x.name,
               }))
             : [];
-          newState.languages.items = payload.languages
-            ? payload.languages.map((x) => ({
+          newState.language.items = payload.language
+            ? payload.language.map((x) => ({
                 id: uuidv4(),
                 name: x.language,
                 fluency: x.fluency,
               }))
             : [];
-          newState.references.items = payload.references
-            ? payload.references.map((x) => ({
+          newState.reference.items = payload.reference
+            ? payload.reference.map((x) => ({
                 id: uuidv4(),
                 name: x.name,
                 summary: x.reference,
               }))
             : [];
-          debouncedUpdateResume(newState);
+          // debouncedUpdateResume(newState);
           return newState;
 
         case "set_data":
+          console.log("calling set data");
           newState = payload;
-          debouncedUpdateResume(newState);
           return newState;
 
         case "reset_data":
+          console.log("calling reset data");
           temp = clone(state);
-          newState = initialState;
-          newState.id = temp.id;
-          newState.user = temp.user;
-          newState.name = temp.name;
-          newState.preview = temp.preview;
-          newState.createdAt = temp.createdAt;
-          newState.updatedAt = temp.updatedAt;
-          debouncedUpdateResume(newState);
-          return newState;
+          returnState = initialState;
+          initialState.owner = state.owner;
+          newState = state;
+          const toOmit = [
+            "addresses",
+            "allLayouts",
+            "description",
+            "descriptionPlaintext",
+            "isActive",
+            "isDeleted",
+            "metadata",
+            "name",
+            "privateMetadata",
+            "public",
+            "seoDescription",
+            "seoTitle",
+            "createdAt",
+            "resumemetadata",
+            "__typename",
+            "profile",
+            "updatedAt",
+            "uuid",
+            "slug",
+            "name",
+            "objective",
+            "owner",
+            "id",
+          ];
+
+          for (let i = 0; i < toOmit.length; i++) {
+            delete newState[toOmit[i]];
+          }
+
+          variables = Object.values(newState).reduce((obj, val) => {
+            const delValues = val.items.reduce((arr, a) => {
+              arr.push(a.id);
+              return arr;
+            }, []);
+            const newObj = setWith(clone(val), `itemsRemove`, delValues, clone);
+            const anotherObj = objDiff(val, newObj);
+            const objName = Object.keys(newState).find(
+              (key) => newState[key] === val,
+            );
+            obj[objName] = anotherObj;
+            return obj;
+          }, {});
+
+          variables["id"] = temp.id;
+          variables["name"] = temp.name;
+          variables["description"] = temp.description;
+          variables["descriptionPlaintext"] = temp.descriptionPlaintext;
+          variables["isActive"] = temp.isActive;
+          variables["metadata"] = temp.metadata;
+          variables["privateMetadata"] = temp.privateMetadata;
+          variables["public"] = temp.public;
+          variables["seoDescription"] = temp.seoDescription;
+          variables["seoTitle"] = temp.seoTitle;
+          variables["objective"] = temp.objective;
+          delete variables.objective.id;
+          delete variables.objective.__typename;
+
+          debouncedUpdateResume(variables);
+          return returnState;
 
         case "load_demo_data":
+          console.log("calling load demo data");
           newState = merge(clone(state), demoState);
-          newState.metadata.layout = demoState.metadata.layout;
-          debouncedUpdateResume(newState);
-          return newState;
+          returnState = newState;
+          variables = demoState;
+          variables.description = state.description;
+          variables.descriptionPlaintext = state.descriptionPlaintext;
+          variables.isActive = state.isActive;
+          variables.metadata = state.metadata;
+          variables.name = state.name;
+          variables.privateMetadata = state.privateMetadata;
+          variables.public = state.public;
+          variables.seoDescription = state.seoDescription;
+          variables.seoTitle = state.seoTitle;
+          variables.id = state.id;
+          delete variables.resumemetadata;
+          delete variables.profile;
+          debouncedUpdateResume(variables);
+          return returnState;
 
         default:
-          throw new Error();
       }
     },
     [debouncedUpdateResume],

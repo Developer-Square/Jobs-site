@@ -1,5 +1,9 @@
 import React from "react";
+// import { findIndex } from "lodash";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import { reduceSectionArray } from "utils";
 import AwardsA from "./blocks/Awards/AwardsA";
 import CertificationsA from "./blocks/Certifications/CertificationsA";
 import ContactA from "./blocks/Contact/ContactA";
@@ -26,7 +30,22 @@ const Blocks = {
 };
 
 const Pikachu = ({ data }) => {
-  const layout = data.metadata.layout.pikachu;
+  const navigation = useHistory();
+  const layoutObj = data.resumemetadata.layouts.find(
+    ({ name }) => name === "pikachu",
+  );
+  if (!layoutObj) {
+    navigation.push("/");
+    toast(
+      "The requested Resume is not Ready. Kindly ask the owner to complete it",
+    );
+  }
+  const layout = reduceSectionArray(layoutObj.collection);
+  // const layoutIndex = findIndex(data.resumemetadata.layouts, [
+  //   "name",
+  //   "pikachu",
+  // ]);
+  // const layout = data.resumemetadata.layouts[layoutIndex].collection;
 
   return (
     <PageContext.Provider value={{ data, heading: HeadingB }}>
@@ -34,51 +53,55 @@ const Pikachu = ({ data }) => {
         id="page"
         className="p-8 rounded"
         style={{
-          fontFamily: data.metadata.font,
-          color: data.metadata.colors.text,
-          backgroundColor: data.metadata.colors.background,
+          fontFamily: data.resumemetadata.font,
+          color: data.resumemetadata.textColor,
+          backgroundColor: data.resumemetadata.backgroundColor,
         }}
       >
         <div className="grid grid-cols-12 gap-8">
-          {data.profile.photograph && (
+          {data.owner?.avatar && (
             <div className="self-center col-span-4">
               <img
                 className="w-48 h-48 rounded-full mx-auto object-cover"
-                src={data.profile.photograph}
-                alt={data.profile.firstName}
+                src={data.owner?.avatar?.url}
+                alt={data.owner?.fullName}
               />
             </div>
           )}
 
           <div
             className={`${
-              data.profile.photograph !== "" ? "col-span-8" : "col-span-12"
+              data.owner?.avatar !== "" ? "col-span-8" : "col-span-12"
             }`}
           >
             <div
               className="h-48 rounded flex flex-col justify-center"
               style={{
-                backgroundColor: data.metadata.colors.primary,
-                color: data.metadata.colors.background,
+                backgroundColor: data.resumemetadata.primaryColor,
+                color: data.resumemetadata.backgroundColor,
               }}
             >
               <div className="flex flex-col justify-center mx-8 my-6">
                 <h1 className="text-3xl font-bold leading-tight">
-                  {data.profile.firstName} {data.profile.lastName}
+                  {data.owner?.firstName
+                    ? `${data.owner?.firstName} ${data.owner?.lastName}`
+                    : data.owner?.fullName}
                 </h1>
                 <div className="text-sm font-medium tracking-wide">
-                  {data.profile.subtitle}
+                  {data.owner?.seeker?.title}
                 </div>
 
-                {data.objective.body && (
+                {data.objective.descriptionPlaintext && (
                   <div>
                     <hr
                       className="my-5 opacity-25"
-                      style={{ borderColor: data.metadata.colors.background }}
+                      style={{
+                        borderColor: data.resumemetadata.backgroundColor,
+                      }}
                     />
 
                     <ReactMarkdown className="text-sm">
-                      {data.objective.body}
+                      {data.objective.descriptionPlaintext}
                     </ReactMarkdown>
                   </div>
                 )}

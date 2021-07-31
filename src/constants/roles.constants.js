@@ -84,8 +84,7 @@ const components = {
     category: management,
     dashboardItem: false,
   },
-
-  resume: {
+  resumeDashboard: {
     component: "ResumeDashboard",
     url: "/resume",
     title: "Resume",
@@ -95,7 +94,7 @@ const components = {
     children: [
       {
         component: "ResumeBuilder",
-        url: "/builder/:resumeID",
+        url: "/resume/builder/:resumeID",
         title: "Add Resume",
         icon: "Category",
         module: 1,
@@ -103,7 +102,7 @@ const components = {
       },
       {
         component: "ResumeDashboard",
-        url: "",
+        url: "/resume",
         title: "Add/Manage Resumes",
         icon: "Category",
         module: 1,
@@ -187,8 +186,8 @@ const rolesConfig = {
       // components.bookmarks,
       components.addVacancy,
       components.updateVacancy,
+      components.resumeDashboard,
       components.resumeBuilder,
-      components.resume,
     ],
   },
 };

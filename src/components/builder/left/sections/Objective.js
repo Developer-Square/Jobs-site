@@ -19,7 +19,7 @@ const Objective = ({ id }) => {
       <Input
         type="textarea"
         label={t("shared.forms.summary")}
-        path="objective.body"
+        path="objective.descriptionPlaintext"
       />
     </section>
   );

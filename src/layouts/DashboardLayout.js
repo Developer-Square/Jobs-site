@@ -33,14 +33,12 @@ const DashboardLayout = (props) => {
   };
   const pathValues = pathname.split("/").reduce((arr, p) => {
     const rootPathIndex = indexOf(pathname.split("/"), p);
-    console.log(rootPathIndex);
     arr.push({
       name: (p.charAt(0).toUpperCase() + p.slice(1)).replace("-", " "),
       path: getPath(pathLocation.split("/"), rootPathIndex),
     });
     return arr;
   }, []);
-  console.log(pathValues);
   return (
     <div>
       {builder ? (

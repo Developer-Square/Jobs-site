@@ -3,7 +3,7 @@ import {
   seekerFragment,
   employerFragment,
   institutionFragment,
-} from "fragments/auth";
+} from "graphql/fragments";
 import gql from "graphql-tag";
 
 export const BASE_PROFILE_MUTATION = gql`

@@ -2,7 +2,11 @@ import { clone, get, isEmpty } from "lodash";
 import { isArray, isEqual, isObject, transform } from "lodash";
 import dayjs from "dayjs";
 import { Base64 } from "js-base64";
-import { addObjectToLocalStorageObject, addArrayToLocalStorage, normalizeErrors } from "helpers";
+import {
+  addObjectToLocalStorageObject,
+  addArrayToLocalStorage,
+  normalizeErrors,
+} from "helpers";
 import { maybe } from "misc";
 
 /**
@@ -82,51 +86,51 @@ export const handleAvatarUpdate = (data, errors) => {
  * @param  {} data
  * Store a user's credentials in localstorage or display an error.
  */
-export const storeLoginDetails = (successful, history, data, setErrors, setSubmitting, location) => {
-    if (successful) {
-        localStorage.removeItem("thedb_auth_roles");
-        var roles = [];
-        if (data.tokenAuth.user.isStaff) {
-          roles.push("admin");
-        }
-        if (data.tokenAuth.user.isSeeker) {
-          roles.push("seeker");
-        }
-        if (data.tokenAuth.user.isEmployer) {
-          roles.push("employer");
-        }
-        if (data.tokenAuth.user.isInstitution) {
-          roles.push("institution");
-        }
-        addArrayToLocalStorage("thedb_auth_roles", roles);
-        localStorage.setItem("access_token", data.tokenAuth.token);
-        localStorage.setItem(
-          "refresh_token",
-          data.tokenAuth.refreshToken,
-        );
-        addObjectToLocalStorageObject("thedb_auth_payload", {
-          refreshToken: data.tokenAuth.refreshToken,
-          token: data.tokenAuth.token,
-        });
-        addObjectToLocalStorageObject(
-          "thedb_auth_profile",
-          data.tokenAuth.user,
-        );
+export const storeLoginDetails = (
+  successful,
+  history,
+  data,
+  setErrors,
+  setSubmitting,
+  location,
+) => {
+  if (successful) {
+    localStorage.removeItem("thedb_auth_roles");
+    var roles = [];
+    if (data.tokenAuth.user.isStaff) {
+      roles.push("admin");
+    }
+    if (data.tokenAuth.user.isSeeker) {
+      roles.push("seeker");
+    }
+    if (data.tokenAuth.user.isEmployer) {
+      roles.push("employer");
+    }
+    if (data.tokenAuth.user.isInstitution) {
+      roles.push("institution");
+    }
+    addArrayToLocalStorage("thedb_auth_roles", roles);
+    localStorage.setItem("access_token", data.tokenAuth.token);
+    localStorage.setItem("refresh_token", data.tokenAuth.refreshToken);
+    addObjectToLocalStorageObject("thedb_auth_payload", {
+      refreshToken: data.tokenAuth.refreshToken,
+      token: data.tokenAuth.token,
+    });
+    addObjectToLocalStorageObject("thedb_auth_profile", data.tokenAuth.user);
 
-        // If the function is being called from the login component
-        // then setSubmiting to false and move to the dashboard.
-        if (location === 'login') {
-            history.push("/dashboard");
-            setSubmitting(false);
-        }
-
-      } else {
-        setErrors(normalizeErrors(data.tokenAuth.errors));
-        if (location === 'login') {
-            setSubmitting(false);
-        }
-      }
-}
+    // If the function is being called from the login component
+    // then setSubmiting to false and move to the dashboard.
+    if (location === "login") {
+      history.push("/dashboard");
+      setSubmitting(false);
+    }
+  } else {
+    setErrors(normalizeErrors(data.tokenAuth.errors));
+    if (location === "login") {
+      setSubmitting(false);
+    }
+  }
+};
 
 export const getDBIdFromGraphqlId = (graphqlId, schema) => {
   // This is temporary solution, we will use slugs in the future
@@ -160,8 +164,7 @@ export const getModalText = (isEditMode, type, t) =>
 export const safetyCheck = (section, path = "items") =>
   !!(section && section.visible === true && !isEmpty(section[path]));
 
-export const isItemVisible = (section) =>
-  section && section.isVisible !== false;
+export const isItemVisible = (section) => section && section.isActive !== false;
 
 // Thought about creating a generic function to filter out non-visible items
 export const genericFilter = (key, data) => {
@@ -226,7 +229,10 @@ export const getUnsplashPhoto = async () => {
 };
 
 export const hasAddress = (address) =>
-  !!address.line1 || !!address.line2 || !!address.city || !!address.pincode;
+  !!address.streetAddress1 ||
+  !!address.streetAddress2 ||
+  !!address.city ||
+  !!address.postalCode;
 
 export const hexToRgb = (hex) => {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -381,4 +387,13 @@ export const toFormData = (obj, form, namespace) => {
   }
 
   return fd;
+};
+
+export const reduceSectionArray = (rawBlock) => {
+  const blocks = rawBlock.reduce((arr, b) => {
+    const filtered = b.filter((section) => section !== "");
+    arr.push(filtered);
+    return arr;
+  }, []);
+  return blocks;
 };
