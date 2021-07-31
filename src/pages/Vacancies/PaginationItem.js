@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useContext } from 'react';
 import $ from 'jquery';
 import './Pagination.scss';
 import { vacancyLimit } from 'constants/constants'
-import { getGraphqlIdFromDBId } from 'utils'
+import { VacancyContext } from 'contexts/vacancies/vacancies.context'
+import { getDBIdFromGraphqlId } from 'utils'
 
 function PaginationItem({ data, loading, setAfterValue, callLoadFilters }) {
     let pages;
     const [pagesArray, setPagesArray] = React.useState([]);
     const [activeIndex, setActiveIndex] = React.useState(0);
+    const { vacancyState } = useContext(VacancyContext);
+    
 
     useEffect(() => {
         if (data) {
@@ -22,8 +25,8 @@ function PaginationItem({ data, loading, setAfterValue, callLoadFilters }) {
         // Populate the pagesArray with the page numbers that are expected.
         if (pages) {
             let array = [];
-            for(let i = 1; i < pages; i++) {
-                array.push(i);
+            for(let i = 0; i < pages; i++) {
+                array.push(i+1);
             }
             setPagesArray(array);
         }
@@ -50,18 +53,32 @@ function PaginationItem({ data, loading, setAfterValue, callLoadFilters }) {
         });
     };
 
+    const handleEncode = (id, salary) => {
+        const decodedId = getDBIdFromGraphqlId(id, 'Vacancy')
+        const cleanedResults = [salary,decodedId];
+        let encoded = Buffer.from(JSON.stringify(cleanedResults)).toString("base64");
+
+        return encoded;
+    }
+
     const handleNumberClick = (requestedPage) => {
-        if (activeIndex !== requestedPage && requestedPage >= 0) {
-            setActiveIndex(requestedPage)
-            const results = requestedPage * vacancyLimit;
-            // Add salary item.
-            // First decode job's ID then pass it in.
-            const cleanedResults = [results];
-            // let encoded = getGraphqlIdFromDBId(results, 'Vacancy');
-            // Only include the following line if sorting without sortByValue.
-            let encoded = Buffer.from(JSON.stringify(cleanedResults)).toString("base64");
-            setAfterValue(encoded)
-            callLoadFilters();
+        console.log(vacancyState.sortedJobs);
+        if (vacancyState.sortedJobs && activeIndex !== requestedPage) {
+            // Get the last job's id and salary.
+            const length = vacancyState.sortedJobs.length;
+
+            if (requestedPage > activeIndex) {
+                setActiveIndex(requestedPage)
+                const {id, salary} = vacancyState.sortedJobs[length - 1];
+                const encodedResult = handleEncode(id, salary);
+                callLoadFilters('', encodedResult, vacancyLimit, 0,);
+            } else {
+                setActiveIndex(requestedPage)
+                const {id, salary} = vacancyState.sortedJobs[0];
+                const encodedResult = handleEncode(id, salary);
+                callLoadFilters(encodedResult, '', 0, vacancyLimit,);
+            }
+
         }
     }
 
@@ -72,7 +89,7 @@ function PaginationItem({ data, loading, setAfterValue, callLoadFilters }) {
             <div className="content_detail__pagination cdp" actpage="1">
             {pagesArray.length ? (<a href="#!-1" className="cdp_i" onClick={() => handleNumberClick(activeIndex - 1)} >{loading ? 'Loading ...' : 'prev'}</a>): null}
                 {pagesArray.length ? pagesArray.map((page, index) => (
-                    <a href={`#!${page}`} key={index} class="cdp_i" onClick={() => handleNumberClick(index)}>{loading ? '...' : page}</a>
+                    <a href={`#!${page}`} key={index} class="cdp_i">{loading ? '...' : page}</a>
                 )) : null}
             {pagesArray.length ? (<a href="#!+1" className="cdp_i" onClick={() => handleNumberClick(activeIndex + 1)}>{loading ? 'Loading ...' : 'next'}</a>) : null}
             </div>

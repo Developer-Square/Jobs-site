@@ -39,6 +39,7 @@ export const VACANCIES_QUERY = gql`
           positions
           yearsOfExp
           payRate
+          salary
           amount {
             currency
             amount
