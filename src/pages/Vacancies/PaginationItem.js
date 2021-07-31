@@ -54,10 +54,12 @@ function PaginationItem({ data, loading, setAfterValue, callLoadFilters }) {
         if (activeIndex !== requestedPage && requestedPage >= 0) {
             setActiveIndex(requestedPage)
             const results = requestedPage * vacancyLimit;
-            // const cleanedResults = [results];
-            let encoded = getGraphqlIdFromDBId(results, 'Vacancy');
+            // Add salary item.
+            // First decode job's ID then pass it in.
+            const cleanedResults = [results];
+            // let encoded = getGraphqlIdFromDBId(results, 'Vacancy');
             // Only include the following line if sorting without sortByValue.
-            // let encoded = Buffer.from(JSON.stringify(cleanedResults)).toString("base64");
+            let encoded = Buffer.from(JSON.stringify(cleanedResults)).toString("base64");
             setAfterValue(encoded)
             callLoadFilters();
         }
