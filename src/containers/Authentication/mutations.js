@@ -252,6 +252,40 @@ export const CREATE_SELECTABLE_INSTITUTION = gql`
   }
 `
 
+export const MAKE_PAYMENT = gql`
+mutation makePayment(
+  $gateway: String!
+  $token: String
+  $billingPhone: String
+  $amount: PositiveDecimal
+  $planId: ID!
+) {
+  checkoutPayment(planId: $planId, input: {
+    gateway: $gateway
+    token: $token
+    billingPhone: $billingPhone
+    amount: $amount
+  }){
+    success
+    plan {
+      periodType
+      periodAmount
+    }
+    payment {
+      total {
+        amount
+        currency
+      }
+      transactions {
+        id
+      }
+    }
+  }
+}
+`
+
+export const TypedMakePayment = TypedMutation(MAKE_PAYMENT);
+
 export const TypedEmployerProfileMutation = TypedMutation(
   EMPLOYER_PROFILE_MUTATION,
 );

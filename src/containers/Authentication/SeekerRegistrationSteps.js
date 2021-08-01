@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Link } from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import { signUpSchema, OTPVerficationSchema, furtherInformationSchema } from "./validation.schema";
 import { HelperText } from "./Authentication.style";
@@ -14,7 +15,7 @@ import { TOS } from "constants/routes.constants";
 import { Typography } from "@material-ui/core";
 import { TypedCreateSelectableInstitutionMutation } from './mutations'
 import { showSuccessNotification, IsNotEmpty } from "helpers";
-import { TypedPlansQuery } from './queries';
+import { TypedPlansListQuery } from './queries';
 import Loader from "components/Loader/Loader";
 import { PaymentModal } from 'modals/PaymentModal';
 
@@ -285,16 +286,22 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
 
 export const Billing = ({ switchTabs, isSeeker }) => {
   const [show, setShow] = React.useState(false);
-  const useStyles = makeStyles({
+  const useStyles = makeStyles(theme => ({
     root: {
       minWidth: 235,
+      [theme.breakpoints.down("lg")] : {
+        minWidth: 180
+      },
+      [theme.breakpoints.down("md")] : {
+        minWidth: 150
+      },
       marginRight: 10,
       minHeight: 150,
       cursor: "pointer",
     }
-  })
+  }));
 
-  const classNames = useStyles()
+  const classNames = useStyles();
 
   const handleModalShow = () => {
     setShow(!show);
@@ -302,21 +309,21 @@ export const Billing = ({ switchTabs, isSeeker }) => {
 
   return (
     <>
-      <TypedPlansQuery>
+      <TypedPlansListQuery>
         {(plansList) => {
           if (plansList.loading) {
             return <Loader />;
           }
 
           let plans;
-          const {allPlans} = plansList.data
-          if (allPlans.length > 0) {
+          const {allPlanLists} = plansList.data
+          if (allPlanLists.length > 0) {
             // If the user is a seeker then only add the options available
             // to them.
             if (isSeeker) {
-              plans = allPlans.slice(4);
+              plans = allPlanLists[1].allPlans;
             } else {
-              plans = allPlans.slice(0, 3);
+              plans = allPlanLists[0].allPlans;
             }
           }
      
@@ -327,11 +334,11 @@ export const Billing = ({ switchTabs, isSeeker }) => {
               <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
             </Spacer>
             <Title>Choose your tier: </Title>
-            <PricingTier>
-              {plans ? plans.map((option, index) => (
+            <PricingTier planType={plans.length > 2 ? 'business' : 'seeker'}>
+              {plans.length ? plans.map((option, index) => (
                 <div key={index}>
                 {/* Add action to take them to dashboard */}
-                  <Card key={index} onClick={() => handleModalShow()} className={classNames.root}>
+                  <Card key={index} onClick={() => handleModalShow(option)} className={classNames.root}>
                     <CardContent>
                       <Typography variant="h5">
                         {option.title}
@@ -345,7 +352,7 @@ export const Billing = ({ switchTabs, isSeeker }) => {
           </>
           )
         }}
-      </TypedPlansQuery>
+      </TypedPlansListQuery>
     </>
   )
 }
@@ -369,6 +376,7 @@ const Spacer = styled.div`
 
 const PricingTier = styled.div`
   display: flex;
+  justify-content: ${props => props.planType === 'business' ? 'space-around' : ''};
 `
 
 const Title = styled.p`
