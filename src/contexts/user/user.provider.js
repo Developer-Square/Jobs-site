@@ -3,8 +3,9 @@ import { toast } from "react-toastify";
 import React, { createContext, memo, useEffect, useState } from "react";
 // import useAuthState from "hooks/useAuthState";
 import { useHistory } from "react-router-dom";
-import { useLazyQuery } from "react-apollo";
+import { useLazyQuery, useMutation } from "react-apollo";
 import { GET_USER_DETAILS } from "graphql/queries";
+import { DELETE_ADDRESS, UPDATE_ADDRESS } from "graphql/mutations";
 import { AuthContext } from "contexts/auth/auth.context";
 
 const defaultUser = {
@@ -41,6 +42,8 @@ const UserProvider = ({ children }) => {
 
   const navigate = useHistory();
   const [fetchUser] = useLazyQuery(GET_USER_DETAILS);
+  const [accountAddressDelete] = useMutation(DELETE_ADDRESS);
+  const [accountAddressUpdate] = useMutation(UPDATE_ADDRESS);
 
   const getUser = async () => {
     if (!user) {
@@ -66,6 +69,27 @@ const UserProvider = ({ children }) => {
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const updateAddress = async (address) => {
+    try {
+      await accountAddressUpdate({
+        variables: {
+          ...address,
+        },
+      }).then(({ data }) => {
+        return data?.resumePatch?.resume;
+      });
+    } catch (error) {
+      console.log("updateResume error", error);
+      return null;
+    }
+  };
+
+  const deleteAddress = async (id) => {
+    const { data } = await accountAddressDelete({
+      variables: { id: id },
+    });
+    return data?.accountAddressDelete;
+  };
 
   const logout = async () => {
     if (typeof window !== "undefined") {
@@ -105,7 +129,10 @@ const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
+        getUser,
         logout,
+        updateAddress,
+        deleteAddress,
         deleteAccount,
       }}
     >

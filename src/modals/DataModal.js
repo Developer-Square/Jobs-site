@@ -4,9 +4,9 @@ import { useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "contexts/resume/resume.provider";
+import ModalContext from "contexts/modal/modal.provider";
 import BaseModal from "./BaseModal";
 import Button from "components/shared/Button";
-import ModalContext from "contexts/modal/modal.provider";
 import { getModalText, objDiff } from "utils";
 
 const DataModal = ({

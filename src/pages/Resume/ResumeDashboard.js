@@ -53,7 +53,7 @@ const ResumeDashboard = ({ user }) => {
             return (
               <MetaWrapper
                 meta={{
-                  description: resumeData.data.myResumes.seoDescription,
+                  description: "The Database Resume Builder",
                   title: t("dashboard.title") || t("shared.appName"),
                 }}
               >

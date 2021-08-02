@@ -29,10 +29,10 @@ const Layout = ({ id }) => {
 
   const squareArray = (arrayItem) => {
     const sortedArray = arrayItem.sort(function (a, b) {
-      return b.length - a.length;
+      return a.length - b.length;
     })[1].length;
     const val = arrayItem.reduce((arr, b) => {
-      if (Array.isArray(val)) {
+      if (Array.isArray(b)) {
         if (b.length === sortedArray) {
           arr.push(b);
         } else {
@@ -68,6 +68,10 @@ const Layout = ({ id }) => {
       const items = reorder(blocks[sInd], source.index, destination.index);
       const newState = [...blocks];
       newState[sInd] = items;
+      Object.values(newState).reduce((arr, v) => {
+        arr.push(v);
+        return arr;
+      }, []);
       dispatch({
         type: "on_input",
         payload: {
@@ -80,6 +84,10 @@ const Layout = ({ id }) => {
       const newState = [...blocks];
       newState[sInd] = newResult[sInd];
       newState[dInd] = newResult[dInd];
+      Object.values(newState).reduce((arr, v) => {
+        arr.push(v);
+        return arr;
+      }, []);
       dispatch({
         type: "on_input",
         payload: {

@@ -80,7 +80,7 @@ const ListItem = ({
       },
     });
   };
-
+  // <Draggable draggableId={data.id} index={index}> */
   return (
     <Draggable draggableId={data.id} index={index}>
       {(dragProvided) => (

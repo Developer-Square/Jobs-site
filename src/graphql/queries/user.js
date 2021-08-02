@@ -10,3 +10,14 @@ export const GET_USER_DETAILS = gql`
     }
   }
 `;
+
+export const COUNTRIES_QUERY = gql`
+  query COUNTRIESQUERY {
+    __type(name: "CountryCode") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;

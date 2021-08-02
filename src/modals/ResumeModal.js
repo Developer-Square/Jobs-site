@@ -78,6 +78,7 @@ const ResumeModal = () => {
                   validateOnBlur
                   initialValues={initialValues}
                   validationSchema={schema}
+                  enableReinitialize
                 >
                   {(formik) => (
                     <DataModal

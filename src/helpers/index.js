@@ -330,6 +330,7 @@ export const showNotification = (
   alert,
   errorField,
   successMessage,
+  setErrors,
 ) => {
   let a = alert;
   let b = true;
@@ -359,7 +360,7 @@ export const showNotification = (
         a(successMessage);
       }
     } else {
-      const err = maybe(() => data.vacancyErrors, []);
+      const err = maybe(() => data[errorField], []);
 
       if (err) {
         const nonFieldErr = normalizeErrors(maybe(() => data[errorField], []));

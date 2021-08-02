@@ -4,16 +4,18 @@ import { FaPrint } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useState } from "react";
-// import download from "downloadjs";
+import download from "downloadjs";
 // import firebase from "gatsby-plugin-firebase";
-// import { useSelector } from "contexts/resume/resume.provider";
+import { useSelector } from "contexts/resume/resume.provider";
 import BaseModal from "../BaseModal";
 import Button from "components/shared/Button";
 import ModalContext from "contexts/modal/modal.provider";
-// import { b64toBlob } from "utils";
+import GenericPdfDownloader from "components/PdfDownloader/pdfDownloader";
+import { b64toBlob } from "utils";
+import ResumeViewer from "pages/Resume/view";
 
 const ExportModal = () => {
-  // const state = useSelector();
+  const state = useSelector();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoadingSingle, setLoadingSingle] = useState(false);
@@ -44,8 +46,8 @@ const ExportModal = () => {
       //   id: state.id,
       //   type: isSinglePDF ? "single" : "multi",
       // });
-      // const blob = b64toBlob(data, "application/pdf");
-      // download(blob, `RxResume-${state.id}.pdf`, "application/pdf");
+      const blob = b64toBlob(<ResumeViewer />, "application/pdf");
+      download(blob, `RxResume-${state.id}.pdf`, "application/pdf");
     } catch (error) {
       toast(t("builder.toasts.printError"));
     } finally {
@@ -97,6 +99,9 @@ const ExportModal = () => {
 
         <div className="mt-5 mb-4">
           <div className="flex">
+            <GenericPdfDownloader
+              downloadFileName={`The Database Resume - ${state.name}`}
+            />
             <Button
               isLoading={isLoadingSingle}
               onClick={() => handleDownload(true)}

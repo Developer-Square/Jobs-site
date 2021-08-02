@@ -2,8 +2,125 @@ import {
   seekerFragment,
   employerFragment,
   institutionFragment,
+  addressFragment,
+  userFragment,
 } from "graphql/fragments";
 import gql from "graphql-tag";
+
+export const CREATE_ADDRESS = gql`
+  ${addressFragment}
+  ${userFragment}
+  mutation AddressCreate(
+    $firstName: String
+    $lastName: String
+    $companyName: String
+    $streetAddress1: String
+    $streetAddress2: String
+    $city: String
+    $cityArea: String
+    $postalCode: String
+    $country: CountryCode
+    $countryArea: String
+    $phone: String
+  ) {
+    accountAddressCreate(
+      input: {
+        firstName: $firstName
+        lastName: $lastName
+        companyName: $companyName
+        streetAddress1: $streetAddress1
+        streetAddress2: $streetAddress2
+        city: $city
+        cityArea: $cityArea
+        postalCode: $postalCode
+        country: $country
+        countryArea: $countryArea
+        phone: $phone
+      }
+    ) {
+      success
+      accountErrors {
+        field
+        message
+        code
+      }
+      user {
+        ...User
+      }
+      address {
+        ...Address
+      }
+    }
+  }
+`;
+export const UPDATE_ADDRESS = gql`
+  ${addressFragment}
+  ${userFragment}
+  mutation AddressUpdate(
+    $firstName: String
+    $lastName: String
+    $companyName: String
+    $streetAddress1: String
+    $streetAddress2: String
+    $city: String
+    $cityArea: String
+    $postalCode: String
+    $country: CountryCode
+    $countryArea: String
+    $phone: String
+    $id: ID!
+  ) {
+    accountAddressCreate(
+      id: $id
+      input: {
+        firstName: $firstName
+        lastName: $lastName
+        companyName: $companyName
+        streetAddress1: $streetAddress1
+        streetAddress2: $streetAddress2
+        city: $city
+        cityArea: $cityArea
+        postalCode: $postalCode
+        country: $country
+        countryArea: $countryArea
+        phone: $phone
+      }
+    ) {
+      success
+      accountErrors {
+        field
+        message
+        code
+      }
+      user {
+        ...Seeker
+      }
+      address {
+        ...Address
+      }
+    }
+  }
+`;
+export const DELETE_ADDRESS = gql`
+  ${addressFragment}
+  ${userFragment}
+  mutation AddressDelete($id: ID!) {
+    accountAddressCreate(id: $id) {
+      success
+      accountErrors {
+        field
+        message
+        code
+      }
+      user {
+        ...Seeker
+      }
+      address {
+        ...Address
+      }
+    }
+  }
+`;
 
 export const BASE_PROFILE_MUTATION = gql`
   mutation UpdateAccount($firstName: String!, $lastName: String!) {
