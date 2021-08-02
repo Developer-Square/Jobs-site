@@ -229,6 +229,7 @@ export const getUnsplashPhoto = async () => {
 };
 
 export const hasAddress = (address) =>
+  address !== null ||
   !!address.streetAddress1 ||
   !!address.streetAddress2 ||
   !!address.city ||
@@ -390,10 +391,14 @@ export const toFormData = (obj, form, namespace) => {
 };
 
 export const reduceSectionArray = (rawBlock) => {
-  const blocks = rawBlock.reduce((arr, b) => {
-    const filtered = b.filter((section) => section !== "");
-    arr.push(filtered);
-    return arr;
-  }, []);
-  return blocks;
+  if (Array.isArray(rawBlock)) {
+    const blocks = rawBlock.reduce((arr, b) => {
+      const filtered = b.filter((section) => section !== "");
+      arr.push(filtered);
+      return arr;
+    }, []);
+    return blocks;
+  } else {
+    throw new Error("Data passed is not an Array");
+  }
 };

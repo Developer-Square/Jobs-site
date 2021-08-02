@@ -1,0 +1,35 @@
+.address {
+    @apply relative flex flex-col items-center;
+  }
+  
+  .address > .backdrop {
+    max-width: 184px;
+    height: 70px;
+  
+    @apply rounded absolute w-full bg-black text-white shadow;
+    @apply absolute flex justify-center items-center;
+  }
+  
+  .address > .page {
+    max-width: 184px;
+    height: 70px;
+  
+    @apply rounded absolute w-full bg-primary-100 text-primary-400;
+    @apply transition-opacity duration-200 ease-in-out;
+    @apply cursor-pointer absolute flex justify-center items-center;
+  }
+  
+  .address > .page:hover {
+    @apply transition-opacity duration-200 ease-in-out opacity-25;
+  }
+  
+  .address > .meta {
+    margin-top: 70px;
+  
+    @apply text-center;
+  }
+  
+  .address > .meta p {
+    @apply mt-3 font-medium leading-normal;
+  }
+  

@@ -203,7 +203,23 @@ const ResumeProvider = ({ children }) => {
 
         case "on_input":
           console.log("add on input");
-          newState = setWith(clone(state), payload.path, payload.value, clone);
+          let path = payload.path;
+          let indexPath = parseInt(payload.path.split("[")[1]);
+          if (indexPath) {
+            let idx = parseInt(indexPath.charAt(0));
+            if (payload.path === `resumemetadata.layouts[${idx}].collection`) {
+              path = "resumemetadata.layoutsUpdate";
+              payload.value = [
+                {
+                  id: state.resumemetadata.layouts[idx].id,
+                  name: state.resumemetadata.layouts[idx].name,
+                  collection: payload.value,
+                },
+              ];
+            }
+          }
+
+          newState = setWith(clone(state), path, payload.value, clone);
           returnState = newState;
           variables = objDiff(state, newState, [
             "id",
@@ -217,9 +233,13 @@ const ResumeProvider = ({ children }) => {
             "backgroundColor",
             "textColor",
             "fontSize",
+            "collection",
             "font",
           ]);
-          delete variables[payload.path.split(".")[0]].id;
+          if (variables[payload.path.split(".")[0]].id) {
+            delete variables[payload.path.split(".")[0]].id;
+          }
+
           debouncedUpdateResume(variables);
           return returnState;
 
@@ -340,6 +360,17 @@ const ResumeProvider = ({ children }) => {
           console.log("calling reset data");
           temp = clone(state);
           returnState = initialState;
+          returnState.id = state.id;
+          returnState.description = state.description;
+          returnState.descriptionPlaintext = state.descriptionPlaintext;
+          returnState.isActive = state.isActive;
+          returnState.metadata = state.metadata;
+          returnState.name = state.name;
+          returnState.privateMetadata = state.privateMetadata;
+          returnState.public = state.public;
+          returnState.seoDescription = state.seoDescription;
+          returnState.seoTitle = state.seoTitle;
+          returnState.owner = state.owner;
           initialState.owner = state.owner;
           newState = state;
           const toOmit = [
@@ -357,11 +388,11 @@ const ResumeProvider = ({ children }) => {
             "seoTitle",
             "createdAt",
             "resumemetadata",
-            "__typename",
             "profile",
             "updatedAt",
             "uuid",
             "slug",
+            "__typename",
             "name",
             "objective",
             "owner",
@@ -386,19 +417,17 @@ const ResumeProvider = ({ children }) => {
             return obj;
           }, {});
 
-          variables["id"] = temp.id;
-          variables["name"] = temp.name;
-          variables["description"] = temp.description;
-          variables["descriptionPlaintext"] = temp.descriptionPlaintext;
-          variables["isActive"] = temp.isActive;
-          variables["metadata"] = temp.metadata;
-          variables["privateMetadata"] = temp.privateMetadata;
-          variables["public"] = temp.public;
-          variables["seoDescription"] = temp.seoDescription;
-          variables["seoTitle"] = temp.seoTitle;
-          variables["objective"] = temp.objective;
-          delete variables.objective.id;
-          delete variables.objective.__typename;
+          variables.id = returnState.id;
+          variables.name = returnState.name;
+          variables.description = returnState.description;
+          variables.descriptionPlaintext = returnState.descriptionPlaintext;
+          variables.isActive = returnState.isActive;
+          variables.metadata = returnState.metadata;
+          variables.privateMetadata = returnState.privateMetadata;
+          variables.public = returnState.public;
+          variables.seoDescription = returnState.seoDescription;
+          variables.seoTitle = returnState.seoTitle;
+          variables.objective = returnState.objective;
 
           debouncedUpdateResume(variables);
           return returnState;
@@ -407,6 +436,35 @@ const ResumeProvider = ({ children }) => {
           console.log("calling load demo data");
           newState = merge(clone(state), demoState);
           returnState = newState;
+
+          returnState.id = state.id;
+          returnState.description = state.description;
+          returnState.descriptionPlaintext = state.descriptionPlaintext;
+          returnState.isActive = state.isActive;
+          returnState.metadata = state.metadata;
+          returnState.name = state.name;
+          returnState.privateMetadata = state.privateMetadata;
+          returnState.public = state.public;
+          returnState.seoDescription = state.seoDescription;
+          returnState.seoTitle = state.seoTitle;
+          returnState.id = state.id;
+          returnState.owner = state.owner;
+          returnState = Object.values(newState).reduce((obj, val) => {
+            let anotherObj = val;
+            if (typeof val === "object" && val !== null) {
+              if (anotherObj.itemsAdd) {
+                let oldItems = anotherObj.items || [];
+                anotherObj.items = anotherObj.itemsAdd.concat(oldItems);
+                delete anotherObj.itemsAdd;
+              }
+            }
+            const objName = Object.keys(newState).find(
+              (key) => newState[key] === val,
+            );
+            obj[objName] = anotherObj;
+            return obj;
+          }, {});
+
           variables = demoState;
           variables.description = state.description;
           variables.descriptionPlaintext = state.descriptionPlaintext;

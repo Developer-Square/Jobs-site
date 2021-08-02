@@ -94,6 +94,7 @@ const DatabaseProvider = ({ children }) => {
     <DatabaseContext.Provider
       value={{
         refetchResumes,
+        setRefetchResumes,
         isUpdating,
         getResume,
         createResume,

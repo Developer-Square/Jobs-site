@@ -24,7 +24,7 @@ import * as styles from "./view.module.css";
 
 export const TypedResumeQuery = TypedQuery(FETCH_RESUME);
 
-const ResumeViewer = () => {
+const ResumeViewer = ({ id }) => {
   const match = useRouteMatch();
   const { t, i18n } = useTranslation();
   const navigate = useHistory();
@@ -33,8 +33,10 @@ const ResumeViewer = () => {
   React.useEffect(() => {
     if (match.params.resumeID) {
       setResumeID(match.params.resumeID);
+    } else {
+      setResumeID(id);
     }
-  }, [match.params.resumeID]);
+  }, [match.params.resumeID, id]);
 
   return useMemo(() => {
     return (
