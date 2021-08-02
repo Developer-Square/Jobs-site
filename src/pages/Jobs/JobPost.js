@@ -191,24 +191,28 @@ function JobPost() {
                     />
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Industry"
                       name="industry"
                       options={industry}
                     />
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Job Type"
                       name="job_type"
                       options={dropdownOptions}
                     />
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Qualification"
                       name="min_qualification"
                       options={minQualificationsOptions}
                     />
                     <FormikControl
                       control="select"
+                      hideButton={() => {}}
                       label="Experience"
                       name="years_of_exp"
                       options={experienceOptions}

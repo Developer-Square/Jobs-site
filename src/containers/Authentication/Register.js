@@ -3,6 +3,7 @@ import { useAlert } from "react-alert";
 import firebase from "firebase";
 
 import Button from "components/Button/Button";
+// import { showSuccessNotification, showNotification, IsNotEmpty } from "helpers";
 import { showSuccessNotification, normalizeErrors, showNotification, IsNotEmpty } from "helpers";
 import { getIndustries, prepareData } from './auth-helpers'
 import { useHistory, useRouteMatch } from "react-router-dom";
@@ -26,11 +27,11 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test41',
-    email: 'ryantest41@gmail.com',
-    phone: '254745613323',
-    password1: 'Passwor1',
-    password2: 'Passwor1',
+    username: '',
+    email: '',
+    phone: '',
+    password1: '',
+    password2: '',
     isEmployer,
     isSeeker,
     isInstitution,
@@ -38,7 +39,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const otpCodeValue = {
-    otpcode: '696969',
+    otpcode: '',
   }
 
   const schoolInterestsInitialValues = {
@@ -48,8 +49,8 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const bioInitialValues = {
-    company: 'Andela LLC',
-    location: 'Nairobi, Kenya',
+    company: '',
+    location: '',
     industries: []
   }
 
@@ -57,8 +58,10 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     if (match.params) {
       if (match.params.userType === 'seeker') {
         setIsSeeker(currSeeker => currSeeker = true);
+        setIsEmplolyer(currEmployer => currEmployer = false);
       } else if (match.params.userType === 'business') {
         setIsEmplolyer(currEmployer => currEmployer = true);
+        setIsSeeker(currSeeker => currSeeker = false);
       }
     }    // eslint-disable-next-line
   }, [match.params.userType, switchTab, initialValues]);
@@ -148,22 +151,19 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   // Send the user's details to the api.
   const registerUserFn = async (registerUser, values, setErrors) => {
     const sentData = await prepareData(values);
-    localStorage.setItem('registerValues', JSON.stringify(sentData));
-    triggerFirebaseSignIn(sentData.phone);
-    switchTabs('', 'forward');
 
-    // registerUser({
-    //   variables: sentData,
-    // }).then(({ data }) => {
+    registerUser({
+      variables: sentData,
+    }).then(({ data }) => {
 
-    //   if (data.register.success) {
-    //     triggerFirebaseSignIn(sentData.phone);
-    //     localStorage.setItem('registerValues', JSON.stringify(sentData));
-    //     switchTabs('', 'forward');
-    //   } else {
-    //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-    //   }
-    // })
+      if (data.register.success) {
+        triggerFirebaseSignIn(sentData.phone);
+        localStorage.setItem('registerValues', JSON.stringify(sentData));
+        switchTabs('', 'forward');
+      } else {
+        setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+      }
+    })
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {
@@ -171,7 +171,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
       arr.push(b.value);
       return arr;
     }, []);
-    // TODO: Check whether values.school.value is in institutions if not send a mutation.
     seekerCreate({
         variables: {
           ...values,
@@ -356,7 +355,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         // eslint-disable-next-line
         ) : activeStep === 3 && switchTab === 'seeker' || activeStep === 3 && switchTab === 'business' ? (
           // Using the Billing Form for both seeker and business tabs as the fields are similar.
-          <Billing switchTabs={switchTabs} loading={loading} />
+          <Billing switchTabs={switchTabs} isSeeker={isSeeker} loading={loading} />
         ) : (
           <div className="register">
             <div

@@ -1,20 +1,67 @@
-import React from "react";
+import React, {useEffect} from "react";
+import styled from 'styled-components';
+import { useHistory } from "react-router-dom";
+
+import { PaymentModal } from 'modals/PaymentModal';
 import VacancyFilter from "./VacancyFilter";
 
 const Vacancies = () => {
+  const history = useHistory();
+  const [verified, setVerified] = React.useState(false);
+  const [show, setShow] = React.useState(false);
+  const [isSeeker, setIsSeeker] = React.useState(false);
+
+  useEffect(() => {
+    checkVerified()
+  }, [])
+
+  const checkVerified = () => {
+    let profileDetails = localStorage.getItem('thedb_auth_profile');
+    profileDetails = JSON.parse(profileDetails)
+    
+    if (profileDetails.verified) {
+      setVerified(curr => curr = true);
+    } else {
+      setVerified(curr => curr = false);
+    }
+    
+    if (profileDetails.isSeeker) {
+      setIsSeeker(curr => curr = true);
+    } else {
+      setIsSeeker(curr => curr = false);
+    }
+  }
+
+  const handleClick = (route) => {
+    if (verified) {
+      history.push(`route/${route}`);
+    } else {
+      handleModalShow()
+    }
+  }
+
+  const handleModalShow = () => {
+    setShow(!show);
+  }
+  
   return (
     <div>
+       {/* Re-using the payment modal to remind the seeker/employer to pay for the denied services */}
+       <PaymentModal open={show} onClose={handleModalShow} moreInfo={true} />
       <div id="titlebar">
         <div className="container">
           <div className="ten columns">
             <span>We found 1,412 jobs matching:</span>
             <h2>Web, Software &amp; IT</h2>
           </div>
-          <div className="six columns">
-            <a href="dashboard-add-job.html" className="button">
-              Post a Job, It’s Free!
-            </a>
-          </div>
+          {!isSeeker ? (
+            <div className="six columns">
+              <a href="dashboard-add-job.html" className="button">
+                Post a Job, It’s Free!
+              </a>
+            </div>
+          ): null}
+
         </div>
       </div>
 
@@ -24,7 +71,7 @@ const Vacancies = () => {
           <div className="padding-right">
             <div className="listings-container">
               {/* Listing */}
-              <a href="job-page-alt.html" className="listing full-time">
+              <JobContainer className="listing full-time" onClick={() => handleClick('job-page-alt.html')}>
                 <div className="listing-logo">
                   <img
                     src="images/job-list-logo-01.png"
@@ -51,9 +98,9 @@ const Vacancies = () => {
                     </li>
                   </ul>
                 </div>
-              </a>
+              </JobContainer>
               {/* Listing */}
-              <a href="job-page.html" className="listing part-time">
+              <JobContainer className="listing part-time" onClick={() => handleClick('job-page-alt.html')}>
                 <div className="listing-logo">
                   <img
                     src="images/job-list-logo-02.png"
@@ -80,9 +127,9 @@ const Vacancies = () => {
                     </li>
                   </ul>
                 </div>
-              </a>
+              </JobContainer>
               {/* Listing */}
-              <a href="job-page-alt.html" className="listing full-time">
+              <JobContainer className="listing full-time" onClick={() => handleClick('job-page-alt.html')}>
                 <div className="listing-logo">
                   <img
                     src="images/job-list-logo-01.png"
@@ -106,9 +153,9 @@ const Vacancies = () => {
                     </li>
                   </ul>
                 </div>
-              </a>
+              </JobContainer>
               {/* Listing */}
-              <a href="job-page.html" className="listing internship">
+              <JobContainer className="listing internship" onClick={() => handleClick('job-page-alt.html')}>
                 <div className="listing-logo">
                   <img
                     src="images/job-list-logo-04.png"
@@ -135,9 +182,9 @@ const Vacancies = () => {
                     </li>
                   </ul>
                 </div>
-              </a>
+              </JobContainer>
               {/* Listing */}
-              <a href="job-page.html" className="listing freelance">
+              <JobContainer className="listing freelance" onClick={() => handleClick('job-page-alt.html')}>
                 <div className="listing-logo">
                   <img
                     src="images/job-list-logo-05.png"
@@ -164,9 +211,9 @@ const Vacancies = () => {
                     </li>
                   </ul>
                 </div>
-              </a>
+              </JobContainer>
               {/* Listing */}
-              <a href="job-page.html" className="listing part-time featured">
+              <JobContainer className="listing part-time featured" onClick={() => handleClick('job-page-alt.html')}>
                 <div className="listing-logo">
                   <img
                     src="images/job-list-logo-02.png"
@@ -193,9 +240,9 @@ const Vacancies = () => {
                     </li>
                   </ul>
                 </div>
-              </a>
+              </JobContainer>
               {/* Listing */}
-              <a href="job-page.html" className="listing full-time">
+              <JobContainer className="listing full-time" onClick={() => handleClick('job-page-alt.html')}>
                 <div className="listing-logo">
                   <img
                     src="images/job-list-logo-01.png"
@@ -219,9 +266,9 @@ const Vacancies = () => {
                     </li>
                   </ul>
                 </div>
-              </a>
+              </JobContainer>
               {/* Listing */}
-              <a href="job-page.html" className="listing full-time">
+              <JobContainer className="listing full-time" onClick={() => handleClick('job-page-alt.html')}>
                 <div className="listing-logo">
                   <img
                     src="images/job-list-logo-04.png"
@@ -248,7 +295,7 @@ const Vacancies = () => {
                     </li>
                   </ul>
                 </div>
-              </a>
+              </JobContainer>
             </div>
             <div className="clearfix" />
             <div className="pagination-container">
@@ -293,5 +340,9 @@ const Vacancies = () => {
     </div>
   );
 };
+
+const JobContainer = styled.div`
+  cursor: pointer;
+`
 
 export default Vacancies;
