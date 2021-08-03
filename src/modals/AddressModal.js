@@ -72,6 +72,7 @@ const AddressModal = () => {
       validateOnBlur
       initialValues={initialValues}
       validationSchema={schema}
+      enableReinitialize
     >
       {(formik) => (
         <TypedCreateAddressMutation
@@ -82,6 +83,7 @@ const AddressModal = () => {
               alert,
               "accountErrors",
               "Address Created",
+              formik.setErrors,
             )
           }
         >
@@ -95,6 +97,7 @@ const AddressModal = () => {
                     alert,
                     "accountErrors",
                     "Address Updated",
+                    formik.setErrors,
                   )
                 }
               >

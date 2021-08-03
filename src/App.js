@@ -67,10 +67,10 @@ function App() {
       <OriginalThemeProvider theme={themeMode}>
         <MuiThemeProvider theme={MUItheme}>
           <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-            <SearchProvider query={query}>
-              <HeaderProvider>
-                <AuthProvider>
-                  <ModalProvider>
+            <ModalProvider>
+              <SearchProvider query={query}>
+                <HeaderProvider>
+                  <AuthProvider>
                     <UserProvider>
                       <DatabaseProvider>
                         <ResumeProvider>
@@ -87,11 +87,11 @@ function App() {
                         </ResumeProvider>
                       </DatabaseProvider>
                     </UserProvider>
-                  </ModalProvider>
-                </AuthProvider>
-              </HeaderProvider>
-              <GlobalStyle />
-            </SearchProvider>
+                  </AuthProvider>
+                </HeaderProvider>
+                <GlobalStyle />
+              </SearchProvider>
+            </ModalProvider>
             <ReactHooksWrapper />
           </ServiceWorkerProvider>
         </MuiThemeProvider>

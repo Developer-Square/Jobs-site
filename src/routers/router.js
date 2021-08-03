@@ -6,6 +6,7 @@ import { Modal } from "@redq/reuse-modal";
 import AppLayout from "layouts/AppLayout";
 import { AuthContext } from "contexts/auth/auth.context";
 import { withApollo } from "helpers/apollo";
+import Wrapper from "components/shared/Wrapper";
 
 function BaseRouter({ deviceType }) {
   const {
@@ -18,7 +19,7 @@ function BaseRouter({ deviceType }) {
       <Redirect to="/auth" deviceType={deviceType} />
     );
   return (
-    <>
+    <Wrapper>
       <Switch>
         <Route path="/dashboard" render={authentication} />
 
@@ -32,7 +33,7 @@ function BaseRouter({ deviceType }) {
           <Modal />
         </AppLayout>
       </Switch>
-    </>
+    </Wrapper>
   );
 }
 

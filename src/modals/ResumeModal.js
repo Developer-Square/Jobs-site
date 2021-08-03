@@ -30,7 +30,6 @@ const ResumeModal = () => {
   React.useEffect(() => {
     (async () => {
       await getUnsplashPhoto().then((res) => {
-        console.log("sometjhing", res);
         setInitialValues({ name: "", preview: res });
       });
     })();
