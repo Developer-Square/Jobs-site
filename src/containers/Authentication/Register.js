@@ -27,9 +27,9 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test56',
-    email: 'ryantest56@gmail.com',
-    phone: '254745613338',
+    username: 'Ryan test62',
+    email: 'ryantest62@gmail.com',
+    phone: '254745613344',
     password1: 'Passwor1',
     password2: 'Passwor1',
     isEmployer,
@@ -57,11 +57,15 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   React.useEffect(() => {
     if (match.params) {
       if (match.params.userType === 'seeker') {
-        setIsSeeker(currSeeker => currSeeker = true);
-        setIsEmplolyer(currEmployer => currEmployer = false);
+        setIsSeeker(true);
+        setIsEmplolyer(false);
+        initialValues.isSeeker = true;
+        initialValues.isEmployer = false;
       } else if (match.params.userType === 'business') {
-        setIsEmplolyer(currEmployer => currEmployer = true);
-        setIsSeeker(currSeeker => currSeeker = false);
+        setIsEmplolyer(true);
+        setIsSeeker(false);
+        initialValues.isSeeker = false;
+        initialValues.isEmployer = true;
       }
     }    // eslint-disable-next-line
   }, [match.params.userType, switchTab, initialValues]);
@@ -159,7 +163,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     // registerUser({
     //   variables: sentData,
     // }).then(({ data }) => {
-
     //   if (data.register.success) {
     //     triggerFirebaseSignIn(sentData.phone);
     //     localStorage.setItem('registerValues', JSON.stringify(sentData));
@@ -362,7 +365,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         // eslint-disable-next-line
         ) : activeStep === 3 && switchTab === 'seeker' || activeStep === 3 && switchTab === 'business' ? (
           // Using the Billing Form for both seeker and business tabs as the fields are similar.
-          <Billing switchTabs={switchTabs} isSeeker={isSeeker} loading={loading} />
+          <Billing switchTabs={switchTabs} isSeeker={isSeeker} loading={loading} alert={alert}/>
         ) : (
           <div className="register">
             <div

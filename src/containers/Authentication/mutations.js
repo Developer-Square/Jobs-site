@@ -253,32 +253,20 @@ export const CREATE_SELECTABLE_INSTITUTION = gql`
 `
 
 export const MAKE_PAYMENT = gql`
-mutation makePayment(
-  $gateway: String!
-  $token: String
+mutation onlinePayment(
   $billingPhone: String
   $amount: PositiveDecimal
   $planId: ID!
 ) {
-  checkoutPayment(planId: $planId, input: {
-    gateway: $gateway
-    token: $token
+  makePayment(planId: $planId, input: {
     billingPhone: $billingPhone
     amount: $amount
   }){
     success
-    plan {
-      periodType
-      periodAmount
-    }
-    payment {
-      total {
-        amount
-        currency
-      }
-      transactions {
-        id
-      }
+    onlineCheckout {
+      id
+      amount
+      transactionDescription
     }
   }
 }
