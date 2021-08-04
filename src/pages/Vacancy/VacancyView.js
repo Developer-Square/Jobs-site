@@ -79,6 +79,7 @@ const VacancyView = () => {
                           }
                           return (
                             <Page
+                              vacancyID={vacancyID}
                               qualificationData={
                                 qualificationData?.data?.__type?.enumValues
                               }

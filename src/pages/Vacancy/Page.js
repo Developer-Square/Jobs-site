@@ -1,21 +1,57 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import LogoImage from "image/thedb.png";
 import moment from "moment";
+import { useAlert } from "react-alert";
+import { toast } from "react-toastify";
+
+import LogoImage from "image/thedb.png";
 import DraftRenderer from "components/DraftRenderer/DraftRenderer";
+import ModalContext from "contexts/modal/modal.provider";
+import Button from "components/Button/Button";
+import { AuthContext } from "contexts/auth/auth.context";
+
+import Bookmark from "./Bookmark";
 
 const Page = ({
+  vacancyID,
   yearsData = [],
   qualificationData = [],
   types = [],
   data = [],
 }) => {
+  const alert = useAlert();
+  const {
+    authState: { isAuthenticated },
+  } = React.useContext(AuthContext);
+
+  const handleLoginNotification = () => {
+    alert.show(
+      {
+        title: "You must login to bookmark this job",
+      },
+      { type: "info", timeout: 5000 },
+    );
+    toast.error("You must login to bookmark this job");
+  };
+  const handleApplyJob = () => {
+    alert.show(
+      {
+        title: "You must login to apply for this job",
+      },
+      { type: "info", timeout: 5000 },
+    );
+    toast.error("You must login to apply for this job");
+  };
+  const { emitter, events } = React.useContext(ModalContext);
+
+  const handleClick = () => emitter.emit(events.APPLICATION_MODAL, data);
+  // const handleClick = () => console.log("handling click");
+
   const jobType = types.find(({ name }) => name === data?.jobType);
   const qualificationType = qualificationData.find(
     ({ name }) => name === data?.minQualification,
   );
   const yearsType = yearsData.find(({ name }) => name === data?.yearsOfExp);
-  console.log("years", moment(new Date()).fromNow());
   return (
     <div>
       <div id="titlebar">
@@ -30,9 +66,11 @@ const Page = ({
             </h2>
           </div>
           <div className="six columns">
-            <a href="#" className="button dark">
-              <i className="fa fa-star" /> Bookmark This Job
-            </a>
+            <Bookmark
+              handleLoginNotification={handleLoginNotification}
+              isAuthenticated={isAuthenticated}
+              data={data}
+            />
           </div>
         </div>
       </div>
@@ -62,56 +100,6 @@ const Page = ({
               <div className="clearfix" />
             </div>
             <DraftRenderer content={JSON.parse(data?.description)} />
-
-            {/* <p className="margin-reset">
-              The Food Service Specialist ensures outstanding customer service
-              is provided to food customers and that all food offerings meet the
-              required stock levels and presentation standards. Beginning your
-              career as a Food Steward will give you a strong foundation in
-              Speedway’s food segment that can make you a vital member of the
-              front line team!
-            </p>
-            <br />
-            <p>
-              The <strong>Food Service Specialist</strong> will have
-              responsibilities that include:
-            </p>
-            <ul className="list-1">
-              <li>
-                Executing the Food Service program, including preparing and
-                presenting our wonderful food offerings to hungry customers on
-                the go!
-              </li>
-              <li>
-                Greeting customers in a friendly manner and suggestive selling
-                and sampling items to help increase sales.
-              </li>
-              <li>
-                Keeping our Store food area looking terrific and ready for our
-                valued customers by managing product inventory, stocking,
-                cleaning, etc.
-              </li>
-              <li>
-                We’re looking for associates who enjoy interacting with people
-                and working in a fast-paced environment!
-              </li>
-            </ul>
-            <br />
-            <h4 className="margin-bottom-10">Job Requirment</h4>
-            <ul className="list-1">
-              <li>
-                Excellent customer service skills, communication skills, and a
-                happy, smiling attitude are essential.
-              </li>
-              <li>
-                Must be available to work required shifts including weekends,
-                evenings and holidays.
-              </li>
-              <li>
-                Must be able to perform repeated bending, standing and reaching.
-              </li>
-              <li> Must be able to occasionally lift up to 50 pounds</li>
-            </ul> */}
           </div>
         </div>
         {/* Widgets */}
@@ -164,44 +152,12 @@ const Page = ({
                   </div>
                 </li>
               </ul>
-              <a href="#small-dialog" className="popup-with-zoom-anim button">
-                Apply For This Job
-              </a>
-              <div
-                id="small-dialog"
-                className="zoom-anim-dialog mfp-hide apply-popup"
-              >
-                <div className="small-dialog-headline">
-                  <h2>Apply For This Job</h2>
-                </div>
-                <div className="small-dialog-content">
-                  <form action="#" method="get">
-                    <input type="text" placeholder="Full Name" defaultValue />
-                    <input
-                      type="text"
-                      placeholder="Email Address"
-                      defaultValue
-                    />
-                    <textarea
-                      placeholder="Your message / cover letter sent to the employer"
-                      defaultValue={""}
-                    />
-                    {/* Upload CV */}
-                    <div className="upload-info">
-                      <strong>Upload your CV (optional)</strong>{" "}
-                      <span>Max. file size: 5MB</span>
-                    </div>
-                    <div className="clearfix" />
-                    <label className="upload-btn">
-                      <input type="file" multiple />
-                      <i className="fa fa-upload" /> Browse
-                    </label>
-                    <span className="fake-input">No file selected</span>
-                    <div className="divider" />
-                    <button className="send">Send Application</button>
-                  </form>
-                </div>
-              </div>
+              <Button
+                // href="#small-dialog"
+                className="popup-with-zoom-anim button mt-8 ml-auto"
+                onClick={isAuthenticated ? handleClick : handleApplyJob}
+                title={`Apply For This job`}
+              />
             </div>
           </div>
         </div>

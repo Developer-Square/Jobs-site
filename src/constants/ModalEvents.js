@@ -2,6 +2,7 @@ const ModalEvents = {
   AUTH_MODAL: "auth_modal",
   CREATE_RESUME_MODAL: "create_resume_modal",
   CREATE_ADDRESS_MODAL: "create_address_modal",
+  APPLICATION_MODAL: "application_modal",
   SOCIAL_MODAL: "social_modal",
   WORK_MODAL: "work_modal",
   EDUCATION_MODAL: "education_modal",

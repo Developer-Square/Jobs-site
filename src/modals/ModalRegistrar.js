@@ -11,6 +11,7 @@ import ProjectModal from "./sections/ProjectModal";
 import ReferenceModal from "./sections/ReferenceModal";
 import ResumeModal from "./ResumeModal";
 import AddressModal from "./AddressModal";
+import ApplicationModal from "./ApplicationModal";
 import SkillModal from "./sections/SkillModal";
 import SocialModal from "./sections/SocialModal";
 import WorkModal from "./sections/WorkModal";
@@ -20,6 +21,7 @@ const ModalRegistrar = () => (
     <AuthModal />
     <ResumeModal />
     <AddressModal />
+    <ApplicationModal />
     <SocialModal />
     <WorkModal />
     <EducationModal />
