@@ -4,7 +4,8 @@ import { VacancyContext } from './vacancies.context'
 export const initialState = {
     loadedData: false,
     jobsData: [],
-    sortedJobs: []
+    sortedJobs: [],
+    sortingByPayRate: false,
 };
 
 export function reducer(state, { type, payload }) {
@@ -20,6 +21,11 @@ export function reducer(state, { type, payload }) {
             return {
                 ...state,
                 sortedJobs: payload,
+            }
+        case "PAYRATE_SORTING":
+            return {
+                ...state,
+                sortingByPayRate: !initialState.sortingByPayRate
             }
         default: {
             throw new Error(`Unsupported action type: ${type}`)

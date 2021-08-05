@@ -7,7 +7,7 @@ import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 import { vacancyLimit } from 'constants/constants'
 
 
-const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue, callLoadFilters, setFilterObj, filterObj}) => {
+const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue, callLoadFilters, setFilterObj, filterObj, clean}) => {
   const [searchString, setSearchString] = React.useState('');
 
   const [sortTypes, setSortTypes] = React.useState([]);
@@ -193,9 +193,10 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
 
 
   const handleSubmit = () => {
+    const cleanedValues = clean(filterObj);
     // Call the sorting functions.
-    // Only sort by rate after the API calls are done.
-    if (rate.lowerLimit !== 'any' && Object.values(filterObj).length === 0) {
+    // Only sort by rate if there are no API calls.
+    if (rate.lowerLimit !== 'any' && Object.values(cleanedValues).length === 0) {
       ratePerHour();
     }
 
@@ -259,7 +260,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-2">
-                  Full-Time <span>(312)</span>
+                  Full-Time
                 </label>
               </li>
               <li>
@@ -271,7 +272,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-3">
-                  Part-Time <span>(269)</span>
+                  Part-Time
                 </label>
               </li>
               <li>
@@ -283,7 +284,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-4">
-                  Internship <span>(46)</span>
+                  Internship
                 </label>
               </li>
               <li>
@@ -295,14 +296,14 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-5">
-                  Freelance <span>(119)</span>
+                  Freelance
                 </label>
               </li>
             </ul>
           </div>
           {/* Rate/Hr */}
           <div className="widget">
-            <h4>Rate / Hr</h4>
+            <h4>Pay Rate / Hr</h4>
             <ul className="checkboxes">
               <li>
                 <input
@@ -324,7 +325,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-7">
-                  $0 - $25 <span>(231)</span>
+                  $0 - $25
                 </label>
               </li>
               <li>
@@ -336,7 +337,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-8">
-                  $25 - $50 <span>(297)</span>
+                  $25 - $50
                 </label>
               </li>
               <li>
@@ -348,7 +349,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-9">
-                  $50 - $100 <span>(78)</span>
+                  $50 - $100
                 </label>
               </li>
               <li>
@@ -360,7 +361,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-10">
-                  $100 - $200 <span>(98)</span>
+                  $100 - $200
                 </label>
               </li>
               <li>
@@ -372,7 +373,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-11">
-                  $200+ <span>(21)</span>
+                  $200+
                 </label>
               </li>
             </ul>

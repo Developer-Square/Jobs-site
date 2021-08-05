@@ -117,129 +117,129 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   };
 
   const sendVerifactionCode = (code, userLogin, setErrors) => {
-    switchTabs('', 'forward')
+    // switchTabs('', 'forward')
 
-    // firebaseResult.confirm(code).then((result) => {
-    //   // User signed in successfully.
-    //   const user = result.user;
-    //   // If the object has values then proceed.
-    //   if (Object.values(user).length > 0) {
-    //     alert.show(
-    //       {
-    //         title: 'Phone number verified successfully',
-    //       },
-    //       { type: 'success', timeout: 5000 },
-    //     );
+    firebaseResult.confirm(code).then((result) => {
+      // User signed in successfully.
+      const user = result.user;
+      // If the object has values then proceed.
+      if (Object.values(user).length > 0) {
+        alert.show(
+          {
+            title: 'Phone number verified successfully',
+          },
+          { type: 'success', timeout: 5000 },
+        );
 
-    //     // When the verification is successfull, login the user.
-    //     let values = localStorage.getItem('registerValues');
-    //     values = JSON.parse(values);
+        // When the verification is successfull, login the user.
+        let values = localStorage.getItem('registerValues');
+        values = JSON.parse(values);
 
-    //     userLogin({
-    //       variables: {
-    //         email: values.email,
-    //         password: values.password1
-    //       }
-    //     }).then(({data}) => {
-    //       const successful = maybe(() => data.tokenAuth.success);
-    //       storeLoginDetails(successful, '', data, setErrors);
-    //     })
+        userLogin({
+          variables: {
+            email: values.email,
+            password: values.password1
+          }
+        }).then(({data}) => {
+          const successful = maybe(() => data.tokenAuth.success);
+          storeLoginDetails(successful, '', data, setErrors);
+        })
 
-    //     switchTabs('', 'forward')
-    //   }
-    // }).catch((error) => {
-    //   // User couldn't sign in (bad verification code?)
-    //   showSuccessNotification('firebase', alert, error);
-    // });
+        switchTabs('', 'forward')
+      }
+    }).catch((error) => {
+      // User couldn't sign in (bad verification code?)
+      showSuccessNotification('firebase', alert, error);
+    });
   }
 
   // Send the user's details to the api.
   const registerUserFn = async (registerUser, values, setErrors) => {
     const sentData = await prepareData(values);
-    localStorage.setItem('registerValues', JSON.stringify(sentData));
-    triggerFirebaseSignIn(sentData.phone);
-    switchTabs('', 'forward');
+    // localStorage.setItem('registerValues', JSON.stringify(sentData));
+    // triggerFirebaseSignIn(sentData.phone);
+    // switchTabs('', 'forward');
 
-    // registerUser({
-    //   variables: sentData,
-    // }).then(({ data }) => {
-    //   if (data.register.success) {
-    //     triggerFirebaseSignIn(sentData.phone);
-    //     localStorage.setItem('registerValues', JSON.stringify(sentData));
-    //     switchTabs('', 'forward');
-    //   } else {
-    //     setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
-    //   }
-    // })
+    registerUser({
+      variables: sentData,
+    }).then(({ data }) => {
+      if (data.register.success) {
+        triggerFirebaseSignIn(sentData.phone);
+        localStorage.setItem('registerValues', JSON.stringify(sentData));
+        switchTabs('', 'forward');
+      } else {
+        setErrors(normalizeErrors(maybe(() => data.register.errors, [])));
+      }
+    })
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {
-    switchTabs('', 'forward');
+    // switchTabs('', 'forward');
 
-    // const interests = values.interests.reduce((arr, b) => {
-    //   arr.push(b.value);
-    //   return arr;
-    // }, []);
-    // seekerCreate({
-    //     variables: {
-    //       ...values,
-    //     institution: values.school.value,
-    //     industries: interests
-    //   }
-    // }).then(({ data }) => {
-    //   if (data) {
-    //     if (data.seekerCreate) {
-    //       switchTabs('', 'forward');
+    const interests = values.interests.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
+    seekerCreate({
+        variables: {
+          ...values,
+        institution: values.school.value,
+        industries: interests
+      }
+    }).then(({ data }) => {
+      if (data) {
+        if (data.seekerCreate) {
+          switchTabs('', 'forward');
 
-    //       if (!data.seekerCreate.success) {
-    //         setErrors(
-    //           normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
-    //         );
-    //       }
-    //     }
-    //   }
-    // });
+          if (!data.seekerCreate.success) {
+            setErrors(
+              normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
+            );
+          }
+        }
+      }
+    });
   }
 
   const employerProfileCreate = (values, employerCreate, setErrors) => {
-    switchTabs('', 'forward');
-    // let country;
-    // const data = values.location.split(',');
+    // switchTabs('', 'forward');
+    let country;
+    const data = values.location.split(',');
 
-    // // Check if the user provided a county as the second arguement.
-    // if (data[1]) {
-    //   // Perform a slice to get rid of the whitespace infront of the 
-    //   // country string.
-    //   country = data[1].slice(1);
-    // } else {
-    //   country = data[0]
-    // }
+    // Check if the user provided a county as the second arguement.
+    if (data[1]) {
+      // Perform a slice to get rid of the whitespace infront of the 
+      // country string.
+      country = data[1].slice(1);
+    } else {
+      country = data[0]
+    }
 
-    // const industries = values.industries.reduce((arr, b) => {
-    //   arr.push(b.value);
-    //   return arr;
-    // }, []);
+    const industries = values.industries.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
 
-    // employerCreate({
-    //     variables: {
-    //       ...values,
-    //       country,
-    //       industries, 
-    //       name: values.company,
-    //     }
-    // }).then(({ data }) => {
-    //   if (data) {
-    //     if (data.employerCreate) {
-    //       switchTabs('', 'forward');
+    employerCreate({
+        variables: {
+          ...values,
+          country,
+          industries, 
+          name: values.company,
+        }
+    }).then(({ data }) => {
+      if (data) {
+        if (data.employerCreate) {
+          switchTabs('', 'forward');
 
-    //       if (!data.employerCreate.success) {
-    //         setErrors(
-    //           normalizeErrors(maybe(() => data.employerCreate.errors, [])),
-    //         );
-    //       }
-    //     }
-    //   }
-    // });
+          if (!data.employerCreate.success) {
+            setErrors(
+              normalizeErrors(maybe(() => data.employerCreate.errors, [])),
+            );
+          }
+        }
+      }
+    });
   }
 
 

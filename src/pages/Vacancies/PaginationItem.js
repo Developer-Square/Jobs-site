@@ -5,7 +5,7 @@ import { vacancyLimit } from 'constants/constants'
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 import { getDBIdFromGraphqlId } from 'utils'
 
-function PaginationItem({ data, loading, setAfterValue, callLoadFilters }) {
+function PaginationItem({ data, loading, callLoadFilters }) {
     let pages;
     const [pagesArray, setPagesArray] = React.useState([]);
     const [activeIndex, setActiveIndex] = React.useState(0);
@@ -13,13 +13,23 @@ function PaginationItem({ data, loading, setAfterValue, callLoadFilters }) {
     
 
     useEffect(() => {
-        if (data) {
+        const { sortingByPayRate, sortedJobs } = vacancyState;
+        console.log("vacancyState", vacancyState);
+        if (data && !sortingByPayRate) {
             if (data.totalCount % vacancyLimit === 0) {
                 // eslint-disable-next-line
                 pages = data.vacancies.totalCount / vacancyLimit
             } else {
                 // eslint-disable-next-line
                 pages = (Math.floor(data.vacancies.totalCount / vacancyLimit)) + 1
+            }
+        } else {
+            if ( sortedJobs.length % vacancyLimit === 0) {
+                // eslint-disable-next-line
+                pages = sortedJobs.length / vacancyLimit
+            } else {
+                // eslint-disable-next-line
+                pages = (Math.floor(sortedJobs.length / vacancyLimit)) + 1
             }
         }
         // Populate the pagesArray with the page numbers that are expected.

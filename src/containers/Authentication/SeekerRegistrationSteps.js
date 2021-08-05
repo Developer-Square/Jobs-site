@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { Link } from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { WebSocketLink } from '@apollo/client/link/ws'
-import { useSubscription } from '@apollo/client'
+// import { WebSocketLink } from '@apollo/client/link/ws'
+// import { useSubscription } from '@apollo/client'
 
 import { signUpSchema, OTPVerficationSchema, furtherInformationSchema } from "./validation.schema";
 import { HelperText } from "./Authentication.style";
@@ -19,7 +19,7 @@ import { showSuccessNotification, IsNotEmpty } from "helpers";
 import { TypedPlansListQuery } from './queries';
 import Loader from "components/Loader/Loader";
 import { PaymentModal } from 'modals/PaymentModal';
-import { ONTRANSACTION_MESSAGE } from './subscription';
+// import { ONTRANSACTION_MESSAGE } from './subscription';
 
 // const wsLink = new WebSocketLink({
 //   uri: 'ws://thedb.hewani.io/graphql/',

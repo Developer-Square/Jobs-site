@@ -19,10 +19,14 @@ const Vacancy = () => {
   // const [afterValue, setAfterValue] = React.useState('');
   const [filterObj, setFilterObj] = React.useState({search: '', jobTypes: [],});
 
-
+  console.log("filterObj", filterObj);
   const ratePerHour = () => {
+    console.log("rate", rate)
     let sortedJobs = [];
     if (rate.length > 0) {
+      vacancyDispatch({
+        type: "PAYRATE_SORTING"
+      })
       let upperLimit = rate[0].upperLimit;
       let lowerLimit = rate[0].lowerLimit;
       // Map over all the rates to find the lowest limit and highest upper limit.
@@ -43,14 +47,14 @@ const Vacancy = () => {
           if (upperLimit === 201 && vacancy.salary > upperLimit) {
             sortedJobs.push(vacancy);
           }
-          if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
-            sortedJobs.push(vacancy);
-          }
+          // if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
+          //   sortedJobs.push(vacancy);
+          // }
         }
         return null;
       })
 
-      if (sortedJobs) {
+      if (sortedJobs.length) {
         vacancyDispatch({
           type: "SORT_JOBS",
           payload: sortedJobs
@@ -205,7 +209,7 @@ const Vacancy = () => {
             <PaginationItem loading={loading} data={data} loadFilterValues={loadFilterValues} sortByValue={sortByValue} callLoadFilters={callLoadFilters} />
           </div>
         </div>
-        <VacancyFilter rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} getJobs={getJobs} setGetJobs={setGetJobs} loadFilterValues={loadFilterValues} sortByValue={sortByValue} setSortByValue={setSortByValue} sortOrder={sortOrder} setSortOrder={setSortOrder} callLoadFilters={callLoadFilters} filterObj={filterObj} setFilterObj={setFilterObj} />
+        <VacancyFilter rate={rate} setRate={setRate} ratePerHour={ratePerHour} loading={loading} getJobs={getJobs} setGetJobs={setGetJobs} loadFilterValues={loadFilterValues} sortByValue={sortByValue} setSortByValue={setSortByValue} sortOrder={sortOrder} setSortOrder={setSortOrder} callLoadFilters={callLoadFilters} filterObj={filterObj} setFilterObj={setFilterObj} clean={clean} />
       </div>
     </div>
   );
