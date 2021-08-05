@@ -208,7 +208,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     }
     
     if ((searchString.length > 0 && IsNotEmpty(sortByValue)) || (sortTypes.length > 0 && IsNotEmpty(sortByValue))  || IsNotEmpty(sortByValue)) {
-      callLoadFilters()
+      callLoadFilters('', '', vacancyLimit, 0)
     }
   }
 
