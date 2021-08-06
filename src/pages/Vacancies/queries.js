@@ -34,7 +34,6 @@ export const VACANCIES_QUERY = gql`
           title
           jobType
           description
-          jobType
           minQualification
           positions
           yearsOfExp

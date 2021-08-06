@@ -11,25 +11,14 @@ function PaginationItem({ data, loading, callLoadFilters }) {
     const [activeIndex, setActiveIndex] = React.useState(0);
     const { vacancyState } = useContext(VacancyContext);
     
-
     useEffect(() => {
-        const { sortingByPayRate, sortedJobs } = vacancyState;
-        console.log("vacancyState", vacancyState);
-        if (data && !sortingByPayRate) {
-            if (data.totalCount % vacancyLimit === 0) {
+        if (data) {
+            if (data.vacancies.totalCount % vacancyLimit === 0) {
                 // eslint-disable-next-line
                 pages = data.vacancies.totalCount / vacancyLimit
             } else {
                 // eslint-disable-next-line
                 pages = (Math.floor(data.vacancies.totalCount / vacancyLimit)) + 1
-            }
-        } else {
-            if ( sortedJobs.length % vacancyLimit === 0) {
-                // eslint-disable-next-line
-                pages = sortedJobs.length / vacancyLimit
-            } else {
-                // eslint-disable-next-line
-                pages = (Math.floor(sortedJobs.length / vacancyLimit)) + 1
             }
         }
         // Populate the pagesArray with the page numbers that are expected.
@@ -72,7 +61,6 @@ function PaginationItem({ data, loading, callLoadFilters }) {
     }
 
     const handleNumberClick = (requestedPage) => {
-        console.log(vacancyState.sortedJobs);
         if (vacancyState.sortedJobs && activeIndex !== requestedPage) {
             // Get the last job's id and salary.
             const length = vacancyState.sortedJobs.length;

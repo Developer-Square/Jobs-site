@@ -19,10 +19,9 @@ const Vacancy = () => {
   // const [afterValue, setAfterValue] = React.useState('');
   const [filterObj, setFilterObj] = React.useState({search: '', jobTypes: [],});
 
-  console.log("filterObj", filterObj);
   const ratePerHour = () => {
-    console.log("rate", rate)
     let sortedJobs = [];
+    
     if (rate.length > 0) {
       vacancyDispatch({
         type: "PAYRATE_SORTING"
@@ -43,23 +42,20 @@ const Vacancy = () => {
       
       vacancyState.sortedJobs.map(vacancy => {
         if (vacancy.payRate === 'HOUR') {
-          // Add the jobs that are offer 200+ hourly payments.
-          if (upperLimit === 201 && vacancy.salary > upperLimit) {
+          // Add the jobs that are offer 10001+ hourly payments.
+          if (upperLimit === 10001 && vacancy.salary > upperLimit) {
             sortedJobs.push(vacancy);
           }
-          // if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
-          //   sortedJobs.push(vacancy);
-          // }
+          if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
+            sortedJobs.push(vacancy);
+          }
         }
         return null;
       })
-
-      if (sortedJobs.length) {
-        vacancyDispatch({
-          type: "SORT_JOBS",
-          payload: sortedJobs
-        })
-      }
+      vacancyDispatch({
+        type: "SORT_JOBS",
+        payload: sortedJobs
+      })
     }
   }
 

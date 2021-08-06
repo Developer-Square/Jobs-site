@@ -125,13 +125,22 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
 
   const addJobTypes = (checked, value) => {
     const filterTypes = types => types !== value;
-      // Don't add the any option to the filterObj.
-      // To solve the double UI issue.
-    if (checked && value !== 'any') {
+    // Don't add the any option to the filterObj.
+    // To solve the double UI issue.
+    // Adding more jobTypes if the field already exists
+    if (checked && value !== 'any' && filterObj.jobTypes) {
       setSortTypes([...sortTypes, value])
       setFilterObj({
         ...filterObj,
         jobTypes: [...filterObj.jobTypes, value]
+      })
+    } 
+    // Adding new jobTypes
+    else if (checked && value !== 'any') {
+      setSortTypes([...sortTypes, value])
+      setFilterObj({
+        ...filterObj,
+        jobTypes: [value]
       })
     } else if (value === 'any') {
       setFilterObj({
@@ -178,15 +187,15 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     if (value === 'check-6') {
       addRateTypes(checked, {name: value, lowerLimit: 'any', upperLimit: 'any'});
     } else if (value === 'check-7') {
-      addRateTypes(checked, {name: value, lowerLimit: 0, upperLimit: 25});
+      addRateTypes(checked, {name: value, lowerLimit: 0, upperLimit: 1000});
     } else if (value === 'check-8') {
-      addRateTypes(checked, {name: value, lowerLimit: 26, upperLimit: 50});
+      addRateTypes(checked, {name: value, lowerLimit: 1001, upperLimit: 2500});
     } else if (value === 'check-9') {
-      addRateTypes(checked, {name: value, lowerLimit: 51, upperLimit: 100});
+      addRateTypes(checked, {name: value, lowerLimit: 2501, upperLimit: 5000});
     } else if (value === 'check-10') {
-      addRateTypes(checked, {name: value, lowerLimit: 101, upperLimit: 200});
+      addRateTypes(checked, {name: value, lowerLimit: 5001, upperLimit: 10000});
     } else if (value === 'check-11') {
-      addRateTypes(checked, {name: value, lowerLimit: 201, upperLimit: 201});
+      addRateTypes(checked, {name: value, lowerLimit: 10001, upperLimit: 10001});
     }
   }
 
@@ -325,7 +334,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-7">
-                  $0 - $25
+                  Ksh 0 - Ksh 1000
                 </label>
               </li>
               <li>
@@ -337,7 +346,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-8">
-                  $25 - $50
+                  Ksh 1001 - Ksh 2500
                 </label>
               </li>
               <li>
@@ -349,7 +358,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-9">
-                  $50 - $100
+                  Ksh 2501 - Ksh 5000
                 </label>
               </li>
               <li>
@@ -361,7 +370,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-10">
-                  $100 - $200
+                  Ksh 5001 - Ksh 10000
                 </label>
               </li>
               <li>
@@ -373,7 +382,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-11">
-                  $200+
+                  Ksh 10000+
                 </label>
               </li>
             </ul>
