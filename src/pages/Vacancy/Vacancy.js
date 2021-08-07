@@ -24,7 +24,7 @@ import {
   TypedJobPayRateQuery,
 } from "./queries";
 import VacancyForm from "./VacancyForm";
-import { getGraphqlIdFromDBId, getDBIdFromGraphqlId, objDiff } from "utils";
+import { getGraphqlIdFromDBId, objDiff } from "utils";
 import { isEmpty } from "lodash";
 
 const Vacancy = () => {
