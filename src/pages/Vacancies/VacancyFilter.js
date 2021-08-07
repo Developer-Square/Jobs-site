@@ -97,14 +97,18 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
         field: 'TITLE'
       });
     } else if (sortOption.value === '-updated_at' || sortOption.innerHTML === 'Newest jobs') {
+      // Clean up the sortby field as we're now sorting using different fields
+      setSortByValue({});
       if (sortOption.innerHTML) {
-        setGetJobs(curr => curr = sortOption.innerHTML)
+        setGetJobs(curr => curr = sortOption.innerHTML);
       } else {
         setGetJobs(curr => curr = sortOption.value);
       }
     } else {
+      // Clean up the sortby field as we're now sorting using different fields
+      setSortByValue({});
       if (sortOption.innerHTML) {
-        setGetJobs(curr => curr = sortOption.innerHTML)
+        setGetJobs(curr => curr = sortOption.innerHTML);
       } else {
         setGetJobs(curr => curr = sortOption.value);
       }
@@ -217,8 +221,12 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
       );
     }
     
-    if ((searchString.length > 0 && IsNotEmpty(sortByValue)) || (sortTypes.length > 0 && IsNotEmpty(sortByValue))  || IsNotEmpty(sortByValue)) {
-      callLoadFilters('', '', vacancyLimit, 0)
+    // Check whether the search field or sortTypes are empty.
+    if ((searchString.length > 0 && IsNotEmpty(sortByValue)) || (sortTypes.length > 0 && IsNotEmpty(sortByValue))  || (IsNotEmpty(sortByValue))) {
+      // Ensure the sortbyValue is not empty.
+      if (Object.keys(sortByValue) !== 0) {
+        callLoadFilters('', '', vacancyLimit, 0)
+      }
     }
   }
 

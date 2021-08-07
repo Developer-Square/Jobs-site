@@ -44,8 +44,6 @@ const Vacancy = () => {
     applicationEmail: "",
   };
   const match = useRouteMatch();
-  console.log(getDBIdFromGraphqlId("VmFjYW5jeToxMA==", "Vacancy"));
-  console.log(getGraphqlIdFromDBId(10, "Vacancy"));
 
   const cleanInitialValues = (
     data,
