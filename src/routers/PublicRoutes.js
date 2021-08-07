@@ -3,17 +3,7 @@ import { Switch } from "react-router-dom";
 
 import Loader from "components/Loader/Loader";
 import * as ROUTE from "constants/routes.constants";
-import TermsOfUse from "pages/TOS/SDG";
-import Help from "pages/Help/Help";
 import { SamplePage } from "pages/sample";
-import Authentication from "pages/Authentication";
-import PasswordReset from "containers/Authentication/PasswordReset";
-import EmailActivation from "containers/Authentication/EmailActivation";
-import Vacancies from "pages/Vacancies/Vacancy";
-import Categories from "pages/Categories";
-import Pricing from "pages/Pricing";
-import Contact from "pages/Contact";
-
 import PublicRoute from "./PublicRoute";
 
 const LandingPage = lazy(() => import("pages/LandingPage"));
