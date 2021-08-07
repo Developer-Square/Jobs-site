@@ -45,16 +45,6 @@ const components = {
     children: [],
     dashboardItem: true,
   },
-  manageResume: {
-    component: "ManageResume",
-    url: "/manage-resume",
-    title: "Manage Resume",
-    icon: "Category",
-    module: 1,
-    category: management,
-    children: [],
-    dashboardItem: true,
-  },
   addVacancy: {
     component: "Vacancy",
     url: "/add-job",
@@ -84,52 +74,42 @@ const components = {
     category: management,
     dashboardItem: false,
   },
-
-  resume: {
+  resumeDashboard: {
     component: "ResumeDashboard",
     url: "/resume",
     title: "Resume",
     icon: "Category",
     module: 1,
     category: management,
-    children: [
-      {
-        component: "ResumeBuilder",
-        url: "/builder/:resumeID",
-        title: "Add Resume",
-        icon: "Category",
-        module: 1,
-        dashboardItem: true,
-      },
-      {
-        component: "ResumeDashboard",
-        url: "",
-        title: "Add/Manage Resumes",
-        icon: "Category",
-        module: 1,
-        dashboardItem: true,
-      },
-      // {
-      //   component: "Resume",
-      //   url: "/view/:resumeID",
-      //   title: "View Resume",
-      //   icon: "Category",
-      //   module: 1,
-      //   dashboardItem: false,
-      // },
-    ],
+    // children: [
+    //   {
+    //     component: "ResumeBuilder",
+    //     url: "/resume/builder/:resumeID",
+    //     title: "Add Resume",
+    //     icon: "Category",
+    //     module: 1,
+    //     dashboardItem: true,
+    //   },
+    //   {
+    //     component: "ResumeDashboard",
+    //     url: "/resume",
+    //     title: "Add/Manage Resumes",
+    //     icon: "Category",
+    //     module: 1,
+    //     dashboardItem: true,
+    //   },
+    //   // {
+    //   //   component: "Resume",
+    //   //   url: "/view/:resumeID",
+    //   //   title: "View Resume",
+    //   //   icon: "Category",
+    //   //   module: 1,
+    //   //   dashboardItem: false,
+    //   // },
+    // ],
     dashboardItem: true,
   },
-  submitResume: {
-    component: "SubmitResume",
-    url: "/submit-resume",
-    title: "Submit Resume",
-    icon: "Category",
-    module: 1,
-    category: management,
-    children: [],
-    dashboardItem: true,
-  },
+
   profile: {
     component: "Profile",
     url: "/profile",
@@ -157,12 +137,6 @@ const rolesConfig = {
   admin: {
     routes: [...Object.values(components)],
   },
-  individual: {
-    routes: [],
-  },
-  business: {
-    routes: [],
-  },
   employer: {
     routes: [],
   },
@@ -187,8 +161,8 @@ const rolesConfig = {
       // components.bookmarks,
       components.addVacancy,
       components.updateVacancy,
+      components.resumeDashboard,
       components.resumeBuilder,
-      components.resume,
     ],
   },
 };

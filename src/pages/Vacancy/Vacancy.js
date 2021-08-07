@@ -114,8 +114,6 @@ const Vacancy = () => {
     const id = match.params.vacancyUpdateID
       ? { id: getGraphqlIdFromDBId(match.params.vacancyUpdateID, "Vacancy") }
       : {};
-    // console.log(objDiff(originalObject, newObject, "id"));
-    // console.log(isEmpty(objDiff(originalObject, newObject, "id")));
     const formData = isEmpty(objDiff(originalObject, newObject, "id"))
       ? null
       : {

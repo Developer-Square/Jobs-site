@@ -2,19 +2,19 @@ import React, { memo, useContext } from "react";
 import { isItemVisible, safetyCheck } from "utils";
 import PageContext from "contexts/page/page.provider";
 
-const SkillItem = ({ id, skill }) => (
+const SkillItem = ({ id, name }) => (
   <li key={id} className="text-sm py-1">
-    {skill}
+    {name}
   </li>
 );
 
 const SkillsA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
-  return safetyCheck(data.skills) ? (
+  return safetyCheck(data.skill) ? (
     <div>
-      <Heading>{data.skills.heading}</Heading>
-      <ul>{data.skills.items.map((x) => isItemVisible(x) && SkillItem(x))}</ul>
+      <Heading>{data.skill.heading}</Heading>
+      <ul>{data.skill.items.map((x) => isItemVisible(x) && SkillItem(x))}</ul>
     </div>
   ) : null;
 };

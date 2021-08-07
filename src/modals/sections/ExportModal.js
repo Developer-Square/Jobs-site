@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { FaPrint } from "react-icons/fa";
-import { clone } from "lodash";
+// import { clone } from "lodash";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useState } from "react";
@@ -10,7 +10,9 @@ import { useSelector } from "contexts/resume/resume.provider";
 import BaseModal from "../BaseModal";
 import Button from "components/shared/Button";
 import ModalContext from "contexts/modal/modal.provider";
+import GenericPdfDownloader from "components/PdfDownloader/pdfDownloader";
 import { b64toBlob } from "utils";
+import ResumeViewer from "pages/Resume/view";
 
 const ExportModal = () => {
   const state = useSelector();
@@ -37,13 +39,14 @@ const ExportModal = () => {
     isSinglePDF ? setLoadingSingle(true) : setLoadingMulti(true);
 
     try {
+      toast("Featur Coming Soon");
+
       // const printResume = firebase.functions().httpsCallable("printResume");
-      const printResume = toast("to handle printResume");
-      const { data } = await printResume({
-        id: state.id,
-        type: isSinglePDF ? "single" : "multi",
-      });
-      const blob = b64toBlob(data, "application/pdf");
+      // const { data } = await printResume({
+      //   id: state.id,
+      //   type: isSinglePDF ? "single" : "multi",
+      // });
+      const blob = b64toBlob(<ResumeViewer />, "application/pdf");
       download(blob, `RxResume-${state.id}.pdf`, "application/pdf");
     } catch (error) {
       toast(t("builder.toasts.printError"));
@@ -53,16 +56,18 @@ const ExportModal = () => {
   };
 
   const handleExportToJson = () => {
-    const backupObj = clone(state);
-    delete backupObj.id;
-    delete backupObj.user;
-    delete backupObj.name;
-    delete backupObj.createdAt;
-    delete backupObj.updatedAt;
-    const data = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(backupObj, null, "\t"),
-    )}`;
-    download(data, `RxResume-${state.id}.json`, "text/json");
+    // const backupObj = clone(state);
+    // delete backupObj.id;
+    // delete backupObj.user;
+    // delete backupObj.name;
+    // delete backupObj.createdAt;
+    // delete backupObj.updatedAt;
+    // const data = `data:text/json;charset=utf-8,${encodeURIComponent(
+    //   JSON.stringify(backupObj, null, "\t"),
+    // )}`;
+    // download(data, `RxResume-${state.id}.json`, "text/json");
+
+    toast("Featur Coming Soon");
   };
 
   return (
@@ -94,6 +99,9 @@ const ExportModal = () => {
 
         <div className="mt-5 mb-4">
           <div className="flex">
+            <GenericPdfDownloader
+              downloadFileName={`The Database Resume - ${state.name}`}
+            />
             <Button
               isLoading={isLoadingSingle}
               onClick={() => handleDownload(true)}

@@ -15,7 +15,7 @@ const ContactItem = ({ value, icon, link }) => {
       <Icon
         size="10px"
         className="mr-2"
-        style={{ color: data.metadata.colors.background }}
+        style={{ color: data.resumemetadata.backgroundColor }}
       />
       {link ? (
         <a href={link} target="_blank" rel="noopener noreferrer">
@@ -35,21 +35,21 @@ const ContactB = () => {
     <div className="text-xs grid gap-2">
       <ContactItem
         label={`Phone Number`}
-        value={data.profile.phone}
+        value={data.owner?.phone}
         icon="phone"
-        link={`tel:${data.profile.phone}`}
+        link={`tel:${data.owner?.phone}`}
       />
       <ContactItem
         label={`Website`}
-        value={data.profile.website}
+        value={data.owner?.website}
         icon="website"
-        link={data.profile.website}
+        link={data.owner?.website}
       />
       <ContactItem
         label={`Email Address`}
-        value={data.profile.email}
+        value={data.owner?.email}
         icon="email"
-        link={`mailto:${data.profile.email}`}
+        link={`mailto:${data.owner?.email}`}
       />
 
       <BirthDateC />
@@ -62,7 +62,7 @@ const ContactB = () => {
                 key={x.id}
                 value={x.username}
                 icon={x.network}
-                link={x.url}
+                link={x.link}
               />
             ),
         )}

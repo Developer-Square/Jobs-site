@@ -13,13 +13,13 @@ const WorkItem = ({ item, language }) => {
           <h6 className="font-semibold text-sm">{item.company}</h6>
           <span className="text-xs">{item.position}</span>
         </div>
-        {item.startDate && (
+        {item.workStart && (
           <h6 className="text-xs font-medium text-right">
             (
             {formatDateRange(
               {
-                startDate: item.startDate,
-                endDate: item.endDate,
+                startDate: item.workStart,
+                endDate: item.workEnd,
                 language,
               },
               t,
@@ -28,9 +28,9 @@ const WorkItem = ({ item, language }) => {
           </h6>
         )}
       </div>
-      {item.summary && (
+      {item.descriptionPlaintext && (
         <ReactMarkdown className="markdown mt-2 text-sm">
-          {item.summary}
+          {item.descriptionPlaintext}
         </ReactMarkdown>
       )}
     </div>
@@ -46,7 +46,11 @@ const WorkA = () => {
         {data.work.items.map(
           (x) =>
             isItemVisible(x) && (
-              <WorkItem key={x.id} item={x} language={data.metadata.language} />
+              <WorkItem
+                key={x.id}
+                item={x}
+                language={data.resumemetadata.language}
+              />
             ),
         )}
       </div>

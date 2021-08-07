@@ -12,7 +12,7 @@ const EducationItem = ({ item, language }) => {
         <div className="flex flex-col text-left mr-2">
           <h6 className="font-semibold text-sm">{item.institution}</h6>
           <span className="text-xs">
-            <strong>{item.degree}</strong> {item.field}
+            <strong>{item.degree}</strong> {item.fieldOfStudy}
           </span>
         </div>
         <div className="flex flex-col items-end text-right">
@@ -21,8 +21,8 @@ const EducationItem = ({ item, language }) => {
               (
               {formatDateRange(
                 {
-                  startDate: item.startDate,
-                  endDate: item.endDate,
+                  startDate: item.schoolStart,
+                  endDate: item.schoolEnd,
                   language,
                 },
                 t,
@@ -33,9 +33,9 @@ const EducationItem = ({ item, language }) => {
           <span className="text-sm font-medium">{item.gpa}</span>
         </div>
       </div>
-      {item.summary && (
+      {item.descriptionPlaintext && (
         <ReactMarkdown className="markdown mt-2 text-sm">
-          {item.summary}
+          {item.descriptionPlaintext}
         </ReactMarkdown>
       )}
     </div>
@@ -55,7 +55,7 @@ const EducationA = () => {
               <EducationItem
                 key={x.id}
                 item={x}
-                language={data.metadata.language}
+                language={data.resumemetadata.language}
               />
             ),
         )}

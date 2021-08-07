@@ -13,21 +13,25 @@ import Pikachu from "templates/Pikachu";
 const Artboard = () => {
   const state = useSelector();
   const { t } = useTranslation();
-  const { id, metadata } = state;
-  // const { id, name, metadata } = state;
-  const { template } = metadata;
+  const { id, name, resumemetadata } = state;
+  const { template } = resumemetadata;
 
   return (
     <>
       <Helmet>
-        <title>
-          {t("shared.appName")}
-          {/* {name} | {t("shared.appName")} */}
+        <title>{`${name} | ${t("shared.appName")}`}</title>
+        <link
+          rel="canonical"
+          href={`${window.location.origin}/dashboard/resume/builder/${id}`}
+        />
+        {/* <title>
+          {name} | {t("shared.appName")}
         </title>
         <link
           rel="canonical"
           href={`https://thedatabase.co.ke/dashboard/resume/builder/${id}`}
-        />
+          // href={`${window.location.origin}/dashboard/resume/builder/${id}`}
+        /> */}
       </Helmet>
 
       <div id="page" className={styles.container}>

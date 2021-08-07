@@ -1,11 +1,9 @@
 import React from "react";
-import { withRouter, Link, useLocation } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { groupBy } from "utils/groupBy";
 
 export default withRouter(function Sidebar(props) {
   const menuItems = groupBy(props.routes, "category");
-  const location = useLocation();
-  console.log(location);
 
   const menuHandler = (section, parent = null) => {
     return section.map((menuItem) => {
@@ -28,7 +26,13 @@ export default withRouter(function Sidebar(props) {
       }
       return (
         <li key={menuItem.title}>
-          <Link>{menuItem.title}</Link>
+          <Link
+            to={{
+              pathname: "",
+            }}
+          >
+            {menuItem.title}
+          </Link>
           <ul>{menuHandler(menuItem.children, menuItem)}</ul>
         </li>
       );

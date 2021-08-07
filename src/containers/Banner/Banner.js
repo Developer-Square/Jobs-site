@@ -56,14 +56,14 @@ const Banner = () => {
             <div className="announce">
               We’ve over <strong>15,000</strong> internship offers for you!
             </div>
-            <Waypoint
-              onEnter={removeSticky}
-              onLeave={setSticky}
-              onPositionChange={onWaypointPositionChange}
-            />
           </div>
         </div>
       </div>
+      <Waypoint
+        onEnter={removeSticky}
+        onLeave={setSticky}
+        onPositionChange={onWaypointPositionChange}
+      />
     </div>
   );
 };

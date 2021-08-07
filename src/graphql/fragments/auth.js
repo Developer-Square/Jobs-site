@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-import { addressFragment } from "./address";
+import { addressFragment } from "graphql/fragments";
 
 export const institutionFragment = gql`
   fragment Institution on InstitutionNode {

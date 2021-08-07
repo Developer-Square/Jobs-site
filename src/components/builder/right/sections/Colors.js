@@ -16,7 +16,7 @@ const Colors = ({ id }) => {
     dispatch({
       type: "on_input",
       payload: {
-        path: "metadata.colors.primary",
+        path: "resumemetadata.primaryColor",
         value,
       },
     });
@@ -45,7 +45,7 @@ const Colors = ({ id }) => {
         name="primary"
         label={t("builder.colors.primary")}
         placeholder="#FF4081"
-        path="metadata.colors.primary"
+        path="resumemetadata.primaryColor"
       />
 
       <Input
@@ -53,7 +53,7 @@ const Colors = ({ id }) => {
         name="text"
         label={t("builder.colors.text")}
         placeholder="#444444"
-        path="metadata.colors.text"
+        path="resumemetadata.textColor"
       />
 
       <Input
@@ -61,7 +61,7 @@ const Colors = ({ id }) => {
         name="background"
         label={t("builder.colors.background")}
         placeholder="#FFFFFF"
-        path="metadata.colors.background"
+        path="resumemetadata.backgroundColor"
       />
     </section>
   );

@@ -24,7 +24,6 @@ const SeekerProfile = () => {
   const [industries, setIndustries] = React.useState([]);
   const [initialValues, setInitialValues] = React.useState();
   const { data, loading } = useQuery(GET_INDUSTRIES);
-  console.log(user);
   React.useEffect(() => {
     if (user?.seeker) {
       setInitialValues(user.seeker);
@@ -72,11 +71,12 @@ const SeekerProfile = () => {
 
   return (
     <TypedSeekerProfileMutation
-      onCompleted={(data, errors) => showSeekerProfileNotification(data, errors, alert)}
+      onCompleted={(data, errors) =>
+        showSeekerProfileNotification(data, errors, alert)
+      }
     >
       {(seekerCreate, { loading }) => {
         function onSubmit(values, { setErrors, setSubmitting }) {
-          console.log(values);
           const gender = values.gender.value;
           const status = values.status.value;
           const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
@@ -112,7 +112,6 @@ const SeekerProfile = () => {
             onSubmit={onSubmit}
           >
             {(formik) => {
-              console.log(formik.values);
               return (
                 <Form>
                   <div className="dashboard-list-box margin-top-30">

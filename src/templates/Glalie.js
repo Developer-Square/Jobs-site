@@ -1,5 +1,8 @@
 import React from "react";
-import { hexToRgb } from "utils";
+// import { findIndex } from "lodash";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
+import { hexToRgb, reduceSectionArray } from "utils";
 import AwardsA from "./blocks/Awards/AwardsA";
 import CertificationsA from "./blocks/Certifications/CertificationsA";
 import ContactD from "./blocks/Contact/ContactD";
@@ -28,24 +31,45 @@ const Blocks = {
 };
 
 const Glalie = ({ data }) => {
-  const layout = data.metadata.layout.glalie;
-  const { r, g, b } = hexToRgb(data.metadata.colors.primary) || {};
+  const navigation = useHistory();
+  const layoutObj = data.resumemetadata.layouts.find(
+    ({ name }) => name === "glalie",
+  );
+  if (!layoutObj) {
+    navigation.push("/");
+    toast(
+      "The requested Resume is not Ready. Kindly ask the owner to complete it",
+    );
+  }
+  const layout = reduceSectionArray(layoutObj.collection);
+  // const layoutIndex = findIndex(data.resumemetadata.layouts, [
+  //   "name",
+  //   "glalie",
+  // ]);
+  // const layout = data.resumemetadata.layouts[layoutIndex].collection;
+  const { r, g, b } = hexToRgb(data.resumemetadata.primaryColor) || {};
 
   const Profile = () => (
     <div className="grid gap-2 text-center">
-      {data.profile.photograph !== "" && (
+      {data.owner?.avatar !== "" && (
         <img
           className="w-40 h-40 rounded-full mx-auto"
-          src={data.profile.photograph}
-          alt={data.profile.firstName}
+          src={data.owner?.avatar?.url}
+          alt={data.owner?.fullName}
         />
       )}
       <div className="text-4xl font-bold leading-none">
-        <h1>{data.profile.firstName}</h1>
-        <h1>{data.profile.lastName}</h1>
+        {data.owner?.firstName ? (
+          <>
+            <h1>{data.owner?.firstName}</h1>
+            <h1>{data.owner?.lastName}</h1>
+          </>
+        ) : (
+          <h1>{data.owner?.fullName}</h1>
+        )}
       </div>
       <div className="tracking-wide text-xs uppercase font-medium">
-        {data.profile.subtitle}
+        {data.owner?.seeker?.title}
       </div>
     </div>
   );
@@ -56,9 +80,9 @@ const Glalie = ({ data }) => {
         id="page"
         className="rounded"
         style={{
-          fontFamily: data.metadata.font,
-          color: data.metadata.colors.text,
-          backgroundColor: data.metadata.colors.background,
+          fontFamily: data.resumemetadata.font,
+          color: data.resumemetadata.textColor,
+          backgroundColor: data.resumemetadata.backgroundColor,
         }}
       >
         <div className="grid grid-cols-12">

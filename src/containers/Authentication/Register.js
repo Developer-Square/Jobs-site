@@ -27,11 +27,11 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   const [resendRequest, setResendRequest] = React.useState(false);
 
   const initialValues = {
-    username: 'Ryan test62',
-    email: 'ryantest62@gmail.com',
-    phone: '254745613344',
-    password1: 'Passwor1',
-    password2: 'Passwor1',
+    username: '',
+    email: '',
+    phone: '',
+    password1: '',
+    password2: '',
     isEmployer,
     isSeeker,
     isInstitution,
@@ -39,7 +39,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const otpCodeValue = {
-    otpcode: '696969',
+    otpcode: '',
   }
 
   const schoolInterestsInitialValues = {
@@ -49,8 +49,8 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const bioInitialValues = {
-    company: 'Andela LLC',
-    location: 'Nairobi, Kenya',
+    company: '',
+    location: '',
     industries: []
   }
 
@@ -156,9 +156,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   // Send the user's details to the api.
   const registerUserFn = async (registerUser, values, setErrors) => {
     const sentData = await prepareData(values);
-    // localStorage.setItem('registerValues', JSON.stringify(sentData));
-    // triggerFirebaseSignIn(sentData.phone);
-    // switchTabs('', 'forward');
 
     registerUser({
       variables: sentData,
@@ -174,8 +171,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {
-    // switchTabs('', 'forward');
-
     const interests = values.interests.reduce((arr, b) => {
       arr.push(b.value);
       return arr;
@@ -202,7 +197,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   }
 
   const employerProfileCreate = (values, employerCreate, setErrors) => {
-    // switchTabs('', 'forward');
     let country;
     const data = values.location.split(',');
 

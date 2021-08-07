@@ -18,11 +18,11 @@ const ReferenceItem = ({ id, name, position, phone, email, summary }) => (
 const ReferencesA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
-  return safetyCheck(data.references) ? (
+  return safetyCheck(data.reference) ? (
     <div>
-      <Heading>{data.references.heading}</Heading>
+      <Heading>{data.reference.heading}</Heading>
       <div className="grid grid-cols-3 gap-4">
-        {data.references.items.map((x) => isItemVisible(x) && ReferenceItem(x))}
+        {data.reference.items.map((x) => isItemVisible(x) && ReferenceItem(x))}
       </div>
     </div>
   ) : null;

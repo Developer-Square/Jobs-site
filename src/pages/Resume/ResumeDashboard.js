@@ -1,93 +1,77 @@
-import { Helmet } from "react-helmet";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import React, { useEffect, useState } from "react";
-// import firebase from "gatsby-plugin-firebase";
+import { toast } from "react-toastify";
+
 import CreateResume from "components/dashboard/CreateResume";
 import LoadingScreen from "components/LoadingScreen";
+import { MetaWrapper } from "components/Meta";
+import NetworkStatus from "components/NetworkStatus";
+import OfflinePlaceholder from "components/OfflinePlaceholder";
+import NoResultFound from "components/NoResult/NoResult";
 import ResumePreview from "components/dashboard/ResumePreview";
+import DatabaseContext from "contexts/database/database.provider";
+
 import { useTimer } from "helpers";
+
+import { TypedQuery } from "core/queries";
+import { RESUMES_QUERY } from "graphql/queries";
+
+export const TypedResumesQuery = TypedQuery(RESUMES_QUERY);
 
 const ResumeDashboard = ({ user }) => {
   const { t } = useTranslation();
-  const [resumes, setResumes] = useState([]);
-  const [loading, setLoading] = useState(true);
   const red = useTimer(5);
+  const { refetchResumes } = React.useContext(DatabaseContext);
 
-  useEffect(() => {
-    // const resumesRef = "resumes";
-    // const socketRef = "/.info/connected";
+  const variables = {};
 
-    // firebase
-    //   .database()
-    //   .ref(socketRef)
-    //   .on("value", (snapshot) => {
-    //     if (snapshot.val()) {
-    //       setLoading(false);
-    //       firebase.database().ref(socketRef).off();
-    //     }
-    //   });
-
-    // firebase
-    //   .database()
-    //   .ref(resumesRef)
-    //   .orderByChild("user")
-    //   .equalTo(user.uid)
-    //   .on("value", (snapshot) => {
-    //     if (snapshot.val()) {
-    //       const resumesArr = [];
-    //       const data = snapshot.val();
-    //       Object.keys(data).forEach((key) => resumesArr.push(data[key]));
-    //       setResumes(resumesArr);
-    //     }
-    //   });
-
-    // firebase
-    //   .database()
-    //   .ref(resumesRef)
-    //   .orderByChild("user")
-    //   .equalTo(user.uid)
-    //   .on("child_removed", (snapshot) => {
-    //     if (snapshot.val()) {
-    //       setResumes(resumes.filter((x) => x.id === snapshot.val().id));
-    //     }
-    //   });
-
-    return () => {
-      // firebase.database().ref(resumesRef).off();
-      console.log("nothing");
-      setResumes([]);
-      setLoading(false);
-      console.log(loading);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resumes, user]);
-
-  if (red !== 0) {
-    return <LoadingScreen />;
+  if (refetchResumes) {
+    return <React.Fragment />;
   }
 
   return (
-    <div>
-      <Helmet>
-        <title>
-          {t("dashboard.title")} | {t("shared.appName")}
-        </title>
-        <link
-          rel="canonical"
-          href="https://thedatabase.co.ke/dashboard/resume"
-        />
-      </Helmet>
+    <NetworkStatus>
+      {(isOnline) => (
+        <TypedResumesQuery variables={variables} errorPolicy="all" loaderFull>
+          {(resumeData) => {
+            if (resumeData.loading && red !== 0) {
+              return <LoadingScreen />;
+            }
+            if (resumeData.errors) {
+              toast.error(
+                "Oops! TheDatabase Kenya ran into an unexpected problem",
+              );
+            }
 
-      <div className="container mt-12 px-12 xl:px-0">
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8">
-          <CreateResume />
+            if (resumeData.data && resumeData.data.myResumes === null) {
+              return <NoResultFound />;
+            }
 
-          {resumes.map((x) => (
-            <ResumePreview key={x.id} resume={x} />
-          ))}
-        </div>
-      </div>
-    </div>
+            if (!isOnline) {
+              return <OfflinePlaceholder />;
+            }
+            return (
+              <MetaWrapper
+                meta={{
+                  description: "The Database Resume Builder",
+                  title: t("dashboard.title") || t("shared.appName"),
+                }}
+              >
+                <div className="container mt-12 px-12 xl:px-0">
+                  <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                    <CreateResume />
+
+                    {resumeData.data.myResumes.map((x) => (
+                      <ResumePreview key={x.id} resume={x} />
+                    ))}
+                  </div>
+                </div>
+              </MetaWrapper>
+            );
+          }}
+        </TypedResumesQuery>
+      )}
+    </NetworkStatus>
   );
 };
 

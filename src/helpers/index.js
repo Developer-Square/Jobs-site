@@ -5,13 +5,19 @@ import AES from "crypto-js/aes";
 import { maybe } from "core/utils";
 import { toast } from "react-toastify";
 
-
 // Returns true if every item in the object returned by the
 // Object.values has an item length of more than one
 // First remove the boolean values.
-export const IsNotEmpty = value => {
-  return Object.values(value).filter(item => typeof item !== 'boolean' && typeof item !==  'number' && typeof item !== 'object').every(item => item.length > 0)
-}
+export const IsNotEmpty = (value) => {
+  return Object.values(value)
+    .filter(
+      (item) =>
+        typeof item !== "boolean" &&
+        typeof item !== "number" &&
+        typeof item !== "object",
+    )
+    .every((item) => item.length > 0);
+};
 
 export const removeTokens = () => {
   localStorage.removeItem("access_token");
@@ -67,7 +73,6 @@ export const useTimer = (seconds) => {
   return counter;
 };
 
-
 export const normalizeErrors = (errors) => {
   if (typeof errors !== "object") return null;
   return Object.keys(errors).reduce((acc, val) => {
@@ -82,9 +87,9 @@ export const normalizeErrors = (errors) => {
     let arr = [];
     for (let i = 0; i < errors[val].length; i++) {
       const element = _.get(errors, oB(val, i), null);
-      arr.push(`${i === 0 ? "" : "😍"}${element}`);
+      arr.push(`${i === 0 ? "" : "⚠️"}${element}`);
     }
-    acc[val] = arr.toString().replace(",", "").replace("😍", ",");
+    acc[val] = arr.toString().replace(",", "").replace("⚠️", ",");
     return acc;
   }, {});
 };
@@ -92,16 +97,16 @@ export const normalizeErrors = (errors) => {
 export const showSuccessNotification = (data, alert, error) => {
   console.log(error);
   // Display the errors from firebase.
-  if ( data === 'firebase') {
-      alert.show(
-        {
-          title: error.message,
-        },
-        { type: "error", timeout: 5000 },
-      );
-  } 
+  if (data === "firebase") {
+    alert.show(
+      {
+        title: error.message,
+      },
+      { type: "error", timeout: 5000 },
+    );
+  }
   // Display errors from the backend.
-  else { 
+  else {
     const successful = maybe(() => data.register.success);
 
     if (successful) {
@@ -132,10 +137,9 @@ export const showSuccessNotification = (data, alert, error) => {
           { type: "error", timeout: 5000 },
         );
       }
-    } 
+    }
   }
 };
-
 
 export const formatError = (error) =>
   error && error[0].toUpperCase() + error.slice(1);
@@ -326,6 +330,7 @@ export const showNotification = (
   alert,
   errorField,
   successMessage,
+  setErrors,
 ) => {
   let a = alert;
   let b = true;
@@ -355,7 +360,7 @@ export const showNotification = (
         a(successMessage);
       }
     } else {
-      const err = maybe(() => data.vacancyErrors, []);
+      const err = maybe(() => data[errorField], []);
 
       if (err) {
         const nonFieldErr = normalizeErrors(maybe(() => data[errorField], []));

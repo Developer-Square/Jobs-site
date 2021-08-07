@@ -8,7 +8,6 @@ import PrivateRoute from "./PrivateRoute";
 import { Modal } from "@redq/reuse-modal";
 import DashboardLayout from "layouts/DashboardLayout";
 import NotFound from "pages/NotFound";
-import Wrapper from "components/shared/Wrapper";
 
 class PrivateRoutes extends Component {
   state = { allowedRoutes: [] };
@@ -59,13 +58,11 @@ class PrivateRoutes extends Component {
         path={this.props.match.path}
       >
         <Modal>
-          <Wrapper>
-            <Switch>
-              {handler(this.state.allowedRoutes)}
+          <Switch>
+            {handler(this.state.allowedRoutes)}
 
-              <Route component={NotFound} />
-            </Switch>{" "}
-          </Wrapper>
+            <Route component={NotFound} />
+          </Switch>
         </Modal>
       </DashboardLayout>
     );

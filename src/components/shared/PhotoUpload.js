@@ -1,52 +1,71 @@
 import { MdFileUpload } from "react-icons/md";
 import { Tooltip } from "@material-ui/core";
-import React, { memo, useContext, useRef } from "react";
+import React, { memo, useRef } from "react";
+
 import { handleKeyUp } from "utils";
 import Input from "./Input";
 import * as styles from "./PhotoUpload.module.css";
-import StorageContext from "contexts/storage/storage.provider";
+import { TypedAvatarUpdateMutation } from "pages/Profile/mutations";
+import { handleAvatarUpdate } from "utils";
 
 const PhotoUpload = () => {
   const fileInputRef = useRef(null);
-  const { uploadPhotograph } = useContext(StorageContext);
-
   const handleIconClick = () => {
     fileInputRef.current.click();
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    uploadPhotograph(file);
-  };
-
   return (
-    <div className="flex items-center">
-      <Tooltip title={`Upload Photograph`} placement="right-start">
-        <div
-          role="button"
-          tabIndex="0"
-          className={styles.circle}
-          onClick={handleIconClick}
-          onKeyUp={(e) => handleKeyUp(e, handleIconClick)}
-        >
-          <MdFileUpload size="22px" />
-          <input
-            name="file"
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            onChange={handleImageUpload}
-          />
-        </div>
-      </Tooltip>
+    <TypedAvatarUpdateMutation
+      onCompleted={(data, errors) => handleAvatarUpdate(data, errors, alert)}
+    >
+      {(updateAvatar) => {
+        const handleAvatarChange = (e) => {
+          console.log(e);
+          const file = e.target.files;
+          console.log(file);
+          for (let i = 0; i < file.length; i++) {
+            const f = file[i];
+            updateAvatar({
+              variables: { image: f },
+            })
+              .then((res) => {
+                handleAvatarUpdate(res.data, null, alert);
+              })
+              .catch((err) => console.log(err));
+          }
+        };
 
-      <Input
-        name="photograph"
-        label={`Photograph`}
-        className="pl-6 w-full"
-        path="profile.photograph"
-      />
-    </div>
+        return (
+          <div className="flex items-center">
+            <Tooltip title={`Upload Photograph`} placement="right-start">
+              <div
+                role="button"
+                tabIndex="0"
+                className={styles.circle}
+                onClick={handleIconClick}
+                onKeyUp={(e) => handleKeyUp(e, handleIconClick)}
+              >
+                <MdFileUpload size="22px" />
+                <input
+                  name="avatar"
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  onChange={handleAvatarChange}
+                />
+              </div>
+            </Tooltip>
+
+            <Input
+              name="photograph"
+              label={`Photograph`}
+              className="pl-6 w-full"
+              path="owner.avatar.url"
+            />
+          </div>
+        );
+      }}
+    </TypedAvatarUpdateMutation>
   );
 };
 

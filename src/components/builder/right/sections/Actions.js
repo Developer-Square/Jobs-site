@@ -28,7 +28,7 @@ const Actions = ({ id }) => {
 
   const getSharableUrl = () => {
     const shareId = state.id;
-    return `https://thedatabase.co.ke/r/${shareId}`;
+    return `${window.location.origin}/r/${shareId}`;
   };
 
   const handleOpenLink = () => {

@@ -1,5 +1,6 @@
 import { Tooltip } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
+// import { toast } from "react-toastify";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "contexts/resume/resume.provider";
 import BaseModal from "../BaseModal";
@@ -21,7 +22,8 @@ const ImportModal = () => {
     return () => unbind();
   }, [emitter, events]);
 
-  const importReactiveResumeJson = (event) => {
+  const importResumeJson = (event) => {
+    // toast("Featur Coming Soon");
     const fr = new FileReader();
     fr.addEventListener("load", () => {
       const payload = JSON.parse(fr.result);
@@ -32,6 +34,7 @@ const ImportModal = () => {
   };
 
   const importJsonResume = (event) => {
+    // toast("Featur Coming Soon");
     const fr = new FileReader();
     fr.addEventListener("load", () => {
       const payload = JSON.parse(fr.result);
@@ -66,7 +69,7 @@ const ImportModal = () => {
           ref={reactiveResumeFileInputRef}
           type="file"
           className="hidden"
-          onChange={importReactiveResumeJson}
+          onChange={importResumeJson}
         />
       </div>
 

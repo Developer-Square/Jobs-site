@@ -7,11 +7,11 @@ const ObjectiveA = () => {
   const { data, heading: Heading } = useContext(PageContext);
 
   return (
-    safetyCheck(data.objective, "body") && (
+    safetyCheck(data.objective, "descriptionPlaintext") && (
       <div>
         <Heading>{data.objective.heading}</Heading>
         <ReactMarkdown className="markdown text-sm">
-          {data.objective.body}
+          {data.objective.descriptionPlaintext}
         </ReactMarkdown>
       </div>
     )
