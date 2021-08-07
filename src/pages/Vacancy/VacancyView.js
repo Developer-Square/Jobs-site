@@ -15,14 +15,16 @@ import {
   TypedJobYearsOfExpQuery,
 } from "./queries";
 import Page from "./Page";
+import { getGraphqlIdFromDBId } from "utils";
 
 const VacancyView = () => {
   const match = useRouteMatch();
-  const [vacancyID, setVacancyID] = React.useState(match.params.vacancyID);
+  const [vacancyID, setVacancyID] = React.useState(getGraphqlIdFromDBId(match.params.vacancyID, 'Vacancy'));
+  console.log(match.params.vacancyID);
 
   React.useEffect(() => {
     if (match.params.vacancyID) {
-      setVacancyID(match.params.vacancyID);
+      setVacancyID(getGraphqlIdFromDBId(match.params.vacancyID, 'Vacancy'));
     }
   }, [match.params.vacancyID]);
 

@@ -11,6 +11,7 @@ import { ReactHooksWrapper, setHook } from "hooks";
 import { NotificationTemplate } from "components/NotificationTemplate";
 import { useDeviceType } from "helpers/useDeviceType";
 import { AuthProvider } from "contexts/auth/auth.provider";
+import { VacancyProvider } from "contexts/vacancies/vacancies.provider";
 import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
@@ -67,10 +68,11 @@ function App() {
       <OriginalThemeProvider theme={themeMode}>
         <MuiThemeProvider theme={MUItheme}>
           <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-            <ModalProvider>
-              <SearchProvider query={query}>
-                <HeaderProvider>
-                  <AuthProvider>
+            <SearchProvider query={query}>
+              <HeaderProvider>
+                <AuthProvider>
+                  <VacancyProvider>
+                  <ModalProvider>
                     <UserProvider>
                       <DatabaseProvider>
                         <ResumeProvider>
@@ -87,11 +89,12 @@ function App() {
                         </ResumeProvider>
                       </DatabaseProvider>
                     </UserProvider>
-                  </AuthProvider>
-                </HeaderProvider>
-                <GlobalStyle />
-              </SearchProvider>
-            </ModalProvider>
+                  </ModalProvider>
+                  </VacancyProvider>
+                </AuthProvider>
+              </HeaderProvider>
+              <GlobalStyle />
+            </SearchProvider>
             <ReactHooksWrapper />
           </ServiceWorkerProvider>
         </MuiThemeProvider>

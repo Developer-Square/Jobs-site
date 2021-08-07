@@ -24,7 +24,7 @@ import {
   TypedJobPayRateQuery,
 } from "./queries";
 import VacancyForm from "./VacancyForm";
-import { getGraphqlIdFromDBId, getDBIdFromGraphqlId, objDiff } from "utils";
+import { getGraphqlIdFromDBId, objDiff } from "utils";
 import { isEmpty } from "lodash";
 
 const Vacancy = () => {
@@ -44,8 +44,6 @@ const Vacancy = () => {
     applicationEmail: "",
   };
   const match = useRouteMatch();
-  console.log(getDBIdFromGraphqlId("VmFjYW5jeToxMA==", "Vacancy"));
-  console.log(getGraphqlIdFromDBId(10, "Vacancy"));
 
   const cleanInitialValues = (
     data,
