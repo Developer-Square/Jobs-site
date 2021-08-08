@@ -61,7 +61,6 @@ const Login = () => {
           }).then(({ data }) => {
             const successful = maybe(() => data.tokenAuth.success);
             if (successful) {
-              authDispatch({ type: "LOGIN_SUCCESS" });
               storeLoginDetails(
                 successful,
                 history,
@@ -70,6 +69,10 @@ const Login = () => {
                 setSubmitting,
                 "login",
               );
+              authDispatch({
+                type: "LOGIN_SUCCESS",
+              });
+              history.push("/dashboard");
             }
           });
         }

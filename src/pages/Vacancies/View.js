@@ -12,7 +12,7 @@ import { vacancyLimit } from "constants/constants";
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 
 
-const View = ({ match, deviceType }) => {
+const View = () => {
   const [sort, setSort] = useQueryParam("sortBy", StringParam);
   const [attributeFilters, setAttributeFilters] = useQueryParam(
     "filters",

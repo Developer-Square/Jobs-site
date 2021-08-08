@@ -74,7 +74,6 @@ const Vacancy = () => {
       }
 
       if (obj[propName] && obj[propName].constructor === Object) {
-        console.log(Object.values(obj[propName]));
         // Remove a property from the variables object if it has no keys or values are undefined.
         if ( Object.keys(obj[propName]).length === 0 || Object.values(obj[propName])[0] === undefined) {
           delete obj[propName];
@@ -104,7 +103,6 @@ const Vacancy = () => {
     });
   }
 
-  // console.log(vacancyState, "vacancyState");
   
   return (
     <div>

@@ -30,6 +30,7 @@ const Header = ({ className, isSticky }) => {
   const { state, dispatch } = useContext(SearchContext);
 
   const handleLogout = () => {
+    console.log('here');
     if (typeof window !== "undefined") {
       localStorage.removeItem("access_token");
       localStorage.removeItem("thedb_auth_profile");

@@ -7,12 +7,9 @@ import { getDBIdFromGraphqlId } from 'utils'
 
 function PaginationItem({ data, loading, callLoadFilters }) {
     let pages;
-    const [pagesArray, setPagesArray] = React.useState([]);
-    const [activeIndex, setActiveIndex] = React.useState(0);
-    const { vacancyState } = useContext(VacancyContext);
-    
+    const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
     useEffect(() => {
-        if (data) {
+        if (vacancyState.pagesArray.length === 0 && data) {
             if (data.vacancies.totalCount % vacancyLimit === 0) {
                 // eslint-disable-next-line
                 pages = data.vacancies.totalCount / vacancyLimit
@@ -27,29 +24,30 @@ function PaginationItem({ data, loading, callLoadFilters }) {
             for(let i = 0; i < pages; i++) {
                 array.push(i+1);
             }
-            setPagesArray(array);
+            vacancyDispatch({
+                type: "ADD_PAGES",
+                payload: array
+            });
         }
-    }, [data])
+    }, [vacancyState.pagesArray.length, data])
 
     // For the pagination section.
     // This javascript is only to change the "actpage" attribut on the .cdp div
-    const changePageNumber = () => {
+    const changePageNumber = (evt) => {
         var paginationPage = parseInt($('.cdp').attr('actpage'), 10);
-        $('.cdp_i').on('click', function(){
-            var go = $(this).attr('href').replace('#!', '');
-            // The next button.
-            if (go === '+1') {
-                paginationPage++;   
-            } 
+        var go = evt.target.hash.replace('#!', '');
+        // The next button.
+        if (go === '+1') {
+            paginationPage++;   
+        } 
 
-            // The previous button.
-            else if (go === '-1') {
-                paginationPage--;
-            } else {
-                paginationPage = parseInt(go, 10);
-            }
-            $('.cdp').attr('actpage', paginationPage);
-        });
+        // The previous button.
+        else if (go === '-1') {
+            paginationPage--;
+        } else {
+            paginationPage = parseInt(go, 10);
+        }
+        $('.cdp').attr('actpage', paginationPage);
     };
 
     const handleEncode = (id, salary) => {
@@ -60,36 +58,45 @@ function PaginationItem({ data, loading, callLoadFilters }) {
         return encoded;
     }
 
-    const handleNumberClick = (requestedPage) => {
+    const handleNumberClick = (e, requestedPage) => {
+        const {activeIndex} = vacancyState;
         if (vacancyState.sortedJobs && activeIndex !== requestedPage) {
             // Get the last job's id and salary.
             const length = vacancyState.sortedJobs.length;
 
             if (requestedPage > activeIndex) {
-                setActiveIndex(requestedPage)
+                vacancyDispatch({
+                    type: "SET_ACTIVE_INDEX",
+                    payload: requestedPage
+                });
                 const {id, salary} = vacancyState.sortedJobs[length - 1];
                 const encodedResult = handleEncode(id, salary);
                 callLoadFilters('', encodedResult, vacancyLimit, 0,);
+                changePageNumber(e);
             } else {
-                setActiveIndex(requestedPage)
+                vacancyDispatch({
+                    type: "SET_ACTIVE_INDEX",
+                    payload: requestedPage
+                });
                 const {id, salary} = vacancyState.sortedJobs[0];
                 const encodedResult = handleEncode(id, salary);
                 callLoadFilters(encodedResult, '', 0, vacancyLimit,);
+                changePageNumber(e);
             }
 
         }
     }
 
-    window.addEventListener ? window.addEventListener("load", changePageNumber, false) : window.attachEvent && window.attachEvent("onload", changePageNumber);
+    // window.addEventListener ? window.addEventListener("load", changePageNumber, false) : window.attachEvent && window.attachEvent("onload", changePageNumber);
 
     return (
         <div className="pagination-container">
-            <div className="content_detail__pagination cdp" actpage="1">
-            {pagesArray.length ? (<a href="#!-1" className="cdp_i" onClick={() => handleNumberClick(activeIndex - 1)} >{loading ? 'Loading ...' : 'prev'}</a>): null}
-                {pagesArray.length ? pagesArray.map((page, index) => (
-                    <a href={`#!${page}`} key={index} class="cdp_i">{loading ? '...' : page}</a>
+            <div className="content_detail__pagination cdp" actpage={vacancyState.activeIndex}>
+            {vacancyState.pagesArray.length ? (<a href="#!-1" className="cdp_i" onClick={(e) => handleNumberClick(e, vacancyState.activeIndex - 1)} >{loading ? 'Loading ...' : 'prev'}</a>): null}
+                {vacancyState.pagesArray.length ? vacancyState.pagesArray.map((page, index) => (
+                    <a href={`#!${page}`} key={index} className="cdp_i">{loading ? '...' : page}</a>
                 )) : null}
-            {pagesArray.length ? (<a href="#!+1" className="cdp_i" onClick={() => handleNumberClick(activeIndex + 1)}>{loading ? 'Loading ...' : 'next'}</a>) : null}
+            {vacancyState.pagesArray.length ? (<a href="#!+1" className="cdp_i" onClick={(e) => handleNumberClick(e, vacancyState.activeIndex + 1)}>{loading ? 'Loading ...' : 'next'}</a>) : null}
             </div>
       </div>
     )

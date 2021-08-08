@@ -26,7 +26,7 @@ class Navigation extends Component {
           </ol>
         </div>
 
-        <button onClick={this.handleLogout}>Logout</button>
+        <button onClick={this.handleLogout}>Logging out</button>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import PasswordChange from "containers/Authentication/PasswordChange";
 import { AuthContext } from "contexts/auth/auth.context";
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import BaseProfile from "./BaseProfile";
 import EmployerProfile from "./EmployerProfile";
 import InstitutionProfile from "./InstitutionProfile";
@@ -10,8 +10,12 @@ import AddressPreview from "containers/Address/AddressSummary";
 import { useQuery } from "react-apollo";
 import { GET_USER_DETAILS } from "graphql/queries";
 import Loader from "components/Loader/Loader";
+import Button from "components/Button/Button";
+
+const MyProfile = lazy(() => import("pages/Profile/MyProfile"));
 
 function Profile() {
+  const [edit, setEdit] = React.useState(false);
   const { data, loading } = useQuery(GET_USER_DETAILS);
   const {
     authState: { profile },
@@ -23,6 +27,13 @@ function Profile() {
 
   return (
     <>
+    <Button title={edit ? "Edit" : 'View'} onClick={() => setEdit(curr => !curr)}/>
+    {!edit ? (
+      <Suspense fallBack={<Loader />}>
+        <MyProfile />
+      </Suspense>
+    ):(
+      <>
       <div className="row">
         {/* Profile */}
         <div className="col-lg-6 col-md-12">
@@ -73,6 +84,8 @@ function Profile() {
       {profile.isInstitution && <InstitutionProfile />}
       {profile.isSeeker && <SeekerProfile />}
       {profile.isEmployer && <EmployerProfile />}
+      </>
+      )}
     </>
   );
 }

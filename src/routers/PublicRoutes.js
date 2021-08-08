@@ -21,7 +21,7 @@ const PasswordReset = lazy(() =>
 const EmailActivation = lazy(() =>
   import("containers/Authentication/EmailActivation"),
 );
-const Vacancies = lazy(() => import("pages/Vacancies/View"));
+const Vacancies = lazy(() => import("pages/Vacancies"));
 const Categories = lazy(() => import("pages/Categories"));
 const Pricing = lazy(() => import("pages/Pricing"));
 const Contact = lazy(() => import("pages/Contact"));

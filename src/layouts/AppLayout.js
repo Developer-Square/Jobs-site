@@ -5,7 +5,7 @@ import { LayoutWrapper } from "./Layout.style";
 import logoImage from "image/thedb.png";
 import styled from "styled-components";
 import { AuthContext } from "contexts/auth/auth.context";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 
 export const LogoImage = styled.img`
   display: block;
@@ -19,9 +19,22 @@ const Layout = (props) => {
     authState: { isAuthenticated },
     authDispatch,
   } = React.useContext(AuthContext);
+  const history = useHistory();
   const location = useLocation();
   const path = location.pathname.replace(/\/+$/, "");
   const pathname = path[0] === "/" ? path.substr(1) : path;
+
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("thedb_auth_profile");
+      localStorage.removeItem("thedb_auth_payload");
+      localStorage.removeItem("thedb_auth_roles");
+      authDispatch({ type: "SIGN_OUT" });
+      history.push("/");
+    }
+  };
   return (
     <LayoutWrapper className={`layoutWrapper ${props.className}`}>
       <div>
@@ -125,12 +138,12 @@ const Layout = (props) => {
                             <Link to={`/dashboard/my-profile`}>My Profile</Link>
                           </li>
                           <li>
-                            <Link to={`/`}>Logout</Link>
+                            <Link to={`/`} onClick={() => handleLogout()}>Logout</Link>
                           </li>
                         </ul>
                       </li>
                       <li>
-                        <Link to={""} onClick={() => console.log("to log out")}>
+                        <Link to={""} onClick={() => handleLogout()}>
                           <i className="fa fa-lock"></i> Log Out
                         </Link>
                       </li>

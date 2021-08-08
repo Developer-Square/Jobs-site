@@ -15,6 +15,7 @@ const AUTHORIZED_MENU_ITEMS = [
 ];
 
 export const AuthorizedMenu = ({ onLogout }) => {
+  console.log(onLogout);
   return (
     <>
       {AUTHORIZED_MENU_ITEMS.map((item, idx) => (
