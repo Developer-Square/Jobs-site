@@ -6,7 +6,7 @@ import { PaymentModal } from 'modals/PaymentModal'
 import { landingVacancyLimit } from 'constants/constants'
 import { VACANCIES_QUERY } from './queries'
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
-import { getDBIdFromGraphqlId, checkDate, checkJobType, findJobTypeDescription, onCompleted } from 'utils';
+import { getDBIdFromGraphqlId, checkDate, checkJobType, findJobTypeDescription } from 'utils';
 import LogoImage from "image/thedb.png";
 import Loader from "components/Loader/Loader";
 
@@ -17,10 +17,24 @@ const Vacancies = () => {
   const [show, setShow] = React.useState(false);
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
 
+  const onCompleted = (loading, data) => {
+    if (!loading) {
+      vacancyDispatch({
+        type: "SET_VACANCIES_SECTION",
+        payload: data.vacancies.edges
+      });
+      vacancyDispatch({
+        type: "SET_JOB_TYPES",
+        payload: data?.__type?.enumValues
+      });
+    }
+  }
+
+
   const [loadFilterValues, { loading, data}] = useLazyQuery(
     VACANCIES_QUERY,
     {
-    onCompleted: () => onCompleted(loading, data, 'refetch', '', ()=>{}, vacancyState, vacancyDispatch),
+    onCompleted: () => onCompleted(loading, data),
     fetchPolicy: 'cache-and-network'
     },
   )
@@ -28,7 +42,7 @@ const Vacancies = () => {
   useEffect(() => {
     checkVerified()
     // Only fetch if context API is empty.
-    if (vacancyState.jobsData.length === 0) { 
+    if (vacancyState.landingPageJobs.length === 0) { 
       loadFilterValues(
         {variables: { 
           first: landingVacancyLimit,
@@ -37,7 +51,7 @@ const Vacancies = () => {
       );
     }
     // eslint-disable-next-line
-  }, [vacancyState.jobTypes.length])
+  }, [vacancyState.landingPageJobs.length])
 
   const checkVerified = () => {
     let profileDetails = localStorage.getItem('thedb_auth_profile');
@@ -73,29 +87,29 @@ const Vacancies = () => {
         <div className="padding-right">
           <h3 className="margin-bottom-25">Recent Jobs</h3>
           <div className="listings-container">
-            {vacancyState.sortedJobs.length ? vacancyState.sortedJobs.map((job, index) => (
+            {vacancyState.landingPageJobs.length ? vacancyState.landingPageJobs.map((job, index) => (
               // Listing
-            <JobContainer className={`listing ${checkJobType(findJobTypeDescription(job, vacancyState.jobTypes))}`} key={index} onClick={() => handleClick(job.id)}>
+            <JobContainer className={`listing ${checkJobType(findJobTypeDescription(job.node, vacancyState.jobTypes))}`} key={index} onClick={() => handleClick(job.id)}>
             <div className="listing-logo">
-              <img src={job.postedBy.logo?.url || LogoImage} alt={job.postedBy.logo?.alt || "TheDB_company_logo"} />
+              <img src={job.node.postedBy.logo?.url || LogoImage} alt={job.node.postedBy.logo?.alt || "TheDB_company_logo"} />
             </div>
             <div className="listing-title">
               <h4>
                 {job.title}
-                <span className="listing-type">{findJobTypeDescription(job, vacancyState.jobTypes)}</span>
+                <span className="listing-type">{findJobTypeDescription(job.node, vacancyState.jobTypes)}</span>
               </h4>
               <ul className="listing-icons">
                 <li>
-                  <i className="ln ln-icon-Management" /> {job.postedBy.name}
+                  <i className="ln ln-icon-Management" /> {job.node.postedBy.name}
                 </li>
                 <li>
-                  <i className="ln ln-icon-Map2" /> {job.location}
+                  <i className="ln ln-icon-Map2" /> {job.node.location}
                 </li>
                 <li>
-                  <i className="ln ln-icon-Money-2" /> {job.amount.currency} {job.amount.amount}
+                  <i className="ln ln-icon-Money-2" /> {job.node.amount.currency} {job.node.amount.amount}
                 </li>
                 <li>
-                <div className={`listing-date ${checkDate(job.createdAt)}`}>{checkDate(job.createdAt)}</div>
+                <div className={`listing-date ${checkDate(job.node.createdAt)}`}>{checkDate(job.node.createdAt)}</div>
                 </li>
               </ul>
             </div>
