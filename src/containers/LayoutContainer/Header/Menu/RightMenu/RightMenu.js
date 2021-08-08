@@ -1,18 +1,6 @@
 import React from "react";
-import NavLink from "components/NavLink/NavLink";
-import Button from "components/Button/Button";
-import Popover from "components/Popover/Popover";
-import {
-  JOBS,
-  GIGS,
-  ABOUT,
-  HELP_PAGE,
-  PROFILE_PAGE,
-} from "constants/routes.constants";
-import { AuthorizedMenu } from "../AuthorizedMenu";
-import { HelpIcon } from "components/AllSvgIcon";
-import { RightMenuBox } from "./RightMenu.style";
 import { AuthContext } from "contexts/auth/auth.context";
+import { Link } from "react-router-dom";
 
 export const RightMenu = ({
   isHomePage,
@@ -22,75 +10,84 @@ export const RightMenu = ({
   isAuthenticated,
   onJoin,
 }) => {
-  const {
-    authState: { profile },
-  } = React.useContext(AuthContext);
-  const className = isHomePage ? (isSticky ? "" : "sticky") : "";
+  const { authDispatch } = React.useContext(AuthContext);
+
   return (
-    <RightMenuBox>
+    <ul
+      className="float-right"
+      style={{ display: "flex", marginLeft: "auto", margin: "0", width: "30%" }}
+    >
       {isAuthenticated ? (
         <>
-          <NavLink
-            className={`menu-item ${className}`}
-            href={JOBS}
-            label="Jobs"
-          />
-          <NavLink
-            className={`menu-item ${className}`}
-            href={GIGS}
-            label="Gigs"
-          />
+          <li>
+            <Link to={""}>Dashboard</Link>
+            <ul>
+              <li>
+                <Link to={`/dashboard`}>Dashboard</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/messages`}>Messages</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/manage/resume`}>Manage Resumes</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/resume`}>Add Resume</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/alert`}>Job Alerts</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/manage/jobs`}>Manage Jobs</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/applications`}>Manage Applications</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/vacancy`}>Add Job</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/profile`}>My Profile</Link>
+              </li>
+              <li>
+                <Link to={`/`}>Logout</Link>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <Link to={""} onClick={() => console.log("to log out")}>
+              <i className="fa fa-lock"></i> Log Out
+            </Link>
+          </li>
         </>
-      ) : (
-        <NavLink
-          className={`menu-item ${className}`}
-          href={ABOUT}
-          label="About"
-        />
-      )}
-      <NavLink
-        className={`menu-item ${className}`}
-        href={HELP_PAGE}
-        label="Need Help"
-        iconClass="menu-icon"
-        icon={
-          <HelpIcon
-            color={isHomePage ? (isSticky ? "#21277F" : "#e6c018") : "#21277F"}
-          />
-        }
-      />
-
-      {!isAuthenticated ? (
-        <Button
-          onClick={onJoin}
-          size="small"
-          title="Join"
-          style={{
-            fontSize: 15,
-            backgroundColor: isHomePage
-              ? isSticky
-                ? "#21277F"
-                : "#e6c018"
-              : "#21277F",
-          }}
-        />
       ) : (
         <>
-          <Popover
-            direction="right"
-            className="user-pages-dropdown"
-            handler={<img src={avatar} alt="user" />}
-            content={<AuthorizedMenu onLogout={onLogout} />}
-          />
-          <NavLink
-            className={`menu-item ${className}`}
-            href={PROFILE_PAGE}
-            label={`${
-              profile.first_name !== "" ? profile.first_name : profile.email
-            }`}
-          />
+          <li>
+            <Link
+              onClick={() => {
+                authDispatch({
+                  type: "SIGNUP",
+                });
+              }}
+              to={`/auth`}
+            >
+              <i className="fa fa-user" /> Sign Up
+            </Link>
+          </li>
+          <li>
+            <Link
+              onClick={() => {
+                authDispatch({
+                  type: "SIGNIN",
+                });
+              }}
+              to={`/auth`}
+            >
+              <i className="fa fa-lock" /> Log In
+            </Link>
+          </li>
         </>
       )}
-    </RightMenuBox>
+    </ul>
   );
 };

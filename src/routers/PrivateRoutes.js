@@ -6,7 +6,7 @@ import * as Routes from "./PrivateRoutes.config";
 // import Navigation from "containers/Navigation/Navigation";
 import PrivateRoute from "./PrivateRoute";
 import { Modal } from "@redq/reuse-modal";
-import DashboardLayout from "layouts/DashboardLayout";
+import DashboardLayout from "containers/LayoutContainer/DashboardLayout";
 import NotFound from "pages/NotFound";
 
 class PrivateRoutes extends Component {

@@ -29,7 +29,7 @@ export const TopbarWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #21277f;
+  background-color: #ffffff;
   padding: 15px 60px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06);
   position: relative;

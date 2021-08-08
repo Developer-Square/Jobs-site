@@ -137,17 +137,9 @@ export const GET_TOKEN_MUTATION = gql`
 `;
 
 export const CREATE_EMPLOYER = gql`
-  mutation EmployerCreate(
-    $name: String
-    $country: String
-    $location: String
-  ) {
+  mutation EmployerCreate($name: String, $country: String, $location: String) {
     employerCreate(
-      input: {
-        name: $name
-        country: $country
-        location: $location
-      }
+      input: { name: $name, country: $country, location: $location }
     ) {
       __typename
       success
@@ -160,7 +152,7 @@ export const CREATE_EMPLOYER = gql`
       }
     }
   }
-`
+`;
 
 export const SEEKER_PROFILE_MUTATION = gql`
   mutation SeekerCreate(
@@ -193,7 +185,7 @@ export const accountErrorFragment = gql`
 
 const AVATAR_UPDATE_MUTATION = gql`
   ${accountErrorFragment}
-  mutation AvatarUpdate($image: Upload!) {
+  mutation AvatarUpdate($image: BaseUpload!) {
     userAvatarUpdate(image: $image) {
       errors: accountErrors {
         ...AccountErrorFragment
@@ -210,17 +202,9 @@ const AVATAR_UPDATE_MUTATION = gql`
 `;
 
 export const EMPLOYER_PROFILE_MUTATION = gql`
-  mutation EmployerCreate(
-    $name: String
-    $country: String
-    $location: String
-  ) {
+  mutation EmployerCreate($name: String, $country: String, $location: String) {
     employerCreate(
-      input: {
-        name: $name
-        country: $country
-        location: $location
-      }
+      input: { name: $name, country: $country, location: $location }
     ) {
       __typename
       success
@@ -237,12 +221,10 @@ export const CREATE_SELECTABLE_INSTITUTION = gql`
     $name: String!
     $chatroom: String!
     $text: String!
+  ) {
+    createSelectableInstitution(
+      input: { name: $name, chatroom: $chatroom, text: $text }
     ) {
-    createSelectableInstitution(input: {
-      name: $name
-      chatroom: $chatroom
-      text: $text
-    }) {
       success
       vacancyErrors {
         message
@@ -250,7 +232,7 @@ export const CREATE_SELECTABLE_INSTITUTION = gql`
       }
     }
   }
-`
+`;
 
 export const TypedEmployerProfileMutation = TypedMutation(
   EMPLOYER_PROFILE_MUTATION,
@@ -271,5 +253,6 @@ export const TypedAvatarUpdateMutation = TypedMutation(AVATAR_UPDATE_MUTATION);
 export const TypedSeekerProfileMutation = TypedMutation(
   SEEKER_PROFILE_MUTATION,
 );
-export const TypedCreateSelectableInstitutionMutation = TypedMutation(CREATE_SELECTABLE_INSTITUTION);
-
+export const TypedCreateSelectableInstitutionMutation = TypedMutation(
+  CREATE_SELECTABLE_INSTITUTION,
+);

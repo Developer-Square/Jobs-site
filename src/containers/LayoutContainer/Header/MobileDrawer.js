@@ -180,7 +180,7 @@ const MobileDrawer = () => {
                   <img src={img} alt="user_avatar" />
                 </UserAvatar>
                 <UserDetails>
-                  <h3>{profile.full_name}</h3>
+                  <h3>{profile.fullName}</h3>
                   <span>{profile.email}</span>
                 </UserDetails>
               </LoginView>

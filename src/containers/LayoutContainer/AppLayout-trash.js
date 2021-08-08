@@ -56,8 +56,8 @@ const Layout = ({
       {!isHomePage && (
         <div
           style={{
-            marginTop: "90px",
             position: "relative",
+            marginTop: isHomePage ? 0 : "80px",
           }}
         />
       )}

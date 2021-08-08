@@ -6,7 +6,7 @@ import { SETTINGS } from "constants/constants";
 import { PROFILE_PAGE } from "constants/routes.constants";
 import { AuthContext } from "contexts/auth/auth.context";
 import { DrawerContext } from "contexts/drawer/drawer.context";
-import Logoimage from "image/db.png";
+import Logoimage from "image/thedb.png";
 import UserImage from "image/user.jpg";
 import React, { useContext, useCallback } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -43,7 +43,7 @@ const data = [
   },
 ];
 
-const Topbar = ({ refs }) => {
+const Topbar = (props) => {
   const history = useHistory();
   const { state, dispatch } = useContext(DrawerContext);
   const {
@@ -85,7 +85,7 @@ const Topbar = ({ refs }) => {
   };
 
   return (
-    <TopbarWrapper ref={refs}>
+    <TopbarWrapper ref={props.refs}>
       <Logo>
         <Link to="/">
           <LogoImage src={Logoimage} alt="TheDB" />
@@ -114,7 +114,12 @@ const Topbar = ({ refs }) => {
         >
           <Scrollbars autoHide>
             <DrawerContentWrapper>
-              <Sidebar onMenuItemClick={toggleHandler} isOpen={state.isOpen} />
+              <Sidebar
+                path={props.path}
+                routes={props.routes}
+                onMenuItemClick={toggleHandler}
+                isOpen={state.isOpen}
+              />
             </DrawerContentWrapper>
           </Scrollbars>
         </Drawer>
@@ -142,7 +147,7 @@ const Topbar = ({ refs }) => {
           style={{ color: "#fff", margin: "0 10px", fontSize: "13px" }}
           to={PROFILE_PAGE}
         >
-          {profile.first_name !== "" ? profile.first_name : profile.email}
+          {profile.fullName !== "" ? profile.fullName : profile.email}
         </Link>
         <Popover
           direction="right"

@@ -54,7 +54,6 @@ const HeaderWrapper = styled.header`
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
   &.home {
-    position: absolute;
     background-color: transparent;
     box-shadow: none;
   }
@@ -367,7 +366,7 @@ export const HamburgerIcon = styled.div`
   position: relative;
   > span {
     display: block;
-    background-color: ${themeGet("colors.lightColor", "#F7F7F7")};
+    background-color: ${themeGet("colors.darkColor", "#21277f")};
     border-radius: 6px;
     height: 2px;
     margin-bottom: 6px;

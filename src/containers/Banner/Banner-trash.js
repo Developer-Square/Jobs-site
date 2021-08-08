@@ -17,6 +17,7 @@ import Button from "components/Button/Button";
 import AuthenticationForm from "containers/SignInOutForm/Form";
 import { openModal } from "@redq/reuse-modal";
 import { AuthContext } from "contexts/auth/auth.context";
+import bgImg from "image/landing.jpg";
 
 const Banner = ({ imageUrl }) => {
   const { state, dispatch } = useContext(SearchContext);
@@ -52,11 +53,11 @@ const Banner = ({ imageUrl }) => {
   const useDispatch = useStickyDispatch();
   const setSticky = useCallback(
     () => useDispatch({ type: "SET_STICKY" }),
-    [useDispatch]
+    [useDispatch],
   );
   const removeSticky = useCallback(
     () => useDispatch({ type: "REMOVE_STICKY" }),
-    [useDispatch]
+    [useDispatch],
   );
 
   const onWaypointPositionChange = ({ currentPosition }) => {
@@ -91,7 +92,7 @@ const Banner = ({ imageUrl }) => {
   return (
     <BannerWrapper
       style={{
-        backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.72), rgb(33 39 127 / 0.72)),url(${imageUrl})`,
+        backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.72), rgb(33 39 127 / 0.72)),url(${bgImg})`,
       }}
     >
       <BannerComponent>
