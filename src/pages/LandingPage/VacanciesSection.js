@@ -6,7 +6,7 @@ import { PaymentModal } from 'modals/PaymentModal'
 import { landingVacancyLimit } from 'constants/constants'
 import { VACANCIES_QUERY } from './queries'
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
-import { getDBIdFromGraphqlId, checkDate, checkJobType, findJobTypeDescription } from 'utils';
+import { getDBIdFromGraphqlId, checkDate, checkJobType, findJobTypeDescription, onCompleted } from 'utils';
 import LogoImage from "image/thedb.png";
 import Loader from "components/Loader/Loader";
 
@@ -15,35 +15,12 @@ const Vacancies = () => {
   const history = useHistory();
   const [verified, setVerified] = React.useState(false);
   const [show, setShow] = React.useState(false);
-  const [jobTypes, setJobTypes] = React.useState([]);
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
-
-
-  const cleanVacanciesData = (edges) => {
-    let jobs;
-
-    if (edges.length > 0) {
-      jobs = edges.map((edge) => edge.node);
-      if (vacancyState.jobsData.length === 0) {
-        vacancyDispatch({
-          type: "ADD_DATA",
-          payload: jobs
-        });
-      }
-    }
-  }
-
-  const onCompleted = (loading, data) => {
-    if (!loading) {
-      cleanVacanciesData(data.vacancies.edges);
-      setJobTypes(data?.__type?.enumValues)
-    }
-  }
 
   const [loadFilterValues, { loading, data}] = useLazyQuery(
     VACANCIES_QUERY,
     {
-    onCompleted: () => onCompleted(loading, data),
+    onCompleted: () => onCompleted(loading, data, 'refetch', '', ()=>{}, vacancyState, vacancyDispatch),
     fetchPolicy: 'cache-and-network'
     },
   )
@@ -60,7 +37,7 @@ const Vacancies = () => {
       );
     }
     // eslint-disable-next-line
-  }, [])
+  }, [vacancyState.jobTypes.length])
 
   const checkVerified = () => {
     let profileDetails = localStorage.getItem('thedb_auth_profile');
@@ -98,14 +75,14 @@ const Vacancies = () => {
           <div className="listings-container">
             {vacancyState.sortedJobs.length ? vacancyState.sortedJobs.map((job, index) => (
               // Listing
-            <JobContainer className={`listing ${checkJobType(findJobTypeDescription(job, jobTypes))}`} key={index} onClick={() => handleClick(job.id)}>
+            <JobContainer className={`listing ${checkJobType(findJobTypeDescription(job, vacancyState.jobTypes))}`} key={index} onClick={() => handleClick(job.id)}>
             <div className="listing-logo">
               <img src={job.postedBy.logo?.url || LogoImage} alt={job.postedBy.logo?.alt || "TheDB_company_logo"} />
             </div>
             <div className="listing-title">
               <h4>
                 {job.title}
-                <span className="listing-type">{findJobTypeDescription(job, jobTypes)}</span>
+                <span className="listing-type">{findJobTypeDescription(job, vacancyState.jobTypes)}</span>
               </h4>
               <ul className="listing-icons">
                 <li>

@@ -6,6 +6,7 @@ export const initialState = {
     jobsData: [],
     sortedJobs: [],
     sortingByPayRate: false,
+    jobTypes: []
 };
 
 export function reducer(state, { type, payload }) {
@@ -26,6 +27,11 @@ export function reducer(state, { type, payload }) {
             return {
                 ...state,
                 sortingByPayRate: !initialState.sortingByPayRate
+            }
+        case "SET_JOB_TYPES":
+            return {
+                ...state,
+                jobTypes: payload
             }
         default: {
             throw new Error(`Unsupported action type: ${type}`)
