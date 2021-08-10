@@ -5,6 +5,7 @@ import SearchForm from 'containers/Search/SearchForm'
 import { IsNotEmpty } from 'helpers/index'
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 import { vacancyLimit } from 'constants/constants'
+import PayrateSlider from "components/Slider/Slider";
 
 
 const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, setGetJobs, getJobs, sortByValue, setSortByValue, callLoadFilters, setFilterObj, filterObj, clean}) => {
@@ -306,19 +307,9 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
           </div>
           {/* Rate/Hr */}
           <div className="widget">
-            <h4>Pay Rate / Hr</h4>
+            <PayrateSlider label="Kindly select your payrate: "/>
+            <h4>Pay Rate Type</h4>
             <ul className="checkboxes">
-              <li>
-                <input
-                  id="check-6"
-                  type="checkbox"
-                  name="check"
-                  defaultValue="check-6"
-                  defaultChecked
-                  onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
-                />
-                <label htmlFor="check-6">Any Rate</label>
-              </li>
               <li>
                 <input
                   id="check-7"
@@ -328,7 +319,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-7">
-                  Ksh 0 - Ksh 1000
+                  Per Hour
                 </label>
               </li>
               <li>
@@ -340,7 +331,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-8">
-                  Ksh 1001 - Ksh 2500
+                  Per Day
                 </label>
               </li>
               <li>
@@ -352,7 +343,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-9">
-                  Ksh 2501 - Ksh 5000
+                  Per Week
                 </label>
               </li>
               <li>
@@ -364,19 +355,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
                   onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
                 />
                 <label htmlFor="check-10">
-                  Ksh 5001 - Ksh 10000
-                </label>
-              </li>
-              <li>
-                <input
-                  id="check-11"
-                  type="checkbox"
-                  name="check"
-                  defaultValue="check-11"
-                  onChange={(e) => handleRateTypes(e.target.value, e.target.checked)}
-                />
-                <label htmlFor="check-11">
-                  Ksh 10000+
+                  Per Month
                 </label>
               </li>
             </ul>
