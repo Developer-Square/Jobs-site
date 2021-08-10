@@ -12,7 +12,8 @@ import Button from "components/Button/Button";
 export const PaymentModal = ({onClose, open, moreInfo, onSubmit, loading}) => {
   const initialValues = {}
   useEffect(() => {
-    // initialValues.phone = getPhoneNumber();
+    initialValues.phone = getPhoneNumber();
+    // eslint-disable-next-line
   }, [])
 
  function getPhoneNumber ()  {

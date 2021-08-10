@@ -7,6 +7,11 @@ import Select from "react-select";
 function SelectInput(props) {
   const { label, name, options, icon, style, hideButton, ...rest } = props;
 
+  // Hide the submit button whenever the select input is active and vice versa.
+  const handleButton = (data) => {
+    hideButton(data);
+  }
+
   const handleChange = (name, val, setFieldValue) => {
     const inputOrganization = document.getElementById('react-select-3-input');
     const inputSeeker = document.getElementById('react-select-5-input');
@@ -24,10 +29,6 @@ function SelectInput(props) {
     setFieldValue(name, val);
   }
 
-  // Hide the submit button whenever the select input is active and vice versa.
-  const handleButton = (data) => {
-    hideButton(data);
-  }
   return (
     <FormInput className={`form-row form-row-wide`} style={style}>
       <label htmlFor={name}>

@@ -21,28 +21,30 @@ const SeekerProfile = () => {
   const {
     authState: { profile },
   } = React.useContext(AuthContext);
+
+  const values = {
+    title: "",
+    idNumber: "",
+    dateOfBirth: "",
+    description: "",
+    location: "",
+    gender: { value: "", label: "Select Gender" },
+    mobile: "",
+    status: { value: "", label: "Select Options" },
+    industries: [],
+    user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
+  }
+
   const [industries, setIndustries] = React.useState([]);
-  const [initialValues, setInitialValues] = React.useState();
+  const [initialValues, setInitialValues] = React.useState(values);
   const { data, loading } = useQuery(GET_INDUSTRIES);
+
   React.useEffect(() => {
     if (user?.seeker) {
       setInitialValues(user.seeker);
-    } else {
-      setInitialValues({
-        title: "",
-        idNumber: "",
-        dateOfBirth: "",
-        description: "",
-        location: "",
-        gender: { value: "", label: "Select Gender" },
-        mobile: "",
-        status: { value: "", label: "Select Options" },
-        industries: [],
-        user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loading]);
 
   const genderOptions = [
     { value: "MALE", label: "Male" },
@@ -139,6 +141,7 @@ const SeekerProfile = () => {
                             control="select"
                             label="Status"
                             name="status"
+                            hideButton={() => {}}
                             style={{ margin: 0 }}
                             options={statusOptions}
                             defaultValue={{
@@ -150,6 +153,7 @@ const SeekerProfile = () => {
                             control="select"
                             label="Gender"
                             name="gender"
+                            hideButton={() => {}}
                             style={{ margin: 0 }}
                             options={genderOptions}
                             defaultValue={{ value: "", label: "Select Gender" }}
@@ -186,6 +190,7 @@ const SeekerProfile = () => {
                             control="select"
                             label="Interests"
                             name="industries"
+                            hideButton={() => {}}
                             style={{ margin: 0 }}
                             options={industries}
                             isMulti={true}
