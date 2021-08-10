@@ -18,6 +18,7 @@ const Vacancy = () => {
   // const [afterValue, setAfterValue] = React.useState('');
   const [filterObj, setFilterObj] = React.useState({search: '', jobTypes: [],});
 
+
   const ratePerHour = () => {
     let sortedJobs = [];
     

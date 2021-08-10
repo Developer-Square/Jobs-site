@@ -23,20 +23,10 @@ export const cleanVacanciesData = (edges, update, rate, ratePerHour, vacancyStat
         payload: jobs
       });
     } else if (update) {
-      // Reverse the vacancies array inorder to display the latests results
-      // and present it as it is when we want the oldest results.
-      if (getJobs === '-updated_at' || getJobs === 'Newest jobs') {
-        jobs = jobs.reverse();
-        vacancyDispatch({
-          type: "SORT_JOBS",
-          payload: jobs
-        });
-      } else {
-        vacancyDispatch({
-          type: "SORT_JOBS",
-          payload: jobs
-        });
-      }
+      vacancyDispatch({
+        type: "SORT_JOBS",
+        payload: jobs
+      });
     }
     // Sort the object according the rate per hour sorting 
     // if there's any option selected.

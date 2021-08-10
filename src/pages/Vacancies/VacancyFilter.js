@@ -97,21 +97,15 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
         field: 'TITLE'
       });
     } else if (sortOption.value === '-updated_at' || sortOption.innerHTML === 'Newest jobs') {
-      // Clean up the sortby field as we're now sorting using different fields
-      setSortByValue({});
-      if (sortOption.innerHTML) {
-        setGetJobs(curr => curr = sortOption.innerHTML);
-      } else {
-        setGetJobs(curr => curr = sortOption.value);
-      }
+      setSortByValue({
+        direction: 'DESC',
+        field: 'CREATED_AT'
+      });
     } else {
-      // Clean up the sortby field as we're now sorting using different fields
-      setSortByValue({});
-      if (sortOption.innerHTML) {
-        setGetJobs(curr => curr = sortOption.innerHTML);
-      } else {
-        setGetJobs(curr => curr = sortOption.value);
-      }
+      setSortByValue({
+        direction: 'ASC',
+        field: 'CREATED_AT'
+      });
     }
   }
 
@@ -211,14 +205,6 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
     // Only sort by rate if there are no API calls.
     if (rate.lowerLimit !== 'any' && Object.values(cleanedValues).length === 0) {
       ratePerHour();
-    }
-
-    if (getJobs === 'updated_at' || getJobs === '-updated_at' || getJobs === 'Newest jobs' || getJobs === 'Oldest jobs') {
-      loadFilterValues(
-        {variables: {
-          first: vacancyLimit
-        }}
-      );
     }
     
     // Check whether the search field or sortTypes are empty.

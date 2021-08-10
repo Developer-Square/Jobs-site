@@ -5,7 +5,7 @@ import { vacancyLimit } from 'constants/constants'
 import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 import { getDBIdFromGraphqlId } from 'utils'
 
-function PaginationItem({ data, loading, callLoadFilters }) {
+function PaginationItem({ data, loading, callLoadFilters, sortByValue }) {
     let pages;
     const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
     useEffect(() => {
@@ -50,9 +50,9 @@ function PaginationItem({ data, loading, callLoadFilters }) {
         $('.cdp').attr('actpage', paginationPage);
     };
 
-    const handleEncode = (id, salary) => {
+    const handleEncode = (id, secondParam) => {
         const decodedId = getDBIdFromGraphqlId(id, 'Vacancy')
-        const cleanedResults = [salary,decodedId];
+        const cleanedResults = [secondParam ,decodedId];
         let encoded = Buffer.from(JSON.stringify(cleanedResults)).toString("base64");
 
         return encoded;
@@ -61,7 +61,6 @@ function PaginationItem({ data, loading, callLoadFilters }) {
     const handleNumberClick = (e, requestedPage) => {
         const {activeIndex} = vacancyState;
         if (vacancyState.sortedJobs && activeIndex !== requestedPage) {
-            // Get the last job's id and salary.
             const length = vacancyState.sortedJobs.length;
 
             if (requestedPage > activeIndex) {
@@ -69,17 +68,46 @@ function PaginationItem({ data, loading, callLoadFilters }) {
                     type: "SET_ACTIVE_INDEX",
                     payload: requestedPage
                 });
-                const {id, salary} = vacancyState.sortedJobs[length - 1];
-                const encodedResult = handleEncode(id, salary);
+
+                let encodedResult;
+                if (sortByValue.field === 'SALARY') {
+                    // Get the last job's id and salary.
+                    const {id, salary} = vacancyState.sortedJobs[length - 1];
+                    encodedResult = handleEncode(id, salary);
+                } else if (sortByValue.field === 'TITLE') {
+                    // Get the last job's id and title.
+                    const {id, title} = vacancyState.sortedJobs[length - 1];
+                    encodedResult = handleEncode(id, title);
+                } else if (sortByValue.field === 'CREATED_AT') {
+                    // Get the last job's id and createdAt value.
+                    const {id, createdAt} = vacancyState.sortedJobs[length - 1];
+                    encodedResult = handleEncode(id, createdAt);
+                }
+                
                 callLoadFilters('', encodedResult, vacancyLimit, 0,);
                 changePageNumber(e);
             } else {
+                // Moving to the previous page.
                 vacancyDispatch({
                     type: "SET_ACTIVE_INDEX",
                     payload: requestedPage
                 });
-                const {id, salary} = vacancyState.sortedJobs[0];
-                const encodedResult = handleEncode(id, salary);
+
+                let encodedResult;
+                if (sortByValue.field === 'SALARY') {
+                    // Get the first job's id and salary.
+                    const {id, salary} = vacancyState.sortedJobs[0];
+                    encodedResult = handleEncode(id, salary);
+                } else if (sortByValue.field === 'TITLE') {
+                    // Get the first job's id and title.
+                    const {id, title} = vacancyState.sortedJobs[0];
+                    encodedResult = handleEncode(id, title);
+                } else if (sortByValue.field === 'CREATED_AT') {
+                    // Get the first job's id and createdAt value.
+                    const {id, createdAt} = vacancyState.sortedJobs[0];
+                    encodedResult = handleEncode(id, createdAt);
+                }
+                
                 callLoadFilters(encodedResult, '', 0, vacancyLimit,);
                 changePageNumber(e);
             }
