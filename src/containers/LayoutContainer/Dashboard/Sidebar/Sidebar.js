@@ -16,6 +16,7 @@ export default withRouter(function Sidebar(props) {
   const menuItems = groupBy(props.routes, "category");
   const history = useHistory();
   const [activeLink, setActiveLink] = React.useState(false);
+  const [openParent, setOpenParent] = React.useState(false);
   const { authDispatch } = useContext(AuthContext);
   const setLink = (title) => {
     // onMenuItemClick();
@@ -29,12 +30,15 @@ export default withRouter(function Sidebar(props) {
       localStorage.removeItem("thedb_auth_profile");
       localStorage.removeItem("thedb_auth_payload");
       localStorage.removeItem("thedb_auth_roles");
-      localStorage.removeItem("thedb_applications");
-      localStorage.removeItem("thedb_org_profile");
-      localStorage.removeItem("thedb_individual_profile");
       authDispatch({ type: "SIGN_OUT" });
       history.push("/");
     }
+  };
+  const isOpen = (menuItem) => {
+    if (activeLink === menuItem.title && openParent) {
+      return true;
+    }
+    return false;
   };
   const menuHandler = (section, parent = null) => {
     return section.map((menuItem) => {
@@ -71,6 +75,8 @@ export default withRouter(function Sidebar(props) {
               : {}
           }
           key={menuItem.title}
+          onClick={() => setOpenParent((curr) => !curr)}
+          className={isOpen(menuItem) ? "active-submenu" : ""}
         >
           <Link
             to={{

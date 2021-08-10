@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthContext } from "contexts/auth/auth.context";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 export const RightMenu = ({
   isHomePage,
@@ -11,6 +11,19 @@ export const RightMenu = ({
   onJoin,
 }) => {
   const { authDispatch } = React.useContext(AuthContext);
+  const history = useHistory();
+
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("thedb_auth_profile");
+      localStorage.removeItem("thedb_auth_payload");
+      localStorage.removeItem("thedb_auth_roles");
+      authDispatch({ type: "SIGN_OUT" });
+      history.push("/");
+    }
+  };
 
   return (
     <ul
@@ -20,7 +33,13 @@ export const RightMenu = ({
       {isAuthenticated ? (
         <>
           <li>
-            <Link to={""}>Dashboard</Link>
+            <Link
+              to={{
+                pathname: "",
+              }}
+            >
+              Dashboard
+            </Link>
             <ul>
               <li>
                 <Link to={`/dashboard`}>Dashboard</Link>
@@ -55,7 +74,12 @@ export const RightMenu = ({
             </ul>
           </li>
           <li>
-            <Link to={""} onClick={() => console.log("to log out")}>
+            <Link
+              to={{
+                pathname: "",
+              }}
+              onClick={handleLogout}
+            >
               <i className="fa fa-lock"></i> Log Out
             </Link>
           </li>

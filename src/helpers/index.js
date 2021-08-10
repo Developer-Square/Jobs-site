@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import _ from "lodash";
+import _, { isArray } from "lodash";
 import CryptoJS from "crypto-js";
 import AES from "crypto-js/aes";
 import { maybe } from "core/utils";
@@ -75,6 +75,7 @@ export const useTimer = (seconds) => {
 
 export const normalizeErrors = (errors) => {
   if (typeof errors !== "object") return null;
+  if (isArray(errors)) return errors;
   return Object.keys(errors).reduce((acc, val) => {
     const oB = (values, number) => {
       if (values || number) {
@@ -340,9 +341,8 @@ export const showNotification = (
     // throw new Error("Alert Provider/Hook not provided");
   }
   if (data) {
-    console.log(errors);
     if (errors) {
-      console.log("Server Error kwa login", errors[0].message);
+      console.log("Server Error : ", errors[0].message);
       return errors[0].message;
     }
 
@@ -363,16 +363,35 @@ export const showNotification = (
       const err = maybe(() => data[errorField], []);
 
       if (err) {
-        const nonFieldErr = normalizeErrors(maybe(() => data[errorField], []));
+        const nonFieldErr = normalizeErrors(maybe(() => err, []));
+        console.log(err);
+        console.log(nonFieldErr);
         if (b) {
-          a.show(
-            {
-              title: nonFieldErr?.nonFieldErrors,
-            },
-            { type: "error", timeout: 5000 },
-          );
+          if (isArray(nonFieldErr)) {
+            for (let i = 0; i < nonFieldErr.length; i++) {
+              a.show(
+                {
+                  title: nonFieldErr[i].message,
+                },
+                { type: "error", timeout: 5000 },
+              );
+            }
+          } else {
+            a.show(
+              {
+                title: nonFieldErr?.nonFieldErr,
+              },
+              { type: "error", timeout: 5000 },
+            );
+          }
         } else {
-          a.error(nonFieldErr?.nonFieldErrors);
+          if (isArray(nonFieldErr)) {
+            for (let i = 0; i < nonFieldErr.length; i++) {
+              a.info(nonFieldErr[i].message);
+            }
+          } else {
+            a.info(nonFieldErr?.message);
+          }
         }
       }
     }

@@ -68,7 +68,8 @@ const UserProvider = ({ children }) => {
     //   getUser();
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthenticated]);
+
   const updateAddress = async (address) => {
     try {
       await accountAddressUpdate({

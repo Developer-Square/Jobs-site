@@ -46,23 +46,44 @@ export const LeftMenu = ({ isSticky, logo }) => {
         )}
       </Logo>
       <li>
-        <Link id={pathname === "" ? "current" : ""} to="/">
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={pathname === "" ? "current" : ""}
+          to="/"
+        >
           Home
         </Link>
       </li>
       <li>
-        <Link id={pathname === "pricing" ? "current" : ""} to="/pricing">
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={pathname === "pricing" ? "current" : ""}
+          to="/pricing"
+        >
           Pricing
         </Link>
       </li>
       <li>
-        <Link id={pathname === "contact-us" ? "current" : ""} to="/contact-us">
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={pathname === "contact-us" ? "current" : ""}
+          to="/contact-us"
+        >
           Contact
         </Link>
       </li>
 
       <li>
         <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
           id={
             pathname === "vacancies" || pathname === "categories"
               ? "current"

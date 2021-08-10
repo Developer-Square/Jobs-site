@@ -32,7 +32,7 @@ import moment from "moment";
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 export const TypedApplicationsQuery = TypedQuery(GET_APPLICATIONS);
 
-const Applications = ({ deviceType }) => {
+const ApplicationsManager = ({ deviceType }) => {
   const {
     authState: { profile },
   } = React.useContext(AuthContext);
@@ -450,4 +450,4 @@ const Applications = ({ deviceType }) => {
   );
 };
 
-export default Applications;
+export default ApplicationsManager;

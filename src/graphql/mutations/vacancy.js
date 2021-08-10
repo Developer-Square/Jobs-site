@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const BOOKMARK_VACANCY = gql`
-  mutation BookmarkJob($job: Vacancy) {
-    bookmarkVacancy(job: $job) {
+  mutation BookmarkJob($job: ID!) {
+    bookmarkVacancy(input: { job: $job }) {
       errors {
         field
         message
@@ -13,7 +13,7 @@ export const BOOKMARK_VACANCY = gql`
         code
         message
       }
-      application {
+      bookmarkedJob {
         slug
         uuid
         createdAt
@@ -21,20 +21,16 @@ export const BOOKMARK_VACANCY = gql`
         isDeleted
         isActive
         id
-        appliedOn
-        resume
-        budget
-        comment
-        status
         job {
           id
           title
         }
-        applicant {
+        user {
           id
           fullName
           email
         }
+        bookmarked
       }
     }
   }
@@ -104,13 +100,9 @@ export const UPDATE_APPLICATION = gql`
     $comment: String
   ) {
     patchApplication(
-      resumeId: $id
+      id: $id
       input: {
         status: $status
-        isActive: $isActive
-        isDeleted: $isDeleted
-        applicant: $applicant
-        job: $job
         resume: $resume
         budget: $budget
         comment: $comment

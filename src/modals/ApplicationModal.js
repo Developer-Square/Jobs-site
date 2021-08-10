@@ -14,11 +14,15 @@ import { showNotification } from "helpers";
 import { withRouter } from "react-router-dom";
 import { useAlert } from "react-alert";
 import ModalContext from "contexts/modal/modal.provider";
+import { AuthContext } from "contexts/auth/auth.context";
 
 export const TypedCreateApplicationMutation = TypedMutation(CREATE_APPLICATION);
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 
 const ApplicationModal = () => {
+  const {
+    authState: { profile },
+  } = React.useContext(AuthContext);
   const { t } = useTranslation();
   const alert = useAlert();
   const [vacancyID, setVacancyID] = React.useState();
@@ -56,11 +60,11 @@ const ApplicationModal = () => {
         <TypedCreateApplicationMutation
           onCompleted={(data, errors) =>
             showNotification(
-              data.applicationCreate,
+              data.createApplication,
               errors,
-              alert,
               null,
-              "Application Created",
+              "errors",
+              "Application submitted successfully, Wait for response from the contractor",
               formik.setErrors,
             )
           }
@@ -74,6 +78,7 @@ const ApplicationModal = () => {
                   resume: values.variables.resume[0],
                   budget: values.variables.budget,
                   comment: values.variables.comment,
+                  applicant: profile.id,
                   status: "APPLIED",
                 },
               });
@@ -95,8 +100,8 @@ const ApplicationModal = () => {
                   return (
                     <DataModal
                       title={{
-                        create: "Create Application",
-                        edit: "Create Application",
+                        create: "Make Application",
+                        edit: "Make Application",
                       }}
                       onEdit={createApplication}
                       onCreate={createApplication}

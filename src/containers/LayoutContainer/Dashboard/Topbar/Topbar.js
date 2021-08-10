@@ -1,6 +1,6 @@
-import { AlertDotIcon, NotificationIcon } from "components/AllSvgIcon";
+// import { AlertDotIcon, NotificationIcon } from "components/AllSvgIcon";
 import Drawer from "components/Drawer/Drawer";
-import Notification from "components/Notification/Notification";
+// import Notification from "components/Notification/Notification";
 import Popover from "components/Popover/Popover";
 import { SETTINGS } from "constants/constants";
 import { PROFILE_PAGE } from "constants/routes.constants";
@@ -11,7 +11,7 @@ import UserImage from "image/user.jpg";
 import React, { useContext, useCallback } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { Link, useHistory } from "react-router-dom";
-import { useDeviceType } from "helpers/useDeviceType";
+// import { useDeviceType } from "helpers/useDeviceType";
 import {
   DrawerClose,
   DrawerContentWrapper,
@@ -19,7 +19,7 @@ import {
 } from "../../Header/Header.style";
 import Sidebar from "../Sidebar/Sidebar";
 import {
-  AlertDot,
+  // AlertDot,
   CloseButton,
   DrawerWrapper,
   Image,
@@ -27,7 +27,7 @@ import {
   LogoImage,
   LogoutBtn,
   NavLink as NavBarLink,
-  NotificationIconWrapper,
+  // NotificationIconWrapper,
   ProfileImg,
   TopbarRightSide,
   TopbarWrapper,
@@ -35,7 +35,7 @@ import {
 } from "./Topbar.style";
 import { CloseIcon } from "components/AllSvgIcon";
 
-const data = [
+export const data = [
   {
     title: "Application Successful",
     time: "5m",
@@ -50,8 +50,8 @@ const Topbar = (props) => {
     authState: { profile },
     authDispatch,
   } = useContext(AuthContext);
-  const userAgent = navigator.userAgent;
-  const deviceType = useDeviceType(userAgent);
+  // const userAgent = navigator.userAgent;
+  // const deviceType = useDeviceType(userAgent);
   const img = localStorage.getItem("thedb_individual_profile")
     ? JSON.parse(localStorage.getItem("thedb_individual_profile"))["image"]
     : localStorage.getItem("thedb_org_profile")
@@ -126,7 +126,30 @@ const Topbar = (props) => {
       </DrawerWrapper>
 
       <TopbarRightSide>
-        {deviceType.desktop ? (
+        <nav className={"menu"}>
+          <ul className="responsive float-right" style={{ margin: 0 }}>
+            <li>
+              <Link style={{ margin: 0 }} to="/dashboard">
+                <i className="fa fa-cog" /> Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link
+                style={{ margin: 0 }}
+                to={{
+                  pathname: "",
+                }}
+                onClick={() => {
+                  handleLogout();
+                }}
+              >
+                <i className="fa fa-lock" /> Log Out
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* {deviceType.desktop ? (
           <Popover
             direction="right"
             content={<Notification data={data} />}
@@ -141,7 +164,7 @@ const Topbar = (props) => {
               </NotificationIconWrapper>
             }
           />
-        ) : null}
+        ) : null} */}
 
         <Link
           style={{ color: "#fff", margin: "0 10px", fontSize: "13px" }}

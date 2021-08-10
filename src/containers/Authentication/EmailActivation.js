@@ -130,7 +130,7 @@ const EmailActivation = () => {
                       () => !data?.sendPasswordResetEmail?.errors?.length,
                     ) ? null : (
                       <HelperText>
-                        <p class=" lost_password">
+                        <p className=" lost_password">
                           <a onClick={handleLogin} href>
                             Login to continue
                           </a>

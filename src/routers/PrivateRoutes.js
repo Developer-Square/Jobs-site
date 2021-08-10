@@ -20,33 +20,46 @@ class PrivateRoutes extends Component {
     let roles = JSON.parse(localStorage.getItem("thedb_auth_roles"));
     if (roles) {
       roles = ["common", ...roles];
+      console.log(roles);
       let allowedRoutes = roles.reduce((acc, role) => {
         return [...acc, ...rolesConfig[role].routes];
       }, []);
       // For removing duplicate entries, compare with 'url'.
       allowedRoutes = uniqBy(allowedRoutes, "url");
       this.setState({ allowedRoutes });
+      console.log(allowedRoutes);
     } else {
       this.props.history.push("/");
     }
   }
 
   render() {
-    const handler = (children) => {
+    const handler = (children, parent = null) => {
       return children.map((child, i) => {
         if (!child.children || child.children.length === 0) {
+          // console.log(
+          //   child.component,
+          //   `${this.props.match.path}${parent ? parent.url : ""}${child.url}`,
+          // );
+          // console.log(this.props);
+          // console.log(parent);
+          // console.log(Routes[child.component]);
           return (
             <PrivateRoute
               exact
               key={`${child.title}-${child.url}(${i})`}
               component={Routes[child.component]}
-              path={`${this.props.match.path}${child.url}`}
+              path={`${this.props.match.path}${parent ? parent.url : ""}${
+                child.url
+              }`}
               {...this.props}
             />
           );
         }
         return (
-          <Switch key={`${child.url}${i}`}>{handler(child.children)}</Switch>
+          <Switch key={`${child.url}${i}`}>
+            {handler(child.children, child)}
+          </Switch>
         );
       });
     };
