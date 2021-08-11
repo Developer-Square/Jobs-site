@@ -2,43 +2,42 @@ import React from 'react'
 import styled from 'styled-components'
 import Switch from '@material-ui/core/Switch';
 
-import {TypedSeekerProfileQuery} from './queries'
+import { TypedEmployerProfileQuery } from './queries';
 import Loader from "components/Loader/Loader";
 import NoResult from 'components/NoResult/NoResult'
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
-function SeekerProfileForm({details}) {
+function EmployerProfileForm({details}) {
     const variables = {
-        first: 10,
         id: details.id
     }
     return (
-        <TypedSeekerProfileQuery variables={variables}>
-            {(seekerProfileData) => {
-                if (seekerProfileData.loading) {
+        <TypedEmployerProfileQuery variables={variables}>
+            {(employerProfileData) => {
+                if (employerProfileData.loading) {
                     return <Loader />
                 }
 
-                if (seekerProfileData.data.user === null) {
+                if (employerProfileData.data.user === null) {
                     return <NoResult />
                 }
 
-                const {user} = seekerProfileData.data;
+                const {user} = employerProfileData.data;
                 let edges;
-                if (user.seeker) {
-                    if (user.seeker.industries) {
-                        edges = user.seeker.industries.edges;
+                if (user.employer) {
+                    if (user.employer.industries) {
+                        edges = user.employer.industries.edges;
                     }    
                 }
 
-                return (
+                return(
                     <div className="row">
                         <div className="col-lg-10 col-md-12">
                             <Heading>
                                 <PageHeader>Account Profile</PageHeader>
                                 <ShareButton>
-                                    <span class="iconify" data-icon="el:share-alt"></span>
+                                    <span className="iconify" data-icon="el:share-alt"></span>
                                 </ShareButton>
                             </Heading>
                             <PageSubTitle>Your Plan</PageSubTitle>
@@ -55,72 +54,32 @@ function SeekerProfileForm({details}) {
                                 </ItemsContainer>
                             </div>
 
-                            <PageSubTitle>Account Details</PageSubTitle>
+                            <PageSubTitle>Profile</PageSubTitle>
                             <div className="dashboard-list-box margin-top-0">
                                 <ItemsContainer type="profile">
                                     <ProfileSkills>
-                                        <ProfileImage src={user.avatar ? user.avatar : "https://bootdey.com/img/Content/avatar/avatar7.png"} alt="Admin" />
-                                        <Title special={true}>
-                                            {user.username}
-                                            <VerifiedStatus>
-                                                {user.verified ? (
-                                                    <span className="iconify" data-icon="ic:sharp-verified" style={{color: "#2196f3"}}></span>
-                                                ): <span>(not verified)</span>}
-                                            </VerifiedStatus>
-                                        </Title>
-                                        <Info>{user.seeker.title}</Info>
-                                        <Info>{user.defaultAddress.streetAddress1}, {user.defaultAddress.city}</Info>
+                                        <ProfileImage src={user.employer.logo ? user.employer.logo : "https://bootdey.com/img/Content/avatar/avatar7.png"} alt="Admin" />
+                                        <Title>{user.username}</Title>
+                                        <Info>Frontend Developer</Info>
+                                        <Info>Nairobi, Kenya</Info>
                                     </ProfileSkills>
                                     <ProfileDetails>
                                         <Details>
                                             <Title type="profile">Email</Title>
-                                            <Info>{user.email}</Info>
+                                            <Info>tanjirokamado@gmail.com</Info>
                                         </Details>
                                         <Details>
-                                            <Title type="profile">First Name</Title>
-                                            <Info>{user.firstName}</Info>
+                                            <Title type="profile">Industry</Title>
+                                            <Info>Engineering and Technology</Info>
                                         </Details>
                                         <Details>
-                                            <Title type="profile">Last Name</Title>
-                                            <Info>{user.lastName}</Info>
-                                        </Details>
-                                    </ProfileDetails>
-                                </ItemsContainer>
-                            </div>
-
-                            <PageSubTitle>Profile Details</PageSubTitle>
-                            <div className="dashboard-list-box margin-top-0">
-                                <ItemsContainer type="profile">
-                                    <ProfileDetails>
-                                        <Details>
-                                            <Title type="profile">Id Number</Title>
-                                            <Info>{user.seeker.idNumber}</Info>
+                                            <Title type="profile">PayRate</Title>
+                                            <Info>Ksh 2500 / hr</Info>
                                         </Details>
                                         <Details>
-                                            <Title type="profile">Status</Title>
-                                            <Info>{user.seeker.status}</Info>
+                                            <Title type="profile">Education Qualification</Title>
+                                            <Info>Secondary</Info>
                                         </Details>
-                                        <Details>
-                                            <Title type="profile">Gender</Title>
-                                            <Info>{user.seeker.gender}</Info>
-                                        </Details>
-                                        <Details>
-                                            <Title type="profile">Phone Number</Title>
-                                            <Info>{user.phone}</Info>
-                                        </Details>
-                                        <Details>
-                                            <Title type="profile">Additional Info</Title>
-                                        </Details>
-                                        <PaddedInfo>{!user.seeker.descriptionPlaintext ? 'Add some info...' : user.seeker.descriptionPlaintext}</PaddedInfo>
-                                    </ProfileDetails>
-                                    <Spacer />
-                                    <ProfileDetails>
-                                        <Details>
-                                            <Title type="profile">Interests</Title>
-                                        </Details>
-                                        {edges.length ? edges.map(industry => (
-                                                <PaddedInfo>{industry.node.name}</PaddedInfo>
-                                            )): null}
                                     </ProfileDetails>
                                 </ItemsContainer>
                             </div>
@@ -135,7 +94,7 @@ function SeekerProfileForm({details}) {
                                                 <span className="iconify" data-icon="bi:github"></span>
                                                 <Title type="profile">Github</Title>
                                             </Socials>
-                                            <Info>https://github.com/{user.username}</Info>
+                                            <Info>https://github.com/tanjiro</Info>
                                         </Details>
                                         <Details type="socials">
                                             <Socials>
@@ -149,7 +108,7 @@ function SeekerProfileForm({details}) {
                                                 <span class="iconify" data-icon="flat-color-icons:google"></span>
                                                 <Title type="profile">Google</Title>
                                             </Socials>
-                                            <Info>{user.email}</Info>
+                                            <Info>tanjirokamado@gmail.com</Info>
                                         </Details>
                                     </ProfileDetails>
                                 </ItemsContainer>
@@ -195,30 +154,17 @@ function SeekerProfileForm({details}) {
                     </div>
                 )
             }}
-            
-        </TypedSeekerProfileQuery> 
+        </TypedEmployerProfileQuery>
     )
 }
-const VerifiedStatus = styled.div`
-    padding-left: 5px;
-    svg {
-        font-size: 22px;
-    }
 
-    span {
-        font-size: 14px;
-    }
-`
-const Spacer = styled.div`
-    margin: 0 15px;
-`
 const Heading = styled.div`
     display: flex;
     justify-content: space-between;
 `
 const PageHeader = styled.div`
-    font-size: 24px;
-    line-height: 28px;
+    font-size: 26px;
+    line-height: 30px;
     margin-left: 40px;
     margin-bottom: 20px;
 `
@@ -262,13 +208,12 @@ const AccountDetails = styled.div`
     align-items: center;
 `
 const Title = styled.div`
-    display: ${props => props.special ? 'flex' : ''};
     font-size: ${props => props.type === 'profile' ? '17px' : '18px'};
     line-height: 24px;
     color: #262b33;
     font-weight: 400;
     margin-bottom: 6px;
-    margin-right: ${props => props.type === 'profile' ? '30px' : '0'};
+    margin-right: ${props => props.type === 'profile' ? '40px' : '0'};
 `
 const AccountImage = styled.img`
     width: 40px;
@@ -290,16 +235,6 @@ const Info = styled.div`
     span {
         color: rgb(33, 150, 243);
     }
-`
-const PaddedInfo = styled.div`
-    font-size: 15px;
-    line-height: 20px;
-    color:  rgb(152, 161, 179);
-    max-width: 448px;
-    padding: 5px;
-    background: #eee;
-    margin-bottom: 3px;
-    border-radius: 3px;
 `
 const UpgradeButton = styled.div`
     font-size: 17px;
@@ -342,4 +277,4 @@ const EmailInfo = styled.div`
     display: flex;
     flex-direction: column;
 `
-export default SeekerProfileForm;
+export default EmployerProfileForm

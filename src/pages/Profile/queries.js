@@ -87,3 +87,37 @@ export const SeekerProfile = gql`
   }
 `
 export const TypedSeekerProfileQuery = TypedQuery(SeekerProfile);
+
+export const EmployerProfile = gql`
+  user (id: $id) {
+    email
+    username
+    firstName
+    lastName
+    avatar
+    phone
+    verified
+    employer {
+      description
+      name
+      website
+      country
+      lookingFor
+      industries {
+        name
+      }
+      logo {
+        url
+        alt
+      }
+    }
+    isSeeker
+    isEmployer
+    defaultAddress {
+      streetAddress1
+      city
+    }
+  }
+  }
+`
+export const TypedEmployerProfileQuery = TypedQuery(EmployerProfile);

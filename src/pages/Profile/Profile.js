@@ -3,6 +3,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 import React, { lazy, Suspense } from "react";
 import BaseProfile from "./BaseProfile";
 import EmployerProfile from "./EmployerProfile";
+import EmployerProfileForm from "./EmployerProfileForm";
 import InstitutionProfile from "./InstitutionProfile";
 import SeekerProfile from "./SeekerProfile";
 import CreateAddress from "containers/Address/AddressCreate";
@@ -26,6 +27,8 @@ function Profile() {
     return <Loader />;
   }
 
+  console.log("details", profile);
+
   return (
     <>
     <div className={!edit ? "col-lg-10 col-md-12" : "col-md-12"}>
@@ -34,9 +37,18 @@ function Profile() {
     </RightBtn>
     </div>
     {!edit ? (
-      <Suspense fallBack={<Loader />}>
-        <SeekerProfileForm />
-      </Suspense>
+      <>
+        {Object.keys(profile).length ? 
+          profile.isEmployer ? 
+          <Suspense fallBack={<Loader />}>
+            <EmployerProfileForm details={profile} />
+          </Suspense>  
+          : 
+          <Suspense fallBack={<Loader />}>
+            <SeekerProfileForm details={profile} />
+          </Suspense>
+        : <Loader />}
+      </>
     ):(
       <>
       <div className="row">
