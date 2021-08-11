@@ -45,19 +45,70 @@ const components = {
     children: [],
     dashboardItem: true,
   },
+  vacancies: {
+    component: "Vacancy",
+    url: "/vacancies",
+    title: "Jobs",
+    icon: "Category",
+    module: 1,
+    category: management,
+    children: [
+      {
+        component: "Vacancy",
+        url: "/add-job",
+        title: "Add Job",
+        icon: "Category",
+        module: 1,
+        category: management,
+        children: [],
+        dashboardItem: true,
+      },
+      {
+        component: "ManageVacancies",
+        url: "/manage-jobs",
+        title: "Manage Jobs",
+        icon: "Category",
+        module: 1,
+        category: management,
+        children: [],
+        dashboardItem: true,
+      },
+      {
+        component: "Vacancy",
+        url: "/edit-job/:vacancyUpdateID",
+        title: "Update Job",
+        icon: "Category",
+        module: 1,
+        category: management,
+        children: [],
+        dashboardItem: false,
+      },
+    ],
+    dashboardItem: true,
+  },
   addVacancy: {
     component: "Vacancy",
-    url: "/add-job",
+    url: "/vacancies/add-job",
     title: "Add Job",
     icon: "Category",
     module: 1,
     category: management,
     children: [],
-    dashboardItem: true,
+    dashboardItem: false,
+  },
+  manageVacancies: {
+    component: "ManageVacancies",
+    url: "/vacancies/manage-jobs",
+    title: "Manage Jobs",
+    icon: "Category",
+    module: 1,
+    category: management,
+    children: [],
+    dashboardItem: false,
   },
   updateVacancy: {
     component: "Vacancy",
-    url: "/edit-job/:vacancyUpdateID",
+    url: "/vacancies/edit-job/:vacancyUpdateID",
     title: "Update Job",
     icon: "Category",
     module: 1,
@@ -74,6 +125,24 @@ const components = {
     category: management,
     dashboardItem: false,
   },
+  applicationsManager: {
+    component: "ApplicationsManager",
+    url: "/all-applications",
+    title: "All Applications",
+    icon: "Category",
+    module: 1,
+    category: management,
+    dashboardItem: true,
+  },
+  applications: {
+    component: "Applications",
+    url: "/applications",
+    title: "Applications",
+    icon: "Category",
+    module: 1,
+    category: management,
+    dashboardItem: true,
+  },
   resumeDashboard: {
     component: "ResumeDashboard",
     url: "/resume",
@@ -81,35 +150,8 @@ const components = {
     icon: "Category",
     module: 1,
     category: management,
-    // children: [
-    //   {
-    //     component: "ResumeBuilder",
-    //     url: "/resume/builder/:resumeID",
-    //     title: "Add Resume",
-    //     icon: "Category",
-    //     module: 1,
-    //     dashboardItem: true,
-    //   },
-    //   {
-    //     component: "ResumeDashboard",
-    //     url: "/resume",
-    //     title: "Add/Manage Resumes",
-    //     icon: "Category",
-    //     module: 1,
-    //     dashboardItem: true,
-    //   },
-    //   // {
-    //   //   component: "Resume",
-    //   //   url: "/view/:resumeID",
-    //   //   title: "View Resume",
-    //   //   icon: "Category",
-    //   //   module: 1,
-    //   //   dashboardItem: false,
-    //   // },
-    // ],
     dashboardItem: true,
   },
-
   profile: {
     component: "Profile",
     url: "/profile",
@@ -122,26 +164,50 @@ const components = {
   },
 };
 
-// modules for grouping.
-const modules = {
-  0: {
-    component: "Dashboard",
-    title: "Dashboard",
-    icon: "home",
-    isExpendable: true,
-  },
-};
+// // modules for grouping.
+// const modules = {
+//   0: {
+//     component: "Dashboard",
+//     title: "Dashboard",
+//     icon: "home",
+//     isExpendable: true,
+//   },
+// };
 
+// const allRoutes = (routes) => {
+//   const parentObjects = Object.values(routes);
+//   const childObjects = parentObjects.reduce((arr, obj) => {
+//     if (obj.children) {
+//       return arr.concat(obj.children);
+//     }
+//     return arr;
+//   }, []);
+//   console.log([...childObjects]);
+//   console.log([...parentObjects]);
+//   console.log([...parentObjects, ...childObjects]);
+//   return [...parentObjects, ...childObjects];
+// };
 // component's access to roles.
 const rolesConfig = {
   admin: {
-    routes: [...Object.values(components)],
+    routes: [components.admin],
+    // routes: allRoutes(components),
   },
   employer: {
-    routes: [],
+    routes: [
+      // components.addVacancy,
+      // components.updateVacancy,
+      // components.manageVacancies,
+      // components.applicationsManager,
+    ],
   },
   seeker: {
-    routes: [],
+    routes: [
+      // components.resumeDashboard,
+      // components.resumeBuilder,
+      // components.applications,
+      // components.bookmarks,
+    ],
   },
   institution: {
     routes: [],
@@ -155,16 +221,23 @@ const rolesConfig = {
 
   common: {
     routes: [
-      components.profile,
       components.dashboard,
-      // components.messages,
-      // components.bookmarks,
-      components.addVacancy,
-      components.updateVacancy,
+      components.profile,
+
       components.resumeDashboard,
       components.resumeBuilder,
+      components.applications,
+      components.bookmarks,
+      components.vacancies,
+
+      components.addVacancy,
+      components.updateVacancy,
+      components.manageVacancies,
+      components.applicationsManager,
+
+      // components.messages,
     ],
   },
 };
 
-export { modules, rolesConfig };
+export { rolesConfig };

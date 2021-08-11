@@ -25,7 +25,11 @@ const Banner = () => {
     <div
       id="banner"
       className="with-transparent-header parallax background"
-      style={{ backgroundImage: `url(${bgImg})` }}
+      style={{
+        backgroundImage: `url(${bgImg})`,
+        maxHeight: "100vh",
+        height: "100vh",
+      }}
       data-img-width={2000}
       data-img-height={1330}
       data-diff={300}
@@ -46,6 +50,11 @@ const Banner = () => {
             <button style={{ backgroundColor: "#e6c018" }}>
               <i className="fa fa-search" />
             </button>
+            <Waypoint
+              onEnter={removeSticky}
+              onLeave={setSticky}
+              onPositionChange={onWaypointPositionChange}
+            />
             {/* Browse Jobs */}
             <div className="browse-jobs">
               Browse job offers by{" "}
@@ -59,11 +68,6 @@ const Banner = () => {
           </div>
         </div>
       </div>
-      <Waypoint
-        onEnter={removeSticky}
-        onLeave={setSticky}
-        onPositionChange={onWaypointPositionChange}
-      />
     </div>
   );
 };

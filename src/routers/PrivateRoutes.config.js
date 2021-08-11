@@ -19,6 +19,13 @@ const Applications = lazy(() => import("pages/Applications/Applications"));
 const SingleView = lazy(() => import("pages/SingleView/SingleView"));
 const ResumeDashboard = lazy(() => import("pages/Resume/ResumeDashboard"));
 const ResumeBuilder = lazy(() => import("pages/Resume/ResumeBuilder"));
+const Bookmarks = lazy(() => import("pages/Bookmarks/Bookmarks"));
+const ManageVacancies = lazy(() =>
+  import("pages/ManageVacancies/ManageVacancies"),
+);
+const ApplicationsManager = lazy(() =>
+  import("pages/Applications/ApplicationsManager"),
+);
 
 export {
   Dashboard,
@@ -38,4 +45,7 @@ export {
   SingleView,
   ResumeDashboard,
   ResumeBuilder,
+  Bookmarks,
+  ApplicationsManager,
+  ManageVacancies,
 };

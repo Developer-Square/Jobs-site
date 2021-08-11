@@ -19,6 +19,17 @@ export const VACANCY_DETAIL_QUERY = gql`
       closingDate
       location
       createdAt
+      isActive
+      creator {
+        id
+        fullName
+        socials {
+          id
+          network
+          link
+          username
+        }
+      }
       industry {
         name
         id

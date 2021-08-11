@@ -24,9 +24,10 @@ import {
 } from "./Header.style";
 import UserImage from "image/user.jpg";
 import { useStickyState } from "contexts/app/app.provider";
-import { CONTACT, PROFILE_PAGE, HELP_PAGE } from "constants/routes.constants";
+import { CONTACT, HELP_PAGE } from "constants/routes.constants";
 import { SDG } from "constants/routes.constants";
 import { isCategoryPage } from "../is-home-page";
+import { VACANCIES } from "constants/routes.constants";
 
 const DrawerMenuItems = [
   {
@@ -36,8 +37,8 @@ const DrawerMenuItems = [
   },
   {
     id: 2,
-    label: "Profile",
-    href: PROFILE_PAGE,
+    label: "Vacancies",
+    href: VACANCIES,
   },
   {
     id: 3,
@@ -177,10 +178,10 @@ const MobileDrawer = () => {
             {isAuthenticated ? (
               <LoginView>
                 <UserAvatar>
-                  <img src={img} alt="user_avatar" />
+                  <img src={profile.avatar || img} alt="user_avatar" />
                 </UserAvatar>
                 <UserDetails>
-                  <h3>{profile.full_name}</h3>
+                  <h3>{profile.fullName}</h3>
                   <span>{profile.email}</span>
                 </UserDetails>
               </LoginView>
@@ -236,15 +237,8 @@ const MobileDrawer = () => {
               </DrawerMenuItem>
               <DrawerMenuItem>
                 <NavLink
-                  href="/dashboard/gigs"
-                  label="Gigs"
-                  className="drawer_menu_item"
-                />
-              </DrawerMenuItem>
-              <DrawerMenuItem>
-                <NavLink
-                  href="/dashboard/jobs"
-                  label="Jobs"
+                  href="/dashboard/applications"
+                  label="Applications"
                   className="drawer_menu_item"
                 />
               </DrawerMenuItem>

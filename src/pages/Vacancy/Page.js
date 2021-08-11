@@ -3,12 +3,15 @@ import React from "react";
 import moment from "moment";
 import { useAlert } from "react-alert";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
+
+import ModalContext from "contexts/modal/modal.provider";
+import { AuthContext } from "contexts/auth/auth.context";
+
+import DraftRenderer from "components/DraftRenderer/DraftRenderer";
+import Button from "components/Button/Button";
 
 import LogoImage from "image/thedb.png";
-import DraftRenderer from "components/DraftRenderer/DraftRenderer";
-import ModalContext from "contexts/modal/modal.provider";
-import Button from "components/Button/Button";
-import { AuthContext } from "contexts/auth/auth.context";
 
 import Bookmark from "./Bookmark";
 
@@ -20,8 +23,9 @@ const Page = ({
   data = [],
 }) => {
   const alert = useAlert();
+  const history = useHistory();
   const {
-    authState: { isAuthenticated },
+    authState: { profile, isAuthenticated },
   } = React.useContext(AuthContext);
 
   const handleLoginNotification = () => {
@@ -44,7 +48,20 @@ const Page = ({
   };
   const { emitter, events } = React.useContext(ModalContext);
 
-  const handleClick = () => emitter.emit(events.APPLICATION_MODAL, data);
+  const handleClick = () => {
+    if (data?.isActive) {
+      emitter.emit(events.APPLICATION_MODAL, data);
+    } else {
+      alert.show(
+        {
+          title: "Sorry 😔, Applications have been closed",
+        },
+        { type: "info", timeout: 5000 },
+      );
+      toast.info("Sorry 😔, Applications have been closed");
+    }
+  };
+
   // const handleClick = () => console.log("handling click");
 
   const jobType = types.find(({ name }) => name === data?.jobType);
@@ -66,11 +83,23 @@ const Page = ({
             </h2>
           </div>
           <div className="six columns">
-            <Bookmark
-              handleLoginNotification={handleLoginNotification}
-              isAuthenticated={isAuthenticated}
-              data={data}
-            />
+            {profile.isSeeker && (
+              <Bookmark
+                handleLoginNotification={handleLoginNotification}
+                isAuthenticated={isAuthenticated}
+                data={data}
+                toast={toast}
+                alert={alert}
+              />
+            )}
+            {profile.isEmployer && profile.id === data.creator.id ? (
+              <Button
+                title={"Edit Job"}
+                onClick={() => {
+                  history.push(`dashboard/vacancies/edit-job/${data?.id}`);
+                }}
+              />
+            ) : null}
           </div>
         </div>
       </div>
@@ -91,11 +120,16 @@ const Page = ({
                     <i className="fa fa-link" /> {data?.postedBy?.website}
                   </a>
                 </span>
-                <span>
-                  <a href="#">
-                    <i className="fa fa-twitter" /> @kingrestaurants
-                  </a>
-                </span>
+                {data.creator.socials.map((social, i) => {
+                  return (
+                    <span key={i}>
+                      <a href="#">
+                        <i className={`"fa fa-${social.network}`} />{" "}
+                        @kingrestaurants
+                      </a>
+                    </span>
+                  );
+                })}
               </div>
               <div className="clearfix" />
             </div>
@@ -152,12 +186,14 @@ const Page = ({
                   </div>
                 </li>
               </ul>
-              <Button
-                // href="#small-dialog"
-                className="popup-with-zoom-anim button mt-8 ml-auto"
-                onClick={isAuthenticated ? handleClick : handleApplyJob}
-                title={`Apply For This job`}
-              />
+              {profile.isSeeker && (
+                <Button
+                  // href="#small-dialog"
+                  className="popup-with-zoom-anim button mt-8 ml-auto"
+                  onClick={isAuthenticated ? handleClick : handleApplyJob}
+                  title={`Apply For This job`}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -23,7 +23,6 @@ export const MenuWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 45px 0;
   overflow-y: auto;
 
   @media only screen and (max-width: 767px) {

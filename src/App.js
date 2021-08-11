@@ -48,7 +48,7 @@ function App() {
   const [theme, componentMounted] = useDarkMode();
   const userAgent = navigator.userAgent;
   const deviceType = useDeviceType(userAgent);
-  const themeMode = theme === "light" ? lightTheme : darkTheme;
+  const themeMode = theme === "Light" ? lightTheme : darkTheme;
   if (!componentMounted) {
     return <div />;
   }

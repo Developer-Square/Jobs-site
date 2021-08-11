@@ -131,7 +131,7 @@ const Layout = ({ className, children }) => {
                       </li>
                       <li>
                         <Link onClick={() => console.log("to log out")}>
-                          <i class="fa fa-lock"></i> Log Out
+                          <i className="fa fa-lock"></i> Log Out
                         </Link>
                       </li>
                     </>

@@ -385,7 +385,7 @@ export const accountErrorFragment = gql`
 `;
 export const AVATAR_UPDATE_MUTATION = gql`
   ${accountErrorFragment}
-  mutation AvatarUpdate($image: Upload!) {
+  mutation AvatarUpdate($image: BaseUpload!) {
     userAvatarUpdate(image: $image) {
       errors: accountErrors {
         ...AccountErrorFragment

@@ -173,7 +173,7 @@ function Uploader(props) {
   );
 
   return (
-    <section className="container uploader">
+    <section className="container uploader" style={{ width: "100%" }}>
       {rest.version && rest.version === "profile" ? (
         <div className="">
           <label

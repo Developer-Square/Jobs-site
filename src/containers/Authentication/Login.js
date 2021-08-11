@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useContext } from "react";
+import React from "react";
 import { useAlert } from "react-alert";
 import { Form, Formik } from "formik";
 import FormikControl from "containers/FormikContainer/FormikControl";
@@ -13,7 +13,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 import { storeLoginDetails } from "utils";
 
 const Login = () => {
-  const { authDispatch } = useContext(AuthContext);
+  const { authDispatch } = React.useContext(AuthContext);
   const alert = useAlert();
   const history = useHistory();
 
@@ -60,7 +60,17 @@ const Login = () => {
             variables: values,
           }).then(({ data }) => {
             const successful = maybe(() => data.tokenAuth.success);
-            storeLoginDetails(successful, history, data, setErrors, setSubmitting, 'login')
+            if (successful) {
+              authDispatch({ type: "LOGIN_SUCCESS" });
+              storeLoginDetails(
+                successful,
+                history,
+                data,
+                setErrors,
+                setSubmitting,
+                "login",
+              );
+            }
           });
         }
         return (

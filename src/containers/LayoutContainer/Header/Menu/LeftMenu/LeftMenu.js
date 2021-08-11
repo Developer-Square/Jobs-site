@@ -1,5 +1,4 @@
 import React from "react";
-import { LeftMenuBox } from "./LeftMenu.style";
 import { Link, useLocation } from "react-router-dom";
 import Logoimage from "image/db.png";
 import styled from "styled-components";
@@ -7,11 +6,11 @@ import LogoimageInverted from "image/thedb.png";
 import { isCategoryPage } from "containers/LayoutContainer/is-home-page";
 
 export const Logo = styled.div`
-  margin-right: auto;
+  // margin-right: auto;
 
-  @media only screen and (max-width: 1199px) {
-    display: none;
-  }
+  // @media only screen and (max-width: 1199px) {
+  //   display: none;
+  // }
 `;
 export const LogoImage = styled.img`
   display: block;
@@ -26,7 +25,7 @@ export const LeftMenu = ({ isSticky, logo }) => {
 
   const isHomePage = isCategoryPage(pathname);
   return (
-    <LeftMenuBox>
+    <ul style={{ display: "flex", margin: "0", width: "70%", color: "#fff" }}>
       <Logo>
         {!isHomePage ? (
           <Link to="/">
@@ -46,6 +45,66 @@ export const LeftMenu = ({ isSticky, logo }) => {
           </>
         )}
       </Logo>
-    </LeftMenuBox>
+      <li>
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={pathname === "" ? "current" : ""}
+          to="/"
+        >
+          Home
+        </Link>
+      </li>
+      <li>
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={pathname === "pricing" ? "current" : ""}
+          to="/pricing"
+        >
+          Pricing
+        </Link>
+      </li>
+      <li>
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={pathname === "contact-us" ? "current" : ""}
+          to="/contact-us"
+        >
+          Contact
+        </Link>
+      </li>
+
+      <li>
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={
+            pathname === "vacancies" || pathname === "categories"
+              ? "current"
+              : ""
+          }
+          to={"#"}
+        >
+          Browse Listings
+        </Link>
+        <ul>
+          <li>
+            <Link to="/vacancies">Browse Vacancies</Link>
+          </li>
+          {/* <li>
+                        <Link href="browse-resumes.html">Browse Resumes</Link>
+                      </li> */}
+          <li>
+            <Link to="/categories">Browse Categories</Link>
+          </li>
+        </ul>
+      </li>
+    </ul>
   );
 };

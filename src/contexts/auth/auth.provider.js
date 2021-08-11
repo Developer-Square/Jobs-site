@@ -33,7 +33,6 @@ function reducer(state, action) {
       return {
         ...state,
         isAuthenticated: true,
-        currentForm: "loginSuccess",
       };
     case "SIGN_OUT":
       return {

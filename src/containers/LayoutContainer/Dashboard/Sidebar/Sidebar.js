@@ -2,192 +2,124 @@ import React, { useContext } from "react";
 import { withRouter, useHistory, Link } from "react-router-dom";
 import {
   SidebarWrapper,
-  NavLink,
   MenuWrapper,
   Svg,
   LogoutBtn,
   LogoImage,
 } from "./Sidebar.style";
-import {
-  DASHBOARD,
-  PROFILE_PAGE,
-  JOBS,
-  MYJOBS,
-  GIGS,
-  INTERNSHIPS,
-  MYINTERNSHIPS,
-  MYGIGS,
-  APPLICATIONS,
-} from "constants/routes.constants";
 import { AuthContext } from "contexts/auth/auth.context";
 import Logoimage from "image/thedb.png";
-import { DashboardIcon, SettingIcon, LogoutIcon } from "components/AllSvgIcon";
-import { CategoryIcon } from "components/AllSvgIcon";
+import { LogoutIcon } from "components/AllSvgIcon";
+import { groupBy } from "utils/groupBy";
 
-const sidebarMenus = [
-  {
-    name: "Dashboard",
-    path: DASHBOARD,
-    exact: true,
-    icon: <DashboardIcon />,
-  },
-
-  {
-    name: "Profile",
-    path: PROFILE_PAGE,
-    exact: true,
-    icon: <SettingIcon />,
-  },
-  {
-    name: "Jobs",
-    path: JOBS,
-    exact: true,
-    icon: <CategoryIcon />,
-  },
-  {
-    name: "Gigs",
-    path: GIGS,
-    exact: true,
-    icon: <CategoryIcon />,
-  },
-  {
-    name: "Internships",
-    path: INTERNSHIPS,
-    exact: true,
-    icon: <CategoryIcon />,
-  },
-];
-
-export default withRouter(function Sidebar({
-  refs,
-  style,
-  onMenuItemClick,
-  isOpen,
-}) {
+export default withRouter(function Sidebar(props) {
+  const menuItems = groupBy(props.routes, "category");
   const history = useHistory();
-  const {
-    authState: { profile },
-    authDispatch,
-  } = useContext(AuthContext);
+  const [activeLink, setActiveLink] = React.useState(false);
+  const [openParent, setOpenParent] = React.useState(false);
+  const { authDispatch } = useContext(AuthContext);
+  const setLink = (title) => {
+    // onMenuItemClick();
+    setActiveLink(title);
+  };
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
+      localStorage.removeItem("refresh_token");
       localStorage.removeItem("access_token");
       localStorage.removeItem("thedb_auth_profile");
       localStorage.removeItem("thedb_auth_payload");
       localStorage.removeItem("thedb_auth_roles");
-      localStorage.removeItem("thedb_applications");
-      localStorage.removeItem("thedb_org_profile");
-      localStorage.removeItem("thedb_individual_profile");
       authDispatch({ type: "SIGN_OUT" });
       history.push("/");
     }
   };
+  const isOpen = (menuItem) => {
+    if (activeLink === menuItem.title && openParent) {
+      return true;
+    }
+    return false;
+  };
+  const menuHandler = (section, parent = null) => {
+    return section.map((menuItem) => {
+      if (!menuItem.children || menuItem.children.length === 0) {
+        return menuItem.dashboardItem ? (
+          <li
+            style={
+              activeLink === menuItem.title
+                ? { borderColor: "#21277f", backgroundColor: "#12177f0d" }
+                : {}
+            }
+            key={menuItem.title}
+          >
+            <Link
+              to={{
+                pathname: `${props.path}${parent ? parent.url : ""}${
+                  menuItem.url
+                }`,
+                pageProps: menuItem,
+              }}
+              exact={menuItem.exact}
+              onClick={() => setLink(menuItem.title)}
+            >
+              {menuItem.title}
+            </Link>
+          </li>
+        ) : null;
+      }
+      return (
+        <li
+          style={
+            activeLink === menuItem.title
+              ? { borderColor: "#21277f", backgroundColor: "#12177f0d" }
+              : {}
+          }
+          key={menuItem.title}
+          onClick={() => setOpenParent((curr) => !curr)}
+          className={isOpen(menuItem) ? "active-submenu" : ""}
+        >
+          <Link
+            to={{
+              pathname: "",
+            }}
+            onClick={() => setLink(menuItem.title)}
+          >
+            {menuItem.title}
+          </Link>
+          <ul>{menuHandler(menuItem.children, menuItem)}</ul>
+        </li>
+      );
+    });
+  };
   return (
-    <SidebarWrapper ref={refs} style={style}>
-      {isOpen ? (
+    <SidebarWrapper ref={props.refs} style={props.style}>
+      {props.isOpen ? (
         <Link to="/">
           <LogoImage src={Logoimage} alt="TheDB" />
         </Link>
       ) : null}
 
       <MenuWrapper>
-        {sidebarMenus.map((menu, index) => (
-          <NavLink
-            to={menu.path}
-            key={index}
-            exact={menu.exact}
-            activeStyle={{
-              color: "#6C3A1F",
-              backgroundColor: "#f7f7f7",
-              borderRadius: "50px 0 0 50px",
-            }}
-            onClick={onMenuItemClick}
-          >
-            {menu.icon ? <Svg>{menu.icon}</Svg> : ""}
-            {menu.name}
-          </NavLink>
-        ))}
-        {profile.is_individual ? (
-          <NavLink
-            to={APPLICATIONS}
-            exact={true}
-            activeStyle={{
-              color: "#6C3A1F",
-              backgroundColor: "#f7f7f7",
-              borderRadius: "50px 0 0 50px",
-            }}
-            onClick={onMenuItemClick}
-          >
-            <Svg>
-              <CategoryIcon />
-            </Svg>
-            Applications
-          </NavLink>
-        ) : (
-          <>
-            <NavLink
-              to={`${MYJOBS}`}
-              exact={true}
-              activeStyle={{
-                color: "#6C3A1F",
-                backgroundColor: "#f7f7f7",
-                borderRadius: "50px 0 0 50px",
+        <div className="dashboard-nav">
+          <div className="dashboard-nav-inner">
+            {Object.keys(menuItems).map((section, i) => (
+              <ul key={i} data-submenu-title={section}>
+                {menuHandler(menuItems[section])}
+              </ul>
+            ))}
+            <LogoutBtn
+              onClick={() => {
+                handleLogout();
               }}
-              onClick={onMenuItemClick}
             >
               <Svg>
-                <CategoryIcon />
+                <LogoutIcon />
               </Svg>
-              My Jobs
-            </NavLink>
-            {profile.is_business ? null : (
-              <NavLink
-                to={`${MYINTERNSHIPS}`}
-                exact={true}
-                activeStyle={{
-                  color: "#6C3A1F",
-                  backgroundColor: "#f7f7f7",
-                  borderRadius: "50px 0 0 50px",
-                }}
-                onClick={onMenuItemClick}
-              >
-                <Svg>
-                  <CategoryIcon />
-                </Svg>
-                My Internships
-              </NavLink>
-            )}
-          </>
-        )}
-
-        <NavLink
-          to={`${MYGIGS}`}
-          exact={true}
-          activeStyle={{
-            color: "#6C3A1F",
-            backgroundColor: "#f7f7f7",
-            borderRadius: "50px 0 0 50px",
-          }}
-          onClick={onMenuItemClick}
-        >
-          <Svg>
-            <CategoryIcon />
-          </Svg>
-          My Gigs
-        </NavLink>
+              Logout
+            </LogoutBtn>
+          </div>
+        </div>
       </MenuWrapper>
-
-      <LogoutBtn
-        onClick={() => {
-          handleLogout();
-        }}
-      >
-        <Svg>
-          <LogoutIcon />
-        </Svg>
-        Logout
-      </LogoutBtn>
     </SidebarWrapper>
   );
 });

@@ -85,28 +85,34 @@ const Header = ({ className, isSticky }) => {
   const showSearch = isCategoryPage(pathname);
   return (
     <HeaderWrapper className={className}>
-      <LeftMenu logo={LogoImage} isSticky={isSticky} />
-      {!showSearch && (
-        <SearchBox
-          className="headerSearch"
-          handleSearch={(value) => onSearch(value)}
-          onClick={(value) => onClickHandler(value)}
-          placeholder="Search anything..."
-          hideType={true}
-          minimal={true}
-          showSvg={true}
-          style={{ width: "100%" }}
-          value={state.text || ""}
-        />
-      )}
-      <RightMenu
-        isAuthenticated={isAuthenticated}
-        onJoin={handleJoin}
-        onLogout={handleLogout}
-        avatar={img}
-        isSticky={isSticky}
-        isHomePage={showSearch}
-      />
+      <div className="container">
+        <div className="sixteen columns">
+          <nav className="menu" style={{ display: "flex" }}>
+            <LeftMenu logo={LogoImage} isSticky={isSticky} />
+            {!showSearch && (
+              <SearchBox
+                className="headerSearch"
+                handleSearch={(value) => onSearch(value)}
+                onClick={(value) => onClickHandler(value)}
+                placeholder="Search anything..."
+                hideType={true}
+                minimal={true}
+                showSvg={true}
+                style={{ width: "100%" }}
+                value={state.text || ""}
+              />
+            )}
+            <RightMenu
+              isAuthenticated={isAuthenticated}
+              onJoin={handleJoin}
+              onLogout={handleLogout}
+              avatar={img}
+              isSticky={isSticky}
+              isHomePage={showSearch}
+            />
+          </nav>
+        </div>
+      </div>
     </HeaderWrapper>
   );
 };

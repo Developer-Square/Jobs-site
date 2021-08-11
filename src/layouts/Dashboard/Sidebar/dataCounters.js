@@ -73,7 +73,7 @@ const DataCounter = ({ type }) => {
     <TypedCounterQuery>
       {(theMutation, { loading }) => {
         const count = "2";
-        return <span class="nav-tag">{count}</span>;
+        return <span className="nav-tag">{count}</span>;
       }}
     </TypedCounterQuery>
   );

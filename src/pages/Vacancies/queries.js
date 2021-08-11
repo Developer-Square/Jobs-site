@@ -45,6 +45,10 @@ export const VACANCIES_QUERY = gql`
           }
           location
           createdAt
+          creator {
+            id
+            fullName
+          }
           industry {
             name
             id
