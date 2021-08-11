@@ -2,7 +2,6 @@ import { lazy } from "react";
 
 const Dashboard = lazy(() => import("pages/Dashboard/Dashboard"));
 const Profile = lazy(() => import("pages/Profile/Profile"));
-const MyProfile = lazy(() => import("pages/Profile/MyProfile"));
 const Vacancy = lazy(() => import("pages/Vacancy/Vacancy"));
 const ProfileView = lazy(() => import("pages/Profile/ProfileView"));
 const Jobs = lazy(() => import("pages/Jobs/Jobs"));
@@ -28,7 +27,6 @@ const ManageVacancies = lazy(() =>
 export {
   Dashboard,
   Profile,
-  MyProfile,
   Vacancy,
   Jobs,
   MyJobs,

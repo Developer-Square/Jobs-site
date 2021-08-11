@@ -53,3 +53,37 @@ export const TypedInstitutionStudentCountQuery = TypedQuery(
 );
 
 export const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
+
+export const SeekerProfile = gql`
+  query User($id: ID!, $first: Int) {
+    user (id: $id) {
+          email
+          username
+          firstName
+          lastName
+          avatar
+          phone
+          verified
+          seeker {
+            title
+            gender
+            status
+            idNumber
+            industries(first: $first) {
+              edges {
+                node {
+                  name
+                }
+              }
+            }
+          }
+          isSeeker
+          isEmployer
+          defaultAddress {
+            streetAddress1
+            city
+          }
+    }
+  }
+`
+export const TypedSeekerProfileQuery = TypedQuery(SeekerProfile);

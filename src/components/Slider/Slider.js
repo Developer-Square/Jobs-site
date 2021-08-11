@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
@@ -36,12 +36,29 @@ const marks = [
   },
 ];
 
-function valuetext(value) {
-  return `Ksh ${value}`;
-}
 
-export default function PayrateSlider({label}) {
-  const classes = useStyles();
+export default function PayrateSlider({label, setFilterObj}) {
+    const classes = useStyles();
+    const [selectedValue, setSelectedValue] = React.useState('')
+
+    // Returns the current value on the slider.
+    function valuetext(value) {
+        setSelectedValue(curr => curr = value);
+        return `Ksh ${value}`;
+    }
+
+    useEffect(() => {
+        if (selectedValue) {
+            setFilterObj({
+                search: selectedValue.toString()
+            })
+        }
+
+        return () => {
+            setFilterObj({})
+        }
+    // eslint-disable-next-line
+    }, [selectedValue])
 
   return (
     <div className={classes.root}>

@@ -307,7 +307,7 @@ const VacancyFilter = ({ rate, setRate, ratePerHour, loading, loadFilterValues, 
           </div>
           {/* Rate/Hr */}
           <div className="widget">
-            <PayrateSlider label="Kindly select your payrate: "/>
+            <PayrateSlider label="Kindly select your payrate: " setFilterObj={setFilterObj}/>
             <h4>Pay Rate Type</h4>
             <ul className="checkboxes">
               <li>

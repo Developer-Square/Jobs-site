@@ -223,7 +223,6 @@ const rolesConfig = {
   common: {
     routes: [
       components.profile,
-      components.myProfile,
       components.dashboard,
       components.profile,
 

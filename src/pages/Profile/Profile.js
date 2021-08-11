@@ -11,8 +11,9 @@ import { useQuery } from "react-apollo";
 import { GET_USER_DETAILS } from "graphql/queries";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
+import styled from 'styled-components';
 
-const MyProfile = lazy(() => import("pages/Profile/MyProfile"));
+const SeekerProfileForm = lazy(() => import("pages/Profile/SeekerProfileForm"));
 
 function Profile() {
   const [edit, setEdit] = React.useState(false);
@@ -27,10 +28,14 @@ function Profile() {
 
   return (
     <>
-    <Button title={edit ? "Edit" : 'View'} onClick={() => setEdit(curr => !curr)}/>
+    <div className={!edit ? "col-lg-10 col-md-12" : "col-md-12"}>
+    <RightBtn>
+        <Button title={!edit ? "Edit" : 'View Profile'} onClick={() => setEdit(curr => !curr)}/>
+    </RightBtn>
+    </div>
     {!edit ? (
       <Suspense fallBack={<Loader />}>
-        <MyProfile />
+        <SeekerProfileForm />
       </Suspense>
     ):(
       <>
@@ -89,4 +94,10 @@ function Profile() {
     </>
   );
 }
+
+const RightBtn = styled.div`
+  float: right;
+  margin-bottom: 30px;
+`
+
 export default Profile;

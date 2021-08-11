@@ -103,7 +103,6 @@ export const checkDate = (date) => {
  * @param  {} alert
  */
 export const showSeekerProfileNotification = (data, errors, alert) => {
-  console.log(errors);
   if (errors) {
     console.log("Server Error kwa login", errors[0].message);
     return errors[0].message;
