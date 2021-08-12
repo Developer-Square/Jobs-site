@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "contexts/resume/resume.provider";
 
+import SettingsContext from "contexts/settings/settings.provider";
 import Artboard from "components/builder/center/Artboard";
 import Button from "components/shared/Button";
 import LeftSidebar from "components/builder/left/LeftSidebar";
@@ -16,6 +17,8 @@ const ResumeBuilderView = ({ resume, resumeID }) => {
   const navigate = useHistory();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const componentRef = React.useRef();
+  const { setPrintRef } = React.useContext(SettingsContext);
 
   const handleLoadDemoData = () => {
     dispatch({ type: "load_demo_data" });
@@ -44,11 +47,11 @@ const ResumeBuilderView = ({ resume, resumeID }) => {
           </div>
         ));
       }
-
+      setPrintRef(componentRef);
       dispatch({ type: "set_data", payload: resume });
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resumeID]);
+  }, [resumeID, componentRef]);
 
   return React.useMemo(() => {
     return (

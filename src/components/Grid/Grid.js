@@ -42,10 +42,10 @@ export const Grid = styled.div`
       box-shadow:rgba(0, 0, 0, 0.16) 0px 1px 4px;
       border-color:#0000003d;
       align-self:start;
-      padding-left: 16px;  
-      padding-bottom: 12px;  
-      padding-right: 16px;  
-      padding-top: 12px;
+      padding-left: 5px;  
+      padding-bottom: 5px;  
+      padding-right: 5px;  
+      padding-top: 5px;
     }
 
     td {

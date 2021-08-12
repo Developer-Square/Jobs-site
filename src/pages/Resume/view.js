@@ -24,7 +24,7 @@ import * as styles from "./view.module.css";
 
 export const TypedResumeQuery = TypedQuery(FETCH_RESUME);
 
-const ResumeViewer = ({ id }) => {
+const ResumeViewer = ({ id, ref = null }) => {
   const match = useRouteMatch();
   const { t, i18n } = useTranslation();
   const navigate = useHistory();
@@ -102,17 +102,29 @@ const ResumeViewer = ({ id }) => {
                     }}
                   >
                     {resumeData.data.resume.resumemetadata.template ===
-                      "onyx" && <Onyx data={resumeData.data.resume} />}
+                      "onyx" && (
+                      <Onyx ref={ref} data={resumeData.data.resume} />
+                    )}
                     {resumeData.data.resume.resumemetadata.template ===
-                      "pikachu" && <Pikachu data={resumeData.data.resume} />}
+                      "pikachu" && (
+                      <Pikachu ref={ref} data={resumeData.data.resume} />
+                    )}
                     {resumeData.data.resume.resumemetadata.template ===
-                      "gengar" && <Gengar data={resumeData.data.resume} />}
+                      "gengar" && (
+                      <Gengar ref={ref} data={resumeData.data.resume} />
+                    )}
                     {resumeData.data.resume.resumemetadata.template ===
-                      "castform" && <Castform data={resumeData.data.resume} />}
+                      "castform" && (
+                      <Castform ref={ref} data={resumeData.data.resume} />
+                    )}
                     {resumeData.data.resume.resumemetadata.template ===
-                      "glalie" && <Glalie data={resumeData.data.resume} />}
+                      "glalie" && (
+                      <Glalie ref={ref} data={resumeData.data.resume} />
+                    )}
                     {resumeData.data.resume.resumemetadata.template ===
-                      "celebi" && <Celebi data={resumeData.data.resume} />}
+                      "celebi" && (
+                      <Celebi ref={ref} data={resumeData.data.resume} />
+                    )}
                   </div>
                 </MetaWrapper>
               );

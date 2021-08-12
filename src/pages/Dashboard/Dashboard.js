@@ -1,6 +1,10 @@
+import UserContext from "contexts/user/user.provider";
 import React from "react";
 import { Link } from "react-router-dom";
+
 const Dashboard = () => {
+  const { user } = React.useContext(UserContext);
+
   return (
     <div>
       {/* Content */}
@@ -9,7 +13,8 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6">
           <div className="dashboard-stat color-1">
             <div className="dashboard-stat-content">
-              <h4 className="counter">3</h4> <span>Active Job Listings</span>
+              <h4 className="counter">{user?.numberOfActiveJobListings}</h4>{" "}
+              <span>Active Job Listings</span>
             </div>
             <div className="dashboard-stat-icon">
               <i className="ln ln-icon-File-Link" />
@@ -20,7 +25,11 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6">
           <div className="dashboard-stat color-2">
             <div className="dashboard-stat-content">
-              <h4 className="counter">527</h4> <span>Total Job Views</span>
+              <h4 className="counter">{user?.extra}</h4>{" "}
+              <span>
+                {user?.isSeeker && "Total Resumes"}
+                {user?.isEmployer && "My Listings"}
+              </span>
             </div>
             <div className="dashboard-stat-icon">
               <i className="ln ln-icon-Bar-Chart" />
@@ -31,7 +40,8 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6">
           <div className="dashboard-stat color-3">
             <div className="dashboard-stat-content">
-              <h4 className="counter">17</h4> <span>Total Applications</span>
+              <h4 className="counter">{user?.numberOfApplications}</h4>{" "}
+              <span>Total Applications</span>
             </div>
             <div className="dashboard-stat-icon">
               <i className="ln ln-icon-Business-ManWoman" />
@@ -42,7 +52,8 @@ const Dashboard = () => {
         <div className="col-lg-3 col-md-6">
           <div className="dashboard-stat color-4">
             <div className="dashboard-stat-content">
-              <h4 className="counter">36</h4> <span>Times Bookmarked</span>
+              <h4 className="counter">{user?.numberOfJobsBookmarked}</h4>{" "}
+              <span>Times Bookmarked</span>
             </div>
             <div className="dashboard-stat-icon">
               <i className="ln ln-icon-Add-UserStar " />

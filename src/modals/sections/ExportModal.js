@@ -4,22 +4,25 @@ import { FaPrint } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useState } from "react";
-import download from "downloadjs";
+import { useReactToPrint } from "react-to-print";
+import Pdf from "react-to-pdf";
+
+// import download from "downloadjs";
 // import firebase from "gatsby-plugin-firebase";
 import { useSelector } from "contexts/resume/resume.provider";
 import BaseModal from "../BaseModal";
 import Button from "components/shared/Button";
 import ModalContext from "contexts/modal/modal.provider";
-import GenericPdfDownloader from "components/PdfDownloader/pdfDownloader";
-import { b64toBlob } from "utils";
-import ResumeViewer from "pages/Resume/view";
+// import { b64toBlob } from "utils";
+import SettingsContext from "contexts/settings/settings.provider";
 
 const ExportModal = () => {
   const state = useSelector();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [isLoadingSingle, setLoadingSingle] = useState(false);
-  const [isLoadingMulti, setLoadingMulti] = useState(false);
+  // const [isLoadingSingle, setLoadingSingle] = useState(false);
+  // const [isLoadingMulti, setLoadingMulti] = useState(false);
+  const { printRef } = React.useContext(SettingsContext);
 
   const { emitter, events } = useContext(ModalContext);
 
@@ -28,32 +31,31 @@ const ExportModal = () => {
 
     return () => unbind();
   }, [emitter, events]);
+  console.log(printRef);
 
-  const handleOpenPrintDialog = () => {
-    if (typeof window !== `undefined`) {
-      window && window.print();
-    }
-  };
+  const handleOpenPrintDialog = useReactToPrint({
+    content: () => printRef.current,
+  });
 
-  const handleDownload = async (isSinglePDF) => {
-    isSinglePDF ? setLoadingSingle(true) : setLoadingMulti(true);
+  // const handleDownload = async (isSinglePDF) => {
+  //   isSinglePDF ? setLoadingSingle(true) : setLoadingMulti(true);
 
-    try {
-      toast("Featur Coming Soon");
+  //   try {
+  //     toast("Featur Coming Soon");
 
-      // const printResume = firebase.functions().httpsCallable("printResume");
-      // const { data } = await printResume({
-      //   id: state.id,
-      //   type: isSinglePDF ? "single" : "multi",
-      // });
-      const blob = b64toBlob(<ResumeViewer />, "application/pdf");
-      download(blob, `RxResume-${state.id}.pdf`, "application/pdf");
-    } catch (error) {
-      toast(t("builder.toasts.printError"));
-    } finally {
-      isSinglePDF ? setLoadingSingle(false) : setLoadingMulti(false);
-    }
-  };
+  //     // const printResume = firebase.functions().httpsCallable("printResume");
+  //     // const { data } = await printResume({
+  //     //   id: state.id,
+  //     //   type: isSinglePDF ? "single" : "multi",
+  //     // });
+  //     // const blob = b64toBlob(<ResumeViewer />, "application/pdf");
+  //     // download(blob, `RxResume-${state.id}.pdf`, "application/pdf");
+  //   } catch (error) {
+  //     toast(t("builder.toasts.printError"));
+  //   } finally {
+  //     isSinglePDF ? setLoadingSingle(false) : setLoadingMulti(false);
+  //   }
+  // };
 
   const handleExportToJson = () => {
     // const backupObj = clone(state);
@@ -99,10 +101,20 @@ const ExportModal = () => {
 
         <div className="mt-5 mb-4">
           <div className="flex">
-            <GenericPdfDownloader
-              downloadFileName={`The Database Resume - ${state.name}`}
-            />
-            <Button
+            <Pdf
+              targetRef={printRef}
+              filename={`${state.name}-${state.id}.pdf`}
+              x={0.5}
+              y={0.5}
+              scale={0.8}
+            >
+              {({ toPdf }) => (
+                <Button onClick={toPdf}>
+                  {t("modals.export.downloadPDF.buttons.single")}
+                </Button>
+              )}
+            </Pdf>
+            {/* <Button
               isLoading={isLoadingSingle}
               onClick={() => handleDownload(true)}
             >
@@ -114,7 +126,7 @@ const ExportModal = () => {
               onClick={() => handleDownload(false)}
             >
               {t("modals.export.downloadPDF.buttons.multi")}
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

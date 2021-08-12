@@ -78,6 +78,17 @@ export const LeftMenu = ({ isSticky, logo }) => {
           Contact
         </Link>
       </li>
+      <li>
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={pathname === "contact-us" ? "current" : ""}
+          to="/help"
+        >
+          F.A.Q
+        </Link>
+      </li>
 
       <li>
         <Link

@@ -58,6 +58,7 @@ function DefaultColumnFilter({
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
       placeholder={`Search ${count} records...`}
+      style={{ borderBottom: "1px solid" }}
     />
   );
 }
@@ -408,39 +409,64 @@ function Table({
           </tbody>
         </table>
       </div>
-      <div className="pagination">
+      <div
+        className="pagination"
+        style={{ display: "flex", lineHeight: "18px", alignItems: "center" }}
+      >
         <Button
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
           title={`<<`}
-          style={{ padding: 1, margin: 2, height: "auto" }}
+          style={{
+            padding: 1,
+            margin: 2,
+            height: "auto",
+            background: "#21277f",
+          }}
         />
         <Button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
           title={"<"}
-          style={{ padding: 1, margin: 2, height: "auto" }}
+          style={{
+            padding: 1,
+            margin: 2,
+            height: "auto",
+            background: "#21277f",
+          }}
         />
         <Button
           onClick={() => nextPage()}
           disabled={!canNextPage}
           title={">"}
-          style={{ padding: 1, margin: 2, height: "auto" }}
+          style={{
+            padding: 1,
+            margin: 2,
+            height: "auto",
+            background: "#21277f",
+          }}
         />
         <Button
           onClick={() => gotoPage(pageCount - 1)}
           disabled={!canNextPage}
           title={">>"}
-          style={{ padding: 1, margin: 2, height: "auto" }}
+          style={{
+            padding: 1,
+            margin: 2,
+            height: "auto",
+            background: "#21277f",
+          }}
         />
+        <span style={{ margin: 5 }} />
         <span>
           Page{" "}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{" "}
         </span>
-        <span>
-          | Go to page:{" "}
+        <span style={{ margin: 5 }} />
+        <span style={{ display: "flex" }}>
+          | Go to page: <span style={{ margin: 5 }} />
           <input
             type="number"
             defaultValue={pageIndex + 1}
@@ -448,9 +474,10 @@ function Table({
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               gotoPage(page);
             }}
-            style={{ width: "100px" }}
+            style={{ width: "100px", padding: " 0 10px" }}
           />
-        </span>{" "}
+        </span>
+        <span style={{ margin: 5 }} />
         <span>
           <select
             style={{

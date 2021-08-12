@@ -8876,7 +8876,7 @@ a.close-list-item {
 		border-radius: 4px;
 	}
 
-	/* Dashboard Nav */
+	/* Dashboard Nav
 	.dashboard-nav {
 		min-width: 90%;
 		max-width: 90%;
@@ -8911,7 +8911,7 @@ a.close-list-item {
 	    visibility: visible;
 	    opacity: 1;
 	    max-height: 300px;
-	}
+	} */
 
 	#header-container.fixed {
 	    position: relative;

@@ -23,9 +23,6 @@ const Bookmarks = lazy(() => import("pages/Bookmarks/Bookmarks"));
 const ManageVacancies = lazy(() =>
   import("pages/ManageVacancies/ManageVacancies"),
 );
-const ApplicationsManager = lazy(() =>
-  import("pages/Applications/ApplicationsManager"),
-);
 
 export {
   Dashboard,
@@ -46,6 +43,5 @@ export {
   ResumeDashboard,
   ResumeBuilder,
   Bookmarks,
-  ApplicationsManager,
   ManageVacancies,
 };

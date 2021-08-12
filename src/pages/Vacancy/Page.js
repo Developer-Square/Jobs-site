@@ -17,6 +17,7 @@ import Bookmark from "./Bookmark";
 
 const Page = ({
   vacancyID,
+  payRateData = [],
   yearsData = [],
   qualificationData = [],
   types = [],
@@ -62,9 +63,8 @@ const Page = ({
     }
   };
 
-  // const handleClick = () => console.log("handling click");
-
   const jobType = types.find(({ name }) => name === data?.jobType);
+  const payRateType = payRateData.find(({ name }) => name === data?.payRate);
   const qualificationType = qualificationData.find(
     ({ name }) => name === data?.minQualification,
   );
@@ -92,11 +92,12 @@ const Page = ({
                 alert={alert}
               />
             )}
-            {profile.isEmployer && profile.id === data.creator.id ? (
+            {profile.isEmployer && profile.email === data.creator.email ? (
               <Button
-                title={"Edit Job"}
+                className="popup-with-zoom-anim button mt-8 ml-auto"
+                title={<div style={{ color: "#FFFFFF" }}> Edit Job</div>}
                 onClick={() => {
-                  history.push(`dashboard/vacancies/edit-job/${data?.id}`);
+                  history.push(`/dashboard/vacancies/edit-job/${data?.id}`);
                 }}
               />
             ) : null}
@@ -183,6 +184,13 @@ const Page = ({
                   <div>
                     <strong>Years of Experience</strong>
                     <span>{yearsType.description}</span>
+                  </div>
+                </li>
+                <li>
+                  <i className="fa fa-calendar-o" />
+                  <div>
+                    <strong>Pay Rate</strong>
+                    <span>{payRateType?.description}</span>
                   </div>
                 </li>
               </ul>
