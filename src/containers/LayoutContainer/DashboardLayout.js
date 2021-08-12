@@ -123,8 +123,9 @@ const DashboardLayout = (props) => {
                             </div>
                           </div>
                         </div>
-                        {/* <div class="area">
-                          <ul class="circles">
+                        {/*
+                        <div class="wrapperx">
+                        <ul className="bg-bubbles">
                             <li></li>
                             <li></li>
                             <li></li>
@@ -136,7 +137,20 @@ const DashboardLayout = (props) => {
                             <li></li>
                             <li></li>
                           </ul>
-                        </div> */}
+
+                         <ul class="circles">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                          </ul>
+                          </div>  */}
                       </div>
                     </div>
                   </ContentInnerWrapper>

@@ -63,6 +63,7 @@ const FormInput = styled.div`
     z-index: 9999;
   }
   .react-date-picker__wrapper {
+    padding: 6px;
     border: 1px solid #e0e0e0;
     border-radius: 3px;
     background: #fcfcfc;
