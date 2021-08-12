@@ -4,3 +4,4 @@ export * from "./resume";
 export * from "./employer";
 export * from "./seeker";
 export * from "./institution";
+export * from "./vacancy";

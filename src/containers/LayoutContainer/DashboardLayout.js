@@ -122,7 +122,21 @@ const DashboardLayout = (props) => {
                               Reserved.
                             </div>
                           </div>
-                        </div>{" "}
+                        </div>
+                        {/* <div class="area">
+                          <ul class="circles">
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                          </ul>
+                        </div> */}
                       </div>
                     </div>
                   </ContentInnerWrapper>

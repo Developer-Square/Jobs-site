@@ -238,13 +238,13 @@ const Applications = ({ deviceType }) => {
                   {profile && d ? (
                     <img
                       style={{
-                        height: 50,
-                        width: 50,
+                        height: "100%",
+                        width: "100%",
                         borderRadius: 50,
                         background: "#009e7f2e",
                       }}
                       src={
-                        profile.is_seeker
+                        profile.isSeeker
                           ? d?.job?.creator?.avatar?.url
                           : d?.applicant?.avatar?.url
                       }
@@ -273,7 +273,7 @@ const Applications = ({ deviceType }) => {
               return (
                 <p>
                   {profile && d
-                    ? profile.is_seeker
+                    ? profile.isSeeker
                       ? d?.job?.creator?.email
                       : d?.applicant?.email
                     : null}

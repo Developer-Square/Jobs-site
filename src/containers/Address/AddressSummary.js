@@ -6,7 +6,6 @@ import React, { useContext, useState } from "react";
 import DatabaseContext from "contexts/database/database.provider";
 import ModalContext from "contexts/modal/modal.provider";
 import * as styles from "./AddressSummary.module.css";
-import moment from "moment";
 
 const menuToggleDataTestIdPrefix = "resume-preview-menu-toggle-";
 
@@ -38,11 +37,48 @@ const AddressPreview = ({ address }) => {
   return (
     <div className={styles.address}>
       <div className={styles.backdrop}>
-        <p>{address.companyName}</p>
-        <p>{address.phone}</p>
-        <p>
-          {address.city} {address.streetAddress1}
-        </p>
+        <div class="p-6 rounded-lg shadow-lg">
+          <div class="flex items-baseline">
+            {address.isDefaultAddress && (
+              <span class="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
+                Default
+              </span>
+            )}
+          </div>
+
+          <div class="ml-2 text-gray-600 uppercase text-xs font-semibold tracking-wider leading-tight truncate">
+            {address.firstName} {address.LastName}
+          </div>
+          <div class="mt-4">
+            {address.companyName && (
+              <p class="text-sm text-gray-600  truncate">
+                &bull;➜ {address.companyName}
+              </p>
+            )}
+            {address.phone && (
+              <p class="text-sm text-gray-600  truncate">
+                {" "}
+                &bull;➜ {address.phone}
+              </p>
+            )}
+            {address.city && (
+              <p class="text-sm text-gray-600  truncate">
+                {" "}
+                &bull;➜ {address.city}
+              </p>
+            )}
+            {address.streetAddress1 && (
+              <p class="text-sm text-gray-600  truncate">
+                &bull;➜ {address.streetAddress1}
+              </p>
+            )}
+            {address.streetAddress2 && (
+              <p class="text-sm text-gray-600  truncate">
+                &bull;➜ {address.streetAddress2}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
       <div className={styles.page}>
         <MdMoreHoriz
@@ -68,14 +104,10 @@ const AddressPreview = ({ address }) => {
         </Menu>
       </div>
       <div className={styles.meta}>
-        <span>{address.name}</span>
-        {address.updatedAt && (
-          <span>
-            {t("dashboard.lastUpdated", {
-              timestamp: moment(address?.updatedAt).fromNow(),
-            })}
-          </span>
-        )}
+        <span>
+          {address.firstName}
+          {address.lastName}
+        </span>
       </div>
     </div>
   );

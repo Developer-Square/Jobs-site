@@ -9,12 +9,14 @@ import Gengar from "templates/Gengar";
 import Glalie from "templates/Glalie";
 import Onyx from "templates/Onyx";
 import Pikachu from "templates/Pikachu";
+import SettingsContext from "contexts/settings/settings.provider";
 
 const Artboard = () => {
   const state = useSelector();
   const { t } = useTranslation();
   const { id, name, resumemetadata } = state;
   const { template } = resumemetadata;
+  const { printRef } = React.useContext(SettingsContext);
 
   return (
     <>
@@ -35,12 +37,14 @@ const Artboard = () => {
       </Helmet>
 
       <div id="page" className={styles.container}>
-        {template === "onyx" && <Onyx data={state} />}
-        {template === "pikachu" && <Pikachu data={state} />}
-        {template === "gengar" && <Gengar data={state} />}
-        {template === "castform" && <Castform data={state} />}
-        {template === "glalie" && <Glalie data={state} />}
-        {template === "celebi" && <Celebi data={state} />}
+        <div ref={printRef}>
+          {template === "onyx" && <Onyx data={state} />}
+          {template === "pikachu" && <Pikachu data={state} />}
+          {template === "gengar" && <Gengar data={state} />}
+          {template === "castform" && <Castform data={state} />}
+          {template === "glalie" && <Glalie data={state} />}
+          {template === "celebi" && <Celebi data={state} />}
+        </div>
       </div>
     </>
   );

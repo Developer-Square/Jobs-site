@@ -32,26 +32,15 @@ const UserProvider = ({ children }) => {
     authState: { isAuthenticated },
     authDispatch,
   } = React.useContext(AuthContext);
-  // const [jobTypes, setJobTypes] = useState(null);
-  // const [industries, setIndustries] = useState(null);
-  // const [experience, setExperience] = useState(null);
-  // const [qualifications, setQualifications] = useState(null);
-  // const [rates, setRates] = useState(null);
-  // const [applicationStatus, setApplicationStatus] = useState(null);
-  // const [workForce, setWorkForce] = useState(null);
-
   const navigate = useHistory();
-  const [fetchUser] = useLazyQuery(GET_USER_DETAILS);
+  const [fetchUser, { data: userData }] = useLazyQuery(GET_USER_DETAILS);
   const [accountAddressDelete] = useMutation(DELETE_ADDRESS);
   const [accountAddressUpdate] = useMutation(UPDATE_ADDRESS);
 
   const getUser = async () => {
     if (!user) {
-      const { data } = await fetchUser;
-      if (data?.me) {
-        setUser(data?.me);
-        return data.me;
-      }
+      await fetchUser();
+      return userData;
     } else {
       return user;
     }
@@ -59,7 +48,11 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (!user && isAuthenticated) {
+      setTimeout(function () {}, 1000);
       getUser();
+    }
+    if (user && !isAuthenticated) {
+      setUser(null);
     }
     // const localUser = JSON.parse(localStorage.getItem("thedb_auth_profile"));
     // if (localUser) {
@@ -69,6 +62,10 @@ const UserProvider = ({ children }) => {
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
+
+  if (userData && !user) {
+    setUser(userData?.me);
+  }
 
   const updateAddress = async (address) => {
     try {
@@ -80,7 +77,7 @@ const UserProvider = ({ children }) => {
         return data?.resumePatch?.resume;
       });
     } catch (error) {
-      console.log("updateResume error", error);
+      console.log("updateAddress error", error);
       return null;
     }
   };

@@ -8,21 +8,31 @@ import { MetaWrapper } from "components/Meta";
 import NetworkStatus from "components/NetworkStatus";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
 import NoResultFound from "components/NoResult/NoResult";
-
+import { TypedQuery } from "core/queries";
 import {
-  TypedVacancyDetailQuery,
-  TypedJobMinQualificationQuery,
-  TypedJobYearsOfExpQuery,
-} from "./queries";
+  VACANCY_DETAIL_QUERY,
+  JobYearsOfExp,
+  JobMinQualification,
+  JobPayRate,
+} from "graphql/queries";
+
 import Page from "./Page";
+import { getGraphqlIdFromDBId } from "utils";
+
+const TypedVacancyDetailQuery = TypedQuery(VACANCY_DETAIL_QUERY);
+const TypedJobYearsOfExpQuery = TypedQuery(JobYearsOfExp);
+const TypedJobMinQualificationQuery = TypedQuery(JobMinQualification);
+const TypedJobPayRateQuery = TypedQuery(JobPayRate);
 
 const VacancyView = () => {
   const match = useRouteMatch();
-  const [vacancyID, setVacancyID] = React.useState(match.params.vacancyID);
+  const [vacancyID, setVacancyID] = React.useState(
+    getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"),
+  );
 
   React.useEffect(() => {
     if (match.params.vacancyID) {
-      setVacancyID(match.params.vacancyID);
+      setVacancyID(getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"));
     }
   }, [match.params.vacancyID]);
 
@@ -66,33 +76,50 @@ const VacancyView = () => {
                     vacancyData.data.vacancy.seoTitle,
                 }}
               >
-                <TypedJobMinQualificationQuery>
-                  {(qualificationData) => {
-                    if (qualificationData.loading) {
+                <TypedJobPayRateQuery>
+                  {(payRateData) => {
+                    if (payRateData.loading) {
                       return <Loader />;
                     }
                     return (
-                      <TypedJobYearsOfExpQuery>
-                        {(yearsData) => {
-                          if (yearsData.loading) {
+                      <TypedJobMinQualificationQuery>
+                        {(qualificationData) => {
+                          if (qualificationData.loading) {
                             return <Loader />;
                           }
                           return (
-                            <Page
-                              vacancyID={vacancyID}
-                              qualificationData={
-                                qualificationData?.data?.__type?.enumValues
-                              }
-                              yearsData={yearsData?.data?.__type?.enumValues}
-                              types={vacancyData?.data?.__type?.enumValues}
-                              data={vacancyData.data.vacancy}
-                            />
+                            <TypedJobYearsOfExpQuery>
+                              {(yearsData) => {
+                                if (yearsData.loading) {
+                                  return <Loader />;
+                                }
+                                return (
+                                  <Page
+                                    vacancyID={vacancyID}
+                                    qualificationData={
+                                      qualificationData?.data?.__type
+                                        ?.enumValues
+                                    }
+                                    yearsData={
+                                      yearsData?.data?.__type?.enumValues
+                                    }
+                                    types={
+                                      vacancyData?.data?.__type?.enumValues
+                                    }
+                                    data={vacancyData.data.vacancy}
+                                    payRateData={
+                                      payRateData?.data?.__type?.enumValues
+                                    }
+                                  />
+                                );
+                              }}
+                            </TypedJobYearsOfExpQuery>
                           );
                         }}
-                      </TypedJobYearsOfExpQuery>
+                      </TypedJobMinQualificationQuery>
                     );
                   }}
-                </TypedJobMinQualificationQuery>
+                </TypedJobPayRateQuery>
               </MetaWrapper>
             );
           }}

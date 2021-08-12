@@ -4,7 +4,7 @@
   
   .address > .backdrop {
     max-width: 184px;
-    height: 70px;
+    height: max-content;
     background: ghostwhite;
   
     @apply rounded absolute w-full shadow;
@@ -12,14 +12,14 @@
   
   .address > .backdrop img {
     max-width: 184px;
-    height: 70px;
+    height: max-content;
   
     @apply w-full object-cover rounded;
   }
   
   .address > .page {
     max-width: 184px;
-    height: 70px;
+    height: 100%;
     background: ghostwhite;
   
     @apply rounded absolute w-full;
@@ -32,7 +32,7 @@
   }
   
   .address > .meta {
-    margin-top: 70px;
+    margin-top:max-content;
   
     @apply flex flex-col text-center items-center;
   }

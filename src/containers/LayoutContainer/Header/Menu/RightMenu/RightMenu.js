@@ -45,10 +45,7 @@ export const RightMenu = ({
                 <Link to={`/dashboard`}>Dashboard</Link>
               </li>
               <li>
-                <Link to={`/dashboard/messages`}>Messages</Link>
-              </li>
-              <li>
-                <Link to={`/dashboard/manage/resume`}>Manage Resumes</Link>
+                <Link to={`/dashboard/resume`}>View Resumes</Link>
               </li>
               <li>
                 <Link to={`/dashboard/resume`}>Add Resume</Link>
@@ -57,19 +54,29 @@ export const RightMenu = ({
                 <Link to={`/dashboard/alert`}>Job Alerts</Link>
               </li>
               <li>
-                <Link to={`/dashboard/manage/jobs`}>Manage Jobs</Link>
+                <Link to={`/dashboard/vacancies/manage-jobs`}>Manage Jobs</Link>
               </li>
               <li>
                 <Link to={`/dashboard/applications`}>Manage Applications</Link>
               </li>
               <li>
-                <Link to={`/dashboard/vacancy`}>Add Job</Link>
+                <Link to={`/dashboard/bookmarks`}>Manage Bookmarks</Link>
+              </li>
+              <li>
+                <Link to={`/dashboard/vacancies/add-job`}>Add Job</Link>
               </li>
               <li>
                 <Link to={`/dashboard/profile`}>My Profile</Link>
               </li>
               <li>
-                <Link to={`/`}>Logout</Link>
+                <Link
+                  to={{
+                    pathname: "",
+                  }}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Link>
               </li>
             </ul>
           </li>

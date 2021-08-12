@@ -125,15 +125,6 @@ const components = {
     category: management,
     dashboardItem: false,
   },
-  applicationsManager: {
-    component: "ApplicationsManager",
-    url: "/all-applications",
-    title: "All Applications",
-    icon: "Category",
-    module: 1,
-    category: management,
-    dashboardItem: true,
-  },
   applications: {
     component: "Applications",
     url: "/applications",
@@ -233,7 +224,6 @@ const rolesConfig = {
       components.addVacancy,
       components.updateVacancy,
       components.manageVacancies,
-      components.applicationsManager,
 
       // components.messages,
     ],

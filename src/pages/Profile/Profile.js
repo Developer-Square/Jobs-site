@@ -20,11 +20,6 @@ function Profile() {
   if (loading) {
     return <Loader />;
   }
-  let allAddresses = [];
-  if (data?.me) {
-    allAddresses.push(data?.me?.defaultAddress);
-    allAddresses.concat(data?.me?.addresses);
-  }
 
   return (
     <>
@@ -61,17 +56,12 @@ function Profile() {
         <h4>Addresses</h4>
         <div className="dashboard-list-box-content">
           <div className="container mt-12 px-12 xl:px-0">
-            <div
-              className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8"
-              style={{
-                margin: "20px",
-              }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8">
               {data?.me && (
                 <>
                   <CreateAddress />
 
-                  {allAddresses.map((x) => (
+                  {data?.me?.addresses.map((x) => (
                     <AddressPreview key={x.id} address={x} />
                   ))}
                 </>
