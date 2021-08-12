@@ -33,6 +33,7 @@ const VacancyView = () => {
   React.useEffect(() => {
     if (match.params.vacancyID) {
       setVacancyID(getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"));
+
     }
   }, [match.params.vacancyID]);
 

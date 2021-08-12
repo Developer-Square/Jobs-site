@@ -1,0 +1,116 @@
+@keyframes cdp-in {
+    from {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .cdp {
+    position: relative;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0;
+    z-index: 6;
+    margin: 0px;
+    
+    animation: cdp-in 500ms ease both;
+    animation-timeout: 200ms;
+  
+    &_i {
+      font-size: 14px;
+      text-decoration: none;
+      
+      transition: background 250ms;
+      
+      display: inline-block;
+      text-transform: uppercase;
+      margin: 0 3px 6px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 38px;
+      border: 2px solid #888;
+      line-height: 38px;
+      padding: 0;
+      color: #888;
+      font-weight: 700;
+      letter-spacing: .03em;
+      display: none;
+  
+      &:first-child,
+      &:last-child {
+        padding: 0 16px 5px 16px;
+        margin: 0 12px 6px;
+      }
+  
+      &:last-child,
+      &:nth-child(2),
+      &:nth-last-child(2) {
+        display: inline-block;
+      }
+    }
+  
+    &_i:hover {
+      background-color: #21277f;
+      border-color: #21277f;
+      color: #fff;
+    }
+  
+    &:not([actpage="1"]) &_i:nth-child(1) {
+      display: inline-block;
+    }
+  }
+  @for $i from 1 through 80 {
+    .cdp[actpage="#{$i}"] {
+      // 3 before
+      .cdp_i:nth-child(#{$i - 1}):not(:first-child):not(:nth-child(2)) {
+        display: inline-block;
+        pointer-events: none;
+        color: transparent;
+        border-color: transparent;
+        width: 20px;
+        &:after {
+          content: '...';
+          color: #888;
+          font-size: 32px;
+          margin-left: -6px;
+        }
+      }
+      // before
+      .cdp_i:nth-child(#{$i}):not(:first-child) {
+        display: inline-block;
+      }
+      // active
+      .cdp_i:nth-child(#{$i + 1}) {
+        background-color: #21277f;
+        border-color: #21277f;
+        color: #fff;
+        display: inline-block;
+  
+        +.cdp_i:last-child {
+          display: none !important;
+        }
+      }
+      // next
+      .cdp_i:nth-child(#{$i + 2}):not(:last-child) {
+        display: inline-block;
+      }
+      // 3 next
+      .cdp_i:nth-child(#{$i + 3}):not(:last-child):not(:nth-last-child(2)) {
+        display: inline-block;
+        pointer-events: none;
+        color: transparent;
+        border-color: transparent;
+        width: 20px;
+        &:after {
+          content: '...';
+          color: #888;
+          font-size: 32px;
+          margin-left: -6px;
+        }
+      }
+    }
+  }

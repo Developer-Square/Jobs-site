@@ -1,42 +1,41 @@
 import * as React from "react";
 
 import { StringParam, useQueryParam } from "use-query-params";
-import { MetaWrapper, OfflinePlaceholder } from "components";
+import OfflinePlaceholder from "components/OfflinePlaceholder";
+import MetaWrapper from "components/Meta/MetaWrapper";
 import NetworkStatus from "components/NetworkStatus";
-import { convertSortByFromString } from "core/utils";
 import Page from "./Page";
 import { TypedVacanciesQuery } from "./queries";
 import { NoResult } from "components/VacancyLoader/VacancyLoader.style";
 import Loader from "components/Loader/Loader";
-import { useLocation } from "react-router";
+import { vacancyLimit } from "constants/constants";
 
-const VACANCIES_PER_PAGE = 10;
-export const FilterQuerySet = {
-  encode(valueObj) {
-    const str = [];
-    Object.keys(valueObj).forEach((value) => {
-      str.push(`${value}_${valueObj[value].join("_")}`);
-    });
-    return str.join(".");
-  },
+// export const FilterQuerySet = {
+//   encode(valueObj) {
+//     const str = [];
+//     Object.keys(valueObj).forEach((value) => {
+//       str.push(`${value}_${valueObj[value].join("_")}`);
+//     });
+//     return str.join(".");
+//   },
 
-  decode(strValue) {
-    const obj = {};
-    const propsWithValues = strValue.split(".").filter((n) => n);
-    propsWithValues.map((value) => {
-      const propWithValues = value.split("_").filter((n) => n);
-      obj[propWithValues[0]] = propWithValues.slice(1);
-      return obj;
-    });
-    return obj;
-  },
-};
+//   decode(strValue) {
+//     const obj = {};
+//     const propsWithValues = strValue.split(".").filter((n) => n);
+//     propsWithValues.map((value) => {
+//       const propWithValues = value.split("_").filter((n) => n);
+//       obj[propWithValues[0]] = propWithValues.slice(1);
+//       return obj;
+//     });
+//     return obj;
+//   },
+// };
 
 export const View = ({ match, deviceType }) => {
   const [sort, setSort] = useQueryParam("sortBy", StringParam);
   const [attributeFilters, setAttributeFilters] = useQueryParam(
     "filters",
-    FilterQuerySet,
+    // FilterQuerySet,
   );
 
   const clearFilters = () => {
@@ -72,15 +71,10 @@ export const View = ({ match, deviceType }) => {
   };
 
   const filters = {
-    pageSize: VACANCIES_PER_PAGE,
+    first: vacancyLimit,
     search: "",
     ids: [],
     industries: [],
-  };
-  const variables = {
-    ...filters,
-    sortBy: convertSortByFromString(filters.sortBy),
-    countryCode: "KE",
   };
 
   const sortOptions = [
@@ -114,11 +108,20 @@ export const View = ({ match, deviceType }) => {
     },
   ];
 
+  const variables = {
+    ...filters,
+    sortBy: {
+      "field": "SALARY",
+      "direction": "DESC"
+    },
+  };
+
   return (
     <NetworkStatus>
       {(isOnline) => (
         <TypedVacanciesQuery variables={variables} errorPolicy="all" loaderFull>
           {(vacancyData) => {
+            console.log(vacancyData)
             if (vacancyData.loading) {
               return <Loader />;
             }
@@ -163,6 +166,7 @@ export const View = ({ match, deviceType }) => {
                   vacancies={vacancyData.data.vacancies}
                   onFiltersChange={onFiltersChange}
                   onLoadMore={handleLoadMore}
+                  sort={sort}
                   onOrder={(value) => {
                     setSort(value.value);
                   }}
