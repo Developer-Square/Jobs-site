@@ -3,7 +3,6 @@ import { AuthContext } from "contexts/auth/auth.context";
 import React, { lazy, Suspense } from "react";
 import BaseProfile from "./BaseProfile";
 import EmployerProfile from "./EmployerProfile";
-import EmployerProfileForm from "./EmployerProfileForm";
 import InstitutionProfile from "./InstitutionProfile";
 import SeekerProfile from "./SeekerProfile";
 import CreateAddress from "containers/Address/AddressCreate";
@@ -15,19 +14,28 @@ import Button from "components/Button/Button";
 import styled from 'styled-components';
 
 const SeekerProfileForm = lazy(() => import("pages/Profile/SeekerProfileForm"));
+const EmployerProfileForm = lazy(() => import("pages/Profile/EmployerProfileForm"));
 
 function Profile() {
   const [edit, setEdit] = React.useState(false);
+  const [userDetails, setUserDetails] = React.useState({});
   const { data, loading } = useQuery(GET_USER_DETAILS);
   const {
     authState: { profile },
   } = React.useContext(AuthContext);
+
+  React.useEffect(() => {
+    const values = localStorage.getItem('thedb_auth_profile');
+    const parsedObj = JSON.parse(values);
+    setUserDetails(curr => curr = parsedObj);
+  }, [])
 
   if (loading) {
     return <Loader />;
   }
 
   console.log("details", profile);
+
 
   return (
     <>
@@ -37,6 +45,7 @@ function Profile() {
     </RightBtn>
     </div>
     {!edit ? (
+<<<<<<< HEAD
       <>
         {Object.keys(profile).length ? 
           profile.isEmployer ? 
@@ -49,6 +58,20 @@ function Profile() {
           </Suspense>
         : <Loader />}
       </>
+=======
+      <Suspense fallBack={<Loader />}>
+        {Object.keys(userDetails).length 
+          ?
+            !userDetails.isEmployer ? 
+              <SeekerProfileForm /> 
+            : 
+              <EmployerProfileForm />
+          :
+          <Loader />
+        }
+        
+      </Suspense>
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
     ):(
       <>
       <div className="row">

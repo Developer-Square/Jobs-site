@@ -15,7 +15,6 @@ const Vacancy = () => {
   const [sortOrder, setSortOrder] = React.useState([]);
   const [sortByValue, setSortByValue] = React.useState({direction: '', field: ''});
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
-  // const [afterValue, setAfterValue] = React.useState('');
   const [filterObj, setFilterObj] = React.useState({search: '', jobTypes: [],});
 
 
@@ -100,9 +99,9 @@ const Vacancy = () => {
     }
     console.log("variables", variables);
     const cleanedVariables =  clean(variables);
-    // loadFilterValues(
-    //   {variables: cleanedVariables
-    // });
+    loadFilterValues(
+      {variables: cleanedVariables
+    });
   }
 
   

@@ -108,6 +108,8 @@ const EmployerProfile = () => {
             if (employerWorkForce.loading) {
               return <Loader />;
             }
+            
+            console.log(employerWorkForce.data);
             let workForceCount = [];
             if (employerWorkForce.data) {
               workForceCount = cleanSelectData(

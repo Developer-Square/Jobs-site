@@ -8,9 +8,21 @@ import NoResult from 'components/NoResult/NoResult'
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
+<<<<<<< HEAD
 function EmployerProfileForm({details}) {
     const variables = {
         id: details.id
+=======
+function EmployerProfileForm() {
+    const getId = () => {
+        const values = localStorage.getItem('thedb_auth_profile');
+        const parsedObj = JSON.parse(values);
+        return parsedObj.id
+    }
+
+    const variables = {
+        id: getId()
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
     }
     return (
         <TypedEmployerProfileQuery variables={variables}>
@@ -25,6 +37,7 @@ function EmployerProfileForm({details}) {
 
                 const {user} = employerProfileData.data;
                 let edges;
+<<<<<<< HEAD
                 if (user.employer) {
                     if (user.employer.industries) {
                         edges = user.employer.industries.edges;
@@ -32,12 +45,26 @@ function EmployerProfileForm({details}) {
                 }
 
                 return(
+=======
+                
+                if (user.employer) {
+                    if (user.employer.industries) {
+                        edges = user.employer.industries.edges;
+                    }  
+                }
+
+                return (
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
                     <div className="row">
                         <div className="col-lg-10 col-md-12">
                             <Heading>
                                 <PageHeader>Account Profile</PageHeader>
                                 <ShareButton>
+<<<<<<< HEAD
                                     <span className="iconify" data-icon="el:share-alt"></span>
+=======
+                                    <span class="iconify" data-icon="el:share-alt"></span>
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
                                 </ShareButton>
                             </Heading>
                             <PageSubTitle>Your Plan</PageSubTitle>
@@ -54,18 +81,36 @@ function EmployerProfileForm({details}) {
                                 </ItemsContainer>
                             </div>
 
+<<<<<<< HEAD
                             <PageSubTitle>Profile</PageSubTitle>
+=======
+                            <PageSubTitle>Account Details</PageSubTitle>
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
                             <div className="dashboard-list-box margin-top-0">
                                 <ItemsContainer type="profile">
                                     <ProfileSkills>
                                         <ProfileImage src={user.employer.logo ? user.employer.logo : "https://bootdey.com/img/Content/avatar/avatar7.png"} alt="Admin" />
+<<<<<<< HEAD
                                         <Title>{user.username}</Title>
                                         <Info>Frontend Developer</Info>
                                         <Info>Nairobi, Kenya</Info>
+=======
+                                        <Title special={true}>
+                                            {user.username}
+                                            <VerifiedStatus>
+                                                {user.verified ? (
+                                                    <span className="iconify" data-icon="ic:sharp-verified" style={{color: "#2196f3"}}></span>
+                                                ): <span>(not verified)</span>}
+                                            </VerifiedStatus>
+                                        </Title>
+                                        <Info>{user.employer.name}</Info>
+                                        <Info>{user.defaultAddress ? user.defaultAddress.streetAddress1 : 'Add street address...'}, {user.defaultAddress ? user.defaultAddress.city: 'Add city...'}</Info>
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
                                     </ProfileSkills>
                                     <ProfileDetails>
                                         <Details>
                                             <Title type="profile">Email</Title>
+<<<<<<< HEAD
                                             <Info>tanjirokamado@gmail.com</Info>
                                         </Details>
                                         <Details>
@@ -80,6 +125,55 @@ function EmployerProfileForm({details}) {
                                             <Title type="profile">Education Qualification</Title>
                                             <Info>Secondary</Info>
                                         </Details>
+=======
+                                            {/* //ToDo: Blur this out */}
+                                            <Info>{user.email}</Info>
+                                        </Details>
+                                        <Details>
+                                            <Title type="profile">First Name</Title>
+                                            <Info>{user.firstName}</Info>
+                                        </Details>
+                                        <Details>
+                                            <Title type="profile">Last Name</Title>
+                                            <Info>{user.lastName}</Info>
+                                        </Details>
+                                    </ProfileDetails>
+                                </ItemsContainer>
+                            </div>
+
+                            <PageSubTitle>Employer Details</PageSubTitle>
+                            <div className="dashboard-list-box margin-top-0">
+                                <ItemsContainer type="profile">
+                                    <ProfileDetails>
+                                        <Details>
+                                            {/* // ToDo: Blur this out */}
+                                            <Title type="profile">Website Url</Title>
+                                            <Info>{user.employer.website}</Info>
+                                        </Details>
+                                        <Details>
+                                            <Title type="profile">Looking For</Title>
+                                            <Info>{user.employer.lookingFor}</Info>
+                                        </Details>
+                                        <Details>
+                                            {/* // ToDo: Blur this out */}
+                                            <Title type="profile">Phone Number</Title>
+                                            <Info>{user.phone}</Info>
+                                        </Details>
+                                        <Details>
+                                            <Title type="profile">Additional Info</Title>
+                                        </Details>
+                                        <PaddedInfo>{!user.employer.descriptionPlaintext ? 'Add some info...' : user.seeker.descriptionPlaintext}</PaddedInfo>
+                                    </ProfileDetails>
+                                    <Spacer />
+                                    <ProfileDetails>
+                                        <Details>
+                                            <Title type="profile">Interests</Title>
+                                        </Details>
+                                        {edges ? 
+                                        edges.length ? edges.map(industry => (
+                                                <PaddedInfo>{industry.node.name}</PaddedInfo>
+                                            )): null:  null}
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
                                     </ProfileDetails>
                                 </ItemsContainer>
                             </div>
@@ -94,7 +188,11 @@ function EmployerProfileForm({details}) {
                                                 <span className="iconify" data-icon="bi:github"></span>
                                                 <Title type="profile">Github</Title>
                                             </Socials>
+<<<<<<< HEAD
                                             <Info>https://github.com/tanjiro</Info>
+=======
+                                            <Info>https://github.com/{user.username}</Info>
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
                                         </Details>
                                         <Details type="socials">
                                             <Socials>
@@ -108,7 +206,11 @@ function EmployerProfileForm({details}) {
                                                 <span class="iconify" data-icon="flat-color-icons:google"></span>
                                                 <Title type="profile">Google</Title>
                                             </Socials>
+<<<<<<< HEAD
                                             <Info>tanjirokamado@gmail.com</Info>
+=======
+                                            <Info>{user.email}</Info>
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
                                         </Details>
                                     </ProfileDetails>
                                 </ItemsContainer>
@@ -152,12 +254,42 @@ function EmployerProfileForm({details}) {
                             <Info>Need help? Have questions or feedback? Our team would love to hear from you - <span>contact our support</span></Info>
                         </div>
                     </div>
-                )
+                );
             }}
+<<<<<<< HEAD
         </TypedEmployerProfileQuery>
     )
 }
 
+=======
+        
+        </TypedEmployerProfileQuery>
+    )
+}
+const VerifiedStatus = styled.div`
+    padding-left: 5px;
+    svg {
+        font-size: 22px;
+    }
+
+    span {
+        font-size: 14px;
+    }
+`
+const Spacer = styled.div`
+    margin: 0 15px;
+`
+const PaddedInfo = styled.div`
+    font-size: 15px;
+    line-height: 20px;
+    color:  rgb(152, 161, 179);
+    max-width: 448px;
+    padding: 5px;
+    background: #eee;
+    margin-bottom: 3px;
+    border-radius: 3px;
+`
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
 const Heading = styled.div`
     display: flex;
     justify-content: space-between;
@@ -208,7 +340,12 @@ const AccountDetails = styled.div`
     align-items: center;
 `
 const Title = styled.div`
+<<<<<<< HEAD
     font-size: ${props => props.type === 'profile' ? '17px' : '18px'};
+=======
+    display: ${props => props.special ? 'flex' : ''};
+    font-size: ${props => props.type === 'profile' ? '18px' : '19px'};
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
     line-height: 24px;
     color: #262b33;
     font-weight: 400;
@@ -237,7 +374,11 @@ const Info = styled.div`
     }
 `
 const UpgradeButton = styled.div`
+<<<<<<< HEAD
     font-size: 17px;
+=======
+    font-size: 18px;
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
     line-height: 24px;
     cursor: pointer;
     color: ${props => props.type === 'delete' ? 'rgb(255, 76, 76)' : 'rgb(33, 150, 243)'};
@@ -277,4 +418,4 @@ const EmailInfo = styled.div`
     display: flex;
     flex-direction: column;
 `
-export default EmployerProfileForm
+export default EmployerProfileForm;

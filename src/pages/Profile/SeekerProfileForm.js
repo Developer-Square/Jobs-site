@@ -1,17 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
 import Switch from '@material-ui/core/Switch';
+import {useHistory} from 'react-router-dom'
 
 import {TypedSeekerProfileQuery} from './queries'
 import Loader from "components/Loader/Loader";
-import NoResult from 'components/NoResult/NoResult'
+import NoResult from 'components/NoResult/NoResult';
+import Button from 'components/Button/Button';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 function SeekerProfileForm({details}) {
+    const history = useHistory();
     const variables = {
         first: 10,
         id: details.id
+    }
+
+    const handleViewResume = () => {
+        if (details.resumes.edges.length === 0) {
+            // const {id} = details.resumes.edges.node
+            history.push(`http://localhost:3000/r/UmVzdW1lTm9kZToy`)
+        }
     }
     return (
         <TypedSeekerProfileQuery variables={variables}>
@@ -26,10 +36,18 @@ function SeekerProfileForm({details}) {
 
                 const {user} = seekerProfileData.data;
                 let edges;
+<<<<<<< HEAD
                 if (user.seeker) {
                     if (user.seeker.industries) {
                         edges = user.seeker.industries.edges;
                     }    
+=======
+                
+                if (user.seeker) {
+                    if (user.seeker.industries) {
+                        edges = user.seeker.industries.edges;
+                    }  
+>>>>>>> 8535208... feat: Added employer profile and removed unused code
                 }
 
                 return (
@@ -130,6 +148,12 @@ function SeekerProfileForm({details}) {
                                 <ItemsContainer>
                                     {/* Reusing the profile details container */}
                                     <ProfileDetails type="socials">
+                                        <Details type="socials">
+                                            <Socials>
+                                                <Title type="profile">Link to Resume</Title>
+                                            </Socials>
+                                            <Button onClick={handleViewResume}>View Resume</Button>
+                                        </Details>
                                         <Details type="socials">
                                             <Socials>
                                                 <span className="iconify" data-icon="bi:github"></span>
