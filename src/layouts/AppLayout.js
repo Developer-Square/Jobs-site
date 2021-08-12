@@ -122,7 +122,7 @@ const Layout = (props) => {
                             <Link to={`/dashboard/vacancy`}>Add Job</Link>
                           </li>
                           <li>
-                            <Link to={`/dashboard/profile`}>My Profile</Link>
+                            <Link to={`/dashboard/my-profile`}>My Profile</Link>
                           </li>
                           <li>
                             <Link to={`/`}>Logout</Link>
