@@ -58,6 +58,7 @@ const FormInput = styled.div`
   .react-date-picker__inputGroup__input {
     display: initial;
     border: none;
+    padding: 0;
   }
   .react-date-picker__calendar {
     z-index: 9999;
