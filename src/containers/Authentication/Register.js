@@ -57,11 +57,15 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   React.useEffect(() => {
     if (match.params) {
       if (match.params.userType === 'seeker') {
-        setIsSeeker(currSeeker => currSeeker = true);
-        setIsEmplolyer(currEmployer => currEmployer = false);
+        setIsSeeker(true);
+        setIsEmplolyer(false);
+        initialValues.isSeeker = true;
+        initialValues.isEmployer = false;
       } else if (match.params.userType === 'business') {
-        setIsEmplolyer(currEmployer => currEmployer = true);
-        setIsSeeker(currSeeker => currSeeker = false);
+        setIsEmplolyer(true);
+        setIsSeeker(false);
+        initialValues.isSeeker = false;
+        initialValues.isEmployer = true;
       }
     }    // eslint-disable-next-line
   }, [match.params.userType, switchTab, initialValues]);
@@ -113,6 +117,8 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
   };
 
   const sendVerifactionCode = (code, userLogin, setErrors) => {
+    // switchTabs('', 'forward')
+
     firebaseResult.confirm(code).then((result) => {
       // User signed in successfully.
       const user = result.user;
@@ -135,7 +141,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
             password: values.password1
           }
         }).then(({data}) => {
-          console.log(data)
           const successful = maybe(() => data.tokenAuth.success);
           storeLoginDetails(successful, '', data, setErrors);
         })
@@ -155,7 +160,6 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
     registerUser({
       variables: sentData,
     }).then(({ data }) => {
-
       if (data.register.success) {
         triggerFirebaseSignIn(sentData.phone);
         localStorage.setItem('registerValues', JSON.stringify(sentData));
@@ -355,7 +359,7 @@ const Register = ({activeStep, setActiveStep, switchTab, setSwitchTab}) => {
         // eslint-disable-next-line
         ) : activeStep === 3 && switchTab === 'seeker' || activeStep === 3 && switchTab === 'business' ? (
           // Using the Billing Form for both seeker and business tabs as the fields are similar.
-          <Billing switchTabs={switchTabs} isSeeker={isSeeker} loading={loading} />
+          <Billing switchTabs={switchTabs} isSeeker={isSeeker} loading={loading} alert={alert}/>
         ) : (
           <div className="register">
             <div

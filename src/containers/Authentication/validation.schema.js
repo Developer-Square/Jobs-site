@@ -42,7 +42,9 @@ const companyName = Yup.string().required(msg.fieldRequired)
 const location = Yup.string().required(msg.fieldRequired)
 const terms = Yup.boolean().oneOf([true], 'Must accept terms and conditions')
 
-
+export const phoneNumberSchema = Yup.object().shape({
+  phone: phonenumber
+})
 
 export const signUpSchema = Yup.object().shape({
   email: email,

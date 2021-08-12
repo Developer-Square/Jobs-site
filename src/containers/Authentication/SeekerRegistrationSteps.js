@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { Link } from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+// import { WebSocketLink } from '@apollo/client/link/ws'
+// import { useSubscription } from '@apollo/client'
 
 import { signUpSchema, OTPVerficationSchema, furtherInformationSchema } from "./validation.schema";
 import { HelperText } from "./Authentication.style";
@@ -12,13 +14,19 @@ import FormikControl from "../FormikContainer/FormikControl"
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
 import { Typography } from "@material-ui/core";
-import { TypedCreateSelectableInstitutionMutation } from './mutations'
+import { TypedCreateSelectableInstitutionMutation, TypedMakePayment } from './mutations'
 import { showSuccessNotification, IsNotEmpty } from "helpers";
-import { TypedPlansQuery } from './queries';
+import { TypedPlansListQuery } from './queries';
 import Loader from "components/Loader/Loader";
 import { PaymentModal } from 'modals/PaymentModal';
+// import { ONTRANSACTION_MESSAGE } from './subscription';
 
-
+// const wsLink = new WebSocketLink({
+//   uri: 'ws://thedb.hewani.io/graphql/',
+//   options: {
+//     reconnect: true
+//   }
+// });
 
 
 export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history, fillFields }) => {
@@ -99,7 +107,7 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
 
             <Button
               type="submit"
-              // disabled={!formik.isValid}
+              disabled={!formik.isValid}
               fullwidth
               loading={loading}
               title={loading ? "Signing Up ... " : "Sign Up"}
@@ -283,69 +291,111 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
   )
 }
 
-export const Billing = ({ switchTabs, isSeeker }) => {
+export const Billing = ({ switchTabs, isSeeker, alert }) => {
   const [show, setShow] = React.useState(false);
-  const useStyles = makeStyles({
+  const [planID, setPlanID] = React.useState('');
+  const [periodAmount, setPeriodAmount] = React.useState(0);
+  const useStyles = makeStyles(theme => ({
     root: {
       minWidth: 235,
+      [theme.breakpoints.down("lg")] : {
+        minWidth: 180
+      },
+      [theme.breakpoints.down("md")] : {
+        minWidth: 150
+      },
       marginRight: 10,
       minHeight: 150,
       cursor: "pointer",
     }
-  })
+  }));
 
-  const classNames = useStyles()
+  const classNames = useStyles();
 
-  const handleModalShow = () => {
+  const handleModalShow = (option) => {
     setShow(!show);
+    if (option) {
+      setPeriodAmount(option.periodAmount);
+      setPlanID(option.id)
+    }
+  }
+
+  const makePaymentFn = (values, makePayment) => {
+    // TODO: Add variables to into an object then remove the empty keys and values.
+    // make the removefunction a global utility.
+    if (planID !== '' && periodAmount !== 0) {
+      makePayment({
+        variables: {
+          planId: planID,
+          amount: periodAmount,
+          billingPhone: values.phone 
+        }
+      }).then((value) => {
+        // const {data, loading} = useSubscription(ONTRANSACTION_MESSAGE, {
+        //   variables: value.transactionDescription
+        // })
+        // console.log(data);
+        console.log("after mpesa push", value);
+      })
+    }
   }
 
   return (
     <>
-      <TypedPlansQuery>
+      <TypedPlansListQuery>
         {(plansList) => {
           if (plansList.loading) {
             return <Loader />;
           }
 
           let plans;
-          const {allPlans} = plansList.data
-          if (allPlans.length > 0) {
+          const {allPlanLists} = plansList.data
+          if (allPlanLists.length > 0) {
             // If the user is a seeker then only add the options available
             // to them.
             if (isSeeker) {
-              plans = allPlans.slice(4);
+              plans = allPlanLists[1].allPlans;
             } else {
-              plans = allPlans.slice(0, 3);
+              plans = allPlanLists[0].allPlans;
             }
           }
      
         return (
-          <>
-            <PaymentModal open={show} onClose={handleModalShow} moreInfo={false} />
-            <Spacer>
-              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
-            </Spacer>
-            <Title>Choose your tier: </Title>
-            <PricingTier>
-              {plans ? plans.map((option, index) => (
-                <div key={index}>
-                {/* Add action to take them to dashboard */}
-                  <Card key={index} onClick={() => handleModalShow()} className={classNames.root}>
-                    <CardContent>
-                      <Typography variant="h5">
-                        {option.title}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </div>
-              )): null}
+          <TypedMakePayment onCompleted={(data, errors) => showSuccessNotification(data, alert, errors)}>
+            {(makePayment, { loading }) => {
+              function onPaymentSubmit(values) {
+                makePaymentFn(values, makePayment);
+              }
 
-            </PricingTier>
-          </>
+              return (
+                <>
+                  <PaymentModal open={show} loading={loading} onSubmit={onPaymentSubmit} onClose={handleModalShow} moreInfo={false} />
+                  <Spacer>
+                    <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
+                  </Spacer>
+                  <Title>Choose your tier: </Title>
+                  <PricingTier planType={plans.length > 2 ? 'business' : 'seeker'}>
+                    {plans.length ? plans.map((option, index) => (
+                      <div key={index}>
+                      {/* Add action to take them to dashboard */}
+                        <Card key={index} onClick={() => handleModalShow(option)} className={classNames.root}>
+                          <CardContent>
+                            <Typography variant="h5">
+                              {option.title}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    )): null}
+                  </PricingTier>
+                </>
+              )
+            }}
+            
+          </TypedMakePayment>
           )
         }}
-      </TypedPlansQuery>
+      </TypedPlansListQuery>
     </>
   )
 }
@@ -369,6 +419,7 @@ const Spacer = styled.div`
 
 const PricingTier = styled.div`
   display: flex;
+  justify-content: ${props => props.planType === 'business' ? 'space-around' : ''};
 `
 
 const Title = styled.p`

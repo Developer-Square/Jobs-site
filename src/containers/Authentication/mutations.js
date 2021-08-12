@@ -234,6 +234,28 @@ export const CREATE_SELECTABLE_INSTITUTION = gql`
   }
 `;
 
+export const MAKE_PAYMENT = gql`
+mutation onlinePayment(
+  $billingPhone: String
+  $amount: PositiveDecimal
+  $planId: ID!
+) {
+  makePayment(planId: $planId, input: {
+    billingPhone: $billingPhone
+    amount: $amount
+  }){
+    success
+    onlineCheckout {
+      id
+      amount
+      transactionDescription
+    }
+  }
+}
+`
+
+export const TypedMakePayment = TypedMutation(MAKE_PAYMENT);
+
 export const TypedEmployerProfileMutation = TypedMutation(
   EMPLOYER_PROFILE_MUTATION,
 );

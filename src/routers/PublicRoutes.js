@@ -3,7 +3,6 @@ import { Switch } from "react-router-dom";
 
 import Loader from "components/Loader/Loader";
 import * as ROUTE from "constants/routes.constants";
-
 import PublicRoute from "./PublicRoute";
 
 const LandingPage = lazy(() => import("pages/LandingPage"));
@@ -22,13 +21,14 @@ const PasswordReset = lazy(() =>
 const EmailActivation = lazy(() =>
   import("containers/Authentication/EmailActivation"),
 );
-const Vacancies = lazy(() => import("pages/Vacancies"));
+const Vacancies = lazy(() => import("pages/Vacancies/View"));
 const Categories = lazy(() => import("pages/Categories"));
 const Pricing = lazy(() => import("pages/Pricing"));
 const Contact = lazy(() => import("pages/Contact"));
 
 const VacancyView = lazy(() => import("pages/Vacancy/VacancyView"));
 const ResumeView = lazy(() => import("pages/Resume/view"));
+
 
 const AuthRoutes = (props) => {
   const { match } = props;
