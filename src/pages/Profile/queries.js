@@ -89,37 +89,7 @@ export const SeekerProfile = gql`
 export const TypedSeekerProfileQuery = TypedQuery(SeekerProfile);
 
 export const EmployerProfile = gql`
-<<<<<<< HEAD
-  user (id: $id) {
-    email
-    username
-    firstName
-    lastName
-    avatar
-    phone
-    verified
-    employer {
-      description
-      name
-      website
-      country
-      lookingFor
-      industries {
-        name
-      }
-      logo {
-        url
-        alt
-      }
-    }
-    isSeeker
-    isEmployer
-    defaultAddress {
-      streetAddress1
-      city
-    }
-  }
-=======
+
   query Employer($id: ID!) {
     user (id: $id) {
       email
@@ -150,7 +120,6 @@ export const EmployerProfile = gql`
         city
       }
     }
->>>>>>> 8535208... feat: Added employer profile and removed unused code
   }
 `
 export const TypedEmployerProfileQuery = TypedQuery(EmployerProfile);
