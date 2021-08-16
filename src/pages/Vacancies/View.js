@@ -153,7 +153,7 @@ export const View = ({ match, deviceType }) => {
               <MetaWrapper
                 meta={{
                   description: "The Database Kenya Jobs and vacancies",
-                  title: "jobs in Kenya",
+                  title: "The Database Kenya | jobs in Kenya | jobs need people",
                 }}
               >
                 <Page

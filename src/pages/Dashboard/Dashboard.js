@@ -1,6 +1,6 @@
 import UserContext from "contexts/user/user.provider";
 import React from "react";
-import { Link } from "react-router-dom";
+import Activities from "./Activities";
 
 const Dashboard = () => {
   const { user } = React.useContext(UserContext);
@@ -66,70 +66,7 @@ const Dashboard = () => {
         <div className="col-lg-6 col-md-12">
           <div className="dashboard-list-box margin-top-20">
             <h4>Recent Activities</h4>
-            <ul>
-              <li>
-                Your listing{" "}
-                <strong>
-                  <Link to="#">
-                    Marketing Coordinator - SEO / SEM Experience{" "}
-                  </Link>
-                </strong>{" "}
-                has been approved!
-                <Link to="#" className="close-list-item">
-                  <i className="fa fa-close" />
-                </Link>
-              </li>
-              <li>
-                Kathy Brown has sent you{" "}
-                <strong>
-                  <Link to="#">private message</Link>
-                </strong>
-                !
-                <Link to="#" className="close-list-item">
-                  <i className="fa fa-close" />
-                </Link>
-              </li>
-              <li>
-                Someone bookmarked your{" "}
-                <strong>
-                  <Link to="#">Restaurant Team Member - Crew</Link>
-                </strong>
-                !
-                <Link to="#" className="close-list-item">
-                  <i className="fa fa-close" />
-                </Link>
-              </li>
-              <li>
-                You have new application for{" "}
-                <strong>
-                  <Link to="#">Power Systems User Experience Designer</Link>
-                </strong>
-                !
-                <Link to="#" className="close-list-item">
-                  <i className="fa fa-close" />
-                </Link>
-              </li>
-              <li>
-                Someone bookmarked your{" "}
-                <strong>
-                  <Link to="#">Core PHP Developer for Site Maintenance</Link>
-                </strong>{" "}
-                listing!
-                <Link to="#" className="close-list-item">
-                  <i className="fa fa-close" />
-                </Link>
-              </li>
-              <li>
-                Your job listing{" "}
-                <strong>
-                  <Link to="#">Core PHP Developer for Site Maintenance</Link>
-                </strong>{" "}
-                is expiring!
-                <Link to="#" className="close-list-item">
-                  <i className="fa fa-close" />
-                </Link>
-              </li>
-            </ul>
+            <Activities />
           </div>
         </div>
         {/* Recent Activity */}
