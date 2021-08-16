@@ -1,8 +1,11 @@
 import React, { useContext } from "react";
 import { useLazyQuery } from "react-apollo";
+import { useHistory } from "react-router-dom";
 import VacancyFilter from "./VacancyFilter";
 import Loader from "components/Loader/Loader";
+import Button from "components/Button/Button";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
+import { AuthContext } from "contexts/auth/auth.context";
 import { VACANCIES_QUERY } from "./queries";
 import PaginationItem from "./PaginationItem";
 import LogoImage from "image/thedb.png";
@@ -27,6 +30,10 @@ const Vacancy = () => {
     search: "",
     jobTypes: [],
   });
+  const {
+    authState: { isAuthenticated, profile },
+  } = useContext(AuthContext);
+  const history = useHistory();
 
   const ratePerHour = () => {
     let sortedJobs = [];
@@ -140,9 +147,26 @@ const Vacancy = () => {
             <h2>Web, Software &amp; IT</h2>
           </div>
           <div className="six columns">
-            <a href="dashboard-add-job.html" className="button">
-              Post a Job, It’s Free!
-            </a>
+            <Button
+              className="popup-with-zoom-anim button mt-8 ml-auto"
+              onClick={() => {
+                history.push(
+                  isAuthenticated
+                    ? profile.isEmployer
+                      ? `/dashboard/vacancies/add-job`
+                      : `/dashboard `
+                    : `/auth/login`,
+                );
+              }}
+              title={
+                isAuthenticated && (
+                  <p style={{ color: "#FFFFFF" }}>
+                    {profile.isSeeker && "View Dashboard stats"}
+                    {profile.isEmployer && "Post a Job, It’s Free!"}
+                  </p>
+                )
+              }
+            />
           </div>
         </div>
       </div>
