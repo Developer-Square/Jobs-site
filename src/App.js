@@ -72,24 +72,24 @@ function App() {
               <HeaderProvider>
                 <AuthProvider>
                   <VacancyProvider>
-                  <ModalProvider>
-                    <UserProvider>
-                      <DatabaseProvider>
-                        <ResumeProvider>
-                          <StickyProvider>
-                            <AlertProvider
-                              template={NotificationTemplate}
-                              {...notificationConfig}
-                            >
-                              <StorageProvider>
-                                <BaseRouter deviceType={deviceType} />
-                              </StorageProvider>
-                            </AlertProvider>
-                          </StickyProvider>
-                        </ResumeProvider>
-                      </DatabaseProvider>
-                    </UserProvider>
-                  </ModalProvider>
+                    <ModalProvider>
+                      <UserProvider>
+                        <DatabaseProvider>
+                          <ResumeProvider>
+                            <StickyProvider>
+                              <AlertProvider
+                                template={NotificationTemplate}
+                                {...notificationConfig}
+                              >
+                                <StorageProvider>
+                                  <BaseRouter deviceType={deviceType} />
+                                </StorageProvider>
+                              </AlertProvider>
+                            </StickyProvider>
+                          </ResumeProvider>
+                        </DatabaseProvider>
+                      </UserProvider>
+                    </ModalProvider>
                   </VacancyProvider>
                 </AuthProvider>
               </HeaderProvider>

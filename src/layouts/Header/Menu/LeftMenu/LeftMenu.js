@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import Logoimage from "image/db.png";
 import styled from "styled-components";
 import LogoimageInverted from "image/thedb.png";
-import { isCategoryPage } from "containers/LayoutContainer/is-home-page";
+import { isCategoryPage } from "../../../is-home-page";
 
 export const Logo = styled.div`
   // margin-right: auto;

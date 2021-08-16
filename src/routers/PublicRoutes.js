@@ -7,9 +7,6 @@ import PublicRoute from "./PublicRoute";
 
 const LandingPage = lazy(() => import("pages/LandingPage"));
 const NotFound = lazy(() => import("pages/NotFound"));
-const EmailVerification = lazy(() =>
-  import("containers/SignInOutForm/emailVerification"),
-);
 const PrivacyPolicy = lazy(() => import("pages/TOS/PrivacyPolicy"));
 const About = lazy(() => import("pages/About/about"));
 const TermsOfUse = lazy(() => import("pages/TOS/SDG"));
@@ -29,7 +26,6 @@ const Contact = lazy(() => import("pages/Contact"));
 const VacancyView = lazy(() => import("pages/Vacancy/VacancyView"));
 const ResumeView = lazy(() => import("pages/Resume/view"));
 
-
 const AuthRoutes = (props) => {
   const { match } = props;
   return (
@@ -45,12 +41,6 @@ const AuthRoutes = (props) => {
         exact
         path={`${match.path}/p/:userType([A-Za-z0-9]+)`}
         component={Authentication}
-      />
-      <PublicRoute
-        restricted={false}
-        exact
-        path={`${match.path}/email-verify`}
-        component={EmailVerification}
       />
       <PublicRoute
         restricted={false}

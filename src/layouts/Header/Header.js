@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
 import { useLocation, useHistory } from "react-router-dom";
-import { openModal } from "@redq/reuse-modal";
 import SearchBox from "components/SearchBox/SearchBox";
 import { SearchContext } from "contexts/search/search.context";
 import { AuthContext } from "contexts/auth/auth.context";
-import AuthenticationForm from "../../SignInOutForm/Form";
 import { RightMenu } from "./Menu/RightMenu/RightMenu";
 import { LeftMenu } from "./Menu/LeftMenu/LeftMenu";
 import HeaderWrapper from "./Header.style";
@@ -43,26 +41,6 @@ const Header = ({ className, isSticky }) => {
     }
   };
 
-  const handleJoin = () => {
-    authDispatch({
-      type: "SIGNIN",
-    });
-
-    openModal({
-      show: true,
-      overlayClassName: "quick-view-overlay",
-      closeOnClickOutside: true,
-      component: AuthenticationForm,
-      closeComponent: "",
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: "quick-view-modal",
-        width: 458,
-        height: "auto",
-      },
-    });
-  };
   const onSearch = (text) => {
     dispatch({
       type: "UPDATE",
@@ -104,7 +82,6 @@ const Header = ({ className, isSticky }) => {
             )}
             <RightMenu
               isAuthenticated={isAuthenticated}
-              onJoin={handleJoin}
               onLogout={handleLogout}
               avatar={img}
               isSticky={isSticky}
