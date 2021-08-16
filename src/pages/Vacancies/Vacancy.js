@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { useLazyQuery } from "react-apollo";
 import { useHistory } from "react-router-dom";
-
-import { AuthContext } from "contexts/auth/auth.context";
-import Button from "components/Button/Button";
+import VacancyFilter from "./VacancyFilter";
 import Loader from "components/Loader/Loader";
+import Button from "components/Button/Button";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
+import { AuthContext } from "contexts/auth/auth.context";
 import { VACANCIES_QUERY } from "./queries";
 import PaginationItem from "./PaginationItem";
 import LogoImage from "image/thedb.png";
@@ -14,13 +14,11 @@ import {
   checkDate,
   checkJobType,
   findJobTypeDescription,
+  onCompleted,
 } from "utils";
-
-import VacancyFilter from "./VacancyFilter";
 
 const Vacancy = () => {
   const [rate, setRate] = React.useState([]);
-  const [jobTypes, setJobTypes] = React.useState([]);
   const [getJobs, setGetJobs] = React.useState("");
   const [sortOrder, setSortOrder] = React.useState([]);
   const [sortByValue, setSortByValue] = React.useState({
@@ -28,7 +26,6 @@ const Vacancy = () => {
     field: "",
   });
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
-  // const [afterValue, setAfterValue] = React.useState('');
   const [filterObj, setFilterObj] = React.useState({
     search: "",
     jobTypes: [],
@@ -37,6 +34,7 @@ const Vacancy = () => {
     authState: { isAuthenticated, profile },
   } = useContext(AuthContext);
   const history = useHistory();
+
   const ratePerHour = () => {
     let sortedJobs = [];
 
@@ -77,57 +75,19 @@ const Vacancy = () => {
     }
   };
 
-  const cleanVacanciesData = (edges, update) => {
-    let jobs;
-
-    if (edges.length > 0) {
-      jobs = edges.map((edge) => edge.node);
-      // Update the context api once the data is fetched successfully.
-      if (vacancyState.jobsData.length === 0) {
-        vacancyDispatch({
-          type: "ADD_DATA",
-          payload: jobs,
-        });
-      } else if (update) {
-        // Reverse the vacancies array inorder to display the latests results
-        // and present it as it is when we want the oldest results.
-        if (getJobs === "-updated_at" || getJobs === "Newest jobs") {
-          jobs = jobs.reverse();
-          vacancyDispatch({
-            type: "SORT_JOBS",
-            payload: jobs,
-          });
-        } else {
-          vacancyDispatch({
-            type: "SORT_JOBS",
-            payload: jobs,
-          });
-        }
-      }
-      // Sort the object according the rate per hour sorting
-      // if there's any option selected.
-      if (rate.length) {
-        ratePerHour();
-      }
-    } else {
-      // Dispatch an empty array when there are no results
-      vacancyDispatch({
-        type: "SORT_JOBS",
-        payload: edges,
-      });
-    }
-  };
-
-  const onCompleted = (loading, data) => {
-    if (!loading) {
-      cleanVacanciesData(data.vacancies.edges, true);
-      setJobTypes(data?.__type?.enumValues);
-    }
-  };
-
   // For the sortByInput.
   const [loadFilterValues, { loading, data }] = useLazyQuery(VACANCIES_QUERY, {
-    onCompleted: () => onCompleted(loading, data),
+    onCompleted: () =>
+      onCompleted(
+        loading,
+        data,
+        "refetch",
+        rate,
+        ratePerHour,
+        vacancyState,
+        vacancyDispatch,
+        getJobs,
+      ),
     fetchPolicy: "cache-and-network",
   });
 
@@ -142,7 +102,6 @@ const Vacancy = () => {
       }
 
       if (obj[propName] && obj[propName].constructor === Object) {
-        console.log(Object.values(obj[propName]));
         // Remove a property from the variables object if it has no keys or values are undefined.
         if (
           Object.keys(obj[propName]).length === 0 ||
@@ -174,11 +133,10 @@ const Vacancy = () => {
         field: sortByValue.field,
       },
     };
+    console.log("variables", variables);
     const cleanedVariables = clean(variables);
     loadFilterValues({ variables: cleanedVariables });
   };
-
-  // console.log(vacancyState, "vacancyState");
 
   return (
     <div>
@@ -228,7 +186,7 @@ const Vacancy = () => {
                     )}`}
                     key={index}
                     className={`listing ${checkJobType(
-                      findJobTypeDescription(job, jobTypes),
+                      findJobTypeDescription(job, vacancyState.jobTypes),
                     )}`}
                   >
                     <div className="listing-logo">
@@ -241,7 +199,7 @@ const Vacancy = () => {
                       <h4>
                         {job.title}
                         <span className="listing-type">
-                          {findJobTypeDescription(job, jobTypes)}
+                          {findJobTypeDescription(job, vacancyState.jobTypes)}
                         </span>
                       </h4>
                       <ul className="listing-icons">

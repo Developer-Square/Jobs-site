@@ -10,6 +10,52 @@ import {
 } from "helpers";
 import { maybe } from "misc";
 
+
+export const cleanVacanciesData = (edges, update, rate, ratePerHour, vacancyState, vacancyDispatch, getJobs) => {
+  let jobs;
+
+  if (edges.length > 0) { 
+    jobs = edges.map((edge) => edge.node);
+    // Update the context api once the data is fetched successfully.
+    if (vacancyState.jobsData.length === 0) {
+      vacancyDispatch({
+        type: "ADD_DATA",
+        payload: jobs
+      });
+    } else if (update) {
+      vacancyDispatch({
+        type: "SORT_JOBS",
+        payload: jobs
+      });
+    }
+    // Sort the object according the rate per hour sorting 
+    // if there's any option selected.
+    if (rate.length) {
+      ratePerHour()
+    }
+  } else {
+    // Dispatch an empty array when there are no results
+    vacancyDispatch({
+      type: "SORT_JOBS",
+      payload: edges
+    })
+  }
+}
+
+// Called when a fetching vacancies is complete.
+// Sets the jobTypes from the backend to the context API so that they can be displayed.
+export const onCompleted = (loading, data, type, rate, ratePerHour, vacancyState, vacancyDispatch, getJobs) => {
+  if (!loading) {
+    if (type === 'refetch') {
+      cleanVacanciesData(data.vacancies.edges, true, rate, ratePerHour, vacancyState, vacancyDispatch, getJobs);
+    }
+    vacancyDispatch({
+      type: "SET_JOB_TYPES",
+      payload: data?.__type?.enumValues
+    });
+  }
+}
+
   /**
  * @param  {} data
  * @param  {} jobTypes
@@ -57,7 +103,6 @@ export const checkDate = (date) => {
  * @param  {} alert
  */
 export const showSeekerProfileNotification = (data, errors, alert) => {
-  console.log(errors);
   if (errors) {
     console.log("Server Error kwa login", errors[0].message);
     return errors[0].message;

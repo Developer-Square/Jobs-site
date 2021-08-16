@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useContext} from "react";
 
 import { StringParam, useQueryParam } from "use-query-params";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
@@ -9,34 +9,16 @@ import { TypedVacanciesQuery } from "./queries";
 import { NoResult } from "components/VacancyLoader/VacancyLoader.style";
 import Loader from "components/Loader/Loader";
 import { vacancyLimit } from "constants/constants";
+import { VacancyContext } from 'contexts/vacancies/vacancies.context'
 
-// export const FilterQuerySet = {
-//   encode(valueObj) {
-//     const str = [];
-//     Object.keys(valueObj).forEach((value) => {
-//       str.push(`${value}_${valueObj[value].join("_")}`);
-//     });
-//     return str.join(".");
-//   },
 
-//   decode(strValue) {
-//     const obj = {};
-//     const propsWithValues = strValue.split(".").filter((n) => n);
-//     propsWithValues.map((value) => {
-//       const propWithValues = value.split("_").filter((n) => n);
-//       obj[propWithValues[0]] = propWithValues.slice(1);
-//       return obj;
-//     });
-//     return obj;
-//   },
-// };
-
-export const View = ({ match, deviceType }) => {
+const View = () => {
   const [sort, setSort] = useQueryParam("sortBy", StringParam);
   const [attributeFilters, setAttributeFilters] = useQueryParam(
     "filters",
-    // FilterQuerySet,
   );
+  const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
+
 
   const clearFilters = () => {
     setAttributeFilters({});
@@ -112,7 +94,7 @@ export const View = ({ match, deviceType }) => {
     ...filters,
     sortBy: {
       "field": "SALARY",
-      "direction": "DESC"
+      "direction": "ASC"
     },
   };
 
@@ -121,7 +103,6 @@ export const View = ({ match, deviceType }) => {
       {(isOnline) => (
         <TypedVacanciesQuery variables={variables} errorPolicy="all" loaderFull>
           {(vacancyData) => {
-            console.log(vacancyData)
             if (vacancyData.loading) {
               return <Loader />;
             }
@@ -133,6 +114,15 @@ export const View = ({ match, deviceType }) => {
             if (!isOnline) {
               return <OfflinePlaceholder />;
             }
+            
+            // Only update the jobTypes in the context API when its empty.
+            if (vacancyData.data.__type.enumValues && vacancyState.jobTypes.length === 0) {
+              vacancyDispatch({
+                type: "SET_JOB_TYPES",
+                payload: vacancyData.data.__type.enumValues
+              });
+            }
+
 
             const handleLoadMore = () =>
               vacancyData.loadMore(

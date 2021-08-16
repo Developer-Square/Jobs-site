@@ -153,6 +153,16 @@ const components = {
     children: [],
     dashboardItem: true,
   },
+  myProfile: {
+    component: "MyProfile",
+    url: "/my-profile",
+    title: "MyProfile",
+    icon: "Category",
+    module: 1,
+    category: account,
+    children: [],
+    dashboardItem: true,
+  },
 };
 
 // // modules for grouping.
@@ -212,8 +222,9 @@ const rolesConfig = {
 
   common: {
     routes: [
-      components.dashboard,
       components.profile,
+      components.dashboard,
+      components.myProfile,
 
       components.resumeDashboard,
       components.resumeBuilder,

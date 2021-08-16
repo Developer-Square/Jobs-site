@@ -26,6 +26,7 @@ class PrivateRoutes extends Component {
       }, []);
       // For removing duplicate entries, compare with 'url'.
       allowedRoutes = uniqBy(allowedRoutes, "url");
+      console.log(allowedRoutes);
       this.setState({ allowedRoutes });
       console.log(allowedRoutes);
     } else {

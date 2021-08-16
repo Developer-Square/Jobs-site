@@ -1,6 +1,6 @@
 import PasswordChange from "containers/Authentication/PasswordChange";
 import { AuthContext } from "contexts/auth/auth.context";
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import BaseProfile from "./BaseProfile";
 import EmployerProfile from "./EmployerProfile";
 import InstitutionProfile from "./InstitutionProfile";
@@ -10,19 +10,55 @@ import AddressPreview from "containers/Address/AddressSummary";
 import { useQuery } from "react-apollo";
 import { GET_USER_DETAILS } from "graphql/queries";
 import Loader from "components/Loader/Loader";
+import Button from "components/Button/Button";
+import styled from 'styled-components';
+
+const SeekerProfileForm = lazy(() => import("pages/Profile/SeekerProfileForm"));
+const EmployerProfileForm = lazy(() => import("pages/Profile/EmployerProfileForm"));
 
 function Profile() {
+  const [edit, setEdit] = React.useState(false);
+  const [userDetails, setUserDetails] = React.useState({});
   const { data, loading } = useQuery(GET_USER_DETAILS);
   const {
     authState: { profile },
   } = React.useContext(AuthContext);
 
+  React.useEffect(() => {
+    const values = localStorage.getItem('thedb_auth_profile');
+    const parsedObj = JSON.parse(values);
+    setUserDetails(curr => curr = parsedObj);
+  }, [])
+
   if (loading) {
     return <Loader />;
   }
 
+  console.log("details", profile);
+
+
   return (
     <>
+    <div className={!edit ? "col-lg-10 col-md-12" : "col-md-12"}>
+    <RightBtn>
+        <Button title={!edit ? "Edit" : 'View Profile'} onClick={() => setEdit(curr => !curr)}/>
+    </RightBtn>
+    </div>
+    {!edit ? (
+      <Suspense fallBack={<Loader />}>
+        {Object.keys(userDetails).length 
+          ?
+            !userDetails.isEmployer ? 
+              <SeekerProfileForm /> 
+            : 
+              <EmployerProfileForm />
+          :
+          <Loader />
+        }
+        
+      </Suspense>
+    ):(
+      <>
       <div className="row">
         {/* Profile */}
         <div className="col-lg-6 col-md-12">
@@ -73,7 +109,15 @@ function Profile() {
       {profile.isInstitution && <InstitutionProfile />}
       {profile.isSeeker && <SeekerProfile />}
       {profile.isEmployer && <EmployerProfile />}
+      </>
+      )}
     </>
   );
 }
+
+const RightBtn = styled.div`
+  float: right;
+  margin-bottom: 30px;
+`
+
 export default Profile;

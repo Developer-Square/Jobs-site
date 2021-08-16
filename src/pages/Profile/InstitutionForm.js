@@ -53,6 +53,7 @@ const InstitutionForm = ({
                       control="select"
                       label="Schools Student Population"
                       name="studentCount"
+                      hideButton={() => {}}
                       style={{ margin: 0 }}
                       options={studentCount}
                     />

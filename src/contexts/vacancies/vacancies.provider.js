@@ -6,6 +6,10 @@ export const initialState = {
     jobsData: [],
     sortedJobs: [],
     sortingByPayRate: false,
+    jobTypes: [],
+    landingPageJobs: [],
+    pagesArray: [],
+    activeIndex: 1,
 };
 
 export function reducer(state, { type, payload }) {
@@ -26,6 +30,26 @@ export function reducer(state, { type, payload }) {
             return {
                 ...state,
                 sortingByPayRate: !initialState.sortingByPayRate
+            }
+        case "SET_JOB_TYPES":
+            return {
+                ...state,
+                jobTypes: payload
+            }
+        case "SET_VACANCIES_SECTION":
+            return {
+                ...state,
+                landingPageJobs: payload
+            }
+        case "ADD_PAGES":
+            return {
+                ...state,
+                pagesArray: payload
+            }
+        case "SET_ACTIVE_INDEX":
+            return {
+                ...state,
+                activeIndex: payload
             }
         default: {
             throw new Error(`Unsupported action type: ${type}`)
