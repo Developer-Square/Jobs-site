@@ -1,82 +1,91 @@
 import React, { useEffect, useContext } from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import {useLazyQuery} from 'react-apollo'
-import { PaymentModal } from 'modals/PaymentModal'
-import { landingVacancyLimit } from 'constants/constants'
-import { VACANCIES_QUERY } from './queries'
-import { VacancyContext } from 'contexts/vacancies/vacancies.context'
-import { getDBIdFromGraphqlId, checkDate, checkJobType, findJobTypeDescription } from 'utils';
+import { useLazyQuery } from "react-apollo";
+import { PaymentModal } from "modals/PaymentModal";
+import { landingVacancyLimit } from "constants/constants";
+import { VACANCIES_QUERY } from "./queries";
+import { VacancyContext } from "contexts/vacancies/vacancies.context";
+import {
+  getDBIdFromGraphqlId,
+  checkDate,
+  checkJobType,
+  findJobTypeDescription,
+} from "utils";
 import LogoImage from "image/thedb.png";
 import Loader from "components/Loader/Loader";
-
+import Button from "components/Button/Button";
 
 const Vacancies = () => {
   const history = useHistory();
   const [verified, setVerified] = React.useState(false);
   const [show, setShow] = React.useState(false);
+  const [jobTypes, setJobTypes] = React.useState([]);
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
+
+  const cleanVacanciesData = (edges) => {
+    let jobs;
+
+    if (edges.length > 0) {
+      jobs = edges.map((edge) => edge.node);
+      if (vacancyState.jobsData.length === 0) {
+        vacancyDispatch({
+          type: "ADD_DATA",
+          payload: jobs,
+        });
+      }
+    }
+  };
 
   const onCompleted = (loading, data) => {
     if (!loading) {
-      vacancyDispatch({
-        type: "SET_VACANCIES_SECTION",
-        payload: data.vacancies.edges
-      });
-      vacancyDispatch({
-        type: "SET_JOB_TYPES",
-        payload: data?.__type?.enumValues
-      });
+      cleanVacanciesData(data.vacancies.edges);
+      setJobTypes(data?.__type?.enumValues);
     }
-  }
+  };
 
-
-  const [loadFilterValues, { loading, data}] = useLazyQuery(
-    VACANCIES_QUERY,
-    {
+  const [loadFilterValues, { loading, data }] = useLazyQuery(VACANCIES_QUERY, {
     onCompleted: () => onCompleted(loading, data),
-    fetchPolicy: 'cache-and-network'
-    },
-  )
+    fetchPolicy: "cache-and-network",
+  });
 
   useEffect(() => {
-    checkVerified()
+    checkVerified();
     // Only fetch if context API is empty.
-    if (vacancyState.landingPageJobs.length === 0) { 
-      loadFilterValues(
-        {variables: { 
+    if (vacancyState.jobsData.length === 0) {
+      loadFilterValues({
+        variables: {
           first: landingVacancyLimit,
-        }
-        }
-      );
+        },
+      });
     }
     // eslint-disable-next-line
-  }, [vacancyState.landingPageJobs.length])
+  }, []);
 
   const checkVerified = () => {
-    let profileDetails = localStorage.getItem('thedb_auth_profile');
-    profileDetails = JSON.parse(profileDetails)
-    
-    if(profileDetails) { 
+    let profileDetails = localStorage.getItem("thedb_auth_profile");
+    profileDetails = JSON.parse(profileDetails);
+
+    if (profileDetails) {
       if (profileDetails.verified) {
-        setVerified(curr => curr = true);
+        setVerified((curr) => (curr = true));
       } else {
-        setVerified(curr => curr = false);
+        setVerified((curr) => (curr = false));
       }
     }
-  }
+  };
 
   const handleClick = (route) => {
     if (!verified) {
-      history.push(`vacancies/${getDBIdFromGraphqlId(route, 'Vacancy')}`);
+      history.push(`vacancies/${getDBIdFromGraphqlId(route, "Vacancy")}`);
     } else {
-      handleModalShow()
+      handleModalShow();
     }
-  }
+  };
 
   const handleModalShow = () => {
     setShow(!show);
-  }
+  };
 
   return (
     <div className="container">
@@ -87,38 +96,68 @@ const Vacancies = () => {
         <div className="padding-right">
           <h3 className="margin-bottom-25">Recent Jobs</h3>
           <div className="listings-container">
-            {vacancyState.landingPageJobs.length ? vacancyState.landingPageJobs.map((job, index) => (
-              // Listing
-            <JobContainer className={`listing ${checkJobType(findJobTypeDescription(job.node, vacancyState.jobTypes))}`} key={index} onClick={() => handleClick(job.id)}>
-            <div className="listing-logo">
-              <img src={job.node.postedBy.logo?.url || LogoImage} alt={job.node.postedBy.logo?.alt || "TheDB_company_logo"} />
-            </div>
-            <div className="listing-title">
-              <h4>
-                {job.title}
-                <span className="listing-type">{findJobTypeDescription(job.node, vacancyState.jobTypes)}</span>
-              </h4>
-              <ul className="listing-icons">
-                <li>
-                  <i className="ln ln-icon-Management" /> {job.node.postedBy.name}
-                </li>
-                <li>
-                  <i className="ln ln-icon-Map2" /> {job.node.location}
-                </li>
-                <li>
-                  <i className="ln ln-icon-Money-2" /> {job.node.amount.currency} {job.node.amount.amount}
-                </li>
-                <li>
-                <div className={`listing-date ${checkDate(job.node.createdAt)}`}>{checkDate(job.node.createdAt)}</div>
-                </li>
-              </ul>
-            </div>
-          </JobContainer>
-            )) : <Loader />}
+            {vacancyState.sortedJobs.length ? (
+              vacancyState.sortedJobs.map((job, index) => (
+                // Listing
+                <JobContainer
+                  className={`listing ${checkJobType(
+                    findJobTypeDescription(job, jobTypes),
+                  )}`}
+                  key={index}
+                  onClick={() => handleClick(job.id)}
+                >
+                  <div className="listing-logo">
+                    <img
+                      src={job.postedBy.logo?.url || LogoImage}
+                      alt={job.postedBy.logo?.alt || "TheDB_company_logo"}
+                    />
+                  </div>
+                  <div className="listing-title">
+                    <h4>
+                      {job.title}
+                      <span className="listing-type">
+                        {findJobTypeDescription(job, jobTypes)}
+                      </span>
+                    </h4>
+                    <ul className="listing-icons">
+                      <li>
+                        <i className="ln ln-icon-Management" />{" "}
+                        {job.postedBy.name}
+                      </li>
+                      <li>
+                        <i className="ln ln-icon-Map2" /> {job.location}
+                      </li>
+                      <li>
+                        <i className="ln ln-icon-Money-2" />{" "}
+                        {job.amount.currency} {job.amount.amount}
+                      </li>
+                      <li>
+                        <div
+                          className={`listing-date ${checkDate(job.createdAt)}`}
+                        >
+                          {checkDate(job.createdAt)}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </JobContainer>
+              ))
+            ) : (
+              <Loader />
+            )}
           </div>
-          <a href="browse-jobs.html" className="button centered">
-            <i className="fa fa-plus-circle" /> Show More Jobs
-          </a>
+
+          <Button
+            className="popup-with-zoom-anim button centered"
+            onClick={() => {
+              history.push(`/vacancies`);
+            }}
+            title={
+              <div style={{ color: "#FFFFFF" }}>
+                <i className="fa fa-plus-circle" /> Show More Jobs
+              </div>
+            }
+          />
           <div className="margin-bottom-55" />
         </div>
       </div>
@@ -136,7 +175,7 @@ const Vacancies = () => {
         </div>
         <div className="clearfix" />
         {/* Showbiz Container */}
-        <div id="job-spotlight" className="showbiz-container">
+        <div id="vacancies-spotlight" className="showbiz-container">
           <div
             className="showbiz"
             data-left="#showbiz_left_1"
@@ -237,6 +276,6 @@ const Vacancies = () => {
 
 const JobContainer = styled.div`
   cursor: pointer;
-`
+`;
 
 export default Vacancies;
