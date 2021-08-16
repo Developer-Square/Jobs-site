@@ -26,8 +26,7 @@ import BaseRouter from "routers/router";
 import { useRouterQuery } from "helpers/useRouterQuery";
 import { serviceWorkerTimeout } from "constants/constants";
 // External CSS import here
-// CSS Modules, react-datepicker-cssmodules.css
-import 'react-datepicker/dist/react-datepicker-cssmodules.css';
+
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-phone-input-2/lib/style.css";
 import "rc-drawer/assets/index.css";
