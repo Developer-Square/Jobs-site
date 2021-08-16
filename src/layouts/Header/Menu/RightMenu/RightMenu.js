@@ -3,12 +3,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 import { Link, useHistory } from "react-router-dom";
 
 export const RightMenu = ({
-  isHomePage,
-  isSticky,
-  onLogout,
-  avatar,
   isAuthenticated,
-  onJoin,
 }) => {
   const { authDispatch } = React.useContext(AuthContext);
   const history = useHistory();

@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { openModal } from "@redq/reuse-modal";
 import { useHistory, useLocation } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
 import Drawer from "components/Drawer/Drawer";
@@ -8,7 +7,6 @@ import NavLink from "components/NavLink/NavLink";
 import { CloseIcon } from "components/AllSvgIcon";
 import { DrawerContext } from "contexts/drawer/drawer.context";
 import { AuthContext } from "contexts/auth/auth.context";
-import AuthenticationForm from "../../SignInOutForm/Form";
 import {
   HamburgerIcon,
   DrawerContentWrapper,
@@ -89,37 +87,7 @@ const MobileDrawer = () => {
       history.push("/");
     }
   };
-  // eslint-disable-next-line no-unused-vars
-  const resetSearch = () => {
-    dispatch({
-      type: "RESET",
-    });
-  };
 
-  const signInOutForm = () => {
-    dispatch({
-      type: "TOGGLE",
-    });
-
-    authDispatch({
-      type: "SIGNIN",
-    });
-
-    openModal({
-      show: true,
-      overlayClassName: "quick-view-overlay",
-      closeOnClickOutside: true,
-      component: AuthenticationForm,
-      closeComponent: "",
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: "quick-view-modal",
-        width: 458,
-        height: "auto",
-      },
-    });
-  };
   const isSticky = useStickyState("isSticky");
   const classStyle = isSticky
     ? {}
@@ -192,7 +160,7 @@ const MobileDrawer = () => {
                   size="small"
                   className="sign_in"
                   // variant="primary"
-                  onClick={signInOutForm}
+                  onClick={() => history.push(`/auth/`)}
                 />
               </LogoutView>
             )}
