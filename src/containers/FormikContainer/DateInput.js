@@ -28,15 +28,14 @@ function DateInput(props) {
         <Field name={name}>
           {({ form, field }) => {
             const { setFieldValue } = form;
-            // const { value } = field;
-            // console.log("value", value.toString().slice(0, 15));
+            const { value } = field;
             return (
               <DatePicker
-                dateFormat="yyyy/MM/dd"
+                dateFormat="y-MM-dd"
                 id={name}
                 {...field}
                 {...rest}
-                selected={new Date()}
+                selected={typeof value === "string" ? new Date(value) : value}
                 onChange={(val) => setFieldValue(name, val)}
               />
             );
