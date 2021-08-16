@@ -45,20 +45,6 @@ function Profile() {
     </RightBtn>
     </div>
     {!edit ? (
-<<<<<<< HEAD
-      <>
-        {Object.keys(profile).length ? 
-          profile.isEmployer ? 
-          <Suspense fallBack={<Loader />}>
-            <EmployerProfileForm details={profile} />
-          </Suspense>  
-          : 
-          <Suspense fallBack={<Loader />}>
-            <SeekerProfileForm details={profile} />
-          </Suspense>
-        : <Loader />}
-      </>
-=======
       <Suspense fallBack={<Loader />}>
         {Object.keys(userDetails).length 
           ?
@@ -71,7 +57,6 @@ function Profile() {
         }
         
       </Suspense>
->>>>>>> 8535208... feat: Added employer profile and removed unused code
     ):(
       <>
       <div className="row">
