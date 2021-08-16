@@ -9,6 +9,7 @@ import NetworkStatus from "components/NetworkStatus";
 import { TypedQuery } from "core/queries";
 import { FETCH_RESUME } from "graphql/queries";
 import { getGraphqlIdFromDBId } from "utils";
+import NoResultFound from "components/NoResult/NoResult";
 
 import ResumeBuilderView from "./ResumeBuilderView";
 
@@ -41,8 +42,11 @@ const ResumeBuilder = () => {
               if (resumeData.loading) {
                 return <LoadingScreen />;
               }
-
               if (resumeData.data && resumeData.data.resume === null) {
+                return <NoResultFound />;
+              }
+
+              if (resumeData.data && resumeData?.data?.resume === null) {
                 navigate.push("/dashboard/resume");
                 toast.error(
                   "The resume you were looking for does not exist anymore... or maybe it never did?",
@@ -56,7 +60,7 @@ const ResumeBuilder = () => {
               return (
                 <MetaWrapper
                   meta={{
-                    description: resumeData.data.resume.seoDescription,
+                    description: resumeData?.data?.resume?.seoDescription,
                     title: resumeData.data.resume.seoTitle,
                     type: "resume CV",
                   }}

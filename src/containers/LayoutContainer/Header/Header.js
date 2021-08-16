@@ -82,7 +82,7 @@ const Header = ({ className, isSticky }) => {
 
     history.push(`${pathname}?${queryParams}`);
   };
-  const showSearch = isCategoryPage(pathname);
+  const showSearch = isCategoryPage(`/${pathname}`);
   return (
     <HeaderWrapper className={className}>
       <div className="container">
