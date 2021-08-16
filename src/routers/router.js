@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import PublicRoutes from "./PublicRoutes";
 import PrivateRoutes from "./PrivateRoutes";
 import { Modal } from "@redq/reuse-modal";
-import AppLayout from "containers/LayoutContainer/AppLayout-trash";
+import AppLayout from "layouts/AppLayout";
 import { AuthContext } from "contexts/auth/auth.context";
 import { withApollo } from "helpers/apollo";
 import Wrapper from "components/shared/Wrapper";

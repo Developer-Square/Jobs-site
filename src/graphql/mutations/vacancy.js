@@ -1,5 +1,39 @@
 import gql from "graphql-tag";
 
+export const VACANCY_VIEW_COUNT_MUTATION = gql`
+  mutation ViewJob($job: ID!) {
+    viewVacancy(input: { job: $job }) {
+      errors {
+        field
+        message
+      }
+      success
+      vacancyErrors {
+        field
+        code
+        message
+      }
+      viewedJob {
+        slug
+        uuid
+        createdAt
+        updatedAt
+        isDeleted
+        isActive
+        id
+        job {
+          id
+          title
+        }
+        user {
+          id
+          fullName
+          email
+        }
+      }
+    }
+  }
+`;
 export const BOOKMARK_VACANCY = gql`
   mutation BookmarkJob($job: ID!) {
     bookmarkVacancy(input: { job: $job }) {

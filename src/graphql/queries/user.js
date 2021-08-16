@@ -21,3 +21,52 @@ export const COUNTRIES_QUERY = gql`
     }
   }
 `;
+
+export const RECENT_ACTIVITIES_QUERY = gql`
+  query RecentActivitiesList(
+    $filter: ActivityFilterInput
+    $sortBy: ActivitySortingInput
+    $before: String
+    $after: String
+    $first: Int
+    $last: Int
+  ) {
+    recentActivities(
+      filter: $filter
+      sortBy: $sortBy
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+    ) {
+      __typename
+      totalCount
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      edges {
+        __typename
+        node {
+          __typename
+          id
+          descriptionPlaintext
+          modelName
+          modelId
+          modelData
+          createdAt
+          user {
+            fullName
+            id
+            avatar {
+              url
+              alt
+            }
+          }
+        }
+      }
+    }
+  }
+`;
