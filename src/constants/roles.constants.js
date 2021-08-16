@@ -224,7 +224,7 @@ const rolesConfig = {
     routes: [
       components.profile,
       components.dashboard,
-      components.profile,
+      components.myProfile,
 
       components.resumeDashboard,
       components.resumeBuilder,
