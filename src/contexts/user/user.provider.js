@@ -93,12 +93,9 @@ const UserProvider = ({ children }) => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
-      localStorage.removeItem("darasa_auth_profile");
-      localStorage.removeItem("darasa_auth_payload");
-      localStorage.removeItem("darasa_auth_roles");
-      localStorage.removeItem("darasa_applications");
-      localStorage.removeItem("darasa_org_profile");
-      localStorage.removeItem("darasa_individual_profile");
+      localStorage.removeItem("thedb_auth_profile");
+      localStorage.removeItem("thedb_auth_payload");
+      localStorage.removeItem("thedb_auth_roles");
       authDispatch({ type: "SIGN_OUT" });
       setUser(null);
       navigate.push("/");

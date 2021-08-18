@@ -26,7 +26,7 @@ const Activities = () => {
     }
   };
   const variables = {
-    first: vacancyLimit,
+    last: vacancyLimit,
   };
   return (
     <NetworkStatus>

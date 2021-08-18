@@ -4,6 +4,7 @@ import { Switch } from "react-router-dom";
 import Loader from "components/Loader/Loader";
 import * as ROUTE from "constants/routes.constants";
 import PublicRoute from "./PublicRoute";
+import ProfileView from "pages/Profile/ProfileView";
 
 const LandingPage = lazy(() => import("pages/LandingPage"));
 const NotFound = lazy(() => import("pages/NotFound"));
@@ -119,6 +120,12 @@ const PublicRoutes = ({ deviceType }) => (
         exact
         path={`${ROUTE.RESUME}/:resumeID`}
         component={ResumeView}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.PROFILE}/:profileID`}
+        component={ProfileView}
       />
       <PublicRoute
         restricted={false}

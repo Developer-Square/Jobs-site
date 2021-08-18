@@ -15,6 +15,7 @@ const ModalEvents = {
   REFERENCE_MODAL: "reference_modal",
   IMPORT_MODAL: "import_modal",
   EXPORT_MODAL: "export_modal",
+  DELETE_MODAL: "delete_modal",
 };
 
 export default ModalEvents;

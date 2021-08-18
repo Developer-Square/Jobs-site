@@ -7,6 +7,16 @@ import {
 } from "graphql/fragments";
 import gql from "graphql-tag";
 
+export const DELETE_ACCOUNT = gql`
+  mutation DeleteAccount($password: String!) {
+    deleteAccount(input: { password: $password }) {
+      __typename
+      success
+      errors
+    }
+  }
+`;
+
 export const CREATE_ADDRESS = gql`
   ${addressFragment}
   ${userFragment}

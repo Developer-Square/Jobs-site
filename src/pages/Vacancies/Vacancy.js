@@ -138,6 +138,19 @@ const Vacancy = () => {
     loadFilterValues({ variables: cleanedVariables });
   };
 
+  const buttonRedirect = () => {
+    if (isAuthenticated) {
+      if (profile.isEmployer) {
+        history.push(`/dashboard/vacancies/add-job`);
+      }
+      if (profile.isSeeker) {
+        history.push(`/dashboard`);
+      }
+    } else {
+      history.push(`/auth/login`);
+    }
+  };
+
   return (
     <div>
       <div id="titlebar">
@@ -149,15 +162,7 @@ const Vacancy = () => {
           <div className="six columns">
             <Button
               className="popup-with-zoom-anim button mt-8 ml-auto"
-              onClick={() => {
-                history.push(
-                  isAuthenticated
-                    ? profile.isEmployer
-                      ? `/dashboard/vacancies/add-job`
-                      : `/dashboard `
-                    : `/auth/login`,
-                );
-              }}
+              onClick={buttonRedirect}
               title={
                 isAuthenticated && (
                   <p style={{ color: "#FFFFFF" }}>
