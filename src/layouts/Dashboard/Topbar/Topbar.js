@@ -25,15 +25,16 @@ import {
   Image,
   Logo,
   LogoImage,
-  LogoutBtn,
-  NavLink as NavBarLink,
+  // LogoutBtn,
+  // NavLink as NavBarLink,
   // NotificationIconWrapper,
   ProfileImg,
   TopbarRightSide,
   TopbarWrapper,
-  UserDropdowItem,
+  // UserDropdowItem,
 } from "./Topbar.style";
 import { CloseIcon } from "components/AllSvgIcon";
+import { HELP_PAGE } from "constants/routes.constants";
 
 export const data = [
   {
@@ -181,21 +182,41 @@ const Topbar = (props) => {
             </ProfileImg>
           }
           content={
-            <UserDropdowItem>
-              <NavBarLink to={PROFILE_PAGE} exact>
-                Profile
-              </NavBarLink>
-              <NavBarLink to={SETTINGS} exact>
-                Settings
-              </NavBarLink>
-              <LogoutBtn
-                onClick={() => {
-                  handleLogout();
-                }}
-              >
-                Logout
-              </LogoutBtn>
-            </UserDropdowItem>
+            <div className="absolute right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+              <div className="py-2 bg-white text-blue-800 text-sm rounded-sm border border-main-color shadow-sm">
+                <Link
+                  className="block px-4 py-2 mt-2 text-sm bg-white md:mt-0 focus:text-gray-900 hover:bg-indigo-100 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                  to={PROFILE_PAGE}
+                  exact
+                >
+                  Profile
+                </Link>
+                <Link
+                  className="block px-4 py-2 mt-2 text-sm bg-white md:mt-0 focus:text-gray-900 hover:bg-indigo-100 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                  to={SETTINGS}
+                >
+                  Settings
+                </Link>
+                <Link
+                  className="block px-4 py-2 mt-2 text-sm bg-white md:mt-0 focus:text-gray-900 hover:bg-indigo-100 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                  to={HELP_PAGE}
+                >
+                  Help
+                </Link>
+                <div className="border-b" />
+                <Link
+                  className="block px-4 py-2 mt-2 text-sm bg-white md:mt-0 focus:text-gray-900 hover:bg-indigo-100 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
+                  onClick={() => {
+                    handleLogout();
+                  }}
+                  to={{
+                    pathname: "",
+                  }}
+                >
+                  Logout
+                </Link>
+              </div>
+            </div>
           }
         />
       </TopbarRightSide>

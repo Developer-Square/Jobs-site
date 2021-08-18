@@ -79,9 +79,19 @@ export const userFragment = gql`
     isEmployer
     isInstitution
     extra
+    phone
+    dateJoined
+    updatedAt
+    createdAt
     numberOfJobsBookmarked
     numberOfApplications
     numberOfActiveJobListings
+    socials {
+      id
+      link
+      network
+      username
+    }
     resumes {
       id
       name

@@ -15,6 +15,7 @@ import ApplicationModal from "./ApplicationModal";
 import SkillModal from "./sections/SkillModal";
 import SocialModal from "./sections/SocialModal";
 import WorkModal from "./sections/WorkModal";
+import DeleteAccountModal from "./DeleteAccountModal";
 
 const ModalRegistrar = () => (
   <>
@@ -34,6 +35,7 @@ const ModalRegistrar = () => (
     <ReferenceModal />
     <ImportModal />
     <ExportModal />
+    <DeleteAccountModal />
   </>
 );
 

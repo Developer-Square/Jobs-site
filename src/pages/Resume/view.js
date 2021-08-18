@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
 import OfflinePlaceholder from "components/OfflinePlaceholder";
+import NoResultFound from "components/NoResult/NoResult";
 import { MetaWrapper } from "components/Meta";
 import NetworkStatus from "components/NetworkStatus";
 import { TypedQuery } from "core/queries";
@@ -55,10 +56,12 @@ const ResumeViewer = ({ id, ref = null }) => {
               }
 
               if (resumeData.data && resumeData.data.resume === null) {
-                navigate.push("/");
-                toast.error(
+                
+                toast.info(
                   `The resume you were looking for does not exist anymore... or maybe it never did?`,
                 );
+                navigate.push("/");
+                return <NoResultFound />;
               }
 
               if (!isOnline) {
