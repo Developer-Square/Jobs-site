@@ -31,7 +31,6 @@ const ExportModal = () => {
 
     return () => unbind();
   }, [emitter, events]);
-  console.log(printRef);
 
   const handleOpenPrintDialog = useReactToPrint({
     content: () => printRef.current,

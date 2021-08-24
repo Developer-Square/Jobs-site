@@ -156,7 +156,7 @@ const MobileDrawer = () => {
             ) : (
               <LogoutView>
                 <Button
-                  title="Join In"
+                  title="Sign In"
                   size="small"
                   className="sign_in"
                   // variant="primary"

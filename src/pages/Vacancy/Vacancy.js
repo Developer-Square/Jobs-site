@@ -12,20 +12,32 @@ import { TypedIndustriesQuery } from "common/queries";
 import { MetaWrapper } from "components/Meta";
 
 import { cleanSelectData, setFieldErrors, showNotification } from "helpers";
-import {
-  TypedVacancyUpdateMutation,
-  TypedVacancyCreateMutation,
-} from "./mutations";
-import {
-  TypedVacancyDetailQuery,
-  TypedJobMinQualificationQuery,
-  TypedJobYearsOfExpQuery,
-  TypedJobJobTypeQuery,
-  TypedJobPayRateQuery,
-} from "./queries";
+
 import VacancyForm from "./VacancyForm";
 import { getGraphqlIdFromDBId, objDiff } from "utils";
 import { isEmpty } from "lodash";
+import { TypedMutation } from "core/mutations";
+import { TypedQuery } from "core/queries";
+import { VACANCY_DETAIL_QUERY } from "graphql/queries";
+import {
+  CREATE_VACANCY_MUTATION,
+  UPDATE_VACANCY_MUTATION,
+} from "graphql/mutations";
+import {
+  JobMinQualification,
+  JobJobType,
+  JobYearsOfExp,
+} from "graphql/queries";
+import { JobPayRate } from "graphql/queries";
+
+const TypedVacancyDetailQuery = TypedQuery(VACANCY_DETAIL_QUERY);
+const TypedJobMinQualificationQuery = TypedQuery(JobMinQualification);
+const TypedJobYearsOfExpQuery = TypedQuery(JobYearsOfExp);
+const TypedJobJobTypeQuery = TypedQuery(JobJobType);
+const TypedJobPayRateQuery = TypedQuery(JobPayRate);
+
+const TypedVacancyCreateMutation = TypedMutation(CREATE_VACANCY_MUTATION);
+const TypedVacancyUpdateMutation = TypedMutation(UPDATE_VACANCY_MUTATION);
 
 const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
   const match = useRouteMatch();

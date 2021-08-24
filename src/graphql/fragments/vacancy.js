@@ -11,6 +11,7 @@ export const vacancyFragment = gql`
     minQualification
     positions
     yearsOfExp
+    isActive
     salary
     applicationEmail
     numberOfApplications
@@ -19,6 +20,10 @@ export const vacancyFragment = gql`
     location
     createdAt
     isActive
+    amount {
+      currency
+      amount
+    }
     creator {
       id
       fullName

@@ -55,48 +55,60 @@ export const TypedInstitutionStudentCountQuery = TypedQuery(
 export const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
 
 export const SeekerProfile = gql`
-  query User($id: ID!, $first: Int) {
-    user (id: $id) {
-          email
-          username
-          firstName
-          lastName
-          avatar
-          phone
-          verified
-          seeker {
-            title
-            gender
-            status
-            idNumber
-            industries(first: $first) {
-              edges {
-                node {
-                  name
-                }
-              }
-            }
-          }
-          isSeeker
-          isEmployer
-          defaultAddress {
-            streetAddress1
-            city
-          }
-    }
-  }
-`
-export const TypedSeekerProfileQuery = TypedQuery(SeekerProfile);
-
-export const EmployerProfile = gql`
-
-  query Employer($id: ID!) {
-    user (id: $id) {
+  query User($id: ID!) {
+    user(id: $id) {
       email
       username
       firstName
       lastName
-      avatar
+      avatar {
+        url
+        alt
+      }
+      socials {
+        id
+        username
+        network
+      }
+      phone
+      verified
+      seeker {
+        title
+        gender
+        status
+        idNumber
+        industries {
+          id
+          name
+        }
+      }
+      isSeeker
+      isEmployer
+      defaultAddress {
+        streetAddress1
+        city
+      }
+    }
+  }
+`;
+export const TypedSeekerProfileQuery = TypedQuery(SeekerProfile);
+
+export const EmployerProfile = gql`
+  query Employer($id: ID!) {
+    user(id: $id) {
+      email
+      username
+      firstName
+      lastName
+      avatar {
+        url
+        alt
+      }
+      socials {
+        id
+        username
+        network
+      }
       phone
       verified
       employer {
@@ -106,6 +118,7 @@ export const EmployerProfile = gql`
         country
         lookingFor
         industries {
+          id
           name
         }
         logo {
@@ -121,5 +134,5 @@ export const EmployerProfile = gql`
       }
     }
   }
-`
+`;
 export const TypedEmployerProfileQuery = TypedQuery(EmployerProfile);

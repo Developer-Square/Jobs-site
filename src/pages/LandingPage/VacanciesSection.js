@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useLazyQuery } from "react-apollo";
 import { PaymentModal } from "modals/PaymentModal";
 import { landingVacancyLimit } from "constants/constants";
-import { VACANCIES_QUERY } from "./queries";
+import { VACANCIES_QUERY } from "graphql/queries";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
 import {
   getDBIdFromGraphqlId,
@@ -15,6 +15,7 @@ import {
 import LogoImage from "image/thedb.png";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
+import NoResultFound from "components/NoResult/NoResult";
 
 const Vacancies = () => {
   const history = useHistory();
@@ -96,52 +97,62 @@ const Vacancies = () => {
         <div className="padding-right">
           <h3 className="margin-bottom-25">Recent Jobs</h3>
           <div className="listings-container">
-            {vacancyState.sortedJobs.length ? (
-              vacancyState.sortedJobs.map((job, index) => (
-                // Listing
-                <JobContainer
-                  className={`listing ${checkJobType(
-                    findJobTypeDescription(job, jobTypes),
-                  )}`}
-                  key={index}
-                  onClick={() => handleClick(job.id)}
-                >
-                  <div className="listing-logo">
-                    <img
-                      src={job.postedBy.logo?.url || LogoImage}
-                      alt={job.postedBy.logo?.alt || "TheDB_company_logo"}
-                    />
-                  </div>
-                  <div className="listing-title">
-                    <h4>
-                      {job.title}
-                      <span className="listing-type">
-                        {findJobTypeDescription(job, jobTypes)}
-                      </span>
-                    </h4>
-                    <ul className="listing-icons">
-                      <li>
-                        <i className="ln ln-icon-Management" />{" "}
-                        {job.postedBy.name}
-                      </li>
-                      <li>
-                        <i className="ln ln-icon-Map2" /> {job.location}
-                      </li>
-                      <li>
-                        <i className="ln ln-icon-Money-2" />{" "}
-                        {job.amount.currency} {job.amount.amount}
-                      </li>
-                      <li>
-                        <div
-                          className={`listing-date ${checkDate(job.createdAt)}`}
-                        >
-                          {checkDate(job.createdAt)}
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </JobContainer>
-              ))
+            {vacancyState?.sortedJobs?.length ? (
+              vacancyState?.sortedJobs.map((job, index) => {
+                if (loading && !vacancyState.sortedJobs) {
+                  return <Loader />;
+                }
+                if (loading && !vacancyState.sortedJobs) {
+                  return <NoResultFound />;
+                }
+                return (
+                  // Listing
+                  <JobContainer
+                    className={`listing ${checkJobType(
+                      findJobTypeDescription(job, jobTypes),
+                    )}`}
+                    key={index}
+                    onClick={() => handleClick(job.id)}
+                  >
+                    <div className="listing-logo">
+                      <img
+                        src={job?.postedBy?.logo?.url || LogoImage}
+                        alt={job?.postedBy?.logo?.alt || "TheDB_company_logo"}
+                      />
+                    </div>
+                    <div className="listing-title">
+                      <h4>
+                        {job?.title}
+                        <span className="listing-type">
+                          {findJobTypeDescription(job, jobTypes)}
+                        </span>
+                      </h4>
+                      <ul className="listing-icons">
+                        <li>
+                          <i className="ln ln-icon-Management" />{" "}
+                          {job?.postedBy?.name}
+                        </li>
+                        <li>
+                          <i className="ln ln-icon-Map2" /> {job?.location}
+                        </li>
+                        <li>
+                          <i className="ln ln-icon-Money-2" />{" "}
+                          {job?.amount?.currency} {job?.amount?.amount}
+                        </li>
+                        <li>
+                          <div
+                            className={`listing-date ${checkDate(
+                              job?.createdAt,
+                            )}`}
+                          >
+                            {checkDate(job?.createdAt)}
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </JobContainer>
+                );
+              })
             ) : (
               <Loader />
             )}

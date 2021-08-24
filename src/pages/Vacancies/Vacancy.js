@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { useLazyQuery } from "react-apollo";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import VacancyFilter from "./VacancyFilter";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
 import { AuthContext } from "contexts/auth/auth.context";
-import { VACANCIES_QUERY } from "./queries";
+import { VACANCIES_QUERY } from "graphql/queries";
 import PaginationItem from "./PaginationItem";
 import LogoImage from "image/thedb.png";
 import {
@@ -34,6 +34,9 @@ const Vacancy = () => {
     authState: { isAuthenticated, profile },
   } = useContext(AuthContext);
   const history = useHistory();
+  const redirectToVacancyPage = (job) => {
+    history.push(`vacancies/${getDBIdFromGraphqlId(job.id, "Vacancy")}`);
+  };
 
   const ratePerHour = () => {
     let sortedJobs = [];
@@ -59,10 +62,10 @@ const Vacancy = () => {
       vacancyState.sortedJobs.map((vacancy) => {
         if (vacancy.payRate === "HOUR") {
           // Add the jobs that are offer 10001+ hourly payments.
-          if (upperLimit === 10001 && vacancy.salary > upperLimit) {
+          if (upperLimit === 10001 && vacancy?.salary > upperLimit) {
             sortedJobs.push(vacancy);
           }
-          if (lowerLimit < vacancy.salary && vacancy.salary < upperLimit) {
+          if (lowerLimit < vacancy?.salary && vacancy?.salary < upperLimit) {
             sortedJobs.push(vacancy);
           }
         }
@@ -156,22 +159,39 @@ const Vacancy = () => {
       <div id="titlebar">
         <div className="container">
           <div className="ten columns">
-            <span>We found 1,412 jobs matching:</span>
-            <h2>Web, Software &amp; IT</h2>
+            {loading ? (
+              <span>Hold on as we get the data ...</span>
+            ) : (
+              <>
+                <span>We found {vacancyState?.totalCount} matching:</span>
+                <h2>
+                  {Object.values(clean(filterObj)).length === 0
+                    ? "All Vacancies"
+                    : undefined}
+                  {clean(filterObj)?.jobTypes
+                    ? `${clean(filterObj)?.jobTypes.toString()}`
+                    : undefined}
+                  {clean(filterObj)?.search
+                    ? `  || ${clean(filterObj)?.search}`
+                    : undefined}
+                </h2>
+              </>
+            )}
           </div>
+
           <div className="six columns">
-            <Button
-              className="popup-with-zoom-anim button mt-8 ml-auto"
-              onClick={buttonRedirect}
-              title={
-                isAuthenticated && (
+            {isAuthenticated ? (
+              <Button
+                className="popup-with-zoom-anim button mt-8 ml-auto"
+                onClick={buttonRedirect}
+                title={
                   <p style={{ color: "#FFFFFF" }}>
-                    {profile.isSeeker && "View Dashboard stats"}
-                    {profile.isEmployer && "Post a Job, It’s Free!"}
+                    {profile?.isSeeker && "View Dashboard stats"}
+                    {profile?.isEmployer && "Post a Job, It’s Free!"}
                   </p>
-                )
-              }
-            />
+                }
+              />
+            ) : undefined}
           </div>
         </div>
       </div>
@@ -182,13 +202,13 @@ const Vacancy = () => {
           <div className="padding-right">
             <div className="listings-container">
               {/* Listings */}
-              {vacancyState.sortedJobs.length > 0 ? (
-                vacancyState.sortedJobs.map((job, index) => (
-                  <a
-                    href={`vacancies/${getDBIdFromGraphqlId(
-                      job.id,
-                      "Vacancy",
-                    )}`}
+              {vacancyState?.sortedJobs?.length > 0 ? (
+                vacancyState?.sortedJobs.map((job, index) => (
+                  <Link
+                    to={{
+                      pathname: "",
+                    }}
+                    onClick={() => redirectToVacancyPage(job)}
                     key={index}
                     className={`listing ${checkJobType(
                       findJobTypeDescription(job, vacancyState.jobTypes),
@@ -196,8 +216,8 @@ const Vacancy = () => {
                   >
                     <div className="listing-logo">
                       <img
-                        src={job.postedBy.logo?.url || LogoImage}
-                        alt={job.postedBy.logo?.alt || "TheDB_company_logo"}
+                        src={job?.postedBy?.logo?.url || LogoImage}
+                        alt={job?.postedBy?.logo?.alt || "TheDB_company_logo"}
                       />
                     </div>
                     <div className="listing-title">
@@ -210,27 +230,27 @@ const Vacancy = () => {
                       <ul className="listing-icons">
                         <li>
                           <i className="ln ln-icon-Management" />{" "}
-                          {job.postedBy.name}
+                          {job?.postedBy?.name}
                         </li>
                         <li>
-                          <i className="ln ln-icon-Map2" /> {job.location}
+                          <i className="ln ln-icon-Map2" /> {job?.location}
                         </li>
                         <li>
                           <i className="ln ln-icon-Money-2" />{" "}
-                          {job.amount.currency} {job.amount.amount}
+                          {job?.amount?.currency} {job?.amount?.amount}
                         </li>
                         <li>
                           <div
                             className={`listing-date ${checkDate(
-                              job.createdAt,
+                              job?.createdAt,
                             )}`}
                           >
-                            {checkDate(job.createdAt)}
+                            {checkDate(job?.createdAt)}
                           </div>
                         </li>
                       </ul>
                     </div>
-                  </a>
+                  </Link>
                 ))
               ) : (
                 <Loader />

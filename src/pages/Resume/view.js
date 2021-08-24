@@ -22,6 +22,7 @@ import { FETCH_RESUME } from "graphql/queries";
 import { scaler } from "utils";
 
 import * as styles from "./view.module.css";
+import BlankResumeTemplate from "./BlankResumeTemplate";
 
 export const TypedResumeQuery = TypedQuery(FETCH_RESUME);
 
@@ -56,7 +57,6 @@ const ResumeViewer = ({ id, ref = null }) => {
               }
 
               if (resumeData.data && resumeData.data.resume === null) {
-                
                 toast.info(
                   `The resume you were looking for does not exist anymore... or maybe it never did?`,
                 );
@@ -69,7 +69,7 @@ const ResumeViewer = ({ id, ref = null }) => {
               }
 
               i18n.changeLanguage(
-                resumeData.data.resume.resumemetadata.language || "en",
+                resumeData.data.resume?.resumemetadata?.language || "en",
               );
 
               for (const [key, sizeDefault] of Object.entries(
@@ -78,9 +78,9 @@ const ResumeViewer = ({ id, ref = null }) => {
                 document.documentElement.style.setProperty(
                   key,
                   `${
-                    scaler(resumeData.data.resume.resumemetadata.fontSize) *
+                    scaler(resumeData.data.resume?.resumemetadata?.fontSize) *
                     sizeDefault
-                  }rem`,
+                  }rem` || `9rem`,
                 );
               }
 
@@ -96,39 +96,44 @@ const ResumeViewer = ({ id, ref = null }) => {
                     type: "resume CV",
                   }}
                 >
-                  <div
-                    className={styles.page}
-                    style={{
-                      margin: "4rem auto",
-                      backgroundColor:
-                        resumeData.data.resume.resumemetadata.backgroundColor,
-                    }}
-                  >
-                    {resumeData.data.resume.resumemetadata.template ===
-                      "onyx" && (
-                      <Onyx ref={ref} data={resumeData.data.resume} />
-                    )}
-                    {resumeData.data.resume.resumemetadata.template ===
-                      "pikachu" && (
-                      <Pikachu ref={ref} data={resumeData.data.resume} />
-                    )}
-                    {resumeData.data.resume.resumemetadata.template ===
-                      "gengar" && (
-                      <Gengar ref={ref} data={resumeData.data.resume} />
-                    )}
-                    {resumeData.data.resume.resumemetadata.template ===
-                      "castform" && (
-                      <Castform ref={ref} data={resumeData.data.resume} />
-                    )}
-                    {resumeData.data.resume.resumemetadata.template ===
-                      "glalie" && (
-                      <Glalie ref={ref} data={resumeData.data.resume} />
-                    )}
-                    {resumeData.data.resume.resumemetadata.template ===
-                      "celebi" && (
-                      <Celebi ref={ref} data={resumeData.data.resume} />
-                    )}
-                  </div>
+                  {!resumeData.data.resume.resumemetadata ? (
+                    <BlankResumeTemplate resume={resumeData.data.resume} />
+                  ) : (
+                    <div
+                      className={styles.page}
+                      style={{
+                        margin: "4rem auto",
+                        backgroundColor:
+                          resumeData.data.resume.resumemetadata
+                            ?.backgroundColor || `#FFFFFF`,
+                      }}
+                    >
+                      {resumeData.data.resume.resumemetadata.template ===
+                        "onyx" && (
+                        <Onyx ref={ref} data={resumeData.data.resume} />
+                      )}
+                      {resumeData.data.resume.resumemetadata.template ===
+                        "pikachu" && (
+                        <Pikachu ref={ref} data={resumeData.data.resume} />
+                      )}
+                      {resumeData.data.resume.resumemetadata.template ===
+                        "gengar" && (
+                        <Gengar ref={ref} data={resumeData.data.resume} />
+                      )}
+                      {resumeData.data.resume.resumemetadata.template ===
+                        "castform" && (
+                        <Castform ref={ref} data={resumeData.data.resume} />
+                      )}
+                      {resumeData.data.resume.resumemetadata.template ===
+                        "glalie" && (
+                        <Glalie ref={ref} data={resumeData.data.resume} />
+                      )}
+                      {resumeData.data.resume.resumemetadata.template ===
+                        "celebi" && (
+                        <Celebi ref={ref} data={resumeData.data.resume} />
+                      )}
+                    </div>
+                  )}
                 </MetaWrapper>
               );
             }}
