@@ -53,13 +53,9 @@ export const seekerFragment = gql`
     gender
     mobile
     status
-    industries(first: 20) {
-      edges {
-        node {
-          name
-          id
-        }
-      }
+    industries {
+      name
+      id
     }
   }
 `;

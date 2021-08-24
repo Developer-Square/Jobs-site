@@ -223,10 +223,10 @@ input[type="range"]::-webkit-slider-thumb {
 
 .wrapperx{
 	background: #50a3a2;
-background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
+  background: -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+  background: -moz-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+  background: -o-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
+  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
 	
 	position: absolute;
 	top: 50%;
@@ -357,4 +357,10 @@ background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
 @keyframes square {
   0%   { transform: translateY(0); }
   100% { transform: translateY(-700px) rotate(600deg); }
+}
+.tracking-tighter-less {
+  letter-spacing: -0.75rem;
+}
+.text-shadow {
+  text-shadow: -8px 0 0 rgb(102 123 242);
 }

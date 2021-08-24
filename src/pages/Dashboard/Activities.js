@@ -16,6 +16,10 @@ const Activities = () => {
     switch (type) {
       case "Resume":
         return `/r/${type_id}`;
+      case "ViewedJob":
+        return `/vacancies/${type_id}`;
+      case "BookmarkedJob":
+        return `/vacancies/${type_id}`;
       case "Job":
         return `/vacancies/${type_id}`;
       case "Application":

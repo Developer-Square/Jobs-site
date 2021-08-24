@@ -554,6 +554,7 @@ export const resumeFragment = gql`
       descriptionPlaintext
     }
     owner {
+      id
       firstName
       lastName
       fullName

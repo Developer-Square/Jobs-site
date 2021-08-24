@@ -2,258 +2,198 @@ import React from "react";
 import styled from "styled-components";
 import Switch from "@material-ui/core/Switch";
 
-import { TypedEmployerProfileQuery } from "./queries";
-import Loader from "components/Loader/Loader";
-import NoResult from "components/NoResult/NoResult";
-
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
-function EmployerProfileForm() {
-  const getId = () => {
-    const values = localStorage.getItem("thedb_auth_profile");
-    const parsedObj = JSON.parse(values);
-    return parsedObj.id;
-  };
-
-  const variables = {
-    id: getId(),
-  };
+function EmployerProfileForm({ details }) {
   return (
-    <TypedEmployerProfileQuery variables={variables}>
-      {(employerProfileData) => {
-        if (employerProfileData.loading) {
-          return <Loader />;
-        }
-
-        if (employerProfileData.data.user === null) {
-          return <NoResult />;
-        }
-
-        const { user } = employerProfileData.data;
-        let edges;
-
-        if (user.employer) {
-          if (user.employer.industries) {
-            edges = user.employer.industries.edges;
-          }
-        }
-
-        return (
-          <div className="row">
-            <div className="col-lg-10 col-md-12">
-              <Heading>
-                <PageHeader>Account Profile</PageHeader>
-                <ShareButton>
-                  <span class="iconify" data-icon="el:share-alt"></span>
-                </ShareButton>
-              </Heading>
-              <PageSubTitle>Your Plan</PageSubTitle>
-              <div className="dashboard-list-box margin-top-0">
-                <ItemsContainer>
-                  <AccountDetails>
-                    <AccountImage
-                      src="https://source.unsplash.com/400x400/?office,tech"
-                      alt="account"
-                    />
-                    <Info>
-                      <Title>Free Account</Title>
-                      You are on the free plan. You can save your data and
-                      search for jobs. Upgrade for PDF downloads & premium
-                      features.
-                    </Info>
-                  </AccountDetails>
-                  <UpgradeButton>Upgrade</UpgradeButton>
-                </ItemsContainer>
-              </div>
-
-              <PageSubTitle>Account Details</PageSubTitle>
-              <div className="dashboard-list-box margin-top-0">
-                <ItemsContainer type="profile">
-                  <ProfileSkills>
-                    <ProfileImage
-                      src={
-                        user.employer.logo
-                          ? user.employer.logo
-                          : "https://bootdey.com/img/Content/avatar/avatar7.png"
-                      }
-                      alt="Admin"
-                    />
-                    <Title special={true}>
-                      {user.username}
-                      <VerifiedStatus>
-                        {user.verified ? (
-                          <span
-                            className="iconify"
-                            data-icon="ic:sharp-verified"
-                            style={{ color: "#2196f3" }}
-                          ></span>
-                        ) : (
-                          <span>(not verified)</span>
-                        )}
-                      </VerifiedStatus>
-                    </Title>
-                    <Info>{user.employer.name}</Info>
-                    <Info>
-                      {user.defaultAddress
-                        ? user.defaultAddress.streetAddress1
-                        : "Add street address..."}
-                      ,{" "}
-                      {user.defaultAddress
-                        ? user.defaultAddress.city
-                        : "Add city..."}
-                    </Info>
-                  </ProfileSkills>
-                  <ProfileDetails>
-                    <Details>
-                      <Title type="profile">Email</Title>
-                      {/* //ToDo: Blur this out */}
-                      <Info>{user.email}</Info>
-                    </Details>
-                    <Details>
-                      <Title type="profile">First Name</Title>
-                      <Info>{user.firstName}</Info>
-                    </Details>
-                    <Details>
-                      <Title type="profile">Last Name</Title>
-                      <Info>{user.lastName}</Info>
-                    </Details>
-                  </ProfileDetails>
-                </ItemsContainer>
-              </div>
-
-              <PageSubTitle>Employer Details</PageSubTitle>
-              <div className="dashboard-list-box margin-top-0">
-                <ItemsContainer type="profile">
-                  <ProfileDetails>
-                    <Details>
-                      {/* // ToDo: Blur this out */}
-                      <Title type="profile">Website Url</Title>
-                      <Info>{user.employer.website}</Info>
-                    </Details>
-                    <Details>
-                      <Title type="profile">Looking For</Title>
-                      <Info>{user.employer.lookingFor}</Info>
-                    </Details>
-                    <Details>
-                      {/* // ToDo: Blur this out */}
-                      <Title type="profile">Phone Number</Title>
-                      <Info>{user.phone}</Info>
-                    </Details>
-                    <Details>
-                      <Title type="profile">Additional Info</Title>
-                    </Details>
-                    <PaddedInfo>
-                      {!user.employer.descriptionPlaintext
-                        ? "Add some info..."
-                        : user.seeker.descriptionPlaintext}
-                    </PaddedInfo>
-                  </ProfileDetails>
-                  <Spacer />
-                  <ProfileDetails>
-                    <Details>
-                      <Title type="profile">Interests</Title>
-                    </Details>
-                    {edges
-                      ? edges.length
-                        ? edges.map((industry) => (
-                            <PaddedInfo>{industry.node.name}</PaddedInfo>
-                          ))
-                        : null
-                      : null}
-                  </ProfileDetails>
-                </ItemsContainer>
-              </div>
-
-              <PageSubTitle>Connected Accounts</PageSubTitle>
-              <div className="dashboard-list-box margin-top-0">
-                <ItemsContainer>
-                  {/* Reusing the profile details container */}
-                  <ProfileDetails type="socials">
-                    <Details type="socials">
-                      <Socials>
-                        <span className="iconify" data-icon="bi:github"></span>
-                        <Title type="profile">Github</Title>
-                      </Socials>
-                      <Info>https://github.com/{user.username}</Info>
-                    </Details>
-                    <Details type="socials">
-                      <Socials>
-                        <span
-                          class="iconify"
-                          data-icon="logos:linkedin-icon"
-                        ></span>
-                        <Title type="profile">LinkedIn</Title>
-                      </Socials>
-                      <Info type="connect">Connect</Info>
-                    </Details>
-                    <Details type="socials">
-                      <Socials>
-                        <span
-                          class="iconify"
-                          data-icon="flat-color-icons:google"
-                        ></span>
-                        <Title type="profile">Google</Title>
-                      </Socials>
-                      <Info>{user.email}</Info>
-                    </Details>
-                  </ProfileDetails>
-                </ItemsContainer>
-              </div>
-
-              <PageSubTitle>Email Notifications</PageSubTitle>
-              <div className="dashboard-list-box margin-top-0">
-                <ItemsContainer>
-                  {/* Reusing the profile details container */}
-                  <ProfileDetails type="socials">
-                    <Details type="socials">
-                      <EmailInfo>
-                        <Title type="profile">Updates and Offers</Title>
-                        <Info>
-                          Discounts, special offers, new features and more
-                        </Info>
-                      </EmailInfo>
-                      <Switch {...label} defaultChecked />
-                    </Details>
-                    <Details type="socials">
-                      <EmailInfo>
-                        <Title type="profile">Resume Analytics</Title>
-                        <Info>
-                          Views, downloads and monthly statistics for each
-                          resume
-                        </Info>
-                      </EmailInfo>
-                      <Switch {...label} defaultChecked />
-                    </Details>
-                  </ProfileDetails>
-                </ItemsContainer>
-              </div>
-
-              <PageSubTitle>Danger Zone</PageSubTitle>
-              <div className="dashboard-list-box margin-top-0">
-                <ItemsContainer>
-                  <ProfileDetails type="socials">
-                    <Details type="socials">
-                      <Info>
-                        Once you delete your account, it cannot be undone. This
-                        is permanent.
-                      </Info>
-                      {/* Reusing the upgrade button */}
-                      <UpgradeButton type="delete">
-                        Delete Account
-                      </UpgradeButton>
-                    </Details>
-                  </ProfileDetails>
-                </ItemsContainer>
-              </div>
+    <div className="row">
+      <div className="col-lg-10 col-md-12">
+        <Heading>
+          <PageHeader>Account Profile</PageHeader>
+          <ShareButton>
+            <span class="iconify" data-icon="el:share-alt"></span>
+          </ShareButton>
+        </Heading>
+        <PageSubTitle>Your Plan</PageSubTitle>
+        <div className="dashboard-list-box margin-top-0">
+          <ItemsContainer>
+            <AccountDetails>
+              <AccountImage
+                src="https://source.unsplash.com/400x400/?office,tech"
+                alt="account"
+              />
               <Info>
-                Need help? Have questions or feedback? Our team would love to
-                hear from you - <span>contact our support</span>
+                <Title>Free Account</Title>
+                You are on the free plan. You can save your data and search for
+                jobs. Upgrade for PDF downloads & premium features.
               </Info>
-            </div>
-          </div>
-        );
-      }}
-    </TypedEmployerProfileQuery>
+            </AccountDetails>
+            <UpgradeButton>Upgrade</UpgradeButton>
+          </ItemsContainer>
+        </div>
+
+        <PageSubTitle>Account Details</PageSubTitle>
+        <div className="dashboard-list-box margin-top-0">
+          <ItemsContainer type="profile">
+            <ProfileSkills>
+              <ProfileImage
+                src={
+                  details.employer?.log?.url ||
+                  "https://bootdey.com/img/Content/avatar/avatar7.png"
+                }
+                alt={details.employer?.log?.alt || "Admin"}
+              />
+              <Title special={true}>
+                {details.username}
+                <VerifiedStatus>
+                  {details.verified ? (
+                    <span
+                      className="iconify"
+                      data-icon="ic:sharp-verified"
+                      style={{ color: "#2196f3" }}
+                    ></span>
+                  ) : (
+                    <span>(not verified)</span>
+                  )}
+                </VerifiedStatus>
+              </Title>
+              <Info>{details.employer.name}</Info>
+              <Info>
+                {details.defaultAddress
+                  ? details.defaultAddress.streetAddress1
+                  : "Add street address..."}
+                ,{" "}
+                {details.defaultAddress
+                  ? details.defaultAddress.city
+                  : "Add city..."}
+              </Info>
+            </ProfileSkills>
+            <ProfileDetails>
+              <Details>
+                <Title type="profile">Email</Title>
+                {/* //ToDo: Blur this out */}
+                <Info>{details.email}</Info>
+              </Details>
+              <Details>
+                <Title type="profile">First Name</Title>
+                <Info>{details.firstName}</Info>
+              </Details>
+              <Details>
+                <Title type="profile">Last Name</Title>
+                <Info>{details.lastName}</Info>
+              </Details>
+            </ProfileDetails>
+          </ItemsContainer>
+        </div>
+
+        <PageSubTitle>Employer Details</PageSubTitle>
+        <div className="dashboard-list-box margin-top-0">
+          <ItemsContainer type="profile">
+            <ProfileDetails>
+              <Details>
+                {/* // ToDo: Blur this out */}
+                <Title type="profile">Website Url</Title>
+                <Info>{details.employer.website}</Info>
+              </Details>
+              <Details>
+                <Title type="profile">Looking For</Title>
+                <Info>{details.employer.lookingFor}</Info>
+              </Details>
+              <Details>
+                {/* // ToDo: Blur this out */}
+                <Title type="profile">Phone Number</Title>
+                <Info>{details.phone}</Info>
+              </Details>
+              <Details>
+                <Title type="profile">Additional Info</Title>
+              </Details>
+              <PaddedInfo>
+                {!details.employer.descriptionPlaintext
+                  ? "Add some info..."
+                  : details.employer.descriptionPlaintext}
+              </PaddedInfo>
+            </ProfileDetails>
+            <Spacer />
+            <ProfileDetails>
+              <Details>
+                <Title type="profile">Interests</Title>
+              </Details>
+              {details.employer?.industries.map((industry, i) => (
+                <PaddedInfo key={i}>{industry.name}</PaddedInfo>
+              ))}
+            </ProfileDetails>
+          </ItemsContainer>
+        </div>
+
+        <PageSubTitle>Connected Accounts</PageSubTitle>
+        <div className="dashboard-list-box margin-top-0">
+          <ItemsContainer>
+            {/* Reusing the profile details container */}
+            <ProfileDetails type="socials">
+              {details?.socials?.map((social) => {
+                return (
+                  <Details key={social.id} type="socials">
+                    <Socials>
+                      <span
+                        className="iconify"
+                        data-icon={`bi:${social.network?.toLowerCase()}`}
+                      ></span>
+                      <Title type="profile">{social.network}</Title>
+                    </Socials>
+                    <Info>{social.username}</Info>
+                  </Details>
+                );
+              })}
+            </ProfileDetails>
+          </ItemsContainer>
+        </div>
+
+        <PageSubTitle>Email Notifications</PageSubTitle>
+        <div className="dashboard-list-box margin-top-0">
+          <ItemsContainer>
+            {/* Reusing the profile details container */}
+            <ProfileDetails type="socials">
+              <Details type="socials">
+                <EmailInfo>
+                  <Title type="profile">Updates and Offers</Title>
+                  <Info>Discounts, special offers, new features and more</Info>
+                </EmailInfo>
+                <Switch {...label} defaultChecked />
+              </Details>
+              <Details type="socials">
+                <EmailInfo>
+                  <Title type="profile">Resume Analytics</Title>
+                  <Info>
+                    Views, downloads and monthly statistics for each resume
+                  </Info>
+                </EmailInfo>
+                <Switch {...label} defaultChecked />
+              </Details>
+            </ProfileDetails>
+          </ItemsContainer>
+        </div>
+
+        <PageSubTitle>Danger Zone</PageSubTitle>
+        <div className="dashboard-list-box margin-top-0">
+          <ItemsContainer>
+            <ProfileDetails type="socials">
+              <Details type="socials">
+                <Info>
+                  Once you delete your account, it cannot be undone. This is
+                  permanent.
+                </Info>
+                {/* Reusing the upgrade button */}
+                <UpgradeButton type="delete">Delete Account</UpgradeButton>
+              </Details>
+            </ProfileDetails>
+          </ItemsContainer>
+        </div>
+        <Info>
+          Need help? Have questions or feedback? Our team would love to hear
+          from you - <span>contact our support</span>
+        </Info>
+      </div>
+    </div>
   );
 }
 const VerifiedStatus = styled.div`

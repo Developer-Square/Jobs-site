@@ -1,6 +1,6 @@
 import { clone, get, isEmpty } from "lodash";
 import { isArray, isEqual, isObject, transform } from "lodash";
-import moment from 'moment';
+import moment from "moment";
 import dayjs from "dayjs";
 import { Base64 } from "js-base64";
 import {
@@ -10,61 +10,85 @@ import {
 } from "helpers";
 import { maybe } from "misc";
 
-
-export const cleanVacanciesData = (edges, update, rate, ratePerHour, vacancyState, vacancyDispatch, getJobs) => {
+export const cleanVacanciesData = (
+  edges,
+  update,
+  rate,
+  ratePerHour,
+  vacancyState,
+  vacancyDispatch,
+  getJobs,
+) => {
   let jobs;
 
-  if (edges.length > 0) { 
+  if (edges.length > 0) {
     jobs = edges.map((edge) => edge.node);
     // Update the context api once the data is fetched successfully.
     if (vacancyState.jobsData.length === 0) {
       vacancyDispatch({
         type: "ADD_DATA",
-        payload: jobs
+        payload: jobs,
       });
     } else if (update) {
       vacancyDispatch({
         type: "SORT_JOBS",
-        payload: jobs
+        payload: jobs,
       });
     }
-    // Sort the object according the rate per hour sorting 
+    // Sort the object according the rate per hour sorting
     // if there's any option selected.
     if (rate.length) {
-      ratePerHour()
+      ratePerHour();
     }
   } else {
     // Dispatch an empty array when there are no results
     vacancyDispatch({
       type: "SORT_JOBS",
-      payload: edges
-    })
+      payload: edges,
+    });
   }
-}
+};
 
 // Called when a fetching vacancies is complete.
 // Sets the jobTypes from the backend to the context API so that they can be displayed.
-export const onCompleted = (loading, data, type, rate, ratePerHour, vacancyState, vacancyDispatch, getJobs) => {
+export const onCompleted = (
+  loading,
+  data,
+  type,
+  rate,
+  ratePerHour,
+  vacancyState,
+  vacancyDispatch,
+  getJobs,
+) => {
   if (!loading) {
-    if (type === 'refetch') {
-      cleanVacanciesData(data.vacancies.edges, true, rate, ratePerHour, vacancyState, vacancyDispatch, getJobs);
+    if (type === "refetch") {
+      cleanVacanciesData(
+        data.vacancies.edges,
+        true,
+        rate,
+        ratePerHour,
+        vacancyState,
+        vacancyDispatch,
+        getJobs,
+      );
     }
     vacancyDispatch({
       type: "SET_JOB_TYPES",
-      payload: data?.__type?.enumValues
+      payload: data?.__type?.enumValues,
     });
   }
-}
+};
 
-  /**
+/**
  * @param  {} data
  * @param  {} jobTypes
  * Maps out the specific jobType description with the right job.
  */
 export const findJobTypeDescription = (data, jobTypes) => {
-  let job = jobTypes.find(({name}) => name === data.jobType);
+  let job = jobTypes.find(({ name }) => name === data.jobType);
   return job ? job.description : null;
-}
+};
 
 /**
  * @param  {} data
@@ -73,29 +97,29 @@ export const findJobTypeDescription = (data, jobTypes) => {
  */
 export const checkJobType = (data) => {
   if (data) {
-    if (data !== 'Gig') {
-      let result = data.replace(/\s/g, '-').toLowerCase();
+    if (data !== "Gig") {
+      let result = data.replace(/\s/g, "-").toLowerCase();
       return result;
     } else {
-      return 'freelance';
+      return "freelance";
     }
   }
-}
+};
 
 /**
  * @param  {} date
  * Check how long ago the job was posted.
  */
 export const checkDate = (date) => {
-  const result = moment(date).fromNow();
-  const numberChecker = result.match(/(\d+)/);
-  const days = parseInt(numberChecker[0], 10);
-  
-  if (days === 1) {
-    return 'new'
+  const result = moment(date);
+  const today = moment();
+  const daysNew = today.diff(result, "days"); // 1 day
+  if (daysNew <= 1) {
+    return "new";
   }
-  return result 
-}
+
+  return result.fromNow();
+};
 
 /**
  * @param  {} data

@@ -78,6 +78,49 @@ export const GET_APPLICATIONS = gql`
   }
 `;
 
+export const VACANCIES_QUERY = gql`
+  ${vacancyFragment}
+  query VacanciesList(
+    $filter: VacancyFilterInput
+    $sortBy: VacancySortingInput
+    $before: String
+    $after: String
+    $first: Int
+    $last: Int
+  ) {
+    vacancies(
+      filter: $filter
+      sortBy: $sortBy
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+    ) {
+      __typename
+      totalCount
+      queryCount
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      edges {
+        __typename
+        node {
+          ...Vacancy
+        }
+      }
+    }
+    __type(name: "JobJobType") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+
 export const GET_MY_VACANCIES = gql`
   ${vacancyFragment}
   query MyVacancies {

@@ -1,24 +1,24 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 
 import { StringParam, useQueryParam } from "use-query-params";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
 import MetaWrapper from "components/Meta/MetaWrapper";
 import NetworkStatus from "components/NetworkStatus";
 import Page from "./Page";
-import { TypedVacanciesQuery } from "./queries";
 import { NoResult } from "components/VacancyLoader/VacancyLoader.style";
 import Loader from "components/Loader/Loader";
 import { vacancyLimit } from "constants/constants";
-import { VacancyContext } from 'contexts/vacancies/vacancies.context'
+import { VacancyContext } from "contexts/vacancies/vacancies.context";
 
+import { TypedQuery } from "core/queries";
+import { VACANCIES_QUERY } from "graphql/queries";
+
+const TypedVacanciesQuery = TypedQuery(VACANCIES_QUERY);
 
 const View = () => {
   const [sort, setSort] = useQueryParam("sortBy", StringParam);
-  const [attributeFilters, setAttributeFilters] = useQueryParam(
-    "filters",
-  );
+  const [attributeFilters, setAttributeFilters] = useQueryParam("filters");
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
-
 
   const clearFilters = () => {
     setAttributeFilters({});
@@ -93,8 +93,8 @@ const View = () => {
   const variables = {
     ...filters,
     sortBy: {
-      "field": "SALARY",
-      "direction": "ASC"
+      field: "SALARY",
+      direction: "ASC",
     },
   };
 
@@ -114,15 +114,21 @@ const View = () => {
             if (!isOnline) {
               return <OfflinePlaceholder />;
             }
-            
+
             // Only update the jobTypes in the context API when its empty.
-            if (vacancyData.data.__type.enumValues && vacancyState.jobTypes.length === 0) {
+            if (
+              vacancyData.data.__type.enumValues &&
+              vacancyState.jobTypes.length === 0
+            ) {
               vacancyDispatch({
                 type: "SET_JOB_TYPES",
-                payload: vacancyData.data.__type.enumValues
+                payload: vacancyData.data.__type.enumValues,
+              });
+              vacancyDispatch({
+                type: "ADD_TOTAL_COUNT",
+                payload: vacancyData.data.vacancies.totalCount,
               });
             }
-
 
             const handleLoadMore = () =>
               vacancyData.loadMore(
@@ -143,13 +149,16 @@ const View = () => {
               <MetaWrapper
                 meta={{
                   description: "The Database Kenya Jobs and vacancies",
-                  title: "The Database Kenya | jobs in Kenya | jobs need people",
+                  title:
+                    "The Database Kenya | jobs in Kenya | jobs need people",
                 }}
               >
                 <Page
                   clearFilters={clearFilters}
                   displayLoader={vacancyData.loading}
-                  hasNextPage={vacancyData.data?.products?.pageInfo.hasNextPage}
+                  hasNextPage={
+                    vacancyData.data?.vacancies?.pageInfo.hasNextPage
+                  }
                   sortOptions={sortOptions}
                   activeSortOption={filters.sortBy}
                   filters={filters}

@@ -3,7 +3,7 @@ import React from "react";
 import moment from "moment";
 import { useAlert } from "react-alert";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 import ModalContext from "contexts/modal/modal.provider";
 import { AuthContext } from "contexts/auth/auth.context";
@@ -14,6 +14,8 @@ import Button from "components/Button/Button";
 import LogoImage from "image/thedb.png";
 
 import Bookmark from "./Bookmark";
+import { checkJobType } from "utils";
+import { findJobTypeDescription } from "utils";
 
 const Page = ({
   vacancyID,
@@ -30,21 +32,9 @@ const Page = ({
   } = React.useContext(AuthContext);
 
   const handleLoginNotification = () => {
-    alert.show(
-      {
-        title: "You must login to bookmark this job",
-      },
-      { type: "info", timeout: 5000 },
-    );
     toast.error("You must login to bookmark this job");
   };
   const handleApplyJob = () => {
-    alert.show(
-      {
-        title: "You must login to apply for this job",
-      },
-      { type: "info", timeout: 5000 },
-    );
     toast.error("You must login to apply for this job");
   };
   const { emitter, events } = React.useContext(ModalContext);
@@ -53,12 +43,6 @@ const Page = ({
     if (data?.isActive) {
       emitter.emit(events.APPLICATION_MODAL, data);
     } else {
-      alert.show(
-        {
-          title: "Sorry 😔, Applications have been closed",
-        },
-        { type: "info", timeout: 5000 },
-      );
       toast.info("Sorry 😔, Applications have been closed");
     }
   };
@@ -75,11 +59,17 @@ const Page = ({
         <div className="container">
           <div className="ten columns">
             <span>
-              <a href="browse-jobs.html">{data?.industry?.name}</a>
+              <Link to={{ pathname: "" }}>{data?.industry?.name}</Link>
             </span>
             <h2>
               {data?.title}{" "}
-              <span className="full-time">{jobType?.description}</span>
+              <span
+                className={`${checkJobType(
+                  findJobTypeDescription(data, types),
+                )}`}
+              >
+                {jobType?.description}
+              </span>
             </h2>
           </div>
           <div className="six columns">
@@ -117,17 +107,20 @@ const Page = ({
               <div className="content">
                 <h4>{data?.postedBy?.name}</h4>
                 <span>
-                  <a href="#">
+                  <Link
+                    to={{ pathname: "" }}
+                    onClick={() => window.open(`${data?.postedBy?.website}`)}
+                  >
                     <i className="fa fa-link" /> {data?.postedBy?.website}
-                  </a>
+                  </Link>
                 </span>
                 {data.creator.socials.map((social, i) => {
                   return (
                     <span key={i}>
-                      <a href="#">
+                      <Link to={{ pathname: "" }}>
                         <i className={`"fa fa-${social.network}`} />{" "}
-                        @kingrestaurants
-                      </a>
+                        {social.username}
+                      </Link>
                     </span>
                   );
                 })}
@@ -135,6 +128,17 @@ const Page = ({
               <div className="clearfix" />
             </div>
             <DraftRenderer content={JSON.parse(data?.description)} />
+            {!isAuthenticated && (
+              <Button
+                className="popup-with-zoom-anim button mt-8 ml-auto"
+                title={
+                  <div style={{ color: "#FFFFFF" }}> Login to view Email</div>
+                }
+                onClick={() => {
+                  history.push(`/auth/`);
+                }}
+              />
+            )}
           </div>
         </div>
         {/* Widgets */}
