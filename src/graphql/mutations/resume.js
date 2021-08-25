@@ -37,8 +37,8 @@ export const DELETE_RESUME = gql`
 
 export const RESUME_MUTATION = gql`
   ${simpleResumeFragment}
-  mutation ResumeCreate($name: String!) {
-    resumeCreate(input: { name: $name }) {
+  mutation ResumeCreate($name: String!, $preview: String) {
+    resumeCreate(input: { name: $name, preview: $preview }) {
       __typename
       success
       errors {

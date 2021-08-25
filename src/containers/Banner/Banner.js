@@ -3,6 +3,7 @@ import React, { useCallback } from "react";
 import { Waypoint } from "react-waypoint";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import bgImg from "image/landing.jpg";
+import SearchContainer from "containers/Search/SearchContainer";
 
 const Banner = () => {
   const useDispatch = useStickyDispatch();
@@ -38,18 +39,7 @@ const Banner = () => {
         <div className="sixteen columns">
           <div className="search-container">
             {/* Form */}
-            <h2>Find Job</h2>
-            <input
-              type="text"
-              className="ico-01"
-              placeholder="job title, keywords or company name"
-              style={{
-                width: "90%;",
-              }}
-            />
-            <button style={{ backgroundColor: "#e6c018" }}>
-              <i className="fa fa-search" />
-            </button>
+            <h2>Find Job</h2> <SearchContainer />
             <Waypoint
               onEnter={removeSticky}
               onLeave={setSticky}

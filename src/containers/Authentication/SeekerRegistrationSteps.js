@@ -1,24 +1,31 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from "react";
 import { Form, Formik } from "formik";
-import { makeStyles } from '@material-ui/core/styles';
-import styled from 'styled-components'
+import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 // import { WebSocketLink } from '@apollo/client/link/ws'
 // import { useSubscription } from '@apollo/client'
 
-import { signUpSchema, OTPVerficationSchema, furtherInformationSchema } from "./validation.schema";
+import {
+  signUpSchema,
+  OTPVerficationSchema,
+  furtherInformationSchema,
+} from "./validation.schema";
 import { HelperText } from "./Authentication.style";
-import FormikControl from "../FormikContainer/FormikControl"
+import FormikControl from "../FormikContainer/FormikControl";
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
 import { Typography } from "@material-ui/core";
-import { TypedCreateSelectableInstitutionMutation, TypedMakePayment } from './mutations'
+import {
+  TypedCreateSelectableInstitutionMutation,
+  TypedMakePayment,
+} from "./mutations";
 import { showSuccessNotification, IsNotEmpty } from "helpers";
-import { TypedPlansListQuery } from './queries';
+import { TypedPlansListQuery } from "./queries";
 import Loader from "components/Loader/Loader";
-import { PaymentModal } from 'modals/PaymentModal';
+import { PaymentModal } from "modals/PaymentModal";
 // import { ONTRANSACTION_MESSAGE } from './subscription';
 
 // const wsLink = new WebSocketLink({
@@ -28,9 +35,16 @@ import { PaymentModal } from 'modals/PaymentModal';
 //   }
 // });
 
-
-export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleChange, loading, history, fillFields }) => {
-
+export const SignUp = ({
+  initialValues,
+  onSubmit,
+  setSwitchTab,
+  checked,
+  handleChange,
+  loading,
+  history,
+  fillFields,
+}) => {
   return (
     <Formik
       initialValues={initialValues}
@@ -41,7 +55,9 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
         return (
           <Form className="register" noValidate>
             <Spacer>
-              <Link to={"/auth"} onClick={() => setSwitchTab('')}>{`<`} Select Different Option </Link>
+              <Link to={"/auth"} onClick={() => setSwitchTab("")}>
+                {`<`} Select Different Option{" "}
+              </Link>
             </Spacer>
 
             {/* Email validation not working */}
@@ -83,26 +99,26 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
 
             <TermsSection>
               <div>
-                <FormikControl 
-                  control="single-checkbox" 
+                <FormikControl
+                  control="single-checkbox"
                   name="terms"
-                  checked={false} 
-                  color="primary" 
+                  checked={false}
+                  color="primary"
                   style={{ marginTop: "16px" }}
                 />
               </div>
 
-            <HelperText style={{ padding: "20px 0px 10px", width: "200px" }}>
-              I agree to the
-              <strong
-                style={{ color: "#21277f" }}
-                onClick={() => history.push(`${TOS}`)}
-              >
-                Terms &amp; Condtions
-              </strong>
-            </HelperText>
+              <HelperText style={{ padding: "20px 0px 10px", width: "200px" }}>
+                I agree to the
+                <strong
+                  style={{ color: "#21277f" }}
+                  onClick={() => history.push(`${TOS}`)}
+                >
+                  Terms &amp; Condtions
+                </strong>
+              </HelperText>
             </TermsSection>
-            
+
             <Spacer marginTopBottom="17px 0" />
 
             <Button
@@ -117,10 +133,17 @@ export const SignUp = ({ initialValues, onSubmit, setSwitchTab, checked, handleC
         );
       }}
     </Formik>
-  )
-}
+  );
+};
 
-export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert, resendRequest}) => {
+export const OTPForm = ({
+  loading,
+  initialValues,
+  onSubmit,
+  onSignInSubmit,
+  alert,
+  resendRequest,
+}) => {
   const [smsResend, setSmsResend] = React.useState(false);
 
   useEffect(() => {
@@ -130,22 +153,26 @@ export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert
       setSmsResend(true);
       alert.show(
         {
-          title: 'OTP code has been resent, check your phone',
+          title: "OTP code has been resent, check your phone",
         },
-        { type: 'success', timeout: 5000 },
-      )
+        { type: "success", timeout: 5000 },
+      );
     }
     // eslint-disable-next-line
-  }, [resendRequest])
+  }, [resendRequest]);
 
   const resendSms = () => {
-    let values = localStorage.getItem('registerValues');
+    let values = localStorage.getItem("registerValues");
     values = JSON.parse(values);
     onSignInSubmit(values.phone, true);
-  }
+  };
 
   return (
-    <Formik initialValues={initialValues} validationSchema={OTPVerficationSchema} onSubmit={onSubmit}>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={OTPVerficationSchema}
+      onSubmit={onSubmit}
+    >
       {(formik) => {
         return (
           <Form noValidate>
@@ -158,7 +185,12 @@ export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert
             />
 
             <Spacer>
-              <p>Didn't receive the code? <Resend smsResend={smsResend} onClick={resendSms}>Resend</Resend></p>
+              <p>
+                Didn't receive the code?{" "}
+                <Resend smsResend={smsResend} onClick={resendSms}>
+                  Resend
+                </Resend>
+              </p>
             </Spacer>
 
             <Button
@@ -169,34 +201,42 @@ export const OTPForm = ({loading, initialValues, onSubmit, onSignInSubmit, alert
               title={loading ? "Verifying ... " : "Verify"}
             />
           </Form>
-        )
+        );
       }}
     </Formik>
-  )
-}
+  );
+};
 
-export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interests, initialValues, onSeekerProfileSubmit, alert }) => {
+export const FurtherInformation = ({
+  switchTabs,
+  loading,
+  schoolOptions,
+  interests,
+  initialValues,
+  onSeekerProfileSubmit,
+  alert,
+}) => {
   const [showButton, setShowButton] = React.useState(true);
 
   const handleButton = (data) => {
-    if (data === 'focus') {
+    if (data === "focus") {
       setShowButton(false);
     } else {
       setShowButton(true);
     }
-  }
+  };
 
   const submitCreateInstitution = (values, createInstitution, options) => {
     let optionInBackend = false;
     // Check whether the institution provided is already among the backend
     // options.
     // eslint-disable-next-line
-    options.map(option => {
+    options.map((option) => {
       if (option.value === values.value) {
-        optionInBackend = true
+        optionInBackend = true;
       }
     });
-    
+
     if (!optionInBackend) {
       // Prepare the data to be sent in the format expected in the backend.
       values.name = values.value;
@@ -205,36 +245,49 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
 
       createInstitution({
         variables: values,
-      }).then(({ data }) => {
-
-        if (data.createSelectableInstitution.success) {
-          alert.show(
-            {
-              title: "Institution created successfully",
-            },
-            { type: "success", timeout: 5000 },
-          );
-        }
-      }).catch((err) => console.log(err));
+      })
+        .then(({ data }) => {
+          if (data.createSelectableInstitution.success) {
+            alert.show(
+              {
+                title: "Institution created successfully",
+              },
+              { type: "success", timeout: 5000 },
+            );
+          }
+        })
+        .catch((err) => console.log(err));
     }
-  }
+  };
   return (
-    <Formik initialValues={initialValues} validationSchema={furtherInformationSchema} onSubmit={onSeekerProfileSubmit}>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={furtherInformationSchema}
+      onSubmit={onSeekerProfileSubmit}
+    >
       {(formik) => {
         return (
           <Form>
             <Spacer>
-              <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
+              <Link to={"/auth"} onClick={() => switchTabs("", "back")}>
+                {`<`} Go to previous tab{" "}
+              </Link>
             </Spacer>
 
-            <TypedCreateSelectableInstitutionMutation onCompleted={(data) => showSuccessNotification(data, alert)}>
+            <TypedCreateSelectableInstitutionMutation
+              onCompleted={(data) => showSuccessNotification(data, alert)}
+            >
               {(createInstitution) => {
                 function onSubmit(values) {
-                  if (values) { 
+                  if (values) {
                     if (IsNotEmpty(values.value)) {
-                      submitCreateInstitution(values, createInstitution, schoolOptions)
+                      submitCreateInstitution(
+                        values,
+                        createInstitution,
+                        schoolOptions,
+                      );
                     }
-                }
+                  }
                 }
                 return (
                   <FormikControl
@@ -249,7 +302,7 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
                     name="school"
                     icon="ln ln-icon-Lock-2"
                   />
-                )
+                );
               }}
             </TypedCreateSelectableInstitutionMutation>
 
@@ -276,38 +329,39 @@ export const FurtherInformation = ({ switchTabs, loading, schoolOptions, interes
             {/* This is here as the dropdown appears behind the submit button
             hence we need to add some extra space */}
             <Spacer marginTopBottom="100px 0" />
-            {showButton ? (<Button
-              type="submit"
-              disabled={!formik.isValid}
-              fullwidth
-              loading={loading}
-              title={loading ? "Saving ... " : "Save"}
-            />) : null }
-            
+            {showButton ? (
+              <Button
+                type="submit"
+                disabled={!formik.isValid}
+                fullwidth
+                loading={loading}
+                title={loading ? "Saving ... " : "Save"}
+              />
+            ) : null}
           </Form>
-        )
+        );
       }}
     </Formik>
-  )
-}
+  );
+};
 
 export const Billing = ({ switchTabs, isSeeker, alert }) => {
   const [show, setShow] = React.useState(false);
-  const [planID, setPlanID] = React.useState('');
+  const [planID, setPlanID] = React.useState("");
   const [periodAmount, setPeriodAmount] = React.useState(0);
-  const useStyles = makeStyles(theme => ({
+  const useStyles = makeStyles((theme) => ({
     root: {
       minWidth: 235,
-      [theme.breakpoints.down("lg")] : {
-        minWidth: 180
+      [theme.breakpoints.down("lg")]: {
+        minWidth: 180,
       },
-      [theme.breakpoints.down("md")] : {
-        minWidth: 150
+      [theme.breakpoints.down("md")]: {
+        minWidth: 150,
       },
       marginRight: 10,
       minHeight: 150,
       cursor: "pointer",
-    }
+    },
   }));
 
   const classNames = useStyles();
@@ -316,29 +370,29 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
     setShow(!show);
     if (option) {
       setPeriodAmount(option.periodAmount);
-      setPlanID(option.id)
+      setPlanID(option.id);
     }
-  }
+  };
 
   const makePaymentFn = (values, makePayment) => {
     // TODO: Add variables to into an object then remove the empty keys and values.
     // make the removefunction a global utility.
-    if (planID !== '' && periodAmount !== 0) {
+    if (planID !== "" && periodAmount !== 0) {
       makePayment({
         variables: {
           planId: planID,
           amount: periodAmount,
-          billingPhone: values.phone 
-        }
+          billingPhone: values.phone,
+        },
       }).then((value) => {
         // const {data, loading} = useSubscription(ONTRANSACTION_MESSAGE, {
         //   variables: value.transactionDescription
         // })
         // console.log(data);
         console.log("after mpesa push", value);
-      })
+      });
     }
-  }
+  };
 
   return (
     <>
@@ -349,7 +403,7 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
           }
 
           let plans;
-          const {allPlanLists} = plansList.data
+          const { allPlanLists } = plansList.data;
           if (allPlanLists.length > 0) {
             // If the user is a seeker then only add the options available
             // to them.
@@ -359,68 +413,99 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
               plans = allPlanLists[0].allPlans;
             }
           }
-     
-        return (
-          <TypedMakePayment onCompleted={(data, errors) => showSuccessNotification(data, alert, errors)}>
-            {(makePayment, { loading }) => {
-              function onPaymentSubmit(values) {
-                makePaymentFn(values, makePayment);
-              }
 
-              return (
-                <>
-                  <PaymentModal open={show} loading={loading} onSubmit={onPaymentSubmit} onClose={handleModalShow} moreInfo={false} />
-                  <Spacer>
-                    <Link to={"/auth"} onClick={() => switchTabs('', 'back')}>{`<`} Go to previous tab </Link>
-                  </Spacer>
-                  <Title>Choose your tier: </Title>
-                  <PricingTier planType={plans.length > 2 ? 'business' : 'seeker'}>
-                    {plans.length ? plans.map((option, index) => (
-                      <div key={index}>
-                      {/* Add action to take them to dashboard */}
-                        <Card key={index} onClick={() => handleModalShow(option)} className={classNames.root}>
-                          <CardContent>
-                            <Typography variant="h5">
-                              {option.title}
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    )): null}
-                  </PricingTier>
-                </>
-              )
-            }}
-            
-          </TypedMakePayment>
-          )
+          return (
+            <TypedMakePayment
+              onCompleted={(data, errors) =>
+                showSuccessNotification(data, alert, errors)
+              }
+            >
+              {(makePayment, { loading }) => {
+                function onPaymentSubmit(values) {
+                  makePaymentFn(values, makePayment);
+                }
+
+                return (
+                  <>
+                    <PaymentModal
+                      open={show}
+                      loading={loading}
+                      onSubmit={onPaymentSubmit}
+                      onClose={handleModalShow}
+                      moreInfo={false}
+                    />
+                    <Spacer>
+                      <Link to={"/auth"} onClick={() => switchTabs("", "back")}>
+                        {`<`} Go to previous tab{" "}
+                      </Link>
+                    </Spacer>
+                    <Title>Choose your tier: </Title>
+                    <PricingTier
+                      planType={plans.length > 2 ? "business" : "seeker"}
+                    >
+                      {plans.length
+                        ? plans.map((option, index) => (
+                            <div key={index}>
+                              {/* Add action to take them to dashboard */}
+                              <Card
+                                key={index}
+                                onClick={() => handleModalShow(option)}
+                                className={classNames.root}
+                              >
+                                <CardContent>
+                                  <Typography variant="h5">
+                                    {option.title}
+                                  </Typography>
+                                  <br />
+                                  {option.collection
+                                    .reduce((arr, v) => {
+                                      arr.push([v]);
+                                      return arr;
+                                    }, [])
+                                    .map((val, i) => (
+                                      <p key={i}>&bull;➜ {val.toString()}</p>
+                                    ))}
+                                  <Title>KES. {option.periodAmount}</Title>
+                                </CardContent>
+                              </Card>
+                            </div>
+                          ))
+                        : null}
+                    </PricingTier>
+                  </>
+                );
+              }}
+            </TypedMakePayment>
+          );
         }}
       </TypedPlansListQuery>
     </>
-  )
-}
+  );
+};
 
 const Resend = styled.div`
   display: inline-block;
-  color: ${ props => props.smsResend ? 'rgba(0, 0, 0, 0.38)' : '#21277f'};
+  color: ${(props) => (props.smsResend ? "rgba(0, 0, 0, 0.38)" : "#21277f")};
   font-weight: bold;
-  pointer-events: ${props => props.smsResend ? 'none': 'all'};
+  pointer-events: ${(props) => (props.smsResend ? "none" : "all")};
   cursor: pointer;
-`
+`;
 
 const TermsSection = styled.div`
   display: flex;
   justify-content: center;
-`
+`;
 
 const Spacer = styled.div`
-  margin: ${props => props.marginTopBottom ? props.marginTopBottom : "15px 0"};
-`
+  margin: ${(props) =>
+    props.marginTopBottom ? props.marginTopBottom : "15px 0"};
+`;
 
 const PricingTier = styled.div`
   display: flex;
-  justify-content: ${props => props.planType === 'business' ? 'space-around' : ''};
-`
+  justify-content: ${(props) =>
+    props.planType === "business" ? "space-around" : ""};
+`;
 
 const Title = styled.p`
   margin: 12px 0;
@@ -428,4 +513,4 @@ const Title = styled.p`
   text-decoration: none;
   color: black;
   cursor: pointer;
-`
+`;

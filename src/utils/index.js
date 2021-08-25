@@ -10,6 +10,22 @@ import {
 } from "helpers";
 import { maybe } from "misc";
 
+export const truncateText = (text = "", limit = 0) => {
+  console.log(text, limit);
+  if (limit === 0 || isNaN(limit) || limit < 0) return "";
+  if (text === "" || text === null || text === undefined) return "...";
+  return text.length > limit ? text.substring(0, limit - 3) + "..." : text;
+};
+
+export const formatCurrency = function (amount) {
+  // return amount.amount;
+  return new Intl.NumberFormat("en-KE", {
+    style: "currency",
+    currency: amount?.currency || "KES",
+    minimumFractionDigits: 2,
+  }).format(amount?.amount || amount);
+};
+
 export const cleanVacanciesData = (
   edges,
   update,
@@ -82,12 +98,55 @@ export const onCompleted = (
 
 /**
  * @param  {} data
+ * @param  {} minQualification
+ * Maps out the specific minQualification description with the right job.
+ */
+export const findMinQualificationDescription = (data, minQualifications) => {
+  if (minQualifications) {
+    let item = minQualifications.find(
+      ({ name }) => name === data.minQualification,
+    );
+    return item ? item.description : null;
+  }
+  return null;
+};
+
+/**
+ * @param  {} data
+ * @param  {} yearsOfExp
+ * Maps out the specific yearsOfExp description with the right job.
+ */
+export const findYearsOfExpDescription = (data, yearsOfExp) => {
+  if (yearsOfExp) {
+    let item = yearsOfExp.find(({ name }) => name === data.yearsOfExp);
+    return item ? item.description : null;
+  }
+  return null;
+};
+
+/**
+ * @param  {} data
  * @param  {} jobTypes
  * Maps out the specific jobType description with the right job.
  */
 export const findJobTypeDescription = (data, jobTypes) => {
-  let job = jobTypes.find(({ name }) => name === data.jobType);
-  return job ? job.description : null;
+  if (jobTypes) {
+    let item = jobTypes.find(({ name }) => name === data.jobType);
+    return item ? item.description : null;
+  }
+  return null;
+};
+/**
+ * @param  {} data
+ * @param  {} payRate
+ * Maps out the specific payRate description with the right job.
+ */
+export const findPayRateDescription = (data, payRates) => {
+  if (payRates) {
+    let item = payRates.find(({ name }) => name === data.payRate);
+    return item ? item.description : null;
+  }
+  return null;
 };
 
 /**
