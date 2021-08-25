@@ -16,6 +16,7 @@ import {
   findJobTypeDescription,
   onCompleted,
 } from "utils";
+import { formatCurrency } from "utils";
 
 const Vacancy = () => {
   const [rate, setRate] = React.useState([]);
@@ -237,7 +238,7 @@ const Vacancy = () => {
                         </li>
                         <li>
                           <i className="ln ln-icon-Money-2" />{" "}
-                          {job?.amount?.currency} {job?.amount?.amount}
+                          {formatCurrency(job?.amount)}
                         </li>
                         <li>
                           <div

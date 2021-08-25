@@ -4,10 +4,22 @@ import { resumeFragment } from "graphql/fragments";
 export const RESUMES_QUERY = gql`
   query Resumes {
     myResumes {
-      id
       name
-      updatedAt
+      id
+      slug
+      description
+      seoTitle
       seoDescription
+      uuid
+      createdAt
+      updatedAt
+      isDeleted
+      privateMetadata
+      metadata
+      isActive
+      preview
+      description
+      descriptionPlaintext
     }
   }
 `;

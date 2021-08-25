@@ -1,6 +1,6 @@
-import React, { useEffect, useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useLazyQuery } from "react-apollo";
 import { PaymentModal } from "modals/PaymentModal";
 import { landingVacancyLimit } from "constants/constants";
@@ -11,18 +11,25 @@ import {
   checkDate,
   checkJobType,
   findJobTypeDescription,
+  formatCurrency,
+  truncateText,
+  findPayRateDescription,
 } from "utils";
 import LogoImage from "image/thedb.png";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
 import NoResultFound from "components/NoResult/NoResult";
 
+import MobileStepper from "@material-ui/core/MobileStepper";
+
 const Vacancies = () => {
   const history = useHistory();
   const [verified, setVerified] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const [jobTypes, setJobTypes] = React.useState([]);
-  const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
+  const { payRates, vacancyState, vacancyDispatch } =
+    React.useContext(VacancyContext);
+  const [activeStep, setActiveStep] = React.useState(0);
 
   const cleanVacanciesData = (edges) => {
     let jobs;
@@ -50,7 +57,7 @@ const Vacancies = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     checkVerified();
     // Only fetch if context API is empty.
     if (vacancyState.jobsData.length === 0) {
@@ -87,6 +94,14 @@ const Vacancies = () => {
   const handleModalShow = () => {
     setShow(!show);
   };
+
+  function handleNext() {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  }
+
+  function handleBack() {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  }
 
   return (
     <div className="container">
@@ -137,7 +152,7 @@ const Vacancies = () => {
                         </li>
                         <li>
                           <i className="ln ln-icon-Money-2" />{" "}
-                          {job?.amount?.currency} {job?.amount?.amount}
+                          {formatCurrency(job?.amount)}
                         </li>
                         <li>
                           <div
@@ -175,111 +190,126 @@ const Vacancies = () => {
       {/* Job Spotlight */}
       <div className="five columns">
         <h3 className="margin-bottom-5">Job Spotlight</h3>
-        {/* Navigation */}
-        <div className="showbiz-navigation">
-          <div id="showbiz_left_1" className="sb-navigation-left">
-            <i className="fa fa-angle-left" />
-          </div>
-          <div id="showbiz_right_1" className="sb-navigation-right">
-            <i className="fa fa-angle-right" />
-          </div>
-        </div>
-        <div className="clearfix" />
-        {/* Showbiz Container */}
-        <div id="vacancies-spotlight" className="showbiz-container">
-          <div
-            className="showbiz"
-            data-left="#showbiz_left_1"
-            data-right="#showbiz_right_1"
-            data-play="#showbiz_play_1"
-          >
-            <div className="overflowholder">
-              <ul>
-                <li>
-                  <div className="job-spotlight">
-                    <a href="/">
-                      <h4>
-                        Social Media: Advertising Coordinator{" "}
-                        <span className="part-time">Part-Time</span>
-                      </h4>
-                    </a>
-                    <span>
-                      <i className="fa fa-briefcase" /> Mates
-                    </span>
-                    <span>
-                      <i className="fa fa-map-marker" /> New York
-                    </span>
-                    <span>
-                      <i className="fa fa-money" /> $20 / hour
-                    </span>
-                    <p>
-                      As advertising &amp; content coordinator, you will support
-                      our social media team in producing high quality social
-                      content for a range of media channels.
-                    </p>
-                    <a href="job-page.html" className="button">
-                      Apply For This Job
-                    </a>
-                  </div>
-                </li>
-                <li>
-                  <div className="job-spotlight">
-                    <a href="/">
-                      <h4>
-                        Prestashop / WooCommerce Product Listing{" "}
-                        <span className="freelance">Freelance</span>
-                      </h4>
-                    </a>
-                    <span>
-                      <i className="fa fa-briefcase" /> King
-                    </span>
-                    <span>
-                      <i className="fa fa-map-marker" /> London
-                    </span>
-                    <span>
-                      <i className="fa fa-money" /> $25 / hour
-                    </span>
-                    <p>
-                      Etiam suscipit tellus ante, sit amet hendrerit magna
-                      varius in. Pellentesque lorem quis enim venenatis
-                      pellentesque.
-                    </p>
-                    <a href="job-page.html" className="button">
-                      Apply For This Job
-                    </a>
-                  </div>
-                </li>
-                <li>
-                  <div className="job-spotlight">
-                    <a href="/">
-                      <h4>
-                        Logo Design <span className="freelance">Freelance</span>
-                      </h4>
-                    </a>
-                    <span>
-                      <i className="fa fa-briefcase" /> Hexagon
-                    </span>
-                    <span>
-                      <i className="fa fa-map-marker" /> Sydney
-                    </span>
-                    <span>
-                      <i className="fa fa-money" /> $10 / hour
-                    </span>
-                    <p>
-                      Proin ligula neque, pretium et ipsum eget, mattis commodo
-                      dolor. Etiam tincidunt libero quis commodo.
-                    </p>
-                    <a href="job-page.html" className="button">
-                      Apply For This Job
-                    </a>
-                  </div>
-                </li>
-              </ul>
-              <div className="clearfix" />
+        {vacancyState?.sortedJobs?.length ? (
+          <>
+            <div className="showbiz-navigation">
+              <MobileStepper
+                steps={vacancyState?.sortedJobs?.length}
+                position="static"
+                activeStep={activeStep}
+                nextButton={
+                  activeStep === vacancyState.sortedJobs.length ? null : (
+                    <div
+                      size="small"
+                      onClick={handleNext}
+                      disabled={
+                        activeStep === vacancyState?.sortedJobs?.length - 1
+                      }
+                      className="sb-navigation-right"
+                    >
+                      <i className="fa fa-angle-right" />
+                    </div>
+                  )
+                }
+                backButton={
+                  activeStep === 0 ? null : (
+                    <div
+                      size="small"
+                      onClick={handleBack}
+                      disabled={activeStep === 0}
+                      className="sb-navigation-left"
+                    >
+                      <i className="fa fa-angle-left" />
+                    </div>
+                  )
+                }
+              />
             </div>
             <div className="clearfix" />
-          </div>
-        </div>
+            {/* Showbiz Container */}
+            <div id="vacancies-spotlight" className="showbiz-container">
+              <div
+                className="showbiz"
+                data-left="#showbiz_left_1"
+                data-right="#showbiz_right_1"
+                data-play="#showbiz_play_1"
+              >
+                <div className="">
+                  <ul>
+                    <li>
+                      <div className="job-spotlight">
+                        <a href="/">
+                          <h4>
+                            {vacancyState?.sortedJobs[activeStep].title}{" "}
+                            <span
+                              className={`${checkJobType(
+                                findJobTypeDescription(
+                                  vacancyState?.sortedJobs[activeStep],
+                                  jobTypes,
+                                ),
+                              )}`}
+                            >
+                              {findJobTypeDescription(
+                                vacancyState?.sortedJobs[activeStep],
+                                jobTypes,
+                              )}
+                            </span>
+                          </h4>
+                        </a>
+                        <span>
+                          <i className="fa fa-briefcase" />{" "}
+                          {vacancyState?.sortedJobs[activeStep]?.postedBy?.name}
+                        </span>
+                        <span>
+                          <i className="fa fa-map-marker" />{" "}
+                          {vacancyState?.sortedJobs[activeStep]?.location}
+                        </span>
+                        <span>
+                          <i className="fa fa-money" />{" "}
+                          {formatCurrency(
+                            vacancyState?.sortedJobs[activeStep]?.amount,
+                          )}{" "}
+                          /{" "}
+                          {findPayRateDescription(
+                            vacancyState?.sortedJobs[activeStep],
+                            payRates,
+                          )}
+                        </span>
+                        <p>
+                          {truncateText(
+                            vacancyState?.sortedJobs[activeStep]
+                              ?.descriptionPlaintext,
+                            250,
+                          )}
+
+                          {}
+                        </p>
+                        <Link
+                          to={{ pathname: "" }}
+                          onClick={() =>
+                            history.push(
+                              `vacancies/${getDBIdFromGraphqlId(
+                                vacancyState?.sortedJobs[activeStep]?.id,
+                                "Vacancy",
+                              )}`,
+                            )
+                          }
+                          className="button"
+                        >
+                          Apply For This Job
+                        </Link>
+                      </div>
+                    </li>
+                  </ul>
+                  <div className="clearfix" />
+                </div>
+                <div className="clearfix" />
+              </div>
+            </div>
+          </>
+        ) : (
+          <Loader />
+        )}
       </div>
     </div>
   );

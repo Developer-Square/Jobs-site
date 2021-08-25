@@ -14,7 +14,7 @@ import { RESUME_MUTATION, RESUME_UPDATE_MUTATION } from "graphql/mutations";
 import { showNotification } from "helpers";
 import { withRouter } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { getUnsplashPhoto } from "utils";
+import { unsplashPhotoRequestUrl } from "utils";
 
 export const TypedResumeMutation = TypedMutation(RESUME_MUTATION);
 export const TypedResumeUpdateMutation = TypedMutation(RESUME_UPDATE_MUTATION);
@@ -22,6 +22,7 @@ export const TypedResumeUpdateMutation = TypedMutation(RESUME_UPDATE_MUTATION);
 const ResumeModal = () => {
   const { t } = useTranslation();
   const alert = useAlert();
+  const [refetchSplashImg, setRefetchSplashImg] = React.useState(false);
   const [initialValues, setInitialValues] = React.useState({
     name: "",
     preview: "",
@@ -29,11 +30,16 @@ const ResumeModal = () => {
 
   React.useEffect(() => {
     (async () => {
-      await getUnsplashPhoto().then((res) => {
-        setInitialValues({ name: "", preview: res });
+      await fetch(unsplashPhotoRequestUrl).then((results) => {
+        if (results && results.url !== undefined) {
+          setInitialValues({ name: "", preview: results.url });
+        }
       });
     })();
-  }, []);
+  }, [refetchSplashImg]);
+  const refetchSplashImages = () => {
+    setRefetchSplashImg((curr) => !curr);
+  };
 
   // const { createResume, updateResume } = useContext(DatabaseContext);
 
@@ -85,8 +91,14 @@ const ResumeModal = () => {
                         create: t("dashboard.createResume"),
                         edit: t("dashboard.editResume"),
                       }}
-                      onEdit={resumeUpdate}
-                      onCreate={resumeCreate}
+                      onEdit={(d) => {
+                        resumeUpdate(d);
+                        refetchSplashImages();
+                      }}
+                      onCreate={(d) => {
+                        resumeCreate(d);
+                        refetchSplashImages();
+                      }}
                       event={ModalEvents.CREATE_RESUME_MODAL}
                     >
                       <Input

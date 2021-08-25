@@ -6,6 +6,7 @@ export const vacancyFragment = gql`
     id
     title
     jobType
+    descriptionPlaintext
     description
     jobType
     minQualification

@@ -535,6 +535,7 @@ export const resumeFragment = gql`
   ${layoutFragment}
   fragment Resume on ResumeNode {
     slug
+    name
     description
     seoTitle
     seoDescription
@@ -545,6 +546,8 @@ export const resumeFragment = gql`
     privateMetadata
     metadata
     isActive
+    preview
+    description
     descriptionPlaintext
     id
     objective {
