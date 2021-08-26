@@ -7,10 +7,10 @@ const InfoSection = () => {
         <div className="one-third column">
           <div className="icon-box rounded alt">
             <i className="ln ln-icon-Folder-Add" />
-            <h4>Add Resume</h4>
+            <h4>Sign Up</h4>
             <p>
-              Pellentesque habitant morbi tristique senectus netus ante et
-              malesuada fames ac turpis egestas maximus neque.
+              Get started on The Database by creating your account and
+              profile.
             </p>
           </div>
         </div>
@@ -19,18 +19,18 @@ const InfoSection = () => {
             <i className="ln ln-icon-Search-onCloud" />
             <h4>Search For Jobs</h4>
             <p>
-              Pellentesque habitant morbi tristique senectus netus ante et
-              malesuada fames ac turpis egestas maximus neque.
+              Get instant access to thousands of job openings that match your
+              interests and expertise.
             </p>
           </div>
         </div>
         <div className="one-third column">
           <div className="icon-box rounded alt">
             <i className="ln ln-icon-Business-ManWoman" />
-            <h4>Find Crew</h4>
+            <h4>Apply and Get Hired</h4>
             <p>
-              Pellentesque habitant morbi tristique senectus netus ante et
-              malesuada fames ac turpis egestas maximus neque.
+              Apply for openings that excite you without hustle. Wait for the employer
+              for interviewing and hiring.
             </p>
           </div>
         </div>

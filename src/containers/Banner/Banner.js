@@ -39,7 +39,7 @@ const Banner = () => {
         <div className="sixteen columns">
           <div className="search-container">
             {/* Form */}
-            <h2>Find Job</h2> <SearchContainer />
+            <h2>Great Careers Start Here</h2> <SearchContainer />
             <Waypoint
               onEnter={removeSticky}
               onLeave={setSticky}

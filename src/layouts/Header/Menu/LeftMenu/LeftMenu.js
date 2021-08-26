@@ -61,32 +61,10 @@ export const LeftMenu = ({ isSticky, logo }) => {
           style={{
             color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
           }}
-          id={pathname === "pricing" ? "current" : ""}
-          to="/pricing"
-        >
-          Pricing
-        </Link>
-      </li>
-      <li>
-        <Link
-          style={{
-            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
-          }}
-          id={pathname === "contact-us" ? "current" : ""}
-          to="/contact-us"
-        >
-          Contact
-        </Link>
-      </li>
-      <li>
-        <Link
-          style={{
-            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
-          }}
           id={pathname === "contact-us" ? "current" : ""}
           to="/help"
         >
-          F.A.Q
+          Help
         </Link>
       </li>
 
@@ -102,17 +80,17 @@ export const LeftMenu = ({ isSticky, logo }) => {
           }
           to={"#"}
         >
-          Browse Listings
+          Jobs
         </Link>
         <ul>
           <li>
-            <Link to="/vacancies">Browse Vacancies</Link>
+            <Link to="/vacancies">Job Vacancies</Link>
           </li>
           {/* <li>
                         <Link href="browse-resumes.html">Browse Resumes</Link>
                       </li> */}
           <li>
-            <Link to="/categories">Browse Categories</Link>
+            <Link to="/categories">Job Categories</Link>
           </li>
         </ul>
       </li>

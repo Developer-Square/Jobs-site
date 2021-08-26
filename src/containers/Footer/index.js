@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
+import { TOS, HELP_PAGE, SDG } from "constants/routes.constants";
 
 const Footer = () => {
   return (
@@ -19,42 +20,31 @@ const Footer = () => {
             <div className="seven columns">
               <h4>About</h4>
               <p>
-                Morbi convallis bibendum urna ut viverra. Maecenas quis
-                consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi
-                ultricies laoreet ullamcorper phasellus semper.
+                The Database - Jobs need People.
               </p>
               <a href="/auth" className="button">
                 Get Started
               </a>
             </div>
             <div className="three columns">
-              <h4>Company</h4>
+              <h4>We Care</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="/">About Us</a>
+                  <a href={`${HELP_PAGE}`}>FAQs</a>
                 </li>
                 <li>
-                  <a href="/">Careers</a>
+                  <a href={`${TOS}`}>Terms of Service</a>
                 </li>
                 <li>
-                  <a href="/">Our Blog</a>
-                </li>
-                <li>
-                  <a href="/">Terms of Service</a>
-                </li>
-                <li>
-                  <a href="/">Privacy Policy</a>
-                </li>
-                <li>
-                  <a href="/">Hiring Hub</a>
+                  <a href={`${TOS}`}>Privacy Policy</a>
                 </li>
               </ul>
             </div>
             <div className="three columns">
-              <h4>Press</h4>
+              <h4>About</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="/">In the News</a>
+                  <a href={`${SDG}`}>Our SDGs</a>
                 </li>
                 <li>
                   <a href="/">Press Releases</a>
@@ -71,25 +61,13 @@ const Footer = () => {
               </ul>
             </div>
             <div className="three columns">
-              <h4>Browse</h4>
+              <h4>Others</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="/">Freelancers by Category</a>
+                  <a href="/pricing">Pricing</a>
                 </li>
                 <li>
-                  <a href="/">Freelancers in USA</a>
-                </li>
-                <li>
-                  <a href="/">Freelancers in UK</a>
-                </li>
-                <li>
-                  <a href="/">Freelancers in Canada</a>
-                </li>
-                <li>
-                  <a href="/">Freelancers in Australia</a>
-                </li>
-                <li>
-                  <a href="/">Find Jobs</a>
+                  <a href="/contact">Contact</a>
                 </li>
               </ul>
             </div>
@@ -101,22 +79,22 @@ const Footer = () => {
                 <h4>Follow Us</h4>
                 <ul className="social-icons">
                   <li>
-                    <a className="facebook" href="/">
+                    <a className="facebook" href="https://facebook.com/thedatabase.co.ke">
                       <i className="icon-facebook" />
                     </a>
                   </li>
                   <li>
-                    <a className="twitter" href="/">
+                    <a className="twitter" href="https://twitter.com/ThedatabaseKe">
                       <i className="icon-twitter" />
                     </a>
                   </li>
                   <li>
-                    <a className="gplus" href="/">
-                      <i className="icon-gplus" />
+                    <a className="instagram" href="https://www.instagram.com/thedatabase.co.ke/">
+                      <i className="icon-instagram" />
                     </a>
                   </li>
                   <li>
-                    <a className="linkedin" href="/">
+                    <a className="linkedin" href="https://www.linkedin.com/company/thedb">
                       <i className="icon-linkedin" />
                     </a>
                   </li>
