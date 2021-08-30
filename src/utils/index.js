@@ -11,13 +11,18 @@ import {
 import { maybe } from "misc";
 
 export const truncateText = (text = "", limit = 0) => {
-  console.log(text, limit);
   if (limit === 0 || isNaN(limit) || limit < 0) return "";
   if (text === "" || text === null || text === undefined) return "...";
   return text.length > limit ? text.substring(0, limit - 3) + "..." : text;
 };
 
-export const formatCurrency = function (amount) {
+export const formatCurrency = function (amount = null) {
+  if (!amount)
+    return new Intl.NumberFormat("en-KE", {
+      style: "currency",
+      currency: "KES",
+      minimumFractionDigits: 2,
+    }).format(0);
   // return amount.amount;
   return new Intl.NumberFormat("en-KE", {
     style: "currency",

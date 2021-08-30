@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
-import styled from 'styled-components';
+import React, { useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import Slider from "@material-ui/core/Slider";
+import styled from "styled-components";
+import { formatCurrency } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,49 +17,40 @@ const useStyles = makeStyles((theme) => ({
 const marks = [
   {
     value: 0,
-    label: 'Ksh 0',
-  },
-  {
-    value: 5000,
-    label: 'Ksh 5000',
+    label: formatCurrency(0),
   },
   {
     value: 10000,
-    label: 'Ksh 10000',
-  },
-  {
-    value: 20000,
-    label: 'Ksh 20000',
+    label: formatCurrency(10000),
   },
   {
     value: 30000,
-    label: 'Ksh 30000+',
+    label: formatCurrency(300000),
   },
 ];
 
+export default function PayrateSlider({ label, setFilterObj }) {
+  const classes = useStyles();
+  const [selectedValue, setSelectedValue] = React.useState("");
 
-export default function PayrateSlider({label, setFilterObj}) {
-    const classes = useStyles();
-    const [selectedValue, setSelectedValue] = React.useState('')
+  // Returns the current value on the slider.
+  function valuetext(value) {
+    setSelectedValue((curr) => (curr = value));
+    return `Ksh ${value}`;
+  }
 
-    // Returns the current value on the slider.
-    function valuetext(value) {
-        setSelectedValue(curr => curr = value);
-        return `Ksh ${value}`;
+  useEffect(() => {
+    if (selectedValue) {
+      setFilterObj({
+        search: selectedValue.toString(),
+      });
     }
 
-    useEffect(() => {
-        if (selectedValue) {
-            setFilterObj({
-                search: selectedValue.toString()
-            })
-        }
-
-        return () => {
-            setFilterObj({})
-        }
+    return () => {
+      setFilterObj({});
+    };
     // eslint-disable-next-line
-    }, [selectedValue])
+  }, [selectedValue]);
 
   return (
     <div className={classes.root}>
@@ -81,5 +73,5 @@ export default function PayrateSlider({label, setFilterObj}) {
 }
 
 const Spacer = styled.div`
-    margin: 35px 0;
-`
+  margin: 35px 0;
+`;
