@@ -283,12 +283,6 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
               history={history}
             />
             <div id="sign-in-button"></div>
-            <Billing
-              switchTabs={switchTabs}
-              isSeeker={isSeeker}
-              loading={loading}
-              alert={alert}
-            />
           </>
         ) : // eslint-disable-next-line
         (activeStep === 1 && switchTab === "seeker") ||
