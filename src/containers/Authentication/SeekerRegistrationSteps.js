@@ -349,6 +349,7 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
   const [show, setShow] = React.useState(false);
   const [planID, setPlanID] = React.useState("");
   const [periodAmount, setPeriodAmount] = React.useState(0);
+  const [transactionId, setTransactionId] = React.useState();
   const useStyles = makeStyles((theme) => ({
     root: {
       minWidth: 235,
@@ -384,12 +385,14 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
           amount: periodAmount,
           billingPhone: values.phone,
         },
-      }).then((value) => {
-        // const {data, loading} = useSubscription(ONTRANSACTION_MESSAGE, {
-        //   variables: value.transactionDescription
-        // })
+      }).then(({ data }) => {
+        console.log("after mpesa push", data);
+
+        if (data.makePayment.success) {
+          setTransactionId(data.makePayment.onlineCheckout.id);
+        }
+
         // console.log(data);
-        console.log("after mpesa push", value);
       });
     }
   };
@@ -433,6 +436,7 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
                       onSubmit={onPaymentSubmit}
                       onClose={handleModalShow}
                       moreInfo={false}
+                      transactionId={transactionId}
                     />
                     <Spacer>
                       <Link to={"/auth"} onClick={() => switchTabs("", "back")}>
