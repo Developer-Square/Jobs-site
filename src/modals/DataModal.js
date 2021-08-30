@@ -14,6 +14,7 @@ const DataModal = ({
   path,
   event,
   title,
+  buttonText,
   onEdit,
   onCreate,
   children,
@@ -83,7 +84,9 @@ const DataModal = ({
     }
   };
 
-  const getTitle = isEmpty(title)
+  const getTitle = buttonText
+    ? buttonText
+    : isEmpty(title)
     ? getModalText(isEditMode, name, t)
     : isEditMode
     ? title.edit

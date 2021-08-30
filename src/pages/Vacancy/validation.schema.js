@@ -13,5 +13,5 @@ export const vacancySchema = Yup.object().shape({
   payRate: schema.select,
   industry: schema.select,
   closingDate: schema.date,
-  applicationEmail: schema.email,
+  applicationEmail: schema.emailNotRequired,
 });

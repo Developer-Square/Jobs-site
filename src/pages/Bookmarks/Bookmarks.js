@@ -185,7 +185,7 @@ const Bookmarks = ({ deviceType }) => {
               return (
                 <p>
                   {profile && d
-                    ? profile.isSeekeer
+                    ? profile.isSeeker
                       ? d?.job?.creator?.fullName
                       : profile.isEmployer
                       ? d?.user?.email
@@ -196,10 +196,10 @@ const Bookmarks = ({ deviceType }) => {
             },
           },
           {
-            Header: "Job Title",
-            id: "jobTitle",
+            Header: "Closing Date",
+            id: "closingDate",
             accessor: (d) => {
-              return <p>{d?.job?.title}</p>;
+              return <p>{moment(d.closingDate).format("YYYY-MM-DD ")}</p>;
             },
           },
           {

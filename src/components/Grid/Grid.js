@@ -24,9 +24,10 @@ export const Grid = styled.div`
     border-spacing: 0;
     background: ${themeGet("colors.white", "#fff")};
 
-    
-    
-
+    thead {
+      background-color: #333 !important;
+      color: #fff !important;
+    }
     tr {
       :last-child {
         td {
@@ -37,7 +38,7 @@ export const Grid = styled.div`
     th{
       font-family:Lato: sans-serif;
       font-weight: 700;
-      color:${themeGet("colors.blue.dark", "#161F6A")}  !important;
+      // color:${themeGet("colors.blue.dark", "#161F6A")}  !important;
       align-items:center;
       box-shadow:rgba(0, 0, 0, 0.16) 0px 1px 4px;
       border-color:#0000003d;

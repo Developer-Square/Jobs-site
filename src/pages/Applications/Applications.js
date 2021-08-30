@@ -13,6 +13,7 @@ import { PencilIcon } from "components/AllSvgIcon";
 // import EditPostCompany from "./EditPostCompany";
 
 import { CSVDownloader } from "react-papaparse";
+import thedbLogo from "image/thedb.png";
 // import { makeSecretKey } from "utils";
 
 import Loader from "components/Loader/Loader";
@@ -28,6 +29,7 @@ import { TypedQuery } from "core/queries";
 import { cleanSelectData, showNotification } from "helpers";
 import { AuthContext } from "contexts/auth/auth.context";
 import moment from "moment";
+import ModalContext from "contexts/modal/modal.provider";
 
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 export const TypedApplicationsQuery = TypedQuery(GET_APPLICATIONS);
@@ -36,11 +38,10 @@ const Applications = ({ deviceType }) => {
   const {
     authState: { profile },
   } = React.useContext(AuthContext);
+  const { emitter, events } = React.useContext(ModalContext);
   const [checkedId, setCheckedId] = React.useState([]);
   const [checked, setChecked] = React.useState(false);
-  // const [editData, setEditData] = React.useState({});
   const [filename, setFileName] = React.useState("makeSecretKey(10)");
-  // const { isOpen, toggleSidebar } = useSidebar();
   console.log(filename);
   console.log(checkedId);
   let statusData;
@@ -54,104 +55,17 @@ const Applications = ({ deviceType }) => {
     skipResetRef.current = false;
   }, [applications]);
 
-  const handleEdit = (d) => {
-    // toggleSidebar();
-    toast.info(`To Edit ${d.applicant.fullName}'s application status`);
-    // setEditData(d);
-  };
-  const handleBulkGenerate = () => {
-    toast.info(`Generated ${checkedId.length} items on CSV`);
-  };
-  const handleBulkDelete = () => {
+  // const handleEdit = (d) => {
+  //   toast.info(`To Edit ${d.applicant.fullName}'s application status`);
+  // };
+  const handleBulkGenerate = () => toast.info(`Feature coming soon!`);
+
+  const handleBulkDelete = () =>
     toast.info(`To Delete ${checkedId.length} items`);
-    // if (checkedId.length > 0) {
-    //   axiosInstance
-    //     .delete(`library/product/bulk_delete/?ids=${checkedId.toString()}`)
-    //     .then((res) => {
-    //       setProducts([]);
-    //       getProducts();
-    //       alert.info(`${res.data.length} Items deleted`);
-    //       for (let i = 0; i < checkedId.length; i++) {
-    //         const product_instance = checkedId[i];
-    //         alert.error(
-    //           `${
-    //             dummydata.filter(
-    //               (filteredObj) => filteredObj.id === product_instance
-    //             )[0].name
-    //           } Deleted`
-    //         );
-    //       }
-    //     });
-    // } else {
-    //   alert.info("make a selection to continue");
-    // }
-  };
-  const handleView = (d) => {
-    // history.push(`/application/${d.id}/`);
+
+  const handleView = (d) =>
     toast.info(`To View ${d.applicant.fullName}'s application`);
-  };
-  // const handleDelete = (d) => {
-  //   toast.info(`To Delete ${d.job.title}`);
-  //   // const cta = () =>
-  //   //   axiosInstance
-  //   //     .delete(`/library/product/${d.id}/`, d, tokenConfig())
-  //   //     .then((res) => {
-  //   //       alert.error(`${res.data.name} Deleted`);
-  //   //     })
-  //   //     .catch((err) => {
-  //   //       alert.error(apiErrorHandler(err));
-  //   //     });
-  //   // handleConfirmModal(d.name, cta);
-  // };
-
-  // const handleModal = (props) => {
-  //   openModal({
-  //     show: true,
-  //     config: {
-  //       className: "cartPopup",
-  //       width: "auto",
-  //       height: "auto",
-  //       enableResizing: false,
-  //       disableDragging: true,
-  //       transition: {
-  //         tension: 360,
-  //         friction: 40,
-  //       },
-  //     },
-  //     closeOnClickOutside: true,
-  //     component: EditPostCompany,
-  //     closeComponent: () => <div />,
-  //     componentProps: {
-  //       onCloseBtnClick: closeModal,
-  //       scrollbarHeight: 330,
-  //       props,
-  //     },
-  //   });
-  // };
-  // const handleConfirmModal = (header, cta) => {
-  //   openModal({
-  //     show: true,
-  //     config: {
-  //       className: "cartPopup",
-  //       width: "auto",
-  //       height: "auto",
-  //       enableResizing: false,
-  //       disableDragging: true,
-  //       transition: {
-  //         tension: 360,
-  //         friction: 40,
-  //       },
-  //     },
-  //     // closeOnClickOutside: true,
-  //     component: ConfirmationModal,
-  //     closeComponent: () => <div />,
-  //     componentProps: {
-  //       header: header,
-  //       cta: cta,
-  //     },
-  //   });
-  // };
-
+  const handleEdit = (d) => emitter.emit(events.UPDATE_APPLICATION_MODAL, d);
   function onAllCheck(event) {
     if (!event.checked) {
       const idx =
@@ -238,15 +152,15 @@ const Applications = ({ deviceType }) => {
                   {profile && d ? (
                     <img
                       style={{
-                        height: "100%",
-                        width: "100%",
+                        height: "30px",
+                        width: "30px",
                         borderRadius: 50,
                         background: "#009e7f2e",
                       }}
                       src={
                         profile.isSeeker
-                          ? d?.job?.creator?.avatar?.url
-                          : d?.applicant?.avatar?.url
+                          ? d?.job?.creator?.avatar?.url || thedbLogo
+                          : d?.applicant?.avatar?.url || thedbLogo
                       }
                       alt="the-user-logo"
                     />
@@ -281,7 +195,6 @@ const Applications = ({ deviceType }) => {
               );
             },
           },
-
           {
             Header: "Status",
             id: "applicationStatus",

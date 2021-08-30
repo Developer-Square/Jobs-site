@@ -58,7 +58,7 @@ function DefaultColumnFilter({
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
       placeholder={`Search ${count} records...`}
-      style={{ borderBottom: "1px solid" }}
+      style={{ borderBottom: "1px solid", backgroundColor: "#575757" }}
     />
   );
 }
@@ -311,7 +311,11 @@ function Table({
   return (
     <>
       <div className="tableWrap">
-        <table {...getTableProps()}>
+        {/* <div className=""> */}
+        <table
+          // className="manage-table resumes responsive-table"
+          {...getTableProps()}
+        >
           <thead>
             {headerGroups.map((headerGroup, i) => (
               <tr {...headerGroup.getHeaderGroupProps()}>

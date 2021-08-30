@@ -26,6 +26,7 @@ import { showSuccessNotification, IsNotEmpty } from "helpers";
 import { TypedPlansListQuery } from "./queries";
 import Loader from "components/Loader/Loader";
 import { PaymentModal } from "modals/PaymentModal";
+import { formatCurrency } from "utils";
 // import { ONTRANSACTION_MESSAGE } from './subscription';
 
 // const wsLink = new WebSocketLink({
@@ -459,6 +460,9 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
                                 <CardContent>
                                   <Typography variant="h5">
                                     {option.title}
+                                    <small>
+                                      <strong>({option?.periodType})</strong>
+                                    </small>
                                   </Typography>
                                   <br />
                                   {option.collection
@@ -469,7 +473,9 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
                                     .map((val, i) => (
                                       <p key={i}>&bull;➜ {val.toString()}</p>
                                     ))}
-                                  <Title>KES. {option.periodAmount}</Title>
+                                  <Title>
+                                    {formatCurrency(option?.periodAmountMoney)}
+                                  </Title>
                                 </CardContent>
                               </Card>
                             </div>

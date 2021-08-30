@@ -7,6 +7,10 @@ export const email = Yup.string()
   .max(100)
   .email(msg.invalidEmail)
   .required(msg.emailRequired);
+export const emailNotRequired = Yup.string()
+  .min(3, msg.emailNotLongEnough)
+  .max(100)
+  .email(msg.invalidEmail);
 
 export const username = Yup.string()
   .min(3, msg.nameNotLongEnough)

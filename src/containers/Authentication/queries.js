@@ -43,6 +43,10 @@ export const plansListQuery = gql`
         renewalType
         collection
         setupAmount
+        periodAmountMoney {
+          amount
+          currency
+        }
       }
     }
   }

@@ -125,13 +125,10 @@ export const UPDATE_APPLICATION = gql`
   mutation PatchApplication(
     $id: ID!
     $status: ApplicationStatus
-    $isActive: Boolean
-    $isDeleted: Boolean
     $applicant: ID
-    $job: ID
-    $resume: Upload
     $budget: String
     $comment: String
+    $employerComment: String
   ) {
     patchApplication(
       id: $id
@@ -140,6 +137,7 @@ export const UPDATE_APPLICATION = gql`
         resume: $resume
         budget: $budget
         comment: $comment
+        employerComment: $employerComment
       }
     ) {
       __typename
