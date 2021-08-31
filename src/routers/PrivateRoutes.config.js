@@ -1,5 +1,6 @@
 import { lazy } from "react";
 
+const Admin = lazy(() => import("pages/Admin/Admin"));
 const Dashboard = lazy(() => import("pages/Dashboard/Dashboard"));
 const Profile = lazy(() => import("pages/Profile/Profile"));
 const Vacancy = lazy(() => import("pages/Vacancy/Vacancy"));
@@ -12,6 +13,7 @@ const ManageVacancies = lazy(() =>
 );
 
 export {
+  Admin,
   Dashboard,
   Profile,
   Vacancy,

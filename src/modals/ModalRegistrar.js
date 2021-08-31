@@ -17,6 +17,7 @@ import SocialModal from "./sections/SocialModal";
 import WorkModal from "./sections/WorkModal";
 import DeleteAccountModal from "./DeleteAccountModal";
 import UpdateApplicationModal from "./UpdateApplicationModal";
+import IndustriesModal from "./IndustriesModal";
 
 const ModalRegistrar = () => (
   <>
@@ -38,6 +39,7 @@ const ModalRegistrar = () => (
     <ExportModal />
     <DeleteAccountModal />
     <UpdateApplicationModal />
+    <IndustriesModal />
   </>
 );
 

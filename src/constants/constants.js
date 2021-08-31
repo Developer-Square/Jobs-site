@@ -18,4 +18,5 @@ export const serviceWorkerTimeout =
   parseInt(process.env.SERVICE_WORKER_TIMEOUT, 10) || 60 * 1000;
 export const vacancyLimit = 6;
 export const landingVacancyLimit = 5;
+export const industriesInnerLimit = 15;
 export const searchLimit = 10;

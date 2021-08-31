@@ -93,7 +93,6 @@ const UpdateApplicationModal = () => {
                       }}
                       buttonText={`Update Application`}
                       onEdit={(data) => {
-                        console.log(data);
                         applicationUpdate({
                           variables: {
                             employerComment: data?.variables?.employerComment,

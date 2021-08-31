@@ -414,8 +414,16 @@ function Table({
         </table>
       </div>
       <div
+        style={{
+          backgroundColor: "#333",
+          color: "#fff",
+          margin: 0,
+          padding: 10,
+          display: "flex",
+          lineHeight: "18px",
+          alignItems: "center",
+        }}
         className="pagination"
-        style={{ display: "flex", lineHeight: "18px", alignItems: "center" }}
       >
         <Button
           onClick={() => gotoPage(0)}
@@ -425,7 +433,7 @@ function Table({
             padding: 1,
             margin: 2,
             height: "auto",
-            background: "#21277f",
+            background: "#575757",
           }}
         />
         <Button
@@ -436,7 +444,7 @@ function Table({
             padding: 1,
             margin: 2,
             height: "auto",
-            background: "#21277f",
+            background: "#575757",
           }}
         />
         <Button
@@ -447,7 +455,7 @@ function Table({
             padding: 1,
             margin: 2,
             height: "auto",
-            background: "#21277f",
+            background: "#575757",
           }}
         />
         <Button
@@ -458,13 +466,13 @@ function Table({
             padding: 1,
             margin: 2,
             height: "auto",
-            background: "#21277f",
+            background: "#575757",
           }}
         />
         <span style={{ margin: 5 }} />
         <span>
           Page{" "}
-          <strong>
+          <strong style={{ color: "#fff" }}>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{" "}
         </span>
@@ -487,6 +495,7 @@ function Table({
             style={{
               display: "inherit",
               width: "auto",
+              background: "#333",
             }}
             value={pageSize}
             onChange={(e) => {

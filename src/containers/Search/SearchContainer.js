@@ -161,7 +161,7 @@ function SearchContainer() {
 
 export default SearchContainer;
 
-export const Input = styled.input`
+const Input = styled.input`
   //   height: 51px;
   //   padding: 10px;
   //   background: #f3f3f3;
@@ -198,17 +198,12 @@ export const Input = styled.input`
   }
 `;
 
-export const Ul = styled.ul`
-  display: contents;
-`;
-
-export const Li = styled.ul`
+const Li = styled.ul`
   height: 51px;
   padding: 5px;
   background: #ffffff;
 `;
-
-export const SuggestContainer = styled.div`
+const SuggestContainer = styled.div`
   height: 240px;
 
   overflow: scroll;

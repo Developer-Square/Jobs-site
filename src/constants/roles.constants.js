@@ -186,16 +186,16 @@ const rolesConfig = {
   },
   employer: {
     routes: [
-      // components.addVacancy,
-      // components.updateVacancy,
-      // components.manageVacancies,
-      // components.applicationsManager,
+      components.vacancies,
+      components.addVacancy,
+      components.updateVacancy,
+      components.manageVacancies,
     ],
   },
   seeker: {
     routes: [
-      // components.resumeDashboard,
-      // components.resumeBuilder,
+      components.resumeDashboard,
+      components.resumeBuilder,
       // components.applications,
       // components.bookmarks,
     ],
@@ -212,18 +212,19 @@ const rolesConfig = {
 
   common: {
     routes: [
-      components.profile,
-      components.dashboard,
+      components.profile, //common
+      components.dashboard, //common
 
-      components.resumeDashboard,
-      components.resumeBuilder,
-      components.applications,
-      components.bookmarks,
-      components.vacancies,
+      components.applications, // commom
+      components.bookmarks, //common
 
-      components.addVacancy,
-      components.updateVacancy,
-      components.manageVacancies,
+      // components.resumeDashboard, //seeker
+      // components.resumeBuilder, //seeker
+
+      // components.vacancies, // employer
+      // components.addVacancy, //employer
+      // components.updateVacancy, // employer
+      // components.manageVacancies, // employer
 
       // components.messages,
     ],
