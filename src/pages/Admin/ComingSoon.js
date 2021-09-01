@@ -6,7 +6,7 @@ const ComingSoon = () => {
       <div className="flex flex-col h-screen bg-center bg-cover bg-no-repeat bg-gray-100">
         <div className="grid place-items-center w-4/5 mx-auto p-10 my-20 sm:my-auto bg-white-600 border-4 border-indigo-600 bg-opacity-70 rounded-xl shadow-2xl space-y-5 text-center cursor-pointer">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            xmlns="https://www.w3.org/2000/svg"
             width={16}
             height={16}
             fill="currentColor"

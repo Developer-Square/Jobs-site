@@ -1,17 +1,17 @@
 /*
 * Author: Vasterad
-* URL: http://purethemes.net
+* URL: https://purethemes.net
 */
 
-
+   
 /* ------------------------------------------------------------------- */
 /* Import Section
 ---------------------------------------------------------------------- */
 @import url("base.css");				/* Default Reset, Typography, Forms, etc. */
 @import url("responsive.css");			/* Responsive Grid */
 @import url("font-awesome.css");		/* Font Awesome Icons */
-@import url("http://fonts.googleapis.com/css?family=Montserrat:400,500,600");
-@import url("http://fonts.googleapis.com/css?family=Lato:400,700,300");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600");
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700,300");
 
 
 /* ------------------------------------------------------------------- */
@@ -6147,16 +6147,16 @@ a.post-img:hover:before {
 .chosen-container-active.chosen-with-drop .chosen-single div b:after { content: "" }
 .chosen-container-active .chosen-choices li.search-field input[type="text"] { color: #808080 !important; }
 
-
+ 
 /* ------------------------------------------------------------------- */
 
 /* SCEditor
-/* http://www.ssceditor.com/
+/* https://www.ssceditor.com/
 
 /* Copyright (C) 2011-12, Sam Clarke (samclarke.com)
 
 /* SCEditor is licensed under the MIT license:
-/* http://www.opensource.org/licenses/mit-license.php
+/* https://www.opensource.org/licenses/mit-license.php
 
 ---------------------------------------------------------------------- */
 

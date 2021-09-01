@@ -3,7 +3,7 @@ import React from "react";
 export const Eyes = ({ color = "#fff", width = "18px", height = "18px" }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 18 18"
@@ -33,7 +33,7 @@ export const Google = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 16.677 17"
@@ -55,7 +55,7 @@ export const GooglePlus = ({
   return (
     <svg
       id="google-hangouts"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 17.239 11.111"
@@ -84,7 +84,7 @@ export const Facebook = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 17 17"
@@ -106,7 +106,7 @@ export const Twitter = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 29.915 24.313"
@@ -129,7 +129,7 @@ export const Linkedin = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 60.046 60.046"
@@ -212,7 +212,7 @@ export const Plus = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 12 12"
@@ -251,7 +251,7 @@ export const PlusOutline = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 16 16"
@@ -290,7 +290,7 @@ export const Minus = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 12 2"
@@ -309,7 +309,7 @@ export const Minus = ({
 export const EllipsisIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="26"
       height="6"
       viewBox="0 0 26 6"
@@ -351,7 +351,7 @@ export const EllipsisIcon = () => {
 export const GiftBox = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="14.857"
       height="16"
       viewBox="0 0 14.857 16"
@@ -375,7 +375,7 @@ export const GiftBox = () => {
 // SVG ArrowNext icon
 export const ArrowNext = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20">
+    <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20">
       <path
         d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z"
         fill="#21277f"
@@ -388,7 +388,7 @@ export const ArrowNext = () => {
 // SVG ArrowPrev icon
 export const ArrowPrev = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20">
+    <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20">
       <path
         d="M217.9 256L345 129c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.3-34 0L167 239c-9.1 9.1-9.3 23.7-.7 33.1L310.9 417c4.7 4.7 10.9 7 17 7s12.3-2.3 17-7c9.4-9.4 9.4-24.6 0-33.9L217.9 256z"
         fill="#21277f"
@@ -401,7 +401,7 @@ export const ArrowPrev = () => {
 // SVG Lock icon
 export const LockIcon = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="15">
+    <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 512 512" width="15">
       <path d="M376 192h-24v-46.7c0-52.7-42-96.5-94.7-97.3-53.4-.7-97.3 42.8-97.3 96v48h-24c-22 0-40 18-40 40v192c0 22 18 40 40 40h240c22 0 40-18 40-40V232c0-22-18-40-40-40zM270 316.8v68.8c0 7.5-5.8 14-13.3 14.4-8 .4-14.7-6-14.7-14v-69.2c-11.5-5.6-19.1-17.8-17.9-31.7 1.4-15.5 14.1-27.9 29.6-29 18.7-1.3 34.3 13.5 34.3 31.9 0 12.7-7.3 23.6-18 28.8zM324 192H188v-48c0-18.1 7.1-35.1 20-48s29.9-20 48-20 35.1 7.1 48 20 20 29.9 20 48v48z" />
     </svg>
   );
@@ -415,7 +415,7 @@ export const SearchIcon = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 14 14"
@@ -433,7 +433,7 @@ export const SearchIcon = ({
 export const SearchIconSmall = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="14.01"
       height="14.01"
       viewBox="0 0 14.01 14.01"
@@ -452,7 +452,7 @@ export const SearchIconSmall = () => {
 export const SmartPhone = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="15.602"
       height="24"
       viewBox="0 0 15.602 24"
@@ -479,7 +479,7 @@ export const SmartPhone = () => {
 export const CloseIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="10.003"
       height="10"
       viewBox="0 0 10.003 10"
@@ -498,7 +498,7 @@ export const CloseIcon = () => {
 export const CategoryIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="14"
       height="14"
       viewBox="0 0 14 14"
@@ -516,7 +516,7 @@ export const CategoryIcon = () => {
 export const ArrowDropDown = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="10"
       height="5"
       viewBox="0 0 10 5"
@@ -534,7 +534,7 @@ export const ArrowDropDown = () => {
 export const PencilIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="7.2"
       height="7.2"
       viewBox="0 0 7.2 7.2"
@@ -551,7 +551,7 @@ export const PencilIcon = () => {
 export const LongArrowLeft = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="12"
       height="8.003"
       viewBox="0 0 12 8.003"
@@ -569,7 +569,7 @@ export const LongArrowLeft = () => {
 export const CheckMark = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="20.894"
       height="16"
       viewBox="0 0 20.894 16"
@@ -588,7 +588,7 @@ export const CheckMark = () => {
 export const NotificationIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="15.898"
       height="18"
       viewBox="0 0 15.898 18"
@@ -607,7 +607,7 @@ export const NotificationIcon = () => {
 export const AlertDotIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="10"
       height="10"
       viewBox="0 0 10 10"
@@ -638,7 +638,7 @@ export const AlertDotIcon = () => {
 export const DashboardIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="15"
       height="15"
       viewBox="0 0 15 15"
@@ -677,7 +677,7 @@ export const DashboardIcon = () => {
 export const SidebarCategoryIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="12.958"
       height="13"
       viewBox="0 0 12.958 13"
@@ -696,7 +696,7 @@ export const SidebarCategoryIcon = () => {
 export const CustomerIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="12.489"
       height="13"
       viewBox="0 0 12.489 13"
@@ -759,7 +759,7 @@ export const CustomerIcon = () => {
 export const InboxIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="13.867"
       height="12.133"
       viewBox="0 0 13.867 12.133"
@@ -787,7 +787,7 @@ export const RefundIcon = () => {
   return (
     <svg
       data-name="Group 2392"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="15"
       height="13"
       viewBox="0 0 15 13"
@@ -820,7 +820,7 @@ export const RefundIcon = () => {
 export const SettingIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="13"
       height="13"
       viewBox="0 0 13 13"
@@ -839,7 +839,7 @@ export const SettingIcon = () => {
 export const LogoutIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="15.999"
       height="13"
       viewBox="0 0 15.999 13"
@@ -886,7 +886,7 @@ export const LogoutIcon = () => {
 export const CarretDownIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="10"
       height="5"
       viewBox="0 0 10 5"
@@ -904,7 +904,7 @@ export const CarretDownIcon = () => {
 export const CarretUpIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="10"
       height="5"
       viewBox="0 0 10 5"
@@ -922,7 +922,7 @@ export const CarretUpIcon = () => {
 export const OptionIcon = () => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width="3.5"
       height="14"
       viewBox="0 0 3.5 14"
@@ -944,7 +944,7 @@ export const Revenue = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 56 56"
@@ -1019,7 +1019,7 @@ export const Refund = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 56 56"
@@ -1254,7 +1254,7 @@ export const ArrowUp = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 11.996 12"
@@ -1276,7 +1276,7 @@ export const ArrowDown = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 11.996 12"
@@ -1298,7 +1298,7 @@ export const UploadIcon = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 40.909 30"
@@ -1322,7 +1322,7 @@ export const SiteSettings = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 56 56"
@@ -1510,7 +1510,7 @@ export const Members = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 56 56"
@@ -1532,7 +1532,7 @@ export const MenuIcon = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 25.5 18"
@@ -1567,7 +1567,7 @@ export const ArrowLeftRound = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 18 14.4"
@@ -1585,7 +1585,7 @@ export const ArrowLeftRound = ({
 export const CoinIcon = ({ width = "48px", height = "48px" }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 48 48"
@@ -1627,7 +1627,7 @@ export const CoinIcon = ({ width = "48px", height = "48px" }) => {
 export const UserIcon = ({ width = "48px", height = "48px" }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 48 48"
@@ -1657,7 +1657,7 @@ export const IosArrowUp = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 7 10"
@@ -1678,7 +1678,7 @@ export const IosArrowDown = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 7 10"
@@ -1699,7 +1699,7 @@ export const MenuDown = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 12 6"
@@ -1722,7 +1722,7 @@ export const HelpIcon = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 14 14"
@@ -1745,7 +1745,7 @@ export const InkPen = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 12.768 20.005"
@@ -1781,7 +1781,7 @@ export const AdobeIcon = ({
 }) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 20.309 18.116"
@@ -1806,7 +1806,7 @@ export const UserAvatar = ({
   return (
     <svg
       id="user"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 25.057 30.034"
@@ -1835,7 +1835,7 @@ export const BookIcon = ({
   return (
     <svg
       id="book"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 30.011 24.606"
@@ -1879,7 +1879,7 @@ export const Instagram = ({
       height={height}
       viewBox="0 0 256 256"
       version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid"
     >
       <g>
@@ -1902,7 +1902,7 @@ export const YouTube = ({
     <svg
       version="1.1"
       id="Layer_1"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns="https://www.w3.org/2000/svg"
       width={width}
       height={height}
       viewBox="0 0 192 192"

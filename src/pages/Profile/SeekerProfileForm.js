@@ -88,7 +88,7 @@ function SeekerProfileForm({ details }) {
                         <span className="text-green-500">
                           <svg
                             className="h-5 fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns="https://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -158,7 +158,7 @@ function SeekerProfileForm({ details }) {
                       <span clas="text-green-500">
                         <svg
                           className="h-5"
-                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns="https://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -255,7 +255,7 @@ function SeekerProfileForm({ details }) {
                             <span clas="text-green-500">
                               <svg
                                 className="h-5"
-                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns="https://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -297,7 +297,7 @@ function SeekerProfileForm({ details }) {
                               <span clas="text-green-500">
                                 <svg
                                   className="h-5"
-                                  xmlns="http://www.w3.org/2000/svg"
+                                  xmlns="https://www.w3.org/2000/svg"
                                   fill="none"
                                   viewBox="0 0 24 24"
                                   stroke="currentColor"
