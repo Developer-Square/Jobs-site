@@ -60,7 +60,10 @@ export default withRouter(function Sidebar(props) {
                 pageProps: menuItem,
               }}
               exact={menuItem.exact}
-              onClick={() => setLink(menuItem.title)}
+              onClick={() => {
+                setLink(menuItem.title);
+                props.onMenuItemClick();
+              }}
             >
               {menuItem.title}
             </Link>
