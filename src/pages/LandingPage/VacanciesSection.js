@@ -198,7 +198,7 @@ const Vacancies = () => {
                 position="static"
                 activeStep={activeStep}
                 nextButton={
-                  activeStep === vacancyState.sortedJobs.length ? null : (
+                  activeStep === vacancyState?.sortedJobs?.length - 1 ? null : (
                     <div
                       size="small"
                       onClick={handleNext}

@@ -11,7 +11,7 @@ function EmployerProfileForm({ details }) {
         <Heading>
           <PageHeader>Account Profile</PageHeader>
           <ShareButton>
-            <span class="iconify" data-icon="el:share-alt"></span>
+            <span className="iconify" data-icon="el:share-alt"></span>
           </ShareButton>
         </Heading>
         <PageSubTitle>Your Plan</PageSubTitle>

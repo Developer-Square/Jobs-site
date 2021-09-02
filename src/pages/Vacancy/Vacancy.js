@@ -7,8 +7,6 @@ import moment from "moment";
 import Loader from "components/Loader/Loader";
 import NetworkStatus from "components/NetworkStatus";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
-
-import { TypedIndustriesQuery } from "common/queries";
 import { MetaWrapper } from "components/Meta";
 
 import { cleanSelectData, setFieldErrors, showNotification } from "helpers";
@@ -27,6 +25,7 @@ import {
   JobMinQualification,
   JobJobType,
   JobYearsOfExp,
+  GET_INDUSTRIES,
 } from "graphql/queries";
 import { JobPayRate } from "graphql/queries";
 
@@ -35,6 +34,7 @@ const TypedJobMinQualificationQuery = TypedQuery(JobMinQualification);
 const TypedJobYearsOfExpQuery = TypedQuery(JobYearsOfExp);
 const TypedJobJobTypeQuery = TypedQuery(JobJobType);
 const TypedJobPayRateQuery = TypedQuery(JobPayRate);
+const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
 
 const TypedVacancyCreateMutation = TypedMutation(CREATE_VACANCY_MUTATION);
 const TypedVacancyUpdateMutation = TypedMutation(UPDATE_VACANCY_MUTATION);

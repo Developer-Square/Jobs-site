@@ -57,7 +57,10 @@ const ResumeDashboard = ({ user }) => {
                   title: t("dashboard.title") || t("shared.appName"),
                 }}
               >
-                <div className="container mt-12 px-12 xl:px-0">
+                <div
+                  className="container mt-12 px-12 xl:px-0"
+                  style={{ width: "100%" }}
+                >
                   <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8">
                     <CreateResume />
 

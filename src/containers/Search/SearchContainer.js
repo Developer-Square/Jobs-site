@@ -67,7 +67,7 @@ function SearchContainer() {
           value={inputValue}
           onChange={(input) => updateValue(input.target.value)}
           placeholder="job title, keywords or company name"
-          style={{ width: "90%" }}
+          style={{ width: "90%", marginRight: 0, padding: "18px 20px" }}
         />
         {/* <StyledResults>
       <div className="line" />
@@ -150,6 +150,7 @@ function SearchContainer() {
           backgroundColor: "#e6c018",
           marginLeft: "10px",
           float: "right",
+          width: "10%",
         }}
         onClick={redirectSearch}
       >

@@ -32,8 +32,6 @@ function Profile() {
     return <Loader />;
   }
 
-  console.log("details", profile);
-
   return (
     <>
       <div className={!edit ? "col-lg-12 col-md-12" : "col-md-12"}>
@@ -85,7 +83,10 @@ function Profile() {
           <div className="dashboard-list-box margin-top-30">
             <h4>Addresses</h4>
             <div className="dashboard-list-box-content">
-              <div className="container mt-12 px-12 xl:px-0">
+              <div
+                className="container mt-12 px-12 xl:px-0"
+                style={{ width: "100%" }}
+              >
                 <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8">
                   {data?.me && (
                     <>

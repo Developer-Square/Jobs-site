@@ -53,3 +53,45 @@ export const ApplicationStatus = gql`
     }
   }
 `;
+export const SeekerStatus = gql`
+  query ApplicationStatus {
+    __type(name: "SeekerStatus") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+export const SeekerGender = gql`
+  query ApplicationStatus {
+    __type(name: "SeekerGender") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+
+export const EmployerWorkForce = gql`
+  query EmployerWorkForce {
+    __type(name: "EmployerWorkForce") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+
+export const InstitutionStudentCount = gql`
+  query InstitutionStudentCount {
+    __type(name: "InstitutionStudentCount") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;

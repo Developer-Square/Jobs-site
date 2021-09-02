@@ -1,13 +1,14 @@
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
-import React, { memo } from "react";
+import React, { memo, Suspense } from "react";
 import { useAlert } from "react-alert";
 
 import { TypedMutation } from "core/mutations";
 import ModalContext from "contexts/modal/modal.provider";
 import { INDUSTRY_MUTATION, INDUSTRY_UPDATE_MUTATION } from "graphql/mutations";
 import IconsSearchInput from "components/IconsSearchInput";
+import Loader from "components/Loader/Loader";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import { showNotification } from "helpers";
 
@@ -174,27 +175,29 @@ const IndustriesModal = () => {
                           name="seo.title"
                         />
                       </div>
-                      <div className="form grid grid-cols-2 gap-6">
-                        <IconsSearchInput
-                          name={"icon"}
-                          formik={formik}
-                          label={"Icon Search"}
-                        />
-                        <p style={{ padding: "10px" }}>
-                          <i
-                            style={{
-                              fontSize: "36px",
-                              height: "42px",
-                              transition: "0.4s",
-                              color: "#21277f",
-                              display: "inline-block",
-                            }}
-                            className={
-                              formik?.values?.icon?.value || "fa fa-question"
-                            }
+                      <Suspense fallback={<Loader />}>
+                        <div className="form grid grid-cols-2 gap-6">
+                          <IconsSearchInput
+                            name={"icon"}
+                            formik={formik}
+                            label={"Icon Search"}
                           />
-                        </p>
-                      </div>
+                          <p style={{ padding: "10px" }}>
+                            <i
+                              style={{
+                                fontSize: "36px",
+                                height: "42px",
+                                transition: "0.4s",
+                                color: "#21277f",
+                                display: "inline-block",
+                              }}
+                              className={
+                                formik?.values?.icon?.value || "fa fa-question"
+                              }
+                            />
+                          </p>
+                        </div>
+                      </Suspense>
                       <div className="form grid grid-cols-1">
                         <FormikControl
                           control="textarea"

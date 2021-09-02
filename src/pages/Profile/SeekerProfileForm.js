@@ -14,15 +14,9 @@ function SeekerProfileForm({ details }) {
     authState: { profile },
   } = React.useContext(AuthContext);
 
-  console.log(profile.id === details.id);
-  console.log(
-    getDBIdFromGraphqlId(details.id, "User") ===
-      getDBIdFromGraphqlId(profile.id, "UserNode"),
-  );
-
   const isOwnAccount = () => {
     if (
-      getDBIdFromGraphqlId(details.id, "User") ===
+      getDBIdFromGraphqlId(details?.id, "User") ===
       getDBIdFromGraphqlId(profile?.id, "UserNode")
     ) {
       return true;
@@ -37,7 +31,10 @@ function SeekerProfileForm({ details }) {
         <div className="bg-gray-100">
           <div className="w-full text-white bg-main-color">
             {/* End of Navbar */}
-            <div className="container mx-auto my-5 p-5">
+            <div
+              className="container mx-auto my-5 p-5"
+              style={{ width: "100%" }}
+            >
               <div className="md:flex no-wrap md:-mx-2 ">
                 {/* Left Side */}
                 <div className="w-full md:w-3/12 md:mx-2">

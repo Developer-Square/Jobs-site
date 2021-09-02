@@ -1,4 +1,4 @@
-import { GET_INDUSTRIES } from "common/queries";
+import { GET_INDUSTRIES } from "graphql/queries";
 import { TypedQuery } from "core/queries";
 import gql from "graphql-tag";
 

@@ -48,7 +48,6 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (!user && isAuthenticated) {
-      setTimeout(function () {}, 1000);
       getUser();
     }
     if (user && !isAuthenticated) {

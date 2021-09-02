@@ -175,7 +175,9 @@ const ManageVacancies = ({ deviceType }) => {
             Header: "Job Title",
             id: "title",
             accessor: (d) => {
-              return <p class="text-sm text-gray-600  truncate">{d.title}</p>;
+              return (
+                <p className="text-sm text-gray-600  truncate">{d.title}</p>
+              );
             },
           },
           {
@@ -189,7 +191,7 @@ const ManageVacancies = ({ deviceType }) => {
                 );
               }
               return (
-                <p class="text-sm text-gray-600  truncate">
+                <p className="text-sm text-gray-600  truncate">
                   {d.salary} {payRateType && `/ ${payRateType.label}`}
                 </p>
               );
@@ -258,7 +260,7 @@ const ManageVacancies = ({ deviceType }) => {
             id: "industry",
             accessor: (d) => {
               return (
-                <p class="text-sm text-gray-600  truncate">
+                <p className="text-sm text-gray-600  truncate">
                   {d?.industry?.name}
                 </p>
               );

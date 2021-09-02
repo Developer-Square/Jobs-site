@@ -19,7 +19,10 @@ export default withRouter(function Sidebar(props) {
   const [openParent, setOpenParent] = React.useState(false);
   const { authDispatch } = useContext(AuthContext);
   const setLink = (title) => {
-    // onMenuItemClick();
+    if (props.onMenuItemClick) {
+      props.onMenuItemClick();
+    }
+
     setActiveLink(title);
   };
 
@@ -60,10 +63,7 @@ export default withRouter(function Sidebar(props) {
                 pageProps: menuItem,
               }}
               exact={menuItem.exact}
-              onClick={() => {
-                setLink(menuItem.title);
-                props.onMenuItemClick();
-              }}
+              onClick={() => setLink(menuItem.title)}
             >
               {menuItem.title}
             </Link>

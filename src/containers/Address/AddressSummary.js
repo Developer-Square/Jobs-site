@@ -37,43 +37,43 @@ const AddressPreview = ({ address }) => {
   return (
     <div className={styles.address}>
       <div className={styles.backdrop}>
-        <div class="p-6 rounded-lg shadow-lg">
-          <div class="flex items-baseline">
+        <div className="p-6 rounded-lg shadow-lg">
+          <div className="flex items-baseline">
             {address.isDefaultAddress && (
-              <span class="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
+              <span className="bg-teal-200 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
                 Default
               </span>
             )}
           </div>
 
-          <div class="ml-2 text-gray-600 uppercase text-xs font-semibold tracking-wider leading-tight truncate">
+          <div className="ml-2 text-gray-600 uppercase text-xs font-semibold tracking-wider leading-tight truncate">
             {address.firstName} {address.LastName}
           </div>
-          <div class="mt-4">
+          <div className="mt-4">
             {address.companyName && (
-              <p class="text-sm text-gray-600  truncate">
+              <p className="text-sm text-gray-600  truncate">
                 &bull;➜ {address.companyName}
               </p>
             )}
             {address.phone && (
-              <p class="text-sm text-gray-600  truncate">
+              <p className="text-sm text-gray-600  truncate">
                 {" "}
                 &bull;➜ {address.phone}
               </p>
             )}
             {address.city && (
-              <p class="text-sm text-gray-600  truncate">
+              <p className="text-sm text-gray-600  truncate">
                 {" "}
                 &bull;➜ {address.city}
               </p>
             )}
             {address.streetAddress1 && (
-              <p class="text-sm text-gray-600  truncate">
+              <p className="text-sm text-gray-600  truncate">
                 &bull;➜ {address.streetAddress1}
               </p>
             )}
             {address.streetAddress2 && (
-              <p class="text-sm text-gray-600  truncate">
+              <p className="text-sm text-gray-600  truncate">
                 &bull;➜ {address.streetAddress2}
               </p>
             )}
