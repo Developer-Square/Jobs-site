@@ -71,6 +71,10 @@ const Page = ({
                 {jobType?.description}
               </span>
             </h2>
+            <span>
+              <i class="fa fa-eye" /> {data?.timesViewed}{" "}
+              {data?.timesViewed === 1 ? "View" : "Views"}
+            </span>
           </div>
           <div className="six columns">
             {profile.isSeeker && (

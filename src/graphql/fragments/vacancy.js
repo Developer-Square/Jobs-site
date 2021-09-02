@@ -9,6 +9,7 @@ export const vacancyFragment = gql`
     descriptionPlaintext
     description
     jobType
+    timesViewed
     minQualification
     positions
     yearsOfExp
