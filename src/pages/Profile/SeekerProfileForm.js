@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
-
 import moment from "moment";
+
 import { AuthContext } from "contexts/auth/auth.context";
 import ModalContext from "contexts/modal/modal.provider";
 import { getDBIdFromGraphqlId } from "core/utils";
+import UserImage from "image/user.jpg";
 
 function SeekerProfileForm({ details }) {
   const history = useHistory();
@@ -43,10 +44,7 @@ function SeekerProfileForm({ details }) {
                     <div className="image overflow-hidden">
                       <img
                         className="h-auto w-full mx-auto"
-                        src={
-                          details?.avatar?.url ||
-                          "https://lavinephotography.com.au/wp-content/uploads/2017/01/PROFILE-Photography-112.jpg"
-                        }
+                        src={details?.avatar?.url || UserImage}
                         alt={details?.avatar?.alt || "profile"}
                       />
                     </div>

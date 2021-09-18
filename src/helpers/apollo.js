@@ -357,6 +357,7 @@ export function createApolloClient(initialState = {}) {
     ]),
     cache: new InMemoryCache().restore(initialState),
     connectToDevTools: process.env.NODE_ENV !== "production",
+    shouldBatch: true,
   });
   return client;
 }

@@ -38,10 +38,10 @@ function EmployerProfileForm({ details }) {
             <ProfileSkills>
               <ProfileImage
                 src={
-                  details.employer?.log?.url ||
+                  details.employer?.logo?.url ||
                   "https://bootdey.com/img/Content/avatar/avatar7.png"
                 }
-                alt={details.employer?.log?.alt || "Admin"}
+                alt={details.employer?.logo?.alt || "Admin"}
               />
               <Title special={true}>
                 {details.username}

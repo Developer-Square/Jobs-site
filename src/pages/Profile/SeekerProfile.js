@@ -44,7 +44,6 @@ const SeekerProfile = () => {
     industries: [],
     user: user ? user?.id : "",
   };
-  console.log(user);
 
   const cleanIndustries = (data) => {
     return data.reduce((arr, b) => {
@@ -86,7 +85,6 @@ const SeekerProfile = () => {
           ...newObject,
           ...id,
         };
-    console.log(formData);
 
     return formData;
   };
@@ -205,7 +203,6 @@ const SeekerProfile = () => {
                                             initialValues,
                                           ),
                                         };
-                                        console.log(variables);
                                         if (
                                           !cleanFormData(values, initialValues)
                                         ) {

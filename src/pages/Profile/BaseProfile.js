@@ -26,9 +26,7 @@ const BaseProfile = () => {
   };
 
   const showNotification = (data, errors, alert) => {
-    console.log(errors);
     if (errors) {
-      console.log("Server Error kwa login", errors[0].message);
       return errors[0].message;
     }
 
@@ -64,11 +62,9 @@ const BaseProfile = () => {
     >
       {(updateAccount, { loading }) => {
         function onSubmit(values, { setErrors, setSubmitting }) {
-          console.log(values);
           updateAccount({
             variables: values,
           }).then(({ data }) => {
-            console.log(data);
             if (data) {
               if (data.updateAccount) {
                 if (!data.updateAccount.success) {

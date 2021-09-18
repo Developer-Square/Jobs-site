@@ -19,7 +19,6 @@ const EmployerForm = ({
       enableReinitialize
     >
       {(formik) => {
-        console.log(formik.values);
         return (
           <Form>
             <div className="dashboard-list-box margin-top-30">

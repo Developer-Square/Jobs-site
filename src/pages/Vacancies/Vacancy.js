@@ -8,7 +8,7 @@ import { VacancyContext } from "contexts/vacancies/vacancies.context";
 import { AuthContext } from "contexts/auth/auth.context";
 import { VACANCIES_QUERY } from "graphql/queries";
 import PaginationItem from "./PaginationItem";
-import LogoImage from "image/thedb.png";
+import LogoImage from "image/job-list-logo-04.png";
 import {
   getDBIdFromGraphqlId,
   checkDate,
