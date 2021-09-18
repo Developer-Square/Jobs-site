@@ -15,7 +15,7 @@ import {
   truncateText,
   findPayRateDescription,
 } from "utils";
-import LogoImage from "image/thedb.png";
+import LogoImage from "image/job-list-logo-04.png";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
 import NoResultFound from "components/NoResult/NoResult";

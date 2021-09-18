@@ -6,6 +6,7 @@ import { SETTINGS } from "constants/constants";
 import { PROFILE_PAGE } from "constants/routes.constants";
 import { AuthContext } from "contexts/auth/auth.context";
 import { DrawerContext } from "contexts/drawer/drawer.context";
+import UserContext from "contexts/user/user.provider";
 import Logoimage from "image/thedb.png";
 import UserImage from "image/user.jpg";
 import React, { useContext, useCallback } from "react";
@@ -47,10 +48,9 @@ export const data = [
 const Topbar = (props) => {
   const history = useHistory();
   const { state, dispatch } = useContext(DrawerContext);
-  const {
-    authState: { profile },
-    authDispatch,
-  } = useContext(AuthContext);
+  const { authDispatch } = useContext(AuthContext);
+  const { user } = useContext(UserContext);
+
   // const userAgent = navigator.userAgent;
   // const deviceType = useDeviceType(userAgent);
   const img = localStorage.getItem("thedb_individual_profile")
@@ -171,14 +171,14 @@ const Topbar = (props) => {
           style={{ color: "#fff", margin: "0 10px", fontSize: "13px" }}
           to={PROFILE_PAGE}
         >
-          {profile.fullName !== "" ? profile.fullName : profile.email}
+          {user?.fullName !== "" ? user?.fullName : user?.email}
         </Link>
         <Popover
           direction="right"
           className="user-pages-dropdown"
           handler={
             <ProfileImg>
-              <Image src={img} alt="user" />
+              <Image src={user?.avatar?.url || img} alt="user" />
             </ProfileImg>
           }
           content={

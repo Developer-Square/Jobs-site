@@ -11,7 +11,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 import DraftRenderer from "components/DraftRenderer/DraftRenderer";
 import Button from "components/Button/Button";
 
-import LogoImage from "image/thedb.png";
+import LogoImage from "image/job-list-logo-04.png";
 
 import Bookmark from "./Bookmark";
 import { checkJobType } from "utils";
