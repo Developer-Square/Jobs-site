@@ -54,7 +54,10 @@ const Glalie = ({ data }) => {
       {data.owner?.avatar !== "" && (
         <img
           className="w-40 h-40 rounded-full mx-auto"
-          src={data.owner?.avatar?.url}
+          src={
+            data.owner?.avatar?.url ||
+            "https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+          }
           alt={data.owner?.fullName}
         />
       )}

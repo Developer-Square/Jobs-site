@@ -568,10 +568,12 @@ export const resumeFragment = gql`
         alt
       }
       seeker {
+        id
         dateOfBirth
         title
       }
       defaultAddress {
+        id
         companyName
         streetAddress1
         streetAddress2

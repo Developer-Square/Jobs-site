@@ -22,7 +22,7 @@ import AuthService, {
 } from "containers/Authentication/auth.service";
 
 const auth = new AuthService();
-console.log(auth.fetchToken());
+// console.log(auth.fetchToken());
 
 let apolloClient = null;
 
@@ -146,7 +146,8 @@ const linkOptions = {
 };
 const uploadLink = createUploadLink(linkOptions);
 const batchLink = new BatchHttpLink({
-  batchInterval: 100,
+  batchInterval: 20,
+  batchMax: 10,
   ...linkOptions,
   fetch,
 });
@@ -253,10 +254,10 @@ export function createApolloClient(initialState = {}) {
           networkError = {},
           operation = {},
           forward,
-          location,
-          ...rest
+          // location,
+          // ...rest
         } = error || {};
-        console.log(graphQLErrors, networkError, operation, rest);
+        // console.log(graphQLErrors, networkError, operation, rest);
         // const { getContext } = operation || {};
         // const { scope, headers = {} } = getContext() || {};
         const { message: networkErrorMessage = "" } = networkError;
@@ -298,7 +299,6 @@ export function createApolloClient(initialState = {}) {
                       auth
                         .fetchToken(client)
                         .then(({ data: { refreshToken } }) => {
-                          console.log("Promise data: ", refreshToken);
                           resolvePendingRequests();
                           return refreshToken.token;
                         })
@@ -308,7 +308,6 @@ export function createApolloClient(initialState = {}) {
                           pendingRequests = [];
                         })
                         .finally(() => {
-                          console.log("Finally");
                           isRefreshing = false;
                         }),
                     );
@@ -321,7 +320,6 @@ export function createApolloClient(initialState = {}) {
                     );
                   }
                   return forward$.flatMap(() => {
-                    console.log("Forwarding!");
                     const oldHeaders = operation.getContext().headers;
                     const token = getToken();
 
