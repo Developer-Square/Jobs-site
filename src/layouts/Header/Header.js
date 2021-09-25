@@ -63,7 +63,7 @@ const Header = ({ className, isSticky }) => {
   const showSearch = isCategoryPage(`/${pathname}`);
   return (
     <HeaderWrapper className={className}>
-      <div className="container">
+      <div className="container-x">
         <div className="sixteen columns">
           <nav className="menu" style={{ display: "flex" }}>
             <LeftMenu logo={LogoImage} isSticky={isSticky} />

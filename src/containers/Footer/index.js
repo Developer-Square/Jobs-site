@@ -16,12 +16,10 @@ const Footer = () => {
           }}
         >
           {/* Main */}
-          <div className="container">
+          <div className="container-x">
             <div className="seven columns">
               <h4>About</h4>
-              <p>
-                The Database - Jobs need People.
-              </p>
+              <p>The Database - Jobs need People.</p>
               <a href="/auth" className="button">
                 Get Started
               </a>
@@ -73,28 +71,40 @@ const Footer = () => {
             </div>
           </div>
           {/* Bottom */}
-          <div className="container">
+          <div className="container-x">
             <div className="footer-bottom">
               <div className="sixteen columns">
                 <h4>Follow Us</h4>
                 <ul className="social-icons">
                   <li>
-                    <a className="facebook" href="https://facebook.com/thedatabase.co.ke">
+                    <a
+                      className="facebook"
+                      href="https://facebook.com/thedatabase.co.ke"
+                    >
                       <i className="icon-facebook" />
                     </a>
                   </li>
                   <li>
-                    <a className="twitter" href="https://twitter.com/ThedatabaseKe">
+                    <a
+                      className="twitter"
+                      href="https://twitter.com/ThedatabaseKe"
+                    >
                       <i className="icon-twitter" />
                     </a>
                   </li>
                   <li>
-                    <a className="instagram" href="https://www.instagram.com/thedatabase.co.ke/">
+                    <a
+                      className="instagram"
+                      href="https://www.instagram.com/thedatabase.co.ke/"
+                    >
                       <i className="icon-instagram" />
                     </a>
                   </li>
                   <li>
-                    <a className="linkedin" href="https://www.linkedin.com/company/thedb">
+                    <a
+                      className="linkedin"
+                      href="https://www.linkedin.com/company/thedb"
+                    >
                       <i className="icon-linkedin" />
                     </a>
                   </li>

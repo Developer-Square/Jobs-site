@@ -6,7 +6,7 @@ const Pricing = () => {
       {/* Titlebar
 ================================================== */}
       <div id="titlebar" className="single">
-        <div className="container">
+        <div className="container-x">
           <div className="sixteen columns">
             <h2>Pricing Tables</h2>
             <nav id="breadcrumbs">
@@ -24,7 +24,7 @@ const Pricing = () => {
       {/* Pricing Tables
 ================================================== */}
       {/* Container / Start */}
-      <div className="container">
+      <div className="container-x">
         <div className="sixteen columns">
           <div className="notification notice margin-bottom-30">
             <p>
@@ -34,7 +34,7 @@ const Pricing = () => {
           </div>
         </div>
         {/* Container / Start */}
-        <div className="container">
+        <div className="container-x">
           <div className="sixteen columns">
             <h3 className="margin-bottom-20">Three Tables</h3>
           </div>

@@ -5,7 +5,7 @@ const CounterSection = () => {
     <div>
       {/* Counters */}
       <div id="counters">
-        <div className="container">
+        <div className="container-x">
           <div className="four columns">
             <div className="counter-box">
               <span className="counter">15</span>

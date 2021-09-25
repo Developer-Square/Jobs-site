@@ -42,14 +42,14 @@ const Authentication = () => {
           backgroundImage: "url(images/all-categories-photo.jpg)",
         }}
       >
-        <div className="container">
+        <div className="container-x">
           <div className="ten columns">
             <h2>Authentication</h2>
           </div>
         </div>
       </div>
 
-      <div className="container">
+      <div className="container-x">
         <div className="my-account">
           <ul className="tabs-nav">
             <li className={authState.currentForm === "signIn" ? "active" : ""}>

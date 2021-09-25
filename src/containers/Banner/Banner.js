@@ -35,7 +35,7 @@ const Banner = () => {
       data-img-height={1330}
       data-diff={300}
     >
-      <div className="container">
+      <div className="container-x">
         <div className="sixteen columns">
           <div className="search-container">
             {/* Form */}

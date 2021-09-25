@@ -82,7 +82,14 @@ const DashboardLayout = (props) => {
                   }}
                 >
                   <ContentInnerWrapper>
-                    <div id="dashboard" style={{ display: "inherit" }}>
+                    <div
+                      id="dashboard"
+                      style={{
+                        backgroundImage: `linear-gradient(to right, hsl(0deg 0% 95% / 68%), rgb(242 242 242 / 72%)), url("https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-flat-wind-cartoon-recruitment-banner-poster-image_195196.jpg")`,
+                        backgroundSize: "cover",
+                        display: "inherit",
+                      }}
+                    >
                       <div style={builder ? { marginLeft: 0, padding: 0 } : {}}>
                         <div id="titlebar">
                           <div className="row">

@@ -104,7 +104,7 @@ const Vacancies = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container-x">
       {/* Re-using the payment modal to remind the seeker/employer to pay for the denied services */}
       <PaymentModal open={show} onClose={handleModalShow} moreInfo={true} />
       {/* Recent Jobs */}

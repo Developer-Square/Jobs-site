@@ -6,7 +6,7 @@ const Contact = () => {
       {/* Titlebar
 ================================================== */}
       <div id="titlebar" className="single">
-        <div className="container">
+        <div className="container-x">
           <div className="sixteen columns">
             <h2>Contact</h2>
             <nav id="breadcrumbs">
@@ -24,7 +24,7 @@ const Contact = () => {
       {/* Content
 ================================================== */}
       {/* Container */}
-      <div className="container">
+      <div className="container-x">
         <div className="sixteen columns">
           <h3 className="margin-bottom-20">Our Office</h3>
           {/* Google Maps */}
@@ -36,7 +36,7 @@ const Contact = () => {
       </div>
       {/* Container / End */}
       {/* Container */}
-      <div className="container">
+      <div className="container-x">
         <div className="eleven columns">
           <h3 className="margin-bottom-15">Contact Form</h3>
           {/* Contact Form */}

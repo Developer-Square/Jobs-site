@@ -55,8 +55,14 @@ const Page = ({
   const yearsType = yearsData.find(({ name }) => name === data?.yearsOfExp);
   return (
     <div>
-      <div id="titlebar">
-        <div className="container">
+      <div
+        id="titlebar"
+        className="with-transparent-header parallax background"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.1), rgb(33 39 127 / 0.79)), url("https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-flat-wind-cartoon-recruitment-banner-poster-image_195196.jpg")`,
+        }}
+      >
+        <div className="container-x">
           <div className="ten columns">
             <span>
               <Link to={{ pathname: "" }}>{data?.industry?.name}</Link>
@@ -98,7 +104,7 @@ const Page = ({
           </div>
         </div>
       </div>
-      <div className="container">
+      <div className="container-x">
         {/* Recent Jobs */}
         <div className="eleven columns">
           <div className="padding-right">

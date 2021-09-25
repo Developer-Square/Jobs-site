@@ -90,13 +90,13 @@ const EmailActivation = () => {
                 backgroundImage: "url(images/all-categories-photo.jpg)",
               }}
             >
-              <div className="container">
+              <div className="container-x">
                 <div className="ten columns">
                   <h2>Account Activation</h2>
                 </div>
               </div>
             </div>
-            <div className="container">
+            <div className="container-x">
               <div className="my-account">
                 <div className="tabs-container">
                   <div
@@ -174,13 +174,13 @@ const EmailActivation = () => {
                 backgroundImage: "url(images/all-categories-photo.jpg)",
               }}
             >
-              <div className="container">
+              <div className="container-x">
                 <div className="ten columns">
                   <h2>Account Activation</h2>
                 </div>
               </div>
             </div>
-            <div className="container">
+            <div className="container-x">
               <div className="my-account">
                 <div className="tabs-container">
                   <div

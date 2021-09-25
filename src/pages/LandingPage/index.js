@@ -27,7 +27,7 @@ function LandingPage({ deviceType }) {
       <Vacancies />
       <InfoSection />
       <div className="infobox margin-bottom-0">
-        <div className="container">
+        <div className="container-x">
           <div className="sixteen columns">
             Start Building Your Own Job Board Now{" "}
             <Link to={{ pathname: "" }} onClick={handleRedirect}>

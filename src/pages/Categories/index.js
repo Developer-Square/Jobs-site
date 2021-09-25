@@ -7,10 +7,12 @@ const Categories = () => {
 ================================================== */}
       <div
         id="titlebar"
-        className="photo-bg"
-        style={{ backgroundImage: "url(images/all-categories-photo.jpg)" }}
+        className="photo-bg with-transparent-header parallax background"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.1), rgb(33 39 127 / 0.79)), url("https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-flat-wind-cartoon-recruitment-banner-poster-image_195196.jpg")`,
+        }}
       >
-        <div className="container">
+        <div className="container-x">
           <div className="ten columns">
             <h2>All Categories</h2>
           </div>
@@ -26,7 +28,7 @@ const Categories = () => {
       <div id="categories">
         {/* Categories Group */}
         <div className="categories-group">
-          <div className="container">
+          <div className="container-x">
             <div className="four columns">
               <h4>Web, Software &amp; IT</h4>
             </div>
@@ -103,7 +105,7 @@ const Categories = () => {
         </div>
         {/* Categories Group */}
         <div className="categories-group">
-          <div className="container">
+          <div className="container-x">
             <div className="four columns">
               <h4>Design, Art &amp; Multimedia</h4>
             </div>
@@ -180,7 +182,7 @@ const Categories = () => {
         </div>
         {/* Categories Group */}
         <div className="categories-group">
-          <div className="container">
+          <div className="container-x">
             <div className="four columns">
               <h4>Sales &amp; Marketing</h4>
             </div>

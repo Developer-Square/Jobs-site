@@ -2,7 +2,7 @@ import React from "react";
 
 const CategoriesSection = () => {
   return (
-    <div className="container">
+    <div className="container-x">
       <div className="sixteen columns">
         <h3 className="margin-bottom-20 margin-top-10">Popular Categories</h3>
         {/* Popular Categories */}
