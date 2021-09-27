@@ -32,7 +32,7 @@ const Page = ({
   } = React.useContext(AuthContext);
 
   const handleLoginNotification = () => {
-    toast.error("You must login to bookmark this job");
+    toast.error("You must login to save this job");
   };
   const handleApplyJob = () => {
     toast.error("You must login to apply for this job");

@@ -111,7 +111,7 @@ const Bookmarks = ({ deviceType }) => {
       {
         Header: (
           <div>
-            Bookmarked Jobs
+            Saved Jobs
             {checkedId.length > 0 && (
               <>
                 <Button
@@ -167,7 +167,7 @@ const Bookmarks = ({ deviceType }) => {
             },
           },
           {
-            Header: "Date Bookmarked",
+            Header: "Date Saved",
             id: "createdAt",
             accessor: (d) => {
               return <p>{moment(d.createdAt).format("YYYY-MM-DD ")}</p>;
@@ -178,7 +178,7 @@ const Bookmarks = ({ deviceType }) => {
               profile && profile.isSeeker
                 ? "Employer"
                 : profile.isEmployer
-                ? "Bookmarked By"
+                ? "Saved By"
                 : null,
             id: "email",
             accessor: (d) => {
@@ -203,12 +203,12 @@ const Bookmarks = ({ deviceType }) => {
             },
           },
           {
-            Header: "Bookmarked",
+            Header: "Saved",
             id: "bookmarked",
             accessor: (d) => {
               return (
                 <p className={`text-sm text-gray-600  truncate`}>
-                  {d?.bookmarked ? "Bookmarked ✔✅" : "Unmarked ✘⛔"}
+                  {d?.bookmarked ? "Saved ✔✅" : "Unmarked ✘⛔"}
                 </p>
               );
             },

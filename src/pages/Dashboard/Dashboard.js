@@ -53,7 +53,7 @@ const Dashboard = () => {
           <div className="dashboard-stat color-4">
             <div className="dashboard-stat-content">
               <h4 className="counter">{user?.numberOfJobsBookmarked}</h4>{" "}
-              <span>Times Bookmarked</span>
+              <span>Jobs Saved</span>
             </div>
             <div className="dashboard-stat-icon">
               <i className="ln ln-icon-Add-UserStar " />

@@ -38,7 +38,7 @@ const components = {
   bookmarks: {
     component: "Bookmarks",
     url: "/bookmarks",
-    title: "Bookmarks",
+    title: "Saved Jobs",
     icon: "Category",
     module: 1,
     category: management,

@@ -36,11 +36,11 @@ const Bookmark = ({
           } else {
             alert.show(
               {
-                title: "This Job can No longer be bookmarked.",
+                title: "This Job can No longer be saved.",
               },
               { type: "info", timeout: 5000 },
             );
-            toast.info("This Job can No longer be bookmarked.");
+            toast.info("This Job can No longer be saved.");
           }
         }
         return (

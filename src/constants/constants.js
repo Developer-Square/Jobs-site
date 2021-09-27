@@ -19,4 +19,5 @@ export const serviceWorkerTimeout =
 export const vacancyLimit = 6;
 export const landingVacancyLimit = 5;
 export const industriesInnerLimit = 15;
+export const landingPageIndustriesLimit = 8;
 export const searchLimit = 10;

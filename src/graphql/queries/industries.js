@@ -16,6 +16,29 @@ export const GET_INDUSTRIES = gql`
     }
   }
 `;
+// , sortBy: {  field: VACANCY_COUNT, direction: DESC }
+
+export const GET_COUNTED_INDUSTRIES = gql`
+  query Industries($first: Int) {
+    industries(first: $first) {
+      edges {
+        node {
+          name
+          id
+          icon
+          backgroundImage {
+            url
+            alt
+          }
+          vacanciesCount
+          seoTitle
+          seoDescription
+          description
+        }
+      }
+    }
+  }
+`;
 
 export const ALL_INDUSTRIES = gql`
   query AllIndustries($first: Int, $last: Int) {

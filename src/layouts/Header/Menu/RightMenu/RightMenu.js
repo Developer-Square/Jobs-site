@@ -2,9 +2,7 @@ import React from "react";
 import { AuthContext } from "contexts/auth/auth.context";
 import { Link, useHistory } from "react-router-dom";
 
-export const RightMenu = ({
-  isAuthenticated,
-}) => {
+export const RightMenu = ({ isAuthenticated }) => {
   const { authDispatch } = React.useContext(AuthContext);
   const history = useHistory();
 
@@ -55,7 +53,7 @@ export const RightMenu = ({
                 <Link to={`/dashboard/applications`}>Manage Applications</Link>
               </li>
               <li>
-                <Link to={`/dashboard/bookmarks`}>Manage Bookmarks</Link>
+                <Link to={`/dashboard/bookmarks`}>Manage Saved Jobs</Link>
               </li>
               <li>
                 <Link to={`/dashboard/vacancies/add-job`}>Add Job</Link>
