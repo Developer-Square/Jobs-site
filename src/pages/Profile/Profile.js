@@ -1,5 +1,4 @@
 import PasswordChange from "containers/Authentication/PasswordChange";
-import { AuthContext } from "contexts/auth/auth.context";
 import React, { lazy, Suspense } from "react";
 import BaseProfile from "./BaseProfile";
 import EmployerProfile from "./EmployerProfile";
@@ -23,25 +22,62 @@ function Profile() {
   const [edit, setEdit] = React.useState(false);
   const { user } = React.useContext(UserContext);
 
-  const { data, loading } = useQuery(GET_USER_DETAILS);
-  const {
-    authState: { profile },
-  } = React.useContext(AuthContext);
+  console.log(user);
 
+  const { data, loading } = useQuery(GET_USER_DETAILS);
   if (loading) {
     return <Loader />;
   }
+  const progressColor = (x) => {
+    if (x > 50) {
+      return "bg-green";
+    }
+    if (x >= 25 && x <= 50) {
+      return "bg-yellow";
+    }
+    if (x < 25 && x > 10) {
+      return "bg-gray";
+    }
+    if (x <= 10) {
+      return "bg-red";
+    }
+
+    return "bg-red";
+  };
 
   return (
     <>
-      <div className={!edit ? "col-lg-12 col-md-12" : "col-md-12"}>
-        <RightBtn>
+      <div className="flex flex-wrap my-5 pl-5 pr-5">
+        <RightBtn className="ml-auto">
           <Button
             title={!edit ? "Edit" : "View Profile"}
             onClick={() => setEdit((curr) => !curr)}
           />
         </RightBtn>
       </div>
+      <div className="flex flex-wrap justify-center">
+        <h5 className="text-gray-900 font-bold text-xl leading-8 my-1 mr-6">
+          Account Completion{" "}
+        </h5>
+        <div className="w-3/4">
+          <div className="shadow rounded border-2 border-gray-400 flex my-1 relative">
+            {/* <div className="border-r-8 h-6 rounded-r absolute flex border-gray-400 ml-24 mt-2 z-10"></div> */}
+            <div
+              className={`cursor-default ${progressColor(
+                user?.progress,
+              )}-400 text-xs font-bold leading-none flex items-center justify-center m-1 py-4 text-center text-white`}
+              style={{
+                width: `${user?.progress}%`,
+              }}
+            >
+              <div className="absolute left-0 mx-8 text-gray-700">
+                {user?.progress}%
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={!edit ? "col-lg-12 col-md-12" : "col-md-12"}></div>
       {!edit ? (
         user && (
           <Suspense fallBack={<Loader />}>
@@ -84,10 +120,10 @@ function Profile() {
             <h4>Addresses</h4>
             <div className="dashboard-list-box-content">
               <div
-                className="container mt-12 px-12 xl:px-0"
+                className="dashboard-list-box-static container px-12 xl:px-0"
                 style={{ width: "100%" }}
               >
-                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8 auto-rows-max ">
                   {data?.me && (
                     <>
                       <CreateAddress />
@@ -101,9 +137,9 @@ function Profile() {
               </div>
             </div>
           </div>
-          {profile.isInstitution && <InstitutionProfile />}
-          {profile.isSeeker && <SeekerProfile />}
-          {profile.isEmployer && <EmployerProfile />}
+          {user?.isInstitution && <InstitutionProfile />}
+          {user?.isSeeker && <SeekerProfile />}
+          {user?.isEmployer && <EmployerProfile />}
         </>
       )}
     </>

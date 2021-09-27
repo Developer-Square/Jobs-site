@@ -10,7 +10,6 @@ const INITIAL_STATE = {
 };
 
 function reducer(state, action) {
-
   switch (action.type) {
     case "SIGNIN":
       return {
@@ -37,6 +36,8 @@ function reducer(state, action) {
       return {
         ...state,
         isAuthenticated: false,
+        currentForm: "signIn",
+        profile: {},
       };
     case "SIGNUP":
       return {

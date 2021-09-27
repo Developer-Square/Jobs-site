@@ -7381,7 +7381,13 @@ a.dashboard-responsive-nav-trigger { display: none; }
 }
 
 .dashboard-nav ul:first-child {
-	margin: 30px 0 0 0;
+	margin: 0;
+}
+.dashboard-nav ul:first-child:before {
+	margin: 0;
+	font-size: 25px;
+	font-family: "Quentin";
+	color: #2a3084;
 }
 
 .dashboard-nav ul:before {
@@ -8860,8 +8866,9 @@ a.close-list-item {
 @media (max-width: 991px) {
 
 	.dashboard-header ul.float-right li a:hover {background: transparent;}
-	.dashboard-nav ul:first-child {
-	    margin: 10px 0 0 0;
+	.dashboard-nav ul:first-child ul:before{
+	    margin: 0;
+		font-size: 30px;
 	}
 	.main-search-container { height: 580px; }
 

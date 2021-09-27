@@ -25,7 +25,7 @@ const TypedEmployerWorkForceQuery = TypedQuery(EmployerWorkForce);
 
 const EmployerProfile = () => {
   const alert = useAlert();
-  const { user } = React.useContext(UserContext);
+  const { user, setRefetchUser } = React.useContext(UserContext);
   const [updating, setUpdating] = React.useState(false);
 
   const initialData = {
@@ -208,6 +208,7 @@ const EmployerProfile = () => {
                                             : data.employerCreate,
                                           setErrors,
                                         );
+                                        setRefetchUser((curr) => !curr);
                                       }
                                     });
                                   }

@@ -11,9 +11,11 @@ import { useHistory } from "react-router-dom";
 import { loginSchema } from "./validation.schema";
 import { AuthContext } from "contexts/auth/auth.context";
 import { storeLoginDetails } from "utils";
+import UserContext from "contexts/user/user.provider";
 
 const Login = () => {
   const { authDispatch } = React.useContext(AuthContext);
+  const { setRefetchUser } = React.useContext(UserContext);
   const alert = useAlert();
   const history = useHistory();
 
@@ -37,6 +39,7 @@ const Login = () => {
         },
         { type: "success", timeout: 5000 },
       );
+      setRefetchUser((curr) => !curr);
     } else {
       const nonFieldErr = normalizeErrors(
         maybe(() => data.tokenAuth.errors, []),

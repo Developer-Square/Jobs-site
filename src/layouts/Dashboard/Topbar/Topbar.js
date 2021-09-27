@@ -4,14 +4,13 @@ import Drawer from "components/Drawer/Drawer";
 import Popover from "components/Popover/Popover";
 import { SETTINGS } from "constants/constants";
 import { PROFILE_PAGE } from "constants/routes.constants";
-import { AuthContext } from "contexts/auth/auth.context";
 import { DrawerContext } from "contexts/drawer/drawer.context";
 import UserContext from "contexts/user/user.provider";
 import Logoimage from "image/thedb.png";
 import UserImage from "image/user.jpg";
 import React, { useContext, useCallback } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import { useDeviceType } from "helpers/useDeviceType";
 import {
   DrawerClose,
@@ -46,10 +45,8 @@ export const data = [
 ];
 
 const Topbar = (props) => {
-  const history = useHistory();
   const { state, dispatch } = useContext(DrawerContext);
-  const { authDispatch } = useContext(AuthContext);
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   // const userAgent = navigator.userAgent;
   // const deviceType = useDeviceType(userAgent);
@@ -65,31 +62,49 @@ const Topbar = (props) => {
     });
   }, [dispatch]);
 
-  const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("thedb_auth_profile");
-      localStorage.removeItem("thedb_auth_payload");
-      localStorage.removeItem("thedb_auth_roles");
-      localStorage.removeItem("thedb_applications");
-      localStorage.removeItem("thedb_org_profile");
-      localStorage.removeItem("thedb_individual_profile");
-      authDispatch({ type: "SIGN_OUT" });
-      history.push("/");
-    }
-  };
+  const handleLogout = () => logout();
+
   // eslint-disable-next-line no-unused-vars
   const resetSearch = () => {
     dispatch({
       type: "RESET",
     });
   };
+  console.log(user);
 
   return (
     <TopbarWrapper ref={props.refs}>
       <Logo>
-        <Link to="/">
+        <Link
+          to="/"
+          style={{
+            display: "flex",
+            color: "#ddd",
+          }}
+        >
           <LogoImage src={Logoimage} alt="TheDB" />
+          <ul
+            className="responsive"
+            style={{
+              margin: "0px",
+              color: "#555",
+              display: "flex",
+              fontWeight: 700,
+              alignItems: "center",
+              padding: "10px",
+            }}
+          >
+            <li>
+              <Link
+                style={{ margin: 0 }}
+                to={{
+                  pathname: "",
+                }}
+              >
+                Hi 👋 {user?.fullName}
+              </Link>
+            </li>
+          </ul>
         </Link>
       </Logo>
 

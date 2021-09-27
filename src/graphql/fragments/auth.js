@@ -71,6 +71,7 @@ export const userFragment = gql`
     id
     email
     username
+    fullName
     firstName
     lastName
     isSeeker
@@ -81,6 +82,7 @@ export const userFragment = gql`
     dateJoined
     updatedAt
     createdAt
+    progress
     numberOfJobsBookmarked
     numberOfApplications
     numberOfActiveJobListings

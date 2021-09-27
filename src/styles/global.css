@@ -541,3 +541,43 @@ input[type="range"]::-webkit-slider-thumb {
 
     /* Self Clearing Goodness */
     .container-x:after { content: "\0020"; display: block; height: 0; clear: both; visibility: hidden; }
+
+    .sidebar-link {
+      color: #555;
+      display: inline-flex;
+      padding: 10px 32px;
+      transition: 0.3s;
+      cursor: pointer;
+      font-weight: 400;
+      position: relative;
+      background-color: #e5e5e5;
+      border-radius: 35px;
+    }
+    .sidebar-link-button  {
+      padding: 8px 12px;
+      margin-bottom: -26px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-width: 80px;
+
+      background-color: #eaeaea!important;
+      border-radius: 50px;
+      border: none!important;
+      height: 50px!important;
+      max-width: 240px!important;
+      top: -68px;
+      text-align: left;
+
+      
+      color: #444;
+      font-family: GorditaMedium,sans-serif;
+      font-size: 14px;
+      letter-spacing: .4px;
+      
+      box-shadow: 0 0 0 transparent;
+      width: 100%;
+
+    }

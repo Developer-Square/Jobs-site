@@ -29,7 +29,7 @@ const TypedSeekerUpdateMutation = TypedMutation(SEEKER_UPDATE_MUTATION);
 
 const SeekerProfile = () => {
   const alert = useAlert();
-  const { user } = React.useContext(UserContext);
+  const { user, setRefetchUser } = React.useContext(UserContext);
   const [updating, setUpdating] = React.useState(false);
 
   const initialData = {
@@ -225,6 +225,7 @@ const SeekerProfile = () => {
                                                   : data.seekerCreate,
                                                 setErrors,
                                               );
+                                              setRefetchUser((curr) => !curr);
                                             }
                                           });
                                         }

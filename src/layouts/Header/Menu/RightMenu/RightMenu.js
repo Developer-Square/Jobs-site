@@ -21,7 +21,7 @@ export const RightMenu = ({ isAuthenticated }) => {
   return (
     <ul
       className="float-right"
-      style={{ display: "flex", marginLeft: "auto", margin: "0", width: "30%" }}
+      style={{ display: "flex", margin: "0", marginLeft: "auto" }}
     >
       {isAuthenticated ? (
         <>

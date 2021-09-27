@@ -28,6 +28,7 @@
   }
   
   .address > .page:hover {
+    background: #000;
     @apply opacity-75 transition-opacity duration-200 ease-in-out;
   }
   

@@ -3,23 +3,18 @@ import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import moment from "moment";
 
-import { AuthContext } from "contexts/auth/auth.context";
+import UserContext from "contexts/user/user.provider";
 import ModalContext from "contexts/modal/modal.provider";
-import { getDBIdFromGraphqlId } from "core/utils";
 import UserImage from "image/user.jpg";
 
 function SeekerProfileForm({ details }) {
   const history = useHistory();
   const { emitter, events } = React.useContext(ModalContext);
-  const {
-    authState: { profile },
-  } = React.useContext(AuthContext);
+  const { user } = React.useContext(UserContext);
+  console.log(details);
 
   const isOwnAccount = () => {
-    if (
-      getDBIdFromGraphqlId(details?.id, "User") ===
-      getDBIdFromGraphqlId(profile?.id, "UserNode")
-    ) {
+    if (details?.id === user?.id) {
       return true;
     }
     return false;
@@ -29,13 +24,10 @@ function SeekerProfileForm({ details }) {
   return (
     <div className="row">
       <div className="col-lg-12 col-md-12">
-        <div className="bg-gray-100">
+        <div>
           <div className="w-full text-white bg-main-color">
             {/* End of Navbar */}
-            <div
-              className="container mx-auto my-5 p-5"
-              style={{ width: "100%" }}
-            >
+            <div className="container mx-auto p-5" style={{ width: "100%" }}>
               <div className="md:flex no-wrap md:-mx-2 ">
                 {/* Left Side */}
                 <div className="w-full md:w-3/12 md:mx-2">

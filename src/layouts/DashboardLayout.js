@@ -19,11 +19,13 @@ const SidedbarDesktop = styled.div`
     display: none;
   }
 `;
+const imageURL =
+  "https://fantasycongress.com/images/icon_pattern_big_light.png";
 
 const DashboardLayout = (props) => {
   let [topbarRef, { height }] = useComponentSize();
   let [sidebarRef, { width }] = useComponentSize();
-  const { desktop } = useDeviceType();
+  const { desktop, mobile, tablet } = useDeviceType();
   const location = useLocation();
   const pathLocation = location.pathname.replace(/\/+$/, "");
   const pathname =
@@ -58,7 +60,12 @@ const DashboardLayout = (props) => {
         props.children
       ) : (
         <>
-          <Topbar path={props.path} routes={props.routes} refs={topbarRef} />
+          <Topbar
+            path={props.path}
+            routes={props.routes}
+            refs={topbarRef}
+            deviceType={{ desktop, mobile, tablet }}
+          />
           <LayoutWrapper
             style={{
               height: `calc(100vh - ${height}px)`,
@@ -68,6 +75,7 @@ const DashboardLayout = (props) => {
               <>
                 <SidedbarDesktop>
                   <Sidebar
+                    deviceType={{ desktop, mobile, tablet }}
                     path={props.path}
                     routes={props.routes}
                     refs={sidebarRef}
@@ -79,14 +87,13 @@ const DashboardLayout = (props) => {
                 <ContentWrapper
                   style={{
                     width: `calc(100% - ${width}px)`,
+                    backgroundImage: ` url(${imageURL})`,
                   }}
                 >
                   <ContentInnerWrapper>
                     <div
                       id="dashboard"
                       style={{
-                        backgroundImage: `linear-gradient(to right, hsl(0deg 0% 95% / 68%), rgb(242 242 242 / 72%)), url("https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-flat-wind-cartoon-recruitment-banner-poster-image_195196.jpg")`,
-                        backgroundSize: "cover",
                         display: "inherit",
                       }}
                     >

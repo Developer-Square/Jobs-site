@@ -78,7 +78,7 @@ const Page = ({
               </span>
             </h2>
             <span>
-              <i class="fa fa-eye" /> {data?.timesViewed}{" "}
+              <i className="fa fa-eye" /> {data?.timesViewed}{" "}
               {data?.timesViewed === 1 ? "View" : "Views"}
             </span>
           </div>

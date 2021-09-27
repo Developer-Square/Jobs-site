@@ -11,18 +11,16 @@ import Button from "components/Button/Button";
 import { normalizeErrors } from "helpers";
 import { baseProfileSchema } from "./validation.schema";
 import LogoImage from "image/thedb.png";
-import { AuthContext } from "contexts/auth/auth.context";
 import { handleAvatarUpdate } from "utils";
+import UserContext from "contexts/user/user.provider";
 
 const BaseProfile = () => {
   const alert = useAlert();
-  const {
-    authState: { profile },
-  } = React.useContext(AuthContext);
+  const { user, setRefetchUser } = React.useContext(UserContext);
   const initialValues = {
-    avatar: profile?.avatar?.url ? profile.avatar.url : LogoImage,
-    firstName: "",
-    lastName: "",
+    avatar: user?.avatar?.url ? user.avatar.url : LogoImage,
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
   };
 
   const showNotification = (data, errors, alert) => {
@@ -39,6 +37,7 @@ const BaseProfile = () => {
         },
         { type: "success", timeout: 5000 },
       );
+      setRefetchUser((curr) => !curr);
     } else {
       const err = maybe(() => data.updateAccount.errors, []);
 
