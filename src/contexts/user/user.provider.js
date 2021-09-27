@@ -36,11 +36,9 @@ const UserProvider = ({ children }) => {
     authDispatch,
   } = React.useContext(AuthContext);
   const navigate = useHistory();
-  const [fetchUser, { data: userData }] = useLazyQuery(GET_USER_DETAILS, {
+  const [fetchUser] = useLazyQuery(GET_USER_DETAILS, {
     fetchPolicy: "no-cache",
     onCompleted: (data) => {
-      console.log("data");
-      console.log(data?.me);
       setUser(data?.me);
     },
   });
@@ -48,9 +46,7 @@ const UserProvider = ({ children }) => {
   const [accountAddressUpdate] = useMutation(UPDATE_ADDRESS);
 
   const getUser = async () => {
-    console.log("getUser");
     if (!user) {
-      console.log("await fetchUser");
       await fetchUser();
     } else {
       return user;
@@ -59,29 +55,19 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (!user && isAuthenticated) {
-      console.log("!user && isAuthenticated");
       getUser();
       setRefetchUser((curr) => !curr);
     }
     if (user && !isAuthenticated) {
-      console.log("user && !isAuthenticated");
       setUser(null);
       setRefetchUser((curr) => !curr);
     }
     if (!user && !isAuthenticated) {
-      console.log("!user && !isAuthenticated");
       setRefetchUser((curr) => !curr);
       setUser(null);
     }
-    console.log("in useEffect");
-    // if (isAuthenticated) {
-    //   fetchUser();
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, fetchUser]);
-  // if (!user && isAuthenticated) {
-  //   getUser();
-  // }
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -89,12 +75,6 @@ const UserProvider = ({ children }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetchUser]);
-
-  // console.log(objDiff(user, userData?.me));
-  // console.log(isEmpty(objDiff(user, userData?.me)));
-  // if (objDiff(user, userData?.me)) {
-  //   setUser(userData?.me);
-  // }
 
   const updateAddress = async (address) => {
     try {
@@ -148,11 +128,6 @@ const UserProvider = ({ children }) => {
       );
     }
   };
-  console.log("user");
-  console.log(user);
-  console.log(!user);
-  console.log("isAuthenticated");
-  console.log(isAuthenticated);
 
   return (
     <UserContext.Provider
