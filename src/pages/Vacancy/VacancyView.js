@@ -20,6 +20,7 @@ import { VACANCY_VIEW_COUNT_MUTATION } from "graphql/mutations";
 
 import Page from "./Page";
 import { getGraphqlIdFromDBId } from "utils";
+import { SEO } from "components/seo";
 
 const TypedVacancyDetailQuery = TypedQuery(VACANCY_DETAIL_QUERY);
 const TypedJobYearsOfExpQuery = TypedQuery(JobYearsOfExp);
@@ -85,6 +86,20 @@ const VacancyView = () => {
                     vacancyData.data.vacancy.seoTitle,
                 }}
               >
+                <SEO
+                  title={`${vacancyData?.data?.vacancy?.title} - ${vacancyData?.data?.vacancy?.industry?.name} | TheDatabase Kenya`}
+                  description={
+                    vacancyData.data.vacancy.seoDescription ||
+                    vacancyData.data.vacancy.descriptionPlaintext
+                  }
+                  industry={vacancyData?.data?.vacancy?.industry?.name}
+                  location={vacancyData?.data?.vacancy?.location}
+                  canonical={window.location.href}
+                  link={window.location.href}
+                  image={vacancyData?.data?.vacancy?.postedBy?.logo?.url}
+                  company={vacancyData?.data?.vacancy?.postedBy?.logo?.url}
+                />
+
                 <TypedJobPayRateQuery>
                   {(payRateData) => {
                     if (payRateData.loading) {

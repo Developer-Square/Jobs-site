@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
+import {Link } from "react-router-dom"
 import { TOS, HELP_PAGE, SDG } from "constants/routes.constants";
 
 const Footer = () => {
@@ -20,21 +21,21 @@ const Footer = () => {
             <div className="seven columns">
               <h4>About</h4>
               <p>The Database - Jobs need People.</p>
-              <a href="/auth" className="button">
+              <Link to="/auth" className="button">
                 Get Started
-              </a>
+              </Link>
             </div>
             <div className="three columns">
               <h4>We Care</h4>
               <ul className="footer-links">
                 <li>
-                  <a href={`${HELP_PAGE}`}>FAQs</a>
+                  <Link to={`${HELP_PAGE}`}>FAQs</Link>
                 </li>
                 <li>
-                  <a href={`${TOS}`}>Terms of Service</a>
+                  <Link to={`${TOS}`}>Terms of Service</Link>
                 </li>
                 <li>
-                  <a href={`${TOS}`}>Privacy Policy</a>
+                  <Link to={`${TOS}`}>Privacy Policy</Link>
                 </li>
               </ul>
             </div>
@@ -42,19 +43,19 @@ const Footer = () => {
               <h4>About</h4>
               <ul className="footer-links">
                 <li>
-                  <a href={`${SDG}`}>Our SDGs</a>
+                  <Link to={`${SDG}`}>Our SDGs</Link>
                 </li>
                 <li>
-                  <a href="/">Press Releases</a>
+                  <Link to="/">Press Releases</Link>
                 </li>
                 <li>
-                  <a href="/">Awards</a>
+                  <Link to="/">Awards</Link>
                 </li>
                 <li>
-                  <a href="/">Testimonials</a>
+                  <Link to="/">Testimonials</Link>
                 </li>
                 <li>
-                  <a href="/">Timeline</a>
+                  <Link to="/">Timeline</Link>
                 </li>
               </ul>
             </div>
@@ -62,10 +63,10 @@ const Footer = () => {
               <h4>Others</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="/pricing">Pricing</a>
+                  <Link to="/pricing">Pricing</Link>
                 </li>
                 <li>
-                  <a href="/contact">Contact</a>
+                  <Link to="/contact">Contact</Link>
                 </li>
               </ul>
             </div>
@@ -77,41 +78,41 @@ const Footer = () => {
                 <h4>Follow Us</h4>
                 <ul className="social-icons">
                   <li>
-                    <a
+                    <Link
                       className="facebook"
-                      href="https://facebook.com/thedatabase.co.ke"
+                      to="https://facebook.com/thedatabase.co.ke"
                     >
                       <i className="icon-facebook" />
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="twitter"
-                      href="https://twitter.com/ThedatabaseKe"
+                      to="https://twitter.com/ThedatabaseKe"
                     >
                       <i className="icon-twitter" />
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="instagram"
-                      href="https://www.instagram.com/thedatabase.co.ke/"
+                      to="https://www.instagram.com/thedatabase.co.ke/"
                     >
                       <i className="icon-instagram" />
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
+                    <Link
                       className="linkedin"
-                      href="https://www.linkedin.com/company/thedb"
+                      to="https://www.linkedin.com/company/thedb"
                     >
                       <i className="icon-linkedin" />
-                    </a>
+                    </Link>
                   </li>
                 </ul>
                 <div className="copyrights">
                   © Copyright {new Date().getFullYear()} by{" "}
-                  <a href="/">TheDatabase</a>. All Rights Reserved.
+                  <Link to="/">TheDatabase</Link>. All Rights Reserved.
                 </div>
               </div>
             </div>
@@ -119,7 +120,7 @@ const Footer = () => {
         </div>
         {/* Back To Top Button */}
         <div id="backtotop">
-          <a href="#"> </a>
+          <Link to="#"> </Link>
         </div>
       </div>
     </>
