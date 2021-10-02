@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
+import {Link } from "react-router-dom"
+import { TOS, HELP_PAGE, SDG } from "constants/routes.constants";
 
 const Footer = () => {
   return (
@@ -15,115 +17,102 @@ const Footer = () => {
           }}
         >
           {/* Main */}
-          <div className="container">
+          <div className="container-x">
             <div className="seven columns">
               <h4>About</h4>
-              <p>
-                Morbi convallis bibendum urna ut viverra. Maecenas quis
-                consequat libero, a feugiat eros. Nunc ut lacinia tortor morbi
-                ultricies laoreet ullamcorper phasellus semper.
-              </p>
-              <a href="/auth" className="button">
+              <p>The Database - Jobs need People.</p>
+              <Link to="/auth" className="button">
                 Get Started
-              </a>
+              </Link>
             </div>
             <div className="three columns">
-              <h4>Company</h4>
+              <h4>We Care</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="/">About Us</a>
+                  <Link to={`${HELP_PAGE}`}>FAQs</Link>
                 </li>
                 <li>
-                  <a href="/">Careers</a>
+                  <Link to={`${TOS}`}>Terms of Service</Link>
                 </li>
                 <li>
-                  <a href="/">Our Blog</a>
-                </li>
-                <li>
-                  <a href="/">Terms of Service</a>
-                </li>
-                <li>
-                  <a href="/">Privacy Policy</a>
-                </li>
-                <li>
-                  <a href="/">Hiring Hub</a>
+                  <Link to={`${TOS}`}>Privacy Policy</Link>
                 </li>
               </ul>
             </div>
             <div className="three columns">
-              <h4>Press</h4>
+              <h4>About</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="/">In the News</a>
+                  <Link to={`${SDG}`}>Our SDGs</Link>
                 </li>
                 <li>
-                  <a href="/">Press Releases</a>
+                  <Link to="/">Press Releases</Link>
                 </li>
                 <li>
-                  <a href="/">Awards</a>
+                  <Link to="/">Awards</Link>
                 </li>
                 <li>
-                  <a href="/">Testimonials</a>
+                  <Link to="/">Testimonials</Link>
                 </li>
                 <li>
-                  <a href="/">Timeline</a>
+                  <Link to="/">Timeline</Link>
                 </li>
               </ul>
             </div>
             <div className="three columns">
-              <h4>Browse</h4>
+              <h4>Others</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="/">Freelancers by Category</a>
+                  <Link to="/pricing">Pricing</Link>
                 </li>
                 <li>
-                  <a href="/">Freelancers in USA</a>
-                </li>
-                <li>
-                  <a href="/">Freelancers in UK</a>
-                </li>
-                <li>
-                  <a href="/">Freelancers in Canada</a>
-                </li>
-                <li>
-                  <a href="/">Freelancers in Australia</a>
-                </li>
-                <li>
-                  <a href="/">Find Jobs</a>
+                  <Link to="/contact">Contact</Link>
                 </li>
               </ul>
             </div>
           </div>
           {/* Bottom */}
-          <div className="container">
+          <div className="container-x">
             <div className="footer-bottom">
               <div className="sixteen columns">
                 <h4>Follow Us</h4>
                 <ul className="social-icons">
                   <li>
-                    <a className="facebook" href="/">
+                    <Link
+                      className="facebook"
+                      to="https://facebook.com/thedatabase.co.ke"
+                    >
                       <i className="icon-facebook" />
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="twitter" href="/">
+                    <Link
+                      className="twitter"
+                      to="https://twitter.com/ThedatabaseKe"
+                    >
                       <i className="icon-twitter" />
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="gplus" href="/">
-                      <i className="icon-gplus" />
-                    </a>
+                    <Link
+                      className="instagram"
+                      to="https://www.instagram.com/thedatabase.co.ke/"
+                    >
+                      <i className="icon-instagram" />
+                    </Link>
                   </li>
                   <li>
-                    <a className="linkedin" href="/">
+                    <Link
+                      className="linkedin"
+                      to="https://www.linkedin.com/company/thedb"
+                    >
                       <i className="icon-linkedin" />
-                    </a>
+                    </Link>
                   </li>
                 </ul>
                 <div className="copyrights">
                   © Copyright {new Date().getFullYear()} by{" "}
-                  <a href="/">TheDatabase</a>. All Rights Reserved.
+                  <Link to="/">TheDatabase</Link>. All Rights Reserved.
                 </div>
               </div>
             </div>
@@ -131,7 +120,7 @@ const Footer = () => {
         </div>
         {/* Back To Top Button */}
         <div id="backtotop">
-          <a href="#"> </a>
+          <Link to="#"> </Link>
         </div>
       </div>
     </>

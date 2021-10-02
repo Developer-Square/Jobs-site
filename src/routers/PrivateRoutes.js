@@ -8,7 +8,6 @@ import PrivateRoute from "./PrivateRoute";
 import { Modal } from "@redq/reuse-modal";
 import DashboardLayout from "layouts/DashboardLayout";
 import NotFound from "pages/NotFound";
-import Wrapper from "components/shared/Wrapper";
 
 class PrivateRoutes extends Component {
   state = { allowedRoutes: [] };
@@ -33,21 +32,32 @@ class PrivateRoutes extends Component {
   }
 
   render() {
-    const handler = (children) => {
+    const handler = (children, parent = null) => {
       return children.map((child, i) => {
         if (!child.children || child.children.length === 0) {
+          // console.log(
+          //   child.component,
+          //   `${this.props.match.path}${parent ? parent.url : ""}${child.url}`,
+          // );
+          // console.log(this.props);
+          // console.log(parent);
+          // console.log(Routes[child.component]);
           return (
             <PrivateRoute
               exact
               key={`${child.title}-${child.url}(${i})`}
               component={Routes[child.component]}
-              path={`${this.props.match.path}${child.url}`}
+              path={`${this.props.match.path}${parent ? parent.url : ""}${
+                child.url
+              }`}
               {...this.props}
             />
           );
         }
         return (
-          <Switch key={`${child.url}${i}`}>{handler(child.children)}</Switch>
+          <Switch key={`${child.url}${i}`}>
+            {handler(child.children, child)}
+          </Switch>
         );
       });
     };
@@ -59,13 +69,11 @@ class PrivateRoutes extends Component {
         path={this.props.match.path}
       >
         <Modal>
-          <Wrapper>
-            <Switch>
-              {handler(this.state.allowedRoutes)}
+          <Switch>
+            {handler(this.state.allowedRoutes)}
 
-              <Route component={NotFound} />
-            </Switch>{" "}
-          </Wrapper>
+            <Route component={NotFound} />
+          </Switch>
         </Modal>
       </DashboardLayout>
     );

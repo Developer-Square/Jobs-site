@@ -10,8 +10,6 @@ const INITIAL_STATE = {
 };
 
 function reducer(state, action) {
-  console.log("auth", state);
-
   switch (action.type) {
     case "SIGNIN":
       return {
@@ -33,12 +31,13 @@ function reducer(state, action) {
       return {
         ...state,
         isAuthenticated: true,
-        currentForm: "loginSuccess",
       };
     case "SIGN_OUT":
       return {
         ...state,
         isAuthenticated: false,
+        currentForm: "signIn",
+        profile: {},
       };
     case "SIGNUP":
       return {

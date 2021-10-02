@@ -7,7 +7,7 @@ function expandIcon({ isActive }) {
     <i>
       {isActive ? (
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="https://www.w3.org/2000/svg"
           width="12"
           height="1.494"
           viewBox="0 0 12 1.494"
@@ -21,7 +21,7 @@ function expandIcon({ isActive }) {
         </svg>
       ) : (
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="https://www.w3.org/2000/svg"
           width="12"
           height="12"
           viewBox="0 0 12 12"

@@ -2,28 +2,48 @@
 import React from "react";
 import { useRouteMatch } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useMutation } from "react-apollo";
 
 import Loader from "components/Loader/Loader";
 import { MetaWrapper } from "components/Meta";
 import NetworkStatus from "components/NetworkStatus";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
 import NoResultFound from "components/NoResult/NoResult";
-
+import { TypedQuery } from "core/queries";
 import {
-  TypedVacancyDetailQuery,
-  TypedJobMinQualificationQuery,
-  TypedJobYearsOfExpQuery,
-} from "./queries";
+  VACANCY_DETAIL_QUERY,
+  JobYearsOfExp,
+  JobMinQualification,
+  JobPayRate,
+} from "graphql/queries";
+import { VACANCY_VIEW_COUNT_MUTATION } from "graphql/mutations";
+
 import Page from "./Page";
+import { getGraphqlIdFromDBId } from "utils";
+import { SEO } from "components/seo";
+
+const TypedVacancyDetailQuery = TypedQuery(VACANCY_DETAIL_QUERY);
+const TypedJobYearsOfExpQuery = TypedQuery(JobYearsOfExp);
+const TypedJobMinQualificationQuery = TypedQuery(JobMinQualification);
+const TypedJobPayRateQuery = TypedQuery(JobPayRate);
 
 const VacancyView = () => {
   const match = useRouteMatch();
-  const [vacancyID, setVacancyID] = React.useState(match.params.vacancyID);
+  const [vacancyID, setVacancyID] = React.useState(
+    getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"),
+  );
+  const [viewvacancyCount] = useMutation(VACANCY_VIEW_COUNT_MUTATION);
+
+  const viewJobMutation = () => {
+    viewvacancyCount({ variables: { job: vacancyID } });
+  };
 
   React.useEffect(() => {
     if (match.params.vacancyID) {
-      setVacancyID(match.params.vacancyID);
+      setVacancyID(getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"));
+      viewJobMutation();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [match.params.vacancyID]);
 
   const variables = {
@@ -66,32 +86,64 @@ const VacancyView = () => {
                     vacancyData.data.vacancy.seoTitle,
                 }}
               >
-                <TypedJobMinQualificationQuery>
-                  {(qualificationData) => {
-                    if (qualificationData.loading) {
+                <SEO
+                  title={`${vacancyData?.data?.vacancy?.title} - ${vacancyData?.data?.vacancy?.industry?.name} | TheDatabase Kenya`}
+                  description={
+                    vacancyData.data.vacancy.seoDescription ||
+                    vacancyData.data.vacancy.descriptionPlaintext
+                  }
+                  industry={vacancyData?.data?.vacancy?.industry?.name}
+                  location={vacancyData?.data?.vacancy?.location}
+                  canonical={window.location.href}
+                  link={window.location.href}
+                  image={vacancyData?.data?.vacancy?.postedBy?.logo?.url}
+                  company={vacancyData?.data?.vacancy?.postedBy?.logo?.url}
+                />
+
+                <TypedJobPayRateQuery>
+                  {(payRateData) => {
+                    if (payRateData.loading) {
                       return <Loader />;
                     }
                     return (
-                      <TypedJobYearsOfExpQuery>
-                        {(yearsData) => {
-                          if (yearsData.loading) {
+                      <TypedJobMinQualificationQuery>
+                        {(qualificationData) => {
+                          if (qualificationData.loading) {
                             return <Loader />;
                           }
                           return (
-                            <Page
-                              qualificationData={
-                                qualificationData?.data?.__type?.enumValues
-                              }
-                              yearsData={yearsData?.data?.__type?.enumValues}
-                              types={vacancyData?.data?.__type?.enumValues}
-                              data={vacancyData.data.vacancy}
-                            />
+                            <TypedJobYearsOfExpQuery>
+                              {(yearsData) => {
+                                if (yearsData.loading) {
+                                  return <Loader />;
+                                }
+                                return (
+                                  <Page
+                                    vacancyID={vacancyID}
+                                    qualificationData={
+                                      qualificationData?.data?.__type
+                                        ?.enumValues
+                                    }
+                                    yearsData={
+                                      yearsData?.data?.__type?.enumValues
+                                    }
+                                    types={
+                                      vacancyData?.data?.__type?.enumValues
+                                    }
+                                    data={vacancyData.data.vacancy}
+                                    payRateData={
+                                      payRateData?.data?.__type?.enumValues
+                                    }
+                                  />
+                                );
+                              }}
+                            </TypedJobYearsOfExpQuery>
                           );
                         }}
-                      </TypedJobYearsOfExpQuery>
+                      </TypedJobMinQualificationQuery>
                     );
                   }}
-                </TypedJobMinQualificationQuery>
+                </TypedJobPayRateQuery>
               </MetaWrapper>
             );
           }}

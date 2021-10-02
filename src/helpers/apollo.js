@@ -8,17 +8,21 @@ import { ApolloLink } from "apollo-link";
 import { fromPromise, Observable } from "apollo-link";
 import { onError } from "apollo-link-error";
 import fetch from "isomorphic-unfetch";
-import { BASE_GRAPHQL_URL } from "constants/constants";
+import { BASE_GRAPHQL_URL, BASE_GRAPHQL_WS_URL } from "constants/constants";
 import { setContext } from "apollo-link-context";
 import { BatchHttpLink } from "apollo-link-batch-http";
 import { createUploadLink } from "apollo-upload-client";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { SubscriptionClient } from "subscriptions-transport-ws";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { split } from "@apollo/client";
 import AuthService, {
   getRefreshToken,
   getToken,
 } from "containers/Authentication/auth.service";
 
 const auth = new AuthService();
-console.log(auth.fetchToken());
+// console.log(auth.fetchToken());
 
 let apolloClient = null;
 
@@ -142,17 +146,72 @@ const linkOptions = {
 };
 const uploadLink = createUploadLink(linkOptions);
 const batchLink = new BatchHttpLink({
-  batchInterval: 100,
+  batchInterval: 20,
+  batchMax: 10,
   ...linkOptions,
   fetch,
 });
+export const myClient = new SubscriptionClient(BASE_GRAPHQL_WS_URL, {
+  reconnect: true,
+  // connectionParams: {
+  //   headers: {
+  //     Authorization: getToken() ? `JWT ${getToken()}` : null,
+  //   },
+  // },
+});
 
-const link = ApolloLink.split(
+myClient.onConnected(() => {
+  console.log("connected f client f onConnected");
+});
+myClient.onReconnected(() => {
+  console.log("connected f client f  reconnected");
+});
+myClient.onReconnecting(() => {
+  console.log("connected f client  f reconnecting");
+});
+myClient.onDisconnected(() => {
+  console.log("connected f client  f onDisconnected");
+});
+myClient.onError(() => {
+  console.log("connected f client  f onError");
+});
+
+// const wsLink = new WebSocketLink(myClient);
+const wsLink = new WebSocketLink({
+  uri: BASE_GRAPHQL_WS_URL,
+  options: {
+    reconnect: true,
+  },
+});
+// const wsLink = new WebSocketLink({
+//   uri: BASE_GRAPHQL_WS_URL,
+//   options: {
+//     reconnect: true,
+//     // connectionParams: {
+//     //   headers: {
+//     //     Authorization: getToken() ? `JWT ${getToken()}` : null,
+//     //   },
+//     // },
+//   },
+// });
+
+const httpLink = ApolloLink.split(
   (operation) => operation.getContext().useBatching,
   batchLink,
   uploadLink,
 );
 
+const link = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLink,
+);
 export const tokenLink = setContext((_, context) => {
   const authToken = getToken();
 
@@ -195,10 +254,10 @@ export function createApolloClient(initialState = {}) {
           networkError = {},
           operation = {},
           forward,
-          location,
-          ...rest
+          // location,
+          // ...rest
         } = error || {};
-        console.log(graphQLErrors, networkError, operation, rest);
+        // console.log(graphQLErrors, networkError, operation, rest);
         // const { getContext } = operation || {};
         // const { scope, headers = {} } = getContext() || {};
         const { message: networkErrorMessage = "" } = networkError;
@@ -240,7 +299,6 @@ export function createApolloClient(initialState = {}) {
                       auth
                         .fetchToken(client)
                         .then(({ data: { refreshToken } }) => {
-                          console.log("Promise data: ", refreshToken);
                           resolvePendingRequests();
                           return refreshToken.token;
                         })
@@ -250,7 +308,6 @@ export function createApolloClient(initialState = {}) {
                           pendingRequests = [];
                         })
                         .finally(() => {
-                          console.log("Finally");
                           isRefreshing = false;
                         }),
                     );
@@ -263,7 +320,6 @@ export function createApolloClient(initialState = {}) {
                     );
                   }
                   return forward$.flatMap(() => {
-                    console.log("Forwarding!");
                     const oldHeaders = operation.getContext().headers;
                     const token = getToken();
 
@@ -299,6 +355,7 @@ export function createApolloClient(initialState = {}) {
     ]),
     cache: new InMemoryCache().restore(initialState),
     connectToDevTools: process.env.NODE_ENV !== "production",
+    shouldBatch: true,
   });
   return client;
 }

@@ -3,6 +3,37 @@ import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import { UploadIcon } from "../AllSvgIcon";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileImage } from "@fortawesome/fontawesome-free-solid";
+import Button from "components/Button/Button";
+
+const PicInput = styled.div`
+  margin-right: 8px;
+  opacity: 1;
+
+  color: #5f6368;
+  fill: #5f6368;
+
+  -webkit-user-select: none;
+  -webkit-transition: background 0.3s;
+  transition: background 0.3s;
+  border: 0;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  height: 48px;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  width: 48px;
+  z-index: 0;
+`;
+
 const Text = styled.span`
   color: black;
   margin-top: 15px;
@@ -62,14 +93,26 @@ const img = {
 };
 
 function Uploader(props) {
-  const { onChange, imageURL, action, directUpload, ...rest } = props;
+  const {
+    onChange,
+    imageURL,
+    action,
+    directUpload,
+    doc,
+    restrict,
+    multiple,
+    minimal,
+    preview,
+    ...rest
+  } = props;
   const [files, setFiles] = useState(
     imageURL ? [{ name: "demo", preview: imageURL }] : [],
   );
 
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*",
-    multiple: false,
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    accept: doc ? (restrict ? restrict : ".doc, .docx, .pdf") : "image/*",
+    multiple: multiple,
+    maxFiles: multiple ? 4 : 1,
     onDrop: useCallback(
       (acceptedFiles) => {
         setFiles(
@@ -88,6 +131,11 @@ function Uploader(props) {
       [onChange],
     ),
   });
+  const acceptedFileItems = acceptedFiles.map((file) => (
+    <li key={file.path}>
+      {file.path} - {file.size / 1000} KB
+    </li>
+  ));
 
   const thumbs = files.map((file) => (
     <Thumb
@@ -110,6 +158,11 @@ function Uploader(props) {
       </div>
     </Thumb>
   ));
+  const minimalThumbs = files.map((file) => (
+    <div key={file.name}>
+      <p>{file.name}</p>
+    </div>
+  ));
 
   useEffect(
     () => () => {
@@ -120,7 +173,7 @@ function Uploader(props) {
   );
 
   return (
-    <section className="container uploader">
+    <section className="container-x uploader" style={{ width: "100%" }}>
       {rest.version && rest.version === "profile" ? (
         <div className="">
           <label
@@ -145,14 +198,50 @@ function Uploader(props) {
         //   </div>
         // </div>
         <>
-          <Container {...getRootProps()}>
-            <input {...getInputProps()} />
-            <UploadIcon />
-            <Text>
-              <TextHighlighted>Drag/Upload</TextHighlighted> your image here.
-            </Text>
-          </Container>
-          {thumbs && <ThumbsContainer>{thumbs}</ThumbsContainer>}
+          {minimal ? (
+            <Button
+              size="small"
+              {...getRootProps()}
+              style={{
+                background: "transparent",
+                color: "#ec7623",
+                textTransform: "none",
+                margin: 0,
+              }}
+              title={
+                <PicInput>
+                  <input {...getInputProps()} />
+                  <FontAwesomeIcon
+                    icon={faFileImage}
+                    className="icon"
+                    style={{
+                      height: "100%",
+                      width: "50%",
+                    }}
+                  />
+                </PicInput>
+              }
+            />
+          ) : (
+            <Container {...getRootProps()}>
+              <input {...getInputProps()} />
+              <UploadIcon />
+              <Text>
+                <TextHighlighted>Drag/Upload</TextHighlighted> your{" "}
+                {`${doc ? (multiple ? "document(s)" : "document") : "image"}`}{" "}
+                here.
+              </Text>
+            </Container>
+          )}
+          {preview ? (
+            multiple ? (
+              <ul>{acceptedFileItems}</ul>
+            ) : (
+              thumbs && <ThumbsContainer>{thumbs}</ThumbsContainer>
+            )
+          ) : (
+            minimalThumbs
+          )}
         </>
       )}
     </section>

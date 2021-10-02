@@ -11,57 +11,20 @@ import Button from "components/Button/Button";
 import { normalizeErrors } from "helpers";
 import { baseProfileSchema } from "./validation.schema";
 import LogoImage from "image/thedb.png";
-import { AuthContext } from "contexts/auth/auth.context";
+import { handleAvatarUpdate } from "utils";
+import UserContext from "contexts/user/user.provider";
 
 const BaseProfile = () => {
   const alert = useAlert();
-  const {
-    authState: { profile },
-  } = React.useContext(AuthContext);
+  const { user, setRefetchUser } = React.useContext(UserContext);
   const initialValues = {
-    avatar: profile?.avatar?.url ? profile.avatar.url : LogoImage,
-    firstName: "",
-    lastName: "",
+    avatar: user?.avatar?.url ? user.avatar.url : LogoImage,
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
   };
-  const handleAvatarUpdate = (data, errors) => {
-    if (errors) {
-      console.log("Server Error kwa login", errors[0].message);
-      return errors[0].message;
-    }
-    const successful = maybe(() => data.userAvatarUpdate.success);
-    alert.show(
-      {
-        title: "Update Successful",
-      },
-      { type: "success", timeout: 5000 },
-    );
-    if (successful) {
-      alert.show(
-        {
-          title: "Avatar Update Successful",
-        },
-        { type: "success", timeout: 5000 },
-      );
-    } else {
-      const err = maybe(() => data.userAvatarUpdate.errors, []);
 
-      if (err) {
-        const nonFieldErr = normalizeErrors(
-          maybe(() => data.userAvatarUpdate.errors, []),
-        );
-        alert.show(
-          {
-            title: nonFieldErr?.nonFieldErrors,
-          },
-          { type: "error", timeout: 5000 },
-        );
-      }
-    }
-  };
   const showNotification = (data, errors, alert) => {
-    console.log(errors);
     if (errors) {
-      console.log("Server Error kwa login", errors[0].message);
       return errors[0].message;
     }
 
@@ -74,6 +37,7 @@ const BaseProfile = () => {
         },
         { type: "success", timeout: 5000 },
       );
+      setRefetchUser((curr) => !curr);
     } else {
       const err = maybe(() => data.updateAccount.errors, []);
 
@@ -97,11 +61,9 @@ const BaseProfile = () => {
     >
       {(updateAccount, { loading }) => {
         function onSubmit(values, { setErrors, setSubmitting }) {
-          console.log(values);
           updateAccount({
             variables: values,
           }).then(({ data }) => {
-            console.log(data);
             if (data) {
               if (data.updateAccount) {
                 if (!data.updateAccount.success) {

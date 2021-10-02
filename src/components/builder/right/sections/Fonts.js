@@ -8,13 +8,13 @@ import fontOptions from "data/fontOptions";
 
 const Fonts = ({ id }) => {
   const dispatch = useDispatch();
-  const font = useSelector("metadata.font");
+  const font = useSelector("resumemetadata.font");
 
   const handleClick = (value) => {
     dispatch({
       type: "on_input",
       payload: {
-        path: "metadata.font",
+        path: "resumemetadata.font",
         value,
       },
     });

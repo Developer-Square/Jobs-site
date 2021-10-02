@@ -1,6 +1,9 @@
 import { useTranslation } from "react-i18next";
 import React from "react";
-import { hexToRgb } from "utils";
+// import { findIndex } from "lodash";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
+import { hexToRgb, reduceSectionArray } from "utils";
 import AwardsA from "./blocks/Awards/AwardsA";
 import CertificationsA from "./blocks/Certifications/CertificationsA";
 import ContactC from "./blocks/Contact/ContactC";
@@ -29,8 +32,24 @@ const Blocks = {
 };
 
 const Celebi = ({ data }) => {
-  const layout = data.metadata.layout.celebi;
-  const { r, g, b } = hexToRgb(data.metadata.colors.primary) || {};
+  const navigation = useHistory();
+  const layoutObj = data.resumemetadata.layouts.find(
+    ({ name }) => name === "celebi",
+  );
+  if (!layoutObj) {
+    navigation.push("/");
+    toast(
+      "The requested Resume is not Ready. Kindly ask the owner to complete it",
+    );
+  }
+  const layout = reduceSectionArray(layoutObj.collection);
+  // const layoutIndex = findIndex(data.resumemetadata.layouts, [
+  //   "name",
+  //   "celebi",
+  // ]);
+  // const layout = data.resumemetadata.layouts[layoutIndex].collection;
+
+  const { r, g, b } = hexToRgb(data.resumemetadata.primaryColor) || {};
   const { t } = useTranslation();
 
   const styles = {
@@ -41,8 +60,8 @@ const Celebi = ({ data }) => {
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
-      color: data.metadata.colors.background,
-      backgroundColor: data.metadata.colors.text,
+      color: data.resumemetadata.backgroundColor,
+      backgroundColor: data.resumemetadata.textColor,
       height: "160px",
       paddingLeft: "275px",
     },
@@ -55,12 +74,15 @@ const Celebi = ({ data }) => {
   };
 
   const Photo = () =>
-    data.profile.photograph !== "" && (
+    data.owner?.avatar !== "" && (
       <div className="relative z-40">
         <img
           className="w-full object-cover object-center"
-          src={data.profile.photograph}
-          alt={data.profile.firstName}
+          src={
+            data.owner?.avatar?.url ||
+            "https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+          }
+          alt={data.owner?.fullName}
           style={{
             height: "160px",
           }}
@@ -74,10 +96,12 @@ const Celebi = ({ data }) => {
         className="tracking-wide uppercase font-bold"
         style={{ fontSize: "2.75em" }}
       >
-        {data.profile.firstName} {data.profile.lastName}
+        {data.owner?.firstName
+          ? `${data.owner?.firstName} ${data.owner?.lastName}`
+          : data.owner?.fullName}
       </h1>
       <h6 className="text-lg tracking-wider uppercase">
-        {data.profile.subtitle}
+        {data.owner?.seeker?.title}
       </h6>
     </div>
   );
@@ -88,9 +112,9 @@ const Celebi = ({ data }) => {
         id="page"
         className="relative rounded"
         style={{
-          fontFamily: data.metadata.font,
-          color: data.metadata.colors.text,
-          backgroundColor: data.metadata.colors.background,
+          fontFamily: data.resumemetadata.font,
+          color: data.resumemetadata.textColor,
+          backgroundColor: data.resumemetadata.backgroundColor,
         }}
       >
         <div className="grid grid-cols-12 gap-8">

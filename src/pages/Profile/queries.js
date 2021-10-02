@@ -1,4 +1,4 @@
-import { GET_INDUSTRIES } from "common/queries";
+import { GET_INDUSTRIES } from "graphql/queries";
 import { TypedQuery } from "core/queries";
 import gql from "graphql-tag";
 
@@ -53,3 +53,86 @@ export const TypedInstitutionStudentCountQuery = TypedQuery(
 );
 
 export const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
+
+export const SeekerProfile = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      email
+      username
+      firstName
+      lastName
+      avatar {
+        url
+        alt
+      }
+      socials {
+        id
+        username
+        network
+      }
+      phone
+      verified
+      seeker {
+        title
+        gender
+        status
+        idNumber
+        industries {
+          id
+          name
+        }
+      }
+      isSeeker
+      isEmployer
+      defaultAddress {
+        streetAddress1
+        city
+      }
+    }
+  }
+`;
+export const TypedSeekerProfileQuery = TypedQuery(SeekerProfile);
+
+export const EmployerProfile = gql`
+  query Employer($id: ID!) {
+    user(id: $id) {
+      email
+      username
+      firstName
+      lastName
+      avatar {
+        url
+        alt
+      }
+      socials {
+        id
+        username
+        network
+      }
+      phone
+      verified
+      employer {
+        descriptionPlaintext
+        name
+        website
+        country
+        lookingFor
+        industries {
+          id
+          name
+        }
+        logo {
+          url
+          alt
+        }
+      }
+      isSeeker
+      isEmployer
+      defaultAddress {
+        streetAddress1
+        city
+      }
+    }
+  }
+`;
+export const TypedEmployerProfileQuery = TypedQuery(EmployerProfile);

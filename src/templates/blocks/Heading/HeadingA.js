@@ -7,7 +7,7 @@ const HeadingA = ({ children }) => {
   return (
     <h6
       className="text-xs font-bold uppercase mb-1"
-      style={{ color: data.metadata.colors.primary }}
+      style={{ color: data.resumemetadata.primaryColor }}
     >
       {children}
     </h6>

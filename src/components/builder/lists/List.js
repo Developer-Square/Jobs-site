@@ -60,7 +60,7 @@ const List = ({
 
   return (
     <div className="flex flex-col">
-      <div className={styles.list}>
+      <div className={styles["list"]}>
         {isEmpty(items) ? (
           <EmptyList />
         ) : (

@@ -3,6 +3,7 @@ import React, { useCallback } from "react";
 import { Waypoint } from "react-waypoint";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import bgImg from "image/landing.jpg";
+import SearchContainer from "containers/Search/SearchContainer";
 
 const Banner = () => {
   const useDispatch = useStickyDispatch();
@@ -25,27 +26,25 @@ const Banner = () => {
     <div
       id="banner"
       className="with-transparent-header parallax background"
-      style={{ backgroundImage: `url(${bgImg})` }}
+      style={{
+        backgroundImage: `url(${bgImg})`,
+        maxHeight: "100vh",
+        height: "100vh",
+      }}
       data-img-width={2000}
       data-img-height={1330}
       data-diff={300}
     >
-      <div className="container">
+      <div className="container-x">
         <div className="sixteen columns">
           <div className="search-container">
             {/* Form */}
-            <h2>Find Job</h2>
-            <input
-              type="text"
-              className="ico-01"
-              placeholder="job title, keywords or company name"
-              style={{
-                width: "90%;",
-              }}
+            <h2>Great Careers Start Here</h2> <SearchContainer />
+            <Waypoint
+              onEnter={removeSticky}
+              onLeave={setSticky}
+              onPositionChange={onWaypointPositionChange}
             />
-            <button style={{ backgroundColor: "#e6c018" }}>
-              <i className="fa fa-search" />
-            </button>
             {/* Browse Jobs */}
             <div className="browse-jobs">
               Browse job offers by{" "}
@@ -56,11 +55,6 @@ const Banner = () => {
             <div className="announce">
               We’ve over <strong>15,000</strong> internship offers for you!
             </div>
-            <Waypoint
-              onEnter={removeSticky}
-              onLeave={setSticky}
-              onPositionChange={onWaypointPositionChange}
-            />
           </div>
         </div>
       </div>

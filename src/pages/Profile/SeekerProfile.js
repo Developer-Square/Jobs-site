@@ -1,258 +1,266 @@
 import React from "react";
 import { useAlert } from "react-alert";
-import { Form, Formik } from "formik";
-import FormikControl from "containers/FormikContainer/FormikControl";
-import { maybe } from "core/utils";
-import { TypedSeekerProfileMutation } from "./mutations";
-import Button from "components/Button/Button";
-import { normalizeErrors } from "helpers";
-import { seekerProfileSchema } from "./validation.schema";
-import { useQuery } from "react-apollo";
-import { GET_INDUSTRIES } from "common/queries";
-import Loader from "components/Loader/Loader";
-import { AuthContext } from "contexts/auth/auth.context";
-import UserContext from "contexts/user/user.provider";
+import { isEmpty } from "lodash";
 import moment from "moment";
+
+import Loader from "components/Loader/Loader";
+import UserContext from "contexts/user/user.provider";
+import SeekerForm from "./SeekerForm";
+import NetworkStatus from "components/NetworkStatus";
+import OfflinePlaceholder from "components/OfflinePlaceholder";
+import { MetaWrapper } from "components/Meta";
+import {
+  SEEKER_PROFILE_MUTATION,
+  SEEKER_UPDATE_MUTATION,
+} from "graphql/mutations";
+import { SeekerStatus, SeekerGender, GET_INDUSTRIES } from "graphql/queries";
+import { cleanSelectData, setFieldErrors, showNotification } from "helpers";
+import { objDiff } from "utils";
+
+import { TypedQuery } from "core/queries";
+import { TypedMutation } from "core/mutations";
+
+const TypedSeekerStatus = TypedQuery(SeekerStatus);
+const TypedSeekerGender = TypedQuery(SeekerGender);
+const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
+
+const TypedSeekerProfileMutation = TypedMutation(SEEKER_PROFILE_MUTATION);
+const TypedSeekerUpdateMutation = TypedMutation(SEEKER_UPDATE_MUTATION);
 
 const SeekerProfile = () => {
   const alert = useAlert();
-  const { user } = React.useContext(UserContext);
-  const {
-    authState: { profile },
-  } = React.useContext(AuthContext);
-  const [industries, setIndustries] = React.useState([]);
-  const [initialValues, setInitialValues] = React.useState();
-  const { data, loading } = useQuery(GET_INDUSTRIES);
-  console.log(user);
-  React.useEffect(() => {
-    if (user?.seeker) {
-      setInitialValues(user.seeker);
-    } else {
-      setInitialValues({
-        title: "",
-        idNumber: "",
-        dateOfBirth: "",
-        description: "",
-        location: "",
-        gender: { value: "", label: "Select Gender" },
-        mobile: "",
-        status: { value: "", label: "Select Options" },
-        industries: [],
-        user: localStorage.getItem("thedb_auth_profile") ? profile.id : "",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { user, setRefetchUser } = React.useContext(UserContext);
+  const [updating, setUpdating] = React.useState(false);
 
-  const genderOptions = [
-    { value: "MALE", label: "Male" },
-    { value: "FEMALE", label: "Female" },
-  ];
-  const statusOptions = [
-    { value: "OPEN", label: "Open to offers" },
-    { value: "BUSY", label: "Busy" },
-    { value: "LOOKING", label: "Actively looking" },
-  ];
-
-  const showNotification = (data, errors, alert) => {
-    console.log(errors);
-    if (errors) {
-      console.log("Server Error kwa login", errors[0].message);
-      return errors[0].message;
-    }
-
-    const successful = maybe(() => data.seekerCreate.success);
-
-    if (successful) {
-      alert.show(
-        {
-          title: "Profile Created",
-        },
-        { type: "success", timeout: 5000 },
-      );
-    } else {
-      const err = maybe(() => data.seekerCreate.errors, []);
-
-      if (err) {
-        const nonFieldErr = normalizeErrors(
-          maybe(() => data.seekerCreate.errors, []),
-        );
-        alert.show(
-          {
-            title: nonFieldErr?.nonFieldErrors,
-          },
-          { type: "error", timeout: 5000 },
-        );
-      }
-    }
+  const initialData = {
+    title: "",
+    idNumber: "",
+    dateOfBirth: "",
+    description: "",
+    location: "",
+    gender: { value: "", label: "Select Gender" },
+    mobile: "",
+    status: { value: "", label: "Select Options" },
+    industries: [],
+    user: user ? user?.id : "",
   };
-  if (data && industries.length === 0) {
-    const cleanedData = data.allIndustries.reduce((arr, b) => {
+
+  const cleanIndustries = (data) => {
+    return data.reduce((arr, b) => {
       arr.push({
         value: b.id,
         label: b.name,
       });
       return arr;
     }, []);
-    setIndustries(cleanedData);
-  }
+  };
 
-  if (loading) {
+  const cleanFormData = (data, oldData) => {
+    const status = data.status.value;
+    const gender = data.gender.value;
+    const industries = data.industries.reduce((arr, b) => {
+      arr.push(b.value);
+      return arr;
+    }, []);
+
+    const originalObject = {
+      ...oldData,
+      status: status,
+      gender: gender,
+      industries: industries,
+      dateOfBirth: moment(data.dateOfBirth).format("YYYY-MM-DD"),
+    };
+    const newObject = {
+      ...data,
+      status: status,
+      gender: gender,
+      industries: industries,
+      dateOfBirth: moment(data.dateOfBirth).format("YYYY-MM-DD"),
+    };
+
+    const id = updating ? { id: user?.seeker?.id } : {};
+    const formData = isEmpty(objDiff(originalObject, newObject, "id"))
+      ? null
+      : {
+          ...newObject,
+          ...id,
+        };
+
+    return formData;
+  };
+  const cleanInitialValues = (data, statusOptions, genderOptions) => {
+    const obj = {
+      status: statusOptions.find(({ value }) => value === data?.status),
+      gender: genderOptions.find(({ value }) => value === data?.gender),
+      description: data.description,
+      title: data.title,
+      idNumber: data.idNumber,
+      dateOfBirth: data.dateOfBirth,
+      location: data.location,
+      mobile: data.mobile,
+      industries: data.industries.reduce((acc, ind) => {
+        acc.push({ value: ind.id, label: ind.name });
+        return acc;
+      }, []),
+    };
+    return obj;
+  };
+  if (!user) {
     return <Loader />;
   }
 
   return (
-    <TypedSeekerProfileMutation
-      onCompleted={(data, errors) => showNotification(data, errors, alert)}
-    >
-      {(seekerCreate, { loading }) => {
-        function onSubmit(values, { setErrors, setSubmitting }) {
-          console.log(values);
-          const gender = values.gender.value;
-          const status = values.status.value;
-          const dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
-          const industries = values.industries.reduce((arr, b) => {
-            arr.push(b.value);
-            return arr;
-          }, []);
-          seekerCreate({
-            variables: {
-              ...values,
-              gender: gender,
-              status: status,
-              industries: industries,
-              dateOfBirth: dateOfBirth,
-            },
-          }).then(({ data }) => {
-            console.log(data);
-            if (data) {
-              if (data.seekerCreate) {
-                if (!data.seekerCreate.success) {
-                  setErrors(
-                    normalizeErrors(maybe(() => data.seekerCreate.errors, [])),
-                  );
-                }
-              }
+    <NetworkStatus>
+      {(isOnline) => (
+        <TypedSeekerGender>
+          {(seekerGender) => {
+            if (seekerGender.loading) {
+              return <Loader />;
             }
-          });
-        }
-
-        return (
-          <Formik
-            initialValues={initialValues}
-            validationSchema={seekerProfileSchema}
-            onSubmit={onSubmit}
-          >
-            {(formik) => {
-              console.log(formik.values);
-              return (
-                <Form>
-                  <div className="dashboard-list-box margin-top-30">
-                    <h4>Profile Details</h4>
-                    <div className="dashboard-list-box-content">
-                      <div className="submit-page">
-                        <div className="form grid grid-cols-2 gap-6">
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Title"
-                            placeholder="e.g. Student, Eng, Mr etc"
-                            name="title"
-                          />
-                          <FormikControl
-                            control="input"
-                            type="number"
-                            label="ID Number"
-                            placeholder="ID Number"
-                            name="idNumber"
-                          />
-                        </div>
-                        <div className="form grid grid-cols-2 gap-6">
-                          <FormikControl
-                            control="select"
-                            label="Status"
-                            name="status"
-                            style={{ margin: 0 }}
-                            options={statusOptions}
-                            defaultValue={{
-                              value: "",
-                              label: "Select Options",
-                            }}
-                          />
-                          <FormikControl
-                            control="select"
-                            label="Gender"
-                            name="gender"
-                            style={{ margin: 0 }}
-                            options={genderOptions}
-                            defaultValue={{ value: "", label: "Select Gender" }}
-                          />
-                        </div>
-                        <div className="form">
-                          <FormikControl
-                            control="phone"
-                            type="phone"
-                            label="Phone Number"
-                            placeholder="e.g. +254 722-123123"
-                            name="mobile"
-                          />
-                        </div>
-                        <div className="form">
-                          <FormikControl
-                            control="input"
-                            type="text"
-                            label="Current Residence (County, Place)"
-                            name="location"
-                            placeholder="e.g. Nairobi, Kasarani - Corner"
-                          />
-                        </div>
-                        {/* <div className="form">
-                          <FormikControl
-                            control="date"
-                            label="Birth Date"
-                            name="dateOfBirth"
-                            maxDate={new Date(2003, 1, 1)}
-                          />
-                        </div> */}
-                        <div className="form" style={{ width: "100%" }}>
-                          <FormikControl
-                            control="select"
-                            label="Interests"
-                            name="industries"
-                            style={{ margin: 0 }}
-                            options={industries}
-                            isMulti={true}
-                          />
-                        </div>
-                        <div className="form" style={{ width: "100%" }}>
-                          <FormikControl
-                            control="textarea"
-                            label="Additional Info"
-                            name="description"
-                            rte={true}
-                            fullWidth
-                          />
-                        </div>
-                        <div className="form" style={{ width: "100%" }}>
-                          <Button
-                            type="submit"
-                            disabled={!formik.isValid}
-                            fullwidth
-                            loading={loading}
-                            title={loading ? "Saving... " : "Save"}
-                            className="button margin-top-15"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Form>
+            let genderOptions = [];
+            if (seekerGender.data) {
+              genderOptions = cleanSelectData(
+                seekerGender.data.__type.enumValues,
               );
-            }}
-          </Formik>
-        );
-      }}
-    </TypedSeekerProfileMutation>
+            }
+            return (
+              <TypedSeekerStatus>
+                {(seekerStatus) => {
+                  if (seekerStatus.loading) {
+                    return <Loader />;
+                  }
+                  let statusOptions = [];
+                  if (seekerStatus.data) {
+                    statusOptions = cleanSelectData(
+                      seekerStatus.data.__type.enumValues,
+                    );
+                  }
+                  if (!isOnline) {
+                    return <OfflinePlaceholder />;
+                  }
+                  return (
+                    <TypedIndustriesQuery>
+                      {(industriesData) => {
+                        if (industriesData.loading) {
+                          return <Loader />;
+                        }
+                        let industries = [];
+                        if (industriesData.data) {
+                          industries = cleanIndustries(
+                            industriesData.data.allIndustries,
+                          );
+                        }
+                        let initialValues = initialData;
+                        if (user?.isSeeker && user.seeker) {
+                          setUpdating(true);
+                          initialValues = cleanInitialValues(
+                            user?.seeker,
+                            statusOptions,
+                            genderOptions,
+                          );
+                        } else {
+                          setUpdating(false);
+                        }
+
+                        return (
+                          <MetaWrapper
+                            meta={{
+                              description: user.seeker
+                                ? "Seeker Profile creation"
+                                : user?.seeker?.descriptionPlaintext,
+                              title: user.fullName,
+                            }}
+                          >
+                            <TypedSeekerProfileMutation
+                              onCompleted={(data, errors) =>
+                                showNotification(
+                                  data.seekerCreate,
+                                  errors,
+                                  alert,
+                                  "accountErrors",
+                                  "Profile Created",
+                                )
+                              }
+                            >
+                              {(seekerCreate) => {
+                                return (
+                                  <TypedSeekerUpdateMutation
+                                    onCompleted={(data, errors) =>
+                                      showNotification(
+                                        data.seekerPatch,
+                                        errors,
+                                        alert,
+                                        "accountErrors",
+                                        "Profile Updated",
+                                      )
+                                    }
+                                  >
+                                    {(seekerUpdate) => {
+                                      function onSubmit(values, { setErrors }) {
+                                        const variables = {
+                                          variables: cleanFormData(
+                                            values,
+                                            initialValues,
+                                          ),
+                                        };
+                                        if (
+                                          !cleanFormData(values, initialValues)
+                                        ) {
+                                          showNotification(
+                                            null,
+                                            null,
+                                            alert,
+                                            null,
+                                            "No Chages Were Made",
+                                          );
+                                        } else {
+                                          const mutationFn = updating
+                                            ? seekerUpdate(variables)
+                                            : seekerCreate(variables);
+                                          mutationFn.then(({ data }) => {
+                                            if (data) {
+                                              setFieldErrors(
+                                                updating
+                                                  ? data.seekerUpdate
+                                                  : data.seekerCreate,
+                                                setErrors,
+                                              );
+                                              setRefetchUser((curr) => !curr);
+                                            }
+                                          });
+                                        }
+                                      }
+                                      return (
+                                        <SeekerForm
+                                          initialValues={initialValues}
+                                          onSubmit={onSubmit}
+                                          loading={
+                                            updating
+                                              ? seekerUpdate.loading
+                                              : seekerCreate.loading
+                                          }
+                                          industries={industries}
+                                          statusOptions={statusOptions}
+                                          genderOptions={genderOptions}
+                                        />
+                                      );
+                                    }}
+                                  </TypedSeekerUpdateMutation>
+                                );
+                              }}
+                            </TypedSeekerProfileMutation>
+                          </MetaWrapper>
+                        );
+                      }}
+                    </TypedIndustriesQuery>
+                  );
+                }}
+              </TypedSeekerStatus>
+            );
+          }}
+        </TypedSeekerGender>
+      )}
+    </NetworkStatus>
   );
 };
 

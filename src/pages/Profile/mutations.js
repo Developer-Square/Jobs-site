@@ -3,7 +3,7 @@ import {
   seekerFragment,
   employerFragment,
   institutionFragment,
-} from "fragments/auth";
+} from "graphql/fragments";
 import gql from "graphql-tag";
 
 export const BASE_PROFILE_MUTATION = gql`
@@ -291,7 +291,7 @@ export const accountErrorFragment = gql`
 `;
 const AVATAR_UPDATE_MUTATION = gql`
   ${accountErrorFragment}
-  mutation AvatarUpdate($image: Upload!) {
+  mutation AvatarUpdate($image: BaseUpload!) {
     userAvatarUpdate(image: $image) {
       errors: accountErrors {
         ...AccountErrorFragment

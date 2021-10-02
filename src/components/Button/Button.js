@@ -16,7 +16,7 @@ const Button = ({
   onClick,
   loader,
   loaderColor,
-  isLoading,
+  isLoading = false,
   className,
   fullwidth,
   style,

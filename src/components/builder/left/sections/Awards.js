@@ -6,6 +6,7 @@ import List from "../../lists/List";
 
 const Awards = ({ id, event }) => {
   const path = `${id}.items`;
+  console.log(path);
   const { t } = useTranslation();
 
   return (

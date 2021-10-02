@@ -1,23 +1,31 @@
-import React, { Fragment } from "react";
+import React, { Fragment, lazy, Suspense } from "react";
 import { Switch } from "react-router-dom";
-import LandingPage from "pages/LandingPage";
-import NotFound from "pages/NotFound";
-import EmailVerification from "containers/SignInOutForm/emailVerification";
-import PrivacyPolicy from "pages/TOS/PrivacyPolicy";
-import About from "pages/About/about";
+
+import Loader from "components/Loader/Loader";
 import * as ROUTE from "constants/routes.constants";
-import TermsOfUse from "pages/TOS/SDG";
-import Help from "pages/Help/Help";
-import { SamplePage } from "pages/sample";
-import Authentication from "pages/Authentication";
-import PasswordReset from "containers/Authentication/PasswordReset";
-import EmailActivation from "containers/Authentication/EmailActivation";
-import Vacancies from "pages/Vacancies";
-import Categories from "pages/Categories";
-import Pricing from "pages/Pricing";
-import Contact from "pages/Contact";
 import PublicRoute from "./PublicRoute";
-import VacancyView from "pages/Vacancy/VacancyView";
+import ProfileView from "pages/Profile/ProfileView";
+
+const LandingPage = lazy(() => import("pages/LandingPage"));
+const NotFound = lazy(() => import("pages/NotFound"));
+const PrivacyPolicy = lazy(() => import("pages/TOS/PrivacyPolicy"));
+const About = lazy(() => import("pages/About/about"));
+const TermsOfUse = lazy(() => import("pages/TOS/SDG"));
+const Help = lazy(() => import("pages/Help/Help"));
+const Authentication = lazy(() => import("pages/Authentication"));
+const PasswordReset = lazy(() =>
+  import("containers/Authentication/PasswordReset"),
+);
+const EmailActivation = lazy(() =>
+  import("containers/Authentication/EmailActivation"),
+);
+const Vacancies = lazy(() => import("pages/Vacancies/View"));
+const Categories = lazy(() => import("pages/Categories"));
+const Pricing = lazy(() => import("pages/Pricing"));
+const Contact = lazy(() => import("pages/Contact"));
+
+const VacancyView = lazy(() => import("pages/Vacancy/VacancyView"));
+const ResumeView = lazy(() => import("pages/Resume/view"));
 
 const AuthRoutes = (props) => {
   const { match } = props;
@@ -34,12 +42,6 @@ const AuthRoutes = (props) => {
         exact
         path={`${match.path}/p/:userType([A-Za-z0-9]+)`}
         component={Authentication}
-      />
-      <PublicRoute
-        restricted={false}
-        exact
-        path={`${match.path}/email-verify`}
-        component={EmailVerification}
       />
       <PublicRoute
         restricted={false}
@@ -67,7 +69,9 @@ const PublicRoutes = ({ deviceType }) => (
   <Fragment>
     <Switch>
       <PublicRoute restricted={false} exact path={ROUTE.LANDING}>
-        <LandingPage deviceType={deviceType} />
+        <Suspense fallback={<Loader />}>
+          <LandingPage deviceType={deviceType} />
+        </Suspense>
       </PublicRoute>
       <PublicRoute
         restricted={false}
@@ -100,12 +104,6 @@ const PublicRoutes = ({ deviceType }) => (
         component={Help}
       />
       <PublicRoute
-        restricted={true}
-        exact
-        path={`/sample`}
-        component={SamplePage}
-      />
-      <PublicRoute
         restricted={false}
         exact
         path={`${ROUTE.VACANCIES}`}
@@ -116,6 +114,18 @@ const PublicRoutes = ({ deviceType }) => (
         exact
         path={`${ROUTE.VACANCIES}/:vacancyID`}
         component={VacancyView}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.RESUME}/:resumeID`}
+        component={ResumeView}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.PROFILE}/:profileID`}
+        component={ProfileView}
       />
       <PublicRoute
         restricted={false}

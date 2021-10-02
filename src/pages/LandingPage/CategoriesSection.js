@@ -1,69 +1,73 @@
 import React from "react";
 
+import Loader from "components/Loader/Loader";
+import NetworkStatus from "components/NetworkStatus";
+import OfflinePlaceholder from "components/OfflinePlaceholder";
+
+import { GET_COUNTED_INDUSTRIES } from "graphql/queries";
+
+import { TypedQuery } from "core/queries";
+import { landingPageIndustriesLimit } from "constants/constants";
+import { Link } from "react-router-dom";
+
+export const TypedIndustriesQuery = TypedQuery(GET_COUNTED_INDUSTRIES);
+
 const CategoriesSection = () => {
+  const variables = {
+    first: landingPageIndustriesLimit,
+  };
+
   return (
-    <div className="container">
-      <div className="sixteen columns">
-        <h3 className="margin-bottom-20 margin-top-10">Popular Categories</h3>
-        {/* Popular Categories */}
-        <div className="categories-boxes-container">
-          {/* Box */}
-          <a href="browse-jobs.html" className="category-small-box">
-            <i className="ln ln-icon-Bar-Chart" />
-            <h4>Accouting / Finance</h4>
-            <span>32</span>
-          </a>
-          {/* Box */}
-          <a href="browse-jobs.html" className="category-small-box">
-            <i className="ln ln-icon-Car" />
-            <h4>Automotive Jobs</h4>
-            <span>76</span>
-          </a>
-          {/* Box */}
-          <a href="browse-jobs.html" className="category-small-box">
-            <i className="ln  ln-icon-Worker" />
-            <h4>Construction / Facilities</h4>
-            <span>31</span>
-          </a>
-          {/* Box */}
-          <a href="browse-jobs.html" className="category-small-box">
-            <i className="ln  ln-icon-Student-Female" />
-            <h4>Education / Training</h4>
-            <span>76</span>
-          </a>
-          {/* Box */}
-          <a href="browse-jobs.html" className="category-small-box">
-            <i className="ln ln-icon-Medical-Sign" />
-            <h4>Healthcare</h4>
-            <span>32</span>
-          </a>
-          {/* Box */}
-          <a href="browse-jobs.html" className="category-small-box">
-            <i className="ln ln-icon-Plates" />
-            <h4>Restarant / Food Service</h4>
-            <span>67</span>
-          </a>
-          {/* Box */}
-          <a href="browse-jobs.html" className="category-small-box">
-            <i className="ln ln-icon-Globe" />
-            <h4>Transportation / Logistics</h4>
-            <span>45</span>
-          </a>
-          {/* Box */}
-          <a href="browse-jobs.html" className="category-small-box">
-            <i className="ln   ln-icon-Laptop-3" />
-            <h4>Telecommunication</h4>
-            <span>96</span>
-          </a>
-        </div>
-        <div className="clearfix" />
-        <div className="margin-top-30" />
-        <a href="browse-categories.html" className="button centered">
-          Browse All Categories
-        </a>
-        <div className="margin-bottom-55" />
-      </div>
-    </div>
+    <NetworkStatus>
+      {(isOnline) => (
+        <TypedIndustriesQuery variables={variables}>
+          {(industriesList) => {
+            if (industriesList.loading) {
+              return <Loader />;
+            }
+            if (!isOnline) {
+              return <OfflinePlaceholder />;
+            }
+            return (
+              <div className="container-x">
+                <div className="sixteen columns">
+                  <h3 className="margin-bottom-20 margin-top-10">
+                    Popular Categories
+                  </h3>
+                  {/* Popular Categories */}
+                  <div className="categories-boxes-container">
+                    {industriesList.data.industries.edges.map(
+                      ({ node: industry }) => {
+                        return (
+                          <Link
+                            to={{ pathname: "/vacancies" }}
+                            className="category-small-box"
+                          >
+                            <i
+                              className={
+                                industry.icon || "ln  ln-icon-Laptop-3"
+                              }
+                            />
+                            <h4>{industry.name}</h4>
+                            <span>{industry.vacanciesCount}</span>
+                          </Link>
+                        );
+                      },
+                    )}
+                  </div>
+                  <div className="clearfix" />
+                  <div className="margin-top-30" />
+                  <a href="/categories" className="button centered">
+                    Browse All Categories
+                  </a>
+                  <div className="margin-bottom-55" />
+                </div>
+              </div>
+            );
+          }}
+        </TypedIndustriesQuery>
+      )}
+    </NetworkStatus>
   );
 };
 

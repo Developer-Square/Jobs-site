@@ -19,7 +19,7 @@ import InstitutionForm from "./InstitutionForm";
 
 const InstitutionProfile = () => {
   const alert = useAlert();
-  const { user } = React.useContext(UserContext);
+  const { user, setRefetchUser } = React.useContext(UserContext);
   const [updating, setUpdating] = React.useState(false);
 
   const initialData = {
@@ -157,6 +157,7 @@ const InstitutionProfile = () => {
                                       : data.institutionCreate,
                                     setErrors,
                                   );
+                                  setRefetchUser((curr) => !curr);
                                 }
                               });
                             }

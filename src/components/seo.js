@@ -1,9 +1,25 @@
 import React from "react";
 import { Helmet } from "react-helmet";
+import { BASE_GRAPHQL_URL } from "constants/constants";
+import dbImage from "image/TheDBLogo.jpeg";
 
-export const SEO = ({ title, description, canonical, css, js, image }) => (
+export const SEO = ({
+  title,
+  link,
+  description,
+  industry,
+  css,
+  js,
+  company,
+  location = "Nairobi, Kenya",
+  image = dbImage,
+  country = "Kenya",
+  canonical = window.location.href,
+}) => (
   <Helmet>
     <title>{title}</title>
+    {link && <link rel="canonical" href={link} />}
+    <link rel="preconnect" href={BASE_GRAPHQL_URL} />
     <meta name="description" content={description} />
     <meta
       name="viewport"
@@ -21,17 +37,16 @@ export const SEO = ({ title, description, canonical, css, js, image }) => (
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:site" content="@propernounco" />
-    <meta name="twitter:creator" content="@propernounco" />
+    <meta name="twitter:site" content="@ThedatabaseKe" />
+    <meta name="twitter:creator" content="@ThedatabaseKe" />
+    <meta property="job:recent" content="recent" />
+    <meta property="job:industry" content={industry || "All Industries"} />
+    <meta property="job:country" content={country} />
+    <meta property="job:location" content={location} />
+    {company && <meta property="job:company" content={company} />}
+
     {css && <link rel="stylesheet" href={`${css}`} />}
-    {image ? (
-      <meta property="og:image" content={`${image}`} />
-    ) : (
-      <meta
-        property="og:image"
-        content="https://www.propernoun.co/static/images/proper-noun-social.png"
-      />
-    )}
+    {image && <meta property="og:image" content={image || dbImage} />}
     {image && <meta name="twitter:image" content={`${image}`} />}
     {canonical && <link rel="canonical" href={`${canonical}`} />}
     {js && <script type="text/javascript" src={`${js}`} />}

@@ -1,43 +1,24 @@
-import * as React from "react";
+import React, { useContext } from "react";
 
 import { StringParam, useQueryParam } from "use-query-params";
-import { MetaWrapper, OfflinePlaceholder } from "components";
+import OfflinePlaceholder from "components/OfflinePlaceholder";
+import MetaWrapper from "components/Meta/MetaWrapper";
 import NetworkStatus from "components/NetworkStatus";
-import { convertSortByFromString } from "core/utils";
 import Page from "./Page";
-import { TypedVacanciesQuery } from "./queries";
 import { NoResult } from "components/VacancyLoader/VacancyLoader.style";
 import Loader from "components/Loader/Loader";
-import { useLocation } from "react-router";
+import { vacancyLimit } from "constants/constants";
+import { VacancyContext } from "contexts/vacancies/vacancies.context";
 
-const VACANCIES_PER_PAGE = 10;
-export const FilterQuerySet = {
-  encode(valueObj) {
-    const str = [];
-    Object.keys(valueObj).forEach((value) => {
-      str.push(`${value}_${valueObj[value].join("_")}`);
-    });
-    return str.join(".");
-  },
+import { TypedQuery } from "core/queries";
+import { VACANCIES_QUERY } from "graphql/queries";
 
-  decode(strValue) {
-    const obj = {};
-    const propsWithValues = strValue.split(".").filter((n) => n);
-    propsWithValues.map((value) => {
-      const propWithValues = value.split("_").filter((n) => n);
-      obj[propWithValues[0]] = propWithValues.slice(1);
-      return obj;
-    });
-    return obj;
-  },
-};
+const TypedVacanciesQuery = TypedQuery(VACANCIES_QUERY);
 
-export const View = ({ match, deviceType }) => {
+const View = () => {
   const [sort, setSort] = useQueryParam("sortBy", StringParam);
-  const [attributeFilters, setAttributeFilters] = useQueryParam(
-    "filters",
-    FilterQuerySet,
-  );
+  const [attributeFilters, setAttributeFilters] = useQueryParam("filters");
+  const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
 
   const clearFilters = () => {
     setAttributeFilters({});
@@ -72,15 +53,10 @@ export const View = ({ match, deviceType }) => {
   };
 
   const filters = {
-    pageSize: VACANCIES_PER_PAGE,
+    first: vacancyLimit,
     search: "",
     ids: [],
     industries: [],
-  };
-  const variables = {
-    ...filters,
-    sortBy: convertSortByFromString(filters.sortBy),
-    countryCode: "KE",
   };
 
   const sortOptions = [
@@ -114,6 +90,14 @@ export const View = ({ match, deviceType }) => {
     },
   ];
 
+  const variables = {
+    ...filters,
+    sortBy: {
+      field: "SALARY",
+      direction: "ASC",
+    },
+  };
+
   return (
     <NetworkStatus>
       {(isOnline) => (
@@ -129,6 +113,21 @@ export const View = ({ match, deviceType }) => {
 
             if (!isOnline) {
               return <OfflinePlaceholder />;
+            }
+
+            // Only update the jobTypes in the context API when its empty.
+            if (
+              vacancyData.data.__type.enumValues &&
+              vacancyState.jobTypes.length === 0
+            ) {
+              vacancyDispatch({
+                type: "SET_JOB_TYPES",
+                payload: vacancyData.data.__type.enumValues,
+              });
+              vacancyDispatch({
+                type: "ADD_TOTAL_COUNT",
+                payload: vacancyData.data.vacancies.totalCount,
+              });
             }
 
             const handleLoadMore = () =>
@@ -150,19 +149,23 @@ export const View = ({ match, deviceType }) => {
               <MetaWrapper
                 meta={{
                   description: "The Database Kenya Jobs and vacancies",
-                  title: "jobs in Kenya",
+                  title:
+                    "The Database Kenya | jobs in Kenya | jobs need people",
                 }}
               >
                 <Page
                   clearFilters={clearFilters}
                   displayLoader={vacancyData.loading}
-                  hasNextPage={vacancyData.data?.products?.pageInfo.hasNextPage}
+                  hasNextPage={
+                    vacancyData.data?.vacancies?.pageInfo.hasNextPage
+                  }
                   sortOptions={sortOptions}
                   activeSortOption={filters.sortBy}
                   filters={filters}
                   vacancies={vacancyData.data.vacancies}
                   onFiltersChange={onFiltersChange}
                   onLoadMore={handleLoadMore}
+                  sort={sort}
                   onOrder={(value) => {
                     setSort(value.value);
                   }}

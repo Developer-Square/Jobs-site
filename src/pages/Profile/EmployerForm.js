@@ -19,7 +19,6 @@ const EmployerForm = ({
       enableReinitialize
     >
       {(formik) => {
-        console.log(formik.values);
         return (
           <Form>
             <div className="dashboard-list-box margin-top-30">
@@ -53,6 +52,7 @@ const EmployerForm = ({
                     <FormikControl
                       control="select"
                       label="Company's WorkForce"
+                      hideButton={() => {}}
                       name="workForce"
                       style={{ margin: 0 }}
                       options={workForce}
@@ -88,6 +88,7 @@ const EmployerForm = ({
                       control="select"
                       label="Industries Engaged"
                       name="industries"
+                      hideButton={() => {}}
                       style={{ margin: 0 }}
                       options={industries}
                       isMulti={true}

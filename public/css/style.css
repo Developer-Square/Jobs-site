@@ -1,17 +1,17 @@
 /*
 * Author: Vasterad
-* URL: http://purethemes.net
+* URL: https://purethemes.net
 */
 
-
+   
 /* ------------------------------------------------------------------- */
 /* Import Section
 ---------------------------------------------------------------------- */
 @import url("base.css");				/* Default Reset, Typography, Forms, etc. */
 @import url("responsive.css");			/* Responsive Grid */
 @import url("font-awesome.css");		/* Font Awesome Icons */
-@import url("http://fonts.googleapis.com/css?family=Montserrat:400,500,600");
-@import url("http://fonts.googleapis.com/css?family=Lato:400,700,300");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600");
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700,300");
 
 
 /* ------------------------------------------------------------------- */
@@ -6147,16 +6147,16 @@ a.post-img:hover:before {
 .chosen-container-active.chosen-with-drop .chosen-single div b:after { content: "" }
 .chosen-container-active .chosen-choices li.search-field input[type="text"] { color: #808080 !important; }
 
-
+ 
 /* ------------------------------------------------------------------- */
 
 /* SCEditor
-/* http://www.ssceditor.com/
+/* https://www.ssceditor.com/
 
 /* Copyright (C) 2011-12, Sam Clarke (samclarke.com)
 
 /* SCEditor is licensed under the MIT license:
-/* http://www.opensource.org/licenses/mit-license.php
+/* https://www.opensource.org/licenses/mit-license.php
 
 ---------------------------------------------------------------------- */
 
@@ -7260,18 +7260,17 @@ label.upload-btn input[type="file"] { display: none; }
 /* Dashboard Styles
 ---------------------------------------------------------------------- */
 #dashboard {
-	background-color: #f7f7f7;
 	min-height: 100vh;
 	display: flex;
 	flex-wrap: wrap;
-	padding-top: 90px;
+	padding-top: 15px;
 }
 
 header.dashboard-header { height: auto; min-height: 90px; }
 
 /* Flexbox Adjustments */
-.dashboard-content,
-.dashboard-nav { flex: 1; }
+.dashboard-content { flex: 1; }
+/* .dashboard-nav { flex: 1; } */
 
 .dashboard-content {
 	padding: 40px 45px;
@@ -7282,17 +7281,23 @@ header.dashboard-header { height: auto; min-height: 90px; }
 	margin-left: 260px;
 }
 
-.dashboard-nav,
+.dashboard-nav {
+	height: 100%;
+    width: 100%;
+}
+
+
+/* .dashboard-nav, */
 .dashboard #logo {
 	min-width: 260px;
 	max-width: 260px;
 }
 
-.dashboard-nav {
+/* .dashboard-nav {
 	position: fixed;
 	min-height: 100vh;
 	overflow: hidden;
-}
+} */
 
 
 /* Navigation Scrolling */
@@ -7358,14 +7363,14 @@ header.fullwidth.dashboard .container { padding-left: 285px; }
 /* ---------------------------------- */
 /* Dashboard Navigation
 ------------------------------------- */
-.dashboard-nav {
+/* .dashboard-nav {
 	display: block;
 	z-index: 11;
 	padding-bottom: 30px;
     box-shadow: 0 0 20px 0 rgba(0,0,0,.1);
     z-index: 100;
     background: #fff;
-}
+} */
 
 a.dashboard-responsive-nav-trigger { display: none; }
 
@@ -7376,7 +7381,13 @@ a.dashboard-responsive-nav-trigger { display: none; }
 }
 
 .dashboard-nav ul:first-child {
-	margin: 30px 0 0 0;
+	margin: 0;
+}
+.dashboard-nav ul:first-child:before {
+	margin: 0;
+	font-size: 25px;
+	font-family: "Quentin";
+	color: #2a3084;
 }
 
 .dashboard-nav ul:before {
@@ -8855,8 +8866,9 @@ a.close-list-item {
 @media (max-width: 991px) {
 
 	.dashboard-header ul.float-right li a:hover {background: transparent;}
-	.dashboard-nav ul:first-child {
-	    margin: 10px 0 0 0;
+	.dashboard-nav ul:first-child ul:before{
+	    margin: 0;
+		font-size: 30px;
 	}
 	.main-search-container { height: 580px; }
 
@@ -8871,7 +8883,7 @@ a.close-list-item {
 		border-radius: 4px;
 	}
 
-	/* Dashboard Nav */
+	/* Dashboard Nav
 	.dashboard-nav {
 		min-width: 90%;
 		max-width: 90%;
@@ -8906,7 +8918,7 @@ a.close-list-item {
 	    visibility: visible;
 	    opacity: 1;
 	    max-height: 300px;
-	}
+	} */
 
 	#header-container.fixed {
 	    position: relative;

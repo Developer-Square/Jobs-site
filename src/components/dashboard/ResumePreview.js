@@ -3,23 +3,30 @@ import { Menu, MenuItem } from "@material-ui/core";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import React, { useContext, useState } from "react";
-import dayjs from "dayjs";
 import DatabaseContext from "contexts/database/database.provider";
 import ModalContext from "contexts/modal/modal.provider";
 import * as styles from "./ResumePreview.module.css";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
+import resumeImg from "image/glalie.png";
+import { getDBIdFromGraphqlId } from "utils";
 
 const menuToggleDataTestIdPrefix = "resume-preview-menu-toggle-";
 
 const ResumePreview = ({ resume }) => {
   const navigate = useHistory();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const { emitter, events } = useContext(ModalContext);
   const { duplicateResume, deleteResume } = useContext(DatabaseContext);
 
   const handleOpen = () =>
-    navigate.push(`/dashboard/resume/builder/${resume.id}`);
+    navigate.push(
+      `/dashboard/resume/builder/${getDBIdFromGraphqlId(
+        resume.id,
+        "ResumeNode",
+      )}`,
+    );
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -48,7 +55,10 @@ const ResumePreview = ({ resume }) => {
   return (
     <div className={styles.resume}>
       <div className={styles.backdrop}>
-        <img src={resume.preview} alt={resume.name} />
+        <img
+          src={resume.preview ? resume.preview : resumeImg}
+          alt={resume.name}
+        />
       </div>
       <div className={styles.page}>
         <MdOpenInNew
@@ -89,9 +99,7 @@ const ResumePreview = ({ resume }) => {
         {resume.updatedAt && (
           <span>
             {t("dashboard.lastUpdated", {
-              timestamp: dayjs(resume.updatedAt)
-                .locale(i18n.language.substr(0, 2))
-                .fromNow(),
+              timestamp: moment(resume?.updatedAt).fromNow(),
             })}
           </span>
         )}

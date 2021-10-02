@@ -1,41 +1,110 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import LogoImage from "image/thedb.png";
 import moment from "moment";
+import { useAlert } from "react-alert";
+import { toast } from "react-toastify";
+import { useHistory, Link } from "react-router-dom";
+
+import ModalContext from "contexts/modal/modal.provider";
+import { AuthContext } from "contexts/auth/auth.context";
+
+import DraftRenderer from "components/DraftRenderer/DraftRenderer";
+import Button from "components/Button/Button";
+
+import LogoImage from "image/job-list-logo-04.png";
+
+import Bookmark from "./Bookmark";
+import { checkJobType } from "utils";
+import { findJobTypeDescription } from "utils";
 
 const Page = ({
+  vacancyID,
+  payRateData = [],
   yearsData = [],
   qualificationData = [],
   types = [],
   data = [],
 }) => {
+  const alert = useAlert();
+  const history = useHistory();
+  const {
+    authState: { profile, isAuthenticated },
+  } = React.useContext(AuthContext);
+
+  const handleLoginNotification = () => {
+    toast.error("You must login to save this job");
+  };
+  const handleApplyJob = () => {
+    toast.error("You must login to apply for this job");
+  };
+  const { emitter, events } = React.useContext(ModalContext);
+
+  const handleClick = () => {
+    if (data?.isActive) {
+      emitter.emit(events.APPLICATION_MODAL, data);
+    } else {
+      toast.info("Sorry 😔, Applications have been closed");
+    }
+  };
+
   const jobType = types.find(({ name }) => name === data?.jobType);
+  const payRateType = payRateData.find(({ name }) => name === data?.payRate);
   const qualificationType = qualificationData.find(
     ({ name }) => name === data?.minQualification,
   );
   const yearsType = yearsData.find(({ name }) => name === data?.yearsOfExp);
-  console.log("years", moment(new Date()).fromNow());
   return (
     <div>
-      <div id="titlebar">
-        <div className="container">
+      <div
+        id="titlebar"
+        className="with-transparent-header parallax background"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.1), rgb(33 39 127 / 0.79)), url("https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-flat-wind-cartoon-recruitment-banner-poster-image_195196.jpg")`,
+        }}
+      >
+        <div className="container-x">
           <div className="ten columns">
             <span>
-              <a href="browse-jobs.html">{data?.industry?.name}</a>
+              <Link to={{ pathname: "" }}>{data?.industry?.name}</Link>
             </span>
             <h2>
               {data?.title}{" "}
-              <span className="full-time">{jobType?.description}</span>
+              <span
+                className={`${checkJobType(
+                  findJobTypeDescription(data, types),
+                )}`}
+              >
+                {jobType?.description}
+              </span>
             </h2>
+            <span>
+              <i className="fa fa-eye" /> {data?.timesViewed}{" "}
+              {data?.timesViewed === 1 ? "View" : "Views"}
+            </span>
           </div>
           <div className="six columns">
-            <a href="#" className="button dark">
-              <i className="fa fa-star" /> Bookmark This Job
-            </a>
+            {profile.isSeeker && (
+              <Bookmark
+                handleLoginNotification={handleLoginNotification}
+                isAuthenticated={isAuthenticated}
+                data={data}
+                toast={toast}
+                alert={alert}
+              />
+            )}
+            {profile.isEmployer && profile.email === data.creator.email ? (
+              <Button
+                className="popup-with-zoom-anim button mt-8 ml-auto"
+                title={<div style={{ color: "#FFFFFF" }}> Edit Job</div>}
+                onClick={() => {
+                  history.push(`/dashboard/vacancies/edit-job/${data?.id}`);
+                }}
+              />
+            ) : null}
           </div>
         </div>
       </div>
-      <div className="container">
+      <div className="container-x">
         {/* Recent Jobs */}
         <div className="eleven columns">
           <div className="padding-right">
@@ -48,73 +117,38 @@ const Page = ({
               <div className="content">
                 <h4>{data?.postedBy?.name}</h4>
                 <span>
-                  <a href="#">
+                  <Link
+                    to={{ pathname: "" }}
+                    onClick={() => window.open(`${data?.postedBy?.website}`)}
+                  >
                     <i className="fa fa-link" /> {data?.postedBy?.website}
-                  </a>
+                  </Link>
                 </span>
-                <span>
-                  <a href="#">
-                    <i className="fa fa-twitter" /> @kingrestaurants
-                  </a>
-                </span>
+                {data.creator.socials.map((social, i) => {
+                  return (
+                    <span key={i}>
+                      <Link to={{ pathname: "" }}>
+                        <i className={`"fa fa-${social.network}`} />{" "}
+                        {social.username}
+                      </Link>
+                    </span>
+                  );
+                })}
               </div>
               <div className="clearfix" />
             </div>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: JSON.parse(data?.description),
-              }}
-            />
-
-            {/* <p className="margin-reset">
-              The Food Service Specialist ensures outstanding customer service
-              is provided to food customers and that all food offerings meet the
-              required stock levels and presentation standards. Beginning your
-              career as a Food Steward will give you a strong foundation in
-              Speedway’s food segment that can make you a vital member of the
-              front line team!
-            </p>
-            <br />
-            <p>
-              The <strong>Food Service Specialist</strong> will have
-              responsibilities that include:
-            </p>
-            <ul className="list-1">
-              <li>
-                Executing the Food Service program, including preparing and
-                presenting our wonderful food offerings to hungry customers on
-                the go!
-              </li>
-              <li>
-                Greeting customers in a friendly manner and suggestive selling
-                and sampling items to help increase sales.
-              </li>
-              <li>
-                Keeping our Store food area looking terrific and ready for our
-                valued customers by managing product inventory, stocking,
-                cleaning, etc.
-              </li>
-              <li>
-                We’re looking for associates who enjoy interacting with people
-                and working in a fast-paced environment!
-              </li>
-            </ul>
-            <br />
-            <h4 className="margin-bottom-10">Job Requirment</h4>
-            <ul className="list-1">
-              <li>
-                Excellent customer service skills, communication skills, and a
-                happy, smiling attitude are essential.
-              </li>
-              <li>
-                Must be available to work required shifts including weekends,
-                evenings and holidays.
-              </li>
-              <li>
-                Must be able to perform repeated bending, standing and reaching.
-              </li>
-              <li> Must be able to occasionally lift up to 50 pounds</li>
-            </ul> */}
+            <DraftRenderer content={JSON.parse(data?.description)} />
+            {!isAuthenticated && (
+              <Button
+                className="popup-with-zoom-anim button mt-8 ml-auto"
+                title={
+                  <div style={{ color: "#FFFFFF" }}> Login to view Email</div>
+                }
+                onClick={() => {
+                  history.push(`/auth/`);
+                }}
+              />
+            )}
           </div>
         </div>
         {/* Widgets */}
@@ -146,65 +180,42 @@ const Page = ({
                   </div>
                 </li>
                 <li>
-                  <i className="fa fa-clock-o" />
+                  <i className="fa fa-user" />
                   <div>
                     <strong>Positions:</strong>
                     <span>{data.positions}</span>
                   </div>
                 </li>
                 <li>
-                  <i className="fa fa-money" />
+                  <i className="fa fa-certificate" />
                   <div>
                     <strong>Minimun Qualification</strong>
                     <span>{qualificationType.description}</span>
                   </div>
                 </li>
                 <li>
-                  <i className="fa fa-money" />
+                  <i className="fa fa-clock-o" />
                   <div>
                     <strong>Years of Experience</strong>
                     <span>{yearsType.description}</span>
                   </div>
                 </li>
+                <li>
+                  <i className="fa fa-calendar-o" />
+                  <div>
+                    <strong>Pay Rate</strong>
+                    <span>{payRateType?.description}</span>
+                  </div>
+                </li>
               </ul>
-              <a href="#small-dialog" className="popup-with-zoom-anim button">
-                Apply For This Job
-              </a>
-              <div
-                id="small-dialog"
-                className="zoom-anim-dialog mfp-hide apply-popup"
-              >
-                <div className="small-dialog-headline">
-                  <h2>Apply For This Job</h2>
-                </div>
-                <div className="small-dialog-content">
-                  <form action="#" method="get">
-                    <input type="text" placeholder="Full Name" defaultValue />
-                    <input
-                      type="text"
-                      placeholder="Email Address"
-                      defaultValue
-                    />
-                    <textarea
-                      placeholder="Your message / cover letter sent to the employer"
-                      defaultValue={""}
-                    />
-                    {/* Upload CV */}
-                    <div className="upload-info">
-                      <strong>Upload your CV (optional)</strong>{" "}
-                      <span>Max. file size: 5MB</span>
-                    </div>
-                    <div className="clearfix" />
-                    <label className="upload-btn">
-                      <input type="file" multiple />
-                      <i className="fa fa-upload" /> Browse
-                    </label>
-                    <span className="fake-input">No file selected</span>
-                    <div className="divider" />
-                    <button className="send">Send Application</button>
-                  </form>
-                </div>
-              </div>
+              {profile.isSeeker && (
+                <Button
+                  // href="#small-dialog"
+                  className="popup-with-zoom-anim button mt-8 ml-auto"
+                  onClick={isAuthenticated ? handleClick : handleApplyJob}
+                  title={`Apply For This job`}
+                />
+              )}
             </div>
           </div>
         </div>

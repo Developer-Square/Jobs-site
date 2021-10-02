@@ -90,7 +90,6 @@ export const Span = styled.span`
 
 export const LoaderContainer = styled.div`
   div {
-    margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;

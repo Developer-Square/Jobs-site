@@ -1,16 +1,16 @@
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import { useTranslation } from 'react-i18next';
-import React, { memo } from 'react';
-import { getFieldProps } from '../../utils';
-import DataModal from '../DataModal';
-import Input from '../../components/shared/Input';
-import ModalEvents from '../../constants/ModalEvents';
+import * as Yup from "yup";
+import { Formik } from "formik";
+import { useTranslation } from "react-i18next";
+import React, { memo } from "react";
+import { getFieldProps } from "../../utils";
+import DataModal from "../DataModal";
+import Input from "../../components/shared/Input";
+import ModalEvents from "../../constants/ModalEvents";
 
 const initialValues = {
-  url: '',
-  network: '',
-  username: '',
+  link: "",
+  network: "",
+  username: "",
 };
 
 const SocialModal = () => {
@@ -18,12 +18,12 @@ const SocialModal = () => {
 
   const schema = Yup.object().shape({
     network: Yup.string()
-      .min(5, t('shared.forms.validation.min', { number: 5 }))
-      .required(t('shared.forms.validation.required')),
-    username: Yup.string().required(t('shared.forms.validation.required')),
-    url: Yup.string()
-      .min(5, t('shared.forms.validation.min', { number: 5 }))
-      .required(t('shared.forms.validation.required')),
+      .min(5, t("shared.forms.validation.min", { number: 5 }))
+      .required(t("shared.forms.validation.required")),
+    username: Yup.string().required(t("shared.forms.validation.required")),
+    link: Yup.string()
+      .min(5, t("shared.forms.validation.min", { number: 5 }))
+      .required(t("shared.forms.validation.required")),
   });
 
   return (
@@ -35,27 +35,27 @@ const SocialModal = () => {
       {(formik) => (
         <DataModal
           path="social.items"
-          name={t('builder.sections.social')}
+          name={t("builder.sections.social")}
           event={ModalEvents.SOCIAL_MODAL}
         >
           <div className="grid grid-cols-2 gap-8">
             <Input
-              label={t('builder.social.network')}
+              label={t("builder.social.network")}
               placeholder="Twitter"
-              {...getFieldProps(formik, schema, 'network')}
+              {...getFieldProps(formik, schema, "network")}
             />
 
             <Input
-              label={t('builder.social.username')}
+              label={t("builder.social.username")}
               placeholder="KingOKings"
-              {...getFieldProps(formik, schema, 'username')}
+              {...getFieldProps(formik, schema, "username")}
             />
 
             <Input
-              label={t('builder.social.url')}
+              label={t("builder.social.url")}
               className="col-span-2"
               placeholder="https://"
-              {...getFieldProps(formik, schema, 'url')}
+              {...getFieldProps(formik, schema, "link")}
             />
           </div>
         </DataModal>

@@ -18,7 +18,6 @@ const InstitutionForm = ({
       enableReinitialize
     >
       {(formik) => {
-        console.log(formik.values);
         return (
           <Form>
             <div className="dashboard-list-box margin-top-30">
@@ -53,6 +52,7 @@ const InstitutionForm = ({
                       control="select"
                       label="Schools Student Population"
                       name="studentCount"
+                      hideButton={() => {}}
                       style={{ margin: 0 }}
                       options={studentCount}
                     />

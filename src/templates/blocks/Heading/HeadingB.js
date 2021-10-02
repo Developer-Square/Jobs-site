@@ -8,8 +8,8 @@ const HeadingB = ({ children }) => {
     <h6
       className="mb-2 border-b-2 pb-1 font-bold uppercase tracking-wide text-sm"
       style={{
-        color: data.metadata.colors.primary,
-        borderColor: data.metadata.colors.primary,
+        color: data.resumemetadata.primaryColor,
+        borderColor: data.resumemetadata.primaryColor,
       }}
     >
       {children}

@@ -6,7 +6,7 @@ import Logo from "components/Logo/Logo";
 
 const TopNavbar = () => (
   <div className={styles.navbar}>
-    <div className="container">
+    <div className="container" style={{ width: "100%" }}>
       <Link to="/">
         <Logo size="40px" />
       </Link>

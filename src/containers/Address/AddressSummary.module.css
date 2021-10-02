@@ -1,0 +1,48 @@
+.address {
+    @apply relative flex flex-col items-center;
+  }
+  
+  .address > .backdrop {
+    max-width: 184px;
+    height: max-content;
+    background: ghostwhite;
+  
+    @apply rounded absolute w-full shadow;
+  }
+  
+  .address > .backdrop img {
+    max-width: 184px;
+    height: max-content;
+  
+    @apply w-full object-cover rounded;
+  }
+  
+  .address > .page {
+    max-width: 184px;
+    height: 100%;
+    background: ghostwhite;
+  
+    @apply rounded absolute w-full;
+    @apply opacity-0 transition-opacity duration-200 ease-in-out;
+    @apply absolute text-primary-500 flex flex-col justify-evenly items-center;
+  }
+  
+  .address > .page:hover {
+    background: #000;
+    @apply opacity-75 transition-opacity duration-200 ease-in-out;
+  }
+  
+  .address > .meta {
+    margin-top:max-content;
+  
+    @apply flex flex-col text-center items-center;
+  }
+  
+  .address > .meta span:first-child {
+    @apply mt-3 font-medium leading-normal;
+  }
+  
+  .address > .meta span:last-child {
+    font-size: 10px;
+  }
+  

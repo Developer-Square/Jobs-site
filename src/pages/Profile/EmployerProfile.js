@@ -5,7 +5,6 @@ import Loader from "components/Loader/Loader";
 import NetworkStatus from "components/NetworkStatus";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
 
-import { TypedIndustriesQuery } from "common/queries";
 import { MetaWrapper } from "components/Meta";
 
 import { cleanSelectData, setFieldErrors, showNotification } from "helpers";
@@ -13,15 +12,20 @@ import {
   TypedEmployerProfileMutation,
   TypedEmployerUpdateMutation,
 } from "./mutations";
-import { TypedEmployerWorkForceQuery } from "./queries";
+
 import { objDiff } from "utils";
 import { isEmpty } from "lodash";
 import UserContext from "contexts/user/user.provider";
 import EmployerForm from "./EmployerForm";
+import { TypedQuery } from "core/queries";
+import { GET_INDUSTRIES, EmployerWorkForce } from "graphql/queries";
+
+const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);
+const TypedEmployerWorkForceQuery = TypedQuery(EmployerWorkForce);
 
 const EmployerProfile = () => {
   const alert = useAlert();
-  const { user } = React.useContext(UserContext);
+  const { user, setRefetchUser } = React.useContext(UserContext);
   const [updating, setUpdating] = React.useState(false);
 
   const initialData = {
@@ -108,6 +112,8 @@ const EmployerProfile = () => {
             if (employerWorkForce.loading) {
               return <Loader />;
             }
+
+            console.log(employerWorkForce.data);
             let workForceCount = [];
             if (employerWorkForce.data) {
               workForceCount = cleanSelectData(
@@ -202,6 +208,7 @@ const EmployerProfile = () => {
                                             : data.employerCreate,
                                           setErrors,
                                         );
+                                        setRefetchUser((curr) => !curr);
                                       }
                                     });
                                   }

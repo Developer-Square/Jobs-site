@@ -11,6 +11,7 @@ import { ReactHooksWrapper, setHook } from "hooks";
 import { NotificationTemplate } from "components/NotificationTemplate";
 import { useDeviceType } from "helpers/useDeviceType";
 import { AuthProvider } from "contexts/auth/auth.provider";
+import { VacancyProvider } from "contexts/vacancies/vacancies.provider";
 import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
@@ -25,6 +26,7 @@ import BaseRouter from "routers/router";
 import { useRouterQuery } from "helpers/useRouterQuery";
 import { serviceWorkerTimeout } from "constants/constants";
 // External CSS import here
+
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-phone-input-2/lib/style.css";
 import "rc-drawer/assets/index.css";
@@ -32,9 +34,11 @@ import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
 import { withApollo } from "helpers/apollo";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import { MuiThemeProvider } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
+import { SEO } from "components/seo";
 
-const MUItheme = createMuiTheme({
+const MUItheme = createTheme({
   typography: {
     fontWeightRegular: 500,
     fontFamily: ["Montserrat", "sans-serif"].join(","),
@@ -46,7 +50,7 @@ function App() {
   const [theme, componentMounted] = useDarkMode();
   const userAgent = navigator.userAgent;
   const deviceType = useDeviceType(userAgent);
-  const themeMode = theme === "light" ? lightTheme : darkTheme;
+  const themeMode = theme === "Light" ? lightTheme : darkTheme;
   if (!componentMounted) {
     return <div />;
   }
@@ -62,40 +66,53 @@ function App() {
   };
 
   return (
-    <SettingsProvider>
-      <OriginalThemeProvider theme={themeMode}>
-        <MuiThemeProvider theme={MUItheme}>
-          <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-            <SearchProvider query={query}>
-              <HeaderProvider>
-                <AuthProvider>
-                  <ModalProvider>
-                    <UserProvider>
-                      <DatabaseProvider>
-                        <ResumeProvider>
-                          <StickyProvider>
-                            <AlertProvider
-                              template={NotificationTemplate}
-                              {...notificationConfig}
-                            >
-                              <StorageProvider>
-                                <BaseRouter deviceType={deviceType} />
-                              </StorageProvider>
-                            </AlertProvider>
-                          </StickyProvider>
-                        </ResumeProvider>
-                      </DatabaseProvider>
-                    </UserProvider>
-                  </ModalProvider>
-                </AuthProvider>
-              </HeaderProvider>
-              <GlobalStyle />
-            </SearchProvider>
-            <ReactHooksWrapper />
-          </ServiceWorkerProvider>
-        </MuiThemeProvider>
-      </OriginalThemeProvider>
-    </SettingsProvider>
+    <>
+      <SEO
+        title={`TheDatabase Kenya`}
+        description={`From Gigs to Internships to Jobs and Volunteering. students can gerrit, employers can get it, workers can gerrit. EVERYBODY can gerrit! TheDatabase, Jobs Need People!`}
+        industry={"All Industries"}
+        location={"Kenya"}
+        canonical={window.location.href}
+        link={window.location.href}
+        company={"ADELIMA THEDATABASE KENYA"}
+      />
+      <SettingsProvider>
+        <OriginalThemeProvider theme={themeMode}>
+          <MuiThemeProvider theme={MUItheme}>
+            <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
+              <SearchProvider query={query}>
+                <HeaderProvider>
+                  <AuthProvider>
+                    <VacancyProvider>
+                      <ModalProvider>
+                        <UserProvider>
+                          <DatabaseProvider>
+                            <ResumeProvider>
+                              <StickyProvider>
+                                <AlertProvider
+                                  template={NotificationTemplate}
+                                  {...notificationConfig}
+                                >
+                                  <StorageProvider>
+                                    <BaseRouter deviceType={deviceType} />
+                                  </StorageProvider>
+                                </AlertProvider>
+                              </StickyProvider>
+                            </ResumeProvider>
+                          </DatabaseProvider>
+                        </UserProvider>
+                      </ModalProvider>
+                    </VacancyProvider>
+                  </AuthProvider>
+                </HeaderProvider>
+                <GlobalStyle />
+              </SearchProvider>
+              <ReactHooksWrapper />
+            </ServiceWorkerProvider>
+          </MuiThemeProvider>
+        </OriginalThemeProvider>
+      </SettingsProvider>
+    </>
   );
 }
 export default withApollo(App);

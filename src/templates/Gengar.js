@@ -1,6 +1,9 @@
 import { useTranslation } from "react-i18next";
 import React from "react";
-import { hasAddress, hexToRgb } from "utils";
+// import { findIndex } from "lodash";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
+import { hasAddress, hexToRgb, reduceSectionArray } from "utils";
 import AwardsA from "./blocks/Awards/AwardsA";
 import CertificationsA from "./blocks/Certifications/CertificationsA";
 import ContactB from "./blocks/Contact/ContactB";
@@ -30,30 +33,59 @@ const Blocks = {
 
 const Gengar = ({ data }) => {
   const { t } = useTranslation();
-  const layout = data.metadata.layout.gengar;
-  const { r, g, b } = hexToRgb(data.metadata.colors.primary) || {};
+  const navigation = useHistory();
+  const layoutObj = data.resumemetadata.layouts.find(
+    ({ name }) => name === "gengar",
+  );
+  if (!layoutObj) {
+    navigation.push("/");
+    toast(
+      "The requested Resume is not Ready. Kindly ask the owner to complete it",
+    );
+  }
+  const layout = reduceSectionArray(layoutObj.collection);
+  // const layoutIndex = findIndex(data.resumemetadata.layouts, [
+  //   "name",
+  //   "gengar",
+  // ]);
+  // const layout = data.resumemetadata.layouts[layoutIndex].collection;
+  const { r, g, b } = hexToRgb(data.resumemetadata.primaryColor) || {};
 
   const Photo = () =>
-    data.profile.photograph !== "" && (
+    data.owner?.avatar !== "" && (
       <img
         className="w-24 h-24 rounded-full mr-4 object-cover border-4"
         style={{
-          borderColor: data.metadata.colors.background,
+          borderColor: data.resumemetadata.backgroundColor,
         }}
-        src={data.profile.photograph}
-        alt={data.profile.firstName}
+        src={
+          data.owner?.avatar?.url ||
+          "https://images.unsplash.com/photo-1515041219749-89347f83291a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+        }
+        alt={data.owner?.fullName}
       />
     );
 
   const Profile = () => (
     <div>
-      <h1 className="text-2xl font-bold leading-tight">
-        {data.profile.firstName}
-      </h1>
-      <h1 className="text-2xl font-bold leading-tight">
-        {data.profile.lastName}
-      </h1>
-      <div className="text-xs font-medium mt-2">{data.profile.subtitle}</div>
+      {data.owner?.firstName ? (
+        <>
+          <h1 className="text-2xl font-bold leading-tight">
+            {data.owner?.firstName}
+          </h1>
+          <h1 className="text-2xl font-bold leading-tight">
+            {data.owner?.lastName}
+          </h1>
+        </>
+      ) : (
+        <h1 className="text-2xl font-bold leading-tight">
+          {data.owner?.fullName}
+        </h1>
+      )}
+
+      <div className="text-xs font-medium mt-2">
+        {data.owner?.seeker?.title}
+      </div>
     </div>
   );
 
@@ -63,17 +95,17 @@ const Gengar = ({ data }) => {
         id="page"
         className="rounded"
         style={{
-          fontFamily: data.metadata.font,
-          color: data.metadata.colors.text,
-          backgroundColor: data.metadata.colors.background,
+          fontFamily: data.resumemetadata.font,
+          color: data.resumemetadata.textColor,
+          backgroundColor: data.resumemetadata.backgroundColor,
         }}
       >
         <div className="grid grid-cols-12">
           <div
             className="col-span-4 px-6 py-8"
             style={{
-              backgroundColor: data.metadata.colors.primary,
-              color: data.metadata.colors.background,
+              backgroundColor: data.resumemetadata.primaryColor,
+              color: data.resumemetadata.backgroundColor,
             }}
           >
             <div className="flex items-center">
@@ -81,22 +113,23 @@ const Gengar = ({ data }) => {
               <Profile />
             </div>
 
-            {hasAddress(data.profile.address) && (
+            {hasAddress(data.owner.defaultAddress) && (
               <div className="flex flex-col mt-4 text-xs">
                 <h6 className="font-bold text-xs uppercase tracking-wide mb-1">
                   {t("shared.forms.address")}
                 </h6>
-                <span>{data.profile.address.line1}</span>
-                <span>{data.profile.address.line2}</span>
+                <span>{data.owner?.defaultAddress?.streetAddress1}</span>
+                <span>{data.owner?.defaultAddress?.streetAddress2}</span>
                 <span>
-                  {data.profile.address.city} {data.profile.address.pincode}
+                  {data.owner?.defaultAddress?.city}{" "}
+                  {data.owner?.defaultAddress?.postalCode}
                 </span>
               </div>
             )}
 
             <hr
               className="w-1/4 my-5 opacity-25"
-              style={{ borderColor: data.metadata.colors.background }}
+              style={{ borderColor: data.resumemetadata.backgroundColor }}
             />
 
             <h6 className="font-bold text-xs uppercase tracking-wide mb-2">

@@ -16,6 +16,7 @@ const SettingsContext = createContext(defaultState);
 const SettingsProvider = ({ children }) => {
   const [theme, setTheme] = useState(defaultState.theme);
   const [language, setLanguage] = useState(defaultState.theme);
+  const [printRef, setPrintRef] = useState(null);
 
   useEffect(() => {
     const prefTheme = localStorage.getItem("theme") || defaultState.theme;
@@ -44,6 +45,8 @@ const SettingsProvider = ({ children }) => {
         theme,
         setTheme,
         language,
+        printRef,
+        setPrintRef,
         setLanguage,
       }}
     >

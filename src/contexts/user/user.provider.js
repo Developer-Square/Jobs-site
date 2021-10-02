@@ -3,8 +3,9 @@ import { toast } from "react-toastify";
 import React, { createContext, memo, useEffect, useState } from "react";
 // import useAuthState from "hooks/useAuthState";
 import { useHistory } from "react-router-dom";
-import { useQuery } from "react-apollo";
-import { GET_USER_DETAILS } from "./query";
+import { useLazyQuery, useMutation } from "react-apollo";
+import { GET_USER_DETAILS } from "graphql/queries";
+import { DELETE_ADDRESS, UPDATE_ADDRESS } from "graphql/mutations";
 import { AuthContext } from "contexts/auth/auth.context";
 
 const defaultUser = {
@@ -27,54 +28,82 @@ const UserContext = createContext(defaultState);
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [refetchUser, setRefetchUser] = useState(false);
   const {
     authState: { isAuthenticated },
     authDispatch,
   } = React.useContext(AuthContext);
-  // const [jobTypes, setJobTypes] = useState(null);
-  // const [industries, setIndustries] = useState(null);
-  // const [experience, setExperience] = useState(null);
-  // const [qualifications, setQualifications] = useState(null);
-  // const [rates, setRates] = useState(null);
-  // const [applicationStatus, setApplicationStatus] = useState(null);
-  // const [workForce, setWorkForce] = useState(null);
-
   const navigate = useHistory();
-  const { data, loading, error } = useQuery(GET_USER_DETAILS);
-  console.log(user);
+  const [fetchUser] = useLazyQuery(GET_USER_DETAILS, {
+    fetchPolicy: "no-cache",
+    onCompleted: (data) => {
+      setUser(data?.me);
+    },
+  });
+  const [accountAddressDelete] = useMutation(DELETE_ADDRESS);
+  const [accountAddressUpdate] = useMutation(UPDATE_ADDRESS);
 
   const getUser = async () => {
-    if (data) {
-      await setUser(data.me);
-      console.log(data);
-      return { user, loading, error };
+    if (!user) {
+      await fetchUser();
+    } else {
+      return user;
     }
   };
 
   useEffect(() => {
     if (!user && isAuthenticated) {
       getUser();
+      setRefetchUser((curr) => !curr);
     }
-    // const localUser = JSON.parse(localStorage.getItem("thedb_auth_profile"));
-    // if (localUser) {
-    //   setUser(localUser);
-    // } else {
-    //   getUser();
-    // }
+    if (user && !isAuthenticated) {
+      setUser(null);
+      setRefetchUser((curr) => !curr);
+    }
+    if (!user && !isAuthenticated) {
+      setRefetchUser((curr) => !curr);
+      setUser(null);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthenticated, fetchUser]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetchUser]);
+
+  const updateAddress = async (address) => {
+    try {
+      await accountAddressUpdate({
+        variables: {
+          ...address,
+        },
+      }).then(({ data }) => {
+        return data?.resumePatch?.resume;
+      });
+    } catch (error) {
+      console.log("updateAddress error", error);
+      return null;
+    }
+  };
+
+  const deleteAddress = async (id) => {
+    const { data } = await accountAddressDelete({
+      variables: { id: id },
+    });
+    return data?.accountAddressDelete;
+  };
 
   const logout = async () => {
     if (typeof window !== "undefined") {
+      authDispatch({ type: "SIGN_OUT" });
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
-      localStorage.removeItem("darasa_auth_profile");
-      localStorage.removeItem("darasa_auth_payload");
-      localStorage.removeItem("darasa_auth_roles");
-      localStorage.removeItem("darasa_applications");
-      localStorage.removeItem("darasa_org_profile");
-      localStorage.removeItem("darasa_individual_profile");
-      authDispatch({ type: "SIGN_OUT" });
+      localStorage.removeItem("thedb_auth_profile");
+      localStorage.removeItem("thedb_auth_payload");
+      localStorage.removeItem("thedb_auth_roles");
       setUser(null);
       navigate.push("/");
     }
@@ -102,7 +131,12 @@ const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
+        getUser,
         logout,
+        refetchUser,
+        setRefetchUser,
+        updateAddress,
+        deleteAddress,
         deleteAccount,
       }}
     >

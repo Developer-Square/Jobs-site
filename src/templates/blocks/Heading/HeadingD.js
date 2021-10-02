@@ -4,14 +4,14 @@ import PageContext from "contexts/page/page.provider";
 
 const HeadingC = ({ children }) => {
   const { data } = useContext(PageContext);
-  const { r, g, b } = hexToRgb(data.metadata.colors.primary) || {};
+  const { r, g, b } = hexToRgb(data.resumemetadata.primaryColor) || {};
 
   return (
     <h6
       className="py-1 px-4 rounded-r leading-loose font-bold text-xs uppercase tracking-wide mb-3"
       style={{
         marginLeft: "-15px",
-        color: data.metadata.colors.background,
+        color: data.resumemetadata.backgroundColor,
         backgroundColor: `rgba(${r - 40}, ${g - 40}, ${b - 40}, 0.8)`,
       }}
     >

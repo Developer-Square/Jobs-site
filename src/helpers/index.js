@@ -1,9 +1,23 @@
 import { useEffect, useState } from "react";
-import _ from "lodash";
+import _, { isArray } from "lodash";
 import CryptoJS from "crypto-js";
 import AES from "crypto-js/aes";
 import { maybe } from "core/utils";
 import { toast } from "react-toastify";
+
+// Returns true if every item in the object returned by the
+// Object.values has an item length of more than one
+// First remove the boolean values.
+export const IsNotEmpty = (value) => {
+  return Object.values(value)
+    .filter(
+      (item) =>
+        typeof item !== "boolean" &&
+        typeof item !== "number" &&
+        typeof item !== "object",
+    )
+    .every((item) => item.length > 0);
+};
 
 export const removeTokens = () => {
   localStorage.removeItem("access_token");
@@ -61,6 +75,7 @@ export const useTimer = (seconds) => {
 
 export const normalizeErrors = (errors) => {
   if (typeof errors !== "object") return null;
+  if (isArray(errors)) return errors;
   return Object.keys(errors).reduce((acc, val) => {
     const oB = (values, number) => {
       if (values || number) {
@@ -69,14 +84,62 @@ export const normalizeErrors = (errors) => {
       }
       return null;
     };
+
     let arr = [];
     for (let i = 0; i < errors[val].length; i++) {
       const element = _.get(errors, oB(val, i), null);
-      arr.push(`${i === 0 ? "" : "😍"}${element}`);
+      arr.push(`${i === 0 ? "" : "⚠️"}${element}`);
     }
-    acc[val] = arr.toString().replace(",", "").replace("😍", ",");
+    acc[val] = arr.toString().replace(",", "").replace("⚠️", ",");
     return acc;
   }, {});
+};
+
+export const showSuccessNotification = (data, alert, error) => {
+  console.log(error);
+  // Display the errors from firebase.
+  if (data === "firebase") {
+    alert.show(
+      {
+        title: error.message,
+      },
+      { type: "error", timeout: 5000 },
+    );
+  }
+  // Display errors from the backend.
+  else {
+    const successful = maybe(() => data.register.success);
+
+    if (successful) {
+      alert.show(
+        {
+          title: "Registration Successful",
+        },
+        { type: "success", timeout: 5000 },
+      );
+      alert.show(
+        {
+          title: "Check your e-mail for further instructions",
+        },
+        { type: "success", timeout: 5000 },
+      );
+    } else {
+      const err = maybe(() => data.register.errors, []);
+      // TODO: Fix normalize errors functions to only show nonFieldErrors.
+      if (err) {
+        const nonFieldErr = normalizeErrors(
+          maybe(() => data.register.errors, []),
+        );
+        alert.show(
+          {
+            // To get the first item in the object
+            title: Object.values(nonFieldErr)[0],
+          },
+          { type: "error", timeout: 5000 },
+        );
+      }
+    }
+  }
 };
 
 export const formatError = (error) =>
@@ -268,6 +331,7 @@ export const showNotification = (
   alert,
   errorField,
   successMessage,
+  setErrors,
 ) => {
   let a = alert;
   let b = true;
@@ -277,9 +341,8 @@ export const showNotification = (
     // throw new Error("Alert Provider/Hook not provided");
   }
   if (data) {
-    console.log(errors);
     if (errors) {
-      console.log("Server Error kwa login", errors[0].message);
+      console.log("Server Error : ", errors[0].message);
       return errors[0].message;
     }
 
@@ -297,19 +360,38 @@ export const showNotification = (
         a(successMessage);
       }
     } else {
-      const err = maybe(() => data.vacancyErrors, []);
+      const err = maybe(() => data[errorField], []);
 
       if (err) {
-        const nonFieldErr = normalizeErrors(maybe(() => data[errorField], []));
+        const nonFieldErr = normalizeErrors(maybe(() => err, []));
+        console.log(err);
+        console.log(nonFieldErr);
         if (b) {
-          a.show(
-            {
-              title: nonFieldErr?.nonFieldErrors,
-            },
-            { type: "error", timeout: 5000 },
-          );
+          if (isArray(nonFieldErr)) {
+            for (let i = 0; i < nonFieldErr.length; i++) {
+              a.show(
+                {
+                  title: nonFieldErr[i].message,
+                },
+                { type: "error", timeout: 5000 },
+              );
+            }
+          } else {
+            a.show(
+              {
+                title: nonFieldErr?.nonFieldErr,
+              },
+              { type: "error", timeout: 5000 },
+            );
+          }
         } else {
-          a.error(nonFieldErr?.nonFieldErrors);
+          if (isArray(nonFieldErr)) {
+            for (let i = 0; i < nonFieldErr.length; i++) {
+              a.info(nonFieldErr[i].message);
+            }
+          } else {
+            a.info(nonFieldErr?.message);
+          }
         }
       }
     }

@@ -1,6 +1,7 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
 import React, { memo, useState } from "react";
+import { findIndex } from "lodash";
 import * as styles from "./Layout.module.css";
 import { move, reorder } from "utils";
 import { useDispatch, useSelector } from "contexts/resume/resume.provider";
@@ -13,8 +14,45 @@ const Layout = ({ id }) => {
     t("builder.layout.reset"),
   );
 
-  const template = useSelector("metadata.template");
-  const blocks = useSelector(`metadata.layout.${template}`, [[]]);
+  const template = useSelector("resumemetadata.template");
+  const layouts = useSelector("resumemetadata.layouts");
+  const layoutIndex = findIndex(layouts, ["name", template]);
+  const rawBlock = useSelector(
+    `resumemetadata.layouts[${layoutIndex}].collection`,
+    [[]],
+  );
+  const blocks = rawBlock.reduce((arr, b) => {
+    const filtered = b.filter((section) => section !== "");
+    arr.push(filtered);
+    return arr;
+  }, []);
+
+  const squareArray = (arrayItem) => {
+    const sortedArray = arrayItem.sort(function (a, b) {
+      return a.length - b.length;
+    })[1].length;
+    const val = arrayItem.reduce((arr, b) => {
+      if (Array.isArray(b)) {
+        if (b.length === sortedArray) {
+          arr.push(b);
+        } else {
+          let updatedValue = b;
+          const num = sortedArray - b.length;
+          for (let index = 0; index < num; index++) {
+            updatedValue.push("");
+          }
+          arr.push(updatedValue);
+        }
+        return arr;
+      } else {
+        arr.push(b);
+        return arr;
+      }
+    }, []);
+
+    return val;
+  };
+
   const dispatch = useDispatch();
 
   const onDragEnd = (result) => {
@@ -30,11 +68,15 @@ const Layout = ({ id }) => {
       const items = reorder(blocks[sInd], source.index, destination.index);
       const newState = [...blocks];
       newState[sInd] = items;
+      Object.values(newState).reduce((arr, v) => {
+        arr.push(v);
+        return arr;
+      }, []);
       dispatch({
         type: "on_input",
         payload: {
-          path: `metadata.layout.${template}`,
-          value: newState,
+          path: `resumemetadata.layouts[${layoutIndex}].collection`,
+          value: squareArray(newState),
         },
       });
     } else {
@@ -42,11 +84,15 @@ const Layout = ({ id }) => {
       const newState = [...blocks];
       newState[sInd] = newResult[sInd];
       newState[dInd] = newResult[dInd];
+      Object.values(newState).reduce((arr, v) => {
+        arr.push(v);
+        return arr;
+      }, []);
       dispatch({
         type: "on_input",
         payload: {
-          path: `metadata.layout.${template}`,
-          value: newState,
+          path: `resumemetadata.layouts[${layoutIndex}].collection`,
+          value: squareArray(newState),
         },
       });
     }

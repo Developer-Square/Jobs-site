@@ -2,22 +2,23 @@ import { isEmpty, isFunction } from "lodash";
 import { toast } from "react-toastify";
 import { useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
-import { v4 as uuidv4 } from "uuid";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch } from "contexts/resume/resume.provider";
+import ModalContext from "contexts/modal/modal.provider";
 import BaseModal from "./BaseModal";
 import Button from "components/shared/Button";
-import ModalContext from "contexts/modal/modal.provider";
-import { getModalText } from "utils";
+import { getModalText, objDiff } from "utils";
 
 const DataModal = ({
   name,
   path,
   event,
   title,
+  buttonText,
   onEdit,
   onCreate,
   children,
+  ...rest
 }) => {
   const modalRef = useRef(null);
   const dispatch = useDispatch();
@@ -45,6 +46,7 @@ const DataModal = ({
   }, [data, setValues]);
 
   const onSubmit = async (newData) => {
+    console.log(objDiff(values, newData, "id"));
     setLoading(true);
 
     const errors = await validateForm();
@@ -53,7 +55,7 @@ const DataModal = ({
       if (isEditMode) {
         if (data !== newData) {
           isFunction(onEdit)
-            ? await onEdit(newData)
+            ? await onEdit({ variables: newData })
             : dispatch({
                 type: "on_edit_item",
                 payload: {
@@ -63,10 +65,8 @@ const DataModal = ({
               });
         }
       } else {
-        newData.id = uuidv4();
-
         isFunction(onCreate)
-          ? await onCreate(newData)
+          ? await onCreate({ variables: newData })
           : dispatch({
               type: "on_add_item",
               payload: {
@@ -84,7 +84,9 @@ const DataModal = ({
     }
   };
 
-  const getTitle = isEmpty(title)
+  const getTitle = buttonText
+    ? buttonText
+    : isEmpty(title)
     ? getModalText(isEditMode, name, t)
     : isEditMode
     ? title.edit

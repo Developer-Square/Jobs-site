@@ -1,7 +1,311 @@
 import { clone, get, isEmpty } from "lodash";
 import { isArray, isEqual, isObject, transform } from "lodash";
+import moment from "moment";
 import dayjs from "dayjs";
 import { Base64 } from "js-base64";
+import {
+  addObjectToLocalStorageObject,
+  addArrayToLocalStorage,
+  normalizeErrors,
+} from "helpers";
+import { maybe } from "misc";
+
+export const truncateText = (text = "", limit = 0) => {
+  if (limit === 0 || isNaN(limit) || limit < 0) return "";
+  if (text === "" || text === null || text === undefined) return "...";
+  return text.length > limit ? text.substring(0, limit - 3) + "..." : text;
+};
+
+export const formatCurrency = function (amount = null) {
+  if (!amount)
+    return new Intl.NumberFormat("en-KE", {
+      style: "currency",
+      currency: "KES",
+      minimumFractionDigits: 2,
+    }).format(0);
+  // return amount.amount;
+  return new Intl.NumberFormat("en-KE", {
+    style: "currency",
+    currency: amount?.currency || "KES",
+    minimumFractionDigits: 2,
+  }).format(amount?.amount || amount);
+};
+
+export const cleanVacanciesData = (
+  edges,
+  update,
+  rate,
+  ratePerHour,
+  vacancyState,
+  vacancyDispatch,
+  getJobs,
+) => {
+  let jobs;
+
+  if (edges.length > 0) {
+    jobs = edges.map((edge) => edge.node);
+    // Update the context api once the data is fetched successfully.
+    if (vacancyState.jobsData.length === 0) {
+      vacancyDispatch({
+        type: "ADD_DATA",
+        payload: jobs,
+      });
+    } else if (update) {
+      vacancyDispatch({
+        type: "SORT_JOBS",
+        payload: jobs,
+      });
+    }
+    // Sort the object according the rate per hour sorting
+    // if there's any option selected.
+    if (rate.length) {
+      ratePerHour();
+    }
+  } else {
+    // Dispatch an empty array when there are no results
+    vacancyDispatch({
+      type: "SORT_JOBS",
+      payload: edges,
+    });
+  }
+};
+
+// Called when a fetching vacancies is complete.
+// Sets the jobTypes from the backend to the context API so that they can be displayed.
+export const onCompleted = (
+  loading,
+  data,
+  type,
+  rate,
+  ratePerHour,
+  vacancyState,
+  vacancyDispatch,
+  getJobs,
+) => {
+  if (!loading) {
+    if (type === "refetch") {
+      cleanVacanciesData(
+        data.vacancies.edges,
+        true,
+        rate,
+        ratePerHour,
+        vacancyState,
+        vacancyDispatch,
+        getJobs,
+      );
+    }
+    vacancyDispatch({
+      type: "SET_JOB_TYPES",
+      payload: data?.__type?.enumValues,
+    });
+  }
+};
+
+/**
+ * @param  {} data
+ * @param  {} minQualification
+ * Maps out the specific minQualification description with the right job.
+ */
+export const findMinQualificationDescription = (data, minQualifications) => {
+  if (minQualifications) {
+    let item = minQualifications.find(
+      ({ name }) => name === data.minQualification,
+    );
+    return item ? item.description : null;
+  }
+  return null;
+};
+
+/**
+ * @param  {} data
+ * @param  {} yearsOfExp
+ * Maps out the specific yearsOfExp description with the right job.
+ */
+export const findYearsOfExpDescription = (data, yearsOfExp) => {
+  if (yearsOfExp) {
+    let item = yearsOfExp.find(({ name }) => name === data.yearsOfExp);
+    return item ? item.description : null;
+  }
+  return null;
+};
+
+/**
+ * @param  {} data
+ * @param  {} jobTypes
+ * Maps out the specific jobType description with the right job.
+ */
+export const findJobTypeDescription = (data, jobTypes) => {
+  if (jobTypes) {
+    let item = jobTypes.find(({ name }) => name === data.jobType);
+    return item ? item.description : null;
+  }
+  return null;
+};
+/**
+ * @param  {} data
+ * @param  {} payRate
+ * Maps out the specific payRate description with the right job.
+ */
+export const findPayRateDescription = (data, payRates) => {
+  if (payRates) {
+    let item = payRates.find(({ name }) => name === data.payRate);
+    return item ? item.description : null;
+  }
+  return null;
+};
+
+/**
+ * @param  {} data
+ * Checks the job type then returns the required className according
+ * to the job type provided.
+ */
+export const checkJobType = (data) => {
+  if (data) {
+    if (data !== "Gig") {
+      let result = data.replace(/\s/g, "-").toLowerCase();
+      return result;
+    } else {
+      return "freelance";
+    }
+  }
+};
+
+/**
+ * @param  {} date
+ * Check how long ago the job was posted.
+ */
+export const checkDate = (date) => {
+  const result = moment(date);
+  const today = moment();
+  const daysNew = today.diff(result, "days"); // 1 day
+  if (daysNew <= 1) {
+    return "new";
+  }
+
+  return result.fromNow();
+};
+
+/**
+ * @param  {} data
+ * @param  {} errors
+ * @param  {} alert
+ */
+export const showSeekerProfileNotification = (data, errors, alert) => {
+  if (errors) {
+    console.log("Server Error kwa login", errors[0].message);
+    return errors[0].message;
+  }
+
+  const successful = maybe(() => data.seekerCreate.success);
+
+  if (successful) {
+    alert.show(
+      {
+        title: "Profile Created",
+      },
+      { type: "success", timeout: 5000 },
+    );
+  } else {
+    const err = maybe(() => data.seekerCreate.errors, []);
+
+    if (err) {
+      const nonFieldErr = normalizeErrors(
+        maybe(() => data.seekerCreate.errors, []),
+      );
+      alert.show(
+        {
+          title: nonFieldErr?.nonFieldErrors,
+        },
+        { type: "error", timeout: 5000 },
+      );
+    }
+  }
+};
+
+/**
+ * @param  {} data
+ * @param  {} errors
+ */
+export const handleAvatarUpdate = (data, errors) => {
+  if (errors) {
+    console.log("Server Error kwa login", errors[0].message);
+    return errors[0].message;
+  }
+  const successful = maybe(() => data.userAvatarUpdate.success);
+
+  if (successful) {
+    alert.show(
+      {
+        title: "Avatar Update Successful",
+      },
+      { type: "success", timeout: 5000 },
+    );
+  } else {
+    const err = maybe(() => data.userAvatarUpdate.errors, []);
+
+    if (err) {
+      const nonFieldErr = normalizeErrors(
+        maybe(() => data.userAvatarUpdate.errors, []),
+      );
+      alert.show(
+        {
+          title: nonFieldErr?.nonFieldErrors,
+        },
+        { type: "error", timeout: 5000 },
+      );
+    }
+  }
+};
+
+/**
+ * @param  {} data
+ * Store a user's credentials in localstorage or display an error.
+ */
+export const storeLoginDetails = (
+  successful,
+  history,
+  data,
+  setErrors,
+  setSubmitting,
+  location,
+) => {
+  if (successful) {
+    localStorage.removeItem("thedb_auth_roles");
+    var roles = [];
+    if (data.tokenAuth.user.isStaff) {
+      roles.push("admin");
+    }
+    if (data.tokenAuth.user.isSeeker) {
+      roles.push("seeker");
+    }
+    if (data.tokenAuth.user.isEmployer) {
+      roles.push("employer");
+    }
+    if (data.tokenAuth.user.isInstitution) {
+      roles.push("institution");
+    }
+    addArrayToLocalStorage("thedb_auth_roles", roles);
+    localStorage.setItem("access_token", data.tokenAuth.token);
+    localStorage.setItem("refresh_token", data.tokenAuth.refreshToken);
+    addObjectToLocalStorageObject("thedb_auth_payload", {
+      refreshToken: data.tokenAuth.refreshToken,
+      token: data.tokenAuth.token,
+    });
+    addObjectToLocalStorageObject("thedb_auth_profile", data.tokenAuth.user);
+
+    // If the function is being called from the login component
+    // then setSubmiting to false and move to the dashboard.
+    if (location === "login") {
+      history.push("/dashboard");
+      setSubmitting(false);
+    }
+  } else {
+    setErrors(normalizeErrors(data.tokenAuth.errors));
+    if (location === "login") {
+      setSubmitting(false);
+    }
+  }
+};
 
 export const getDBIdFromGraphqlId = (graphqlId, schema) => {
   // This is temporary solution, we will use slugs in the future
@@ -35,8 +339,7 @@ export const getModalText = (isEditMode, type, t) =>
 export const safetyCheck = (section, path = "items") =>
   !!(section && section.visible === true && !isEmpty(section[path]));
 
-export const isItemVisible = (section) =>
-  section && section.isVisible !== false;
+export const isItemVisible = (section) => section && section.isActive !== false;
 
 // Thought about creating a generic function to filter out non-visible items
 export const genericFilter = (key, data) => {
@@ -101,7 +404,11 @@ export const getUnsplashPhoto = async () => {
 };
 
 export const hasAddress = (address) =>
-  !!address.line1 || !!address.line2 || !!address.city || !!address.pincode;
+  address !== null ||
+  !!address.streetAddress1 ||
+  !!address.streetAddress2 ||
+  !!address.city ||
+  !!address.postalCode;
 
 export const hexToRgb = (hex) => {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -256,4 +563,17 @@ export const toFormData = (obj, form, namespace) => {
   }
 
   return fd;
+};
+
+export const reduceSectionArray = (rawBlock) => {
+  if (Array.isArray(rawBlock)) {
+    const blocks = rawBlock.reduce((arr, b) => {
+      const filtered = b.filter((section) => section !== "");
+      arr.push(filtered);
+      return arr;
+    }, []);
+    return blocks;
+  } else {
+    throw new Error("Data passed is not an Array");
+  }
 };

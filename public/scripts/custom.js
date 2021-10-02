@@ -1,6 +1,6 @@
 /* ----------------- Start Document ----------------- */
 (function ($) {
-  "use strict";
+  
 
   $(document).ready(function () {
     /*----------------------------------------------------*/
@@ -119,7 +119,7 @@
     /*----------------------------------------------------*/
     /*  Showbiz Carousel
     /*----------------------------------------------------*/
-    $("#job-spotlight").showbizpro({
+    $("#vacancies-spotlight").showbizpro({
       dragAndScroll: "off",
       visibleElementsArray: [1, 1, 1, 1],
       carousel: "off",

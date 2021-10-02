@@ -90,13 +90,13 @@ const EmailActivation = () => {
                 backgroundImage: "url(images/all-categories-photo.jpg)",
               }}
             >
-              <div className="container">
+              <div className="container-x">
                 <div className="ten columns">
                   <h2>Account Activation</h2>
                 </div>
               </div>
             </div>
-            <div className="container">
+            <div className="container-x">
               <div className="my-account">
                 <div className="tabs-container">
                   <div
@@ -130,7 +130,7 @@ const EmailActivation = () => {
                       () => !data?.sendPasswordResetEmail?.errors?.length,
                     ) ? null : (
                       <HelperText>
-                        <p class=" lost_password">
+                        <p className=" lost_password">
                           <a onClick={handleLogin} href>
                             Login to continue
                           </a>
@@ -174,13 +174,13 @@ const EmailActivation = () => {
                 backgroundImage: "url(images/all-categories-photo.jpg)",
               }}
             >
-              <div className="container">
+              <div className="container-x">
                 <div className="ten columns">
                   <h2>Account Activation</h2>
                 </div>
               </div>
             </div>
-            <div className="container">
+            <div className="container-x">
               <div className="my-account">
                 <div className="tabs-container">
                   <div

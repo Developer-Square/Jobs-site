@@ -6,7 +6,7 @@ const Pricing = () => {
       {/* Titlebar
 ================================================== */}
       <div id="titlebar" className="single">
-        <div className="container">
+        <div className="container-x">
           <div className="sixteen columns">
             <h2>Pricing Tables</h2>
             <nav id="breadcrumbs">
@@ -15,7 +15,7 @@ const Pricing = () => {
                 <li>
                   <a href>Home</a>
                 </li>
-                <li>Pricing Tables</li>
+                <li>Pricing</li>
               </ul>
             </nav>
           </div>
@@ -24,17 +24,9 @@ const Pricing = () => {
       {/* Pricing Tables
 ================================================== */}
       {/* Container / Start */}
-      <div className="container">
-        <div className="sixteen columns">
-          <div className="notification notice margin-bottom-30">
-            <p>
-              Below are examples of four and three columns of pricing tables,
-              but you can easily have as many columns as you want.
-            </p>
-          </div>
-        </div>
+      <div className="container-x">
         {/* Container / Start */}
-        <div className="container">
+        <div className="container-x">
           <div className="sixteen columns">
             <h3 className="margin-bottom-20">Three Tables</h3>
           </div>
@@ -42,7 +34,7 @@ const Pricing = () => {
           <div className="plan color-1 one-third column">
             <div className="plan-price">
               <h3>Start Up</h3>
-              <span className="plan-currency">$</span>
+              <span className="plan-currency">Ksh. </span>
               <span className="value">19</span>
             </div>
             <div className="plan-features">
@@ -61,7 +53,7 @@ const Pricing = () => {
           <div className="plan color-2 one-third column">
             <div className="plan-price">
               <h3>Company</h3>
-              <span className="plan-currency">$</span>
+              <span className="plan-currency">Ksh. </span>
               <span className="value">59</span>
             </div>
             <div className="plan-features">
@@ -80,7 +72,7 @@ const Pricing = () => {
           <div className="plan color-1 one-third column">
             <div className="plan-price">
               <h3>Enterprise</h3>
-              <span className="plan-currency">$</span>
+              <span className="plan-currency">Ksh. </span>
               <span className="value">99</span>
             </div>
             <div className="plan-features">
@@ -106,7 +98,7 @@ const Pricing = () => {
         <div className="plan color-1 four columns">
           <div className="plan-price">
             <h3>Start Up</h3>
-            <span className="plan-currency">$</span>
+            <span className="plan-currency">Ksh. </span>
             <span className="value">19</span>
           </div>
           <div className="plan-features">
@@ -125,7 +117,7 @@ const Pricing = () => {
         <div className="plan color-1 four columns">
           <div className="plan-price">
             <h3>Company</h3>
-            <span className="plan-currency">$</span>
+            <span className="plan-currency">Ksh. </span>
             <span className="value">59</span>
           </div>
           <div className="plan-features">
@@ -144,7 +136,7 @@ const Pricing = () => {
         <div className="plan color-2 four columns">
           <div className="plan-price">
             <h3>Enterprise</h3>
-            <span className="plan-currency">$</span>
+            <span className="plan-currency">Ksh. </span>
             <span className="value">99</span>
           </div>
           <div className="plan-features">
@@ -163,7 +155,7 @@ const Pricing = () => {
         <div className="plan color-1 four columns">
           <div className="plan-price">
             <h3>Extended</h3>
-            <span className="plan-currency">$</span>
+            <span className="plan-currency">Ksh. </span>
             <span className="value">199</span>
           </div>
           <div className="plan-features">
