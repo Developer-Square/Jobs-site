@@ -191,14 +191,14 @@ const MobileDrawer = () => {
             <UesrOptionMenu>
               <DrawerMenuItem>
                 <NavLink
-                  href="/profile"
+                  href="/dashboard/profile"
                   label="Your Account Settings"
                   className="drawer_menu_item"
                 />
               </DrawerMenuItem>
               <DrawerMenuItem>
                 <NavLink
-                  href="/profile"
+                  href="/dashboard/profile"
                   label="Profile"
                   className="drawer_menu_item"
                 />
