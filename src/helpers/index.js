@@ -113,16 +113,16 @@ export const showSuccessNotification = (data, alert, error) => {
     if (successful) {
       alert.show(
         {
-          title: "Registration Successful",
+          title: "Registration Successful. Verify your phone number to continue.",
         },
         { type: "success", timeout: 5000 },
       );
-      alert.show(
-        {
-          title: "Check your e-mail for further instructions",
-        },
-        { type: "success", timeout: 5000 },
-      );
+//       alert.show(
+//         {
+//           title: "Check your e-mail for further instructions",
+//         },
+//         { type: "success", timeout: 5000 },
+//       );
     } else {
       const err = maybe(() => data.register.errors, []);
       // TODO: Fix normalize errors functions to only show nonFieldErrors.
