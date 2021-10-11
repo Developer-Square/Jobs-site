@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useLazyQuery } from "react-apollo";
 import { Link, useHistory } from "react-router-dom";
 import VacancyFilter from "./VacancyFilter";
-import Loader from "components/Loader/Loader";
+import VacancyLoader from "components/Loader/VacancyLoader";
 import Button from "components/Button/Button";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
 import { AuthContext } from "contexts/auth/auth.context";
@@ -260,7 +260,11 @@ const Vacancy = () => {
                   </Link>
                 ))
               ) : (
-                <Loader />
+                <>
+                  <VacancyLoader />
+                  <VacancyLoader />
+                  <VacancyLoader />
+                </>
               )}
             </div>
             <div className="clearfix" />

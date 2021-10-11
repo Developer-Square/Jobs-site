@@ -59,6 +59,10 @@ export const seekerFragment = gql`
       name
       id
     }
+    institution {
+      id
+      name
+    }
   }
 `;
 

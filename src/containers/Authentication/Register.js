@@ -285,8 +285,8 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
             <div id="sign-in-button"></div>
           </>
         ) : // eslint-disable-next-line
-        (activeStep === 1 && switchTab === "seeker") ||
-          (activeStep === 1 && switchTab === "business") ? (
+        (activeStep === 2 && switchTab === "seeker") ||
+          (activeStep === 2 && switchTab === "business") ? (
           <>
             <TypedAccountLoginMutation>
               {(userLogin) => {
@@ -318,7 +318,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
             </TypedAccountLoginMutation>
             <div id="sign-in-button"></div>
           </>
-        ) : activeStep === 2 && switchTab === "seeker" ? (
+        ) : activeStep === 1 && switchTab === "seeker" ? (
           <TypedInstitutionQuery>
             {(institutions) => {
               if (institutions.loading) {

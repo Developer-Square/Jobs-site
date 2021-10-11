@@ -322,7 +322,7 @@ export const FurtherInformation = ({
               showButton={showButton}
               hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
               label="Interests"
-              name="interests"
+              name="industries"
               id="basic-multi-select"
               classNamePrefix="select"
               icon="ln ln-icon-Lock-2"

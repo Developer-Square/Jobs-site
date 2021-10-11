@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { BASE_GRAPHQL_URL } from "constants/constants";
-import dbImage from "image/TheDBLogo";
+import dbImage from "image/TheDBLogo.jpeg";
 
 export const SEO = ({
   title,
