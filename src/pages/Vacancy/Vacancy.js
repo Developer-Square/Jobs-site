@@ -1,7 +1,7 @@
 import React from "react";
 import { useAlert } from "react-alert";
 import { toast } from "react-toastify";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, useHistory } from "react-router-dom";
 import moment from "moment";
 
 import Loader from "components/Loader/Loader";
@@ -12,7 +12,7 @@ import { MetaWrapper } from "components/Meta";
 import { cleanSelectData, setFieldErrors, showNotification } from "helpers";
 
 import VacancyForm from "./VacancyForm";
-import { getGraphqlIdFromDBId, objDiff } from "utils";
+import { getGraphqlIdFromDBId, getDBIdFromGraphqlId, objDiff } from "utils";
 import { isEmpty } from "lodash";
 import { TypedMutation } from "core/mutations";
 import { TypedQuery } from "core/queries";
@@ -42,6 +42,7 @@ const TypedVacancyUpdateMutation = TypedMutation(UPDATE_VACANCY_MUTATION);
 const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
   const match = useRouteMatch();
   const alert = useAlert();
+  const history = useHistory();
   const [updating, setUpdating] = React.useState(false);
   const initialData = {
     title: "",
@@ -194,28 +195,40 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
                   }}
                 >
                   <TypedVacancyCreateMutation
-                    onCompleted={(data, errors) =>
+                    onCompleted={(data, errors) => {
                       showNotification(
                         data.createVacancy,
                         errors,
                         alert,
                         "vacancyErrors",
                         "Job Created",
-                      )
-                    }
+                      );
+                      history.push(
+                        `/vacancies/${getDBIdFromGraphqlId(
+                          data.createVacancy.job.id,
+                          "Vacancy",
+                        )}`,
+                      );
+                    }}
                   >
                     {(vacancyCreate) => {
                       return (
                         <TypedVacancyUpdateMutation
-                          onCompleted={(data, errors) =>
+                          onCompleted={(data, errors) => {
                             showNotification(
                               data.patchVacancy,
                               errors,
                               alert,
                               "vacancyErrors",
                               "Job Updated",
-                            )
-                          }
+                            );
+                            history.push(
+                              `/vacancies/${getDBIdFromGraphqlId(
+                                data.patchVacancy.job.id,
+                                "Vacancy",
+                              )}`,
+                            );
+                          }}
                         >
                           {(vacancyUpdate) => {
                             function onSubmit(

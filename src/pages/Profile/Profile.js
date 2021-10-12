@@ -12,6 +12,7 @@ import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
 import styled from "styled-components";
 import UserContext from "contexts/user/user.provider";
+import ModalContext from "contexts/modal/modal.provider";
 
 const SeekerProfileForm = lazy(() => import("pages/Profile/SeekerProfileForm"));
 const EmployerProfileForm = lazy(() =>
@@ -21,8 +22,9 @@ const EmployerProfileForm = lazy(() =>
 function Profile() {
   const [edit, setEdit] = React.useState(false);
   const { user } = React.useContext(UserContext);
-
-  console.log(user);
+  const { emitter, events } = React.useContext(ModalContext);
+  const [settings, setSettings] = React.useState(false);
+  const handleDelete = () => emitter.emit(events.DELETE_MODAL);
 
   const { data, loading } = useQuery(GET_USER_DETAILS);
   if (loading) {
@@ -87,59 +89,135 @@ function Profile() {
         )
       ) : (
         <>
-          <div className="row">
-            {/* Profile */}
-            <div className="col-lg-6 col-md-12">
-              <div className="dashboard-list-box margin-top-0">
-                <h4 className="gray">Account Details</h4>
-                <div className="dashboard-list-box-static">
-                  <BaseProfile />
-                </div>
-              </div>
-            </div>
-            {/* Change Password */}
-            <div className="col-lg-6 col-md-12">
-              <div className="dashboard-list-box margin-top-0">
-                <h4 className="gray">
-                  <strong style={{ color: "red" }}>DANGER ZONE!</strong> -
-                  Change Password
-                </h4>
-                <div className="dashboard-list-box-static">
-                  {/* Change Password */}
-                  <div className="my-account">
-                    <div className="my-profile">
-                      <PasswordChange />
-                    </div>
+          <section className="py-1 bg-blueGray-50">
+            <div className="w-full lg:w-8/12 px-4 mx-auto mt-6">
+              <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
+                <div className="rounded-t bg-white mb-0 px-6 py-6">
+                  <div className="text-center flex justify-between">
+                    <h6 className="text-blueGray-700 text-xl font-bold">
+                      My account
+                    </h6>
+                    <button
+                      onClick={() => setSettings((curr) => !curr)}
+                      className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                      type="button"
+                    >
+                      {settings ? "profile" : "settings"}
+                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          {/* Extended Profile*/}
-          <div className="dashboard-list-box margin-top-30">
-            <h4>Addresses</h4>
-            <div className="dashboard-list-box-content">
-              <div
-                className="dashboard-list-box-static container px-12 xl:px-0"
-                style={{ width: "100%" }}
-              >
-                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8 auto-rows-max ">
-                  {data?.me && (
-                    <>
-                      <CreateAddress />
 
-                      {data?.me?.addresses.map((x) => (
-                        <AddressPreview key={x.id} address={x} />
-                      ))}
-                    </>
-                  )}
-                </div>
+                {settings ? (
+                  <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-gray-100">
+                    <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+                      Change Password
+                    </h6>
+                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                      <PasswordChange />
+                    </div>
+
+                    <hr className="mt-6 border-b-1 border-blueGray-300" />
+                    <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+                      Delete Account
+                    </h6>
+                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                      <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+                        {/*content*/}
+                        <div className>
+                          {/*body*/}
+                          <div className="text-center p-5 flex-auto justify-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-4 h-4 -m-1 flex items-center text-red-500 mx-auto"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-16 h-16 flex items-center text-red-500 mx-auto"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            <h2 className="text-xl font-bold py-4 ">
+                              Are you sure?
+                            </h2>
+                            <p className="text-sm text-gray-500 px-8">
+                              Do you really want to delete your account? This
+                              process cannot be undone
+                            </p>
+                          </div>
+                          {/*footer*/}
+                          <div className="p-3  mt-2 text-center space-x-4 md:block">
+                            <button
+                              onClick={handleDelete}
+                              className="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr className="mt-6 border-b-1 border-blueGray-300" />
+                  </div>
+                ) : (
+                  <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-gray-100">
+                    <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+                      Account Details
+                    </h6>
+                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                      <BaseProfile />
+                    </div>
+
+                    <hr className="mt-6 border-b-1 border-blueGray-300" />
+
+                    <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+                      Addresses
+                    </h6>
+                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8 auto-rows-max ">
+                        {data?.me && (
+                          <>
+                            <CreateAddress />
+
+                            {data?.me?.addresses.map((x) => (
+                              <AddressPreview key={x.id} address={x} />
+                            ))}
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <hr className="mt-6 border-b-1 border-blueGray-300" />
+
+                    <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+                      About Me
+                    </h6>
+                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                      {user?.isInstitution && <InstitutionProfile />}
+                      {user?.isSeeker && <SeekerProfile />}
+                      {user?.isEmployer && <EmployerProfile />}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-          {user?.isInstitution && <InstitutionProfile />}
-          {user?.isSeeker && <SeekerProfile />}
-          {user?.isEmployer && <EmployerProfile />}
+          </section>
         </>
       )}
     </>

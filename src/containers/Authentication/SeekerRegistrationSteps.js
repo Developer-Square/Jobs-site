@@ -154,7 +154,7 @@ export const OTPForm = ({
       setSmsResend(true);
       alert.show(
         {
-          title: "OTP code has been resent, check your phone",
+          title: "verify phone no. code has been resent to your phone",
         },
         { type: "success", timeout: 5000 },
       );

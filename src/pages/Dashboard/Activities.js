@@ -61,6 +61,17 @@ const Activities = () => {
               >
                 <ul>
                   {activitiesList.data.recentActivities.edges.map((edge, i) => {
+                    if (!edge) {
+                      return (
+                        <li>
+                          <strong>
+                            <Link to={{ pathname: "" }}>
+                              No Recent Activities yet! Let's get you started.
+                            </Link>
+                          </strong>
+                        </li>
+                      );
+                    }
                     return (
                       <li key={i}>
                         <strong>

@@ -32,7 +32,12 @@ const ResumeDashboard = ({ user }) => {
   return (
     <NetworkStatus>
       {(isOnline) => (
-        <TypedResumesQuery variables={variables} errorPolicy="all" loaderFull>
+        <TypedResumesQuery
+          variables={variables}
+          errorPolicy="all"
+          // fetchPolicy="no-cache"
+          loaderFull
+        >
           {(resumeData) => {
             if (resumeData.loading && red !== 0) {
               return <LoadingScreen />;

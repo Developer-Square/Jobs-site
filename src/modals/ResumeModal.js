@@ -2,19 +2,19 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
 import React, { memo } from "react";
-import { getFieldProps } from "utils";
 import DataModal from "./DataModal";
 // import DatabaseContext from "contexts/database/database.provider";
 import Input from "../components/shared/Input";
 import ModalEvents from "../constants/ModalEvents";
 import { TypedMutation } from "core/mutations";
+import DatabaseContext from "contexts/database/database.provider";
 
 import { RESUME_MUTATION, RESUME_UPDATE_MUTATION } from "graphql/mutations";
 
 import { showNotification } from "helpers";
 import { withRouter } from "react-router-dom";
 import { useAlert } from "react-alert";
-import { unsplashPhotoRequestUrl } from "utils";
+import { getFieldProps, unsplashPhotoRequestUrl } from "utils";
 
 export const TypedResumeMutation = TypedMutation(RESUME_MUTATION);
 export const TypedResumeUpdateMutation = TypedMutation(RESUME_UPDATE_MUTATION);
@@ -22,6 +22,7 @@ export const TypedResumeUpdateMutation = TypedMutation(RESUME_UPDATE_MUTATION);
 const ResumeModal = () => {
   const { t } = useTranslation();
   const alert = useAlert();
+  const { setRefetchResumes } = React.useContext(DatabaseContext);
   const [refetchSplashImg, setRefetchSplashImg] = React.useState(false);
   const [initialValues, setInitialValues] = React.useState({
     name: "",
@@ -94,10 +95,14 @@ const ResumeModal = () => {
                       onEdit={(d) => {
                         resumeUpdate(d);
                         refetchSplashImages();
+                        setRefetchResumes(true);
+                        setRefetchResumes(false);
                       }}
                       onCreate={(d) => {
                         resumeCreate(d);
                         refetchSplashImages();
+                        setRefetchResumes(true);
+                        setRefetchResumes(false);
                       }}
                       event={ModalEvents.CREATE_RESUME_MODAL}
                     >

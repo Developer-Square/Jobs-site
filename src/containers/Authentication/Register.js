@@ -148,7 +148,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
         if (Object.values(user).length > 0) {
           alert.show(
             {
-              title: "Phone number verified successfully",
+              title: "Phone verified successfully",
             },
             { type: "success", timeout: 5000 },
           );

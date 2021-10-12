@@ -136,6 +136,7 @@ const VacancyForm = ({
                       rte={true}
                       fullWidth
                     />
+                    <h3>NB : Type or copy as plain text</h3>
                   </div>
                   <div className="form" style={{ width: "100%" }}>
                     <Button

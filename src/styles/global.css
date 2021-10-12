@@ -581,3 +581,7 @@ input[type="range"]::-webkit-slider-thumb {
       width: 100%;
 
     }
+
+    #titlebar{
+      margin-top: 80px;
+    }
