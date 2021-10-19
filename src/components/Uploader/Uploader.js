@@ -103,6 +103,7 @@ function Uploader(props) {
     multiple,
     minimal,
     preview,
+    showIcon = true,
     ...rest
   } = props;
   const [files, setFiles] = useState(
@@ -181,7 +182,8 @@ function Uploader(props) {
             style={{ margin: 0, color: "#fff", marginRight: "10px" }}
           >
             <input {...getInputProps()} />
-            <i className="fa fa-upload" /> Browse
+            {showIcon && <i className="fa fa-upload" />}
+            Browse
           </label>
           <span className="fake-input">No file selected</span>
         </div>

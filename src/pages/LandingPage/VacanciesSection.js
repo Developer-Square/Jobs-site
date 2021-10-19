@@ -116,11 +116,13 @@ const Vacancies = () => {
             {vacancyState?.sortedJobs?.length ? (
               vacancyState?.sortedJobs.map((job, index) => {
                 if (loading && !vacancyState.sortedJobs) {
-                  return <>
-                  <VacancyLoader />
-                  <VacancyLoader />
-                  <VacancyLoader />
-                  </>;
+                  return (
+                    <>
+                      <VacancyLoader />
+                      <VacancyLoader />
+                      <VacancyLoader />
+                    </>
+                  );
                 }
                 if (loading && !vacancyState.sortedJobs) {
                   return <NoResultFound />;
@@ -174,7 +176,11 @@ const Vacancies = () => {
                 );
               })
             ) : (
-              <Loader />
+              <>
+                <VacancyLoader />
+                <VacancyLoader />
+                <VacancyLoader />
+              </>
             )}
           </div>
 

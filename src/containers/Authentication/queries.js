@@ -28,30 +28,4 @@ export const institutionsQuery = gql`
 `;
 export const TypedInstitutionQuery = TypedQuery(institutionsQuery);
 
-export const plansListQuery = gql`
-  query {
-    allPlanLists {
-      id
-      userType
-      title
-      allPlans {
-        id
-        title
-        description
-        periodType
-        periodAmount
-        renewalType
-        collection
-        setupAmount
-        periodAmountMoney {
-          amount
-          currency
-        }
-      }
-    }
-  }
-`;
-
-export const TypedPlansListQuery = TypedQuery(plansListQuery);
-
 export const TypedIndustriesQuery = TypedQuery(GET_INDUSTRIES);

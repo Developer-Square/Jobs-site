@@ -25,26 +25,26 @@ const fullname = Yup.string()
   .required(msg.fieldRequired);
 
 const OTP = Yup.string()
-.min(6, msg.OTPCodeExactLength)
-.max(6, msg.OTPCodeExactLength)
-.required(msg.fieldRequired);
+  .min(6, msg.OTPCodeExactLength)
+  .max(6, msg.OTPCodeExactLength)
+  .required(msg.fieldRequired);
 
 const phonenumber = Yup.string()
   .min(12, msg.phoneNumberNotLongEnough)
   .required(msg.fieldRequired);
 
-const interests = Yup.array().test({
+const industries = Yup.array().test({
   message: msg.fieldRequired,
-  test: arr => arr.length > 0
+  test: (arr) => arr.length > 0,
 });
 
-const companyName = Yup.string().required(msg.fieldRequired)
-const location = Yup.string().required(msg.fieldRequired)
-const terms = Yup.boolean().oneOf([true], 'Must accept terms and conditions')
+const companyName = Yup.string().required(msg.fieldRequired);
+const location = Yup.string().required(msg.fieldRequired);
+const terms = Yup.boolean().oneOf([true], "Must accept terms and conditions");
 
 export const phoneNumberSchema = Yup.object().shape({
-  phone: phonenumber
-})
+  phone: phonenumber,
+});
 
 export const signUpSchema = Yup.object().shape({
   email: email,
@@ -52,22 +52,22 @@ export const signUpSchema = Yup.object().shape({
   phone: phonenumber,
   password1: password,
   password2: passwordConfirm("password1"),
-  terms: terms
-})
+  terms: terms,
+});
 
 export const OTPVerficationSchema = Yup.object().shape({
   otpcode: OTP,
 });
 
 export const furtherInformationSchema = Yup.object().shape({
-  interests: interests,
-})
+  industries: industries,
+});
 
 export const bioSchema = Yup.object().shape({
   company: companyName,
   location: location,
-  industries: interests,
-})
+  industries: industries,
+});
 
 export const loginSchema = Yup.object().shape({
   email: email,

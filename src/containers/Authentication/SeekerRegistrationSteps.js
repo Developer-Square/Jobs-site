@@ -23,7 +23,7 @@ import {
   TypedMakePayment,
 } from "./mutations";
 import { showSuccessNotification, IsNotEmpty } from "helpers";
-import { TypedPlansListQuery } from "./queries";
+import { TypedPlanListsQuery } from "graphql/queries";
 import Loader from "components/Loader/Loader";
 import { PaymentModal } from "modals/PaymentModal";
 import { formatCurrency } from "utils";
@@ -212,7 +212,7 @@ export const FurtherInformation = ({
   switchTabs,
   loading,
   schoolOptions,
-  interests,
+  industries,
   initialValues,
   onSeekerProfileSubmit,
   alert,
@@ -318,11 +318,11 @@ export const FurtherInformation = ({
             <FormikControl
               control="select"
               isMulti
-              options={interests}
+              options={industries}
               showButton={showButton}
               hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
-              label="Interests"
-              name="interests"
+              label="Industries to look for Jobs"
+              name="industries"
               id="basic-multi-select"
               classNamePrefix="select"
               icon="ln ln-icon-Lock-2"
@@ -400,7 +400,7 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
 
   return (
     <>
-      <TypedPlansListQuery>
+      <TypedPlanListsQuery>
         {(plansList) => {
           if (plansList.loading) {
             return <Loader />;
@@ -488,7 +488,7 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
             </TypedMakePayment>
           );
         }}
-      </TypedPlansListQuery>
+      </TypedPlanListsQuery>
     </>
   );
 };
