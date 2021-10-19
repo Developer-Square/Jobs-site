@@ -138,14 +138,36 @@ const VacancyFilter = ({
   };
 
   const addRateTypes = (checked, value) => {
-    const filterRates = (rateObj) => rateObj.name !== value.name;
-    if (checked && value.lowerLimit !== "any") {
-      setRate([...rate, value]);
-    } else if (value.lowerLimit === "any") {
-      setRate([]);
+    const filterTypes = (types) => types !== value;
+    // Don't add the any option to the filterObj.
+    // To solve the double UI issue.
+    // Adding more payRate if the field already exists
+    if (checked && value !== "any" && filterObj.payRate) {
+      setSortTypes([...sortTypes, value]);
+      setFilterObj({
+        ...filterObj,
+        payRate: [...filterObj.payRate, value],
+      });
+    }
+    // Adding new payRate
+    else if (checked && value !== "any") {
+      setSortTypes([...sortTypes, value]);
+      setFilterObj({
+        ...filterObj,
+        payRate: [value],
+      });
+    } else if (value === "any") {
+      setFilterObj({
+        ...filterObj,
+        payRate: [],
+      });
     } else {
-      let newRateTypes = rate.filter(filterRates);
-      setRate([...newRateTypes]);
+      let newSortTypes = sortTypes.filter(filterTypes);
+      setSortTypes([...newSortTypes]);
+      setFilterObj({
+        ...filterObj,
+        payRate: filterObj.payRate.filter(filterTypes),
+      });
     }
   };
 
@@ -209,37 +231,15 @@ const VacancyFilter = ({
    */
   const handleRateTypes = (value, checked) => {
     if (value === "check-6") {
-      addRateTypes(checked, {
-        name: value,
-        lowerLimit: "any",
-        upperLimit: "any",
-      });
+      addRateTypes(checked, "any");
     } else if (value === "check-7") {
-      addRateTypes(checked, { name: value, lowerLimit: 0, upperLimit: 1000 });
+      addRateTypes(checked, "Hour");
     } else if (value === "check-8") {
-      addRateTypes(checked, {
-        name: value,
-        lowerLimit: 1001,
-        upperLimit: 2500,
-      });
+      addRateTypes(checked, "Day");
     } else if (value === "check-9") {
-      addRateTypes(checked, {
-        name: value,
-        lowerLimit: 2501,
-        upperLimit: 5000,
-      });
+      addRateTypes(checked, "Week");
     } else if (value === "check-10") {
-      addRateTypes(checked, {
-        name: value,
-        lowerLimit: 5001,
-        upperLimit: 10000,
-      });
-    } else if (value === "check-11") {
-      addRateTypes(checked, {
-        name: value,
-        lowerLimit: 10001,
-        upperLimit: 10001,
-      });
+      addRateTypes(checked, "Month");
     }
   };
 
@@ -266,6 +266,8 @@ const VacancyFilter = ({
       }
     }
   };
+  console.log(clean(filterObj));
+  console.log(clean(filterObj)?.jobTypes);
 
   return (
     <div className="five columns">
@@ -305,6 +307,10 @@ const VacancyFilter = ({
               name="check"
               defaultValue="check-1"
               defaultChecked
+              checked={
+                clean(filterObj)?.jobTypes?.length === 4 ||
+                !clean(filterObj)?.jobTypes
+              }
               onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
             />
             <label htmlFor="check-1">Any Type</label>
@@ -315,6 +321,7 @@ const VacancyFilter = ({
               type="checkbox"
               name="check"
               defaultValue="check-2"
+              checked={clean(filterObj)?.jobTypes?.includes("Full-Time")}
               onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
             />
             <label htmlFor="check-2">Full-Time</label>
@@ -325,6 +332,7 @@ const VacancyFilter = ({
               type="checkbox"
               name="check"
               defaultValue="check-3"
+              checked={clean(filterObj)?.jobTypes?.includes("Part-Time")}
               onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
             />
             <label htmlFor="check-3">Part-Time</label>
@@ -335,6 +343,7 @@ const VacancyFilter = ({
               type="checkbox"
               name="check"
               defaultValue="check-4"
+              checked={clean(filterObj)?.jobTypes?.includes("Internship")}
               onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
             />
             <label htmlFor="check-4">Internship</label>
@@ -345,6 +354,7 @@ const VacancyFilter = ({
               type="checkbox"
               name="check"
               defaultValue="check-5"
+              checked={clean(filterObj)?.jobTypes?.includes("Gig")}
               onChange={(e) => handleJobTypes(e.target.value, e.target.checked)}
             />
             <label htmlFor="check-5">Freelance</label>
@@ -356,15 +366,34 @@ const VacancyFilter = ({
         <PayrateSlider
           label="Kindly select your payrate: "
           setFilterObj={setFilterObj}
+          filterObj={filterObj}
         />
-        <h4>Pay Rate Type</h4>
+        <h4>Pay Rate</h4>
         <ul className="checkboxes">
+          <li>
+            <input
+              id="check-6"
+              type="checkbox"
+              name="check"
+              defaultValue="check-6"
+              defaultChecked
+              checked={
+                clean(filterObj)?.payRate?.length === 4 ||
+                !clean(filterObj)?.payRate
+              }
+              onChange={(e) =>
+                handleRateTypes(e.target.value, e.target.checked)
+              }
+            />
+            <label htmlFor="check-6">Any</label>
+          </li>
           <li>
             <input
               id="check-7"
               type="checkbox"
               name="check"
               defaultValue="check-7"
+              checked={clean(filterObj)?.payRate?.includes("Hour")}
               onChange={(e) =>
                 handleRateTypes(e.target.value, e.target.checked)
               }
@@ -377,6 +406,7 @@ const VacancyFilter = ({
               type="checkbox"
               name="check"
               defaultValue="check-8"
+              checked={clean(filterObj)?.payRate?.includes("Day")}
               onChange={(e) =>
                 handleRateTypes(e.target.value, e.target.checked)
               }
@@ -389,6 +419,7 @@ const VacancyFilter = ({
               type="checkbox"
               name="check"
               defaultValue="check-9"
+              checked={clean(filterObj)?.payRate?.includes("Week")}
               onChange={(e) =>
                 handleRateTypes(e.target.value, e.target.checked)
               }
@@ -401,6 +432,7 @@ const VacancyFilter = ({
               type="checkbox"
               name="check"
               defaultValue="check-10"
+              checked={clean(filterObj)?.payRate?.includes("Month")}
               onChange={(e) =>
                 handleRateTypes(e.target.value, e.target.checked)
               }

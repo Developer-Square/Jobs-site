@@ -29,7 +29,7 @@ const marks = [
   },
 ];
 
-export default function PayrateSlider({ label, setFilterObj }) {
+export default function PayrateSlider({ label, setFilterObj, filterObj }) {
   const classes = useStyles();
   const [selectedValue, setSelectedValue] = React.useState("");
 
@@ -42,7 +42,8 @@ export default function PayrateSlider({ label, setFilterObj }) {
   useEffect(() => {
     if (selectedValue) {
       setFilterObj({
-        search: selectedValue.toString(),
+        ...filterObj,
+        salary: selectedValue.toString(),
       });
     }
 

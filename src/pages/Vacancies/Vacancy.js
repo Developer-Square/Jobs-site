@@ -137,7 +137,6 @@ const Vacancy = () => {
         field: sortByValue.field,
       },
     };
-    console.log("variables", variables);
     const cleanedVariables = clean(variables);
     loadFilterValues({ variables: cleanedVariables });
   };
