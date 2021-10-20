@@ -57,7 +57,6 @@ const Layout = ({
         <div
           style={{
             position: "relative",
-            marginTop: isHomePage ? 0 : "80px",
           }}
         />
       )}

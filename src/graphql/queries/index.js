@@ -3,3 +3,4 @@ export * from "./user";
 export * from "./vacancy";
 export * from "./enums";
 export * from "./industries";
+export * from "./pricing";

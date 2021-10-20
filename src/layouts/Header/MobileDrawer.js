@@ -154,7 +154,7 @@ const MobileDrawer = () => {
                 </UserDetails>
               </LoginView>
             ) : (
-              <LogoutView>
+              <LogoutView onClick={toggleHandler}>
                 <Button
                   title="Sign In"
                   size="small"
@@ -191,6 +191,7 @@ const MobileDrawer = () => {
             <UesrOptionMenu>
               <DrawerMenuItem>
                 <NavLink
+                  onClick={toggleHandler}
                   href="/dashboard/profile"
                   label="Your Account Settings"
                   className="drawer_menu_item"
@@ -198,6 +199,7 @@ const MobileDrawer = () => {
               </DrawerMenuItem>
               <DrawerMenuItem>
                 <NavLink
+                  onClick={toggleHandler}
                   href="/dashboard/profile"
                   label="Profile"
                   className="drawer_menu_item"
@@ -205,12 +207,13 @@ const MobileDrawer = () => {
               </DrawerMenuItem>
               <DrawerMenuItem>
                 <NavLink
+                  onClick={toggleHandler}
                   href="/dashboard/applications"
                   label="Applications"
                   className="drawer_menu_item"
                 />
               </DrawerMenuItem>
-              <DrawerMenuItem>
+              <DrawerMenuItem onClick={toggleHandler}>
                 <div onClick={handleLogout} className="drawer_menu_item">
                   <span className="logoutBtn">Logout</span>
                 </div>

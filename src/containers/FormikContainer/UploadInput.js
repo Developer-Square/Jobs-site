@@ -11,7 +11,7 @@ function UploadInput(props) {
     <FormInput className={`form-row form-row-wide`}>
       <label htmlFor={name}>
         {label}
-        <i className={`ln ${icon}`}></i>
+        <i className={`${icon}`}></i>
         <Field name={name}>
           {({ form, field }) => {
             const { setFieldValue } = form;

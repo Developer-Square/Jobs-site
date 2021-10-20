@@ -70,7 +70,6 @@ const Topbar = (props) => {
       type: "RESET",
     });
   };
-  console.log(user);
 
   return (
     <TopbarWrapper ref={props.refs}>

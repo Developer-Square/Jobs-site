@@ -10,6 +10,32 @@ import {
 } from "helpers";
 import { maybe } from "misc";
 
+export const getClosingDate = (date) => {
+  const time = moment(date).diff(moment(), "days");
+  if (time > 0) {
+    return (
+      <span style={{ color: "#00b55e" }}>
+        <i className="calendar" /> {time} days left to apply{" "}
+      </span>
+    );
+  }
+  if (time === 1) {
+    return (
+      <span style={{ color: "#00b55e" }}>
+        <i className="calendar" /> {time} day left to apply{" "}
+      </span>
+    );
+  }
+  if (time < 0) {
+    return (
+      <span style={{ color: "#eb3737" }}>
+        <i className="calendar" />
+        Application Ended {time} days ago
+      </span>
+    );
+  }
+};
+
 export const truncateText = (text = "", limit = 0) => {
   if (limit === 0 || isNaN(limit) || limit < 0) return "";
   if (text === "" || text === null || text === undefined) return "...";
@@ -23,7 +49,9 @@ export const formatCurrency = function (amount = null) {
       currency: "KES",
       minimumFractionDigits: 2,
     }).format(0);
-  // return amount.amount;
+  if (amount?.amount === 0) {
+    return "Not Included";
+  }
   return new Intl.NumberFormat("en-KE", {
     style: "currency",
     currency: amount?.currency || "KES",
@@ -226,7 +254,7 @@ export const showSeekerProfileNotification = (data, errors, alert) => {
  * @param  {} data
  * @param  {} errors
  */
-export const handleAvatarUpdate = (data, errors) => {
+export const handleAvatarUpdate = (data, errors, alert) => {
   if (errors) {
     console.log("Server Error kwa login", errors[0].message);
     return errors[0].message;

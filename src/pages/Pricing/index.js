@@ -1,10 +1,13 @@
 import React from "react";
+import { TypedPlanListsQuery } from "graphql/queries";
+import Loader from "components/Loader/Loader";
+import { formatCurrency } from "utils";
 
 const Pricing = () => {
   return (
     <div>
       {/* Titlebar
-================================================== */}
+    ================================================== */}
       <div id="titlebar" className="single">
         <div className="container-x">
           <div className="sixteen columns">
@@ -22,156 +25,69 @@ const Pricing = () => {
         </div>
       </div>
       {/* Pricing Tables
-================================================== */}
-      {/* Container / Start */}
-      <div className="container-x">
-        {/* Container / Start */}
-        <div className="container-x">
-          <div className="sixteen columns">
-            <h3 className="margin-bottom-20">Three Tables</h3>
-          </div>
-          {/* Plan #1 */}
-          <div className="plan color-1 one-third column">
-            <div className="plan-price">
-              <h3>Start Up</h3>
-              <span className="plan-currency">Ksh. </span>
-              <span className="value">19</span>
+    ================================================== */}
+      <TypedPlanListsQuery>
+        {(plansList) => {
+          if (plansList.loading) {
+            return <Loader />;
+          }
+
+          const { allPlanLists } = plansList.data;
+          if (allPlanLists.length > 0) {
+            // If the user is a seeker then only add the options available
+            // to them.
+            console.log(allPlanLists);
+          }
+
+          return (
+            <div className="container-x">
+              {allPlanLists.map((list, index) => (
+                <div
+                  className={list?.allPlans?.length === 4 ? "" : "container-x"}
+                  key={index}
+                >
+                  <div className="sixteen columns">
+                    <h3 className="margin-bottom-20">{list?.userType}</h3>
+                  </div>
+                  {list.allPlans.map((plan, idx) => (
+                    <div
+                      className={`plan color-1 ${
+                        list?.allPlans?.length === 4
+                          ? "four columns"
+                          : "one-third column"
+                      }`}
+                      key={idx}
+                    >
+                      <div className="plan-price">
+                        <h3>{plan.title}</h3>
+                        <span className="plan-currency">
+                          {" "}
+                          {formatCurrency(plan?.periodAmountMoney)}
+                        </span>
+                      </div>
+                      <div className="plan-features">
+                        <ul>
+                          {plan.collection
+                            .reduce((arr, v) => {
+                              arr.push([v]);
+                              return arr;
+                            }, [])
+                            .map((val, i) => (
+                              <li key={i}>&bull;➜ {val.toString()}</li>
+                            ))}
+                        </ul>
+                        <a className="button" href>
+                          <i className="fa fa-shopping-cart" /> Purchase Plan
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
-            <div className="plan-features">
-              <ul>
-                <li>One Time Fee</li>
-                <li>This Plan Includes 1 Job</li>
-                <li>Non-Highlighted Post</li>
-                <li>Posted For 30 Days</li>
-              </ul>
-              <a className="button" href>
-                <i className="fa fa-shopping-cart" /> Add to Cart
-              </a>
-            </div>
-          </div>
-          {/* Plan #2 */}
-          <div className="plan color-2 one-third column">
-            <div className="plan-price">
-              <h3>Company</h3>
-              <span className="plan-currency">Ksh. </span>
-              <span className="value">59</span>
-            </div>
-            <div className="plan-features">
-              <ul>
-                <li>One Time Fee</li>
-                <li>This Plan Includes 2 Jobs</li>
-                <li>Highlighted Job Post</li>
-                <li>Posted For 60 Days</li>
-              </ul>
-              <a className="button" href>
-                <i className="fa fa-shopping-cart" /> Add to Cart
-              </a>
-            </div>
-          </div>
-          {/* Plan #3 */}
-          <div className="plan color-1 one-third column">
-            <div className="plan-price">
-              <h3>Enterprise</h3>
-              <span className="plan-currency">Ksh. </span>
-              <span className="value">99</span>
-            </div>
-            <div className="plan-features">
-              <ul>
-                <li>One Time Fee</li>
-                <li>This Plan Includes 4 Jobs</li>
-                <li>2 Highlighted Job Posts</li>
-                <li>Posted For 90 Days</li>
-              </ul>
-              <a className="button" href>
-                <i className="fa fa-shopping-cart" /> Add to Cart
-              </a>
-            </div>
-          </div>
-        </div>
-        {/* Container / End */}
-        <br />
-        <br />
-        <div className="sixteen columns">
-          <h3 className="margin-bottom-20">Four Tables</h3>
-        </div>
-        {/* Plan #1 */}
-        <div className="plan color-1 four columns">
-          <div className="plan-price">
-            <h3>Start Up</h3>
-            <span className="plan-currency">Ksh. </span>
-            <span className="value">19</span>
-          </div>
-          <div className="plan-features">
-            <ul>
-              <li>One Time Fee</li>
-              <li>This Plan Includes 1 Job</li>
-              <li>Non-Highlighted Post</li>
-              <li>Posted For 30 Days</li>
-            </ul>
-            <a className="button" href>
-              <i className="fa fa-shopping-cart" /> Add to Cart
-            </a>
-          </div>
-        </div>
-        {/* Plan #2 */}
-        <div className="plan color-1 four columns">
-          <div className="plan-price">
-            <h3>Company</h3>
-            <span className="plan-currency">Ksh. </span>
-            <span className="value">59</span>
-          </div>
-          <div className="plan-features">
-            <ul>
-              <li>One Time Fee</li>
-              <li>This Plan Includes 2 Jobs</li>
-              <li>Highlighted Job Post</li>
-              <li>Posted For 60 Days</li>
-            </ul>
-            <a className="button" href>
-              <i className="fa fa-shopping-cart" /> Add to Cart
-            </a>
-          </div>
-        </div>
-        {/* Plan #3 */}
-        <div className="plan color-2 four columns">
-          <div className="plan-price">
-            <h3>Enterprise</h3>
-            <span className="plan-currency">Ksh. </span>
-            <span className="value">99</span>
-          </div>
-          <div className="plan-features">
-            <ul>
-              <li>One Time Fee</li>
-              <li>This Plan Includes 4 Jobs</li>
-              <li>2 Highlighted Job Posts</li>
-              <li>Posted For 90 Days</li>
-            </ul>
-            <a className="button" href>
-              <i className="fa fa-shopping-cart" /> Add to Cart
-            </a>
-          </div>
-        </div>
-        {/* Plan #4 */}
-        <div className="plan color-1 four columns">
-          <div className="plan-price">
-            <h3>Extended</h3>
-            <span className="plan-currency">Ksh. </span>
-            <span className="value">199</span>
-          </div>
-          <div className="plan-features">
-            <ul>
-              <li>One Time Fee</li>
-              <li>This Plan Includes 10 Jobs</li>
-              <li>5 Highlighted Job Posts</li>
-              <li>Posted For 180 Days</li>
-            </ul>
-            <a className="button" href>
-              <i className="fa fa-shopping-cart" /> Add to Cart
-            </a>
-          </div>
-        </div>
-      </div>
-      {/* Container / End */}
+          );
+        }}
+      </TypedPlanListsQuery>
       <br />
     </div>
   );

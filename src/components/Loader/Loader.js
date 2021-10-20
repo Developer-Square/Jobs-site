@@ -1,22 +1,14 @@
 import React from "react";
-import {
-  LoaderContainer,
-  LoaderWrapper,
-  Spinner,
-  Bounce1,
-  Bounce2,
-} from "./Loader.style";
+import { Spinner, Bounce1, Bounce2 } from "./Loader.style";
 
 function Loader() {
   return (
-    <LoaderContainer>
-      <LoaderWrapper>
-        <Spinner>
-          <Bounce1 />
-          <Bounce2 />
-        </Spinner>
-      </LoaderWrapper>
-    </LoaderContainer>
+    <div class="h-52 flex space-x-2 p-5 rounded-full justify-center items-center">
+      <Spinner>
+        <Bounce1 />
+        <Bounce2 />
+      </Spinner>
+    </div>
   );
 }
 export default Loader;

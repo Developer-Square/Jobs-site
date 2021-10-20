@@ -8,8 +8,13 @@ import EditorField from "./EditorField";
 function Textarea(props) {
   const { label, name, rte, value, ...rest } = props;
   return (
-    <FormInput className={`form-row form-row-wide`}>
-      <label htmlFor={name}>{label}</label>
+    <FormInput className="relative w-full mb-3">
+      <label
+        className="block text-blueGray-600 text-xs font-bold mb-2"
+        htmlFor={name}
+      >
+        {label}
+      </label>
       {rte ? (
         <Field
           as="textarea"
@@ -17,6 +22,7 @@ function Textarea(props) {
           name={name}
           value={value}
           component={EditorField}
+          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
           {...rest}
         />
       ) : (

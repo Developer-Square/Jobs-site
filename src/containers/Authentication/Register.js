@@ -148,7 +148,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
         if (Object.values(user).length > 0) {
           alert.show(
             {
-              title: "Phone number verified successfully",
+              title: "Phone verified successfully",
             },
             { type: "success", timeout: 5000 },
           );
@@ -194,15 +194,20 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
   };
 
   const seekerProfileCreate = (values, seekerCreate, setErrors) => {
-    const interests = values.interests.reduce((arr, b) => {
+    // const interests = values.interests.reduce((arr, b) => {
+    //   arr.push(b.value);
+    //   return arr;
+    // }, []);
+    const industries = values.industries.reduce((arr, b) => {
       arr.push(b.value);
       return arr;
     }, []);
     seekerCreate({
       variables: {
-        ...values,
         institution: values.school.value,
-        industries: interests,
+        industries: industries,
+        // interests: interests,
+        course: values.course,
       },
     }).then(({ data }) => {
       if (data) {
@@ -239,9 +244,9 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
 
     employerCreate({
       variables: {
-        ...values,
         country,
         industries,
+        location: values.location,
         name: values.company,
       },
     }).then(({ data }) => {
@@ -367,7 +372,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
                           return (
                             <FurtherInformation
                               schoolOptions={schoolOptions}
-                              interests={industries}
+                              industries={industries}
                               loading={loading}
                               switchTabs={switchTabs}
                               onSeekerProfileSubmit={onSeekerProfileSubmit}

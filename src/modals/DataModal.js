@@ -7,7 +7,8 @@ import { useDispatch } from "contexts/resume/resume.provider";
 import ModalContext from "contexts/modal/modal.provider";
 import BaseModal from "./BaseModal";
 import Button from "components/shared/Button";
-import { getModalText, objDiff } from "utils";
+import { getModalText } from "utils";
+// import { objDiff } from "utils";
 
 const DataModal = ({
   name,
@@ -46,7 +47,7 @@ const DataModal = ({
   }, [data, setValues]);
 
   const onSubmit = async (newData) => {
-    console.log(objDiff(values, newData, "id"));
+    // console.log(objDiff(values, newData, "id"));
     setLoading(true);
 
     const errors = await validateForm();

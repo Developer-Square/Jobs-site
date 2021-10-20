@@ -160,21 +160,21 @@ export const myClient = new SubscriptionClient(BASE_GRAPHQL_WS_URL, {
   // },
 });
 
-myClient.onConnected(() => {
-  console.log("connected f client f onConnected");
-});
-myClient.onReconnected(() => {
-  console.log("connected f client f  reconnected");
-});
-myClient.onReconnecting(() => {
-  console.log("connected f client  f reconnecting");
-});
-myClient.onDisconnected(() => {
-  console.log("connected f client  f onDisconnected");
-});
-myClient.onError(() => {
-  console.log("connected f client  f onError");
-});
+// myClient.onConnected(() => {
+//   console.log("connected f client f onConnected");
+// });
+// myClient.onReconnected(() => {
+//   console.log("connected f client f  reconnected");
+// });
+// myClient.onReconnecting(() => {
+//   console.log("connected f client  f reconnecting");
+// });
+// myClient.onDisconnected(() => {
+//   console.log("connected f client  f onDisconnected");
+// });
+// myClient.onError(() => {
+//   console.log("connected f client  f onError");
+// });
 
 // const wsLink = new WebSocketLink(myClient);
 const wsLink = new WebSocketLink({
@@ -345,6 +345,10 @@ export function createApolloClient(initialState = {}) {
 
               default:
                 toast.error(err.extensions.exception.code);
+                if (process.env.NODE_ENV !== "production") {
+                  toast.error(err.message);
+                }
+
                 break;
             }
           }

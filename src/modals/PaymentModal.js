@@ -3,6 +3,7 @@ import styled from "styled-components";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { Form, Formik } from "formik";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSubscription } from "react-apollo";
 
@@ -13,6 +14,7 @@ import { ONTRANSACTION_MESSAGE } from "graphql/subscriptions";
 import Loader from "components/Loader/Loader";
 
 const PaymentCallbacks = ({ transactionId }) => {
+  const history = useHistory();
   const { data } = useSubscription(ONTRANSACTION_MESSAGE, {
     variables: {
       transactionId: transactionId,
@@ -29,6 +31,7 @@ const PaymentCallbacks = ({ transactionId }) => {
       toast.success(
         `Payment (${cleanData?.checkout?.amount}) for ${cleanData?.checkout?.account_reference} was made successfully`,
       );
+      history.push(`/dashboard`);
     }
 
     return (

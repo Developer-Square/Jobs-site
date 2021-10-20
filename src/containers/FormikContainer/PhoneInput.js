@@ -7,8 +7,11 @@ import PhoneInput from "react-phone-input-2";
 function PhoneNumberInput(props) {
   const { label, name, type, file, setFieldValue, icon, ...rest } = props;
   return (
-    <FormInput className={`form-row form-row-wide`}>
-      <label htmlFor={name}>
+    <FormInput className="relative w-full mb-3">
+      <label
+        className="block text-blueGray-600 text-xs font-bold mb-2"
+        htmlFor={name}
+      >
         {rest.iconPosition ? (
           <>
             {rest.iconPosition === "left" ? (
@@ -37,10 +40,10 @@ function PhoneNumberInput(props) {
                   name: "mobile",
                   required: true,
                   autoFocus: false,
-                  className: "input-group mb-3 phone-input",
+                  className:
+                    "border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150",
                 }}
-                //   className="form-control"
-                className={`input-text`}
+                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 defaultCountry={"ke"}
                 onlyCountries={["ke", "ug", "tz"]}
                 masks={{ ke: "...-......" }}
@@ -64,10 +67,10 @@ export default PhoneNumberInput;
 const FormInput = styled.div`
   .react-tel-input .form-control {
     width: 100%;
-    height: 44px;
-    border-radius: 3px;
-    font-family: "Lato", sans-serif;
-    line-height: 19px;
+    height: 40px;
+    // border-radius: 3px;
+    // font-family: "Lato", sans-serif;
+    // line-height: 19px;
     box-sizing: border-box;
     transition: border-color 0.25s ease;
 

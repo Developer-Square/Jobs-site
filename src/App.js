@@ -37,6 +37,7 @@ import { withApollo } from "helpers/apollo";
 import { MuiThemeProvider } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import { SEO } from "components/seo";
+import ScrollToTop from "helpers/scrollToTop";
 
 const MUItheme = createTheme({
   typography: {
@@ -94,7 +95,9 @@ function App() {
                                   {...notificationConfig}
                                 >
                                   <StorageProvider>
-                                    <BaseRouter deviceType={deviceType} />
+                                    <ScrollToTop>
+                                      <BaseRouter deviceType={deviceType} />
+                                    </ScrollToTop>
                                   </StorageProvider>
                                 </AlertProvider>
                               </StickyProvider>

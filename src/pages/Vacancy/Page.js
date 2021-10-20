@@ -15,7 +15,7 @@ import LogoImage from "image/job-list-logo-04.png";
 
 import Bookmark from "./Bookmark";
 import { checkJobType } from "utils";
-import { findJobTypeDescription } from "utils";
+import { findJobTypeDescription, getClosingDate } from "utils";
 
 const Page = ({
   vacancyID,
@@ -124,6 +124,8 @@ const Page = ({
                     <i className="fa fa-link" /> {data?.postedBy?.website}
                   </Link>
                 </span>
+                <p>{getClosingDate(data?.closingDate)}</p>
+
                 {data.creator.socials.map((social, i) => {
                   return (
                     <span key={i}>

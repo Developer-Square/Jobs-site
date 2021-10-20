@@ -137,9 +137,19 @@ export const GET_TOKEN_MUTATION = gql`
 `;
 
 export const CREATE_EMPLOYER = gql`
-  mutation EmployerCreate($name: String, $country: String, $location: String) {
+  mutation EmployerCreate(
+    $name: String
+    $country: String
+    $location: String
+    $industries: [ID]
+  ) {
     employerCreate(
-      input: { name: $name, country: $country, location: $location }
+      input: {
+        name: $name
+        country: $country
+        location: $location
+        industries: $industries
+      }
     ) {
       __typename
       success
@@ -156,15 +166,17 @@ export const CREATE_EMPLOYER = gql`
 
 export const SEEKER_PROFILE_MUTATION = gql`
   mutation SeekerCreate(
-    $institution: String
+    $institution: ID
     $course: String
     $industries: [ID]!
+    $interests: [ID]
   ) {
     seekerCreate(
       input: {
         industries: $industries
         course: $course
         institution: $institution
+        interests: $interests
       }
     ) {
       success
@@ -235,24 +247,24 @@ export const CREATE_SELECTABLE_INSTITUTION = gql`
 `;
 
 export const MAKE_PAYMENT = gql`
-mutation onlinePayment(
-  $billingPhone: String
-  $amount: PositiveDecimal
-  $planId: ID!
-) {
-  makePayment(planId: $planId, input: {
-    billingPhone: $billingPhone
-    amount: $amount
-  }){
-    success
-    onlineCheckout {
-      id
-      amount
-      transactionDescription
+  mutation onlinePayment(
+    $billingPhone: String
+    $amount: PositiveDecimal
+    $planId: ID!
+  ) {
+    makePayment(
+      planId: $planId
+      input: { billingPhone: $billingPhone, amount: $amount }
+    ) {
+      success
+      onlineCheckout {
+        id
+        amount
+        transactionDescription
+      }
     }
   }
-}
-`
+`;
 
 export const TypedMakePayment = TypedMutation(MAKE_PAYMENT);
 

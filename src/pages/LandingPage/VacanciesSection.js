@@ -17,6 +17,7 @@ import {
 } from "utils";
 import LogoImage from "image/job-list-logo-04.png";
 import Loader from "components/Loader/Loader";
+import VacancyLoader from "components/Loader/VacancyLoader";
 import Button from "components/Button/Button";
 import NoResultFound from "components/NoResult/NoResult";
 
@@ -115,7 +116,13 @@ const Vacancies = () => {
             {vacancyState?.sortedJobs?.length ? (
               vacancyState?.sortedJobs.map((job, index) => {
                 if (loading && !vacancyState.sortedJobs) {
-                  return <Loader />;
+                  return (
+                    <>
+                      <VacancyLoader />
+                      <VacancyLoader />
+                      <VacancyLoader />
+                    </>
+                  );
                 }
                 if (loading && !vacancyState.sortedJobs) {
                   return <NoResultFound />;
@@ -169,7 +176,11 @@ const Vacancies = () => {
                 );
               })
             ) : (
-              <Loader />
+              <>
+                <VacancyLoader />
+                <VacancyLoader />
+                <VacancyLoader />
+              </>
             )}
           </div>
 
