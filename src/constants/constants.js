@@ -11,7 +11,7 @@ export const BASE_URL =
 export const BASE_GRAPHQL_URL =
   process.env.REACT_APP_BASE_GRAPHQL_URL || "http://backend.thedatabase.co.ke/graphql/";
 export const BASE_GRAPHQL_WS_URL =
-  process.env.REACT_APP_BASE_GRAPHQL_WS_URL || "http://backend.thedatabase.co.ke/graphql/";
+  process.env.REACT_APP_BASE_GRAPHQL_WS_URL || "ws://backend.thedatabase.co.ke/graphql/";
 
 export const CURRENCY = process.env.REACT_APP_CURRENCY || "Ksh. ";
 export const serviceWorkerTimeout =
