@@ -7,8 +7,11 @@ import styled from "styled-components";
 function DateInput(props) {
   const { label, name, icon, ...rest } = props;
   return (
-    <FormInput className="form-row form-row-wide">
-      <label htmlFor={name}>
+    <FormInput className="relative w-full mb-3">
+      <label
+        className="block text-blueGray-600 text-xs font-bold"
+        htmlFor={name}
+      >
         {rest.iconPosition ? (
           <>
             {rest.iconPosition === "left" ? (
@@ -31,6 +34,7 @@ function DateInput(props) {
             const { value } = field;
             return (
               <DatePicker
+                className="border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 dateFormat="y-MM-dd"
                 id={name}
                 {...field}
