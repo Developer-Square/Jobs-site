@@ -8,10 +8,9 @@ import CheckboxGroup from "./CheckboxGroup";
 import DateInput from "./DateInput";
 import UploadInput from "./UploadInput";
 import PhoneNumberInput from "./PhoneInput";
-import SingleCheckbox from './SingleCheckbox'
-import CreatableSelectInput from './CreatableSelect'
-
-
+import SingleCheckbox from "./SingleCheckbox";
+import CreatableSelectInput from "./CreatableSelect";
+import Code from "./Code";
 
 function FormikControl(props) {
   const { control, ...rest } = props;
@@ -36,6 +35,8 @@ function FormikControl(props) {
       return <UploadInput {...rest} />;
     case "phone":
       return <PhoneNumberInput {...rest} />;
+    case "code":
+      return <Code {...rest} />;
     default:
       return null;
   }

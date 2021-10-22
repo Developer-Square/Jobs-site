@@ -180,7 +180,7 @@ export const myClient = new SubscriptionClient(BASE_GRAPHQL_WS_URL, {
 const wsLink = new WebSocketLink({
   uri: BASE_GRAPHQL_WS_URL,
   options: {
-    reconnect: true,
+    reconnect: false,
   },
 });
 // const wsLink = new WebSocketLink({

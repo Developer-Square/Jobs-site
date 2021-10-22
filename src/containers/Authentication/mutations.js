@@ -259,8 +259,18 @@ export const MAKE_PAYMENT = gql`
       success
       onlineCheckout {
         id
+        phone
         amount
+        isPaybill
+        checkoutRequestId
+        planId
+        accountReference
         transactionDescription
+        customerMessage
+        merchantRequestId
+        responseCode
+        responseDescription
+        dateAdded
       }
     }
   }

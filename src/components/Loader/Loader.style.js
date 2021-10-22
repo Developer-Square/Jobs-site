@@ -131,7 +131,7 @@ const skBounce = keyframes`
 `;
 
 export const Bounce1 = styled.div`
-  background-color: #26ae61;
+  background-color: #21277f;
 
   width: 100%;
   height: 100%;
@@ -145,7 +145,7 @@ export const Bounce1 = styled.div`
   animation: ${skBounce} 2s infinite ease-in-out;
 `;
 export const Bounce2 = styled.div`
-  background-color: #26ae61;
+  background-color: #21277f;
 
   width: 100%;
   height: 100%;

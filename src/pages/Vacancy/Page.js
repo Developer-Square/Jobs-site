@@ -15,7 +15,11 @@ import LogoImage from "image/job-list-logo-04.png";
 
 import Bookmark from "./Bookmark";
 import { checkJobType } from "utils";
-import { findJobTypeDescription, getClosingDate } from "utils";
+import {
+  findJobTypeDescription,
+  getClosingDate,
+  getDBIdFromGraphqlId,
+} from "utils";
 
 const Page = ({
   vacancyID,
@@ -97,7 +101,12 @@ const Page = ({
                 className="popup-with-zoom-anim button mt-8 ml-auto"
                 title={<div style={{ color: "#FFFFFF" }}> Edit Job</div>}
                 onClick={() => {
-                  history.push(`/dashboard/vacancies/edit-job/${data?.id}`);
+                  history.push(
+                    `/dashboard/vacancies/edit-job/${getDBIdFromGraphqlId(
+                      data?.id,
+                      data?.__typename,
+                    )}`,
+                  );
                 }}
               />
             ) : null}

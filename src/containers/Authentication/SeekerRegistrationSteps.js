@@ -178,9 +178,9 @@ export const OTPForm = ({
         return (
           <Form noValidate>
             <FormikControl
-              control="input"
-              type="number"
-              label="OTP Code"
+              control="code"
+              type="text"
+              label="Confirmation Code"
               name="otpcode"
               icon="ln ln-icon-Lock-2"
             />
@@ -351,6 +351,7 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
   const [planID, setPlanID] = React.useState("");
   const [periodAmount, setPeriodAmount] = React.useState(0);
   const [transactionId, setTransactionId] = React.useState();
+  const [checkoutResponseId, setCheckoutResponseId] = React.useState();
   const useStyles = makeStyles((theme) => ({
     root: {
       minWidth: 235,
@@ -390,7 +391,11 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
         console.log("after mpesa push", data);
 
         if (data.makePayment.success) {
+          console.log(data.makePayment.onlineCheckout);
           setTransactionId(data.makePayment.onlineCheckout.id);
+          setCheckoutResponseId(
+            data.makePayment.onlineCheckout.checkoutRequestId,
+          );
         }
 
         // console.log(data);
@@ -438,6 +443,7 @@ export const Billing = ({ switchTabs, isSeeker, alert }) => {
                       onClose={handleModalShow}
                       moreInfo={false}
                       transactionId={transactionId}
+                      checkoutRequestId={checkoutResponseId}
                     />
                     <Spacer>
                       <Link to={"/auth"} onClick={() => switchTabs("", "back")}>
