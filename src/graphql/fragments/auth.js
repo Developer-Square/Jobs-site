@@ -81,6 +81,7 @@ export const userFragment = gql`
     isSeeker
     isEmployer
     isInstitution
+    productTour
     extra
     phone
     dateJoined
