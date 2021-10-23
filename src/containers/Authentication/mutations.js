@@ -71,7 +71,6 @@ export const LOGIN_MUTATION = gql`
         isSeeker
         isEmployer
         isInstitution
-        avatar
       }
     }
   }
