@@ -166,9 +166,10 @@ export const CREATE_EMPLOYER = gql`
 export const SEEKER_PROFILE_MUTATION = gql`
   mutation SeekerCreate(
     $institution: ID
-    $course: String
+    $course: ID
     $industries: [ID]!
     $interests: [ID]
+    $skills: [ID]
   ) {
     seekerCreate(
       input: {
@@ -176,6 +177,7 @@ export const SEEKER_PROFILE_MUTATION = gql`
         course: $course
         institution: $institution
         interests: $interests
+        skills: $skills
       }
     ) {
       success
