@@ -35,7 +35,7 @@ const PaymentCallbacks = ({ transactionId, checkoutRequestId }) => {
             checkoutRequestId: requestId,
           }
         : { id: transactionId },
-      pollInterval: 1000,
+      pollInterval: 2000,
     },
   );
   useEffect(() => {

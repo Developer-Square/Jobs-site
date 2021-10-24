@@ -5,3 +5,4 @@ export * from "./enums";
 export * from "./industries";
 export * from "./pricing";
 export * from "./mpesa";
+export * from "./institutions";
