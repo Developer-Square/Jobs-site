@@ -103,7 +103,7 @@ export default withRouter(function Sidebar(props) {
                       pathname: "",
                     }}
                   >
-                    Hi 👋 {user?.fullName}
+                    Hi 👋 {user?.fullName || user?.username}
                   </Link>
                 </li>
               )}

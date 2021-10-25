@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 import * as msg from "./common";
+import { requiredIndustries, select } from "common/yupFieldValidation";
 
 const password = Yup.string()
   .min(8, msg.passwordNotLongEnough)
@@ -60,7 +61,9 @@ export const OTPVerficationSchema = Yup.object().shape({
 });
 
 export const furtherInformationSchema = Yup.object().shape({
-  industries: industries,
+  industries: requiredIndustries,
+  school: select,
+  course: select,
 });
 
 export const bioSchema = Yup.object().shape({
