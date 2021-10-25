@@ -112,7 +112,7 @@ function Profile() {
                     <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                       Change Password
                     </h6>
-                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                    <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                       <PasswordChange />
                     </div>
 
@@ -120,7 +120,7 @@ function Profile() {
                     <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                       Delete Account
                     </h6>
-                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                    <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                       <div className="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
                         {/*content*/}
                         <div className>
@@ -180,7 +180,7 @@ function Profile() {
                     <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                       Account Details
                     </h6>
-                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                    <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                       <BaseProfile />
                     </div>
 
@@ -189,7 +189,7 @@ function Profile() {
                     <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                       Addresses
                     </h6>
-                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                    <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                       <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8 auto-rows-max ">
                         {data?.me && (
                           <>
@@ -208,7 +208,7 @@ function Profile() {
                     <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                       About Me
                     </h6>
-                    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+                    <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                       {user?.isInstitution && <InstitutionProfile />}
                       {user?.isSeeker && <SeekerProfile />}
                       {user?.isEmployer && <EmployerProfile />}

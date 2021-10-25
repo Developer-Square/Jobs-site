@@ -31,11 +31,15 @@ import Loader from "components/Loader/Loader";
 import { cleanIndustries, cleanInitialValues } from "./auth-helpers";
 import { storeLoginDetails, showSeekerProfileNotification } from "utils";
 import { TypedCourseQuery } from "graphql/queries";
+import { AuthContext } from "contexts/auth/auth.context";
+import UserContext from "contexts/user/user.provider";
 
 const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
   const alert = useAlert();
   const history = useHistory();
   const match = useRouteMatch();
+  const { authDispatch } = React.useContext(AuthContext);
+  const { setRefetchUser } = React.useContext(UserContext);
   const [isSeeker, setIsSeeker] = React.useState(false);
   const [isEmployer, setIsEmplolyer] = React.useState(false);
   const [isInstitution] = React.useState(false);
@@ -71,9 +75,9 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
   };
 
   const schoolInterestsInitialValues = {
-    school: "",
-    interests: [],
-    course: [],
+    school: { value: "", label: "Select School" },
+    industries: [],
+    course: { value: "", label: "Select Course" },
   };
 
   const bioInitialValues = {
@@ -175,7 +179,9 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
         const successful = maybe(() => data.tokenAuth.success);
         storeLoginDetails(successful, "", data, setErrors);
       });
-
+      authDispatch({
+        type: "LOGIN_SUCCESS",
+      });
       switchTabs("", "forward");
     }
     //
@@ -211,7 +217,9 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
             const successful = maybe(() => data.tokenAuth.success);
             storeLoginDetails(successful, "", data, setErrors);
           });
-
+          authDispatch({
+            type: "LOGIN_SUCCESS",
+          });
           switchTabs("", "forward");
         }
       })
@@ -258,6 +266,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
     }).then(({ data }) => {
       if (data) {
         if (data.seekerCreate) {
+          setRefetchUser((curr) => !curr);
           switchTabs("", "forward");
 
           if (!data.seekerCreate.success) {
@@ -298,6 +307,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
     }).then(({ data }) => {
       if (data) {
         if (data.employerCreate) {
+          setRefetchUser((curr) => !curr);
           switchTabs("", "forward");
 
           if (!data.employerCreate.success) {
@@ -428,7 +438,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
                                   values,
                                   { setErrors },
                                 ) {
-                                  if (IsNotEmpty(values.interests)) {
+                                  if (IsNotEmpty(values.industries)) {
                                     seekerProfileCreate(
                                       values,
                                       seekerCreate,

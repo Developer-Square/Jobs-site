@@ -16,6 +16,7 @@ import {
   GET_ONLINE_CHECKOUT_RESPONSE,
 } from "graphql/queries";
 import Loader from "components/Loader/Loader";
+import { useTimer } from "helpers";
 
 const PaymentCallbacks = ({ transactionId, checkoutRequestId }) => {
   const noData = "***************";
@@ -27,7 +28,7 @@ const PaymentCallbacks = ({ transactionId, checkoutRequestId }) => {
   const [message, setMessage] = React.useState(noData);
   const [requestId, setRequestId] = React.useState();
 
-  const { data, loading } = useQuery(
+  const { data, loading, stopPolling } = useQuery(
     requestId ? GET_ONLINE_CHECKOUT_RESPONSE : GET_ONLINE_CHECKOUT,
     {
       variables: requestId
@@ -38,12 +39,16 @@ const PaymentCallbacks = ({ transactionId, checkoutRequestId }) => {
       pollInterval: 2000,
     },
   );
+  const red = useTimer(60);
   useEffect(() => {
     if (data?.onlineCheckout?.customerMessage) {
       setMessage(data?.onlineCheckout?.customerMessage);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestId, message]);
+  if (red === 0) {
+    stopPolling();
+  }
   if (data && !requestId) {
     if (
       data?.onlineCheckout?.checkoutRequestId &&
@@ -72,6 +77,7 @@ const PaymentCallbacks = ({ transactionId, checkoutRequestId }) => {
   }
   if (message === "The service request is processed successfully.") {
     setTimeout(function () {
+      stopPolling();
       toast.success(`Payment (${amount}) for ${amount} was made successfully`);
       history.push(`/dashboard`);
     }, 3000);
