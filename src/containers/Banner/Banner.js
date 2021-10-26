@@ -36,7 +36,7 @@ const Banner = () => {
       data-diff={300}
     >
       <div className="container-x">
-        <div className="sixteen columns">
+        <div className="sixteen columns slide-in-bck-bottom">
           <div className="search-container">
             {/* Form */}
             <h2>Great Careers Start Here</h2> <SearchContainer />
@@ -47,9 +47,8 @@ const Banner = () => {
             />
             {/* Browse Jobs */}
             <div className="browse-jobs">
-              Browse job offers by{" "}
-              <a href="browse-categories.html"> category</a> or{" "}
-              <a href="/">job titles</a>
+              Browse job by <a href="browse-categories.html"> category</a> or{" "}
+              <a href="/">titles</a>
             </div>
             {/* Announce */}
             <div className="announce">

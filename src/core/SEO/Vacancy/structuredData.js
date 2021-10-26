@@ -2,14 +2,14 @@
 
 // import { paths } from "@paths";
 
-export const structuredData = (shop = {}) => {
+export const structuredData = (shop = null) => {
   return JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebSite",
     description: shop
-      ? shop.description
+      ? shop?.description
       : "From Gigs to Internships to Jobs and Volunteering. students can gerrit, employers can get it, workers can gerrit. EVERYBODY can gerrit! TheDatabase, Jobs Need People!",
-    name: shop ? shop.name : "The Database Kenya",
+    name: shop ? shop?.name : "The Database Kenya",
     potentialAction: {
       "@type": "SearchAction",
       "query-input": "required name=q",
