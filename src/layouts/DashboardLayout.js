@@ -71,7 +71,8 @@ const DashboardLayout = (props) => {
     {
       content: "Some brief stats for your overview",
       placement: "bottom",
-      target: ".main__dashboard__content .product_tour__step_1",
+      target:
+        ".main__dashboard__content .product_tour__step_1 .product_tour__sub_step_1",
       textAlign: "center",
     },
   ];
