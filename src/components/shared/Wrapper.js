@@ -20,7 +20,7 @@ const Wrapper = ({ children }) => {
     <>
       <Helmet>
         <html lang="en" />
-        <title>TheDatabase Resume Builder</title>
+        <title>TheDatabase | Jobs Need People | Resume Builder</title>
         <meta
           name="description"
           content="A free and open source resume builder that’s built to make the mundane tasks of creating, updating and sharing your resume as easy as 1, 2, 3."

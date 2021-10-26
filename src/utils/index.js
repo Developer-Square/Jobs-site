@@ -10,6 +10,9 @@ import {
 } from "helpers";
 import { maybe } from "misc";
 
+export const numberWithCommas = (x = 0) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 export const getClosingDate = (date) => {
   const time = moment(date).diff(moment(), "days");
   if (time > 0) {
