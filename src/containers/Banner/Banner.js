@@ -4,6 +4,7 @@ import { Waypoint } from "react-waypoint";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import bgImg from "image/landing.jpg";
 import SearchContainer from "containers/Search/SearchContainer";
+import Fade from "react-reveal/Fade";
 
 const Banner = () => {
   const useDispatch = useStickyDispatch();
@@ -36,24 +37,25 @@ const Banner = () => {
       data-diff={300}
     >
       <div className="container-x">
-        <div className="sixteen columns slide-in-bck-bottom">
+        <div className="sixteen columns">
           <div className="search-container">
-            {/* Form */}
-            <h2>Great Careers Start Here</h2> <SearchContainer />
-            <Waypoint
-              onEnter={removeSticky}
-              onLeave={setSticky}
-              onPositionChange={onWaypointPositionChange}
-            />
-            {/* Browse Jobs */}
-            <div className="browse-jobs">
-              Browse job by <a href="browse-categories.html"> category</a> or{" "}
-              <a href="/">titles</a>
-            </div>
-            {/* Announce */}
-            <div className="announce">
-              We’ve over <strong>15,000</strong> internship offers for you!
-            </div>
+            <Fade bottom>
+              <h2>Great Careers Start Here</h2> <SearchContainer />
+              <Waypoint
+                onEnter={removeSticky}
+                onLeave={setSticky}
+                onPositionChange={onWaypointPositionChange}
+              />
+              {/* Browse Jobs */}
+              <div className="browse-jobs">
+                Browse job by <a href="browse-categories.html"> category</a> or{" "}
+                <a href="/">titles</a>
+              </div>
+              {/* Announce */}
+              <div className="announce">
+                We’ve over <strong>15,000</strong> internship offers for you!
+              </div>
+            </Fade>
           </div>
         </div>
       </div>

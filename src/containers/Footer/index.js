@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import {Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import Fade from "react-reveal/Fade";
 import { TOS, HELP_PAGE, SDG } from "constants/routes.constants";
 
 const Footer = () => {
@@ -18,58 +19,60 @@ const Footer = () => {
         >
           {/* Main */}
           <div className="container-x">
-            <div className="seven columns">
-              <h4>About</h4>
-              <p>The Database - Jobs need People.</p>
-              <Link to="/auth" className="button">
-                Get Started
-              </Link>
-            </div>
-            <div className="three columns">
-              <h4>We Care</h4>
-              <ul className="footer-links">
-                <li>
-                  <Link to={`${HELP_PAGE}`}>FAQs</Link>
-                </li>
-                <li>
-                  <Link to={`${TOS}`}>Terms of Service</Link>
-                </li>
-                <li>
-                  <Link to={`${TOS}`}>Privacy Policy</Link>
-                </li>
-              </ul>
-            </div>
-            <div className="three columns">
-              <h4>About</h4>
-              <ul className="footer-links">
-                <li>
-                  <Link to={`${SDG}`}>Our SDGs</Link>
-                </li>
-                <li>
-                  <Link to="/">Press Releases</Link>
-                </li>
-                <li>
-                  <Link to="/">Awards</Link>
-                </li>
-                <li>
-                  <Link to="/">Testimonials</Link>
-                </li>
-                <li>
-                  <Link to="/">Timeline</Link>
-                </li>
-              </ul>
-            </div>
-            <div className="three columns">
-              <h4>Others</h4>
-              <ul className="footer-links">
-                <li>
-                  <Link to="/pricing">Pricing</Link>
-                </li>
-                <li>
-                  <Link to="/contact">Contact</Link>
-                </li>
-              </ul>
-            </div>
+            <Fade left cascade>
+              <div className="seven columns">
+                <h4>About</h4>
+                <p>The Database - Jobs need People.</p>
+                <Link to="/auth" className="button">
+                  Get Started
+                </Link>
+              </div>
+              <div className="three columns">
+                <h4>We Care</h4>
+                <ul className="footer-links">
+                  <li>
+                    <Link to={`${HELP_PAGE}`}>FAQs</Link>
+                  </li>
+                  <li>
+                    <Link to={`${TOS}`}>Terms of Service</Link>
+                  </li>
+                  <li>
+                    <Link to={`${TOS}`}>Privacy Policy</Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="three columns">
+                <h4>About</h4>
+                <ul className="footer-links">
+                  <li>
+                    <Link to={`${SDG}`}>Our SDGs</Link>
+                  </li>
+                  <li>
+                    <Link to="/">Press Releases</Link>
+                  </li>
+                  <li>
+                    <Link to="/">Awards</Link>
+                  </li>
+                  <li>
+                    <Link to="/">Testimonials</Link>
+                  </li>
+                  <li>
+                    <Link to="/">Timeline</Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="three columns">
+                <h4>Others</h4>
+                <ul className="footer-links">
+                  <li>
+                    <Link to="/pricing">Pricing</Link>
+                  </li>
+                  <li>
+                    <Link to="/contact">Contact</Link>
+                  </li>
+                </ul>
+              </div>
+            </Fade>
           </div>
           {/* Bottom */}
           <div className="container-x">

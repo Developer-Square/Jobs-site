@@ -585,7 +585,3 @@ input[type="range"]::-webkit-slider-thumb {
     #titlebar{
       margin-top: 80px;
     }
-    .slide-in-bck-bottom {
-      -webkit-animation: slide-in-bck-bottom 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-              animation: slide-in-bck-bottom 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    }

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory, Link } from "react-router-dom";
 import { useLazyQuery } from "react-apollo";
+import Fade from "react-reveal/Fade";
 import { PaymentModal } from "modals/PaymentModal";
 import { landingVacancyLimit } from "constants/constants";
 import { VACANCIES_QUERY } from "graphql/queries";
@@ -113,75 +114,77 @@ const Vacancies = () => {
         <div className="padding-right">
           <h3 className="margin-bottom-25">Recent Jobs</h3>
           <div className="listings-container">
-            {vacancyState?.sortedJobs?.length ? (
-              vacancyState?.sortedJobs.map((job, index) => {
-                if (loading && !vacancyState.sortedJobs) {
+            <Fade bottom cascade>
+              {vacancyState?.sortedJobs?.length ? (
+                vacancyState?.sortedJobs.map((job, index) => {
+                  if (loading && !vacancyState.sortedJobs) {
+                    return (
+                      <>
+                        <VacancyLoader />
+                        <VacancyLoader />
+                        <VacancyLoader />
+                      </>
+                    );
+                  }
+                  if (loading && !vacancyState.sortedJobs) {
+                    return <NoResultFound />;
+                  }
                   return (
-                    <>
-                      <VacancyLoader />
-                      <VacancyLoader />
-                      <VacancyLoader />
-                    </>
+                    // Listing
+                    <JobContainer
+                      className={`listing ${checkJobType(
+                        findJobTypeDescription(job, jobTypes),
+                      )}`}
+                      key={index}
+                      onClick={() => handleClick(job.id)}
+                    >
+                      <div className="listing-logo">
+                        <img
+                          src={job?.postedBy?.logo?.url || LogoImage}
+                          alt={job?.postedBy?.logo?.alt || "TheDB_company_logo"}
+                        />
+                      </div>
+                      <div className="listing-title">
+                        <h4>
+                          {job?.title}
+                          <span className="listing-type">
+                            {findJobTypeDescription(job, jobTypes)}
+                          </span>
+                        </h4>
+                        <ul className="listing-icons">
+                          <li>
+                            <i className="ln ln-icon-Management" />{" "}
+                            {job?.postedBy?.name}
+                          </li>
+                          <li>
+                            <i className="ln ln-icon-Map2" /> {job?.location}
+                          </li>
+                          <li>
+                            <i className="ln ln-icon-Money-2" />{" "}
+                            {formatCurrency(job?.amount)}
+                          </li>
+                          <li>
+                            <div
+                              className={`listing-date ${checkDate(
+                                job?.createdAt,
+                              )}`}
+                            >
+                              {checkDate(job?.createdAt)}
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </JobContainer>
                   );
-                }
-                if (loading && !vacancyState.sortedJobs) {
-                  return <NoResultFound />;
-                }
-                return (
-                  // Listing
-                  <JobContainer
-                    className={`listing ${checkJobType(
-                      findJobTypeDescription(job, jobTypes),
-                    )}`}
-                    key={index}
-                    onClick={() => handleClick(job.id)}
-                  >
-                    <div className="listing-logo">
-                      <img
-                        src={job?.postedBy?.logo?.url || LogoImage}
-                        alt={job?.postedBy?.logo?.alt || "TheDB_company_logo"}
-                      />
-                    </div>
-                    <div className="listing-title">
-                      <h4>
-                        {job?.title}
-                        <span className="listing-type">
-                          {findJobTypeDescription(job, jobTypes)}
-                        </span>
-                      </h4>
-                      <ul className="listing-icons">
-                        <li>
-                          <i className="ln ln-icon-Management" />{" "}
-                          {job?.postedBy?.name}
-                        </li>
-                        <li>
-                          <i className="ln ln-icon-Map2" /> {job?.location}
-                        </li>
-                        <li>
-                          <i className="ln ln-icon-Money-2" />{" "}
-                          {formatCurrency(job?.amount)}
-                        </li>
-                        <li>
-                          <div
-                            className={`listing-date ${checkDate(
-                              job?.createdAt,
-                            )}`}
-                          >
-                            {checkDate(job?.createdAt)}
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </JobContainer>
-                );
-              })
-            ) : (
-              <>
-                <VacancyLoader />
-                <VacancyLoader />
-                <VacancyLoader />
-              </>
-            )}
+                })
+              ) : (
+                <>
+                  <VacancyLoader />
+                  <VacancyLoader />
+                  <VacancyLoader />
+                </>
+              )}
+            </Fade>
           </div>
 
           <Button

@@ -1,6 +1,7 @@
 import React from "react";
 import { AuthContext } from "contexts/auth/auth.context";
 import { Link, useHistory } from "react-router-dom";
+import Shake from "react-reveal/Shake";
 
 export const RightMenu = ({ isAuthenticated }) => {
   const { authDispatch } = React.useContext(AuthContext);
@@ -86,30 +87,34 @@ export const RightMenu = ({ isAuthenticated }) => {
         </>
       ) : (
         <>
-          <li>
-            <Link
-              onClick={() => {
-                authDispatch({
-                  type: "SIGNUP",
-                });
-              }}
-              to={`/auth`}
-            >
-              <i className="fa fa-user" /> Sign Up
-            </Link>
-          </li>
-          <li>
-            <Link
-              onClick={() => {
-                authDispatch({
-                  type: "SIGNIN",
-                });
-              }}
-              to={`/auth`}
-            >
-              <i className="fa fa-lock" /> Log In
-            </Link>
-          </li>
+          <Shake>
+            <li>
+              <Link
+                onClick={() => {
+                  authDispatch({
+                    type: "SIGNUP",
+                  });
+                }}
+                to={`/auth`}
+              >
+                <i className="fa fa-user" /> Sign Up
+              </Link>{" "}
+            </li>
+          </Shake>
+          <Shake>
+            <li>
+              <Link
+                onClick={() => {
+                  authDispatch({
+                    type: "SIGNIN",
+                  });
+                }}
+                to={`/auth`}
+              >
+                <i className="fa fa-lock" /> Log In
+              </Link>
+            </li>{" "}
+          </Shake>
         </>
       )}
     </ul>
