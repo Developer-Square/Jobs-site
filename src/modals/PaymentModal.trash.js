@@ -5,126 +5,84 @@ import Dialog from "@material-ui/core/Dialog";
 import { Form, Formik } from "formik";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useQuery } from "react-apollo";
+import { useSubscription } from "react-apollo";
 
 import FormikControl from "../containers/FormikContainer/FormikControl";
 import { phoneNumberSchema } from "../containers/Authentication/validation.schema";
 import Button from "components/Button/Button";
-// import { ONTRANSACTION_MESSAGE } from "graphql/subscriptions";
-import {
-  GET_ONLINE_CHECKOUT,
-  GET_ONLINE_CHECKOUT_RESPONSE,
-} from "graphql/queries";
+import { ONTRANSACTION_MESSAGE } from "graphql/subscriptions";
 import Loader from "components/Loader/Loader";
-import { useTimer } from "helpers";
 
-const PaymentCallbacks = ({ transactionId, checkoutRequestId }) => {
-  const noData = "***************";
+const PaymentCallbacks = ({ transactionId }) => {
   const history = useHistory();
-  const [phone, setPhone] = React.useState(noData);
-  const [amount, setAmount] = React.useState(noData);
-  const [accountReference, setAccountReference] = React.useState(noData);
-  const [mpesaReceiptNumber, setMpesaReceiptNumber] = React.useState(noData);
-  const [message, setMessage] = React.useState(noData);
-  const [requestId, setRequestId] = React.useState();
-
-  const { data, loading, stopPolling } = useQuery(
-    requestId ? GET_ONLINE_CHECKOUT_RESPONSE : GET_ONLINE_CHECKOUT,
-    {
-      variables: requestId
-        ? {
-            checkoutRequestId: requestId,
-          }
-        : { id: transactionId },
-      pollInterval: 2000,
+  const { data } = useSubscription(ONTRANSACTION_MESSAGE, {
+    variables: {
+      transactionId: transactionId,
     },
-  );
-  const red = useTimer(60);
-  useEffect(() => {
-    if (data?.onlineCheckout?.customerMessage) {
-      setMessage(data?.onlineCheckout?.customerMessage);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestId, message]);
-  if (red === 0) {
-    stopPolling();
-  }
-  if (data && !requestId) {
-    if (
-      data?.onlineCheckout?.checkoutRequestId &&
-      data?.onlineCheckout?.checkoutRequestId !== ""
-    ) {
-      setRequestId(data?.onlineCheckout?.checkoutRequestId);
-    }
-  }
+  });
 
-  if (data && phone === noData) {
-    if (data.onlineCheckout) {
-      setPhone(data?.onlineCheckout?.phone);
-      setAmount(data?.onlineCheckout?.amount);
-      setAccountReference(data?.onlineCheckout?.accountReference);
+  if (!transactionId) return <div />;
+  if (data) {
+    const cleanData = JSON.parse(JSON.parse(data.onTransactionMessage?.data));
+    if (
+      cleanData?.response?.result_description ===
+      "The service request is processed successfully."
+    ) {
+      toast.success(
+        `Payment (${cleanData?.checkout?.amount}) for ${cleanData?.checkout?.account_reference} was made successfully`,
+      );
+      history.push(`/dashboard`);
     }
-  }
-  if (
-    data?.onlineCheckoutResponses &&
-    data?.onlineCheckoutResponses.length > 0
-  ) {
-    setMpesaReceiptNumber(data?.onlineCheckout?.mpesaReceiptNumber);
-    setMessage(
-      data?.onlineCheckoutResponses[data.onlineCheckoutResponses?.length - 1]
-        ?.resultDescription,
+
+    return (
+      <Container>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold">
+            <strong>Account Reference : </strong>
+          </div>
+          <div className="px-4 py-2">
+            {cleanData?.checkout?.account_reference || "***************"}
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold">
+            <strong>Amount: </strong>
+          </div>
+          <div className="px-4 py-2">
+            Ksh {cleanData?.checkout?.amount || "***************"}
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold">
+            <strong>Customer Message : </strong>
+          </div>
+          <div className="px-4 py-2">
+            {cleanData?.response
+              ? cleanData?.response?.result_description
+              : cleanData?.checkout?.customer_message}
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold">
+            <strong>Phone: </strong>
+          </div>
+          <div className="px-4 py-2">
+            {cleanData?.checkout?.phone || "***************"}
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold">
+            <strong>Mpesa Receipt No. : </strong>
+          </div>
+          <div className="px-4 py-2">
+            {cleanData?.checkout?.mpesa_receipt_number || "***************"}
+          </div>
+        </div>
+      </Container>
     );
   }
-  if (message === "The service request is processed successfully.") {
-    setTimeout(function () {
-      stopPolling();
-      toast.success(`Payment (${amount}) for ${amount} was made successfully`);
-      history.push(`/dashboard`);
-    }, 3000);
-  }
-
-  return (
-    <Container>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="flex justify-center items-center">
-          Payment Details {loading && <Loader />}
-        </div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Safaricom Message : </strong>
-        </div>
-        <div className="px-4 py-2">{message}</div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Account Reference : </strong>
-        </div>
-        <div className="px-4 py-2">{accountReference}</div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Amount: </strong>
-        </div>
-        <div className="px-4 py-2">Ksh {amount}</div>
-      </div>
-
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Phone: </strong>
-        </div>
-        <div className="px-4 py-2">{phone}</div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Mpesa Receipt No. : </strong>
-        </div>
-        <div className="px-4 py-2">{mpesaReceiptNumber}</div>
-      </div>
-    </Container>
-  );
+  return <Loader />;
 };
-
 export const PaymentModal = ({
   onClose,
   open,

@@ -50,3 +50,7 @@ export const baseProfileSchema = Yup.object().shape({
   firstName: username,
   lastName: username,
 });
+
+export const requiredIndustries = Yup.array().required(
+  "select at least one industry",
+);

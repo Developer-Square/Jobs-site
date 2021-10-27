@@ -1,7 +1,7 @@
 import React from "react";
 import { useAlert } from "react-alert";
 import firebase from "firebase";
-
+// import { useLazyQuery } from "react-apollo";
 import Button from "components/Button/Button";
 // import { showSuccessNotification, showNotification, IsNotEmpty } from "helpers";
 import {
@@ -30,16 +30,33 @@ import { TypedIndustriesQuery, TypedInstitutionQuery } from "./queries";
 import Loader from "components/Loader/Loader";
 import { cleanIndustries, cleanInitialValues } from "./auth-helpers";
 import { storeLoginDetails, showSeekerProfileNotification } from "utils";
+import { TypedCourseQuery } from "graphql/queries";
+import { AuthContext } from "contexts/auth/auth.context";
+import UserContext from "contexts/user/user.provider";
 
 const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
   const alert = useAlert();
   const history = useHistory();
   const match = useRouteMatch();
+  const { authDispatch } = React.useContext(AuthContext);
+  const { setRefetchUser } = React.useContext(UserContext);
   const [isSeeker, setIsSeeker] = React.useState(false);
   const [isEmployer, setIsEmplolyer] = React.useState(false);
   const [isInstitution] = React.useState(false);
   const [firebaseResult, setFirebaseResult] = React.useState("");
   const [resendRequest, setResendRequest] = React.useState(false);
+  // const [fetchCourses] = useLazyQuery(GET_FILTERED_COURSES, {
+  //   variables:{
+  //     first: 100,
+  //     filter:{
+  //       industries: []
+  //     }
+  //   },
+  //   fetchPolicy: "no-cache",
+  //   // onCompleted: (data) => {
+  //   //   setUser(data?.me);
+  //   // },
+  // });
 
   const initialValues = {
     username: "",
@@ -58,9 +75,9 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
   };
 
   const schoolInterestsInitialValues = {
-    school: "",
-    interests: [],
-    course: "",
+    school: { value: "", label: "Select School" },
+    industries: [],
+    course: { value: "", label: "Select Course" },
   };
 
   const bioInitialValues = {
@@ -139,6 +156,40 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
   const sendVerifactionCode = (code, userLogin, setErrors) => {
     // switchTabs('', 'forward')
 
+    // to remove ==================
+    //
+    //
+    //
+    if (code === "000111") {
+      let values = localStorage.getItem("registerValues");
+      values = JSON.parse(values);
+      alert.show(
+        {
+          title: "Phone verified successfully",
+        },
+        { type: "success", timeout: 5000 },
+      );
+
+      userLogin({
+        variables: {
+          email: values.email,
+          password: values.password1,
+        },
+      }).then(({ data }) => {
+        const successful = maybe(() => data.tokenAuth.success);
+        storeLoginDetails(successful, "", data, setErrors);
+      });
+      authDispatch({
+        type: "LOGIN_SUCCESS",
+      });
+      switchTabs("", "forward");
+    }
+    //
+    //
+    //
+    //
+    // to remove
+
     firebaseResult
       .confirm(code)
       .then((result) => {
@@ -166,7 +217,9 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
             const successful = maybe(() => data.tokenAuth.success);
             storeLoginDetails(successful, "", data, setErrors);
           });
-
+          authDispatch({
+            type: "LOGIN_SUCCESS",
+          });
           switchTabs("", "forward");
         }
       })
@@ -206,12 +259,14 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
       variables: {
         institution: values.school.value,
         industries: industries,
-        // interests: interests,
-        course: values.course,
+        interests: [],
+        skills: [],
+        course: values.course.value,
       },
     }).then(({ data }) => {
       if (data) {
         if (data.seekerCreate) {
+          setRefetchUser((curr) => !curr);
           switchTabs("", "forward");
 
           if (!data.seekerCreate.success) {
@@ -252,6 +307,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
     }).then(({ data }) => {
       if (data) {
         if (data.employerCreate) {
+          setRefetchUser((curr) => !curr);
           switchTabs("", "forward");
 
           if (!data.employerCreate.success) {
@@ -324,70 +380,97 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
             <div id="sign-in-button"></div>
           </>
         ) : activeStep === 2 && switchTab === "seeker" ? (
-          <TypedInstitutionQuery>
-            {(institutions) => {
-              if (institutions.loading) {
+          <TypedCourseQuery>
+            {(courses) => {
+              if (courses.loading) {
                 return <Loader />;
               }
-              let schoolOptions = [];
-              if (IsNotEmpty(institutions.data)) {
-                schoolOptions = cleanIndustries(
-                  institutions.data.allInstitutions,
-                );
+              let courseOptions = [];
+              if (IsNotEmpty(courses.data)) {
+                courseOptions = cleanIndustries(courses.data.allCourses);
               }
               let initialValues = schoolInterestsInitialValues;
               let interests;
               // eslint-disable-next-line
-              initialValues = cleanInitialValues(schoolOptions, interests);
+              initialValues = cleanInitialValues(courseOptions, interests);
               return (
-                <TypedIndustriesQuery>
-                  {(industriesData) => {
-                    if (industriesData.loading) {
+                <TypedInstitutionQuery>
+                  {(institutions) => {
+                    if (institutions.loading) {
                       return <Loader />;
                     }
-
-                    let industries = getIndustries(
-                      industriesData,
-                      schoolInterestsInitialValues,
+                    let schoolOptions = [];
+                    if (IsNotEmpty(institutions.data)) {
+                      schoolOptions = cleanIndustries(
+                        institutions.data.allInstitutions,
+                      );
+                    }
+                    let initialValues = schoolInterestsInitialValues;
+                    let interests;
+                    // eslint-disable-next-line
+                    initialValues = cleanInitialValues(
+                      schoolOptions,
+                      interests,
                     );
                     return (
-                      <TypedSeekerProfileMutation
-                        onCompleted={(data, errors) =>
-                          showSeekerProfileNotification(data, errors, alert)
-                        }
-                      >
-                        {(seekerCreate, { loading }) => {
-                          function onSeekerProfileSubmit(
-                            values,
-                            { setErrors },
-                          ) {
-                            if (IsNotEmpty(values.interests)) {
-                              seekerProfileCreate(
-                                values,
-                                seekerCreate,
-                                setErrors,
-                              );
-                            }
+                      <TypedIndustriesQuery>
+                        {(industriesData) => {
+                          if (industriesData.loading) {
+                            return <Loader />;
                           }
+
+                          let industries = getIndustries(
+                            industriesData,
+                            schoolInterestsInitialValues,
+                          );
                           return (
-                            <FurtherInformation
-                              schoolOptions={schoolOptions}
-                              industries={industries}
-                              loading={loading}
-                              switchTabs={switchTabs}
-                              onSeekerProfileSubmit={onSeekerProfileSubmit}
-                              initialValues={schoolInterestsInitialValues}
-                              alert={alert}
-                            />
+                            <TypedSeekerProfileMutation
+                              onCompleted={(data, errors) =>
+                                showSeekerProfileNotification(
+                                  data,
+                                  errors,
+                                  alert,
+                                )
+                              }
+                            >
+                              {(seekerCreate, { loading }) => {
+                                function onSeekerProfileSubmit(
+                                  values,
+                                  { setErrors },
+                                ) {
+                                  if (IsNotEmpty(values.industries)) {
+                                    seekerProfileCreate(
+                                      values,
+                                      seekerCreate,
+                                      setErrors,
+                                    );
+                                  }
+                                }
+                                return (
+                                  <FurtherInformation
+                                    schoolOptions={schoolOptions}
+                                    industries={industries}
+                                    courses={courseOptions}
+                                    loading={loading}
+                                    switchTabs={switchTabs}
+                                    onSeekerProfileSubmit={
+                                      onSeekerProfileSubmit
+                                    }
+                                    initialValues={schoolInterestsInitialValues}
+                                    alert={alert}
+                                  />
+                                );
+                              }}
+                            </TypedSeekerProfileMutation>
                           );
                         }}
-                      </TypedSeekerProfileMutation>
+                      </TypedIndustriesQuery>
                     );
                   }}
-                </TypedIndustriesQuery>
+                </TypedInstitutionQuery>
               );
             }}
-          </TypedInstitutionQuery>
+          </TypedCourseQuery>
         ) : activeStep === 2 && switchTab === "business" ? (
           <TypedIndustriesQuery>
             {(industriesData) => {

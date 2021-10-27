@@ -213,6 +213,7 @@ export const FurtherInformation = ({
   loading,
   schoolOptions,
   industries,
+  courses,
   initialValues,
   onSeekerProfileSubmit,
   alert,
@@ -307,14 +308,25 @@ export const FurtherInformation = ({
               }}
             </TypedCreateSelectableInstitutionMutation>
 
-            <FormikControl
+            {/* <FormikControl
               control="input"
               type="text"
               label="Course"
               name="course"
               icon="ln ln-icon-Lock-2"
-            />
+            /> */}
 
+            <FormikControl
+              control="select"
+              options={courses}
+              showButton={showButton}
+              hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
+              label="Course"
+              name="course"
+              id="simple-select"
+              classNamePrefix="select"
+              icon="ln ln-icon-Lock-2"
+            />
             <FormikControl
               control="select"
               isMulti

@@ -60,7 +60,18 @@ const Activities = () => {
                 }}
               >
                 <ul>
+                  {activitiesList.data?.recentActivities?.edges?.length ===
+                    0 && (
+                    <li>
+                      <strong>
+                        <Link to={{ pathname: "" }}>
+                          No Recent Activities yet! Let's get you started.
+                        </Link>
+                      </strong>
+                    </li>
+                  )}
                   {activitiesList.data.recentActivities.edges.map((edge, i) => {
+                    console.log(edge, edge);
                     if (!edge) {
                       return (
                         <li>

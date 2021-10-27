@@ -20,7 +20,7 @@ const Bookmark = ({
           errors,
           null,
           "errors",
-          "job Bookmarked Created",
+          "Job Saved",
           null,
         )
       }
@@ -49,7 +49,7 @@ const Bookmark = ({
             onClick={isAuthenticated ? bookmarkJob : handleLoginNotification}
             title={
               <div style={{ color: "#FFFFFF" }}>
-                <i className="fa fa-star" /> Bookmark This Job
+                <i className="fa fa-star" /> Save This Job
               </div>
             }
           />

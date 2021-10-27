@@ -1,4 +1,5 @@
 import React from "react";
+import Bounce from "react-reveal/Bounce";
 
 import Loader from "components/Loader/Loader";
 import NetworkStatus from "components/NetworkStatus";
@@ -31,30 +32,33 @@ const CategoriesSection = () => {
             return (
               <div className="container-x">
                 <div className="sixteen columns">
-                  <h3 className="margin-bottom-20 margin-top-10">
-                    Popular Categories
-                  </h3>
-                  {/* Popular Categories */}
-                  <div className="categories-boxes-container">
-                    {industriesList.data.industries.edges.map(
-                      ({ node: industry }) => {
-                        return (
-                          <Link
-                            to={{ pathname: "/vacancies" }}
-                            className="category-small-box"
-                          >
-                            <i
-                              className={
-                                industry.icon || "ln  ln-icon-Laptop-3"
-                              }
-                            />
-                            <h4>{industry.name}</h4>
-                            <span>{industry.vacanciesCount}</span>
-                          </Link>
-                        );
-                      },
-                    )}
-                  </div>
+                  <Bounce bottom cascade>
+                    {" "}
+                    <h3 className="margin-bottom-20 margin-top-10">
+                      Popular Categories
+                    </h3>
+                    {/* Popular Categories */}
+                    <div className="categories-boxes-container">
+                      {industriesList.data.industries.edges.map(
+                        ({ node: industry }) => {
+                          return (
+                            <Link
+                              to={{ pathname: "/vacancies" }}
+                              className="category-small-box"
+                            >
+                              <i
+                                className={
+                                  industry.icon || "ln  ln-icon-Laptop-3"
+                                }
+                              />
+                              <h4>{industry.name}</h4>
+                              <span>{industry.vacanciesCount}</span>
+                            </Link>
+                          );
+                        },
+                      )}
+                    </div>{" "}
+                  </Bounce>
                   <div className="clearfix" />
                   <div className="margin-top-30" />
                   <a href="/categories" className="button centered">

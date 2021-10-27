@@ -100,7 +100,7 @@ const Topbar = (props) => {
                   pathname: "",
                 }}
               >
-                Hi 👋 {user?.fullName}
+                Hi 👋 {user?.fullName || user?.username}
               </Link>
             </li>
           </ul>

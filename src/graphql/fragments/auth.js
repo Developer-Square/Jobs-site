@@ -55,6 +55,18 @@ export const seekerFragment = gql`
     gender
     mobile
     status
+    skills {
+      name
+      id
+    }
+    course {
+      name
+      id
+    }
+    profession {
+      name
+      id
+    }
     industries {
       name
       id
@@ -91,6 +103,27 @@ export const userFragment = gql`
     numberOfJobsBookmarked
     numberOfApplications
     numberOfActiveJobListings
+    subscriptions {
+      id
+      start
+      end
+      description
+      reason
+      plan {
+        id
+        title
+        description
+        periodType
+        periodAmount
+        renewalType
+        collection
+        setupAmount
+        periodAmountMoney {
+          amount
+          currency
+        }
+      }
+    }
     socials {
       id
       link
