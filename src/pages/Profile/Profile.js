@@ -67,7 +67,7 @@ function Profile() {
             <div
               className={`cursor-default ${progressColor(
                 user?.progress,
-              )}-400 text-xs font-bold leading-none flex items-center justify-center m-1 py-4 text-center text-white`}
+              )}-500 text-xs font-bold leading-none flex items-center justify-center m-1 py-4 text-center text-white`}
               style={{
                 width: `${user?.progress}%`,
               }}
