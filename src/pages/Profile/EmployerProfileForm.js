@@ -116,7 +116,7 @@ function EmployerProfileForm({ details }) {
             <Spacer />
             <ProfileDetails>
               <Details>
-                <Title type="profile">Interests</Title>
+                <Title type="profile">Company Industries</Title>
               </Details>
               {details.employer?.industries.map((industry, i) => (
                 <PaddedInfo key={i}>{industry.name}</PaddedInfo>

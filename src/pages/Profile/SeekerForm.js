@@ -90,7 +90,7 @@ const SeekerForm = ({
             <div className="form" style={{ width: "100%" }}>
               <FormikControl
                 control="select"
-                label="Interests"
+                label="Job Industries"
                 name="industries"
                 hideButton={() => {}}
                 style={{ margin: 0 }}
