@@ -219,7 +219,7 @@ const Applications = ({ deviceType }) => {
           {
             id: "btns",
             hideFilter: true,
-            Header: () => <h5 className="logo-header">Actions</h5>,
+            Header: () => <h5>Actions</h5>,
             accessor: "",
             Cell: ({ row }) => {
               const { original } = row;

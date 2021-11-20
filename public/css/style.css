@@ -7260,7 +7260,7 @@ label.upload-btn input[type="file"] { display: none; }
 /* Dashboard Styles
 ---------------------------------------------------------------------- */
 #dashboard {
-	min-height: 100vh;
+	/* min-height: 100vh; */
 	display: flex;
 	flex-wrap: wrap;
 	padding-top: 15px;

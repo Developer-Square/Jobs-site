@@ -3,6 +3,7 @@ import { Form, Formik } from "formik";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import Button from "components/Button/Button";
 import { seekerProfileSchema } from "./validation.schema";
+import CoursesSearch from "components/CoursesSearch/CoursesSearch";
 
 const SeekerForm = ({
   initialValues,
@@ -99,6 +100,9 @@ const SeekerForm = ({
               />
             </div>
             <div className="form" style={{ width: "100%" }}>
+              <CoursesSearch />
+            </div>
+            <div className="form" style={{ width: "100%" }}>
               <FormikControl
                 control="textarea"
                 label="Additional Info"
@@ -112,7 +116,7 @@ const SeekerForm = ({
                 type="submit"
                 disabled={!formik.isValid}
                 fullwidth
-                loading={loading}
+                isLoading={loading}
                 title={loading ? "Saving... " : "Save"}
                 className="button margin-top-15"
               />

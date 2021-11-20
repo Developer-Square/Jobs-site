@@ -134,7 +134,7 @@ export const DELETE_ADDRESS = gql`
 
 export const BASE_PROFILE_MUTATION = gql`
   mutation UpdateAccount($firstName: String!, $lastName: String!) {
-    updateAccount(input: { firstName: $fullName, lastName: $lastName }) {
+    updateAccount(input: { firstName: $firstName, lastName: $lastName }) {
       success
       errors
     }

@@ -17,9 +17,12 @@ export default withRouter(function Sidebar(props) {
   const [activeLink, setActiveLink] = React.useState(false);
   const [openParent, setOpenParent] = React.useState(false);
   const { user, logout } = useContext(UserContext);
-  const setLink = (title) => {
+
+  const setLink = (title, isParent) => {
     if (props.onMenuItemClick) {
-      props.onMenuItemClick();
+      if (!isParent) {
+        props.onMenuItemClick();
+      }
     }
 
     setActiveLink(title);
@@ -68,14 +71,16 @@ export default withRouter(function Sidebar(props) {
               : {}
           }
           key={menuItem.title}
-          onClick={() => setOpenParent((curr) => !curr)}
+          onClick={() => {
+            setLink(menuItem.title, true);
+            setOpenParent((curr) => !curr);
+          }}
           className={isOpen(menuItem) ? "active-submenu" : ""}
         >
           <Link
             to={{
               pathname: "",
             }}
-            onClick={() => setLink(menuItem.title)}
           >
             {menuItem.title}
           </Link>

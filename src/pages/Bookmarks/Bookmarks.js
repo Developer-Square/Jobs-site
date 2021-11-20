@@ -59,7 +59,7 @@ const Bookmarks = ({ deviceType }) => {
       )}`;
     }
     if (profile.isEmployer) {
-      return `${window.location.origin}/profile/${getDBIdFromGraphqlId(
+      return `${window.location.origin}/p/${getDBIdFromGraphqlId(
         d?.user?.id,
         "User",
       )}`;
@@ -216,7 +216,7 @@ const Bookmarks = ({ deviceType }) => {
           {
             id: "btns",
             hideFilter: true,
-            Header: () => <h5 className="logo-header">Actions</h5>,
+            Header: () => <h5>Actions</h5>,
             accessor: "",
             Cell: ({ row }) => {
               const { original } = row;

@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { indexOf, isEmpty } from "lodash";
-import Joyride from "react-joyride";
+// import Joyride from "react-joyride";
 
 import useComponentSize from "helpers/useComponentSize";
 import { useDeviceType } from "helpers/useDeviceType";
 
-import UserContext from "contexts/user/user.provider";
+// import UserContext from "contexts/user/user.provider";
 import DrawerItems from "containers/DrawerItems/DrawerItems";
 import { DrawerProvider } from "contexts/drawer/drawer.provider";
 
@@ -30,7 +30,7 @@ const imageURL =
 const DashboardLayout = (props) => {
   let [topbarRef, { height }] = useComponentSize();
   let [sidebarRef, { width }] = useComponentSize();
-  const { user } = React.useContext(UserContext);
+  // const { user } = React.useContext(UserContext);
   const { desktop, mobile, tablet } = useDeviceType();
   const location = useLocation();
   const pathLocation = location.pathname.replace(/\/+$/, "");
@@ -60,75 +60,75 @@ const DashboardLayout = (props) => {
     return arr;
   }, []);
 
-  const handleProductTourCallback = (data) => {
-    const { type } = data;
+  // const handleProductTourCallback = (data) => {
+  //   const { type } = data;
 
-    console.groupCollapsed(type);
-    console.log(data);
-    console.groupEnd();
-  };
-  const commonSteps = [
-    {
-      content: "Some brief stats for your overview",
-      placement: "bottom",
-      target:
-        ".main__dashboard__content .product_tour__step_1 .product_tour__sub_step_1",
-      textAlign: "center",
-    },
-  ];
+  //   console.groupCollapsed(type);
+  //   console.log(data);
+  //   console.groupEnd();
+  // };
+  // const commonSteps = [
+  //   {
+  //     content: "Some brief stats for your overview",
+  //     placement: "bottom",
+  //     target:
+  //       ".main__dashboard__content .product_tour__step_1 .product_tour__sub_step_1",
+  //     textAlign: "center",
+  //   },
+  // ];
 
-  const seekerSteps = [
-    ...commonSteps,
-    {
-      content: "The latest version of React!",
-      placement: "bottom",
-      target: ".app__scroller h2",
-      textAlign: "center",
-    },
-    {
-      content: "Nobody likes errors! 🤬",
-      placement: "top",
-      target: ".app__scroller h3:nth-of-type(2)",
-    },
-    {
-      content: "Yay! Portals are awesome",
-      placement: "top",
-      target: ".app__scroller h3:nth-of-type(3)",
-    },
-    {
-      content: "SSR is supported",
-      placement: "top",
-      target: ".app__scroller h3:nth-of-type(4)",
-    },
-  ];
-  const employerSteps = [
-    ...commonSteps,
-    {
-      content: "The latest version of React!",
-      placement: "bottom",
-      target: ".app__scroller h2",
-      textAlign: "center",
-    },
-    {
-      content: "Nobody likes errors! 🤬",
-      placement: "top",
-      target: ".app__scroller h3:nth-of-type(2)",
-    },
-    {
-      content: "Yay! Portals are awesome",
-      placement: "top",
-      target: ".app__scroller h3:nth-of-type(3)",
-    },
-    {
-      content: "SSR is supported",
-      placement: "top",
-      target: ".app__scroller h3:nth-of-type(4)",
-    },
-  ];
+  // const seekerSteps = [
+  //   ...commonSteps,
+  //   {
+  //     content: "The latest version of React!",
+  //     placement: "bottom",
+  //     target: ".app__scroller h2",
+  //     textAlign: "center",
+  //   },
+  //   {
+  //     content: "Nobody likes errors! 🤬",
+  //     placement: "top",
+  //     target: ".app__scroller h3:nth-of-type(2)",
+  //   },
+  //   {
+  //     content: "Yay! Portals are awesome",
+  //     placement: "top",
+  //     target: ".app__scroller h3:nth-of-type(3)",
+  //   },
+  //   {
+  //     content: "SSR is supported",
+  //     placement: "top",
+  //     target: ".app__scroller h3:nth-of-type(4)",
+  //   },
+  // ];
+  // const employerSteps = [
+  //   ...commonSteps,
+  //   {
+  //     content: "The latest version of React!",
+  //     placement: "bottom",
+  //     target: ".app__scroller h2",
+  //     textAlign: "center",
+  //   },
+  //   {
+  //     content: "Nobody likes errors! 🤬",
+  //     placement: "top",
+  //     target: ".app__scroller h3:nth-of-type(2)",
+  //   },
+  //   {
+  //     content: "Yay! Portals are awesome",
+  //     placement: "top",
+  //     target: ".app__scroller h3:nth-of-type(3)",
+  //   },
+  //   {
+  //     content: "SSR is supported",
+  //     placement: "top",
+  //     target: ".app__scroller h3:nth-of-type(4)",
+  //   },
+  // ];
 
   return (
     <>
-      <Joyride
+      {/* <Joyride
         run={!user?.productTour}
         steps={
           user?.isEmployer
@@ -142,7 +142,7 @@ const DashboardLayout = (props) => {
         showProgress={true}
         showSkipButton={true}
         callback={handleProductTourCallback}
-      />
+      /> */}
       <DrawerProvider>
         {builder ? (
           props.children
@@ -183,42 +183,59 @@ const DashboardLayout = (props) => {
                         id="dashboard"
                         style={{
                           display: "inherit",
+                          height: "100%",
                         }}
                       >
                         <div
                           className="main__dashboard__content"
-                          style={builder ? { marginLeft: 0, padding: 0 } : {}}
+                          style={
+                            builder
+                              ? {
+                                  marginLeft: 0,
+                                  padding: 0,
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  height: "100%",
+                                }
+                              : {
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  height: "100%",
+                                }
+                          }
                         >
-                          <div id="titlebar">
-                            <div className="row">
-                              <div className="col-md-12">
-                                {/* Breadcrumbs */}
-                                <nav id="breadcrumbs">
-                                  <ul>
-                                    <li>
-                                      <Link to="/">Home</Link>
-                                    </li>
-                                    {pathValues.map((singlePath, i) => (
-                                      <li key={i}>
-                                        <Link
-                                          to={{
-                                            pathname: location.path,
-                                            pageProps: {
-                                              title: singlePath.name,
-                                            },
-                                          }}
-                                        >
-                                          {singlePath.name}
-                                        </Link>
+                          <div style={{ flex: "1 0 auto" }}>
+                            <div id="titlebar">
+                              <div className="row">
+                                <div className="col-md-12">
+                                  {/* Breadcrumbs */}
+                                  <nav id="breadcrumbs">
+                                    <ul>
+                                      <li>
+                                        <Link to="/">Home</Link>
                                       </li>
-                                    ))}
-                                  </ul>
-                                </nav>
+                                      {pathValues.map((singlePath, i) => (
+                                        <li key={i}>
+                                          <Link
+                                            to={{
+                                              pathname: location.path,
+                                              pageProps: {
+                                                title: singlePath.name,
+                                              },
+                                            }}
+                                          >
+                                            {singlePath.name}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </nav>
+                                </div>
                               </div>
                             </div>
+                            {props.children}
                           </div>
-                          {props.children}
-                          <div className="row">
+                          <div className="row" style={{ marginTop: "auto" }}>
                             {/* Copyrights */}
                             <div className="col-md-12">
                               <div className="copyrights">
@@ -228,34 +245,6 @@ const DashboardLayout = (props) => {
                               </div>
                             </div>
                           </div>
-                          {/*
-                        <div className="wrapperx">
-                        <ul className="bg-bubbles">
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                          </ul>
-
-                         <ul className="circles">
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                          </ul>
-                          </div>  */}
                         </div>
                       </div>
                     </ContentInnerWrapper>
@@ -270,9 +259,15 @@ const DashboardLayout = (props) => {
                   <h3>
                     width: {width} , height: {height}
                   </h3>
-                  <ContentInnerWrapper>
-                    {props.children}
-                    <div className="row">
+                  <ContentInnerWrapper
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    }}
+                  >
+                    <div style={{ flex: "1 0 auto" }}>{props.children}</div>
+                    <div className="row" style={{ marginTop: "auto" }}>
                       {/* Copyrights */}
                       <div className="col-md-12">
                         <div className="copyrights">

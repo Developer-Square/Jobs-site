@@ -19,7 +19,7 @@ const showSuccessNotification = (data, alert) => {
           ? "Please check your e-mail for further instructions"
           : "New user has been created",
       },
-      { type: "success", timeout: 5000 }
+      { type: "success", timeout: 5000 },
     );
   }
 };
@@ -49,8 +49,8 @@ const PasswordResetEmail = () => {
               } else {
                 setErrors(
                   normalizeErrors(
-                    maybe(() => data.sendPasswordResetEmail.errors, [])
-                  )
+                    maybe(() => data.sendPasswordResetEmail.errors, []),
+                  ),
                 );
               }
             }
@@ -78,7 +78,7 @@ const PasswordResetEmail = () => {
                       type="submit"
                       disabled={!formik.isValid}
                       fullwidth
-                      loading={loading}
+                      isLoading={loading}
                       title={loading ? "Sending Email... " : "Reset Password"}
                       style={{ color: "#ffffff" }}
                       //   {...(loading && { disabled: true })}

@@ -11,22 +11,23 @@ export const Grid = styled.div`
     overflow-x: scroll;
     overflow-y: hidden;
     border-radius: 4px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
     input[type='text'], input[type='email'], input[type='number'], input[type='password'], textarea, select {
       display: initial;
       height: auto;
       width: auto;
-
+    }
+    .table {
+      border-spacing: 0 15px;
     }
   }
 
   table {
     border-spacing: 0;
-    background: ${themeGet("colors.white", "#fff")};
+    // background: ${themeGet("colors.white", "#fff")};
 
     thead {
-      background-color: #333 !important;
-      color: #fff !important;
+      // background-color: #333 !important;
+      // color: #fff !important;
     }
     tr {
       :last-child {
@@ -34,6 +35,15 @@ export const Grid = styled.div`
           border-bottom: 0;
         }
       }
+    }
+    tr td:last-child,
+    tr th:last-child {
+      border-radius: 0 .625rem .625rem 0;
+    }
+
+    tr td:nth-child(1),
+    tr th:nth-child(1) {
+      border-radius: .625rem 0 0 .625rem;
     }
     th{
       font-family:Lato: sans-serif;
@@ -51,9 +61,9 @@ export const Grid = styled.div`
 
     td {
       margin: 0;
-      padding: 0.5rem;
+      // padding: 0.5rem;
       border-bottom: 2px solid #00000017;
-      color:${themeGet("colors.blue.dark", "#161F6A")};
+      // color:${themeGet("colors.blue.dark", "#161F6A")};
       
       width: 1%;
       &.collapse {

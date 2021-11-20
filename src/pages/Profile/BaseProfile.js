@@ -150,7 +150,7 @@ const BaseProfile = () => {
                       type="submit"
                       disabled={!formik.isValid}
                       fullwidth
-                      loading={loading}
+                      isLoading={loading}
                       title={loading ? "Saving... " : "Save"}
                       className="button margin-top-15"
                     />

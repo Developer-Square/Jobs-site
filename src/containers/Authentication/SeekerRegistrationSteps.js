@@ -126,7 +126,7 @@ export const SignUp = ({
               type="submit"
               disabled={!formik.isValid}
               fullwidth
-              loading={loading}
+              isLoading={loading}
               title={loading ? "Signing Up ... " : "Sign Up"}
               style={{ color: "#ffffff" }}
             />
@@ -198,7 +198,7 @@ export const OTPForm = ({
               type="submit"
               disabled={!formik.isValid}
               fullwidth
-              loading={loading}
+              isLoading={loading}
               title={loading ? "Verifying ... " : "Verify"}
             />
           </Form>
@@ -347,7 +347,7 @@ export const FurtherInformation = ({
                 type="submit"
                 disabled={!formik.isValid}
                 fullwidth
-                loading={loading}
+                isLoading={loading}
                 title={loading ? "Saving ... " : "Save"}
               />
             ) : null}

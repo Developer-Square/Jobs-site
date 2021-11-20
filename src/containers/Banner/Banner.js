@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useCallback } from "react";
 import { Waypoint } from "react-waypoint";
+import Fade from "react-reveal/Fade";
 import { useStickyDispatch } from "contexts/app/app.provider";
 import bgImg from "image/landing.jpg";
-import SearchContainer from "containers/Search/SearchContainer";
-import Fade from "react-reveal/Fade";
+// import SearchContainer from "containers/Search/SearchContainer";
+import GetStarted from "components/GetStarted/GetStarted";
 
 const Banner = () => {
   const useDispatch = useStickyDispatch();
@@ -40,17 +41,26 @@ const Banner = () => {
         <div className="sixteen columns">
           <div className="search-container">
             <Fade bottom>
-              <h2>Great Careers Start Here</h2> <SearchContainer />
+              <h2>Great Careers Start Here</h2>
+              <div>
+                <GetStarted
+                  floatDirection="left"
+                  buttonStyles={{ width: "auto", height: "36px" }}
+                />
+                <br />
+              </div>
+
+              {/* <SearchContainer /> */}
               <Waypoint
                 onEnter={removeSticky}
                 onLeave={setSticky}
                 onPositionChange={onWaypointPositionChange}
               />
               {/* Browse Jobs */}
-              <div className="browse-jobs">
+              {/* <div className="browse-jobs">
                 Browse job by <a href="browse-categories.html"> category</a> or{" "}
                 <a href="/">titles</a>
-              </div>
+              </div> */}
               {/* Announce */}
               <div className="announce">
                 We’ve over <strong>15,000</strong> internship offers for you!

@@ -12,6 +12,7 @@ import { loginSchema } from "./validation.schema";
 import { AuthContext } from "contexts/auth/auth.context";
 import { storeLoginDetails } from "utils";
 import UserContext from "contexts/user/user.provider";
+// import GoogleSocialAuth from "./GoogleSocialAuth";
 
 const Login = () => {
   const { authDispatch } = React.useContext(AuthContext);
@@ -118,6 +119,7 @@ const Login = () => {
                     style={{ color: "#ffffff", margin: "16px 0" }}
                     //   {...(loading && { disabled: true })}
                   />
+                  {/* <GoogleSocialAuth /> */}
                   <p className=" lost_password">
                     <a
                       onClick={() =>

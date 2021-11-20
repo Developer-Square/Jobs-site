@@ -21,7 +21,7 @@ const components = {
     title: "Dashboard",
     icon: "Category",
     module: 1,
-    category: start,
+    category: account,
     children: [],
     dashboardItem: true,
   },
@@ -212,11 +212,11 @@ const rolesConfig = {
 
   common: {
     routes: [
-      components.profile, //common
-      components.dashboard, //common
-
       components.applications, // commom
       components.bookmarks, //common
+
+      components.dashboard, //common
+      components.profile, //common
 
       // components.resumeDashboard, //seeker
       // components.resumeBuilder, //seeker

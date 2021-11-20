@@ -77,7 +77,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
   const schoolInterestsInitialValues = {
     school: { value: "", label: "Select School" },
     industries: [],
-    course: { value: "", label: "Select Course" },
+    course: { value: "", label: "Search Course" },
   };
 
   const bioInitialValues = {

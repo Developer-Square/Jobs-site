@@ -237,7 +237,7 @@ export const UPDATE_VACANCY_MUTATION = gql`
     $payRate: JobPayRate
     $minQualification: JobMinQualification
     $yearsOfExp: JobYearsOfExp
-    $salary: Int
+    $salary: Decimal
     $location: String
     $description: JSONString
     $positions: Int

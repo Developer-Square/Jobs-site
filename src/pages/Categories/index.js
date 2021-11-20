@@ -18,7 +18,7 @@ const Categories = () => {
           </div>
           <div className="six columns">
             <a href="dashboard-add-job.html" className="button">
-              Post a Job, It’s Free!
+              Post a Job
             </a>
           </div>
         </div>

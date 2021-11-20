@@ -13,6 +13,7 @@ const passwordConfirm = (pass) => {
     .oneOf([Yup.ref(pass), null], msg.passwordDoNotMatch)
     .required(msg.fieldRequired);
 };
+const weakPassword = Yup.string().min(1, msg.passwordNotLongEnough);
 
 const email = Yup.string()
   .min(3, msg.emailNotLongEnough)
@@ -74,7 +75,7 @@ export const bioSchema = Yup.object().shape({
 
 export const loginSchema = Yup.object().shape({
   email: email,
-  password: password,
+  password: weakPassword,
 });
 export const passwordResetEmailSchema = Yup.object().shape({
   email: email,

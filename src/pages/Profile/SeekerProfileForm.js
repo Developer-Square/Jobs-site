@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import moment from "moment";
 
 import UserContext from "contexts/user/user.provider";
@@ -11,18 +11,21 @@ function SeekerProfileForm({ details }) {
   const history = useHistory();
   const { emitter, events } = React.useContext(ModalContext);
   const { user } = React.useContext(UserContext);
-  console.log(details);
-
+  const location = useLocation();
   const isOwnAccount = () => {
     if (details?.id === user?.id) {
       return true;
     }
     return false;
   };
+  const path = location.pathname.replace(/\/+$/, "");
+  const pathname = path[0] === "/" ? path.substr(1) : path;
+
+  const isDashboardPage = pathname === "dashboard";
 
   const handleClick = () => emitter.emit(events.DELETE_MODAL);
   return (
-    <div className="row">
+    <div className="row" style={{ marginTop: isDashboardPage ? 0 : "80px" }}>
       <div className="col-lg-12 col-md-12">
         <div>
           <div className="w-full text-white bg-main-color">
@@ -162,49 +165,45 @@ function SeekerProfileForm({ details }) {
                     </div>
                     <div className="text-gray-700">
                       <div className="grid md:grid-cols-2 text-sm">
-                        <div className="grid grid-cols-2">
+                        <div className="grid grid-cols-4">
                           <div className="px-4 py-2 font-semibold">Country</div>
-                          <div className="px-4 py-2">
+                          <div className="col-span-3 px-4 py-2">
                             {details?.defaultAddress?.country?.country}
                           </div>
                         </div>
-                        <div className="grid grid-cols-2">
+                        <div className="grid grid-cols-4">
                           <div className="px-4 py-2 font-semibold">City</div>
-                          <div className="px-4 py-2">
+                          <div className="col-span-3 px-4 py-2">
                             {details?.defaultAddress?.city}
                           </div>
                         </div>
-                        <div className="grid grid-cols-2">
+                        <div className="grid grid-cols-4">
                           <div className="px-4 py-2 font-semibold">Gender</div>
-                          <div className="px-4 py-2">
+                          <div className="col-span-3 px-4 py-2">
                             {details?.seeker?.gender}
                           </div>
                         </div>
-                        <div className="grid grid-cols-2">
-                          <div className="px-4 py-2 font-semibold">
-                            Contact No.
+                        <div className="grid grid-cols-4">
+                          <div className="px-4 py-2 font-semibold">Contact</div>
+                          <div className="col-span-3 px-4 py-2">
+                            {details?.phone}
                           </div>
-                          <div className="px-4 py-2">{details?.phone}</div>
                         </div>
-                        <div className="grid grid-cols-2">
-                          <div className="px-4 py-2 font-semibold">
-                            Address 1
-                          </div>
-                          <div className="px-4 py-2">
+                        <div className="grid grid-cols-4">
+                          <div className="px-4 py-2 font-semibold">Addr.1</div>
+                          <div className="col-span-3 px-4 py-2">
                             {details?.defaultAddress?.streetAddress1}
                           </div>
                         </div>
-                        <div className="grid grid-cols-2">
-                          <div className="px-4 py-2 font-semibold">
-                            Address 2
-                          </div>
-                          <div className="px-4 py-2">
+                        <div className="grid grid-cols-4">
+                          <div className="px-4 py-2 font-semibold">Addr. 2</div>
+                          <div className="col-span-3 px-4 py-2">
                             {details?.defaultAddress?.streetAddress2}
                           </div>
                         </div>
-                        <div className="grid grid-cols-2">
+                        <div className="grid grid-cols-4">
                           <div className="px-4 py-2 font-semibold">Email.</div>
-                          <div className="px-4 py-2">
+                          <div className="col-span-3 px-4 py-2">
                             <a
                               className="text-blue-800"
                               href={`mailto:${details?.email}`}
@@ -213,11 +212,11 @@ function SeekerProfileForm({ details }) {
                             </a>
                           </div>
                         </div>
-                        <div className="grid grid-cols-2">
+                        <div className="grid grid-cols-4">
                           <div className="px-4 py-2 font-semibold">
                             Birthday
                           </div>
-                          <div className="px-4 py-2">
+                          <div className="col-span-3 px-4 py-2">
                             {moment(details?.seeker?.dateOfBirth).format(
                               `MMM D, YYYY`,
                             )}

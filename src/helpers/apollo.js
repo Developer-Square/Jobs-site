@@ -152,7 +152,7 @@ const batchLink = new BatchHttpLink({
   fetch,
 });
 export const myClient = new SubscriptionClient(BASE_GRAPHQL_WS_URL, {
-  reconnect: true,
+  reconnect: false,
   // connectionParams: {
   //   headers: {
   //     Authorization: getToken() ? `JWT ${getToken()}` : null,

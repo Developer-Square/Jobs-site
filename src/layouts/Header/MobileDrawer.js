@@ -192,8 +192,16 @@ const MobileDrawer = () => {
               <DrawerMenuItem>
                 <NavLink
                   onClick={toggleHandler}
+                  href="/dashboard"
+                  label="Dashboard"
+                  className="drawer_menu_item"
+                />
+              </DrawerMenuItem>
+              <DrawerMenuItem>
+                <NavLink
+                  onClick={toggleHandler}
                   href="/dashboard/profile"
-                  label="Your Account Settings"
+                  label="Account Settings"
                   className="drawer_menu_item"
                 />
               </DrawerMenuItem>

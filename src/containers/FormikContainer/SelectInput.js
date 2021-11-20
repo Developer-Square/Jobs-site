@@ -1,8 +1,9 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
-import TextError from "./TextError";
 import styled from "styled-components";
 import Select from "react-select";
+import AsyncSelect from "react-select/async";
+import TextError from "./TextError";
 
 function SelectInput(props) {
   const { label, name, options, icon, style, hideButton, ...rest } = props;
@@ -55,7 +56,15 @@ function SelectInput(props) {
           {({ form, field }) => {
             const { setFieldValue } = form;
             const { value } = field;
-            return (
+            return rest?.isAsync ? (
+              <AsyncSelect
+                cacheOptions={false}
+                loadOptions={rest.loadOptions}
+                defaultOptions={rest.defaultOptions}
+                onInputChange={rest.handleInputChange}
+                onChange={(val) => handleChange(name, val, setFieldValue)}
+              />
+            ) : (
               <Select
                 options={options}
                 value={value}
