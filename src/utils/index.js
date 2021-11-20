@@ -33,7 +33,7 @@ export const getClosingDate = (date) => {
     return (
       <span style={{ color: "#eb3737" }}>
         <i className="calendar" />
-        Application Ended {time} days ago
+        Application Ended {`${time}`.substring(1)} days ago
       </span>
     );
   }
@@ -58,7 +58,7 @@ export const formatCurrency = function (amount = null) {
   return new Intl.NumberFormat("en-KE", {
     style: "currency",
     currency: amount?.currency || "KES",
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
   }).format(amount?.amount || amount);
 };
 
@@ -434,24 +434,17 @@ export const getUnsplashPhoto = async () => {
   return response.url;
 };
 
-export const hasAddress = (address) =>
-  address !== null ||
-  !!address.streetAddress1 ||
-  !!address.streetAddress2 ||
-  !!address.city ||
-  !!address.postalCode;
-
-export const hexToRgb = (hex) => {
-  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-  hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
+export const hasAddress = (address) => {
+  if (address !== null) {
+    return (
+      !!address.streetAddress1 ||
+      !!address.streetAddress2 ||
+      !!address.city ||
+      !!address.postalCode
+    );
+  } else {
+    return true;
+  }
 };
 
 export const reorder = (list, startIndex, endIndex) => {
@@ -607,4 +600,17 @@ export const reduceSectionArray = (rawBlock) => {
   } else {
     throw new Error("Data passed is not an Array");
   }
+};
+
+export const hexToRgb = (hex) => {
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
 };

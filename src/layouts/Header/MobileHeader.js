@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { openModal, closeModal } from "@redq/reuse-modal";
+import React from "react";
+import { Link } from "react-router-dom";
+// import { openModal, closeModal } from "@redq/reuse-modal";
 import { DrawerProvider } from "contexts/drawer/drawer.provider";
 import MobileDrawer from "./MobileDrawer";
 import {
@@ -8,15 +8,15 @@ import {
   MobileHeaderInnerWrapper,
   DrawerWrapper,
   LogoWrapper,
-  SearchWrapper,
-  SearchModalWrapper,
-  SearchModalClose,
+  // SearchWrapper,
+  // SearchModalWrapper,
+  // SearchModalClose,
 } from "./Header.style";
-import SearchBox from "components/SearchBox/SearchBox";
+// import SearchBox from "components/SearchBox/SearchBox";
 import { SearchContext } from "contexts/search/search.context";
 import { HeaderContext } from "contexts/header/header.context";
 
-import { SearchIcon, LongArrowLeft } from "components/AllSvgIcon";
+// import { SearchIcon, LongArrowLeft } from "components/AllSvgIcon";
 // import LogoImage from "image/logo.svg";
 import { isCategoryPage } from "../is-home-page";
 import useDimensions from "helpers/useComponentSize";
@@ -39,50 +39,51 @@ export const LogoImage = styled.img`
   max-height: 50px;
 `;
 
-const SearchModal = ({ state, pathname, handleSearch }) => {
-  const history = useHistory();
-  const [text, setText] = useState(state.text || "");
-  const handleSearchInput = (text) => {
-    setText(text);
-  };
-  const { page, ...urlState } = state;
+// const SearchModal = ({ state, pathname, handleSearch }) => {
+//   const history = useHistory();
+//   const [text, setText] = useState(state.text || "");
+//   const handleSearchInput = (text) => {
+//     setText(text);
+//   };
+//   const { page, ...urlState } = state;
 
-  const handleClickSearchButton = () => {
-    handleSearch(text);
-    history.push({
-      pathname: pathname,
-      query: {
-        ...urlState,
-        text,
-      },
-    });
-    closeModal();
-  };
-  return (
-    <SearchModalWrapper>
-      <SearchModalClose type="submit" onClick={() => closeModal()}>
-        <LongArrowLeft />
-      </SearchModalClose>
-      <SearchBox
-        className="header-modal-search"
-        bordered={false}
-        inputStyle={{ height: 35 }}
-        buttonText=""
-        placeholder="Search"
-        handleSearch={handleSearchInput}
-        value={text}
-        onClick={handleClickSearchButton}
-        pathname={pathname}
-      />
-    </SearchModalWrapper>
-  );
-};
+//   const handleClickSearchButton = () => {
+//     handleSearch(text);
+//     history.push({
+//       pathname: pathname,
+//       query: {
+//         ...urlState,
+//         text,
+//       },
+//     });
+//     closeModal();
+//   };
+//   return (
+//     <SearchModalWrapper>
+//       <SearchModalClose type="submit" onClick={() => closeModal()}>
+//         <LongArrowLeft />
+//       </SearchModalClose>
+//       <SearchBox
+//         className="header-modal-search"
+//         bordered={false}
+//         inputStyle={{ height: 35 }}
+//         buttonText=""
+//         placeholder="Search"
+//         handleSearch={handleSearchInput}
+//         value={text}
+//         onClick={handleClickSearchButton}
+//         pathname={pathname}
+//       />
+//     </SearchModalWrapper>
+//   );
+// };
 
 const MobileHeader = ({ className, pathname, isSticky }) => {
-  const { state, dispatch } = useContext(SearchContext);
+  const { state } = React.useContext(SearchContext);
+  // const { state, dispatch } = useContext(SearchContext);
 
   const [mobileHeaderRef, dimensions] = useDimensions();
-  const { headerDispatch } = useContext(HeaderContext);
+  const { headerDispatch } = React.useContext(HeaderContext);
 
   const headerHeight = dimensions.height;
 
@@ -97,31 +98,31 @@ const MobileHeader = ({ className, pathname, isSticky }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [headerHeight]);
 
-  const handleSearch = (text) => {
-    dispatch({
-      type: "UPDATE",
-      payload: {
-        ...state,
-        text,
-      },
-    });
-  };
-  const handleSearchModal = () => {
-    openModal({
-      show: true,
-      config: {
-        enableResizing: false,
-        disableDragging: true,
-        className: "search-modal-mobile",
-        width: "100%",
-        height: "100%",
-      },
-      closeOnClickOutside: false,
-      component: SearchModal,
-      componentProps: { state, pathname, handleSearch },
-      closeComponent: () => <div />,
-    });
-  };
+  // const handleSearch = (text) => {
+  //   dispatch({
+  //     type: "UPDATE",
+  //     payload: {
+  //       ...state,
+  //       text,
+  //     },
+  //   });
+  // };
+  // const handleSearchModal = () => {
+  //   openModal({
+  //     show: true,
+  //     config: {
+  //       enableResizing: false,
+  //       disableDragging: true,
+  //       className: "search-modal-mobile",
+  //       width: "100%",
+  //       height: "100%",
+  //     },
+  //     closeOnClickOutside: false,
+  //     component: SearchModal,
+  //     componentProps: { state, pathname, handleSearch },
+  //     closeComponent: () => <div />,
+  //   });
+  // };
 
   const isHomePage = isCategoryPage(pathname);
 
@@ -148,14 +149,14 @@ const MobileHeader = ({ className, pathname, isSticky }) => {
             </Link>
           </LogoWrapper>
 
-          {isHomePage ? (
+          {/* {isHomePage ? (
             <SearchWrapper
               onClick={handleSearchModal}
               className="searchIconWrapper"
             >
               <SearchIcon />
             </SearchWrapper>
-          ) : null}
+          ) : null} */}
         </MobileHeaderInnerWrapper>
       </MobileHeaderWrapper>
     </DrawerProvider>

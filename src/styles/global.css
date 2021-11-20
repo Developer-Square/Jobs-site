@@ -547,7 +547,7 @@ input[type="range"]::-webkit-slider-thumb {
       display: inline-flex;
       padding: 10px 32px;
       transition: 0.3s;
-      cursor: pointer;
+      cursor: context-menu;
       font-weight: 400;
       position: relative;
       background-color: #e5e5e5;

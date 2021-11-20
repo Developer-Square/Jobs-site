@@ -84,7 +84,7 @@ export const LeftMenu = ({ isSticky, logo }) => {
         </Link>
         <ul>
           <li>
-            <Link to="/vacancies">Job Vacancies</Link>
+            <Link to="/vacancies">All Jobs</Link>
           </li>
           {/* <li>
                         <Link href="browse-resumes.html">Browse Resumes</Link>

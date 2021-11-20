@@ -151,7 +151,7 @@ export const PaymentModal = ({
                         type="submit"
                         disabled={!formik.isValid}
                         fullwidth
-                        loading={loading}
+                        isLoading={loading}
                         title={loading ? "Upgrading ... " : "Upgrade"}
                       />
                     </>
@@ -172,7 +172,7 @@ export const PaymentModal = ({
                         type="submit"
                         disabled={!formik.isValid}
                         fullwidth
-                        loading={loading}
+                        isLoading={loading}
                         title={loading ? "Confirming ... " : "Confirm"}
                       />
                     </>

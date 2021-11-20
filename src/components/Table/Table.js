@@ -315,10 +315,14 @@ function Table({
         <table
           // className="manage-table resumes responsive-table"
           {...getTableProps()}
+          className="table text-gray-400 border-separate space-y-6 text-sm"
         >
-          <thead>
+          <thead className="bg-gray-800 text-gray-500">
             {headerGroups.map((headerGroup, i) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <tr
+                {...headerGroup.getHeaderGroupProps()}
+                className="align-middle bg-gray-800"
+              >
                 {headerGroup.headers.map((column) => {
                   // console.log(column);
                   return (
@@ -330,6 +334,7 @@ function Table({
                           style: column.style,
                         },
                       ])}
+                      className="p-3 align-middle"
                     >
                       <div>
                         {/* {column.canGroupBy ? (
@@ -351,7 +356,8 @@ function Table({
                               column.id === "header_1" ||
                               column.id === "selection_placeholder_0"
                             ? ""
-                            : "     ↕️"}
+                            : ""}
+                          {/* : "     ↕️"} */}
                           {/* ↓↓ ↑↑ */}
                         </span>
                       </div>
@@ -374,7 +380,7 @@ function Table({
               prepareRow(row);
               return (
                 // Merge user row props in
-                <tr {...row.getRowProps()}>
+                <tr {...row.getRowProps()} className="bg-gray-800">
                   {row.cells.map((cell) => {
                     return (
                       <td
@@ -386,6 +392,7 @@ function Table({
                           },
                           getCellProps(cell, row.cells),
                         ])}
+                        className="p-3 align-middle"
                       >
                         {cell.isGrouped ? (
                           // If it's a grouped cell, add an expander and row count
@@ -415,15 +422,13 @@ function Table({
       </div>
       <div
         style={{
-          backgroundColor: "#333",
-          color: "#fff",
           margin: 0,
           padding: 10,
           display: "flex",
           lineHeight: "18px",
           alignItems: "center",
         }}
-        className="pagination"
+        className="pagination bg-gray-800 text-gray-500"
       >
         <Button
           onClick={() => gotoPage(0)}
@@ -495,8 +500,8 @@ function Table({
             style={{
               display: "inherit",
               width: "auto",
-              background: "#333",
             }}
+            className={"bg-gray-800"}
             value={pageSize}
             onChange={(e) => {
               setPageSize(Number(e.target.value));

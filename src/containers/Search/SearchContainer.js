@@ -99,7 +99,14 @@ function SearchContainer() {
             <ul>
               {Array.isArray(data?.vacancies?.edges) &&
                 isEmpty(data?.vacancies?.edges) && (
-                  <li>😬 No results Found 😔</li>
+                  <li
+                    className="listing"
+                    style={{
+                      backgroundColor: "#fdfdfd",
+                    }}
+                  >
+                    😬 No results Found 😔
+                  </li>
                 )}
               {data?.vacancies?.edges &&
                 data.vacancies.edges.map((value, index) => {

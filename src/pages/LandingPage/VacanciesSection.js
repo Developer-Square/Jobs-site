@@ -23,6 +23,7 @@ import Button from "components/Button/Button";
 import NoResultFound from "components/NoResult/NoResult";
 
 import MobileStepper from "@material-ui/core/MobileStepper";
+import { getClosingDate } from "utils";
 
 const Vacancies = () => {
   const history = useHistory();
@@ -66,6 +67,7 @@ const Vacancies = () => {
       loadFilterValues({
         variables: {
           first: landingVacancyLimit,
+          sortBy: { direction: "DESC", field: "CREATED_AT" },
         },
       });
     }
@@ -147,10 +149,15 @@ const Vacancies = () => {
                       <div className="listing-title">
                         <h4>
                           {job?.title}
+                          {"  "}
+
                           <span className="listing-type">
                             {findJobTypeDescription(job, jobTypes)}
                           </span>
                         </h4>
+                        <strong style={{ fontSize: "10px" }}>
+                          {getClosingDate(job?.closingDate)}
+                        </strong>
                         <ul className="listing-icons">
                           <li>
                             <i className="ln ln-icon-Management" />{" "}
@@ -270,6 +277,11 @@ const Vacancies = () => {
                             </span>
                           </h4>
                         </a>
+                        <strong style={{ fontSize: "10px" }}>
+                          {getClosingDate(
+                            vacancyState?.sortedJobs[activeStep]?.closingDate,
+                          )}
+                        </strong>
                         <span>
                           <i className="fa fa-briefcase" />{" "}
                           {vacancyState?.sortedJobs[activeStep]?.postedBy?.name}

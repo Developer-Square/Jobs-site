@@ -15,8 +15,9 @@ import {
   checkJobType,
   findJobTypeDescription,
   onCompleted,
+  getClosingDate,
+  formatCurrency,
 } from "utils";
-import { formatCurrency } from "utils";
 
 const Vacancy = () => {
   const [rate, setRate] = React.useState([]);
@@ -193,7 +194,7 @@ const Vacancy = () => {
                 title={
                   <p style={{ color: "#FFFFFF" }}>
                     {profile?.isSeeker && "View Dashboard stats"}
-                    {profile?.isEmployer && "Post a Job, It’s Free!"}
+                    {profile?.isEmployer && "Post a Job"}
                   </p>
                 }
               />
@@ -233,6 +234,9 @@ const Vacancy = () => {
                           {findJobTypeDescription(job, vacancyState.jobTypes)}
                         </span>
                       </h4>
+                      <strong style={{ fontSize: "10px" }}>
+                        {getClosingDate(job?.closingDate)}
+                      </strong>
                       <ul className="listing-icons">
                         <li>
                           <i className="ln ln-icon-Management" />{" "}

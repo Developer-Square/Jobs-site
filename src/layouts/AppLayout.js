@@ -60,8 +60,18 @@ const Layout = ({
           }}
         />
       )}
-      {children}
-      <Footer />
+      <div style={{ height: "100vh" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+          }}
+        >
+          <div style={{ flex: "1 0 auto" }}>{children}</div>
+          <Footer />
+        </div>
+      </div>
     </LayoutWrapper>
   );
 };

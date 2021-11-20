@@ -65,6 +65,14 @@ const View = () => {
       value: null,
     },
     {
+      label: "Last updated Ascending",
+      value: "updated_at",
+    },
+    {
+      label: "Price High-Low",
+      value: "-updated_at",
+    },
+    {
       label: "Salary Low-High",
       value: "salary",
     },
@@ -80,20 +88,12 @@ const View = () => {
       label: "Name Decreasing",
       value: "-title",
     },
-    {
-      label: "Last updated Ascending",
-      value: "updated_at",
-    },
-    {
-      label: "Price High-Low",
-      value: "-updated_at",
-    },
   ];
 
   const variables = {
     ...filters,
     sortBy: {
-      field: "SALARY",
+      field: "CREATED_AT",
       direction: "ASC",
     },
   };

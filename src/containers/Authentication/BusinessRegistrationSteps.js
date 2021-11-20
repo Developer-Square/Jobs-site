@@ -116,7 +116,7 @@ export const Bio = ({
                 type="submit"
                 disabled={!formik.isValid}
                 fullwidth
-                loading={loading}
+                isLoading={loading}
                 title={loading ? "Verifying ... " : "Verify"}
               />
             ) : null}

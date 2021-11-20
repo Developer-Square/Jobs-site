@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useLocation, useHistory } from "react-router-dom";
-import SearchBox from "components/SearchBox/SearchBox";
-import { SearchContext } from "contexts/search/search.context";
+// import SearchBox from "components/SearchBox/SearchBox";
+// import { SearchContext } from "contexts/search/search.context";
 import { AuthContext } from "contexts/auth/auth.context";
 import { RightMenu } from "./Menu/RightMenu/RightMenu";
 import { LeftMenu } from "./Menu/LeftMenu/LeftMenu";
@@ -15,7 +15,7 @@ const Header = ({ className, isSticky }) => {
   const history = useHistory();
   const path = location.pathname.replace(/\/+$/, "");
   const pathname = path[0] === "/" ? path.substr(1) : path;
-  const query = new URLSearchParams(location.search);
+  // const query = new URLSearchParams(location.search);
   const {
     authState: { isAuthenticated },
     authDispatch,
@@ -25,7 +25,7 @@ const Header = ({ className, isSticky }) => {
     : localStorage.getItem("thedb_org_profile")
     ? JSON.parse(localStorage.getItem("thedb_org_profile"))["logo"]
     : UserImage;
-  const { state, dispatch } = useContext(SearchContext);
+  // const { state, dispatch } = useContext(SearchContext);
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
@@ -41,25 +41,25 @@ const Header = ({ className, isSticky }) => {
     }
   };
 
-  const onSearch = (text) => {
-    dispatch({
-      type: "UPDATE",
-      payload: {
-        ...state,
-        text,
-      },
-    });
-  };
+  // const onSearch = (text) => {
+  //   dispatch({
+  //     type: "UPDATE",
+  //     payload: {
+  //       ...state,
+  //       text,
+  //     },
+  //   });
+  // };
 
-  const onClickHandler = (searchValue) => {
-    const categoryParam = query.get("category") ? query.get("category") : "";
+  // const onClickHandler = (searchValue) => {
+  //   const categoryParam = query.get("category") ? query.get("category") : "";
 
-    const queryParams = query.get("category")
-      ? `category=${categoryParam}&text=${searchValue}`
-      : `&text=${searchValue}`;
+  //   const queryParams = query.get("category")
+  //     ? `category=${categoryParam}&text=${searchValue}`
+  //     : `&text=${searchValue}`;
 
-    history.push(`${pathname}?${queryParams}`);
-  };
+  //   history.push(`${pathname}?${queryParams}`);
+  // };
   const showSearch = isCategoryPage(`/${pathname}`);
   return (
     <HeaderWrapper className={className}>
@@ -67,7 +67,7 @@ const Header = ({ className, isSticky }) => {
         <div className="sixteen columns">
           <nav className="menu" style={{ display: "flex" }}>
             <LeftMenu logo={LogoImage} isSticky={isSticky} />
-            {!showSearch && (
+            {/* {!showSearch && (
               <SearchBox
                 className="headerSearch"
                 handleSearch={(value) => onSearch(value)}
@@ -79,7 +79,7 @@ const Header = ({ className, isSticky }) => {
                 style={{ width: "100%" }}
                 value={state.text || ""}
               />
-            )}
+            )} */}
             <RightMenu
               isAuthenticated={isAuthenticated}
               onLogout={handleLogout}

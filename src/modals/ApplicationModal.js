@@ -122,6 +122,9 @@ const ApplicationModal = () => {
                             control="textarea"
                             label="Cover Letter"
                             name="comment"
+                            subText={
+                              "Introduce yourself and explain why you’re a strong candidate for this job. This is the first thing your potential employer will see before looking at your profile."
+                            }
                             placeholder="Your message / cover letter sent to the employer"
                             rte={false}
                             fullWidth

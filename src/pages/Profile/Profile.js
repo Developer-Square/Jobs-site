@@ -67,7 +67,7 @@ function Profile() {
             <div
               className={`cursor-default ${progressColor(
                 user?.progress,
-              )}-400 text-xs font-bold leading-none flex items-center justify-center m-1 py-4 text-center text-white`}
+              )}-500 text-xs font-bold leading-none flex items-center justify-center m-1 py-4 text-center text-white`}
               style={{
                 width: `${user?.progress}%`,
               }}
@@ -90,7 +90,7 @@ function Profile() {
       ) : (
         <>
           <section className="py-1 bg-blueGray-50">
-            <div className="w-full lg:w-8/12 px-4 mx-auto mt-6">
+            <div className="w-full px-4 mx-auto mt-6">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
                 <div className="rounded-t bg-white mb-0 px-6 py-6">
                   <div className="text-center flex justify-between">

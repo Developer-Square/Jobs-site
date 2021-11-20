@@ -15,6 +15,17 @@ function Textarea(props) {
       >
         {label}
       </label>
+      {rest?.subText && (
+        <span
+          style={{
+            font: "10px",
+            // color: "#fefefe",
+            fontStyle: "italic",
+          }}
+        >
+          {rest?.subText}
+        </span>
+      )}
       {rte ? (
         <Field
           as="textarea"

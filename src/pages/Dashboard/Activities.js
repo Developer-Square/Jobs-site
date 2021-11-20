@@ -50,7 +50,6 @@ const Activities = () => {
             if (!isOnline) {
               return <OfflinePlaceholder />;
             }
-            console.log(activitiesList);
             return (
               <MetaWrapper
                 meta={{
@@ -71,7 +70,6 @@ const Activities = () => {
                     </li>
                   )}
                   {activitiesList.data.recentActivities.edges.map((edge, i) => {
-                    console.log(edge, edge);
                     if (!edge) {
                       return (
                         <li>

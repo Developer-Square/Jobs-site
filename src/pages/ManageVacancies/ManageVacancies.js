@@ -53,9 +53,9 @@ const ManageVacancies = ({ deviceType }) => {
   console.log(checkedId);
   let myVacancies;
   let jobTypeData = [];
-  let qualificationData = [];
+  // let qualificationData = [];
   let payRateData;
-  let yearsData = [];
+  // let yearsData = [];
 
   const skipResetRef = React.useRef(false);
 
@@ -176,7 +176,10 @@ const ManageVacancies = ({ deviceType }) => {
             id: "title",
             accessor: (d) => {
               return (
-                <p className="text-sm text-gray-600  truncate">{d.title}</p>
+                <div class="ml-3">
+                  <div class="">{d?.title}</div>
+                  <div class="text-gray-500">({d?.industry?.name})</div>
+                </div>
               );
             },
           },
@@ -204,10 +207,10 @@ const ManageVacancies = ({ deviceType }) => {
               return <p>{moment(d.createdAt).format("YYYY-MM-DD ")}</p>;
             },
           },
-          {
-            Header: "Email",
-            accessor: "applicationEmail",
-          },
+          // {
+          //   Header: "Email",
+          //   accessor: "applicationEmail",
+          // },
           {
             Header: "Positions",
             accessor: "positions",
@@ -229,48 +232,48 @@ const ManageVacancies = ({ deviceType }) => {
               return <p>{jobType && jobType.label}</p>;
             },
           },
-          {
-            Header: "Experience",
-            id: "yearsOfExp",
-            accessor: (d) => {
-              let yearsType;
-              if (yearsData) {
-                yearsType = yearsData?.find(
-                  ({ value }) => value === d?.yearsOfExp,
-                );
-              }
-              return <p>{yearsType && yearsType.label}</p>;
-            },
-          },
-          {
-            Header: "Qualification",
-            id: "qualification",
-            accessor: (d) => {
-              let qualificationType;
-              if (qualificationData) {
-                qualificationType = qualificationData?.find(
-                  ({ value }) => value === d?.minQualification,
-                );
-              }
-              return <p>{qualificationType && qualificationType.label}</p>;
-            },
-          },
-          {
-            Header: "Industry",
-            id: "industry",
-            accessor: (d) => {
-              return (
-                <p className="text-sm text-gray-600  truncate">
-                  {d?.industry?.name}
-                </p>
-              );
-            },
-          },
+          // {
+          //   Header: "Experience",
+          //   id: "yearsOfExp",
+          //   accessor: (d) => {
+          //     let yearsType;
+          //     if (yearsData) {
+          //       yearsType = yearsData?.find(
+          //         ({ value }) => value === d?.yearsOfExp,
+          //       );
+          //     }
+          //     return <p>{yearsType && yearsType.label}</p>;
+          //   },
+          // },
+          // {
+          //   Header: "Qualification",
+          //   id: "qualification",
+          //   accessor: (d) => {
+          //     let qualificationType;
+          //     if (qualificationData) {
+          //       qualificationType = qualificationData?.find(
+          //         ({ value }) => value === d?.minQualification,
+          //       );
+          //     }
+          //     return <p>{qualificationType && qualificationType.label}</p>;
+          //   },
+          // },
+          // {
+          //   Header: "Industry",
+          //   id: "industry",
+          //   accessor: (d) => {
+          //     return (
+          //       <p className="text-sm text-gray-600  truncate">
+          //         {d?.industry?.name}
+          //       </p>
+          //     );
+          //   },
+          // },
 
           {
             id: "btns",
             hideFilter: true,
-            Header: () => <h5 className="logo-header">Actions</h5>,
+            Header: () => <h5>Actions</h5>,
             accessor: "",
             Cell: ({ row }) => {
               const { original } = row;

@@ -21,7 +21,7 @@ const EmployerForm = ({
       {(formik) => {
         return (
           <Form>
-            <div className="submit-page">
+            <div>
               <div className="form grid grid-cols-2 gap-6">
                 <FormikControl
                   control="input"
@@ -115,7 +115,7 @@ const EmployerForm = ({
                   type="submit"
                   disabled={!formik.isValid}
                   fullwidth
-                  loading={loading}
+                  isLoading={loading}
                   title={loading ? "Saving... " : "Save"}
                   className="button margin-top-15"
                 />

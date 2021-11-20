@@ -13,15 +13,12 @@ import {
   BannerSubHeading1,
   BannerComponent,
 } from "./Banner.style";
-import Button from "components/Button/Button";
-import { AuthContext } from "contexts/auth/auth.context";
 import bgImg from "image/landing.jpg";
+import GetStarted from "components/GetStarted/GetStarted";
 
 const Banner = ({ imageUrl }) => {
   const { state, dispatch } = useContext(SearchContext);
-  const {
-    authState: { isAuthenticated },
-  } = useContext(AuthContext);
+
   const history = useHistory();
   const location = useLocation();
   const query = useRouterQuery();
@@ -62,9 +59,6 @@ const Banner = ({ imageUrl }) => {
       setSticky();
     }
   };
-  const handleRedirect = () => {
-    history.push("/dashboard");
-  };
 
   return (
     <BannerWrapper
@@ -80,31 +74,7 @@ const Banner = ({ imageUrl }) => {
           Browse through job listings, get one that fits your skillset, do the
           work and get paid. Fast and Easy!
         </BannerSubHeading>
-        {isAuthenticated ? (
-          <Button
-            onClick={handleRedirect}
-            size="small"
-            title={`Go to Dashboard`}
-            style={{
-              fontSize: 15,
-              color: "#fff",
-              backgroundColor: "#e6c018",
-              float: "right",
-            }}
-          />
-        ) : (
-          <Button
-            onClick={() => history.push(`/auth`)}
-            size="small"
-            title={`Get Started`}
-            style={{
-              fontSize: 15,
-              color: "#fff",
-              backgroundColor: "#e6c018",
-              float: "right",
-            }}
-          />
-        )}
+        <GetStarted />
         <SearchBox
           style={{
             width: 700,
