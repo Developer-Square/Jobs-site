@@ -4,7 +4,7 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Typography from "@material-ui/core/Typography";
-
+import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -27,7 +27,6 @@ import {
   GET_ONLINE_CHECKOUT,
   GET_ONLINE_CHECKOUT_RESPONSE,
 } from "graphql/queries";
-import Loader from "components/Loader/Loader";
 const StepOne = (props) => {
   return (
     <PlanCards
@@ -111,6 +110,7 @@ const StepThree = (props) => {
   const [fetchPaymentResponse, { data, loading, stopPolling }] = useLazyQuery(
     requestId ? GET_ONLINE_CHECKOUT_RESPONSE : GET_ONLINE_CHECKOUT,
     {
+      fetchPolicy: "no-cache",
       variables: requestId
         ? {
             checkoutRequestId: requestId,
@@ -169,50 +169,52 @@ const StepThree = (props) => {
     }, 3000);
   }
   return (
-    <div className="py-4 px-4 bg-gray-100 rounded-xl shadow-lg hover:shadow-xl  mx-auto md:mx-0 grid grid-cols-2">
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="flex justify-center items-center">
-          Payment Details {loading && <Loader />}
+    <div className="py-4 px-4 bg-gray-100 rounded-xl shadow-lg hover:shadow-xl mx-auto md:mx-0">
+      <div className="mt-4 text-green-600 text-center">
+        <div className="mx-auto my-4 text-xl font-bold">
+          <div className="flex justify-center items-center">
+            Payment Details{" "}
+          </div>
         </div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Safaricom Message : </strong>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold ml-auto">
+            <strong>Safaricom Message : </strong>
+          </div>
+          <div className="px-4 py-2">{message}</div>
         </div>
-        <div className="px-4 py-2">{message}</div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Account Reference : </strong>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold ml-auto">
+            <strong>Account Reference : </strong>
+          </div>
+          <div className="px-4 py-2">{accountReference}</div>
         </div>
-        <div className="px-4 py-2">{accountReference}</div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Amount: </strong>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold ml-auto">
+            <strong>Amount: </strong>
+          </div>
+          <div className="px-4 py-2">Ksh {amount}</div>
         </div>
-        <div className="px-4 py-2">Ksh {amount}</div>
-      </div>
 
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Phone: </strong>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold ml-auto">
+            <strong>Phone: </strong>
+          </div>
+          <div className="px-4 py-2">{phone}</div>
         </div>
-        <div className="px-4 py-2">{phone}</div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <div className="px-4 py-2 font-semibold">
-          <strong>Mpesa Receipt No. : </strong>
+        <div className="grid md:grid-cols-2 text-sm">
+          <div className="px-4 py-2 font-semibold ml-auto">
+            <strong>Mpesa Receipt No. : </strong>
+          </div>
+          <div className="px-4 py-2">{mpesaReceiptNumber}</div>
         </div>
-        <div className="px-4 py-2">{mpesaReceiptNumber}</div>
-      </div>
-      <div className="grid md:grid-cols-2 text-sm">
-        <button
-          onClick={fetchResponse}
-          className="mt-8 mb-4 py-2 px-14 rounded-full bg-green-600 text-white tracking-widest hover:bg-green-500 transition duration-200"
-        >
-          Confirm Payment
-        </button>
+        <div className="grid mx-auto text-sm">
+          <button
+            onClick={fetchResponse}
+            className="mt-8 mb-4 py-2 px-14 rounded-full bg-green-600 text-white tracking-widest hover:bg-green-500 transition duration-200"
+          >
+            {loading ? " Loading . . ." : "Confirm Payment"}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -221,6 +223,7 @@ const StepThree = (props) => {
 const steps = ["Plans", "Pay", "Confirm"];
 const Billing = () => {
   const history = useHistory();
+  const alert = useAlert();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [selectedPlan, setSelectedPlan] = React.useState({});
