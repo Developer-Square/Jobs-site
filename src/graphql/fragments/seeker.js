@@ -12,6 +12,10 @@ export const seekerFragment = gql`
     gender
     mobile
     status
+    course {
+      id
+      name
+    }
     industries {
       name
       id

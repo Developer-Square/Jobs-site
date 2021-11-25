@@ -58,7 +58,8 @@ function SelectInput(props) {
             const { value } = field;
             return rest?.isAsync ? (
               <AsyncSelect
-                cacheOptions={false}
+                value={value}
+                cacheOptions={rest.cacheOptions}
                 loadOptions={rest.loadOptions}
                 defaultOptions={rest.defaultOptions}
                 onInputChange={rest.handleInputChange}

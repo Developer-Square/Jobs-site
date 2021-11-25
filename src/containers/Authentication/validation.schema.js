@@ -50,7 +50,7 @@ export const phoneNumberSchema = Yup.object().shape({
 
 export const signUpSchema = Yup.object().shape({
   email: email,
-  username: fullname,
+  fullName: fullname,
   phone: phonenumber,
   password1: password,
   password2: passwordConfirm("password1"),

@@ -143,6 +143,15 @@ const components = {
     category: management,
     dashboardItem: true,
   },
+  billing: {
+    component: "Billing",
+    url: "/billing",
+    title: "Billing",
+    icon: "Category",
+    module: 1,
+    category: account,
+    dashboardItem: true,
+  },
   profile: {
     component: "Profile",
     url: "/profile",
@@ -217,6 +226,7 @@ const rolesConfig = {
 
       components.dashboard, //common
       components.profile, //common
+      components.billing, //common
 
       // components.resumeDashboard, //seeker
       // components.resumeBuilder, //seeker

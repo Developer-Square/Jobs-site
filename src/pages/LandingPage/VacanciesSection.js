@@ -88,11 +88,13 @@ const Vacancies = () => {
   };
 
   const handleClick = (route) => {
-    if (!verified) {
-      history.push(`vacancies/${getDBIdFromGraphqlId(route, "Vacancy")}`);
-    } else {
-      handleModalShow();
-    }
+    history.push(`vacancies/${getDBIdFromGraphqlId(route, "Vacancy")}`);
+    console.log(verified);
+    // if (!verified) {
+    //   history.push(`vacancies/${getDBIdFromGraphqlId(route, "Vacancy")}`);
+    // } else {
+    //   handleModalShow();
+    // }
   };
 
   const handleModalShow = () => {
