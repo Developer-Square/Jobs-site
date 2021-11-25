@@ -80,6 +80,7 @@ export const SIGNUP_MUTATION = gql`
   mutation RegisterAccount(
     $email: String!
     $username: String!
+    $fullName: String!
     $password1: String!
     $password2: String!
     $phone: String!
@@ -91,6 +92,7 @@ export const SIGNUP_MUTATION = gql`
       input: {
         email: $email
         username: $username
+        fullName: $fullName
         password1: $password1
         password2: $password2
         phone: $phone

@@ -12,6 +12,7 @@ const SeekerForm = ({
   loading,
   statusOptions,
   genderOptions,
+  setCourseList,
 }) => {
   return (
     <Formik
@@ -80,14 +81,14 @@ const SeekerForm = ({
                 placeholder="e.g. Nairobi, Kasarani - Corner"
               />
             </div>
-            {/* <div className="form">
-                          <FormikControl
-                            control="date"
-                            label="Birth Date"
-                            name="dateOfBirth"
-                            maxDate={new Date(2003, 1, 1)}
-                          />
-                        </div> */}
+            <div className="form">
+              <FormikControl
+                control="date"
+                label="Date of Birth"
+                name="dateOfBirth"
+                maxDate={new Date(2003, 1, 1)}
+              />
+            </div>
             <div className="form" style={{ width: "100%" }}>
               <FormikControl
                 control="select"
@@ -100,7 +101,15 @@ const SeekerForm = ({
               />
             </div>
             <div className="form" style={{ width: "100%" }}>
-              <CoursesSearch />
+              <CoursesSearch
+                setCourseList={setCourseList}
+                initialSearch={{
+                  searchBy: "search",
+                  searchAfter: true,
+                  searchType: "string",
+                  searchString: initialValues?.course?.value,
+                }}
+              />
             </div>
             <div className="form" style={{ width: "100%" }}>
               <FormikControl

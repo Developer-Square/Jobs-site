@@ -32,6 +32,7 @@ export const MYGIGS = `${baseUrl}dashboard/my-gigs`;
 export const INTERNSHIPS = `${baseUrl}dashboard/internships`;
 export const MYINTERNSHIPS = `${baseUrl}dashboard/my-internships`;
 export const APPLICATIONS = `${baseUrl}dashboard/applications`;
+export const BILLING = `${baseUrl}dashboard/billing`;
 export const HELP_PAGE = `${baseUrl}help`;
 export const ABOUT = `${baseUrl}about`;
 export const TERMS_CONDITIONS = `${baseUrl}terms-and-conditions`;

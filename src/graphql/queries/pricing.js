@@ -12,6 +12,7 @@ export const planListsQuery = gql`
         title
         description
         periodType
+        recommended
         periodAmount
         renewalType
         collection

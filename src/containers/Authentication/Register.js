@@ -59,7 +59,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
   // });
 
   const initialValues = {
-    username: "",
+    fullName: "",
     email: "",
     phone: "",
     password1: "",

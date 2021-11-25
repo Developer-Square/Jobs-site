@@ -252,7 +252,7 @@ const Bookmarks = ({ deviceType }) => {
   const tablePage = (props) => {
     return (
       <div style={{ display: "block", alignItems: "center" }}>
-        <h2 className="logo-header">Applications</h2>
+        <h2 className="logo-header">Saved Jobs</h2>
 
         {/* <Button
           onClick={() => {

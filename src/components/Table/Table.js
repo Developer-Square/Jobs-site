@@ -316,6 +316,9 @@ function Table({
           // className="manage-table resumes responsive-table"
           {...getTableProps()}
           className="table text-gray-400 border-separate space-y-6 text-sm"
+          style={{
+            width: "-webkit-fill-available",
+          }}
         >
           <thead className="bg-gray-800 text-gray-500">
             {headerGroups.map((headerGroup, i) => (
@@ -344,21 +347,35 @@ function Table({
                         </span>
                       ) : null} */}
                         <span {...column.getSortByToggleProps()}>
-                          {column.render("Header")}
-                          {/* Add a sort direction indicator */}
-                          {column.isSorted
-                            ? column.isSortedDesc
-                              ? " 🔽"
-                              : " 🔼"
-                            : column.id === "btns" ||
+                          <div style={{ display: "flex" }}>
+                            {column.render("Header")}
+                            {/* Add a sort direction indicator */}
+                            {column.isSorted ? (
+                              column.isSortedDesc ? (
+                                " 🔽"
+                              ) : (
+                                " 🔼"
+                              )
+                            ) : column.id === "btns" ||
                               column.id === "header" ||
+                              column.id === "logo" ||
                               column.id === "selection" ||
                               column.id === "header_1" ||
-                              column.id === "selection_placeholder_0"
-                            ? ""
-                            : ""}
-                          {/* : "     ↕️"} */}
-                          {/* ↓↓ ↑↑ */}
+                              column.id === "selection_placeholder_0" ? (
+                              ""
+                            ) : (
+                              // : ""}
+                              <svg
+                                className="ml-1 h-5 w-5 fill-current"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  d="M18 21l-4-4h3V7h-3l4-4 4 4h-3v10h3M2
+                            19v-2h10v2M2 13v-2h7v2M2 7V5h4v2H2z"
+                                ></path>
+                              </svg>
+                            )}
+                          </div>
                         </span>
                       </div>
                       {/* Render the columns filter UI */}

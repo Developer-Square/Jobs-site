@@ -31,6 +31,8 @@ const SeekerProfile = () => {
   const alert = useAlert();
   const { user, setRefetchUser } = React.useContext(UserContext);
   const [updating, setUpdating] = React.useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [courseList, setCourseList] = React.useState([]);
 
   const initialData = {
     title: "",
@@ -41,6 +43,8 @@ const SeekerProfile = () => {
     gender: { value: "", label: "Select Gender" },
     mobile: "",
     status: { value: "", label: "Select Options" },
+    course: { value: "", label: "Search Course" },
+    // institution: { value: "", label: "Search Institution" },
     industries: [],
     user: user ? user?.id : "",
   };
@@ -58,6 +62,8 @@ const SeekerProfile = () => {
   const cleanFormData = (data, oldData) => {
     const status = data.status.value;
     const gender = data.gender.value;
+    const course = data.course.value;
+    // const institution = data.institution.value;
     const industries = data.industries.reduce((arr, b) => {
       arr.push(b.value);
       return arr;
@@ -66,6 +72,8 @@ const SeekerProfile = () => {
     const originalObject = {
       ...oldData,
       status: status,
+      course: course,
+      // institution: institution,
       gender: gender,
       industries: industries,
       dateOfBirth: moment(data.dateOfBirth).format("YYYY-MM-DD"),
@@ -73,6 +81,8 @@ const SeekerProfile = () => {
     const newObject = {
       ...data,
       status: status,
+      course: course,
+      // institution: institution,
       gender: gender,
       industries: industries,
       dateOfBirth: moment(data.dateOfBirth).format("YYYY-MM-DD"),
@@ -91,6 +101,9 @@ const SeekerProfile = () => {
   const cleanInitialValues = (data, statusOptions, genderOptions) => {
     const obj = {
       status: statusOptions.find(({ value }) => value === data?.status),
+      // institution: institutionOptions.find(({ value }) => value === data?.institution),
+      course: { value: data.course.id, label: data.course.name },
+      // course: courseList.find(({ value }) => value === data?.course?.id),
       gender: genderOptions.find(({ value }) => value === data?.gender),
       description: data.description,
       title: data.title,
@@ -239,6 +252,7 @@ const SeekerProfile = () => {
                                               ? seekerUpdate.loading
                                               : seekerCreate.loading
                                           }
+                                          setCourseList={setCourseList}
                                           industries={industries}
                                           statusOptions={statusOptions}
                                           genderOptions={genderOptions}

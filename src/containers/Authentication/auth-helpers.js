@@ -15,9 +15,8 @@ export const prepareData = (data) => {
     }
 
     // Remove the space from the full name value.
-    if (key === "username") {
-      data["username"] = data["username"].replace(/ /g, "");
-    }
+    data["username"] = data["fullName"].replace(/ /g, "");
+
     return null;
   });
   return data;
