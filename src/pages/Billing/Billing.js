@@ -27,7 +27,6 @@ import {
   GET_ONLINE_CHECKOUT,
   GET_ONLINE_CHECKOUT_RESPONSE,
 } from "graphql/queries";
-
 const StepOne = (props) => {
   return (
     <PlanCards
