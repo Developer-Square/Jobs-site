@@ -77,6 +77,10 @@ export const SeekerProfile = gql`
         gender
         status
         idNumber
+        course {
+          id
+          name
+        }
         industries {
           id
           name

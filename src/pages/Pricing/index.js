@@ -2,6 +2,7 @@ import React from "react";
 import { TypedPlanListsQuery } from "graphql/queries";
 import Loader from "components/Loader/Loader";
 import { formatCurrency } from "utils";
+import { Link } from "react-router-dom";
 
 const Pricing = () => {
   return (
@@ -33,11 +34,6 @@ const Pricing = () => {
           }
 
           const { allPlanLists } = plansList.data;
-          if (allPlanLists.length > 0) {
-            // If the user is a seeker then only add the options available
-            // to them.
-            console.log(allPlanLists);
-          }
 
           return (
             <div className="container-x">
@@ -76,9 +72,9 @@ const Pricing = () => {
                               <li key={i}>&bull;➜ {val.toString()}</li>
                             ))}
                         </ul>
-                        <a className="button" href>
+                        <Link className="button" to={{ pathname: "" }}>
                           <i className="fa fa-shopping-cart" /> Purchase Plan
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   ))}

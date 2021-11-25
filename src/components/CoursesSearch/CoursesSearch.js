@@ -1,42 +1,109 @@
 import React from "react";
-import { debounce, isEmpty } from "lodash";
+import { debounce, isArray } from "lodash";
 import { useLazyQuery } from "react-apollo";
 import { GET_FILTERED_COURSES } from "graphql/queries";
 
 import FormikControl from "containers/FormikContainer/FormikControl";
 
-const DEBOUNCE_WAIT_TIME = 1000;
+const DEBOUNCE_WAIT_TIME = 500;
 
-const CoursesSearch = ({ label = "Course", name = "course" }) => {
-  const [searchString, setSearchString] = React.useState();
+const repopulateCourses = (newQuery) => {
+  return newQuery.reduce((arr, edge) => {
+    arr.push({ value: edge?.node?.id, label: edge?.node?.name });
+    return arr;
+  }, []);
+};
 
-  const [showButton, setShowButton] = React.useState(true);
-
-  const [fetchCourses, { loading, data }] = useLazyQuery(GET_FILTERED_COURSES, {
-    // fetchPolicy: "cache-and-network",
-    // variables:{
-    //   first: 30,
-    //   filter:{
-    //     search: searchString
-    //   }
-    // },
-    // fetchPolicy: "no-cache",
-    // onCompleted: (data) => {
-    //   setAllCourses([{ value: "", label: "Search Course" },...repopulateCourses(data?.courses?.edges)]);
-    // },
-  });
-  const searchQuery = () => {
-    fetchCourses({
-      variables: searchString
-        ? {
-            first: 40,
-            filter: { search: searchString },
-          }
-        : { first: 40 },
+const cleanCourses = (data) => {
+  return data.reduce((arr, b) => {
+    arr.push({
+      value: b.node.id,
+      label: b.node.name,
     });
+    return arr;
+  }, []);
+};
+
+const CoursesSearch = ({ label = "Course", name = "course", ...rest }) => {
+  const [searchString, setSearchString] = React.useState();
+  const [showButton, setShowButton] = React.useState(true);
+  const [allCourses, setAllCourses] = React.useState([
+    { value: "", label: "Search Course" },
+  ]);
+
+  const [fetchCourses] = useLazyQuery(GET_FILTERED_COURSES, {
+    // fetchPolicy: "cache-and-network",
+    variables: {
+      first: 30,
+      filter: {
+        search: searchString,
+      },
+    },
+    fetchPolicy: "no-cache",
+    onCompleted: (data) => {
+      setAllCourses(repopulateCourses(data?.courses?.edges));
+      if (rest?.setCourseList) {
+        rest?.setCourseList(cleanCourses(data?.courses?.edges));
+      }
+    },
+  });
+  const searchQuery = (d) => {
+    if (d && d !== "") {
+      fetchCourses({
+        variables: d
+          ? {
+              first: 40,
+              filter: { search: d },
+            }
+          : { first: 40 },
+      });
+    }
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSearch = React.useCallback(
+    debounce((newValue) => searchQuery(newValue), DEBOUNCE_WAIT_TIME),
+    [],
+  );
+
   React.useEffect(() => {
-    searchQuery();
+    if (rest?.initialSearch) {
+      if (rest?.initialSearch?.searchAfter) {
+        fetchCourses({
+          variables: { first: 40, after: rest?.initialSearch?.searchString },
+        });
+      } else {
+        if (rest?.initialSearch?.searchType === "array") {
+          fetchCourses({
+            variables: {
+              first: 40,
+              filter: {
+                [rest?.initialSearch?.searchBy]: isArray(
+                  rest?.initialSearch?.searchString,
+                )
+                  ? rest?.initialSearch?.searchString
+                  : rest?.initialSearch?.searchString.split(","),
+              },
+            },
+          });
+        } else {
+          fetchCourses({
+            variables: {
+              first: 40,
+              after: rest?.initialSearch?.searchString,
+              filter: {
+                [rest?.initialSearch?.searchBy]:
+                  rest?.initialSearch?.searchString,
+              },
+            },
+          });
+        }
+      }
+    } else {
+      fetchCourses({
+        variables: { first: 40 },
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,51 +115,28 @@ const CoursesSearch = ({ label = "Course", name = "course" }) => {
     }
   };
 
-  const repopulateCourses = (newQuery) => {
-    return newQuery.reduce((arr, edge) => {
-      arr.push({ value: edge?.node?.id, label: edge?.node?.name });
-      return arr;
-    }, []);
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedSearch = React.useCallback(
-    debounce((newValue) => searchQuery(newValue), DEBOUNCE_WAIT_TIME),
-    [],
-  );
   const updateValue = (newValue) => {
-    console.log(newValue);
     setSearchString(newValue);
-    debouncedSearch(newValue);
+    // debouncedSearch(newValue);
     return newValue;
   };
-  const getCourses = () => {
-    return repopulateCourses(data?.courses?.edges);
-  };
-  console.log(searchString);
-
-  const loadOptions = (props) => {
-    setSearchString(props);
-    debouncedSearch(props);
+  const loadOptions = (inputValue, callback) => {
     setTimeout(() => {
-      return getCourses();
+      debouncedSearch(inputValue);
+      callback(allCourses);
     }, 1000);
   };
-  if (loading) {
-    return <div>loading ...</div>;
-  }
+
+  // if (loading) {
+  //   return <div>loading ...</div>;
+  // }
 
   return (
     <FormikControl
+      cacheOptions
       control="select"
-      options={
-        data
-          ? Array.isArray(data?.vacancies?.edges) &&
-            isEmpty(data?.vacancies?.edges)
-            ? [{ value: "", label: "Search Course" }]
-            : repopulateCourses(data?.courses?.edges)
-          : [{ value: "", label: "Search Course" }]
-      }
+      options={allCourses}
+      defaultOptions={allCourses}
       showButton={showButton}
       hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
       label={label}
@@ -100,14 +144,6 @@ const CoursesSearch = ({ label = "Course", name = "course" }) => {
       isAsync={true}
       loadOptions={loadOptions}
       handleInputChange={updateValue}
-      defaultOptions={
-        data
-          ? Array.isArray(data?.vacancies?.edges) &&
-            isEmpty(data?.vacancies?.edges)
-            ? [{ value: "", label: "Search Course" }]
-            : repopulateCourses(data?.courses?.edges)
-          : [{ value: "", label: "Search Course" }]
-      }
       id="simple-select"
       classNamePrefix="select"
       icon="ln ln-icon-Lock-2"

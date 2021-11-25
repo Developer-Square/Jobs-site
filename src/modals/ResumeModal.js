@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import { useTranslation } from "react-i18next";
 import React, { memo } from "react";
+import { toast } from "react-toastify";
 import DataModal from "./DataModal";
 // import DatabaseContext from "contexts/database/database.provider";
 import Input from "../components/shared/Input";
@@ -31,11 +32,18 @@ const ResumeModal = () => {
 
   React.useEffect(() => {
     (async () => {
-      await fetch(unsplashPhotoRequestUrl).then((results) => {
-        if (results && results.url !== undefined) {
-          setInitialValues({ name: "", preview: results.url });
-        }
-      });
+      try {
+        await fetch(unsplashPhotoRequestUrl).then((results) => {
+          if (results && results.url !== undefined) {
+            setInitialValues({ name: "", preview: results.url });
+          }
+        });
+      } catch (error) {
+        toast.info(
+          "You're offline, connect to the internet for the best experience",
+        );
+        console.log(error);
+      }
     })();
   }, [refetchSplashImg]);
   const refetchSplashImages = () => {

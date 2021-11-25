@@ -8,6 +8,7 @@ const Applications = lazy(() => import("pages/Applications/Applications"));
 const ResumeDashboard = lazy(() => import("pages/Resume/ResumeDashboard"));
 const ResumeBuilder = lazy(() => import("pages/Resume/ResumeBuilder"));
 const Bookmarks = lazy(() => import("pages/Bookmarks/Bookmarks"));
+const Billing = lazy(() => import("pages/Billing/Billing"));
 const ManageVacancies = lazy(() =>
   import("pages/ManageVacancies/ManageVacancies"),
 );
@@ -21,5 +22,6 @@ export {
   ResumeDashboard,
   ResumeBuilder,
   Bookmarks,
+  Billing,
   ManageVacancies,
 };

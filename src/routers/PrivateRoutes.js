@@ -19,7 +19,7 @@ class PrivateRoutes extends Component {
      */
     let roles = JSON.parse(localStorage.getItem("thedb_auth_roles"));
     if (roles) {
-      roles = [...roles, "common"];
+      roles = ["common", ...roles];
       let allowedRoutes = roles.reduce((acc, role) => {
         return [...acc, ...rolesConfig[role].routes];
       }, []);

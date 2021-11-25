@@ -5,8 +5,6 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-// import { WebSocketLink } from '@apollo/client/link/ws'
-// import { useSubscription } from '@apollo/client'
 
 import {
   signUpSchema,
@@ -27,14 +25,7 @@ import { TypedPlanListsQuery } from "graphql/queries";
 import Loader from "components/Loader/Loader";
 import { PaymentModal } from "modals/PaymentModal";
 import { formatCurrency } from "utils";
-// import { ONTRANSACTION_MESSAGE } from './subscription';
-
-// const wsLink = new WebSocketLink({
-//   uri: 'ws://thedb.hewani.io/graphql/',
-//   options: {
-//     reconnect: true
-//   }
-// });
+import CoursesSearch from "components/CoursesSearch/CoursesSearch";
 
 export const SignUp = ({
   initialValues,
@@ -80,7 +71,7 @@ export const SignUp = ({
               control="input"
               type="text"
               label="Full name"
-              name="username"
+              name="fullName"
               icon="ln ln-icon-Male"
             />
             <FormikControl
@@ -308,25 +299,7 @@ export const FurtherInformation = ({
               }}
             </TypedCreateSelectableInstitutionMutation>
 
-            {/* <FormikControl
-              control="input"
-              type="text"
-              label="Course"
-              name="course"
-              icon="ln ln-icon-Lock-2"
-            /> */}
-
-            <FormikControl
-              control="select"
-              options={courses}
-              showButton={showButton}
-              hideButton={(data) => handleButton(data)} // Hide the button when a select input is open, to avoid UI interferance from the button.
-              label="Course"
-              name="course"
-              id="simple-select"
-              classNamePrefix="select"
-              icon="ln ln-icon-Lock-2"
-            />
+            <CoursesSearch label="Course" name="course" />
             <FormikControl
               control="select"
               isMulti
