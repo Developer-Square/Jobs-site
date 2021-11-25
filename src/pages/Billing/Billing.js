@@ -1,32 +1,30 @@
 import * as React from "react";
+import { useAlert } from "react-alert";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useLazyQuery } from "react-apollo";
+import { Form, Formik } from "formik";
+
 import Box from "@material-ui/core/Box";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Typography from "@material-ui/core/Typography";
-import { useAlert } from "react-alert";
-import { useHistory } from "react-router-dom";
-
-import { toast } from "react-toastify";
-import { useLazyQuery } from "react-apollo";
+import { showSuccessNotification, useTimer } from "helpers";
 
 import MpesaLogo from "image/m-pesa.webp";
-import PlanCards from "./PlanCards";
-import PlanCard from "./PlanCard";
 import { phoneNumberSchema } from "containers/Authentication/validation.schema";
-import { Form, Formik } from "formik";
-import { showSuccessNotification } from "helpers";
-
 import FormikControl from "containers/FormikContainer/FormikControl";
-
 import Button from "components/Button/Button";
 import { TypedMakePayment } from "graphql/mutations";
-
-import { useTimer } from "helpers";
 import {
   GET_ONLINE_CHECKOUT,
   GET_ONLINE_CHECKOUT_RESPONSE,
 } from "graphql/queries";
+
+import PlanCards from "./PlanCards";
+import PlanCard from "./PlanCard";
+
 const StepOne = (props) => {
   return (
     <PlanCards
@@ -64,7 +62,11 @@ const StepTwo = (props) => {
               <Formik
                 initialValues={props?.initialValues}
                 validationSchema={phoneNumberSchema}
-                onSubmit={props?.onSubmit}
+                onSubmit={
+                  props?.transactionId || props?.checkoutRequestId
+                    ? null
+                    : props?.onSubmit
+                }
               >
                 {(formik) => {
                   return (
@@ -78,14 +80,16 @@ const StepTwo = (props) => {
                       />
                       <Button
                         type="submit"
-                        disabled={!formik.isValid}
+                        disabled={
+                          !formik.isValid ||
+                          props?.transactionId ||
+                          props?.checkoutRequestId
+                        }
                         fullwidth
                         isLoading={formik.isLoading}
-                        title={formik.isLoading ? "Confirming ... " : "Confirm"}
+                        title={formik.isLoading ? "Initiating ... " : "Pay"}
                         className="mt-8 mb-4 py-2 px-14 rounded-full bg-green-600 text-white tracking-widest hover:bg-green-500 transition duration-200"
-                      >
-                        Pay
-                      </Button>
+                      />
                     </Form>
                   );
                 }}
@@ -180,39 +184,54 @@ const StepThree = (props) => {
           <div className="px-4 py-2 font-semibold ml-auto">
             <strong>Safaricom Message : </strong>
           </div>
-          <div className="px-4 py-2">{message}</div>
+          <div className="px-4 py-2 mr-auto">{message}</div>
         </div>
         <div className="grid md:grid-cols-2 text-sm">
           <div className="px-4 py-2 font-semibold ml-auto">
             <strong>Account Reference : </strong>
           </div>
-          <div className="px-4 py-2">{accountReference}</div>
+          <div className="px-4 py-2 mr-auto">{accountReference}</div>
         </div>
         <div className="grid md:grid-cols-2 text-sm">
           <div className="px-4 py-2 font-semibold ml-auto">
-            <strong>Amount: </strong>
+            <strong>Amount : </strong>
           </div>
-          <div className="px-4 py-2">Ksh {amount}</div>
+          <div className="px-4 py-2 mr-auto">Ksh {amount}</div>
         </div>
 
         <div className="grid md:grid-cols-2 text-sm">
           <div className="px-4 py-2 font-semibold ml-auto">
-            <strong>Phone: </strong>
+            <strong>Phone : </strong>
           </div>
-          <div className="px-4 py-2">{phone}</div>
+          <div className="px-4 py-2 mr-auto">{phone}</div>
         </div>
         <div className="grid md:grid-cols-2 text-sm">
           <div className="px-4 py-2 font-semibold ml-auto">
             <strong>Mpesa Receipt No. : </strong>
           </div>
-          <div className="px-4 py-2">{mpesaReceiptNumber}</div>
+          <div className="px-4 py-2 mr-auto">{mpesaReceiptNumber}</div>
         </div>
-        <div className="grid mx-auto text-sm">
+        <div className="mx-auto text-sm">
           <button
-            onClick={fetchResponse}
+            disable={
+              message === "The service request is processed successfully."
+            }
+            onClick={
+              message === "Success. Request accepted for processing" ||
+              message === noData
+                ? fetchResponse
+                : null
+            }
             className="mt-8 mb-4 py-2 px-14 rounded-full bg-green-600 text-white tracking-widest hover:bg-green-500 transition duration-200"
           >
-            {loading ? " Loading . . ." : "Confirm Payment"}
+            {message === "The service request is processed successfully."
+              ? "Payment Successful"
+              : message === "Success. Request accepted for processing" ||
+                message === noData
+              ? loading
+                ? " Loading . . ."
+                : "Confirm Payment"
+              : "Payment Failed"}
           </button>
         </div>
       </div>
@@ -361,6 +380,8 @@ const Billing = () => {
                     initialValues={initialValues}
                     selectedPlan={selectedPlan}
                     setSelectedPlan={setSelectedPlan}
+                    transactionId={transactionId}
+                    checkoutRequestId={checkoutRequestId}
                   />
                 );
               }}

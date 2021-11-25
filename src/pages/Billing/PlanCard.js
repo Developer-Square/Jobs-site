@@ -28,7 +28,7 @@ const PlanCard = (props) => {
             {plan.title}
           </span>
         </div>
-        <div className="mt-4 flex justify-center text-6xl leading-none font-extrabold">
+        <div className="mt-4 flex justify-center text-4xl leading-none font-extrabold">
           {formatCurrency(plan?.periodAmountMoney)}
           <span
             className={`ml-1 pt-8 text-2xl leading-8 font-medium text-gray-${
