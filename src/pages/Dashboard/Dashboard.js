@@ -1,8 +1,7 @@
 import UserContext from "contexts/user/user.provider";
 import React from "react";
 import Activities from "./Activities";
-import { numberWithCommas } from "utils";
-
+import { numberWithCommas, formatCurrency } from "utils";
 const Dashboard = () => {
   const { user } = React.useContext(UserContext);
 
@@ -86,12 +85,14 @@ const Dashboard = () => {
               user?.subscriptions?.map((subscription, index) => (
                 <ul key={index} className="dashboard-packages">
                   <li>
-                    <i className="list-box-icon fa fa-shopping-cart" />
+                    <i className="list-box-icon fa fa-money" />
                     <strong>
                       {subscription?.plan?.title} (
-                      {subscription?.plan?.renewalType})
+                      {subscription?.plan?.periodType})
                     </strong>
-                    <span>{subscription?.plan?.title}</span>
+                    <span>
+                      {formatCurrency(subscription?.plan?.periodAmountMoney)}
+                    </span>
                   </li>
                 </ul>
               ))

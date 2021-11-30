@@ -12,9 +12,9 @@ const PlanCards = (props) => {
     ? "EMPLOYER"
     : null;
   return (
-    <div>
+    <div className="py-4 px-4 bg-gray-100 rounded-xl shadow-lg hover:shadow-xl  mx-auto md:mx-0">
       {/* component */}
-      <div className="min-h-screen items-center">
+      <div className="items-center">
         <div className>
           <div className="text-center font-semibold">
             <h1 className="text-5xl">
@@ -35,20 +35,24 @@ const PlanCards = (props) => {
               const { allPlanLists } = plansList.data;
 
               return allPlanLists.map((list, index) => (
-                <div
-                  className="my-16 sm:flex flex-wrap justify-center items-center gap-8"
-                  key={index}
-                >
-                  {" "}
+                <div key={index}>
                   {userType ? (
-                    list?.userType === userType &&
-                    list.allPlans.map((plan) => (
-                      <PlanCard
-                        plan={plan}
-                        selectedPlan={props?.selectedPlan}
-                        selectPlan={props.selectPlan}
-                      />
-                    ))
+                    list?.userType === userType && (
+                      <div
+                        className="my-16 sm:flex flex-wrap justify-center items-center gap-8"
+                        key={index}
+                      >
+                        {list.allPlans.map((plan) => (
+                          <PlanCard
+                            plan={plan}
+                            selectedPlan={props?.selectedPlan}
+                            selectPlan={props?.selectPlan}
+                            handleNext={props?.handleNext}
+                            handleBack={props?.handleBack}
+                          />
+                        ))}
+                      </div>
+                    )
                   ) : (
                     <>
                       <div className="sixteen columns">
@@ -58,7 +62,9 @@ const PlanCards = (props) => {
                         <PlanCard
                           plan={plan}
                           selectedPlan={props?.selectedPlan}
-                          selectPlan={props.selectPlan}
+                          selectPlan={props?.selectPlan}
+                          handleNext={props?.handleNext}
+                          handleBack={props?.handleBack}
                         />
                       ))}
                     </>

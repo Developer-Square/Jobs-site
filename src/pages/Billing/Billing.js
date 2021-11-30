@@ -30,6 +30,8 @@ const StepOne = (props) => {
     <PlanCards
       selectedPlan={props?.selectedPlan}
       selectPlan={props?.setSelectedPlan}
+      handleBack={props?.handleBack}
+      handleNext={props?.handleNext}
     />
   );
 };
@@ -43,6 +45,7 @@ const StepTwo = (props) => {
           selectedPlan={props?.selectedPlan}
           step={props?.step}
           handleBack={props?.handleBack}
+          handleNext={props?.handleNext}
           class="col-span-1 lg:block"
         />
         <div className="col-span-1 lg:block space-y-8 px-12">
@@ -156,20 +159,25 @@ const StepThree = (props) => {
       setAccountReference(data?.onlineCheckout?.accountReference);
     }
   }
-  if (
-    data?.onlineCheckoutResponses &&
-    data?.onlineCheckoutResponses.length > 0
-  ) {
-    setMpesaReceiptNumber(data?.onlineCheckout?.mpesaReceiptNumber);
-    setMessage(
-      data?.onlineCheckoutResponses[data.onlineCheckoutResponses?.length - 1]
-        ?.resultDescription,
-    );
+  if (data && mpesaReceiptNumber === noData) {
+    if (
+      data?.onlineCheckoutResponses &&
+      data?.onlineCheckoutResponses.length > 0
+    ) {
+      setMpesaReceiptNumber(
+        data?.onlineCheckoutResponses[0]?.mpesaReceiptNumber,
+      );
+      setMessage(data?.onlineCheckoutResponses[0]?.resultDescription);
+    }
   }
+
   if (message === "The service request is processed successfully.") {
+    stopPolling();
+    toast.success(
+      `Payment (${amount}) for ${accountReference} was made successfully`,
+    );
     setTimeout(function () {
-      stopPolling();
-      toast.success(`Payment (${amount}) for ${amount} was made successfully`);
+      props?.handleNext();
     }, 3000);
   }
   return (
@@ -274,20 +282,20 @@ const Billing = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
+  // const handleSkip = () => {
+  //   if (!isStepOptional(activeStep)) {
+  //     // You probably want to guard against something like this,
+  //     // it should never occur unless someone's actively trying to break something.
+  //     throw new Error("You can't skip a step that isn't optional.");
+  //   }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
+  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //   setSkipped((prevSkipped) => {
+  //     const newSkipped = new Set(prevSkipped.values());
+  //     newSkipped.add(activeStep);
+  //     return newSkipped;
+  //   });
+  // };
 
   const handleReset = () => {
     setActiveStep(0);
@@ -311,6 +319,7 @@ const Billing = () => {
           setCheckoutRequestId(
             data.makePayment.onlineCheckout.checkoutRequestId,
           );
+          handleNext();
         }
 
         // console.log(data);
@@ -347,7 +356,9 @@ const Billing = () => {
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button onClick={handleReset}>Start</Button>
-            <Button onClick={() => history.push(`/dashboard`)}>Finish</Button>
+            <Button onClick={() => history.push(`/dashboard`)}>
+              Go to Dashboard
+            </Button>
           </Box>
         </React.Fragment>
       ) : (
@@ -395,7 +406,7 @@ const Billing = () => {
               handleBack={handleBack}
             />
           )}
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
               disabled={activeStep === 0}
@@ -414,7 +425,7 @@ const Billing = () => {
             <Button onClick={handleNext}>
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
-          </Box>
+          </Box> */}
         </React.Fragment>
       )}
     </Box>
