@@ -19,6 +19,8 @@ const PlanCard = (props) => {
           ? {
               border: "10px solid #4be16e",
             }
+          : props?.step
+          ? { maxWidth: "440px" }
           : {}
       }
     >
@@ -28,10 +30,12 @@ const PlanCard = (props) => {
             {plan.title}
           </span>
         </div>
-        <div className="mt-4 flex justify-center text-4xl leading-none font-extrabold">
-          {formatCurrency(plan?.periodAmountMoney)}
+        <div className="grid justify-center items-center">
+          <div className="mt-4 mx-auto text-4xl items-center leading-none font-extrabold">
+            {formatCurrency(plan?.periodAmountMoney)}
+          </div>
           <span
-            className={`ml-1 pt-8 text-2xl leading-8 font-medium text-gray-${
+            className={`mx-auto leading-8 font-medium text-gray-${
               plan?.recommended ? "100" : "500"
             }`}
           >
