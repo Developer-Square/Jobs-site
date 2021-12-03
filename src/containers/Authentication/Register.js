@@ -16,7 +16,6 @@ import {
   OTPForm,
   FurtherInformation,
   SignUp,
-  Billing,
 } from "./SeekerRegistrationSteps";
 import { Bio } from "./BusinessRegistrationSteps";
 import {
@@ -266,8 +265,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
     }).then(({ data }) => {
       if (data) {
         if (data.seekerCreate) {
-          setRefetchUser((curr) => !curr);
-          switchTabs("", "forward");
+          history.push("/dashboard/billing");
 
           if (!data.seekerCreate.success) {
             setErrors(
@@ -307,8 +305,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
     }).then(({ data }) => {
       if (data) {
         if (data.employerCreate) {
-          setRefetchUser((curr) => !curr);
-          switchTabs("", "forward");
+          history.push("/dashboard/billing");
 
           if (!data.employerCreate.success) {
             setErrors(
@@ -346,213 +343,201 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
             <div id="sign-in-button"></div>
           </>
         ) : // eslint-disable-next-line
-        (activeStep === 1 && switchTab === "seeker") ||
-          (activeStep === 1 && switchTab === "business") ? (
-          <>
-            <TypedAccountLoginMutation>
-              {(userLogin) => {
-                function onVerificationSubmit(values, { setErrors }) {
-                  // Check if the object values are populated before sending.
-                  if (IsNotEmpty(values)) {
-                    sendVerifactionCode(
-                      values.otpcode.toString(),
-                      userLogin,
-                      setErrors,
-                    );
-                  }
-                }
-                return (
-                  <>
-                    {/* Using the OTP Form for both seeker and business tabs as the fields are similar. */}
-                    <OTPForm
-                      loading={loading}
-                      switchTabs={switchTabs}
-                      initialValues={otpCodeValue}
-                      onSubmit={onVerificationSubmit}
-                      onSignInSubmit={onSignInSubmit}
-                      alert={alert}
-                      resendRequest={resendRequest}
-                    />
-                  </>
-                );
-              }}
-            </TypedAccountLoginMutation>
-            <div id="sign-in-button"></div>
-          </>
-        ) : activeStep === 2 && switchTab === "seeker" ? (
-          <TypedCourseQuery>
-            {(courses) => {
-              if (courses.loading) {
-                return <Loader />;
-              }
-              let courseOptions = [];
-              if (IsNotEmpty(courses.data)) {
-                courseOptions = cleanIndustries(courses.data.allCourses);
-              }
-              let initialValues = schoolInterestsInitialValues;
-              let interests;
-              // eslint-disable-next-line
-              initialValues = cleanInitialValues(courseOptions, interests);
-              return (
-                <TypedInstitutionQuery>
-                  {(institutions) => {
-                    if (institutions.loading) {
-                      return <Loader />;
-                    }
-                    let schoolOptions = [];
-                    if (IsNotEmpty(institutions.data)) {
-                      schoolOptions = cleanIndustries(
-                        institutions.data.allInstitutions,
+          (activeStep === 1 && switchTab === "seeker") ||
+            (activeStep === 1 && switchTab === "business") ? (
+            <>
+              <TypedAccountLoginMutation>
+                {(userLogin) => {
+                  function onVerificationSubmit(values, { setErrors }) {
+                    // Check if the object values are populated before sending.
+                    if (IsNotEmpty(values)) {
+                      sendVerifactionCode(
+                        values.otpcode.toString(),
+                        userLogin,
+                        setErrors,
                       );
                     }
-                    let initialValues = schoolInterestsInitialValues;
-                    let interests;
-                    // eslint-disable-next-line
-                    initialValues = cleanInitialValues(
-                      schoolOptions,
-                      interests,
-                    );
-                    return (
-                      <TypedIndustriesQuery>
-                        {(industriesData) => {
-                          if (industriesData.loading) {
-                            return <Loader />;
-                          }
-
-                          let industries = getIndustries(
-                            industriesData,
-                            schoolInterestsInitialValues,
-                          );
-                          return (
-                            <TypedSeekerProfileMutation
-                              onCompleted={(data, errors) =>
-                                showSeekerProfileNotification(
-                                  data,
-                                  errors,
-                                  alert,
-                                )
-                              }
-                            >
-                              {(seekerCreate, { loading }) => {
-                                function onSeekerProfileSubmit(
-                                  values,
-                                  { setErrors },
-                                ) {
-                                  if (IsNotEmpty(values.industries)) {
-                                    seekerProfileCreate(
-                                      values,
-                                      seekerCreate,
-                                      setErrors,
-                                    );
-                                  }
-                                }
-                                return (
-                                  <FurtherInformation
-                                    schoolOptions={schoolOptions}
-                                    industries={industries}
-                                    courses={courseOptions}
-                                    loading={loading}
-                                    switchTabs={switchTabs}
-                                    onSeekerProfileSubmit={
-                                      onSeekerProfileSubmit
-                                    }
-                                    initialValues={schoolInterestsInitialValues}
-                                    alert={alert}
-                                  />
-                                );
-                              }}
-                            </TypedSeekerProfileMutation>
-                          );
-                        }}
-                      </TypedIndustriesQuery>
-                    );
-                  }}
-                </TypedInstitutionQuery>
-              );
-            }}
-          </TypedCourseQuery>
-        ) : activeStep === 2 && switchTab === "business" ? (
-          <TypedIndustriesQuery>
-            {(industriesData) => {
-              if (industriesData.loading) {
-                return <Loader />;
-              }
-              let industries = getIndustries(industriesData, bioInitialValues);
-
-              return (
-                <TypedEmployerProfileMutation
-                  onCompleted={(data, errors) =>
-                    showNotification(
-                      data.employerCreate,
-                      errors,
-                      alert,
-                      "accountErrors",
-                      "Profile Created",
-                    )
                   }
-                >
-                  {(employerCreate) => {
-                    function onEmployerProfileSubmit(values, { setErrors }) {
-                      if (IsNotEmpty(values)) {
-                        employerProfileCreate(
-                          values,
-                          employerCreate,
-                          setErrors,
-                        );
-                      }
-                    }
-                    return (
-                      <Bio
-                        initialValues={bioInitialValues}
-                        industries={industries}
+                  return (
+                    <>
+                      {/* Using the OTP Form for both seeker and business tabs as the fields are similar. */}
+                      <OTPForm
                         loading={loading}
                         switchTabs={switchTabs}
-                        onEmployerProfileSubmit={onEmployerProfileSubmit}
+                        initialValues={otpCodeValue}
+                        onSubmit={onVerificationSubmit}
+                        onSignInSubmit={onSignInSubmit}
                         alert={alert}
+                        resendRequest={resendRequest}
                       />
-                    );
-                  }}
-                </TypedEmployerProfileMutation>
-              );
-            }}
-          </TypedIndustriesQuery>
-        ) : // eslint-disable-next-line
-        (activeStep === 3 && switchTab === "seeker") ||
-          (activeStep === 3 && switchTab === "business") ? (
-          // Using the Billing Form for both seeker and business tabs as the fields are similar.
-          <Billing
-            switchTabs={switchTabs}
-            isSeeker={isSeeker}
-            loading={loading}
-            alert={alert}
-          />
-        ) : (
-          <div className="register">
-            <div
-              style={{
-                textAlign: "center",
-                padding: "30px 0",
+                    </>
+                  );
+                }}
+              </TypedAccountLoginMutation>
+              <div id="sign-in-button"></div>
+            </>
+          ) : activeStep === 2 && switchTab === "seeker" ? (
+            <TypedCourseQuery>
+              {(courses) => {
+                if (courses.loading) {
+                  return <Loader />;
+                }
+                let courseOptions = [];
+                if (IsNotEmpty(courses.data)) {
+                  courseOptions = cleanIndustries(courses.data.allCourses);
+                }
+                let initialValues = schoolInterestsInitialValues;
+                let interests;
+                // eslint-disable-next-line
+                initialValues = cleanInitialValues(courseOptions, interests);
+                return (
+                  <TypedInstitutionQuery>
+                    {(institutions) => {
+                      if (institutions.loading) {
+                        return <Loader />;
+                      }
+                      let schoolOptions = [];
+                      if (IsNotEmpty(institutions.data)) {
+                        schoolOptions = cleanIndustries(
+                          institutions.data.allInstitutions,
+                        );
+                      }
+                      let initialValues = schoolInterestsInitialValues;
+                      let interests;
+                      // eslint-disable-next-line
+                      initialValues = cleanInitialValues(
+                        schoolOptions,
+                        interests,
+                      );
+                      return (
+                        <TypedIndustriesQuery>
+                          {(industriesData) => {
+                            if (industriesData.loading) {
+                              return <Loader />;
+                            }
+
+                            let industries = getIndustries(
+                              industriesData,
+                              schoolInterestsInitialValues,
+                            );
+                            return (
+                              <TypedSeekerProfileMutation
+                                onCompleted={(data, errors) =>
+                                  showSeekerProfileNotification(
+                                    data,
+                                    errors,
+                                    alert,
+                                  )
+                                }
+                              >
+                                {(seekerCreate, { loading }) => {
+                                  function onSeekerProfileSubmit(
+                                    values,
+                                    { setErrors },
+                                  ) {
+                                    if (IsNotEmpty(values.industries)) {
+                                      seekerProfileCreate(
+                                        values,
+                                        seekerCreate,
+                                        setErrors,
+                                      );
+                                    }
+                                  }
+                                  return (
+                                    <FurtherInformation
+                                      schoolOptions={schoolOptions}
+                                      industries={industries}
+                                      courses={courseOptions}
+                                      loading={loading}
+                                      onSeekerProfileSubmit={
+                                        onSeekerProfileSubmit
+                                      }
+                                      initialValues={schoolInterestsInitialValues}
+                                      alert={alert}
+                                    />
+                                  );
+                                }}
+                              </TypedSeekerProfileMutation>
+                            );
+                          }}
+                        </TypedIndustriesQuery>
+                      );
+                    }}
+                  </TypedInstitutionQuery>
+                );
               }}
-            >
-              <h4>Hi there, Welcome...</h4>
-              <h5>Select an option to get started.</h5>
-            </div>
+            </TypedCourseQuery>
+          ) : activeStep === 2 && switchTab === "business" ? (
+            <TypedIndustriesQuery>
+              {(industriesData) => {
+                if (industriesData.loading) {
+                  return <Loader />;
+                }
+                let industries = getIndustries(industriesData, bioInitialValues);
 
-            <div style={{ display: "flex", margin: "5px" }}>
-              <Button
-                style={{ margin: "0 5px", width: "100%" }}
-                title={`Job Seeker`}
-                onClick={() => switchTabs("seeker")}
-              />
+                return (
+                  <TypedEmployerProfileMutation
+                    onCompleted={(data, errors) =>
+                      showNotification(
+                        data.employerCreate,
+                        errors,
+                        alert,
+                        "accountErrors",
+                        "Profile Created",
+                      )
+                    }
+                  >
+                    {(employerCreate) => {
+                      function onEmployerProfileSubmit(values, { setErrors }) {
+                        if (IsNotEmpty(values)) {
+                          employerProfileCreate(
+                            values,
+                            employerCreate,
+                            setErrors,
+                          );
+                        }
+                      }
+                      return (
+                        <Bio
+                          initialValues={bioInitialValues}
+                          industries={industries}
+                          loading={loading}
+                          onEmployerProfileSubmit={onEmployerProfileSubmit}
+                          alert={alert}
+                        />
+                      );
+                    }}
+                  </TypedEmployerProfileMutation>
+                );
+              }}
+            </TypedIndustriesQuery>
+          ) : (
+            <div className="register">
+              <div
+                style={{
+                  textAlign: "center",
+                  padding: "30px 0",
+                }}
+              >
+                <h4>Hi there, Welcome...</h4>
+                <h5>Select an option to get started.</h5>
+              </div>
 
-              <Button
-                style={{ margin: "0 5px", width: "100%" }}
-                title={`Business`}
-                onClick={() => switchTabs("business")}
-              />
+              <div style={{ display: "flex", margin: "5px" }}>
+                <Button
+                  style={{ margin: "0 5px", width: "100%" }}
+                  title={`Job Seeker`}
+                  onClick={() => switchTabs("seeker")}
+                />
+
+                <Button
+                  style={{ margin: "0 5px", width: "100%" }}
+                  title={`Business`}
+                  onClick={() => switchTabs("business")}
+                />
+              </div>
             </div>
-          </div>
-        );
+          );
       }}
     </TypedAccountRegistrationMutation>
   );
