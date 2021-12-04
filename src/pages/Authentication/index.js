@@ -18,7 +18,7 @@ const Authentication = () => {
 
 
   // Provides the step header for each step i.e. the first one is SignUp.
-  const steps = ['Sign Up', 'OTP Verification', 'Further information', 'Billing'];
+  const steps = ['Sign Up', 'Verify', 'About You'];
 
   let RenderForm;
 
@@ -44,7 +44,7 @@ const Authentication = () => {
       >
         <div className="container-x">
           <div className="ten columns">
-            <h2>Authentication</h2>
+            <h2>Get Started</h2>
           </div>
         </div>
       </div>
@@ -85,7 +85,7 @@ const Authentication = () => {
                 </Step>
               ))}
             </Stepper>
-          ): null}
+          ) : null}
 
           <TabsContainer>
             <div className="tab-content">
