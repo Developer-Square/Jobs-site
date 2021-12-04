@@ -266,6 +266,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
       if (data) {
         if (data.seekerCreate) {
           history.push("/dashboard/billing");
+          setRefetchUser();
 
           if (!data.seekerCreate.success) {
             setErrors(
@@ -306,6 +307,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
       if (data) {
         if (data.employerCreate) {
           history.push("/dashboard/billing");
+          setRefetchUser();
 
           if (!data.employerCreate.success) {
             setErrors(
