@@ -95,13 +95,15 @@ export const SignUp = ({
               </div>
 
               <HelperText style={{ padding: "20px 0px 10px", width: "200px" }}>
-                I agree to the
-                <strong
+                I agree to the{"  "}
+                <Link
                   style={{ color: "#21277f" }}
                   onClick={() => history.push(`${TOS}`)}
                 >
-                  Terms &amp; Conditions
-                </strong>
+                  <strong>
+                    Terms &amp; Conditions
+                  </strong>
+                </Link>
               </HelperText>
             </TermsSection>
 
