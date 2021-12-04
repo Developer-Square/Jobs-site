@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Form, Formik } from "formik";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -13,12 +13,12 @@ import { HelperText } from "./Authentication.style";
 import FormikControl from "../FormikContainer/FormikControl";
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
-import { Typography } from "@material-ui/core";
+// import { Typography } from "@material-ui/core";
 import {
   TypedCreateSelectableInstitutionMutation,
 } from "./mutations";
 import { showSuccessNotification, IsNotEmpty } from "helpers";
-import Loader from "components/Loader/Loader";
+// import Loader from "components/Loader/Loader";
 import CoursesSearch from "components/CoursesSearch/CoursesSearch";
 
 export const SignUp = ({
@@ -345,10 +345,10 @@ const Spacer = styled.div`
     props.marginTopBottom ? props.marginTopBottom : "15px 0"};
 `;
 
-const Title = styled.p`
-  margin: 12px 0;
-  font-size: 15px;
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-`;
+// const Title = styled.p`
+//   margin: 12px 0;
+//   font-size: 15px;
+//   text-decoration: none;
+//   color: black;
+//   cursor: pointer;
+// `;
