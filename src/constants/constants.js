@@ -7,11 +7,11 @@ export const SITE_SETTINGS = "/site-settings";
 // **************** ROUTE CONSTANT END **************************
 
 export const BASE_URL =
-  process.env.REACT_APP_BASE_URL || "https://thedb.hewani.io/API/v1";
+  process.env.REACT_APP_BASE_URL || "https://db.hewani.io/API/v1";
 export const BASE_GRAPHQL_URL =
-  process.env.REACT_APP_BASE_GRAPHQL_URL || "https://thedb.hewani.io/graphql/";
+  process.env.REACT_APP_BASE_GRAPHQL_URL || "https://db.hewani.io/graphql/";
 export const BASE_GRAPHQL_WS_URL =
-  process.env.REACT_APP_BASE_GRAPHQL_WS_URL || "wss://thedb.hewani.io/graphql/";
+  process.env.REACT_APP_BASE_GRAPHQL_WS_URL || "wss://db.hewani.io/graphql/";
 
 export const CURRENCY = process.env.REACT_APP_CURRENCY || "Ksh. ";
 export const serviceWorkerTimeout =

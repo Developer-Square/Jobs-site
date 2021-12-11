@@ -82,7 +82,7 @@ export const Bio = ({
                     updateAvatar({
                       variables: { image: f },
                     })
-                      .then((res) => {})
+                      .then((res) => { })
                       .catch((err) => console.log(err));
                   }
                 };
@@ -117,7 +117,7 @@ export const Bio = ({
                 disabled={!formik.isValid}
                 fullwidth
                 isLoading={loading}
-                title={loading ? "Verifying ... " : "Verify"}
+                title={loading ? "Verifying... " : "Get Started"}
               />
             ) : null}
           </Form>

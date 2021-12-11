@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import { Form, Formik } from "formik";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 
 import {
   signUpSchema,
@@ -15,16 +13,12 @@ import { HelperText } from "./Authentication.style";
 import FormikControl from "../FormikContainer/FormikControl";
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
-import { Typography } from "@material-ui/core";
+// import { Typography } from "@material-ui/core";
 import {
   TypedCreateSelectableInstitutionMutation,
-  TypedMakePayment,
 } from "./mutations";
 import { showSuccessNotification, IsNotEmpty } from "helpers";
-import { TypedPlanListsQuery } from "graphql/queries";
-import Loader from "components/Loader/Loader";
-import { PaymentModal } from "modals/PaymentModal";
-import { formatCurrency } from "utils";
+// import Loader from "components/Loader/Loader";
 import CoursesSearch from "components/CoursesSearch/CoursesSearch";
 
 export const SignUp = ({
@@ -101,13 +95,15 @@ export const SignUp = ({
               </div>
 
               <HelperText style={{ padding: "20px 0px 10px", width: "200px" }}>
-                I agree to the
-                <strong
+                I agree to the{"  "}
+                <Link
                   style={{ color: "#21277f" }}
                   onClick={() => history.push(`${TOS}`)}
                 >
-                  Terms &amp; Condtions
-                </strong>
+                  <strong>
+                    Terms &amp; Conditions
+                  </strong>
+                </Link>
               </HelperText>
             </TermsSection>
 
@@ -321,166 +317,13 @@ export const FurtherInformation = ({
                 disabled={!formik.isValid}
                 fullwidth
                 isLoading={loading}
-                title={loading ? "Saving ... " : "Save"}
+                title={loading ? "Saving..." : "Get Started"}
               />
             ) : null}
           </Form>
         );
       }}
     </Formik>
-  );
-};
-
-export const Billing = ({ switchTabs, isSeeker, alert }) => {
-  const [show, setShow] = React.useState(false);
-  const [planID, setPlanID] = React.useState("");
-  const [periodAmount, setPeriodAmount] = React.useState(0);
-  const [transactionId, setTransactionId] = React.useState();
-  const [checkoutResponseId, setCheckoutResponseId] = React.useState();
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      minWidth: 235,
-      [theme.breakpoints.down("lg")]: {
-        minWidth: 180,
-      },
-      [theme.breakpoints.down("md")]: {
-        minWidth: 150,
-      },
-      marginRight: 10,
-      minHeight: 150,
-      cursor: "pointer",
-    },
-  }));
-
-  const classNames = useStyles();
-
-  const handleModalShow = (option) => {
-    setShow(!show);
-    if (option) {
-      setPeriodAmount(option.periodAmount);
-      setPlanID(option.id);
-    }
-  };
-
-  const makePaymentFn = (values, makePayment) => {
-    // TODO: Add variables to into an object then remove the empty keys and values.
-    // make the removefunction a global utility.
-    if (planID !== "" && periodAmount !== 0) {
-      makePayment({
-        variables: {
-          planId: planID,
-          amount: periodAmount,
-          billingPhone: values.phone,
-        },
-      }).then(({ data }) => {
-        console.log("after mpesa push", data);
-
-        if (data.makePayment.success) {
-          console.log(data.makePayment.onlineCheckout);
-          setTransactionId(data.makePayment.onlineCheckout.id);
-          setCheckoutResponseId(
-            data.makePayment.onlineCheckout.checkoutRequestId,
-          );
-        }
-
-        // console.log(data);
-      });
-    }
-  };
-
-  return (
-    <>
-      <TypedPlanListsQuery>
-        {(plansList) => {
-          if (plansList.loading) {
-            return <Loader />;
-          }
-
-          let plans;
-          const { allPlanLists } = plansList.data;
-          if (allPlanLists.length > 0) {
-            // If the user is a seeker then only add the options available
-            // to them.
-            if (isSeeker) {
-              plans = allPlanLists[1].allPlans;
-            } else {
-              plans = allPlanLists[0].allPlans;
-            }
-          }
-
-          return (
-            <TypedMakePayment
-              onCompleted={(data, errors) =>
-                showSuccessNotification(data, alert, errors)
-              }
-            >
-              {(makePayment, { loading }) => {
-                function onPaymentSubmit(values) {
-                  makePaymentFn(values, makePayment);
-                }
-
-                return (
-                  <>
-                    <PaymentModal
-                      open={show}
-                      loading={loading}
-                      onSubmit={onPaymentSubmit}
-                      onClose={handleModalShow}
-                      moreInfo={false}
-                      transactionId={transactionId}
-                      checkoutRequestId={checkoutResponseId}
-                    />
-                    <Spacer>
-                      <Link to={"/auth"} onClick={() => switchTabs("", "back")}>
-                        {`<`} Go to previous tab{" "}
-                      </Link>
-                    </Spacer>
-                    <Title>Choose your tier: </Title>
-                    <PricingTier
-                      planType={plans.length > 2 ? "business" : "seeker"}
-                    >
-                      {plans.length
-                        ? plans.map((option, index) => (
-                            <div key={index}>
-                              {/* Add action to take them to dashboard */}
-                              <Card
-                                key={index}
-                                onClick={() => handleModalShow(option)}
-                                className={classNames.root}
-                              >
-                                <CardContent>
-                                  <Typography variant="h5">
-                                    {option.title}
-                                    <small>
-                                      <strong>({option?.periodType})</strong>
-                                    </small>
-                                  </Typography>
-                                  <br />
-                                  {option.collection
-                                    .reduce((arr, v) => {
-                                      arr.push([v]);
-                                      return arr;
-                                    }, [])
-                                    .map((val, i) => (
-                                      <p key={i}>&bull;➜ {val.toString()}</p>
-                                    ))}
-                                  <Title>
-                                    {formatCurrency(option?.periodAmountMoney)}
-                                  </Title>
-                                </CardContent>
-                              </Card>
-                            </div>
-                          ))
-                        : null}
-                    </PricingTier>
-                  </>
-                );
-              }}
-            </TypedMakePayment>
-          );
-        }}
-      </TypedPlanListsQuery>
-    </>
   );
 };
 
@@ -502,16 +345,10 @@ const Spacer = styled.div`
     props.marginTopBottom ? props.marginTopBottom : "15px 0"};
 `;
 
-const PricingTier = styled.div`
-  display: flex;
-  justify-content: ${(props) =>
-    props.planType === "business" ? "space-around" : ""};
-`;
-
-const Title = styled.p`
-  margin: 12px 0;
-  font-size: 15px;
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-`;
+// const Title = styled.p`
+//   margin: 12px 0;
+//   font-size: 15px;
+//   text-decoration: none;
+//   color: black;
+//   cursor: pointer;
+// `;
