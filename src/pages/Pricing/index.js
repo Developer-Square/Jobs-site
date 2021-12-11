@@ -72,7 +72,10 @@ const Pricing = () => {
                               <li key={i}>&bull;➜ {val.toString()}</li>
                             ))}
                         </ul>
-                        <Link className="button" to={{ pathname: "" }}>
+                        <Link
+                          className="button"
+                          to={{ pathname: "/dashboard/billing" }}
+                        >
                           <i className="fa fa-shopping-cart" /> Purchase Plan
                         </Link>
                       </div>

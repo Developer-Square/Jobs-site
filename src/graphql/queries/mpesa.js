@@ -9,6 +9,7 @@ export const GET_ONLINE_CHECKOUT = gql`
       checkoutRequestId
       accountReference
       customerMessage
+      responseDescription
     }
   }
 `;
