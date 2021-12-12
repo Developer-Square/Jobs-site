@@ -2,8 +2,10 @@ import UserContext from "contexts/user/user.provider";
 import React from "react";
 import Activities from "./Activities";
 import { numberWithCommas, formatCurrency } from "utils";
+import { useHistory } from "react-router";
 const Dashboard = () => {
   const { user } = React.useContext(UserContext);
+  const history = useHistory();
 
   return (
     <div className="product_tour__step_1">
@@ -11,7 +13,10 @@ const Dashboard = () => {
       <div className="product_tour__sub_step_1">
         <div className="row">
           {/* Item */}
-          <div className="col-lg-3 col-md-6">
+          <div
+            onClick={() => history.push(`/vacancies`)}
+            className="col-lg-3 col-md-6"
+          >
             <div className="dashboard-stat color-1">
               <div className="dashboard-stat-content">
                 <h4 className="counter">
@@ -25,7 +30,18 @@ const Dashboard = () => {
             </div>
           </div>
           {/* Item */}
-          <div className="col-lg-3 col-md-6">
+          <div
+            onClick={() =>
+              history.push(
+                user?.isSeeker
+                  ? `/dashboard/resume`
+                  : user?.isEmployer
+                  ? `/dashboard/vacancies/manage-jobs`
+                  : ``,
+              )
+            }
+            className="col-lg-3 col-md-6"
+          >
             <div className="dashboard-stat color-2">
               <div className="dashboard-stat-content">
                 <h4 className="counter">{numberWithCommas(user?.extra)}</h4>{" "}
@@ -40,7 +56,10 @@ const Dashboard = () => {
             </div>
           </div>
           {/* Item */}
-          <div className="col-lg-3 col-md-6">
+          <div
+            onClick={() => history.push(`/dashboard/applications`)}
+            className="col-lg-3 col-md-6"
+          >
             <div className="dashboard-stat color-3">
               <div className="dashboard-stat-content">
                 <h4 className="counter">
@@ -54,7 +73,10 @@ const Dashboard = () => {
             </div>
           </div>
           {/* Item */}
-          <div className="col-lg-3 col-md-6">
+          <div
+            onClick={() => history.push(`/dashboard/bookmarks`)}
+            className="col-lg-3 col-md-6"
+          >
             <div className="dashboard-stat color-4">
               <div className="dashboard-stat-content">
                 <h4 className="counter">
