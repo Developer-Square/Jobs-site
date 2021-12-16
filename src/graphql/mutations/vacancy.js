@@ -125,18 +125,18 @@ export const UPDATE_APPLICATION = gql`
   mutation PatchApplication(
     $id: ID!
     $status: ApplicationStatus
-    $applicant: ID
     $budget: String
     $comment: String
+    $favourite: Boolean
     $employerComment: String
   ) {
     patchApplication(
       id: $id
       input: {
         status: $status
-        resume: $resume
         budget: $budget
         comment: $comment
+        favourite: $favourite
         employerComment: $employerComment
       }
     ) {
@@ -159,6 +159,8 @@ export const UPDATE_APPLICATION = gql`
         resume
         budget
         comment
+        favourite
+        employerComment
       }
       errors {
         field

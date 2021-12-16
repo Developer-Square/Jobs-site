@@ -10,7 +10,7 @@ import { UPDATE_APPLICATION } from "graphql/mutations";
 import { ApplicationStatus } from "graphql/queries";
 import DataModal from "./DataModal";
 import ModalEvents from "../constants/ModalEvents";
-import thedbLogo from "image/thedb.png";
+import userImage from "image/user.jpg";
 import { Link } from "react-router-dom";
 import Loader from "components/Loader/Loader";
 import { cleanSelectData } from "helpers";
@@ -107,7 +107,7 @@ const UpdateApplicationModal = () => {
                         <div className="app-content" style={{ padding: "5px" }}>
                           <div className="info">
                             <img
-                              src={data?.applicant?.avatar.url || thedbLogo}
+                              src={data?.applicant?.avatar?.url || userImage}
                               alt="application"
                             />
                             <span>
