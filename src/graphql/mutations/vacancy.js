@@ -143,22 +143,47 @@ export const UPDATE_APPLICATION = gql`
       __typename
       success
       application {
-        status
-        isActive
+        slug
+        uuid
+        createdAt
+        updatedAt
         isDeleted
+        isActive
+        id
         applicant {
           id
-          email
           fullName
+          email
+          phone
+          progress
+          seeker {
+            status
+            title
+          }
+          avatar {
+            url
+            alt
+          }
         }
         job {
           id
           title
+          creator {
+            id
+            fullName
+            email
+            phone
+            avatar {
+              url
+              alt
+            }
+          }
         }
         appliedOn
         resume
         budget
         comment
+        status
         favourite
         employerComment
       }

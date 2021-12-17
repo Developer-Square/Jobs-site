@@ -14,6 +14,7 @@ import userImage from "image/user.jpg";
 import { Link } from "react-router-dom";
 import Loader from "components/Loader/Loader";
 import { cleanSelectData } from "helpers";
+// import { getStatus } from "utils/vacancy";
 import moment from "moment";
 
 export const TypedApplicationMutation = TypedMutation(UPDATE_APPLICATION);
@@ -23,26 +24,31 @@ const UpdateApplicationModal = () => {
   const [data, setData] = React.useState(null);
   const [activeTab, setActiveTab] = React.useState("view");
   const { emitter } = React.useContext(ModalContext);
+  console.log(data);
+  let initialData = {
+    employerComment: "",
+    status: "",
+  };
 
   React.useEffect(() => {
     const unbind = emitter.on(
       ModalEvents.UPDATE_APPLICATION_MODAL,
       (payload) => {
         setData(payload);
+        // setInitialData({
+        //   employerComment: payload?.employerComment,
+        //   status: getStatus(payload?.status),
+        // });
       },
     );
 
     return () => unbind();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emitter, ModalEvents]);
-  const initialData = {
-    employerComment: "",
-    status: "",
-  };
 
   const cleanInitialValues = (data, statusType) => {
     return {
-      employerComment: data?.comment,
+      employerComment: data?.employerComment,
       status: statusType.find(({ value }) => value === data?.status),
     };
   };
@@ -56,7 +62,7 @@ const UpdateApplicationModal = () => {
         showNotification(
           data.updateApplication,
           errors,
-          alert,
+          null,
           "errors",
           "Application Updated",
         )
@@ -79,12 +85,7 @@ const UpdateApplicationModal = () => {
               let initialValues = initialData;
               initialValues = cleanInitialValues(data, statusTypes);
               return (
-                <Formik
-                  validateOnBlur
-                  initialValues={initialValues}
-                  // validationSchema={schema}
-                  enableReinitialize
-                >
+                <Formik initialValues={initialValues} enableReinitialize>
                   {(formik) => (
                     <DataModal
                       title={{
@@ -92,11 +93,13 @@ const UpdateApplicationModal = () => {
                         edit: `${data?.applicant.fullName}'s Application`,
                       }}
                       buttonText={`Update Application`}
-                      onEdit={(data) => {
+                      onEdit={(formdata) => {
                         applicationUpdate({
                           variables: {
-                            employerComment: data?.variables?.employerComment,
-                            status: data?.variables?.status.value,
+                            id: data?.id,
+                            employerComment:
+                              formdata?.variables?.employerComment,
+                            status: formdata?.variables?.status.value,
                           },
                         });
                       }}

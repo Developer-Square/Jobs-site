@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useHistory } from "react-router-dom";
+import { findIndex } from "lodash";
 import Loader from "components/Loader/Loader";
 import NetworkStatus from "components/NetworkStatus";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
@@ -14,44 +15,18 @@ import { cleanSelectData, showNotification } from "helpers";
 import moment from "moment";
 import { useRouteMatch } from "react-router";
 import { getGraphqlIdFromDBId } from "utils";
+import { getStatus } from "utils/vacancy";
 import UserImage from "image/user.jpg";
 import ModalContext from "contexts/modal/modal.provider";
+import "animate.css";
+import { bounceOutUp } from "react-animations";
 
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 export const TypedApplicationsQuery = TypedQuery(GET_JOB_APPLICATIONS);
 
-const getStatus = (status) => {
-  if (status === "APPLIED") {
-    return {
-      color: "#ff6746c7",
-      name: "Applied",
-      fancyName: "On Hold",
-    };
-  }
-  if (status === "Accepted") {
-    return {
-      color: "#15a367",
-      name: "Accepted",
-      fancyName: "Good Fit",
-    };
-  }
-  if (status === "SHORTLISTED") {
-    return {
-      color: "#17ae6f",
-      name: "Shortlisted",
-      fancyName: "Candidate",
-    };
-  }
-  if (status === "REJECTED") {
-    return {
-      color: "#f33331e6",
-      name: "Rejected",
-      fancyName: "Not a fit",
-    };
-  }
-};
 const ApplicationCard = (props) => {
   const { emitter, events } = React.useContext(ModalContext);
+  const [animate, setAnimate] = React.useState(false);
   const markFavourite = () => {
     props?.patchApplication({
       variables: {
@@ -59,11 +34,19 @@ const ApplicationCard = (props) => {
         favourite: !props?.application?.favourite,
         status: props?.statusData?.find(
           ({ value }) => value === props?.application?.status,
-        ).value,
+        )?.value,
       },
     });
   };
   const handleEdit = (d) => emitter.emit(events.UPDATE_APPLICATION_MODAL, d);
+  const showAnimation = () => {
+    console.log(bounceOutUp);
+    if (animate) {
+      return bounceOutUp;
+    } else {
+      return "";
+    }
+  };
 
   return (
     <div>
@@ -72,11 +55,19 @@ const ApplicationCard = (props) => {
           <div className="bg-white border border-white shadow-lg  rounded-3xl p-4 m-4">
             <div className="flex-none sm:flex items-center">
               <div className=" relative h-32 w-32 sm:mb-0 mb-3">
-                <img
-                  src={props?.application?.applicant?.avatar?.url || UserImage}
-                  alt="p"
-                  className=" w-32 h-32 object-cover rounded-2xl"
-                />
+                {props?.application?.applicant?.avatar?.url ? (
+                  <img
+                    src={
+                      props?.application?.applicant?.avatar?.url || UserImage
+                    }
+                    alt="p"
+                    className="w-32 h-32 object-cover rounded-2xl"
+                  />
+                ) : (
+                  <div className="w-32 h-32 object-cover rounded-2xl">
+                    {getStatus(props?.application?.status)?.statusImage}
+                  </div>
+                )}
               </div>
               <div className="flex-auto sm:ml-5 justify-evenly">
                 <div className="flex items-center justify-between sm:mt-2">
@@ -92,23 +83,40 @@ const ApplicationCard = (props) => {
                           style={{
                             backgroundColor: getStatus(
                               props?.application?.status,
-                            ).color,
+                            )?.color,
                             color: "#fff",
                           }}
                         >
-                          {getStatus(props?.application?.status).fancyName}
+                          {getStatus(props?.application?.status)?.fancyName}
                         </span>
                         <span className="mr-3 border-r border-gray-200  max-h-0" />
                         <span className="mr-3 ">
                           {props?.application?.applicant?.seeker?.title}
                         </span>
                       </div>
+                      <div
+                        className={showAnimation}
+                        onClick={() => {
+                          setAnimate(true);
+                          setTimeout(setAnimate(false), 2000);
+                        }}
+                      >
+                        dsasdasd as
+                      </div>
+
                       <div className="flex-auto text-gray-500 my-1">
                         {props?.application?.applicant?.seeker?.status ===
                           "OPEN" && (
-                          <div className="sidebar-link">
+                          <div
+                            className="sidebar-link"
+                            style={{
+                              padding: "5px",
+                              fontSize: "10px",
+                            }}
+                          >
                             <img
                               alt="open to jobs"
+                              style={{ zoom: 0.5 }}
                               src={
                                 "https://developers.turing.com/static/media/openToOffers.c87ed54c.svg"
                               }
@@ -118,9 +126,16 @@ const ApplicationCard = (props) => {
                         )}
                         {props?.application?.applicant?.seeker?.status ===
                           "BUSY" && (
-                          <div className="sidebar-link">
+                          <div
+                            className="sidebar-link"
+                            style={{
+                              padding: "5px",
+                              fontSize: "10px",
+                            }}
+                          >
                             <img
                               alt="open to jobs"
+                              style={{ zoom: 0.5 }}
                               src={
                                 "https://developers.turing.com/static/media/not_available_for_work.2848971e.svg"
                               }
@@ -130,9 +145,16 @@ const ApplicationCard = (props) => {
                         )}
                         {props?.application?.applicant?.seeker?.status ===
                           "LOOKING" && (
-                          <div className="sidebar-link">
+                          <div
+                            className="sidebar-link"
+                            style={{
+                              padding: "5px",
+                              fontSize: "10px",
+                            }}
+                          >
                             <img
                               alt="open to jobs"
+                              style={{ zoom: 0.5 }}
                               src={
                                 "https://developers.turing.com/static/media/available_for_work.74e15aac.svg"
                               }
@@ -144,9 +166,11 @@ const ApplicationCard = (props) => {
                     </div>
                   </div>
                   <a
-                    onClick={markFavourite}
                     href
-                    className="flex flex-row items-center mb-auto w-full lg:w-1/3 bg-white lg:justify-end lg:px-0"
+                    onClick={() => {
+                      markFavourite();
+                    }}
+                    className="flex flex-row items-center mb-auto justify-end "
                   >
                     {props?.application?.favourite ? (
                       <svg
@@ -191,7 +215,7 @@ const ApplicationCard = (props) => {
                     </svg>
                     <p className>
                       Applied :{" "}
-                      {moment(props?.application?.createdAt).fromNow()}
+                      {moment(props?.application?.createdAt)?.fromNow()}
                     </p>
                   </div>
                   <div className="flex-1 inline-flex items-center">
@@ -244,9 +268,19 @@ const JobApplications = () => {
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(jobArray);
 
   let statusData;
+  let applications;
+
+  const newApps = (data) => {
+    let newArr = applications;
+    const app = data?.patchApplication?.application;
+    const idx = findIndex(newArr, ["id", app.id]);
+    newArr[idx] = app;
+    applications = newArr;
+    // setApplications((oldArr) => newArr);
+    return newArr;
+  };
   return (
     <NetworkStatus>
       {(isOnline) => (
@@ -268,6 +302,9 @@ const JobApplications = () => {
                 applicationsList.data.__type.enumValues,
               );
               // setCompanies((curr) => applicationsList.data.applications);
+              applications = applicationsList.data.jobApplications.edges.map(
+                (edge) => edge.node,
+              );
               statusData = applicationStatus;
             }
             if (!isOnline) {
@@ -281,20 +318,27 @@ const JobApplications = () => {
                 }}
               >
                 <TypedUpdateApplicationMutation
-                  onCompleted={(data, errors) =>
+                  onCompleted={(data, errors) => {
+                    newApps(data);
                     showNotification(
                       data.patchApplication,
                       errors,
-                      alert,
-                      "accountErrors",
-                      "Application Updated",
-                    )
-                  }
+                      null,
+                      "vacancyErrors",
+                      `${
+                        data?.patchApplication?.application?.applicant?.fullName
+                      } ${
+                        data?.patchApplication?.application?.favourite
+                          ? "added to"
+                          : "removed from"
+                      } favourites`,
+                    );
+                  }}
                 >
                   {(patchApplication) => {
                     return (
                       <div>
-                        <div className="bg-white md:flex md:items-center md:justify-between shadow rounded-lg p-4 md:p-6 xl:p-8">
+                        <div className="bg-white md:flex md:items-center md:justify-between shadow rounded-t-lg p-2">
                           <div className="flex items-center flex-shrink-0 text-gray-800">
                             <div className="flex justify-center pr-8">
                               <svg
@@ -446,22 +490,18 @@ const JobApplications = () => {
                             </nav>{" "}
                           </div>
                           <div class="lg:col-span-4 col-span-5 bg-indigo-50 space-y-8">
-                            {applicationsList.data.jobApplications.edges.map(
-                              (edge) => edge.node,
-                            ).length > 0 ? (
-                              applicationsList.data.jobApplications.edges
-                                .map((edge) => edge.node)
-                                .map((application, i) => {
-                                  return (
-                                    <ApplicationCard
-                                      application={application}
-                                      job={location?.state?.job}
-                                      statusData={statusData}
-                                      patchApplication={patchApplication}
-                                      key={i}
-                                    />
-                                  );
-                                })
+                            {applications?.length > 0 ? (
+                              applications.map((application, i) => {
+                                return (
+                                  <ApplicationCard
+                                    application={application}
+                                    job={location?.state?.job}
+                                    statusData={statusData}
+                                    patchApplication={patchApplication}
+                                    key={i}
+                                  />
+                                );
+                              })
                             ) : (
                               <section className="text-black">
                                 <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">

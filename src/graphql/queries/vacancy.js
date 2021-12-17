@@ -150,6 +150,7 @@ export const GET_JOB_APPLICATIONS = gql`
           comment
           status
           favourite
+          employerComment
         }
       }
     }
