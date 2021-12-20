@@ -125,40 +125,67 @@ export const UPDATE_APPLICATION = gql`
   mutation PatchApplication(
     $id: ID!
     $status: ApplicationStatus
-    $applicant: ID
     $budget: String
     $comment: String
+    $favourite: Boolean
     $employerComment: String
   ) {
     patchApplication(
       id: $id
       input: {
         status: $status
-        resume: $resume
         budget: $budget
         comment: $comment
+        favourite: $favourite
         employerComment: $employerComment
       }
     ) {
       __typename
       success
       application {
-        status
-        isActive
+        slug
+        uuid
+        createdAt
+        updatedAt
         isDeleted
+        isActive
+        id
         applicant {
           id
-          email
           fullName
+          email
+          phone
+          progress
+          seeker {
+            status
+            title
+          }
+          avatar {
+            url
+            alt
+          }
         }
         job {
           id
           title
+          creator {
+            id
+            fullName
+            email
+            phone
+            avatar {
+              url
+              alt
+            }
+          }
         }
         appliedOn
         resume
         budget
         comment
+        status
+        favourite
+        employerComment
       }
       errors {
         field

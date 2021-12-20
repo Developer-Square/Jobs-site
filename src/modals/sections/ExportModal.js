@@ -68,7 +68,7 @@ const ExportModal = () => {
     // )}`;
     // download(data, `RxResume-${state.id}.json`, "text/json");
 
-    toast("Featur Coming Soon");
+    toast("Feature Coming Soon");
   };
 
   return (

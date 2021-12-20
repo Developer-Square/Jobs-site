@@ -4,15 +4,24 @@ import { useAlert } from "react-alert";
 import Table from "components/Table/Table";
 import { Grid } from "components/Grid/Grid";
 import { ActionButton } from "styles/pages.style";
+// import { useSidebar } from "context/sidebar/use-sidebar";
 import { toast } from "react-toastify";
+
 import Button from "components/Button/Button";
 import { PencilIcon } from "components/AllSvgIcon";
+// import Slide from "containers/Slide/Slide";
+// import EditPostCompany from "./EditPostCompany";
+
 import { CSVDownloader } from "react-papaparse";
 import thedbLogo from "image/thedb.png";
+// import { makeSecretKey } from "utils";
+
 import Loader from "components/Loader/Loader";
 import NetworkStatus from "components/NetworkStatus";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
+
 import { GET_APPLICATIONS } from "graphql/queries";
+
 import { UPDATE_APPLICATION } from "graphql/mutations";
 import { MetaWrapper } from "components/Meta";
 import { TypedMutation } from "core/mutations";
@@ -21,7 +30,6 @@ import { cleanSelectData, showNotification } from "helpers";
 import { AuthContext } from "contexts/auth/auth.context";
 import moment from "moment";
 import ModalContext from "contexts/modal/modal.provider";
-import EmployerApplications from "./Employer";
 
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 export const TypedApplicationsQuery = TypedQuery(GET_APPLICATIONS);
@@ -254,6 +262,23 @@ const Applications = ({ deviceType }) => {
     return (
       <div style={{ display: "block", alignItems: "center" }}>
         <h2 className="logo-header">Applications</h2>
+
+        {/* <Button
+          onClick={() => {
+            setEditData({});
+            toggleSidebar();
+          }}
+          title={`Add Company`}
+        />
+        <Slide deviceType={deviceType}>
+          {isOpen && (
+            <EditPostCompany
+              onCloseBtnClick={toggleSidebar}
+              scrollbarHeight="100vh"
+              editData={editData}
+            />
+          )}
+        </Slide> */}
         <Grid>
           <Table
             columns={columns}
@@ -287,7 +312,7 @@ const Applications = ({ deviceType }) => {
       </div>
     );
   };
-  return profile?.isSeeker ? (
+  return (
     <NetworkStatus>
       {(isOnline) => (
         <TypedApplicationsQuery>
@@ -335,8 +360,6 @@ const Applications = ({ deviceType }) => {
         </TypedApplicationsQuery>
       )}
     </NetworkStatus>
-  ) : (
-    <EmployerApplications />
   );
 };
 

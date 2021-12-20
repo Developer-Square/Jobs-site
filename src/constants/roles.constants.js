@@ -125,6 +125,15 @@ const components = {
     category: management,
     dashboardItem: false,
   },
+  jobAppications: {
+    component: "JobApplications",
+    url: "/applications/:jobID",
+    title: "Sort Applications",
+    icon: "Category",
+    module: 1,
+    category: management,
+    dashboardItem: false,
+  },
   applications: {
     component: "Applications",
     url: "/applications",
@@ -221,6 +230,7 @@ const rolesConfig = {
 
   common: {
     routes: [
+      components.jobAppications, //common
       components.applications, // commom
       components.bookmarks, //common
 

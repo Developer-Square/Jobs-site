@@ -68,6 +68,7 @@ export const GET_APPLICATIONS = gql`
       budget
       comment
       status
+      favourite
     }
     __type(name: "ApplicationStatus") {
       enumValues {
@@ -78,6 +79,89 @@ export const GET_APPLICATIONS = gql`
   }
 `;
 
+export const GET_JOB_APPLICATIONS = gql`
+  query JobApplications(
+    $filter: ApplicationFilterInput
+    $sortBy: ApplicationSortingInput
+    $before: String
+    $after: String
+    $first: Int
+    $last: Int
+  ) {
+    jobApplications(
+      filter: $filter
+      sortBy: $sortBy
+      before: $before
+      after: $after
+      first: $first
+      last: $last
+    ) {
+      __typename
+      totalCount
+      queryCount
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      edges {
+        __typename
+        node {
+          slug
+          uuid
+          createdAt
+          updatedAt
+          isDeleted
+          isActive
+          id
+          applicant {
+            id
+            fullName
+            email
+            phone
+            progress
+            seeker {
+              status
+              title
+            }
+            avatar {
+              url
+              alt
+            }
+          }
+          job {
+            id
+            title
+            creator {
+              id
+              fullName
+              email
+              phone
+              avatar {
+                url
+                alt
+              }
+            }
+          }
+          appliedOn
+          resume
+          budget
+          comment
+          status
+          favourite
+          employerComment
+        }
+      }
+    }
+    __type(name: "ApplicationStatus") {
+      enumValues {
+        description
+        name
+      }
+    }
+  }
+`;
 export const VACANCIES_QUERY = gql`
   ${vacancyFragment}
   query VacanciesList(
