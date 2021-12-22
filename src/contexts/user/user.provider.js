@@ -28,6 +28,7 @@ const UserContext = createContext(defaultState);
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userType, setUserType] = useState(localStorage.getItem("thedb_user"));
   const [refetchUser, setRefetchUser] = useState(false);
   const {
     authState: { isAuthenticated },
@@ -138,6 +139,8 @@ const UserProvider = ({ children }) => {
         updateAddress,
         deleteAddress,
         deleteAccount,
+        setUserType,
+        userType,
       }}
     >
       {children}

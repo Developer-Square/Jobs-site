@@ -1,8 +1,10 @@
-import UserContext from "contexts/user/user.provider";
 import React from "react";
+import { useHistory } from "react-router";
 import Activities from "./Activities";
 import { numberWithCommas, formatCurrency } from "utils";
-import { useHistory } from "react-router";
+
+import UserContext from "contexts/user/user.provider";
+
 const Dashboard = () => {
   const { user } = React.useContext(UserContext);
   const history = useHistory();

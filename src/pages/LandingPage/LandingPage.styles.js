@@ -1,0 +1,133 @@
+import styled from "styled-components";
+import rightImage from "image/JOBS.jpg";
+import leftImage from "image/GIGS.jpg";
+
+export const Wrapper = styled.div`
+  .left,
+  .right {
+    width: 100%;
+    height: 50vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // transform: skewX(-20deg);
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    background-size: cover !important;
+    background-position: center !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: 0.25s ease all;
+  }
+
+  .left-image {
+    background: url(${leftImage});
+  }
+
+  .right-image {
+    background: url(${rightImage});
+  }
+
+  .caption {
+    bottom: 40px;
+    position: absolute;
+    z-index: 10;
+    color: #fff;
+    text-align: center;
+  }
+
+  .caption h1 {
+    font: normal normal medium 18px/67px Montserrat;
+    letter-spacing: 0.1em;
+    margin-bottom: 5px;
+    color: #fff;
+  }
+  .caption h5 {
+    font: normal normal medium 18px/67px Montserrat;
+    text-transform: uppercase;
+    margin-bottom: 1em;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 40px;
+  }
+
+  .caption .button {
+    border-radius: 50px;
+    color: #fff;
+    padding: 0.5em 1.5em;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    transition: 0.25s ease all;
+  }
+  .caption .button .btn-left {
+    color: #fff;
+  }
+  .btn-right {
+    border: 2px solid #fff;
+    background-color: transparent;
+  }
+
+  .caption .btn-left:hover {
+    background: #fff;
+    color: #21277f;
+  }
+  .caption .btn-right:hover {
+    background: #fff;
+    color: #21277f;
+  }
+
+  .left::before {
+    background: linear-gradient(
+      160deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+    display: block;
+  }
+  .right::before {
+    background: linear-gradient(
+      160deg,
+      rgba(33, 39, 127, 0.5) 0%,
+      rgba(33, 39, 127, 0.5) 100%
+    );
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+    display: block;
+  }
+
+  .left:hover .image,
+  .right:hover .image {
+    transform: scale(1.1);
+  }
+
+  @media screen and (min-width: 1200px) {
+    display: flex;
+
+    .left,
+    .right {
+      width: 50%;
+      height: 100vh;
+    }
+  }
+`;
