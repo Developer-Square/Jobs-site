@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import Logoimage from "image/db.png";
 import styled from "styled-components";
 import LogoimageInverted from "image/thedb.png";
+import UserContext from "contexts/user/user.provider";
 import { isCategoryPage } from "../../../is-home-page";
 
 export const Logo = styled.div`
@@ -20,6 +21,8 @@ export const LogoImage = styled.img`
 `;
 export const LeftMenu = ({ isSticky, logo }) => {
   const location = useLocation();
+
+  const { userType, setUserType } = React.useContext(UserContext);
   const path = location.pathname.replace(/\/+$/, "");
   const pathname = path[0] === "/" ? path.substr(1) : path;
 
@@ -45,6 +48,29 @@ export const LeftMenu = ({ isSticky, logo }) => {
           </>
         )}
       </Logo>
+      <li>
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={"current"}
+          to={{
+            pathname: "",
+          }}
+          onClick={() => {
+            if (userType === "Employer") {
+              localStorage.setItem("thedb_user", "Seeker");
+              setUserType("Seeker");
+            } else if (userType === "Seeker") {
+              localStorage.setItem("thedb_user", "Employer");
+              setUserType("Employer");
+            }
+          }}
+        >
+          {userType === "Seeker" && "As Employer"}
+          {userType === "Employer" && "As Seeker"}
+        </Link>
+      </li>
       <li>
         <Link
           style={{

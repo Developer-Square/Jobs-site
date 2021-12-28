@@ -7,7 +7,7 @@ import bgImg from "image/landing.jpg";
 // import SearchContainer from "containers/Search/SearchContainer";
 import GetStarted from "components/GetStarted/GetStarted";
 
-const Banner = () => {
+const Banner = (props) => {
   const useDispatch = useStickyDispatch();
   const setSticky = useCallback(
     () => useDispatch({ type: "SET_STICKY" }),
@@ -41,7 +41,7 @@ const Banner = () => {
         <div className="sixteen columns">
           <div className="search-container">
             <Fade bottom>
-              <h2>Great Careers Start Here</h2>
+              <h2>{props?.bannerHeading || "Great Careers Start Here"}</h2>
               <div>
                 <GetStarted
                   floatDirection="left"

@@ -6,12 +6,13 @@ import Vacancies from "./VacanciesSection";
 import InfoSection from "./InfoSection";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "contexts/auth/auth.context";
-// import Loader from "components/Loader/Loader";
+import UserContext from "contexts/user/user.provider";
 
 function LandingPage({ deviceType }) {
   const {
     authState: { isAuthenticated },
   } = React.useContext(AuthContext);
+  const { userType } = React.useContext(UserContext);
   const history = useHistory();
 
   const handleRedirect = () => {
@@ -22,26 +23,52 @@ function LandingPage({ deviceType }) {
     }
   };
   return (
-    <div>
-      <Banner />
-      <Vacancies />
-      <InfoSection />
-      <div className="infobox margin-bottom-0">
-        <div className="container-x">
-          <div className="sixteen columns">
-            Start Building Your Own Job Board Now{" "}
-            <Link to={{ pathname: "" }} onClick={handleRedirect}>
-              {" "}
-              Get Started{" "}
-            </Link>
+    <React.Fragment>
+      {userType === "Employer" && (
+        <div>
+          <Banner bannerHeading={"Start Posting Jobs Now"} />
+          <Vacancies />
+          <InfoSection />
+          <div className="infobox margin-bottom-0">
+            <div className="container-x">
+              <div className="sixteen columns">
+                Start Posting Jobs Now{" "}
+                <Link to={{ pathname: "" }} onClick={handleRedirect}>
+                  {" "}
+                  Get Posting{" "}
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      {/* <Loader /> */}
+          {/* <Loader /> */}
 
-      {/* <CounterSection /> */}
-      <CategoriesSection />
-    </div>
+          {/* <CounterSection /> */}
+          <CategoriesSection />
+        </div>
+      )}
+      {userType === "Seeker" && (
+        <div>
+          <Banner bannerHeading={"Start Building Your Own Jobs Board Now"} />
+          <Vacancies />
+          <InfoSection />
+          <div className="infobox margin-bottom-0">
+            <div className="container-x">
+              <div className="sixteen columns">
+                Start Building Your Own Job Board Now{" "}
+                <Link to={{ pathname: "" }} onClick={handleRedirect}>
+                  {" "}
+                  Get Started{" "}
+                </Link>
+              </div>
+            </div>
+          </div>
+          {/* <Loader /> */}
+
+          {/* <CounterSection /> */}
+          <CategoriesSection />
+        </div>
+      )}
+    </React.Fragment>
   );
 }
 export default LandingPage;

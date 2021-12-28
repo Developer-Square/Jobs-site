@@ -38,7 +38,7 @@ function BaseRouter({ deviceType }) {
             <Modal />
           </AppLayout>
         ) : (
-          <SplitScreen />
+          <SplitScreen deviceType={deviceType} />
         )}
       </Switch>
     </Wrapper>
