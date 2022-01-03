@@ -354,7 +354,7 @@ ul.float-right li a:hover,
 
 /* Drop-Down */
 .menu ul ul {
-	background-color: #21277f;
+	background-color: #1849B1;
 	z-index: 999;
 	margin: 0 0 0 0;
 	padding: 14px 0;
@@ -365,7 +365,7 @@ ul.float-right li a:hover,
 	font-family: "FontAwesome";
 	content:"";
 	font-size: 23px;
-	color: #21277f;
+	color: #1849B1;
 	display: block;
 	position: absolute;
 	top: -11px;
@@ -395,7 +395,7 @@ ul.float-right li a:hover,
 	padding: 5px 18px !important;
 	border: 0;
 	margin-bottom: 0;
-	background-color: #21277f;
+	background-color: #1849B1;
 }
 
 
@@ -459,7 +459,7 @@ ul li ul a.sf-with-ul:after {
 
 	a.menu-trigger {
 		color: #fff;
-		background-color: #21277f;
+		background-color: #1849B1;
 		display: block;
 		float: left;
 		z-index: 100;
@@ -532,7 +532,7 @@ ul li ul a.sf-with-ul:after {
 	}
 }
 
-#jPanelMenu-menu { background-color: #21277f; }
+#jPanelMenu-menu { background-color: #1849B1; }
 
 #jPanelMenu-menu #current:after,
 #jPanelMenu-menu .sf-sub-indicator { display: none; }
@@ -556,7 +556,7 @@ ul li ul a.sf-with-ul:after {
 #jPanelMenu-menu li a:hover { background-color: #505050; color: #fff; }
 
 #jPanelMenu-menu li li a {
-	background-color: #21277f;
+	background-color: #1849B1;
 	padding-left: 30px !important;
 }
 
@@ -953,7 +953,7 @@ a.button.dark,
 button:hover,
 a.button:hover,.submit-page .button.linkedin-btn:hover,
 input[type="button"]:hover,
-input[type="submit"]:hover { background-color: #21277f; }
+input[type="submit"]:hover { background-color: #1849B1; }
 
 .upload-btn:hover,
 #titlebar.photo-bg a.button.white:hover,
@@ -1491,7 +1491,7 @@ button.mfp-arrow {
 	right: 0;
 	cursor: pointer !important;
 	z-index: 9999;
-	background: #21277f;
+	background: #1849B1;
 	color: #fff;
 	-webkit-transition: all 0.2s ease-in-out;
 	-moz-transition: all 0.2s ease-in-out;
@@ -1928,7 +1928,7 @@ img.mfp-img {
 /* Counters
 ------------------------------------- */
 #counters {
-	background-color: #21277f;
+	background-color: #1849B1;
 	padding: 68px 0 65px 0;
 }
 
@@ -1944,7 +1944,7 @@ img.mfp-img {
 	position: absolute;
 	height: 100%;
 	display: inline-block;
-	background-color: #21277f;
+	background-color: #1849B1;
 	content: "";
 	right: 10px;
 }
@@ -3823,12 +3823,12 @@ body .job-spotlight .fa-calendar:before { content: "\e770"; }
 }
 
 .testimonial-carousel .slick-slide.slick-active .testimonial-box {
-	background: #21277f;
+	background: #1849B1;
 	color: #fff;
 }
 
 .testimonial-carousel .slick-slide.slick-active .testimonial:before {
-	color: #21277f;
+	color: #1849B1;
 }
 
 .testimonial:before {
@@ -6843,7 +6843,7 @@ a.close-form {
 	color: #888;
 }
 
-a.close-form:hover { color: #fff; background-color: #21277f !important; }
+a.close-form:hover { color: #fff; background-color: #1849B1 !important; }
 a.close-form i { margin: 0; }
 
 
@@ -7142,7 +7142,7 @@ ul.footer-links { margin: 0 0 15px 0; }
 	transition: all 0.2s ease-in-out;
 }
 
-.list-search button:hover { background-color: #21277f; }
+.list-search button:hover { background-color: #1849B1; }
 
 .list-search input {
 	font-size: 16px;
@@ -9331,7 +9331,7 @@ a.button ,
 	}
 	
 	#style-switcher h2 {
-		background: #21277f;
+		background: #1849B1;
 		color: #fff;
 		font-weight: bold;
 		font-size: 14px;
@@ -9342,7 +9342,7 @@ a.button ,
 	
 	#style-switcher h2 a {
 		background: url("../images/switcher.png") no-repeat 9px center transparent;
-		background-color: #21277f;
+		background-color: #1849B1;
 		display: block;
 		height: 43px;
 		position: absolute;

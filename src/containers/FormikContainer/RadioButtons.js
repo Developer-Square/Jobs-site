@@ -34,13 +34,13 @@ function RadioButtons(props) {
                       marginTop: "3px",
                     }}
                     type="radio"
-                    id={option.key}
+                    id={option.label}
                     {...field}
                     {...rest}
                     value={Boolean(option.value)}
                     checked={field.value === `${option.value}`}
                   />
-                  {option.key}
+                  {option.label}
                 </label>
               </Fragment>
             );

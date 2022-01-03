@@ -163,7 +163,7 @@ export const Accent = styled.div`
   color: #60a9f0;
 `;
 export const Skills = styled.div`
-  background: #21277f;
+  background: #1849b1;
   color: #f5f5f5;
   padding: 40px;
   min-height: 330px;
@@ -171,7 +171,7 @@ export const Skills = styled.div`
 `;
 
 export const Education = styled.div`
-  background: #21277f;
+  background: #1849b1;
   color: #f5f5f5;
   padding: 40px;
   min-height: 330px;
@@ -200,7 +200,7 @@ export const Contact = styled.div`
 `;
 
 export const Experience = styled.div`
-  background: #21277f;
+  background: #1849b1;
   color: #f5f5f5;
   padding: 40px;
   min-height: 330px;

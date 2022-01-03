@@ -139,11 +139,11 @@ export const SkewedPage = styled.div`
 
       .caption .btn-left:hover {
         background: #fff;
-        color: #21277f;
+        color: #1849b1;
       }
       .caption .btn-right:hover {
         background: #fff;
-        color: #21277f;
+        color: #1849b1;
       }
 
       .skw-page__half--left & {
@@ -283,11 +283,11 @@ export const Wrapper = styled.div`
 
   .caption .btn-left:hover {
     background: #fff;
-    color: #21277f;
+    color: #1849b1;
   }
   .caption .btn-right:hover {
     background: #fff;
-    color: #21277f;
+    color: #1849b1;
   }
 
   .left::before {

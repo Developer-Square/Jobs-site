@@ -105,9 +105,9 @@ const MobileDrawer = () => {
               ...classStyle,
               backgroundColor: isHomePage
                 ? isSticky
-                  ? `#21277f`
+                  ? `#1849B1`
                   : `#fff`
-                : `#21277f`,
+                : `#1849B1`,
             }}
           />
           <span
@@ -115,9 +115,9 @@ const MobileDrawer = () => {
               ...classStyle,
               backgroundColor: isHomePage
                 ? isSticky
-                  ? `#21277f`
+                  ? `#1849B1`
                   : `#fff`
-                : `#21277f`,
+                : `#1849B1`,
             }}
           />
           <span
@@ -125,9 +125,9 @@ const MobileDrawer = () => {
               ...classStyle,
               backgroundColor: isHomePage
                 ? isSticky
-                  ? `#21277f`
+                  ? `#1849B1`
                   : `#fff`
-                : `#21277f`,
+                : `#1849B1`,
             }}
           />
         </HamburgerIcon>

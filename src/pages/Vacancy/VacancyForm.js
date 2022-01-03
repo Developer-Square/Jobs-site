@@ -285,7 +285,7 @@ const VacancyForm = ({
                   class="fa fa-lightbulb-o"
                   style={{
                     fontSize: "48px",
-                    color: "#21277f",
+                    color: "#1849B1",
                   }}
                 />
                 <div className="my-4" />

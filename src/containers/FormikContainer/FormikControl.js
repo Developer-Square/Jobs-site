@@ -10,6 +10,7 @@ import UploadInput from "./UploadInput";
 import PhoneNumberInput from "./PhoneInput";
 import SingleCheckbox from "./SingleCheckbox";
 import CreatableSelectInput from "./CreatableSelect";
+import MUIRadioButton from "./RadioButton.MUI";
 import Code from "./Code";
 
 function FormikControl(props) {
@@ -25,6 +26,8 @@ function FormikControl(props) {
       return <CreatableSelectInput {...rest} />;
     case "radio":
       return <RadioButtons {...rest} />;
+    case "mui-radio":
+      return <MUIRadioButton {...rest} />;
     case "checkbox":
       return <CheckboxGroup {...rest} />;
     case "single-checkbox":
