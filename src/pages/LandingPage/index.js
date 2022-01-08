@@ -7,6 +7,8 @@ import InfoSection from "./InfoSection";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
+import seekerImg from "image/9.jpg";
+import employerImg from "image/3.jpg";
 
 function LandingPage({ deviceType }) {
   const {
@@ -26,7 +28,11 @@ function LandingPage({ deviceType }) {
     <React.Fragment>
       {userType === "Employer" && (
         <div>
-          <Banner bannerHeading={"Start Posting Jobs Now"} />
+          <Banner
+            bannerHeading={"Start Posting Jobs Now"}
+            bannerSubHeading={"loreum ipsum"}
+            bannerImage={employerImg}
+          />
           <Vacancies />
           <InfoSection />
           <div className="infobox margin-bottom-0">
@@ -48,7 +54,11 @@ function LandingPage({ deviceType }) {
       )}
       {userType === "Seeker" && (
         <div>
-          <Banner bannerHeading={"Start Building Your Own Jobs Board Now"} />
+          <Banner
+            bannerHeading={"Great Careers Start Here"}
+            bannerSubHeading={"We've over 15,000 internship offers for you!"}
+            bannerImage={seekerImg}
+          />
           <Vacancies />
           <InfoSection />
           <div className="infobox margin-bottom-0">

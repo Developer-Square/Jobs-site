@@ -29,7 +29,7 @@ const Banner = (props) => {
       id="banner"
       className="with-transparent-header parallax background"
       style={{
-        backgroundImage: `url(${bgImg})`,
+        backgroundImage: `url(${props?.bannerImage || bgImg})`,
         maxHeight: "100vh",
         height: "100vh",
       }}
@@ -41,11 +41,25 @@ const Banner = (props) => {
         <div className="sixteen columns">
           <div className="search-container">
             <Fade bottom>
-              <h2>{props?.bannerHeading || "Great Careers Start Here"}</h2>
+              <div className="announce text-lg">
+                {props?.bannerSubHeading || (
+                  <>
+                    We’ve over <strong>15,000</strong> internship offers for
+                    you!
+                  </>
+                )}
+              </div>
+              <h2 style={{ borderLeft: "3px solid white" }} className={"px-3"}>
+                {props?.bannerHeading || "Great Careers Start Here"}
+              </h2>
               <div>
                 <GetStarted
                   floatDirection="left"
-                  buttonStyles={{ width: "auto", height: "36px" }}
+                  buttonStyles={{
+                    width: "auto",
+                    height: "36px",
+                    borderRadius: "50px",
+                  }}
                 />
                 <br />
               </div>
@@ -62,9 +76,6 @@ const Banner = (props) => {
                 <a href="/">titles</a>
               </div> */}
               {/* Announce */}
-              <div className="announce">
-                We’ve over <strong>15,000</strong> internship offers for you!
-              </div>
             </Fade>
           </div>
         </div>

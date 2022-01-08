@@ -138,7 +138,7 @@ header.transparent .sf-with-ul::after { color: rgba(255,255,255,0.8); }
 
 }
 
-#banner.with-transparent-header:before { background-color: rgba(33, 39, 127, 0.7); }
+#banner.with-transparent-header:before { background-color: rgba(18, 64, 170, 0.7); }
 header.transparent.alternative #navigation { border-top: none; }
 
 

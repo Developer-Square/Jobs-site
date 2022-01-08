@@ -10,6 +10,7 @@ module.exports = {
         "context-menu": "context-menu",
       },
       colors: {
+        "base-theme-blue": "#1849B1",
         "primary-50": "var(--color-primary-50)",
         "primary-100": "var(--color-primary-100)",
         "primary-200": "var(--color-primary-200)",

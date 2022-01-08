@@ -2,8 +2,7 @@ import React from "react";
 import { Form, Formik } from "formik";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import Button from "components/Button/Button";
-// import { vacancySchema } from "./validation.schema";
-
+import lodash from "lodash";
 import {
   Card,
   CardHeader,
@@ -13,8 +12,9 @@ import {
   StepLabel,
   Typography,
   StepContent,
+  LinearProgress,
 } from "@material-ui/core";
-
+import { withStyles } from "@material-ui/core/styles";
 const personaTitles = [
   { label: "Student", value: "Student" },
   { label: "Sir", value: "Sir" },
@@ -30,12 +30,12 @@ const personaTitles = [
 const steps = [
   {
     label: "Desired Role",
-    description: `Desired Role.`,
+    description: `Help Us understand more about you.`,
     fields: [
       {
         type: "number",
         name: "idNumber",
-        description: "Current Status as a Job Seeker",
+        description: "Enter ID or passport Number as a legal identifier",
         control: "input",
       },
       {
@@ -83,10 +83,27 @@ const steps = [
   },
 ];
 
+const BorderLinearProgress = withStyles((theme) => ({
+  root: {
+    height: 10,
+    borderRadius: 5,
+  },
+  colorPrimary: {
+    backgroundColor:
+      theme.palette.grey[theme.palette.type === "light" ? 200 : 700],
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: "#1849B1",
+  },
+}))(LinearProgress);
+
 const SeekerProfileTest = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const [activeQuestion, setActiveQuestion] = React.useState();
+  const [activeQuestion, setActiveQuestion] = React.useState(
+    steps[activeStep]?.fields[0],
+  );
 
   React.useEffect(() => {
     setActiveQuestion(steps[activeStep].fields[0]);
@@ -138,31 +155,33 @@ const SeekerProfileTest = () => {
       return true;
     } else return false;
   };
-  console.log(activeStep);
+  const getQuestionNumber = () => {
+    const val = steps[activeStep]?.fields?.find(
+      ({ name }) => name === activeQuestion?.name,
+    );
+    const num = (lodash.findIndex(steps[activeStep].fields, val) || 0) + 1;
+    const len = steps[activeStep]?.fields?.length || 0;
+    const percentage = ((parseInt(num) * 100) / parseInt(len)).toFixed(0) || 0;
+    console.log("precet", percentage);
+    return [num, len, percentage];
+  };
 
   const mapFields = (formik, currentStep) =>
     currentStep.fields.map((stepField, i) => {
       return isActiveQuestion(stepField) ? (
         <>
-          <p className={"m-2 tracking-loose text-l mt-4"}>
+          <p className={"m-2 tracking-loose font-bold mt-4 text-gray-700"}>
             {stepField?.description}
           </p>
+
           <FormikControl key={i} {...stepField} />
           <Box sx={{ mb: 2, mr: 0 }}>
-            <div>
-              <Button
-                disabled={i === 0}
-                onClick={
-                  i === 0
-                    ? null
-                    : () => {
-                        setActiveQuestion(currentStep.fields[i - 1]);
-                      }
-                }
-                sx={{ mt: 1, mr: 1 }}
-              >
-                Back
-              </Button>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row-reverse",
+              }}
+            >
               <Button
                 variant="contained"
                 onClick={
@@ -172,11 +191,24 @@ const SeekerProfileTest = () => {
                         setActiveQuestion(currentStep.fields[i + 1]);
                       }
                 }
-                sx={{ mt: 1, mr: 1 }}
+                sx={{ borderRadius: 5, height: 30 }}
               >
                 Next
               </Button>
-            </div>
+              <Button
+                disabled={i === 0}
+                onClick={
+                  i === 0
+                    ? null
+                    : () => {
+                        setActiveQuestion(currentStep.fields[i - 1]);
+                      }
+                }
+                sx={{ borderRadius: 5, height: 30 }}
+              >
+                Back
+              </Button>
+            </Box>
           </Box>
         </>
       ) : (
@@ -198,7 +230,11 @@ const SeekerProfileTest = () => {
               />
             }
             action={
-              <p className="text-xl text-cyan-500 mx-auto my-auto">Edit</p>
+              <div
+                className={`block align-middle mt-3 mr-3 font-medium text-base-theme-blue leading-snug`}
+              >
+                Edit
+              </div>
             }
             title={stepField?.description}
           />
@@ -253,26 +289,6 @@ const SeekerProfileTest = () => {
                                   {f?.description}
                                 </Typography>
                               ))}
-                              {/* <Box sx={{ mb: 2 }}>
-                                <div>
-                                  <Button
-                                    variant="contained"
-                                    onClick={handleNext}
-                                    sx={{ mt: 1, mr: 1 }}
-                                  >
-                                    {index === steps.length - 1
-                                      ? "Finish"
-                                      : "Continue"}
-                                  </Button>
-                                  <Button
-                                    disabled={index === 0}
-                                    onClick={handleBack}
-                                    sx={{ mt: 1, mr: 1 }}
-                                  >
-                                    Back
-                                  </Button>
-                                </div>
-                              </Box> */}
                             </StepContent>
                           </Step>
                         ))}
@@ -291,11 +307,31 @@ const SeekerProfileTest = () => {
                             <>
                               <p
                                 className={
-                                  "m-2 tracking-loose font-bold text-5xl"
+                                  "m-2 tracking-loose font-semibold text-5xl"
                                 }
                               >
                                 {steps[activeStep].label}
                               </p>
+                              <p
+                                className={
+                                  "m-2 tracking-loose font-bold text-gray-700"
+                                }
+                              >
+                                {steps[activeStep].description}
+                              </p>
+
+                              <Box sx={{ width: "50%", mr: 1, mt: 5, mb: 5 }}>
+                                <p className={"font-bold text-gray-900"}>
+                                  {getQuestionNumber()[0]} of{" "}
+                                  {getQuestionNumber()[1]} questions in this
+                                  step
+                                </p>
+
+                                <BorderLinearProgress
+                                  variant="determinate"
+                                  value={getQuestionNumber()[2]}
+                                />
+                              </Box>
                               {mapFields(formik, steps[activeStep])}
                             </>
                           )}

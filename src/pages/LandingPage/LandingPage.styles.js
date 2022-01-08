@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import rightImage from "image/JOBS.jpg";
-import leftImage from "image/GIGS.jpg";
+import rightImage from "image/5.jpg";
+import leftImage from "image/3.jpg";
 
 const skewDeg = "18deg";
 const magicVH = "32.4vh";
@@ -46,10 +46,9 @@ export const SkewedPage = styled.div`
       }
 
       &--right {
-        left: 50%;
         transform: translate3d(${magicVH}, -100%, 0);
         @media screen and (min-width: 1200px) {
-          transform: translate3d(${magicVH}, -100%, 0);
+          left: 50%;
         }
       }
 
@@ -68,10 +67,14 @@ export const SkewedPage = styled.div`
       background: #000;
 
       .skw-page__half--left & {
-        left: -40%;
+        @media screen and (min-width: 1200px) {
+          left: -40%;
+        }
       }
       .skw-page__half--right & {
-        right: -40%;
+        @media screen and (min-width: 1200px) {
+          right: -40%;
+        }
       }
     }
 
