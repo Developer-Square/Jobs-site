@@ -12,6 +12,7 @@ const SeekerForm = ({
   loading,
   statusOptions,
   genderOptions,
+  loadOptions,
   setCourseList,
 }) => {
   return (
@@ -102,6 +103,7 @@ const SeekerForm = ({
             </div>
             <div className="form" style={{ width: "100%" }}>
               <CoursesSearch
+                formik={formik}
                 setCourseList={setCourseList}
                 initialSearch={{
                   searchBy: "search",

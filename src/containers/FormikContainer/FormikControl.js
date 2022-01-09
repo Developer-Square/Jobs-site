@@ -12,6 +12,7 @@ import SingleCheckbox from "./SingleCheckbox";
 import CreatableSelectInput from "./CreatableSelect";
 import MUIRadioButton from "./RadioButton.MUI";
 import Code from "./Code";
+import AsyncSelect from "./AsyncSelect";
 
 function FormikControl(props) {
   const { control, ...rest } = props;
@@ -22,6 +23,8 @@ function FormikControl(props) {
       return <Textarea {...rest} />;
     case "select":
       return <SelectInput {...rest} />;
+    case "async-select":
+      return <AsyncSelect {...rest} />;
     case "create-select":
       return <CreatableSelectInput {...rest} />;
     case "radio":
