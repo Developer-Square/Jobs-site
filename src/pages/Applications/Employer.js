@@ -4,7 +4,7 @@ import { GET_APPLICATIONS } from "graphql/queries";
 import { UPDATE_APPLICATION } from "graphql/mutations";
 import { TypedMutation } from "core/mutations";
 import { TypedQuery } from "core/queries";
-import { VACANCIES_QUERY } from "graphql/queries";
+import { EMPLOYER_VACANCIES_QUERY } from "graphql/queries";
 import { getClosingDate, getDBIdFromGraphqlId } from "utils";
 import { vacancyType } from "utils/vacancy";
 
@@ -40,12 +40,15 @@ const EmployerApplications = ({ deviceType }) => {
   const history = useHistory();
   const [vacancies, setVacancies] = React.useState();
 
-  const [loadFilterValues, { loading }] = useLazyQuery(VACANCIES_QUERY, {
-    fetchPolicy: "network",
-    onCompleted: (data) => {
-      setVacancies(data.vacancies.edges.map((edge) => edge.node));
+  const [loadFilterValues, { loading }] = useLazyQuery(
+    EMPLOYER_VACANCIES_QUERY,
+    {
+      fetchPolicy: "network",
+      onCompleted: (data) => {
+        setVacancies(data.employerVacancies.edges.map((edge) => edge.node));
+      },
     },
-  });
+  );
 
   const callLoadFilters = (
     beforeValue = "",

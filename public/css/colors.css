@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------- */
-/* Yellow : #21277f
+/* Yellow : #1849B1
 ---------------------------------------------------------------------- */
 #current,
 .icon-box.rounded i:after,
@@ -39,7 +39,7 @@ a.button.dark:hover,
 .chosen-container-multi .chosen-choices li.search-choice,
 .list-search button,
 .checkboxes input[type=checkbox]:checked + label:before 
-{ background-color: #21277f; }
+{ background-color: #1849B1; }
 
 
 
@@ -63,10 +63,10 @@ table.manage-table td.action a:hover,
 .widget-text h5 a:hover,
 .app-content .info span ,
 .app-content .info ul li a:hover
-{ color: #21277f; }
+{ color: #1849B1; }
 
 .icon-box.rounded i {
-	border-color: #21277f;
+	border-color: #1849B1;
 }
 
 
@@ -76,23 +76,23 @@ table.manage-table td.action a:hover,
 .dashboard-nav ul li.active-submenu a,
 .dashboard-nav ul li:hover a,
 .dashboard-nav ul li.active a,
-.dashboard-list-box .comment-by-listing a:hover { color: #21277f; }
+.dashboard-list-box .comment-by-listing a:hover { color: #1849B1; }
 
 .dashboard-nav ul li.active-submenu,
 .dashboard-nav ul li.active,
 .dashboard-nav ul li:hover {
-	border-color: #21277f;
+	border-color: #1849B1;
 	background-color: rgba(18 23 127 / 0.05);
 }
 
 .dashboard-nav ul li.active-submenu a:after,
 .dashboard-nav ul li.active a:after,
 .dashboard-nav ul li:hover a:after {
-    color: #21277f;
+    color: #1849B1;
 	background-color: rgb(18 23 127 / 15%);
 }
 .message-bubble.me .message-text {
-	color: #21277f;
+	color: #1849B1;
 	background: rgba(38, 174, 97, 0.1);
 }
 
@@ -104,7 +104,7 @@ table.manage-table td.action a:hover,
 .dashboard-list-box .button.gray:hover,
 .change-photo-btn:hover,
 .dashboard-list-box  a.rate-review:hover {
-    background-color: #21277f;
+    background-color: #1849B1;
 }
 
 
@@ -134,13 +134,13 @@ table.manage-table tr:hover td,
 
 
 .resumes-list li:hover,
-.job-list li:hover { border-color: #21277f !important; }
+.job-list li:hover { border-color: #1849B1 !important; }
 
 .resumes-list li.highlighted a:after,
 .resumes-list li a:after,
 .job-list li.highlighted a:after,
-.job-list li a:after { background-color: #21277f }
+.job-list li a:after { background-color: #1849B1 }
 
 .resumes-list.alternative li:before,
-.category-small-box:hover { background-color: #21277f; }
-.category-small-box i { color: #21277f; }
+.category-small-box:hover { background-color: #1849B1; }
+.category-small-box i { color: #1849B1; }

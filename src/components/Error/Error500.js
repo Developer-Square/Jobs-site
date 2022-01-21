@@ -60,7 +60,7 @@ export default function Error500(err) {
           display: "flex",
           padding: "20px",
           justifyContent: "center",
-          color: "#21277f",
+          color: "#1849B1",
         }}
       >
         <Center>
@@ -71,7 +71,7 @@ export default function Error500(err) {
             style={{
               fontSize: 15,
               color: "#fff",
-              backgroundColor: "#21277f",
+              backgroundColor: "#1849B1",
               float: "right",
               margin: "10px",
             }}

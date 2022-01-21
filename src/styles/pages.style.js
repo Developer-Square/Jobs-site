@@ -23,7 +23,7 @@ export const ActionButton = styled.span`
     background-color: #ffa5a5;
   }
   &.view-btn {
-    background-color: #21277f;
+    background-color: #1849b1;
   }
 
   svg {
@@ -142,7 +142,7 @@ const CategoryBox = styled.div`
     rgba(255, 255, 255, 0) 25%,
     rgba(255, 255, 255, 0.2)
   );
-  background-color: #21277f;
+  background-color: #1849b1;
   margin: 10px;
   position: relative;
   box-sizing: border-box;
@@ -741,7 +741,7 @@ const H4 = styled.h4`
   font-size: 18px;
   line-height: 27px;
   margin-bottom: 5px;
-  color: #21277f;
+  color: #1849b1;
   margin-top: 2px;
   > span {
     float: right;

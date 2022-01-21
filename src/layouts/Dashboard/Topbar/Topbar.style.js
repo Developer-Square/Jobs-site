@@ -120,7 +120,7 @@ export const UserDropdowItem = styled.div`
 export const NavLink = styled(RRNavLink)`
   font-size: 16px;
   font-weight: 700;
-  color: #21277f;
+  color: #1849b1;
   line-height: 1.2em;
   text-decoration: none;
   display: flex;
@@ -143,7 +143,7 @@ export const NavLink = styled(RRNavLink)`
 export const LogoutBtn = styled.button`
   font-size: 16px;
   font-weight: 700;
-  color: #21277f;
+  color: #1849b1;
   background-color: transparent;
   line-height: 1.2em;
   text-decoration: none;
@@ -161,7 +161,7 @@ export const LogoutBtn = styled.button`
 `;
 
 export const CloseButton = styled.button`
-  color: #21277f;
+  color: #1849b1;
   background-color: transparent;
   outline: 0;
   border: none;

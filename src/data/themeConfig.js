@@ -9,7 +9,7 @@ const themeConfig = {
     "--color-primary-600": "#8A8680",
     "--color-primary-700": "#686663",
     "--color-primary-800": "#484745",
-    "--color-primary-900": "#21277f",
+    "--color-primary-900": "#1849B1",
   },
   Dark: {
     "--color-primary-50": "#212121",
