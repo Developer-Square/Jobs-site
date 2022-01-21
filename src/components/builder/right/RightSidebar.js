@@ -1,5 +1,6 @@
 import { Element } from "react-scroll";
 import React, { Fragment, memo } from "react";
+import SettingsContext from "contexts/settings/settings.provider";
 import * as styles from "./RightSidebar.module.css";
 import Actions from "./sections/Actions";
 import Colors from "./sections/Colors";
@@ -49,14 +50,20 @@ const SidebarSection = ({ id, event }) => {
   );
 };
 
-const RightSidebar = () => (
-  <div className="flex">
-    <div id="RightSidebar" className={styles.container}>
-      {sections.map(SidebarSection)}
-    </div>
+const RightSidebar = () => {
+  const { isSideBarOpen } = React.useContext(SettingsContext);
 
-    <RightNavbar />
-  </div>
-);
+  return (
+    <div className="flex">
+      {isSideBarOpen && (
+        <div id="RightSidebar" className={styles.container}>
+          {sections.map(SidebarSection)}
+        </div>
+      )}
+
+      <RightNavbar />
+    </div>
+  );
+};
 
 export default memo(RightSidebar);

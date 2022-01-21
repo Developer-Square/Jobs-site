@@ -366,7 +366,7 @@ export const HamburgerIcon = styled.div`
   position: relative;
   > span {
     display: block;
-    background-color: ${themeGet("colors.darkColor", "#21277f")};
+    background-color: ${themeGet("colors.darkColor", "#1849B1")};
     border-radius: 6px;
     height: 2px;
     margin-bottom: 6px;

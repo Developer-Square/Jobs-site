@@ -35,7 +35,12 @@ export const GET_FILTERED_COURSES = gql`
       first: $first
       last: $last
     ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
       edges {
+        cursor
         node {
           name
           id

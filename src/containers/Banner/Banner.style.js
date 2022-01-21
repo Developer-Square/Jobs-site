@@ -7,8 +7,8 @@ const BannerWrapper = styled.div`
   display: flex;
   align-items: center;
   overflow: hidden;
-  background-size: 100%;
-  background-position: bottom center;
+  // background-size: 100%;
+  // background-position: bottom center;
   background-repeat: no-repeat;
   background-color: #f7f7f7;
   background-size: cover;

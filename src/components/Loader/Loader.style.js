@@ -43,7 +43,7 @@ export const Circle = styled.div`
   height: 20px;
   position: absolute;
   border-radius: 50%;
-  background-color: #21277f;
+  background-color: #1849b1;
   left: 15%;
   transform-origin: 50%;
   animation: ${circle} 0.5s alternate infinite ease;
@@ -84,7 +84,7 @@ export const Span = styled.span`
   top: 75px;
   font-size: 20px;
   letter-spacing: 12px;
-  color: #21277f;
+  color: #1849b1;
   left: 15%;
 `;
 
@@ -131,7 +131,7 @@ const skBounce = keyframes`
 `;
 
 export const Bounce1 = styled.div`
-  background-color: #21277f;
+  background-color: #1849b1;
 
   width: 100%;
   height: 100%;
@@ -145,7 +145,7 @@ export const Bounce1 = styled.div`
   animation: ${skBounce} 2s infinite ease-in-out;
 `;
 export const Bounce2 = styled.div`
-  background-color: #21277f;
+  background-color: #1849b1;
 
   width: 100%;
   height: 100%;

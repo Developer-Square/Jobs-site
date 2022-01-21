@@ -43,7 +43,7 @@ export default withRouter(function Sidebar(props) {
           <li
             style={
               activeLink === menuItem.title
-                ? { borderColor: "#21277f", backgroundColor: "#12177f0d" }
+                ? { borderColor: "#1849B1", backgroundColor: "#12177f0d" }
                 : {}
             }
             key={menuItem.title}
@@ -67,7 +67,7 @@ export default withRouter(function Sidebar(props) {
         <li
           style={
             activeLink === menuItem.title
-              ? { borderColor: "#21277f", backgroundColor: "#12177f0d" }
+              ? { borderColor: "#1849B1", backgroundColor: "#12177f0d" }
               : {}
           }
           key={menuItem.title}
