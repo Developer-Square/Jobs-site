@@ -34,7 +34,7 @@ const CategoriesSection = () => {
                 <div className="sixteen columns">
                   <Bounce bottom cascade>
                     {" "}
-                    <h3 className="margin-bottom-20 margin-top-10">
+                    <h3 className="text-4xl font-bold uppercase transition duration-500 margin-bottom-20 margin-top-10">
                       Popular Categories
                     </h3>
                     {/* Popular Categories */}

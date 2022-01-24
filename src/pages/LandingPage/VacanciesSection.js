@@ -116,7 +116,9 @@ const Vacancies = () => {
       {/* Recent Jobs */}
       <div className="eleven columns">
         <div className="padding-right">
-          <h3 className="margin-bottom-25">Recent Jobs</h3>
+          <h3 className="text-5xl font-bold uppercase transition duration-500 margin-bottom-25">
+            Recent Jobs
+          </h3>
           <div className="listings-container">
             <Fade bottom cascade>
               {vacancyState?.sortedJobs?.length ? (
@@ -212,7 +214,9 @@ const Vacancies = () => {
       </div>
       {/* Job Spotlight */}
       <div className="five columns">
-        <h3 className="margin-bottom-5">Job Spotlight</h3>
+        <h3 className="text-5xl font-bold uppercase transition duration-500 margin-bottom-5">
+          Spotlight
+        </h3>
         {vacancyState?.sortedJobs?.length ? (
           <>
             <div className="showbiz-navigation">
