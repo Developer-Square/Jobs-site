@@ -17,7 +17,7 @@ export const LogoImage = styled.img`
   display: block;
   backface-visibility: hidden;
   max-width: 150px;
-  max-height: 50px;
+  max-height: 36px;
 `;
 export const LeftMenu = ({ isSticky, logo }) => {
   const location = useLocation();

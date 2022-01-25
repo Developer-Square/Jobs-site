@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 import styled from "styled-components";
-import { formatCurrency } from "utils";
+import { nFormatter } from "utils";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,15 +17,15 @@ const useStyles = makeStyles((theme) => ({
 const marks = [
   {
     value: 0,
-    label: formatCurrency(0),
+    label: nFormatter(0),
   },
   {
     value: 10000,
-    label: formatCurrency(10000),
+    label: nFormatter(10000),
   },
   {
     value: 30000,
-    label: formatCurrency(300000),
+    label: nFormatter(300000),
   },
 ];
 

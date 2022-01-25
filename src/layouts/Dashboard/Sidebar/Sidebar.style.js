@@ -85,7 +85,7 @@ export const LogoImage = styled.img`
   display: block;
   backface-visibility: hidden;
   max-width: 150px;
-  max-height: 50px;
+  max-height: 36px;
   z-index: 1000;
   top: 12px;
   position: absolute;

@@ -36,7 +36,7 @@ export const LogoImage = styled.img`
   backface-visibility: hidden;
   height: 100px;
   max-width: 150px;
-  max-height: 50px;
+  max-height: 36px;
 `;
 
 // const SearchModal = ({ state, pathname, handleSearch }) => {

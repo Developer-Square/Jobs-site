@@ -30,8 +30,8 @@ const Banner = (props) => {
       className="with-transparent-header parallax background"
       style={{
         backgroundImage: `url(${props?.bannerImage || bgImg})`,
-        maxHeight: "100vh",
-        height: "100vh",
+        maxHeight: "80vh",
+        height: "80vh",
       }}
       data-img-width={2000}
       data-img-height={1330}
