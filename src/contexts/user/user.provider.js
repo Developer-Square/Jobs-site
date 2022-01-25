@@ -1,7 +1,5 @@
-// import { pick } from "lodash";
 import { toast } from "react-toastify";
 import React, { createContext, memo, useEffect, useState } from "react";
-// import useAuthState from "hooks/useAuthState";
 import { useHistory } from "react-router-dom";
 import { useLazyQuery, useMutation } from "react-apollo";
 import { GET_USER_DETAILS } from "graphql/queries";
