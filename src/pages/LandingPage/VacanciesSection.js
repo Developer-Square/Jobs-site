@@ -21,9 +21,9 @@ import Loader from "components/Loader/Loader";
 import VacancyLoader from "components/Loader/VacancyLoader";
 import Button from "components/Button/Button";
 import NoResultFound from "components/NoResult/NoResult";
-
 import MobileStepper from "@material-ui/core/MobileStepper";
 import { getClosingDate } from "utils";
+import UserContext from "contexts/user/user.provider";
 
 const Vacancies = () => {
   const history = useHistory();
@@ -32,6 +32,7 @@ const Vacancies = () => {
   const [jobTypes, setJobTypes] = React.useState([]);
   const { payRates, vacancyState, vacancyDispatch } =
     React.useContext(VacancyContext);
+  const { user } = React.useContext(UserContext);
   const [activeStep, setActiveStep] = React.useState(0);
 
   const cleanVacanciesData = (edges) => {
@@ -59,6 +60,15 @@ const Vacancies = () => {
     onCompleted: () => onCompleted(loading, data),
     fetchPolicy: "cache-and-network",
   });
+  const checkVerified = () => {
+    if (user) {
+      if (user.verified) {
+        setVerified((curr) => (curr = true));
+      } else {
+        setVerified((curr) => (curr = false));
+      }
+    }
+  };
 
   React.useEffect(() => {
     checkVerified();
@@ -73,19 +83,6 @@ const Vacancies = () => {
     }
     // eslint-disable-next-line
   }, []);
-
-  const checkVerified = () => {
-    let profileDetails = localStorage.getItem("thedb_auth_profile");
-    profileDetails = JSON.parse(profileDetails);
-
-    if (profileDetails) {
-      if (profileDetails.verified) {
-        setVerified((curr) => (curr = true));
-      } else {
-        setVerified((curr) => (curr = false));
-      }
-    }
-  };
 
   const handleClick = (route) => {
     history.push(`vacancies/${getDBIdFromGraphqlId(route, "Vacancy")}`);
@@ -116,25 +113,31 @@ const Vacancies = () => {
       {/* Recent Jobs */}
       <div className="eleven columns">
         <div className="padding-right">
-          <h3 className="margin-bottom-25">Recent Jobs</h3>
+          <h3 className="text-5xl font-bold uppercase transition duration-500 margin-bottom-25">
+            Recent Jobs
+          </h3>
           <div className="listings-container">
-            <Fade bottom cascade>
-              {vacancyState?.sortedJobs?.length ? (
-                vacancyState?.sortedJobs.map((job, index) => {
-                  if (loading && !vacancyState.sortedJobs) {
-                    return (
-                      <>
-                        <VacancyLoader />
-                        <VacancyLoader />
-                        <VacancyLoader />
-                      </>
-                    );
-                  }
-                  if (loading && !vacancyState.sortedJobs) {
-                    return <NoResultFound />;
-                  }
+            {vacancyState?.sortedJobs?.length ? (
+              vacancyState?.sortedJobs.map((job, index) => {
+                if (loading && !vacancyState.sortedJobs) {
                   return (
-                    // Listing
+                    <Fade bottom cascade>
+                      <VacancyLoader />
+                      <VacancyLoader />
+                      <VacancyLoader />
+                    </Fade>
+                  );
+                }
+                if (loading && !vacancyState.sortedJobs) {
+                  return (
+                    <Fade>
+                      <NoResultFound />
+                    </Fade>
+                  );
+                }
+                return (
+                  // Listing
+                  <Fade key={index} collapse bottom>
                     <JobContainer
                       className={`listing ${checkJobType(
                         findJobTypeDescription(job, jobTypes),
@@ -184,16 +187,14 @@ const Vacancies = () => {
                         </ul>
                       </div>
                     </JobContainer>
-                  );
-                })
-              ) : (
-                <>
-                  <VacancyLoader />
-                  <VacancyLoader />
-                  <VacancyLoader />
-                </>
-              )}
-            </Fade>
+                  </Fade>
+                );
+              })
+            ) : (
+              <Fade bottom>
+                <NoResultFound />
+              </Fade>
+            )}
           </div>
 
           <Button
@@ -212,7 +213,9 @@ const Vacancies = () => {
       </div>
       {/* Job Spotlight */}
       <div className="five columns">
-        <h3 className="margin-bottom-5">Job Spotlight</h3>
+        <h3 className="text-5xl font-bold uppercase transition duration-500 margin-bottom-5">
+          Spotlight
+        </h3>
         {vacancyState?.sortedJobs?.length ? (
           <>
             <div className="showbiz-navigation">
