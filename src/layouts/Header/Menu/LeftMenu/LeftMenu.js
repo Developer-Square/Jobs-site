@@ -50,6 +50,7 @@ export const LeftMenu = ({ isSticky, logo }) => {
       </Logo>
       <li>
         <Link
+          classame={"text-base hover:text-white"}
           style={{
             color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
           }}

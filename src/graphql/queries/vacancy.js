@@ -162,6 +162,7 @@ export const GET_JOB_APPLICATIONS = gql`
     }
   }
 `;
+
 export const VACANCIES_QUERY = gql`
   ${vacancyFragment}
   query VacanciesList(
@@ -247,6 +248,7 @@ export const EMPLOYER_VACANCIES_QUERY = gql`
     }
   }
 `;
+
 export const GET_MY_VACANCIES = gql`
   ${vacancyFragment}
   query MyVacancies {

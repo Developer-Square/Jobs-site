@@ -11,6 +11,8 @@ const Bookmark = ({
   isAuthenticated,
   handleLoginNotification,
   toast,
+  alert,
+  customClass = null,
 }) => {
   return (
     <TypedBookmarkMutation
@@ -45,11 +47,15 @@ const Bookmark = ({
         }
         return (
           <Button
-            className="popup-with-zoom-anim button mt-8 ml-auto"
+            className={
+              customClass
+                ? customClass
+                : "popup-with-zoom-anim button mt-8 ml-auto"
+            }
             onClick={isAuthenticated ? bookmarkJob : handleLoginNotification}
             title={
               <div style={{ color: "#FFFFFF" }}>
-                <i className="fa fa-star" /> Save This Job
+                <i className="fa fa-star" /> Save Job
               </div>
             }
           />

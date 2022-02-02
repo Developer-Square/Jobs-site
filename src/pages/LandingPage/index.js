@@ -9,6 +9,7 @@ import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
 import seekerImg from "image/9.jpg";
 import employerImg from "image/3.jpg";
+import Users from "./UsersSection";
 
 function LandingPage({ deviceType }) {
   const {
@@ -33,7 +34,7 @@ function LandingPage({ deviceType }) {
             bannerSubHeading={"loreum ipsum"}
             bannerImage={employerImg}
           />
-          <Vacancies />
+          <Users />
           <InfoSection />
           <div className="infobox margin-bottom-0">
             <div className="container-x">

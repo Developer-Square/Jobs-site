@@ -113,9 +113,10 @@ const Vacancies = () => {
       {/* Recent Jobs */}
       <div className="eleven columns">
         <div className="padding-right">
-          <h3 className="text-5xl font-bold uppercase transition duration-500 margin-bottom-25">
+          <h3 className="font-bold text-2xl transition duration-500 my-2">
             Recent Jobs
           </h3>
+          <hr className="my-1 rounded border-b-2 border-blue-800 w-8" />
           <div className="listings-container">
             {vacancyState?.sortedJobs?.length ? (
               vacancyState?.sortedJobs.map((job, index) => {
@@ -213,9 +214,10 @@ const Vacancies = () => {
       </div>
       {/* Job Spotlight */}
       <div className="five columns">
-        <h3 className="text-5xl font-bold uppercase transition duration-500 margin-bottom-5">
+        <h3 className="font-bold text-2xl transition duration-500 margin-bottom-5">
           Spotlight
         </h3>
+        <hr className="my-1 rounded border-b-2 border-blue-800 w-8" />
         {vacancyState?.sortedJobs?.length ? (
           <>
             <div className="showbiz-navigation">

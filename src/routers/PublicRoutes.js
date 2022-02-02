@@ -7,6 +7,7 @@ import PublicRoute from "./PublicRoute";
 import ProfileView from "pages/Profile/ProfileView";
 import BillingTest from "pages/BillingTest/BillingTest";
 import SeekerProfileTest from "pages/SeekerProfileTest/SeekerProfileTest";
+import ApplicationForm from "pages/Vacancy/ApplicationForm";
 
 const LandingPage = lazy(() => import("pages/LandingPage"));
 const NotFound = lazy(() => import("pages/NotFound"));
@@ -128,6 +129,12 @@ const PublicRoutes = ({ deviceType }) => (
         exact
         path={`${ROUTE.VACANCIES}/:vacancyID`}
         component={VacancyView}
+      />
+      <PublicRoute
+        restricted={false}
+        exact
+        path={`${ROUTE.VACANCIES}/:vacancyID/application`}
+        component={ApplicationForm}
       />
       <PublicRoute
         restricted={false}

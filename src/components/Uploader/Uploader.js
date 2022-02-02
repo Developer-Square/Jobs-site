@@ -138,6 +138,10 @@ function Uploader(props) {
     </li>
   ));
 
+  const removeFile = (file) => {
+    acceptedFiles.splice(file, 1);
+  };
+
   const thumbs = files.map((file) => (
     <Thumb
       style={
@@ -187,54 +191,123 @@ function Uploader(props) {
           </label>
           <span className="fake-input">No file selected</span>
         </div>
-      ) : (
-        // <div className="edit-profile-photo" {...getRootProps()}>
-        //   {thumbs}
-        //   <div className="change-photo-btn">
-        //     <div className="photoUpload">
-        //       <span>
-        //         <i className="fa fa-upload" /> Upload Photo
-        //       </span>
-        //       <input {...getInputProps()} />
-        //     </div>
-        //   </div>
-        // </div>
+      ) : rest?.version === "stepper" ? (
         <>
-          {minimal ? (
-            <Button
-              size="small"
-              {...getRootProps()}
-              style={{
-                background: "transparent",
-                color: "#ec7623",
-                textTransform: "none",
-                margin: 0,
-              }}
-              title={
-                <PicInput>
-                  <input {...getInputProps()} />
-                  <FontAwesomeIcon
-                    icon={faFileImage}
-                    className="icon"
-                    style={{
-                      height: "100%",
-                      width: "50%",
-                    }}
-                  />
-                </PicInput>
-              }
-            />
-          ) : (
-            <Container {...getRootProps()}>
+          <div className="flex flex-col lg:grid lg:gap-4 2xl:gap-6 lg:grid-cols-4 2xl:row-span-2 ">
+            <div className="lg:order-4 lg:row-span-2 2xl:row-span-1 lg:col-span-1">
+              <ul id="gallery" className="flex flex-1 flex-wrap -m-1">
+                {files.length === 0 && (
+                  <li
+                    id="empty"
+                    className="h-full w-full text-center flex flex-col items-center justify-center items-center"
+                  >
+                    <img
+                      className="mx-auto w-32"
+                      src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png"
+                      alt="no data"
+                    />
+                    <span className="text-small text-gray-500">
+                      No file selected
+                    </span>
+                  </li>
+                )}
+
+                {files.length > 0 &&
+                  files.map((file, i) => (
+                    <li
+                      className="block p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/8 h-24"
+                      key={i}
+                    >
+                      <article
+                        tabIndex={0}
+                        className="group hasImage w-full h-full rounded-md focus:outline-none focus:shadow-outline bg-gray-100 cursor-pointer relative text-transparent hover:text-white shadow-sm"
+                      >
+                        <img
+                          alt="upload preview"
+                          src={typeof file === "string" ? file : file.preview}
+                          className="img-preview w-full h-full sticky object-cover rounded-md bg-fixed"
+                        />
+                        <section className="flex flex-col rounded-md text-xs break-words w-full h-full z-20 absolute top-0 py-2 px-3">
+                          <div className="flex">
+                            <button
+                              onClick={() => removeFile(file)}
+                              className="delete ml-auto focus:outline-none hover:bg-gray-200 p-1 rounded-md"
+                            >
+                              <svg
+                                className="pointer-events-none fill-current w-4 h-4 ml-auto"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width={24}
+                                height={24}
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  className="pointer-events-none"
+                                  d="M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711z"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </section>
+                        <h1 className="flex-1">
+                          {file?.name} {file.size / 1000} KB
+                        </h1>
+                      </article>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+            <div className="lg:order-4 lg:row-span-2 2xl:row-span-1 lg:col-span-1">
+              <Container {...getRootProps()}>
+                <input {...getInputProps()} />
+                <UploadIcon />
+                <Text>
+                  <TextHighlighted>Drag/Upload</TextHighlighted> your{" "}
+                  {`${doc ? (multiple ? "document(s)" : "document") : "image"}`}{" "}
+                  here.
+                </Text>
+              </Container>
+            </div>
+          </div>
+          <p className="text-sm text-gray-300">
+            <span>File types: png, jpg, jpeg, types of images</span>
+          </p>
+        </>
+      ) : minimal ? (
+        <Button
+          size="small"
+          {...getRootProps()}
+          style={{
+            background: "transparent",
+            color: "#ec7623",
+            textTransform: "none",
+            margin: 0,
+          }}
+          title={
+            <PicInput>
               <input {...getInputProps()} />
-              <UploadIcon />
-              <Text>
-                <TextHighlighted>Drag/Upload</TextHighlighted> your{" "}
-                {`${doc ? (multiple ? "document(s)" : "document") : "image"}`}{" "}
-                here.
-              </Text>
-            </Container>
-          )}
+              <FontAwesomeIcon
+                icon={faFileImage}
+                className="icon"
+                style={{
+                  height: "100%",
+                  width: "50%",
+                }}
+              />
+            </PicInput>
+          }
+        />
+      ) : (
+        <Container {...getRootProps()}>
+          <input {...getInputProps()} />
+          <UploadIcon />
+          <Text>
+            <TextHighlighted>Drag/Upload</TextHighlighted> your{" "}
+            {`${doc ? (multiple ? "document(s)" : "document") : "image"}`} here.
+          </Text>
+        </Container>
+      )}
+      {!rest?.version === "stepper" && (
+        <>
           {preview ? (
             multiple ? (
               <ul>{acceptedFileItems}</ul>

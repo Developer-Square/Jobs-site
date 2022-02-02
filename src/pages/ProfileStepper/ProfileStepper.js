@@ -16,74 +16,6 @@ import {
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
-const personaTitles = [
-  { label: "Student", value: "Student" },
-  { label: "Sir", value: "Sir" },
-  { label: "Ma'am", value: "Ma'am" },
-  { label: "Madam", value: "Madam" },
-  { label: "Mr", value: "Mr" },
-  { label: "Mrs", value: "Mrs" },
-  { label: "Ms", value: "Ms" },
-  { label: "Miss", value: "Miss" },
-  { label: "Engineer", value: "Engineer" },
-];
-
-const steps = [
-  {
-    label: "Desired Role",
-    description: `Help Us understand more about you.`,
-    fields: [
-      {
-        type: "number",
-        name: "idNumber",
-        description: "Enter ID or passport Number as a legal identifier",
-        control: "input",
-      },
-      {
-        name: "title",
-        description: "Current Status as a Job Seeker",
-        control: "mui-radio",
-        options: personaTitles,
-      },
-    ],
-  },
-  {
-    label: "Ideal Culture",
-    description: "Ideal Culture",
-    fields: [
-      {
-        name: "phone",
-        description: "Current Status as a Job Seeker",
-        control: "input",
-      },
-    ],
-  },
-  {
-    label: "Job Experience",
-    description: `how to resolve approval issues.`,
-    fields: [
-      {
-        type: "text",
-        name: "location",
-        description: "Current Status as a Job Seeker",
-        control: "input",
-      },
-    ],
-  },
-  {
-    label: "Upload Resume",
-    description: `find out how to tell .`,
-    fields: [
-      {
-        type: "text",
-        name: "title",
-        description: "Current Status as a Job Seeker",
-        control: "input",
-      },
-    ],
-  },
-];
-
 const BorderLinearProgress = withStyles((theme) => ({
   root: {
     height: 10,
@@ -99,7 +31,8 @@ const BorderLinearProgress = withStyles((theme) => ({
   },
 }))(LinearProgress);
 
-const SeekerProfileTest = () => {
+const ProfileStepper = (props) => {
+  const { steps } = props;
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [activeQuestion, setActiveQuestion] = React.useState(
@@ -108,6 +41,7 @@ const SeekerProfileTest = () => {
 
   React.useEffect(() => {
     setActiveQuestion(steps[activeStep].fields[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeStep]);
 
   const isStepOptional = (step) => {
@@ -264,7 +198,7 @@ const SeekerProfileTest = () => {
                           <Step key={step.label}>
                             <StepLabel
                               optional={
-                                index === 2 ? (
+                                index === steps.length - 1 ? (
                                   <Typography variant="caption">
                                     Last step
                                   </Typography>
@@ -350,4 +284,4 @@ const SeekerProfileTest = () => {
   );
 };
 
-export default SeekerProfileTest;
+export default ProfileStepper;
