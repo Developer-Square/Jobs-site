@@ -140,9 +140,9 @@ const Vacancies = () => {
                   // Listing
                   <Fade key={index} collapse bottom>
                     <JobContainer
-                      className={`listing ${checkJobType(
+                      className={`rounded-2xl listing ${checkJobType(
                         findJobTypeDescription(job, jobTypes),
-                      )}`}
+                      )} my-2`}
                       key={index}
                       onClick={() => handleClick(job.id)}
                     >

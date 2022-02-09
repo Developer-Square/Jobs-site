@@ -132,6 +132,7 @@ const UserProvider = ({ children }) => {
         user,
         getUser,
         logout,
+        fetchUser,
         refetchUser,
         setRefetchUser,
         updateAddress,

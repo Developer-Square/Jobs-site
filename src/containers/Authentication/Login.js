@@ -87,12 +87,6 @@ const Login = () => {
             onSubmit={onSubmit}
           >
             {(formik) => {
-              // console.log(formik);
-              // if (!data?.tokenAuth?.success) {
-              //   formik.setErrors(
-              //     normalizeErrors(maybe(() => data.tokenAuth.errors, []))
-              //   );
-              // }
               return (
                 <Form className="login">
                   <FormikControl

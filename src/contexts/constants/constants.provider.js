@@ -16,6 +16,24 @@ import {
 } from "graphql/queries";
 
 const defaultState = {
+  industries: [],
+  experience: [],
+  qualification: [],
+  jobType: [],
+  payRate: [],
+  applicationStatus: [],
+  seekerStatus: [],
+  seekerGender: [],
+  institutionCount: [],
+  getIndustries: () => [],
+  getExperience: () => [],
+  getPayRate: () => [],
+  getQualification: () => [],
+  getJobType: () => [],
+  getApplicationStatus: () => [],
+  getSeekerStatus: () => [],
+  getSeekerGender: () => [],
+  getInstitutionCount: () => [],
   vacancyType: () => {},
 };
 
@@ -47,10 +65,9 @@ const ConstantsProvider = ({ children }) => {
     fetchPolicy: "cahce-and-network",
   });
   const [fetchQualificationData] = useLazyQuery(JobMinQualification, {
-    onCompleted: (data) =>
-      setQualification(cleanSelectData(data?.__type?.enumValues)),
+    onCompleted: (data) => setQualification(cleanSelectData(data?.__type?.enumValues)),
     fetchPolicy: "cahce-and-network",
-  });
+  })
   const [fetchYearsOfExpData] = useLazyQuery(JobYearsOfExp, {
     onCompleted: (data) =>
       setExperience(cleanSelectData(data?.__type?.enumValues)),
@@ -113,6 +130,61 @@ const ConstantsProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getIndustries = () => {
+    if (industries) {
+      return industries;
+    }
+    return fetchIndustriesData();
+  };
+  const getExperience = () => {
+    if (experience) {
+      return experience;
+    }
+    return fetchYearsOfExpData();
+  };
+  const getPayRate = () => {
+    if (payRate) {
+      return payRate;
+    }
+    return fetchJobTypeData();
+  };
+  const getQualification = () => {
+    if (qualification) {
+      return qualification;
+    }
+    return fetchQualificationData();
+  };
+  const getJobType = () => {
+    if (jobType) {
+      return jobType;
+    }
+    return fetchJobTypeData();
+  };
+  const getApplicationStatus = () => {
+    if (applicationStatus) {
+      return applicationStatus;
+    }
+    return fetchApplicationStatusData();
+  };
+  const getSeekerStatus = () => {
+    if (seekerStatus) {
+      return seekerStatus;
+    }
+    return fetchSeekerStatusData();
+  };
+  const getSeekerGender = () => {
+    if (seekerGender) {
+      return seekerGender;
+    }
+    return fetchSeekerGendersData();
+  };
+  const getInstitutionCount = () => {
+    if (institutionCount) {
+      return institutionCount;
+    }
+    return fetchInstitutionStudentCountData();
+  };
+
   return (
     <ConstantsContext.Provider
       value={{
@@ -126,6 +198,15 @@ const ConstantsProvider = ({ children }) => {
         seekerGender,
         institutionCount,
         vacancyType,
+        getIndustries,
+        getExperience,
+        getPayRate,
+        getQualification,
+        getJobType,
+        getApplicationStatus,
+        getSeekerStatus,
+        getSeekerGender,
+        getInstitutionCount,
       }}
     >
       {children}

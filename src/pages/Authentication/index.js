@@ -9,13 +9,13 @@ import PasswordResetEmail from "containers/Authentication/PasswordResetEmail";
 import Register from "containers/Authentication/Register";
 import { AuthContext } from "contexts/auth/auth.context";
 import bgImg from "image/12.jpg";
-import UserContext from "contexts/user/user.provider";
+// import UserContext from "contexts/user/user.provider";
 
 const Authentication = () => {
   const { authState, authDispatch } = useContext(AuthContext);
   const [activeStep, setActiveStep] = React.useState(0);
   const [switchTab, setSwitchTab] = React.useState("");
-  const { userType } = React.useContext(UserContext);
+  // const { userType } = React.useContext(UserContext);
 
   // Provides the step header for each step i.e. the first one is SignUp.
   const steps = ["Sign Up", "Verify", "About You"];
@@ -48,10 +48,6 @@ const Authentication = () => {
           <div className="flex flex-col items-center justify-center">
             <div className="font-medium self-center text-xl sm:text-3xl text-gray-800  items-center justify-center">
               Welcome {authState.currentForm === "signIn" && `Back`}
-            </div>
-            <div className="mt-4 self-center text-xl sm:text-sm text-gray-800  items-center justify-center">
-              {userType === "Employer" && "It's time to find your Dream Team"}
-              {userType === "Seeker" && "It's time to find your Dream Job"}
             </div>
           </div>
           <div className="items-center justify-center">

@@ -32,12 +32,19 @@ const BorderLinearProgress = withStyles((theme) => ({
 }))(LinearProgress);
 
 const ProfileStepper = (props) => {
-  const { steps } = props;
+  const {
+    steps,
+    // onProfileInitialSubmit,
+    // onProfileSubmit,
+    // setRefetchUser,
+    // isEdit,
+  } = props;
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [activeQuestion, setActiveQuestion] = React.useState(
     steps[activeStep]?.fields[0],
   );
+  const [activeSection, setActiveSection] = React.useState(steps[activeStep]);
 
   React.useEffect(() => {
     setActiveQuestion(steps[activeStep].fields[0]);
@@ -67,6 +74,7 @@ const ProfileStepper = (props) => {
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
+    setActiveSection(steps[activeStep])
   };
 
   const handleBack = () => {
@@ -74,9 +82,7 @@ const ProfileStepper = (props) => {
   };
   console.log(typeof handleBack, typeof handleNext, typeof handleSkip);
   const initialValues = {};
-  const onSubmit = ({ values }) => {
-    console.log(values);
-  };
+
   const isAnswered = (formik, item) => {
     const val = formik.values[`${item.name}`];
     if (val === undefined || val === null) {
@@ -90,6 +96,11 @@ const ProfileStepper = (props) => {
       return true;
     } else return false;
   };
+  const isActiveSection = (item) => {
+    if (item?.label === activeSection?.label) {
+      return true;
+    } else return false;
+  };
   const getQuestionNumber = () => {
     const val = steps[activeStep]?.fields?.find(
       ({ name }) => name === activeQuestion?.name,
@@ -99,6 +110,19 @@ const ProfileStepper = (props) => {
     const percentage = ((parseInt(num) * 100) / parseInt(len)).toFixed(0) || 0;
     console.log("precet", percentage);
     return [num, len, percentage];
+  };
+  const onFormSubmit = (props) => {
+    console.log("00000000000",props)
+    handleNext()
+    // if (isEdit) {
+    //   onProfileSubmit(props);
+    //   setRefetchUser((prev) => !prev);
+    //   // setActiveSection()
+    // } else {
+    //   onProfileInitialSubmit(props);
+    //   setRefetchUser((prev) => !prev);
+    //   // setActiveSection()
+    // }
   };
 
   const mapFields = (formik, currentStep) =>
@@ -181,7 +205,7 @@ const ProfileStepper = (props) => {
     <Formik
       initialValues={initialValues}
       //   validationSchema={vacancySchema}
-      onSubmit={onSubmit}
+      onSubmit={onFormSubmit}
       enableReinitialize
     >
       {(formik) => {
@@ -236,7 +260,7 @@ const ProfileStepper = (props) => {
                 <Form>
                   <section className="container px-6 py-4 mx-auto">
                     {steps?.map((step, k) => {
-                      return (
+                      return isActiveSection(steps[activeStep]) ? (
                         <div key={k}>
                           {activeStep === k && (
                             <>
@@ -268,9 +292,54 @@ const ProfileStepper = (props) => {
                                 />
                               </Box>
                               {mapFields(formik, steps[activeStep])}
+                              <Box sx={{ mb: 2, mr: 0 }}>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    flexDirection: "row-reverse",
+                                  }}
+                                    onClick={() =>{
+                                      setActiveSection(steps[k+1]);
+                                      setActiveStep(k+1)
+                                    }}
+                                >
+                                  <Button
+                                    variant="contained"
+                                    type="submit"
+                                    sx={{ borderRadius: 5, height: 30 }}
+                                  >
+                                    Go To Next
+                                  </Button>
+                                </Box>
+                              </Box>
                             </>
                           )}
                         </div>
+                      ) : (
+                        <Card
+                          onClick={() => {
+                            setActiveSection(steps[k]);
+                            setActiveStep(k)
+                          }}
+                          sx={{ maxWidth: 345 }}
+                          style={{ margin: 10 }}
+                        >
+                          <CardHeader
+                            avatar={
+                              <i
+                                className={`${"fa fa-check-circle text-green-600 text-lg"}`}
+                              />
+                            }
+                            action={
+                              <div
+                                className={`block align-middle mt-3 mr-3 font-medium text-base-theme-blue leading-snug`}
+                              >
+                                Edit
+                              </div>
+                            }
+                            title={steps[k]?.label }
+                          />
+                        </Card>
                       );
                     })}
                   </section>

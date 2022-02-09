@@ -38,11 +38,11 @@ export const SignUp = ({
       {(formik) => {
         return (
           <Form className="register" noValidate>
-            <Spacer>
+            {/* <Spacer>
               <Link to={"/auth"} onClick={() => setSwitchTab("")}>
-                {`<`} Select Different Option{" "}
+                {`<`} Select Different Option ddd
               </Link>
-            </Spacer>
+            </Spacer> */}
 
             {/* Email validation not working */}
             <FormikControl

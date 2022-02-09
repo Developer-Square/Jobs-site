@@ -1,5 +1,7 @@
 import React from "react";
-import { useRouteMatch } from "react-router-dom";
+import * as Yup from "yup";
+import { Formik } from "formik";
+import { useRouteMatch, useHistory} from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useQuery } from "react-apollo";
 import { toast } from "react-toastify";
@@ -7,25 +9,30 @@ import { VACANCY_DETAIL_QUERY } from "graphql/queries";
 import Loader from "components/Loader/Loader";
 import NoResultFound from "components/NoResult/NoResult";
 import DraftRenderer from "components/DraftRenderer/DraftRenderer";
-import { getGraphqlIdFromDBId } from "utils";
 import Bookmark from "./Bookmark";
-import { getClosingDate } from "utils";
+import {
+  checkJobType,
+  getClosingDate,
+  findJobTypeDescription,
+  getDBIdFromGraphqlId,
+  getGraphqlIdFromDBId
+} from "utils";
 import Button from "components/Button/Button";
-import * as Yup from "yup";
-import { Formik } from "formik";
+import got from "image/got.jpg";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import { TypedMutation } from "core/mutations";
-
 import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
 import { UPDATE_APPLICATION } from "graphql/mutations";
 import { showNotification } from "helpers";
+import ConstantsContext from "contexts/constants/constants.provider";
 
 const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 
 const ApplicationForm = () => {
   const match = useRouteMatch();
   const alert = useAlert();
+  const history = useHistory();
   const { data, loading } = useQuery(VACANCY_DETAIL_QUERY, {
     variables: {
       id: match.params.vacancyID
@@ -35,12 +42,15 @@ const ApplicationForm = () => {
   });
 
   const {
-    authState: { isAuthenticated },
+    profile, authState: { isAuthenticated },
   } = React.useContext(AuthContext);
   const { user } = React.useContext(UserContext);
+  const { jobType:jT } = React.useContext(ConstantsContext);
   const handleLoginNotification = () => {
     toast.error("You must login to save this job");
   };
+  console.log("some some goooooo", jT)
+  const jobType = jT?.find(({ value }) => value === data?.vacancy?.jobType);
 
   if (loading) {
     return <Loader />;
@@ -57,28 +67,61 @@ const ApplicationForm = () => {
 
   return (
     <div className="bg-white pt-10">
-      <div className="mb-4" />
-      <div className="pt-6 mt-10">
-        {/* Image gallery */}
-        {/* <div className="mt-6 max-w-2xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-3 lg:gap-x-8">
-          <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-            <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
-              <img
-                src="https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg"
-                alt="Model wearing plain black basic tee."
-                className="w-full h-full object-center object-cover"
-              />
+      <div
+          id="titlebar"
+          className="with-transparent-header parallax background"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.80), rgb(33 39 127 / 0.80)), url(${got})`,
+          }}
+        >
+          <div className="container-x">
+            <div className="ten columns">
+              <p className={"text-base text-white"}>{data?.vacancy?.industry?.name}</p>
+              <h2 className={"text-base text-white"}>
+                {data?.vacancy?.title}{" "}
+                <span
+                  className={`${checkJobType(
+                    findJobTypeDescription(data?.vacancy, data?.__type?.enumValues),
+                  )}`}
+                >
+                  {jobType?.description}
+                </span>
+              </h2>
+              <p className={"text-base text-white"}>
+                <i className="fa fa-eye text-gray-200" /> {data?.vacancy?.timesViewed}{" "}
+                <span className={"text-base text-white"}>
+                  {data?.vacancy?.timesViewed === 1 ? "View" : "Views"}
+                </span>
+              </p>
             </div>
-            <div className="aspect-w-3 aspect-h-2 rounded-lg overflow-hidden">
-              <img
-                src="https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg"
-                alt="Model wearing plain gray basic tee."
-                className="w-full h-full object-center object-cover"
-              />
+            <div className="six columns">
+              {profile?.isSeeker && (
+                <Bookmark
+                  handleLoginNotification={handleLoginNotification}
+                  isAuthenticated={isAuthenticated}
+                  data={data}
+                  toast={toast}
+                  alert={alert}
+                />
+              )}
+              {profile?.isEmployer && profile.email === data.creator.email ? (
+                <Button
+                  className="popup-with-zoom-anim button mt-8 ml-auto"
+                  title={<div style={{ color: "#FFFFFF" }}> Edit Job</div>}
+                  onClick={() => {
+                    history.push(
+                      `/dashboard/vacancies/edit-job/${getDBIdFromGraphqlId(
+                        data?.id,
+                        data?.__typename,
+                      )}`,
+                    );
+                  }}
+                />
+              ) : null}
             </div>
           </div>
-        </div> */}
-        {/* Product info */}
+        </div>
+      <div className="pt-6 mt-10">
         <div className="max-w-2xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:pt-16 lg:pb-24 lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
             {/* This example requires Tailwind CSS v2.0+ */}
@@ -122,24 +165,6 @@ const ApplicationForm = () => {
                       />
                     </svg>
                     {data?.vacancy?.location}
-                  </div>
-                  <div className="mt-2 flex items-center text-sm text-gray-500">
-                    {/* Heroicon name: solid/currency-dollar */}
-                    <svg
-                      className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    $120k – $140k
                   </div>
                   <div className="mt-2 flex items-center text-sm text-gray-500">
                     {/* Heroicon name: solid/calendar */}
