@@ -18,15 +18,12 @@ import { getGraphqlIdFromDBId } from "utils";
 import { getStatus } from "utils/vacancy";
 import UserImage from "image/user.jpg";
 import ModalContext from "contexts/modal/modal.provider";
-import "animate.css";
-import { bounceOutUp } from "react-animations";
 
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 export const TypedApplicationsQuery = TypedQuery(GET_JOB_APPLICATIONS);
 
 const ApplicationCard = (props) => {
   const { emitter, events } = React.useContext(ModalContext);
-  const [animate, setAnimate] = React.useState(false);
   const markFavourite = () => {
     props?.patchApplication({
       variables: {
@@ -39,14 +36,6 @@ const ApplicationCard = (props) => {
     });
   };
   const handleEdit = (d) => emitter.emit(events.UPDATE_APPLICATION_MODAL, d);
-  const showAnimation = () => {
-    console.log(bounceOutUp);
-    if (animate) {
-      return bounceOutUp;
-    } else {
-      return "";
-    }
-  };
 
   return (
     <div>
@@ -94,16 +83,6 @@ const ApplicationCard = (props) => {
                           {props?.application?.applicant?.seeker?.title}
                         </span>
                       </div>
-                      <div
-                        className={showAnimation}
-                        onClick={() => {
-                          setAnimate(true);
-                          setTimeout(setAnimate(false), 2000);
-                        }}
-                      >
-                        dsasdasd as
-                      </div>
-
                       <div className="flex-auto text-gray-500 my-1">
                         {props?.application?.applicant?.seeker?.status ===
                           "OPEN" && (
