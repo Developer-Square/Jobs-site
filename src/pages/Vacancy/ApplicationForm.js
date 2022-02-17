@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
-import { Link, useRouteMatch, useHistory } from "react-router-dom";
+import { useRouteMatch, useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useQuery } from "react-apollo";
 import { toast } from "react-toastify";
