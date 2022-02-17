@@ -4,10 +4,13 @@ import { Link, useHistory } from "react-router-dom";
 import VacancyFilter from "./VacancyFilter";
 import VacancyLoader from "components/Loader/VacancyLoader";
 import Button from "components/Button/Button";
+import Slide from "containers/Slide/Slide";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
 import { AuthContext } from "contexts/auth/auth.context";
 import { VACANCIES_QUERY } from "graphql/queries";
 import PaginationItem from "./PaginationItem";
+import { useDeviceType } from "helpers/useDeviceType";
+import { useSidebar } from "contexts/sidebar/use-sidebar";
 import LogoImage from "image/job-list-logo-04.png";
 import {
   getDBIdFromGraphqlId,
@@ -20,6 +23,7 @@ import {
 } from "utils";
 
 const Vacancy = () => {
+  const history = useHistory();
   const [rate, setRate] = React.useState([]);
   const [getJobs, setGetJobs] = React.useState("");
   const [sortOrder, setSortOrder] = React.useState([]);
@@ -35,7 +39,9 @@ const Vacancy = () => {
   const {
     authState: { isAuthenticated, profile },
   } = useContext(AuthContext);
-  const history = useHistory();
+  const { isOpen, toggleSidebar } = useSidebar();
+  const userAgent = navigator.userAgent;
+  const deviceType = useDeviceType(userAgent);
   const redirectToVacancyPage = (job) => {
     history.push(`vacancies/${getDBIdFromGraphqlId(job.id, "Vacancy")}`);
   };
@@ -280,23 +286,51 @@ const Vacancy = () => {
             />
           </div>
         </div>
-        <VacancyFilter
-          rate={rate}
-          setRate={setRate}
-          ratePerHour={ratePerHour}
-          loading={loading}
-          getJobs={getJobs}
-          setGetJobs={setGetJobs}
-          loadFilterValues={loadFilterValues}
-          sortByValue={sortByValue}
-          setSortByValue={setSortByValue}
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-          callLoadFilters={callLoadFilters}
-          filterObj={filterObj}
-          setFilterObj={setFilterObj}
-          clean={clean}
-        />
+
+        {deviceType.desktop ? (
+          <VacancyFilter
+            rate={rate}
+            setRate={setRate}
+            ratePerHour={ratePerHour}
+            loading={loading}
+            getJobs={getJobs}
+            setGetJobs={setGetJobs}
+            loadFilterValues={loadFilterValues}
+            sortByValue={sortByValue}
+            setSortByValue={setSortByValue}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            callLoadFilters={callLoadFilters}
+            filterObj={filterObj}
+            setFilterObj={setFilterObj}
+            clean={clean}
+          />
+        ) : (
+          <>
+            <Button onClick={() => toggleSidebar()} title={`Filter`} />
+            <Slide deviceType={deviceType}>
+              {isOpen && (
+                <VacancyFilter
+                  rate={rate}
+                  setRate={setRate}
+                  ratePerHour={ratePerHour}
+                  loading={loading}
+                  getJobs={getJobs}
+                  setGetJobs={setGetJobs}
+                  loadFilterValues={loadFilterValues}
+                  sortByValue={sortByValue}
+                  setSortByValue={setSortByValue}
+                  sortOrder={sortOrder}
+                  setSortOrder={setSortOrder}
+                  callLoadFilters={callLoadFilters}
+                  filterObj={filterObj}
+                  setFilterObj={setFilterObj}
+                  clean={clean}
+                />
+              )}
+            </Slide>
+          </>
+        )}
       </div>
     </div>
   );

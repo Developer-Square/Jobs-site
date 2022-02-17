@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
-import { Formik } from "formik";
-import { useRouteMatch, useHistory} from "react-router-dom";
+import { Form, Formik } from "formik";
+import { Link, useRouteMatch, useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useQuery } from "react-apollo";
 import { toast } from "react-toastify";
@@ -15,7 +15,7 @@ import {
   getClosingDate,
   findJobTypeDescription,
   getDBIdFromGraphqlId,
-  getGraphqlIdFromDBId
+  getGraphqlIdFromDBId,
 } from "utils";
 import Button from "components/Button/Button";
 import got from "image/got.jpg";
@@ -23,11 +23,12 @@ import FormikControl from "containers/FormikContainer/FormikControl";
 import { TypedMutation } from "core/mutations";
 import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
-import { UPDATE_APPLICATION } from "graphql/mutations";
+import { CREATE_APPLICATION } from "graphql/mutations";
 import { showNotification } from "helpers";
 import ConstantsContext from "contexts/constants/constants.provider";
-
-const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
+import { normalizeErrors } from "helpers";
+import { maybe } from "core/utils";
+export const TypedCreateApplicationMutation = TypedMutation(CREATE_APPLICATION);
 
 const ApplicationForm = () => {
   const match = useRouteMatch();
@@ -42,14 +43,15 @@ const ApplicationForm = () => {
   });
 
   const {
-    profile, authState: { isAuthenticated },
+    profile,
+    authState: { isAuthenticated },
   } = React.useContext(AuthContext);
   const { user } = React.useContext(UserContext);
-  const { jobType:jT } = React.useContext(ConstantsContext);
+  const { jobType: jT } = React.useContext(ConstantsContext);
   const handleLoginNotification = () => {
     toast.error("You must login to save this job");
   };
-  console.log("some some goooooo", jT)
+  console.log("some some goooooo", jT);
   const jobType = jT?.find(({ value }) => value === data?.vacancy?.jobType);
 
   if (loading) {
@@ -68,59 +70,65 @@ const ApplicationForm = () => {
   return (
     <div className="bg-white pt-10">
       <div
-          id="titlebar"
-          className="with-transparent-header parallax background"
-          style={{
-            backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.80), rgb(33 39 127 / 0.80)), url(${got})`,
-          }}
-        >
-          <div className="container-x">
-            <div className="ten columns">
-              <p className={"text-base text-white"}>{data?.vacancy?.industry?.name}</p>
-              <h2 className={"text-base text-white"}>
-                {data?.vacancy?.title}{" "}
-                <span
-                  className={`${checkJobType(
-                    findJobTypeDescription(data?.vacancy, data?.__type?.enumValues),
-                  )}`}
-                >
-                  {jobType?.description}
-                </span>
-              </h2>
-              <p className={"text-base text-white"}>
-                <i className="fa fa-eye text-gray-200" /> {data?.vacancy?.timesViewed}{" "}
-                <span className={"text-base text-white"}>
-                  {data?.vacancy?.timesViewed === 1 ? "View" : "Views"}
-                </span>
-              </p>
-            </div>
-            <div className="six columns">
-              {profile?.isSeeker && (
-                <Bookmark
-                  handleLoginNotification={handleLoginNotification}
-                  isAuthenticated={isAuthenticated}
-                  data={data}
-                  toast={toast}
-                  alert={alert}
-                />
-              )}
-              {profile?.isEmployer && profile.email === data.creator.email ? (
-                <Button
-                  className="popup-with-zoom-anim button mt-8 ml-auto"
-                  title={<div style={{ color: "#FFFFFF" }}> Edit Job</div>}
-                  onClick={() => {
-                    history.push(
-                      `/dashboard/vacancies/edit-job/${getDBIdFromGraphqlId(
-                        data?.id,
-                        data?.__typename,
-                      )}`,
-                    );
-                  }}
-                />
-              ) : null}
-            </div>
+        id="titlebar"
+        className="with-transparent-header parallax background"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.80), rgb(33 39 127 / 0.80)), url(${got})`,
+        }}
+      >
+        <div className="container-x">
+          <div className="ten columns">
+            <p className={"text-base text-white"}>
+              {data?.vacancy?.industry?.name}
+            </p>
+            <h2 className={"text-base text-white"}>
+              {data?.vacancy?.title}{" "}
+              <span
+                className={`${checkJobType(
+                  findJobTypeDescription(
+                    data?.vacancy,
+                    data?.__type?.enumValues,
+                  ),
+                )}`}
+              >
+                {jobType?.description}
+              </span>
+            </h2>
+            <p className={"text-base text-white"}>
+              <i className="fa fa-eye text-gray-200" />{" "}
+              {data?.vacancy?.timesViewed}{" "}
+              <span className={"text-base text-white"}>
+                {data?.vacancy?.timesViewed === 1 ? "View" : "Views"}
+              </span>
+            </p>
+          </div>
+          <div className="six columns">
+            {profile?.isSeeker && (
+              <Bookmark
+                handleLoginNotification={handleLoginNotification}
+                isAuthenticated={isAuthenticated}
+                data={data}
+                toast={toast}
+                alert={alert}
+              />
+            )}
+            {profile?.isEmployer && profile.email === data.creator.email ? (
+              <Button
+                className="popup-with-zoom-anim button mt-8 ml-auto"
+                title={<div style={{ color: "#FFFFFF" }}> Edit Job</div>}
+                onClick={() => {
+                  history.push(
+                    `/dashboard/vacancies/edit-job/${getDBIdFromGraphqlId(
+                      data?.id,
+                      data?.__typename,
+                    )}`,
+                  );
+                }}
+              />
+            ) : null}
           </div>
         </div>
+      </div>
       <div className="pt-6 mt-10">
         <div className="max-w-2xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:pt-16 lg:pb-24 lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
@@ -128,7 +136,7 @@ const ApplicationForm = () => {
             <div className="lg:flex lg:items-center lg:justify-between">
               <div className="flex-1 min-w-0">
                 <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-                  Back End Developer
+                  {data?.vacancy?.title}
                 </h2>
                 <div className="mt-1 flex sflex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
                   <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -230,9 +238,21 @@ export default ApplicationForm;
 
 const ApplicationSeekerForm = () => {
   const match = useRouteMatch();
+  const history = useHistory();
+  const [resumeType, setResumeType] = React.useState();
+  const { user, getUser } = React.useContext(UserContext);
   const [vacancyID, setVacancyID] = React.useState(
     getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"),
   );
+  const {
+    authState: { profile },
+  } = React.useContext(AuthContext);
+  React.useEffect(() => {
+    if (!user) {
+      getUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   React.useEffect(() => {
     setVacancyID(getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"));
   }, [match.params.vacancyID]);
@@ -246,80 +266,180 @@ const ApplicationSeekerForm = () => {
 
   const schema = Yup.object().shape({
     comment: Yup.string()
-      .min(50, "Please enter at least 50 characters")
+      .min(100, "Enter more than 100 characters")
       .required("This field is required"),
   });
+  const cleanResumes = (data) => {
+    return data.reduce((arr, b) => {
+      arr.push({
+        value: b.id,
+        label: b.name,
+      });
+      return arr;
+    }, []);
+  };
+  console.log("ooooo", user);
+
   return (
-    <Formik
-      validateOnBlur
-      initialValues={initialValues}
-      validationSchema={schema}
-      enableReinitialize
+    <TypedCreateApplicationMutation
+      onCompleted={(data, errors) =>
+        showNotification(
+          data.createApplication,
+          errors,
+          null,
+          errors,
+          "Application Updated",
+          null,
+        )
+      }
     >
-      {(formik) => (
-        <TypedUpdateApplicationMutation
-          onCompleted={(data, errors) =>
-            showNotification(
-              data.applicationPatch,
-              errors,
-              alert,
-              null,
-              "Application Updated",
-              formik.setErrors,
-            )
-          }
-        >
-          {(applicationUpdate) => {
-            return (
-              <div className="dashboard-list-box-content text-base text-gray-900">
-                <div className="form">
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Budget"
-                    placeholder="starting at 1,000"
-                    name="budget"
-                  />
+      {(applicationCreate, { loading }) => {
+        function onSubmit(values, { setErrors, setSubmitting }) {
+          console.log(values);
+          applicationCreate({
+            variables: {
+              job: values.job,
+              resume: values.resume[0],
+              budget: values.budget,
+              comment: values.comment,
+              applicant: profile.id,
+              status: "APPLIED",
+            },
+          }).then(({ data }) => {
+            if (data) {
+              if (data.createApplication) {
+                if (!data.createApplication.success) {
+                  // setErrors(normalizeErrors(data.updateAccount.errors));
+                  setErrors(
+                    normalizeErrors(
+                      maybe(() => data.createApplication.errors, []),
+                    ),
+                  );
+                }
+              }
+            }
+          });
+        }
+        console.log(resumeType);
+        return (
+          <Formik
+            validateOnBlur
+            initialValues={initialValues}
+            validationSchema={schema}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
+            {(formik) => (
+              <Form>
+                <div className="dashboard-list-box-content text-base text-gray-900">
+                  <div className="form">
+                    <FormikControl
+                      control="input"
+                      type="text"
+                      label="Budget"
+                      placeholder="starting at 1,000"
+                      name="budget"
+                    />
+                  </div>
+                  <div className="form" style={{ width: "100%" }}>
+                    <FormikControl
+                      control="textarea"
+                      label="Cover Letter"
+                      name="comment"
+                      subText={
+                        <small className="text-xs text-gray-500 leading-3">
+                          Introduce yourself and explain why you’re a strong
+                          candidate for this job. This is the first thing your
+                          potential employer will see before looking at your
+                          profile.
+                        </small>
+                      }
+                      placeholder="Your message / cover letter sent to the employer"
+                      rte={false}
+                      fullWidth
+                    />
+                  </div>
+                  <div className="form p-2 w-full shadow p-8 text-gray-700 ">
+                    <button
+                      onClick={() => setResumeType("inbuilt")}
+                      className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${
+                        resumeType === "inbuilt" && " bg-blue-500"
+                      }`}
+                    >
+                      Select Inbuilt Resume
+                    </button>
+                    <button
+                      onClick={() => setResumeType("file")}
+                      className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${
+                        resumeType === "file" && " bg-blue-500"
+                      }`}
+                    >
+                      Upload File
+                    </button>
+                    {resumeType === "file" && (
+                      <FormikControl
+                        control="file"
+                        type="file"
+                        doc={true}
+                        restrict={`.pdf`}
+                        setFieldValue={formik.setFieldValue}
+                        label="Resume"
+                        name="resume"
+                        minimal
+                      />
+                    )}
+                    {resumeType === "inbuilt" && (
+                      <>
+                        {user?.resumes?.length > 0 ? (
+                          <FormikControl
+                            control="select"
+                            hideButton={() => {}}
+                            label="Resume"
+                            name="inbuiltResume"
+                            style={{ margin: 0 }}
+                            options={cleanResumes(user?.resumes)}
+                          />
+                        ) : (
+                          <p className="text-sm tracking-wider text-gray-700 text-center p-4">
+                            No Resumes Found. Use Our CV Builder to get started
+                            and have a professionally curated CV.
+                            <button
+                              onClick={() => history.push(`/dashboard/resume`)}
+                              className={`flex-no-shrink bg-blue-100 hover:bg-blue-200 px-3 py-1 text-xs text-gray-800 shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300`}
+                            >
+                              Build the Perfect CV now!
+                            </button>
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </div>
+                  <div className="form">
+                    <FormikControl
+                      control="file"
+                      type="file"
+                      doc={true}
+                      restrict={`.pdf`}
+                      setFieldValue={formik.setFieldValue}
+                      label="Extra Attachments"
+                      name="extraAttachment"
+                    />
+                  </div>
+                  <div className="form">
+                    <Button
+                      type="submit"
+                      fullwidth
+                      isLoading={formik?.loading}
+                      title={formik?.loading ? "Saving... " : "Apply"}
+                      className="button margin-top-15"
+                    />
+                  </div>
                 </div>
-                <div className="form" style={{ width: "100%" }}>
-                  <FormikControl
-                    control="textarea"
-                    label="Cover Letter"
-                    name="comment"
-                    subText={
-                      "Introduce yourself and explain why you’re a strong candidate for this job. This is the first thing your potential employer will see before looking at your profile."
-                    }
-                    placeholder="Your message / cover letter sent to the employer"
-                    rte={false}
-                    fullWidth
-                  />
-                </div>
-                <div className="form">
-                  <FormikControl
-                    control="file"
-                    type="file"
-                    doc={true}
-                    restrict={`.pdf`}
-                    setFieldValue={formik.setFieldValue}
-                    label="Resume"
-                    name="resume"
-                  />
-                </div>
-                <div className="form">
-                  <Button
-                    type="submit"
-                    disabled={!formik.isValid}
-                    fullwidth
-                    isLoading={formik?.loading}
-                    title={formik?.loading ? "Saving... " : "Apply"}
-                    className="button margin-top-15"
-                  />
-                </div>
-              </div>
-            );
-          }}
-        </TypedUpdateApplicationMutation>
-      )}
-    </Formik>
+              </Form>
+            )}
+          </Formik>
+        );
+      }}
+    </TypedCreateApplicationMutation>
   );
 };

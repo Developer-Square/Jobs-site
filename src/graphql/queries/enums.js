@@ -95,3 +95,13 @@ export const InstitutionStudentCount = gql`
     }
   }
 `;
+export const SeekerNationality  = gql`
+  query SeekerNationality {
+    __type(name: "SeekerNationality") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;

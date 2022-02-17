@@ -9,11 +9,15 @@ import { isCategoryPage } from "./is-home-page";
 import MobileHeader from "./Header/MobileHeader";
 import Header from "./Header/Header";
 import SeekerStepper from "pages/ProfileStepper/SeekerStepper";
+import EmployerStepper from "pages/ProfileStepper/EmployerStepper";
+import UserContext from "contexts/user/user.provider";
 
 const DashboardProfile = (props) => {
   const isSticky = useStickyState("isSticky");
   const location = useLocation();
   const { desktop, mobile, tablet } = useDeviceType();
+  const { user } = React.useContext(UserContext);
+
   const path = location.pathname.replace(/\/+$/, "");
   const pathname = path[0] === "/" ? path.substr(1) : path;
 
@@ -51,7 +55,8 @@ const DashboardProfile = (props) => {
         </Sticky>
       )}
       <div style={{ flex: "1 0 auto" }}>
-        <SeekerStepper />
+        {user?.isSeeker && <SeekerStepper />}
+        {user?.isEmployer && <EmployerStepper />}
       </div>
     </LayoutWrapper>
   );

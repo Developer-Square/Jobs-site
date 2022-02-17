@@ -25,7 +25,7 @@ const SeekerStepper = () => {
   const history = useHistory();
   const [initialValues, setInitialValues] = React.useState(initValues);
   const { setRefetchUser, user, getUser } = React.useContext(UserContext);
-  const { seekerGender, seekerStatus } = React.useContext(ConstantsContext);
+  const { seekerGender, seekerStatus, seekerNationality } = React.useContext(ConstantsContext);
 
   const seekerSteps = [
     {
@@ -69,6 +69,22 @@ const SeekerStepper = () => {
           control: "mui-radio",
           options: seekerGender,
         },
+        {
+          control:"select",
+          label:"Nationality",
+          name:"nationality",
+          hideButton:() => {},
+          style:{ margin: 0 },
+          options:seekerNationality,
+          description: "Choose your Nationality",
+          defaultValue:{ value: "", label: "Select Nationality" },
+        },
+        {
+          name: "linkedin",
+          description: "Your LinkedIn Profile",
+          control: "input",
+          type: "text",
+        },
       ],
     },
     {
@@ -89,8 +105,8 @@ const SeekerStepper = () => {
         {
           type: "text",
           name: "location",
-          description: "Current Status as a Job Seeker",
-          control: "input",
+          description: "Where you are located",
+          control: "location",
         },
       ],
     },

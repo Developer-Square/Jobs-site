@@ -9,29 +9,32 @@ function UploadInput(props) {
 
   return (
     <FormInput className={`form-row form-row-wide`}>
-      <label htmlFor={name}>
+      <label
+        className="block text-blueGray-600 text-xs font-bold mb-2"
+        htmlFor={name}
+      >
         {label}
-        <i className={`${icon}`}></i>
-        <Field name={name}>
-          {({ form, field }) => {
-            const { setFieldValue } = form;
-            const { value } = field;
-            return (
-              <Uploader
-                id={name}
-                name={name}
-                selected={value}
-                {...field}
-                {...rest}
-                onChange={(val) => setFieldValue(name, val)}
-                imageURL={value}
-                onBlur={(e) => field.onBlur(e)}
-              />
-            );
-          }}
-        </Field>
-        <ErrorMessage component={TextError} name={name} />
       </label>
+      <i className={`${icon}`}></i>
+      <Field name={name}>
+        {({ form, field }) => {
+          const { setFieldValue } = form;
+          const { value } = field;
+          return (
+            <Uploader
+              id={name}
+              name={name}
+              selected={value}
+              {...field}
+              {...rest}
+              onChange={(val) => setFieldValue(name, val)}
+              imageURL={value}
+              onBlur={(e) => field.onBlur(e)}
+            />
+          );
+        }}
+      </Field>
+      <ErrorMessage component={TextError} name={name} />
     </FormInput>
   );
 }

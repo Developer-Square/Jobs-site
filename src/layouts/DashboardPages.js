@@ -26,7 +26,7 @@ const DashboardPages = (props) => {
     return false;
   };
 
-  return checkUserProfileCompletion() ? (
+  return !checkUserProfileCompletion() ? (
     <DashboardLayout {...props} />
   ) : (
     <DashboardProfile {...props} />

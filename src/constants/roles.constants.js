@@ -1,5 +1,5 @@
 // component's config object.
-const start = "Start";
+// const start = "Start";
 const management = "Management";
 const account = "Account";
 const admin = "Admin";
@@ -28,10 +28,10 @@ const components = {
   messages: {
     component: "Messages",
     url: "/messages",
-    title: "messages",
+    title: "Messages",
     icon: "Category",
     module: 1,
-    category: start,
+    category: account,
     children: [],
     dashboardItem: true,
   },
@@ -120,6 +120,15 @@ const components = {
     component: "ResumeBuilder",
     url: "/resume/builder/:resumeID",
     title: "Add Resume",
+    icon: "Category",
+    module: 1,
+    category: management,
+    dashboardItem: false,
+  },
+  jobAppicationsView: {
+    component: "ApplicationView",
+    url: "/applications/:jobID/:applicationID",
+    title: "View Single Application",
     icon: "Category",
     module: 1,
     category: management,
@@ -230,9 +239,11 @@ const rolesConfig = {
 
   common: {
     routes: [
+      components.jobAppicationsView, //common
       components.jobAppications, //common
       components.applications, // commom
       components.bookmarks, //common
+      components.messages, //common
 
       components.dashboard, //common
       components.profile, //common

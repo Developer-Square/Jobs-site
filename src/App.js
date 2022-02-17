@@ -23,6 +23,7 @@ import { ResumeProvider } from "contexts/resume/resume.provider";
 import { SettingsProvider } from "contexts/settings/settings.provider";
 import { StorageProvider } from "contexts/storage/storage.provider";
 import { UserProvider } from "contexts/user/user.provider";
+import { SidebarProvider } from "contexts/sidebar/use-sidebar";
 import BaseRouter from "routers/router";
 import { useRouterQuery } from "helpers/useRouterQuery";
 import { serviceWorkerTimeout } from "constants/constants";
@@ -82,37 +83,39 @@ function App() {
         <OriginalThemeProvider theme={themeMode}>
           <MuiThemeProvider theme={MUItheme}>
             <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-              <ConstantsProvider>
-                <SearchProvider query={query}>
-                  <HeaderProvider>
-                    <AuthProvider>
-                      <VacancyProvider>
-                        <ModalProvider>
-                          <UserProvider>
-                            <DatabaseProvider>
-                              <ResumeProvider>
-                                <StickyProvider>
-                                  <AlertProvider
-                                    template={NotificationTemplate}
-                                    {...notificationConfig}
-                                  >
-                                    <StorageProvider>
-                                      <ScrollToTop>
-                                        <BaseRouter deviceType={deviceType} />
-                                      </ScrollToTop>
-                                    </StorageProvider>
-                                  </AlertProvider>
-                                </StickyProvider>
-                              </ResumeProvider>
-                            </DatabaseProvider>
-                          </UserProvider>
-                        </ModalProvider>
-                      </VacancyProvider>
-                    </AuthProvider>
-                  </HeaderProvider>
-                  <GlobalStyle />
-                </SearchProvider>
-              </ConstantsProvider>
+              <SidebarProvider>
+                <ConstantsProvider>
+                  <SearchProvider query={query}>
+                    <HeaderProvider>
+                      <AuthProvider>
+                        <VacancyProvider>
+                          <ModalProvider>
+                            <UserProvider>
+                              <DatabaseProvider>
+                                <ResumeProvider>
+                                  <StickyProvider>
+                                    <AlertProvider
+                                      template={NotificationTemplate}
+                                      {...notificationConfig}
+                                    >
+                                      <StorageProvider>
+                                        <ScrollToTop>
+                                          <BaseRouter deviceType={deviceType} />
+                                        </ScrollToTop>
+                                      </StorageProvider>
+                                    </AlertProvider>
+                                  </StickyProvider>
+                                </ResumeProvider>
+                              </DatabaseProvider>
+                            </UserProvider>
+                          </ModalProvider>
+                        </VacancyProvider>
+                      </AuthProvider>
+                    </HeaderProvider>
+                    <GlobalStyle />
+                  </SearchProvider>
+                </ConstantsProvider>
+              </SidebarProvider>
               <ReactHooksWrapper />
             </ServiceWorkerProvider>
           </MuiThemeProvider>

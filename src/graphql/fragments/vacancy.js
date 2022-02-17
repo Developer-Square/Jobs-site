@@ -15,7 +15,7 @@ export const vacancyFragment = gql`
     yearsOfExp
     isActive
     salary
-    applicationEmail
+    applicationUrl
     numberOfApplications
     shortlistedCount
     acceptedCount

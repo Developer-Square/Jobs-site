@@ -13,6 +13,7 @@ import {
   SeekerGender,
   EmployerWorkForce,
   InstitutionStudentCount,
+  SeekerNationality,
 } from "graphql/queries";
 
 const defaultState = {
@@ -25,6 +26,7 @@ const defaultState = {
   seekerStatus: [],
   seekerGender: [],
   institutionCount: [],
+  SseekerNationality: [],
   getIndustries: () => [],
   getExperience: () => [],
   getPayRate: () => [],
@@ -34,6 +36,7 @@ const defaultState = {
   getSeekerStatus: () => [],
   getSeekerGender: () => [],
   getInstitutionCount: () => [],
+  getSeekerNationality: () => [],
   vacancyType: () => {},
 };
 
@@ -59,6 +62,7 @@ const ConstantsProvider = ({ children }) => {
   const [seekerStatus, setSeekerStatus] = useState();
   const [seekerGender, setSeekerGender] = useState();
   const [institutionCount, setInstitutionCount] = useState();
+  const [seekerNationality, setSeekerNationality] = useState();
 
   const [fetchIndustriesData] = useLazyQuery(GET_INDUSTRIES, {
     onCompleted: (data) => setIndustries(cleanIndustries(data.allIndustries)),
@@ -66,6 +70,10 @@ const ConstantsProvider = ({ children }) => {
   });
   const [fetchQualificationData] = useLazyQuery(JobMinQualification, {
     onCompleted: (data) => setQualification(cleanSelectData(data?.__type?.enumValues)),
+    fetchPolicy: "cahce-and-network",
+  })
+  const [fetchNationalityData] = useLazyQuery(SeekerNationality, {
+    onCompleted: (data) => setSeekerNationality(cleanSelectData(data?.__type?.enumValues)),
     fetchPolicy: "cahce-and-network",
   })
   const [fetchYearsOfExpData] = useLazyQuery(JobYearsOfExp, {
@@ -123,6 +131,7 @@ const ConstantsProvider = ({ children }) => {
     fetchSeekerGendersData();
     fetchEmployeeWorkForceData();
     fetchInstitutionStudentCountData();
+    fetchNationalityData();
   };
 
   useEffect(() => {
@@ -141,6 +150,12 @@ const ConstantsProvider = ({ children }) => {
       return experience;
     }
     return fetchYearsOfExpData();
+  };
+  const getSeekerNationality = () => {
+    if (seekerNationality) {
+      return seekerNationality;
+    }
+    return fetchNationalityData();
   };
   const getPayRate = () => {
     if (payRate) {
@@ -198,6 +213,7 @@ const ConstantsProvider = ({ children }) => {
         seekerGender,
         institutionCount,
         vacancyType,
+        seekerNationality,
         getIndustries,
         getExperience,
         getPayRate,
@@ -206,6 +222,7 @@ const ConstantsProvider = ({ children }) => {
         getApplicationStatus,
         getSeekerStatus,
         getSeekerGender,
+        getSeekerNationality,
         getInstitutionCount,
       }}
     >

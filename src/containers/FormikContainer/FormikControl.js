@@ -13,6 +13,7 @@ import CreatableSelectInput from "./CreatableSelect";
 import MUIRadioButton from "./RadioButton.MUI";
 import Code from "./Code";
 import AsyncSelect from "./AsyncSelect";
+import LocationSearch from "./LocationSearch";
 
 function FormikControl(props) {
   const { control, ...rest } = props;
@@ -43,6 +44,8 @@ function FormikControl(props) {
       return <PhoneNumberInput {...rest} />;
     case "code":
       return <Code {...rest} />;
+    case "location":
+      return <LocationSearch {...rest} />;
     default:
       return null;
   }

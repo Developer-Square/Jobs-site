@@ -306,7 +306,7 @@ function Uploader(props) {
           </Text>
         </Container>
       )}
-      {!rest?.version === "stepper" && (
+      {!rest?.version === "stepper" ?(
         <>
           {preview ? (
             multiple ? (
@@ -318,7 +318,7 @@ function Uploader(props) {
             minimalThumbs
           )}
         </>
-      )}
+      ) :minimalThumbs}
     </section>
   );
 }
