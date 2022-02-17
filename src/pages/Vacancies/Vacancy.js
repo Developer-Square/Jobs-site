@@ -12,6 +12,7 @@ import PaginationItem from "./PaginationItem";
 import { useDeviceType } from "helpers/useDeviceType";
 import { useSidebar } from "contexts/sidebar/use-sidebar";
 import LogoImage from "image/job-list-logo-04.png";
+import gotImg from "image/got.jpg";
 import {
   getDBIdFromGraphqlId,
   checkDate,
@@ -167,7 +168,9 @@ const Vacancy = () => {
         id="titlebar"
         className="with-transparent-header parallax background"
         style={{
-          backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.1), rgb(33 39 127 / 0.79)), url("https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-flat-wind-cartoon-recruitment-banner-poster-image_195196.jpg")`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.1), rgb(33 39 127 / 0.79)), url(${gotImg})`,
         }}
       >
         <div className="container-x">

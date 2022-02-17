@@ -53,7 +53,7 @@ const Banner = (props) => {
               />
 
               <Fade bottom>
-                <p className="text-xs lg:text-base leading-5 mb-7 announce text-lg">
+                <p className="text-xs lg:text-base leading-5 announce text-lg">
                   {props?.bannerSubHeading || (
                     <>
                       We’ve over <strong>15,000</strong> internship offers for
@@ -63,7 +63,9 @@ const Banner = (props) => {
                 </p>
                 <h2
                   style={{ borderLeft: "3px solid white" }}
-                  className={"px-4 my-4 font-semibold text-5xl tracking-wide text-white"}
+                  className={
+                    "px-4 my-4 font-semibold text-5xl tracking-wide text-white"
+                  }
                 >
                   {props?.bannerHeading || "Great Careers Start Here"}
                 </h2>
@@ -79,7 +81,6 @@ const Banner = (props) => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
