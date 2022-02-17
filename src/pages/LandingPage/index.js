@@ -29,8 +29,8 @@ function LandingPage({ deviceType }) {
       {userType === "Employer" && (
         <div>
           <Banner
-            bannerHeading={"Welcome to The Database, great talent awaits."}
-            bannerSubHeading={"Post your Job Today"}
+            bannerHeading={"Post your Job Today"}
+            bannerSubHeading={"Welcome to The Database, great talent awaits."}
             bannerImage={employerImg}
           />
           <Vacancies />
