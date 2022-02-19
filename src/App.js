@@ -34,6 +34,7 @@ import { SEO } from "components/seo";
 import ScrollToTop from "helpers/scrollToTop";
 
 // External CSS import here
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-phone-input-2/lib/style.css";
 import "rc-drawer/assets/index.css";

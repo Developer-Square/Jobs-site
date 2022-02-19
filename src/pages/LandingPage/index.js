@@ -9,8 +9,7 @@ import UserContext from "contexts/user/user.provider";
 import seekerImg from "image/9.jpg";
 import employerImg from "image/3.jpg";
 // import Users from "./UsersSection";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from "react-responsive-carousel";
+// import { Carousel } from "react-responsive-carousel";
 
 function LandingPage({ deviceType }) {
   const {
@@ -191,7 +190,7 @@ function LandingPage({ deviceType }) {
                   <hr className="my-1 rounded border-b-2 border-blue-800 w-8" />
                 </div>
                 <div className="w-full md:w-full xl:w-3/4 px-4">
-                  <Carousel
+                  {/* <Carousel
                     // showarrows={true}
                     autoPlay
                     // onchange={onChange}
@@ -312,7 +311,7 @@ function LandingPage({ deviceType }) {
                         </div>
                       </div>
                     </div>
-                  </Carousel>
+                  </Carousel> */}
                 </div>
               </div>
             </div>

@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { useLazyQuery } from "react-apollo";
 import { Link, useHistory } from "react-router-dom";
 import VacancyFilter from "./VacancyFilter";
-import VacancyLoader from "components/Loader/VacancyLoader";
 import Button from "components/Button/Button";
 import Slide from "containers/Slide/Slide";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
@@ -23,7 +22,7 @@ import {
   formatCurrency,
 } from "utils";
 
-const Vacancy = () => {
+const Vacancy = (props) => {
   const history = useHistory();
   const [rate, setRate] = React.useState([]);
   const [getJobs, setGetJobs] = React.useState("");
@@ -42,7 +41,8 @@ const Vacancy = () => {
   } = useContext(AuthContext);
   const { isOpen, toggleSidebar } = useSidebar();
   const userAgent = navigator.userAgent;
-  const deviceType = useDeviceType(userAgent);
+  const { mobile, tablet, desktop } = useDeviceType(userAgent);
+  console.log(mobile, tablet, desktop);
   const redirectToVacancyPage = (job) => {
     history.push(`vacancies/${getDBIdFromGraphqlId(job.id, "Vacancy")}`);
   };
@@ -272,11 +272,7 @@ const Vacancy = () => {
                   </Link>
                 ))
               ) : (
-                <>
-                  <VacancyLoader />
-                  <VacancyLoader />
-                  <VacancyLoader />
-                </>
+                <>No Jobs Found</>
               )}
             </div>
             <div className="clearfix" />
@@ -290,7 +286,7 @@ const Vacancy = () => {
           </div>
         </div>
 
-        {deviceType.desktop ? (
+        {desktop ? (
           <VacancyFilter
             rate={rate}
             setRate={setRate}
@@ -311,7 +307,7 @@ const Vacancy = () => {
         ) : (
           <>
             <Button onClick={() => toggleSidebar()} title={`Filter`} />
-            <Slide deviceType={deviceType}>
+            <Slide deviceType={{ mobile, tablet, desktop }}>
               {isOpen && (
                 <VacancyFilter
                   rate={rate}
