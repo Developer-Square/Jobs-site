@@ -1,7 +1,5 @@
-import React, { Fragment, lazy, Suspense } from "react";
+import React, { Fragment, lazy } from "react";
 import { Switch } from "react-router-dom";
-
-import Loader from "components/Loader/Loader";
 import * as ROUTE from "constants/routes.constants";
 import PublicRoute from "./PublicRoute";
 import ProfileView from "pages/Profile/ProfileView";
@@ -71,11 +69,12 @@ const AuthRoutes = (props) => {
 const PublicRoutes = ({ deviceType }) => (
   <Fragment>
     <Switch>
-      <PublicRoute restricted={false} exact path={ROUTE.LANDING}>
-        <Suspense fallback={<Loader />}>
-          <LandingPage deviceType={deviceType} />
-        </Suspense>
-      </PublicRoute>
+      <PublicRoute
+        restricted={false}
+        exact
+        path={ROUTE.LANDING}
+        component={LandingPage}
+      />
       <PublicRoute
         restricted={false}
         path={ROUTE.AUTH}
