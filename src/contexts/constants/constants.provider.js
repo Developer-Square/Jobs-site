@@ -62,6 +62,7 @@ const ConstantsProvider = ({ children }) => {
   const [seekerStatus, setSeekerStatus] = useState();
   const [seekerGender, setSeekerGender] = useState();
   const [institutionCount, setInstitutionCount] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [seekerNationality, setSeekerNationality] = useState();
 
   const [fetchIndustriesData] = useLazyQuery(GET_INDUSTRIES, {
@@ -69,13 +70,14 @@ const ConstantsProvider = ({ children }) => {
     fetchPolicy: "cahce-and-network",
   });
   const [fetchQualificationData] = useLazyQuery(JobMinQualification, {
-    onCompleted: (data) => setQualification(cleanSelectData(data?.__type?.enumValues)),
+    onCompleted: (data) =>
+      setQualification(cleanSelectData(data?.__type?.enumValues)),
     fetchPolicy: "cahce-and-network",
-  })
+  });
   const [fetchNationalityData] = useLazyQuery(SeekerNationality, {
-    onCompleted: (data) => setSeekerNationality(cleanSelectData(data?.__type?.enumValues)),
+    // onCompleted: (data) => setSeekerNationality(cleanSelectData(data?.__type?.enumValues)),
     fetchPolicy: "cahce-and-network",
-  })
+  });
   const [fetchYearsOfExpData] = useLazyQuery(JobYearsOfExp, {
     onCompleted: (data) =>
       setExperience(cleanSelectData(data?.__type?.enumValues)),
