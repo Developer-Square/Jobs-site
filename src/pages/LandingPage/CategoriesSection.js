@@ -16,6 +16,10 @@ export const TypedIndustriesQuery = TypedQuery(GET_COUNTED_INDUSTRIES);
 const CategoriesSection = () => {
   const variables = {
     first: landingPageIndustriesLimit,
+    sortBy: {
+      direction: "DESC",
+      field: "VACANCY_COUNT",
+    },
   };
 
   return (
@@ -34,15 +38,17 @@ const CategoriesSection = () => {
                 <div className="sixteen columns">
                   <Bounce bottom cascade>
                     {" "}
-                    <h3 className="text-4xl font-bold uppercase transition duration-500 margin-bottom-20 margin-top-10">
+                    <h3 className="text-3xl font-bold transition duration-500 text-center my-1">
                       Popular Categories
                     </h3>
+                    <hr className="mx-auto my-1 rounded border-b-2 border-blue-800 w-8" />
                     {/* Popular Categories */}
                     <div className="categories-boxes-container">
                       {industriesList.data.industries.edges.map(
-                        ({ node: industry }) => {
+                        ({ node: industry }, index) => {
                           return (
                             <Link
+                              key={index}
                               to={{ pathname: "/vacancies" }}
                               className="category-small-box"
                             >

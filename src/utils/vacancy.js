@@ -136,7 +136,6 @@ const gig = (
     ></path>
   </svg>
 );
-
 export const getStatus = (status) => {
   if (status === "APPLIED") {
     return {
@@ -147,13 +146,13 @@ export const getStatus = (status) => {
       selectObj: { label: "Applied", value: "APPLIED" },
     };
   }
-  if (status === "ACCEPTED") {
+  if (status === "HIRED") {
     return {
       statusImage: gig,
       color: "#15a367",
-      name: "Accepted",
+      name: "Hired",
       fancyName: "Good Fit",
-      selectObj: { label: "Accepted", value: "ACCEPTED" },
+      selectObj: { label: "Hired", value: "HIRED" },
     };
   }
   if (status === "SHORTLISTED") {
@@ -165,13 +164,22 @@ export const getStatus = (status) => {
       selectObj: { label: "Shortlisted", value: "SHORTLISTED" },
     };
   }
-  if (status === "REJECTED") {
+  if (status === "INTERVIEWING") {
+    return {
+      statusImage: partTime,
+      color: "#ff6746c7",
+      name: "Interviewing",
+      fancyName: "On Hold",
+      selectObj: { label: "Interviewing", value: "INTERVIEWING" },
+    };
+  }
+  if (status === "DECLINED") {
     return {
       statusImage: volunteering,
       color: "#f33331e6",
       name: "Rejected",
       fancyName: "Not a fit",
-      selectObj: { label: "Rejected", value: "REJECTED" },
+      selectObj: { label: "Declined", value: "DECLINED" },
     };
   }
 };

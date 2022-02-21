@@ -6,6 +6,9 @@ import { useTranslation } from "react-i18next";
 import React, { memo, useContext, useEffect, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import Pdf from "react-to-pdf";
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+// import htmlToPdfmake from "html-to-pdfmake";
 
 // import download from "downloadjs";
 // import firebase from "gatsby-plugin-firebase";
@@ -36,24 +39,29 @@ const ExportModal = () => {
     content: () => printRef.current,
   });
 
-  // const handleDownload = async (isSinglePDF) => {
-  //   isSinglePDF ? setLoadingSingle(true) : setLoadingMulti(true);
+  // const handleDownload = () => {
+  //   console.log("================", printRef);
+  //   console.log("================", printRef.current);
+  //   console.log("================", `${printRef.current}`);
+  //   const resumeElement = printRef.current;
+  //   pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  //   var filename = `${state.name}-${state.id}`;
 
-  //   try {
-  //     toast("Featur Coming Soon");
+  //   var html = htmlToPdfmake(`
+  //     <div>
+  //       <h1>The Database Resume</h1>
+  //       <p>
+  //         coming soon!
+  //       </p>
+  //     </div>
+  //   `);
 
-  //     // const printResume = firebase.functions().httpsCallable("printResume");
-  //     // const { data } = await printResume({
-  //     //   id: state.id,
-  //     //   type: isSinglePDF ? "single" : "multi",
-  //     // });
-  //     // const blob = b64toBlob(<ResumeViewer />, "application/pdf");
-  //     // download(blob, `RxResume-${state.id}.pdf`, "application/pdf");
-  //   } catch (error) {
-  //     toast(t("builder.toasts.printError"));
-  //   } finally {
-  //     isSinglePDF ? setLoadingSingle(false) : setLoadingMulti(false);
-  //   }
+  //   var val = htmlToPdfmake(`${resumeElement}`);
+  //   var dd = { content: val };
+  //   var ee = { content: html };
+  //   console.log(val);
+  //   pdfMake.createPdf(ee).download();
+  //   pdfMake.createPdf(ee).download();
   // };
 
   const handleExportToJson = () => {
@@ -113,18 +121,8 @@ const ExportModal = () => {
                 </Button>
               )}
             </Pdf>
-            {/* <Button
-              isLoading={isLoadingSingle}
-              onClick={() => handleDownload(true)}
-            >
+            {/* <Button onClick={() => handleDownload()}>
               {t("modals.export.downloadPDF.buttons.single")}
-            </Button>
-            <Button
-              className="ml-8"
-              isLoading={isLoadingMulti}
-              onClick={() => handleDownload(false)}
-            >
-              {t("modals.export.downloadPDF.buttons.multi")}
             </Button> */}
           </div>
         </div>

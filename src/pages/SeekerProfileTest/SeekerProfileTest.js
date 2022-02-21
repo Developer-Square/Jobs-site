@@ -15,6 +15,7 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+
 const personaTitles = [
   { label: "Student", value: "Student" },
   { label: "Sir", value: "Sir" },

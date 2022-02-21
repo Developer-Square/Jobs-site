@@ -209,7 +209,7 @@ const ManageVacancies = ({ deviceType }) => {
           },
           // {
           //   Header: "Email",
-          //   accessor: "applicationEmail",
+          //   accessor: "applicationUrl",
           // },
           {
             Header: "Positions",

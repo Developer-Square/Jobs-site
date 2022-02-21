@@ -97,6 +97,7 @@ const EmployerApplications = ({ deviceType }) => {
               <Loading />
               <Loading />
               <Loading />
+              <Loading />
             </>
           ) : (
             vacancies?.map((job, i) => {

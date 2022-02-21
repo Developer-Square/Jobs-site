@@ -2,13 +2,16 @@ import React, { useContext } from "react";
 import { useLazyQuery } from "react-apollo";
 import { Link, useHistory } from "react-router-dom";
 import VacancyFilter from "./VacancyFilter";
-import VacancyLoader from "components/Loader/VacancyLoader";
 import Button from "components/Button/Button";
+import Slide from "containers/Slide/Slide";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
 import { AuthContext } from "contexts/auth/auth.context";
 import { VACANCIES_QUERY } from "graphql/queries";
 import PaginationItem from "./PaginationItem";
+import { useDeviceType } from "helpers/useDeviceType";
+import { useSidebar } from "contexts/sidebar/use-sidebar";
 import LogoImage from "image/job-list-logo-04.png";
+import gotImg from "image/got.jpg";
 import {
   getDBIdFromGraphqlId,
   checkDate,
@@ -19,7 +22,8 @@ import {
   formatCurrency,
 } from "utils";
 
-const Vacancy = () => {
+const Vacancy = (props) => {
+  const history = useHistory();
   const [rate, setRate] = React.useState([]);
   const [getJobs, setGetJobs] = React.useState("");
   const [sortOrder, setSortOrder] = React.useState([]);
@@ -35,7 +39,10 @@ const Vacancy = () => {
   const {
     authState: { isAuthenticated, profile },
   } = useContext(AuthContext);
-  const history = useHistory();
+  const { isOpen, toggleSidebar } = useSidebar();
+  const userAgent = navigator.userAgent;
+  const { mobile, tablet, desktop } = useDeviceType(userAgent);
+  console.log(mobile, tablet, desktop);
   const redirectToVacancyPage = (job) => {
     history.push(`vacancies/${getDBIdFromGraphqlId(job.id, "Vacancy")}`);
   };
@@ -161,7 +168,9 @@ const Vacancy = () => {
         id="titlebar"
         className="with-transparent-header parallax background"
         style={{
-          backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.1), rgb(33 39 127 / 0.79)), url("https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-flat-wind-cartoon-recruitment-banner-poster-image_195196.jpg")`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.1), rgb(33 39 127 / 0.79)), url(${gotImg})`,
         }}
       >
         <div className="container-x">
@@ -263,11 +272,7 @@ const Vacancy = () => {
                   </Link>
                 ))
               ) : (
-                <>
-                  <VacancyLoader />
-                  <VacancyLoader />
-                  <VacancyLoader />
-                </>
+                <>No Jobs Found</>
               )}
             </div>
             <div className="clearfix" />
@@ -280,23 +285,51 @@ const Vacancy = () => {
             />
           </div>
         </div>
-        <VacancyFilter
-          rate={rate}
-          setRate={setRate}
-          ratePerHour={ratePerHour}
-          loading={loading}
-          getJobs={getJobs}
-          setGetJobs={setGetJobs}
-          loadFilterValues={loadFilterValues}
-          sortByValue={sortByValue}
-          setSortByValue={setSortByValue}
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-          callLoadFilters={callLoadFilters}
-          filterObj={filterObj}
-          setFilterObj={setFilterObj}
-          clean={clean}
-        />
+
+        {desktop ? (
+          <VacancyFilter
+            rate={rate}
+            setRate={setRate}
+            ratePerHour={ratePerHour}
+            loading={loading}
+            getJobs={getJobs}
+            setGetJobs={setGetJobs}
+            loadFilterValues={loadFilterValues}
+            sortByValue={sortByValue}
+            setSortByValue={setSortByValue}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            callLoadFilters={callLoadFilters}
+            filterObj={filterObj}
+            setFilterObj={setFilterObj}
+            clean={clean}
+          />
+        ) : (
+          <>
+            <Button onClick={() => toggleSidebar()} title={`Filter`} />
+            <Slide deviceType={{ mobile, tablet, desktop }}>
+              {isOpen && (
+                <VacancyFilter
+                  rate={rate}
+                  setRate={setRate}
+                  ratePerHour={ratePerHour}
+                  loading={loading}
+                  getJobs={getJobs}
+                  setGetJobs={setGetJobs}
+                  loadFilterValues={loadFilterValues}
+                  sortByValue={sortByValue}
+                  setSortByValue={setSortByValue}
+                  sortOrder={sortOrder}
+                  setSortOrder={setSortOrder}
+                  callLoadFilters={callLoadFilters}
+                  filterObj={filterObj}
+                  setFilterObj={setFilterObj}
+                  clean={clean}
+                />
+              )}
+            </Slide>
+          </>
+        )}
       </div>
     </div>
   );

@@ -55,7 +55,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
     description: "",
     positions: 0,
     closingDate: new Date(),
-    applicationEmail: "",
+    applicationUrl: "",
   };
   const cleanIndustries = (data) => {
     return data.reduce((arr, b) => {
@@ -129,7 +129,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
       description: data.description,
       positions: data.positions,
       closingDate: new Date(data.closingDate),
-      applicationEmail: data.applicationEmail,
+      applicationUrl: data.applicationUrl,
     };
     return obj;
   };

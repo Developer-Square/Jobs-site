@@ -100,9 +100,14 @@ export const CREATE_APPLICATION = gql`
         message
       }
       application {
+        id
         status
         isActive
         isDeleted
+        inbuiltResume {
+          id
+        }
+        extraAttachment
         applicant {
           id
           email
@@ -150,6 +155,10 @@ export const UPDATE_APPLICATION = gql`
         isDeleted
         isActive
         id
+        inbuiltResume {
+          id
+        }
+        extraAttachment
         applicant {
           id
           fullName
@@ -208,7 +217,7 @@ export const CREATE_VACANCY_MUTATION = gql`
     $description: JSONString
     $positions: Int
     $closingDate: Date
-    $applicationEmail: String!
+    $applicationUrl: String!
   ) {
     createVacancy(
       input: {
@@ -223,7 +232,7 @@ export const CREATE_VACANCY_MUTATION = gql`
         description: $description
         positions: $positions
         closingDate: $closingDate
-        applicationEmail: $applicationEmail
+        applicationUrl: $applicationUrl
       }
     ) {
       __typename
@@ -241,7 +250,7 @@ export const CREATE_VACANCY_MUTATION = gql`
         positions
         closingDate
         createdAt
-        applicationEmail
+        applicationUrl
         postedBy {
           id
           name
@@ -269,7 +278,7 @@ export const UPDATE_VACANCY_MUTATION = gql`
     $description: JSONString
     $positions: Int
     $closingDate: Date
-    $applicationEmail: String
+    $applicationUrl: String
   ) {
     patchVacancy(
       id: $id
@@ -285,7 +294,7 @@ export const UPDATE_VACANCY_MUTATION = gql`
         description: $description
         positions: $positions
         closingDate: $closingDate
-        applicationEmail: $applicationEmail
+        applicationUrl: $applicationUrl
       }
     ) {
       __typename
@@ -298,13 +307,13 @@ export const UPDATE_VACANCY_MUTATION = gql`
         yearsOfExp
         salary
         payRate
-        applicationEmail
+        applicationUrl
         location
         description
         positions
         closingDate
         createdAt
-        applicationEmail
+        applicationUrl
         postedBy {
           id
           name
