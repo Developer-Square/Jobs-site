@@ -27,7 +27,12 @@ function UploadInput(props) {
               selected={value}
               {...field}
               {...rest}
-              onChange={(val) => setFieldValue(name, val)}
+              onChange={(val) => {
+                if (rest?.onChangeCallback) {
+                  rest?.onChangeCallback(val);
+                }
+                setFieldValue(name, val);
+              }}
               imageURL={value}
               onBlur={(e) => field.onBlur(e)}
             />

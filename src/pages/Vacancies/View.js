@@ -15,11 +15,11 @@ import { VACANCIES_QUERY } from "graphql/queries";
 
 const TypedVacanciesQuery = TypedQuery(VACANCIES_QUERY);
 
-const View = () => {
+const View = (props) => {
   const [sort, setSort] = useQueryParam("sortBy", StringParam);
   const [attributeFilters, setAttributeFilters] = useQueryParam("filters");
   const { vacancyState, vacancyDispatch } = useContext(VacancyContext);
-
+  console.log("kwa view", props);
   const clearFilters = () => {
     setAttributeFilters({});
   };

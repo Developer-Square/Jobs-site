@@ -1,6 +1,11 @@
 import gql from "graphql-tag";
 import { resumeFragment } from "graphql/fragments";
-import { simpleResumeFragment, awardItemFragment } from "graphql/fragments";
+import {
+  simpleResumeFragment,
+  awardItemFragment,
+  educationItemFragment,
+  workItemFragment,
+} from "graphql/fragments";
 
 export const DUPLICATE_RESUME = gql`
   ${simpleResumeFragment}
@@ -121,6 +126,7 @@ export const UPDATE_RESUME = gql`
     }
   }
 `;
+
 export const AWARD_MUTATION = gql`
   ${awardItemFragment}
   mutation AwardItemCreate(
@@ -178,6 +184,150 @@ export const AWARD_UPDATE_MUTATION = gql`
       }
       awardItem {
         ...AwardItem
+      }
+    }
+  }
+`;
+
+export const WORK_ITEM_CREATE = gql`
+  ${workItemFragment}
+  mutation WorkItemCreate(
+    $descriptionPlaintext: String
+    $owner: ID
+    $company: String
+    $position: String
+    $workStart: Date
+    $workEnd: Date
+    $achievements: String
+    $website: String
+  ) {
+    workItemCreate(
+      input: {
+        descriptionPlaintext: $descriptionPlaintext
+        owner: $owner
+        company: $company
+        position: $position
+        workStart: $workStart
+        workEnd: $workEnd
+        achievements: $achievements
+        website: $website
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      workItem {
+        ...WorkItem
+      }
+    }
+  }
+`;
+
+export const WORK_ITEM_UPDATE = gql`
+  ${workItemFragment}
+  mutation WorkItemUpdate(
+    $descriptionPlaintext: String
+    $company: String
+    $position: String
+    $workStart: Date
+    $workEnd: Date
+    $achievements: String
+    $website: String
+  ) {
+    workItemPatch(
+      input: {
+        descriptionPlaintext: $descriptionPlaintext
+        company: $company
+        position: $position
+        workStart: $workStart
+        workEnd: $workEnd
+        achievements: $achievements
+        website: $website
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      workItem {
+        ...WorkItem
+      }
+    }
+  }
+`;
+
+export const EDUCATION_ITEM_CREATE = gql`
+  ${educationItemFragment}
+  mutation WorkItemCreate(
+    $descriptionPlaintext: String
+    $owner: ID
+    $institution: String
+    $fieldOfStudy: String
+    $degree: String
+    $gpa: String
+    $schoolStart: Date!
+    $schoolEnd: Date!
+  ) {
+    educationItemCreate(
+      input: {
+        descriptionPlaintext: $descriptionPlaintext
+        owner: $owner
+        institution: $institution
+        fieldOfStudy: $fieldOfStudy
+        degree: $degree
+        gpa: $gpa
+        schoolStart: $schoolStart
+        schoolEnd: $schoolEnd
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      educationItem {
+        ...WorkItem
+      }
+    }
+  }
+`;
+
+export const EDUCATION_ITEM_UPDATE = gql`
+  ${educationItemFragment}
+  mutation EducationItemUpdate(
+    $descriptionPlaintext: String
+    $institution: String
+    $fieldOfStudy: String
+    $degree: String
+    $gpa: String
+    $schoolStart: Date!
+    $schoolEnd: Date!
+  ) {
+    educationItemPatch(
+      input: {
+        descriptionPlaintext: $descriptionPlaintext
+        institution: $institution
+        fieldOfStudy: $fieldOfStudy
+        degree: $degree
+        gpa: $gpa
+        schoolStart: $schoolStart
+        schoolEnd: $schoolEnd
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      educationItem {
+        ...WorkItem
       }
     }
   }

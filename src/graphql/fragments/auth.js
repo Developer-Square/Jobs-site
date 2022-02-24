@@ -33,6 +33,9 @@ export const employerFragment = gql`
     mobile
     regNo
     lookingFor
+    profileCompletion {
+      settings
+    }
     industries {
       name
       id
@@ -55,6 +58,12 @@ export const seekerFragment = gql`
     gender
     mobile
     status
+    profileCompletion {
+      settings
+      education
+      skills
+      experience
+    }
     skills {
       name
       id

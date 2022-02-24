@@ -285,6 +285,28 @@ const Vacancy = (props) => {
             />
           </div>
         </div>
+        <Button onClick={() => toggleSidebar()} title={`Filterz`} />
+        <Slide deviceType={{ mobile, tablet, desktop }}>
+          {isOpen && (
+            <VacancyFilter
+              rate={rate}
+              setRate={setRate}
+              ratePerHour={ratePerHour}
+              loading={loading}
+              getJobs={getJobs}
+              setGetJobs={setGetJobs}
+              loadFilterValues={loadFilterValues}
+              sortByValue={sortByValue}
+              setSortByValue={setSortByValue}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              callLoadFilters={callLoadFilters}
+              filterObj={filterObj}
+              setFilterObj={setFilterObj}
+              clean={clean}
+            />
+          )}
+        </Slide>
 
         {desktop ? (
           <VacancyFilter

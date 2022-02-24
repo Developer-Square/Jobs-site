@@ -95,9 +95,21 @@ export const InstitutionStudentCount = gql`
     }
   }
 `;
-export const SeekerNationality  = gql`
+
+export const SeekerNationality = gql`
   query SeekerNationality {
     __type(name: "SeekerNationality") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;
+
+export const EducationItemLevel = gql`
+  query EducationItemLevel {
+    __type(name: "EducationItemLevel") {
       enumValues {
         name
         description

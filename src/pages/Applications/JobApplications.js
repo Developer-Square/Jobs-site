@@ -19,6 +19,9 @@ import { getStatus } from "utils/vacancy";
 import UserImage from "image/user.jpg";
 // import ModalContext from "contexts/modal/modal.provider";
 import { VACANCY_DETAIL_QUERY } from "graphql/queries";
+import Slide from "containers/Slide/Slide";
+import { useDeviceType } from "helpers/useDeviceType";
+import { useSidebar } from "contexts/sidebar/use-sidebar";
 
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 export const TypedApplicationsQuery = TypedQuery(GET_JOB_APPLICATIONS);
@@ -148,6 +151,10 @@ const ApplicationCard = (props) => {
 const JobApplications = () => {
   const history = useHistory();
   const match = useRouteMatch();
+
+  const { isOpen, toggleSidebar } = useSidebar();
+  const userAgent = navigator.userAgent;
+  const { mobile, tablet, desktop } = useDeviceType(userAgent);
   const [jobArray, setJobArray] = React.useState([]);
   const [activeTab, setActiveTab] = React.useState("Applied");
   const { data, loading: vacancyLoading } = useQuery(VACANCY_DETAIL_QUERY, {
@@ -350,6 +357,7 @@ const JobApplications = () => {
                             <a
                               href
                               className="text-gray-500 hover:text-gray-900"
+                              onClick={() => toggleSidebar()}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -367,6 +375,9 @@ const JobApplications = () => {
                               </svg>
                             </a>
                           </div>
+                          <Slide deviceType={{ mobile, tablet, desktop }}>
+                            {isOpen && <div>the filter</div>}
+                          </Slide>
                         </div>
 
                         <div class="lg:col-span-4 col-span-5 bg-gray-100 space-y-8">

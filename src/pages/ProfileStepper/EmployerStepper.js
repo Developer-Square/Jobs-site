@@ -1,4 +1,6 @@
 import React from "react";
+import { useAlert } from "react-alert";
+import { useMutation } from "react-apollo";
 import ProfileStepper from "./ProfileStepper";
 import { useHistory } from "react-router-dom";
 import { normalizeErrors, IsNotEmpty, showNotification } from "helpers";
@@ -6,14 +8,23 @@ import UserContext from "contexts/user/user.provider";
 import { maybe } from "misc";
 import { TypedEmployerProfileMutation } from "containers/Authentication/mutations";
 import ConstantsContext from "contexts/constants/constants.provider";
+import {
+  EMPLOYER_PROFILE_MUTATION,
+  EMPLOYER_PROFILE_COMPLETION,
+  AVATAR_UPDATE_MUTATION,
+} from "graphql/mutations";
+import { handleAvatarUpdate } from "utils";
 
 const EmployerStepper = () => {
   const initValues = {};
   const history = useHistory();
+  const alert = useAlert();
   const [initialValues, setInitialValues] = React.useState(initValues);
   const { setRefetchUser, user, getUser } = React.useContext(UserContext);
-  const { industries } = React.useContext(ConstantsContext);
+  const { industries, workForce } = React.useContext(ConstantsContext);
   const [showButton, setShowButton] = React.useState(true);
+
+  console.log(workForce);
 
   const handleButton = (data) => {
     if (data === "focus") {
@@ -23,10 +34,53 @@ const EmployerStepper = () => {
     }
   };
 
+  const [updateEmployerProfile] = useMutation(EMPLOYER_PROFILE_COMPLETION, {
+    onCompleted: (data) => {
+      setRefetchUser((prev) => !prev);
+    },
+  });
+  const [updateAvatar] = useMutation(AVATAR_UPDATE_MUTATION);
+  const [
+    createEmployer,
+    { data: employerData, loading: employerLoading, error: employerError },
+  ] = useMutation(EMPLOYER_PROFILE_MUTATION, {
+    onCompleted: (data) => {
+      // after this I've to send another req
+      updateEmployerProfile({
+        variables: {
+          settings: true,
+        },
+      });
+    },
+  });
+  const employerCreateSubmit = (values) => {
+    console.log("inafika", values);
+    values.industries = values.industries.map((industry) => industry.value);
+
+    console.log("all the employer values", values);
+    if (IsNotEmpty(values.industries)) {
+      createEmployer({ variables: { ...values } });
+    }
+    return { employerData, employerLoading, employerError };
+  };
+  const handleAvatarChange = (file) => {
+    for (let i = 0; i < file.length; i++) {
+      const f = file[i];
+      updateAvatar({
+        variables: { image: f },
+      })
+        .then((res) => {
+          handleAvatarUpdate(res.data, null, alert);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
   const employerSteps = [
     {
       label: "Account Settings",
       description: `Help Us understand more about your Company.`,
+      mutation: employerCreateSubmit,
       fields: [
         {
           type: "file",
@@ -34,6 +88,7 @@ const EmployerStepper = () => {
           version: "stepper",
           multiple: false,
           description: "Upload Company Picture",
+          onChangeCallback: handleAvatarChange,
           control: "file",
         },
         {
@@ -41,6 +96,32 @@ const EmployerStepper = () => {
           type: "text",
           description: "Company Name",
           name: "company",
+        },
+        {
+          control: "input",
+          type: "number",
+          description: "Company Registration No.",
+          name: "regNo",
+        },
+        {
+          control: "phone",
+          type: "phone",
+          description: "Company Phone No.",
+          placeholder: "e.g. +254 722-123456",
+          name: "phone",
+        },
+        {
+          control: "input",
+          type: "text",
+          description: "Website URL",
+          placeholder: "e.g. https://thedatabase.co.ke",
+          name: "website",
+        },
+        {
+          name: "workForce",
+          description: "Company's WorkForce",
+          control: "mui-radio",
+          options: workForce,
         },
         {
           control: "location",
@@ -58,6 +139,20 @@ const EmployerStepper = () => {
           isMulti: true,
           id: "basic-multi-select",
           classNamePrefix: "select",
+        },
+        {
+          name: "lookingFor",
+          description: "Key Traits",
+          placeholder: "What you're looking for in an employee",
+          control: "textarea",
+          rte: false,
+        },
+        {
+          name: "description",
+          description: "About the company",
+          control: "textarea",
+          rte: true,
+          fullWidth: true,
         },
       ],
     },
@@ -110,26 +205,24 @@ const EmployerStepper = () => {
     });
   };
 
+  if (!industries || !workForce) return <div>To Load</div>;
+
   return (
     <TypedEmployerProfileMutation
-    onCompleted={(data, errors) =>
-      showNotification(
-        data.employerCreate,
-        errors,
-        alert,
-        "accountErrors",
-        "Profile Created",
-      )
-    }
+      onCompleted={(data, errors) =>
+        showNotification(
+          data.employerCreate,
+          errors,
+          alert,
+          "accountErrors",
+          "Profile Created",
+        )
+      }
     >
       {(employerCreate, { loading }) => {
         function onEmployerProfileSubmit(values, { setErrors }) {
           if (IsNotEmpty(values)) {
-            employerProfileCreate(
-              values,
-              employerCreate,
-              setErrors,
-            );
+            employerProfileCreate(values, employerCreate, setErrors);
           }
         }
         return (

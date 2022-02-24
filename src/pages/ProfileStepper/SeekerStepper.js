@@ -1,4 +1,6 @@
 import React from "react";
+import { useAlert } from "react-alert";
+import { useMutation } from "react-apollo";
 import ProfileStepper from "./ProfileStepper";
 import { useHistory } from "react-router-dom";
 import { normalizeErrors, IsNotEmpty } from "helpers";
@@ -7,6 +9,16 @@ import { maybe } from "misc";
 import { showSeekerProfileNotification } from "utils";
 import { TypedSeekerProfileMutation } from "containers/Authentication/mutations";
 import ConstantsContext from "contexts/constants/constants.provider";
+import CoursesSearch from "components/CoursesSearch/CoursesSearch";
+import {
+  SEEKER_PROFILE_MUTATION,
+  SEEKER_PROFILE_COMPLETION,
+  SEEKER_UPDATE_MUTATION,
+  AVATAR_UPDATE_MUTATION,
+  EDUCATION_ITEM_CREATE,
+  WORK_ITEM_CREATE,
+} from "graphql/mutations";
+import { handleAvatarUpdate } from "utils";
 
 const personaTitles = [
   { label: "Student", value: "Student" },
@@ -17,20 +29,122 @@ const personaTitles = [
   { label: "Mrs", value: "Mrs" },
   { label: "Ms", value: "Ms" },
   { label: "Miss", value: "Miss" },
-  { label: "Engineer", value: "Engineer" },
 ];
 
 const SeekerStepper = () => {
   const initValues = {};
   const history = useHistory();
+  const alert = useAlert();
   const [initialValues, setInitialValues] = React.useState(initValues);
   const { setRefetchUser, user, getUser } = React.useContext(UserContext);
-  const { seekerGender, seekerStatus, seekerNationality } = React.useContext(ConstantsContext);
+  const {
+    seekerGender,
+    seekerStatus,
+    seekerNationality,
+    educationLevel,
+    institutions,
+    industries,
+    skills,
+  } = React.useContext(ConstantsContext);
+  const [updateAvatar] = useMutation(AVATAR_UPDATE_MUTATION);
+
+  const [updateSeekerProfile] = useMutation(SEEKER_PROFILE_COMPLETION, {
+    onCompleted: (data) => {
+      setRefetchUser((prev) => !prev);
+    },
+  });
+  const [
+    createSeeker,
+    { data: seekerData, loading: seekerLoading, error: seekerError },
+  ] = useMutation(SEEKER_PROFILE_MUTATION, {
+    onCompleted: (data) => {
+      // after this I've to send another req
+      updateSeekerProfile({
+        variables: { settings: true },
+      });
+    },
+  });
+  const [updateSeeker] = useMutation(SEEKER_UPDATE_MUTATION, {
+    onCompleted: (data) => {
+      // after this I've to send another req
+      updateSeekerProfile({
+        variables: { skills: true },
+      });
+    },
+  });
+  const [createEducation] = useMutation(WORK_ITEM_CREATE, {
+    onCompleted: (data) => {
+      // after this I've to send another req
+      updateSeekerProfile({
+        variables: { education: true },
+      });
+    },
+  });
+  const [createWork] = useMutation(EDUCATION_ITEM_CREATE, {
+    onCompleted: (data) => {
+      // after this I've to send another req
+      updateSeekerProfile({
+        variables: { experience: true },
+      });
+    },
+  });
+  const seekerCreateSubmit = (values) => {
+    console.log("inafika", values);
+    values.industries = values.industries.map((industry) => industry.value);
+    values.nationality = values.nationality.value;
+    // moment(values.dateOfBirth).format("YYYY-MM-DD");
+    // const g = new Date(values.dateOfBirth).getDate();
+    values.dateOfBirth = new Date(values.dateOfBirth).getDate();
+
+    console.log("all the seeker values", values);
+    if (IsNotEmpty(values.industries)) {
+      createSeeker({ variables: { ...values } });
+    }
+    return { seekerData, seekerLoading, seekerError };
+  };
+  const seekerUpdateSubmit = (values) => {
+    console.log("inafika", values);
+    values.skills = values.skills.map((skill) => skill.value);
+    console.log("all the seeker values", values);
+    if (IsNotEmpty(values.industries)) {
+      updateSeeker({ variables: { ...values } });
+    }
+  };
+  const educationCreateSubmit = (values) => {
+    console.log("inafika", values);
+    values.institution = values.institution.label;
+    values.course = values.course.label;
+    values.schoolStart = new Date(values.schoolStart).getDate();
+    values.schoolEnd = new Date(values.schoolEnd).getDate();
+    console.log("all the seeker values", values);
+    createEducation({ variables: { ...values } });
+  };
+
+  const experienceCreateSubmit = (values) => {
+    console.log("inafika", values);
+    values.workStart = new Date(values.workStart).getDate();
+    values.workEnd = new Date(values.workEnd).getDate();
+    console.log("all the seeker values", values);
+    createWork({ variables: { ...values } });
+  };
+  const handleAvatarChange = (file) => {
+    for (let i = 0; i < file.length; i++) {
+      const f = file[i];
+      updateAvatar({
+        variables: { image: f },
+      })
+        .then((res) => {
+          handleAvatarUpdate(res.data, null, alert);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
 
   const seekerSteps = [
     {
       label: "Account Settings",
       description: `Help Us understand more about you.`,
+      mutation: seekerCreateSubmit,
       fields: [
         {
           type: "file",
@@ -38,6 +152,7 @@ const SeekerStepper = () => {
           version: "stepper",
           multiple: false,
           description: "Upload a profile Picture",
+          onChangeCallback: handleAvatarChange,
           control: "file",
         },
         {
@@ -70,18 +185,35 @@ const SeekerStepper = () => {
           options: seekerGender,
         },
         {
-          control:"select",
-          label:"Nationality",
-          name:"nationality",
-          hideButton:() => {},
-          style:{ margin: 0 },
-          options:seekerNationality,
+          control: "location",
+          type: "text",
+          description: "Location",
+          name: "location",
+        },
+        {
+          control: "select",
+          label: "Nationality",
+          name: "nationality",
+          hideButton: () => {},
+          style: { margin: 0 },
+          options: seekerNationality,
           description: "Choose your Nationality",
-          defaultValue:{ value: "", label: "Select Nationality" },
+          defaultValue: { value: "", label: "Select Nationality" },
+        },
+        {
+          control: "select",
+          label: "Industry Interests",
+          isMulti: true,
+          name: "industries",
+          hideButton: () => {},
+          style: { margin: 0 },
+          options: industries,
+          description: "Choose your Industries",
         },
         {
           name: "linkedin",
           description: "Your LinkedIn Profile",
+          placeholder: "https://www.linkedin.com/in/john-doe-112",
           control: "input",
           type: "text",
         },
@@ -90,35 +222,115 @@ const SeekerStepper = () => {
     {
       label: "Education",
       description: "Education",
+      mutation: educationCreateSubmit,
+      useFieldArray: false,
+      blankValues: {
+        institution: "",
+        course: "",
+        level: "",
+        schoolStart: "",
+        schoolEnd: "",
+      },
       fields: [
         {
-          name: "phone",
-          description: "Current Status as a Job Seeker",
-          control: "input",
+          control: "select",
+          label: "Institution",
+          name: "institution",
+          hideButton: () => {},
+          style: { margin: 0 },
+          options: institutions,
+          description: "Choose your Institution",
+          defaultValue: { value: "", label: "Select Institution" },
+        },
+        {
+          name: "course",
+          type: "custom",
+          description: "Select the course studied",
+          Component: (
+            <CoursesSearch label="Field Of Study" name="fieldOfStudy" />
+          ),
+        },
+        {
+          name: "level",
+          description: "Selet EducationL Level",
+          control: "mui-radio",
+          options: educationLevel,
+        },
+        {
+          name: "schoolStart",
+          control: "date",
+          description: "Course Start Date",
+        },
+        {
+          name: "schoolEnd",
+          control: "date",
+          description: "Course End Date",
         },
       ],
     },
     {
       label: "Skills",
       description: `Skills.`,
+      mutation: seekerUpdateSubmit,
       fields: [
         {
-          type: "text",
-          name: "location",
-          description: "Where you are located",
-          control: "location",
+          control: "select",
+          label: "Skills",
+          isMulti: true,
+          name: "skills",
+          hideButton: () => {},
+          style: { margin: 0 },
+          options: skills,
+          description: "Choose your Skills",
         },
       ],
     },
     {
       label: "Experience",
-      description: `Skills.`,
+      description: `Experience.`,
+      mutation: experienceCreateSubmit,
+      useFieldArray: false,
+      blankValues: {
+        company: "",
+        website: "",
+        position: "",
+        workStart: "",
+        workEnd: "",
+        descriptionPlaintext: "",
+      },
       fields: [
         {
-          type: "text",
-          name: "title",
-          description: "Current Status as a Job Seeker",
+          name: "company",
+          description: "Company Name",
           control: "input",
+        },
+        {
+          name: "website",
+          description: "Company Website",
+          placeholder: "https://",
+          control: "input",
+          type: "text",
+        },
+        {
+          name: "position",
+          description: "Position",
+          control: "input",
+        },
+        {
+          name: "workStart",
+          control: "date",
+          description: "Start Date",
+        },
+        {
+          name: "workEnd",
+          control: "date",
+          description: "End Date",
+        },
+        {
+          name: "descriptionPlaintext",
+          description: "Description of the work",
+          control: "textarea",
+          rte: false,
         },
       ],
     },
@@ -162,6 +374,15 @@ const SeekerStepper = () => {
       }
     });
   };
+  if (
+    !seekerGender ||
+    !seekerStatus ||
+    !seekerNationality ||
+    !educationLevel ||
+    !institutions ||
+    !skills
+  )
+    return <div>To Load</div>;
 
   return (
     <TypedSeekerProfileMutation

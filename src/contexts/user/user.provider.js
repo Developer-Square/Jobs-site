@@ -16,10 +16,18 @@ const defaultUser = {
 const defaultState = {
   loading: false,
   user: defaultUser,
+  refetchUser: false,
+  userType: null,
   logout: async () => {},
   loginWithGoogle: async () => {},
   loginAnonymously: async () => {},
+  setRefetchUser: async () => {},
+  getUser: async () => {},
+  fetchUser: async () => {},
+  updateAddress: async () => {},
+  deleteAddress: async () => {},
   deleteAccount: async () => {},
+  setUserType: async () => {},
 };
 
 const UserContext = createContext(defaultState);
