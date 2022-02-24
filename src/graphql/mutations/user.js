@@ -141,6 +141,58 @@ export const BASE_PROFILE_MUTATION = gql`
   }
 `;
 
+export const SEEKER_PROFILE_COMPLETION = gql`
+  mutation SeekerProfileCompletionPatch(
+    $settings: String
+    $education: String
+    $skills: String
+    $experience: String
+  ) {
+    seekerProfileCompletionPatch(
+      input: {
+        settings: $settings
+        education: $education
+        skills: $skills
+        experience: $experience
+      }
+    ) {
+      success
+      errors {
+        field
+        message
+      }
+      seekerProfileCompletion {
+        id
+        seeker {
+          id
+        }
+        settings
+        education
+        skills
+        experience
+      }
+    }
+  }
+`;
+export const EMPLOYER_PROFILE_COMPLETION = gql`
+  mutation EmployerProfileCompletionPatch($settings: String) {
+    employerProfileCompletionUpdate(input: { settings: $settings }) {
+      success
+      errors {
+        field
+        message
+      }
+      employerProfileCompletion {
+        id
+        employer {
+          id
+        }
+        settings
+      }
+    }
+  }
+`;
+
 export const SEEKER_PROFILE_MUTATION = gql`
   ${seekerFragment}
   mutation SeekerCreate(
@@ -181,7 +233,7 @@ export const SEEKER_PROFILE_MUTATION = gql`
 
 export const SEEKER_UPDATE_MUTATION = gql`
   ${seekerFragment}
-  mutation SeekerCreate(
+  mutation SeekerPatch(
     $id: ID!
     $title: String
     $idNumber: Int

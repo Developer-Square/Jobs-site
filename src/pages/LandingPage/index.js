@@ -7,7 +7,8 @@ import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
 import seekerImg from "image/9.jpg";
-import employerImg from "image/3.jpg";
+import employerImg from "image/52.jpg";
+import cardsImg from "image/54.jpg";
 // import Users from "./UsersSection";
 import { Carousel } from "react-responsive-carousel";
 
@@ -142,7 +143,7 @@ function LandingPage({ deviceType }) {
                   {/* Big profile image for side bar (desktop) */}
                   <img
                     alt="landing"
-                    src="https://source.unsplash.com/MP0IUfwrn0A"
+                    src={cardsImg}
                     className="rounded-none lg:rounded-lg shadow-2xl hidden lg:block"
                   />
                   {/* Image from: http://unsplash.com/photos/MP0IUfwrn0A */}

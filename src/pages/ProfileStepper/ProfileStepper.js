@@ -1,8 +1,7 @@
 import React from "react";
-import { Form, Formik } from "formik";
+import { Form, Formik, FieldArray } from "formik";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import Button from "components/Button/Button";
-import lodash from "lodash";
 import {
   Card,
   CardHeader,
@@ -12,24 +11,7 @@ import {
   StepLabel,
   Typography,
   StepContent,
-  LinearProgress,
 } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-
-const BorderLinearProgress = withStyles((theme) => ({
-  root: {
-    height: 10,
-    borderRadius: 5,
-  },
-  colorPrimary: {
-    backgroundColor:
-      theme.palette.grey[theme.palette.type === "light" ? 200 : 700],
-  },
-  bar: {
-    borderRadius: 5,
-    backgroundColor: "#1849B1",
-  },
-}))(LinearProgress);
 
 const ProfileStepper = (props) => {
   const {
@@ -41,15 +23,7 @@ const ProfileStepper = (props) => {
   } = props;
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-  const [activeQuestion, setActiveQuestion] = React.useState(
-    steps[activeStep]?.fields[0],
-  );
   const [activeSection, setActiveSection] = React.useState(steps[activeStep]);
-
-  React.useEffect(() => {
-    setActiveQuestion(steps[activeStep].fields[0]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeStep]);
 
   const isStepOptional = (step) => {
     return step === 6;
@@ -74,7 +48,7 @@ const ProfileStepper = (props) => {
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
-    setActiveSection(steps[activeStep])
+    setActiveSection(steps[activeStep]);
   };
 
   const handleBack = () => {
@@ -91,113 +65,55 @@ const ProfileStepper = (props) => {
       return true;
     }
   };
-  const isActiveQuestion = (item) => {
-    if (item?.name === activeQuestion?.name) {
-      return true;
-    } else return false;
-  };
+
   const isActiveSection = (item) => {
     if (item?.label === activeSection?.label) {
       return true;
     } else return false;
   };
-  const getQuestionNumber = () => {
-    const val = steps[activeStep]?.fields?.find(
-      ({ name }) => name === activeQuestion?.name,
-    );
-    const num = (lodash.findIndex(steps[activeStep].fields, val) || 0) + 1;
-    const len = steps[activeStep]?.fields?.length || 0;
-    const percentage = ((parseInt(num) * 100) / parseInt(len)).toFixed(0) || 0;
-    console.log("precet", percentage);
-    return [num, len, percentage];
-  };
-  const onFormSubmit = (props) => {
-    console.log("00000000000",props)
-    handleNext()
-    // if (isEdit) {
-    //   onProfileSubmit(props);
-    //   setRefetchUser((prev) => !prev);
-    //   // setActiveSection()
-    // } else {
-    //   onProfileInitialSubmit(props);
-    //   setRefetchUser((prev) => !prev);
-    //   // setActiveSection()
-    // }
+
+  const onFormSubmit = (props, { set }) => {
+    const { seekerData, seekerLoading, seekerError } =
+      steps[activeStep]?.mutation(props);
+    console.log("00000000000", seekerData, seekerLoading, seekerError);
+    handleNext();
+    setActiveSection(steps[activeStep + 1]);
+    setActiveStep(activeStep + 1);
   };
 
   const mapFields = (formik, currentStep) =>
     currentStep.fields.map((stepField, i) => {
-      return isActiveQuestion(stepField) ? (
+      return (
         <>
           <p className={"m-2 tracking-loose font-bold mt-4 text-gray-700"}>
             {stepField?.description}
           </p>
-
-          <FormikControl key={i} {...stepField} />
-          <Box sx={{ mb: 2, mr: 0 }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row-reverse",
-              }}
-            >
-              <Button
-                variant="contained"
-                onClick={
-                  i === currentStep.fields.length
-                    ? null
-                    : () => {
-                        setActiveQuestion(currentStep.fields[i + 1]);
-                      }
-                }
-                sx={{ borderRadius: 5, height: 30 }}
-              >
-                Next
-              </Button>
-              <Button
-                disabled={i === 0}
-                onClick={
-                  i === 0
-                    ? null
-                    : () => {
-                        setActiveQuestion(currentStep.fields[i - 1]);
-                      }
-                }
-                sx={{ borderRadius: 5, height: 30 }}
-              >
-                Back
-              </Button>
-            </Box>
-          </Box>
+          {stepField?.type === "custom" ? (
+            stepField?.Component
+          ) : (
+            <FormikControl key={i} {...stepField} />
+          )}
         </>
-      ) : (
-        <Card
-          onClick={() => {
-            setActiveQuestion(stepField);
-          }}
-          sx={{ maxWidth: 345 }}
-          style={{ margin: 10 }}
-        >
-          <CardHeader
-            avatar={
-              <i
-                className={`${
-                  isAnswered(formik, stepField)
-                    ? "fa fa-check-circle text-green-600 text-lg"
-                    : "fa fa-check-circle-o text-lg"
-                }`}
-              />
-            }
-            action={
-              <div
-                className={`block align-middle mt-3 mr-3 font-medium text-base-theme-blue leading-snug`}
-              >
-                Edit
-              </div>
-            }
-            title={stepField?.description}
-          />
-        </Card>
+      );
+    });
+
+  const mapArrayFields = (formik, currentStep, path) =>
+    currentStep.fields.map((stepField, i) => {
+      return (
+        <>
+          <p className={"m-2 tracking-loose font-bold mt-4 text-gray-700"}>
+            {stepField?.description}
+          </p>
+          {stepField?.type === "custom" ? (
+            stepField?.Component
+          ) : (
+            <FormikControl
+              key={i}
+              {...stepField}
+              name={`${path}.${stepField.name}`}
+            />
+          )}
+        </>
       );
     });
 
@@ -257,93 +173,131 @@ const ProfileStepper = (props) => {
                 </nav>{" "}
               </div>
               <div class="lg:col-span-2 col-span-3 bg-gray-100 space-y-8">
-                <Form>
-                  <section className="container px-6 py-4 mx-auto">
-                    {steps?.map((step, k) => {
-                      return isActiveSection(steps[activeStep]) ? (
-                        <div key={k}>
-                          {activeStep === k && (
-                            <>
-                              <p
-                                className={
-                                  "m-2 tracking-loose font-semibold text-5xl"
-                                }
-                              >
-                                {steps[activeStep].label}
-                              </p>
-                              <p
-                                className={
-                                  "m-2 tracking-loose font-bold text-gray-700"
-                                }
-                              >
-                                {steps[activeStep].description}
-                              </p>
-
-                              <Box sx={{ width: "50%", mr: 1, mt: 5, mb: 5 }}>
-                                <p className={"font-bold text-gray-900"}>
-                                  {getQuestionNumber()[0]} of{" "}
-                                  {getQuestionNumber()[1]} questions in this
-                                  step
-                                </p>
-
-                                <BorderLinearProgress
-                                  variant="determinate"
-                                  value={getQuestionNumber()[2]}
-                                />
-                              </Box>
-                              {mapFields(formik, steps[activeStep])}
-                              <Box sx={{ mb: 2, mr: 0 }}>
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    flexDirection: "row-reverse",
-                                  }}
-                                    onClick={() =>{
-                                      setActiveSection(steps[k+1]);
-                                      setActiveStep(k+1)
-                                    }}
-                                >
-                                  <Button
-                                    variant="contained"
-                                    type="submit"
-                                    sx={{ borderRadius: 5, height: 30 }}
-                                  >
-                                    Go To Next
-                                  </Button>
-                                </Box>
-                              </Box>
-                            </>
-                          )}
-                        </div>
-                      ) : (
-                        <Card
-                          onClick={() => {
-                            setActiveSection(steps[k]);
-                            setActiveStep(k)
-                          }}
-                          sx={{ maxWidth: 345 }}
-                          style={{ margin: 10 }}
-                        >
-                          <CardHeader
-                            avatar={
-                              <i
-                                className={`${"fa fa-check-circle text-green-600 text-lg"}`}
+                <section className="container px-6 py-4 mx-auto">
+                  {steps?.map((step, k) => {
+                    return isActiveSection(steps[activeStep]) ? (
+                      <div key={k}>
+                        {activeStep === k && (
+                          <Form>
+                            <p
+                              className={
+                                "m-2 tracking-loose font-semibold text-5xl"
+                              }
+                            >
+                              {steps[activeStep].label}
+                            </p>
+                            <p
+                              className={
+                                "m-2 tracking-loose font-bold text-gray-700"
+                              }
+                            >
+                              {steps[activeStep].description}
+                            </p>
+                            {steps[activeStep]?.useFieldArray ? (
+                              <FieldArray
+                                name={steps[activeStep]?.label}
+                                render={(arrayHelpers) => (
+                                  <div>
+                                    {formik.values[
+                                      `${steps[activeStep]?.label}`
+                                    ] &&
+                                    formik.values[`${steps[activeStep]?.label}`]
+                                      .length > 0 ? (
+                                      formik.values[
+                                        `${steps[activeStep]?.label}`
+                                      ].map((experience, index) => (
+                                        <div key={index}>
+                                          {mapArrayFields(
+                                            formik,
+                                            steps[activeStep],
+                                            `${steps[activeStep]?.label}.${index}`,
+                                          )}
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              arrayHelpers.remove(index)
+                                            } // remove a friend from the list
+                                          >
+                                            -
+                                          </button>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              arrayHelpers.insert(index, "")
+                                            } // insert an empty string at a position
+                                          >
+                                            +
+                                          </button>
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          arrayHelpers.push(
+                                            steps[activeStep]?.blankValues,
+                                          )
+                                        }
+                                      >
+                                        Add Another
+                                      </button>
+                                    )}
+                                    <div>
+                                      <button type="submit">Submit</button>
+                                    </div>
+                                  </div>
+                                )}
                               />
-                            }
-                            action={
-                              <div
-                                className={`block align-middle mt-3 mr-3 font-medium text-base-theme-blue leading-snug`}
+                            ) : (
+                              mapFields(formik, steps[activeStep])
+                            )}
+                            <Box sx={{ mb: 2, mr: 0 }}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  flexDirection: "row-reverse",
+                                }}
                               >
-                                Edit
-                              </div>
-                            }
-                            title={steps[k]?.label }
-                          />
-                        </Card>
-                      );
-                    })}
-                  </section>
-                </Form>
+                                <Button
+                                  variant="contained"
+                                  type="submit"
+                                  sx={{ borderRadius: 5, height: 30 }}
+                                >
+                                  Save and Proceed
+                                </Button>
+                              </Box>
+                            </Box>
+                          </Form>
+                        )}
+                      </div>
+                    ) : (
+                      <Card
+                        onClick={() => {
+                          setActiveSection(steps[k]);
+                          setActiveStep(k);
+                        }}
+                        sx={{ maxWidth: 345 }}
+                        style={{ margin: 10 }}
+                      >
+                        <CardHeader
+                          avatar={
+                            <i
+                              className={`${"fa fa-check-circle text-green-600 text-lg"}`}
+                            />
+                          }
+                          action={
+                            <div
+                              className={`block align-middle mt-3 mr-3 font-medium text-base-theme-blue leading-snug`}
+                            >
+                              Edit
+                            </div>
+                          }
+                          title={steps[k]?.label}
+                        />
+                      </Card>
+                    );
+                  })}
+                </section>
               </div>
             </div>
           </div>

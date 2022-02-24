@@ -111,7 +111,7 @@ export const CloseButton = styled.button`
 `;
 
 export const SlidePopup = styled.div`
-  width: 750px;
+  width: 400px;
   height: 100vh;
   background-color: ${themeGet("colors.white", "#ffffff")};
   position: fixed;
