@@ -44,6 +44,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
   const alert = useAlert();
   const history = useHistory();
   const [updating, setUpdating] = React.useState(false);
+  const [publish, setPublish] = React.useState();
   const initialData = {
     title: "",
     jobType: "",
@@ -56,6 +57,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
     positions: 0,
     closingDate: new Date(),
     applicationUrl: "",
+    publish: publish,
   };
   const cleanIndustries = (data) => {
     return data.reduce((arr, b) => {
@@ -101,6 +103,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
       : {
           ...newObject,
           ...id,
+          isPublished: publish,
         };
 
     return formData;
@@ -276,6 +279,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
                                 qualification={qualification}
                                 jobType={jobType}
                                 rate={payRate}
+                                setPublish={setPublish}
                               />
                             );
                           }}

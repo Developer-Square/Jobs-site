@@ -10,7 +10,8 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Typography from "@material-ui/core/Typography";
 
-const steps = ["Overview", "Detail", "Finish", "Publish"];
+const steps = ["Overview", "Detail", "Publish"];
+// const steps = ["Overview", "Detail", "Sceening", "Publish"];
 
 const StepOne = ({ formik, jobType }) => {
   return (
@@ -124,17 +125,108 @@ const StepTwo = ({ formik, qualification, rate, experience, industries }) => {
     </>
   );
 };
-const StepThree = ({ formik, loading }) => {
+const StepThree = ({ formik, loading, setPublish }) => {
   return (
-    <div className="form" style={{ width: "100%" }}>
-      <Button
-        type="submit"
-        disabled={!formik.isValid}
-        fullwidth
-        isLoading={loading}
-        title={loading ? "Saving... " : "Save"}
-        className="button margin-top-15"
-      />
+    <div className="flex flex-col justify-center items-center">
+      <card className="grid grid-cols-6 max-w-5xl rounded-xl bg-blue-800 my-2">
+        <div className="col-span-4">
+          <h2 className="font-bold text-3xl text-white ml-10 mt-8">
+            Save and Publish Now
+          </h2>
+          <p className="font-light text-white text-sm ml-10 mt-5">
+            You're one step away from Getting the right employees. Publish your
+            listing directly to the listings page and get the Workforce that
+            suits you.
+          </p>
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            isLoading={loading}
+            onClick={() => setPublish(true)}
+            title={
+              loading ? (
+                "Publishing... "
+              ) : (
+                <>
+                  Save and Publish
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="inline-block h-6 w-6 group-hover:translate-x-2 transition delay-100 transition-200"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </>
+              )
+            }
+            className="text-white font-semibold ml-10 mt-5 mb-8 group"
+            // className="button margin-top-15"
+          />
+        </div>
+        <div className="col-span-2 relative">
+          <img
+            src="https://www.digitalocean.com/_next/static/media/cloudJourneyImage.954519ea.svg"
+            className="absolute bottom-0 right-0"
+            alt="loop"
+          />
+        </div>
+      </card>
+      <card className="grid grid-cols-6 max-w-5xl rounded-xl bg-blue-800 my-2">
+        <div className="col-span-4">
+          <h2 className="font-bold text-3xl text-white ml-10 mt-8">
+            Save and Publish Later
+          </h2>
+          <p className="font-light text-white text-sm ml-10 mt-5">
+            You can Alternatively Save your post and publish later. The job post
+            will not appear on the listings page.
+          </p>
+          <Button
+            type="submit"
+            disabled={!formik.isValid}
+            isLoading={loading}
+            onClick={() => setPublish(false)}
+            title={
+              loading ? (
+                "Saving... "
+              ) : (
+                <>
+                  Save
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="inline-block h-6 w-6 group-hover:translate-x-2 transition delay-100 transition-200"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </>
+              )
+            }
+            className="text-white font-semibold ml-10 mt-5 mb-8 group"
+            // className="button margin-top-15"
+          />
+        </div>
+        <div className="col-span-2 relative">
+          <img
+            src="https://www.digitalocean.com/_next/static/media/cloudJourneyImage.954519ea.svg"
+            className="absolute bottom-0 right-0"
+            alt="loop"
+          />
+        </div>
+      </card>
     </div>
   );
 };
@@ -147,6 +239,7 @@ const VacancyForm = ({
   qualification,
   jobType,
   rate,
+  setPublish,
 }) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
@@ -232,10 +325,15 @@ const VacancyForm = ({
                               rate={rate}
                               experience={experience}
                               industries={industries}
+                              setPublish={setPublish}
                             />
                           )}
                           {activeStep === 2 && (
-                            <StepThree formik={formik} loading={loading} />
+                            <StepThree
+                              setPublish={setPublish}
+                              formik={formik}
+                              loading={loading}
+                            />
                           )}
 
                           <Box

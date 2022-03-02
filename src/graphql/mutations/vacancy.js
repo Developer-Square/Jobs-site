@@ -217,6 +217,7 @@ export const CREATE_VACANCY_MUTATION = gql`
     $description: JSONString
     $positions: Int
     $closingDate: Date
+    $isPublished: Boolean
     $applicationUrl: String!
   ) {
     createVacancy(
@@ -233,6 +234,7 @@ export const CREATE_VACANCY_MUTATION = gql`
         positions: $positions
         closingDate: $closingDate
         applicationUrl: $applicationUrl
+        isPublished: $isPublished
       }
     ) {
       __typename
@@ -250,6 +252,7 @@ export const CREATE_VACANCY_MUTATION = gql`
         positions
         closingDate
         createdAt
+        isPublished
         applicationUrl
         postedBy {
           id
