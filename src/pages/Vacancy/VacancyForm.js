@@ -39,7 +39,7 @@ const StepOne = ({ formik, jobType }) => {
         name="positions"
       />
       <FormikControl
-        control="input"
+        control="location"
         type="text"
         label="Office Location"
         name="location"
@@ -138,37 +138,38 @@ const StepThree = ({ formik, loading, setPublish }) => {
             listing directly to the listings page and get the Workforce that
             suits you.
           </p>
-          <Button
-            type="submit"
-            disabled={!formik.isValid}
-            isLoading={loading}
-            onClick={() => setPublish(true)}
-            title={
-              loading ? (
-                "Publishing... "
-              ) : (
-                <>
-                  Save and Publish
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="inline-block h-6 w-6 group-hover:translate-x-2 transition delay-100 transition-200"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </>
-              )
-            }
-            className="text-white font-semibold ml-10 mt-5 mb-8 group"
-            // className="button margin-top-15"
-          />
+          <div onClick={() => setPublish(true)}>
+            <Button
+              type="submit"
+              disabled={!formik.isValid}
+              isLoading={loading}
+              title={
+                loading ? (
+                  "Publishing... "
+                ) : (
+                  <>
+                    Save and Publish
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="inline-block h-6 w-6 group-hover:translate-x-2 transition delay-100 transition-200"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </>
+                )
+              }
+              className="text-white font-semibold ml-10 mt-5 mb-8 group"
+              // className="button margin-top-15"
+            />
+          </div>
         </div>
         <div className="col-span-2 relative">
           <img
@@ -187,37 +188,38 @@ const StepThree = ({ formik, loading, setPublish }) => {
             You can Alternatively Save your post and publish later. The job post
             will not appear on the listings page.
           </p>
-          <Button
-            type="submit"
-            disabled={!formik.isValid}
-            isLoading={loading}
-            onClick={() => setPublish(false)}
-            title={
-              loading ? (
-                "Saving... "
-              ) : (
-                <>
-                  Save
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="inline-block h-6 w-6 group-hover:translate-x-2 transition delay-100 transition-200"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </>
-              )
-            }
-            className="text-white font-semibold ml-10 mt-5 mb-8 group"
-            // className="button margin-top-15"
-          />
+          <div onClick={() => setPublish(false)}>
+            <Button
+              type="submit"
+              disabled={!formik.isValid}
+              isLoading={loading}
+              title={
+                loading ? (
+                  "Saving... "
+                ) : (
+                  <>
+                    Save
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="inline-block h-6 w-6 group-hover:translate-x-2 transition delay-100 transition-200"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </>
+                )
+              }
+              className="text-white font-semibold ml-10 mt-5 mb-8 group"
+              // className="button margin-top-15"
+            />
+          </div>
         </div>
         <div className="col-span-2 relative">
           <img

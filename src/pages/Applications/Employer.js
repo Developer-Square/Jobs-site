@@ -38,16 +38,18 @@ const Loading = () => {
 };
 const EmployerApplications = ({ deviceType }) => {
   const history = useHistory();
-  const [vacancies, setVacancies] = React.useState();
+  // const [vacancies, setVacancies] = React.useState([]);
   // eslint-disable-next-line no-unused-vars
-  const [pageCount, setPageCount] = React.useState(9);
-
+  const [pageCount, setPageCount] = React.useState(30);
   const [loadFilterValues, { data: vacanciesData, loading, fetchMore }] =
     useLazyQuery(EMPLOYER_VACANCIES_QUERY, {
-      fetchPolicy: "network",
-      onCompleted: (data) => {
-        setVacancies(data.employerVacancies.edges.map((edge) => edge.node));
-      },
+      fetchPolicy: "cache-and-network",
+      // onCompleted: (data) => {
+      //   setVacancies((prev) => [
+      //     ...prev,
+      //     ...data.employerVacancies.edges.map((edge) => edge.node),
+      //   ]);
+      // },
     });
 
   const callLoadFilters = (
@@ -88,6 +90,23 @@ const EmployerApplications = ({ deviceType }) => {
     });
   };
 
+  // const updateQuery = (previousResult, { fetchMoreResult }) => {
+  //   if (!fetchMoreResult) {
+  //     return previousResult;
+  //   }
+
+  //   const allVacancies = {
+  //     ...fetchMoreResult.employerVacancies,
+  //     edges: [
+  //       ...previousResult.employerVacancies.edges,
+  //       ...fetchMoreResult.employerVacancies.edges,
+  //     ],
+  //     pageInfo: fetchMoreResult.employerVacancies.pageInfo,
+  //   };
+
+  //   return { ...fetchMoreResult };
+  // };
+
   const handleLoadMore = () =>
     fetchMore({
       query: EMPLOYER_VACANCIES_QUERY,
@@ -97,7 +116,7 @@ const EmployerApplications = ({ deviceType }) => {
       },
       updateQuery: (previousResult, { fetchMoreResult }) => {
         console.log("dddd", previousResult, fetchMoreResult);
-        const vacancies = {
+        const allVacancies = {
           ...previousResult.employerVacancies,
           edges: [
             ...previousResult.employerVacancies.edges,
@@ -110,10 +129,10 @@ const EmployerApplications = ({ deviceType }) => {
           return previousResult;
         }
         // setVacancies(
-        //   vacancies?.employerVacancies.edges.map((edge) => edge.node),
+        //   allVacancies?.employerVacancies.edges.map((edge) => edge.node),
         // );
 
-        return vacancies;
+        return allVacancies;
       },
     });
   //   (prev, next) => ({
@@ -131,6 +150,7 @@ const EmployerApplications = ({ deviceType }) => {
   //     after: vacanciesData.employerVacancies.pageInfo.endCursor,
   //   },
   // );
+  console.log(vacanciesData);
 
   return (
     <div class="border rounded-t-lg bg-gray-100">
@@ -144,40 +164,6 @@ const EmployerApplications = ({ deviceType }) => {
             </h2>
           </div>
           <div className="my-2 flex sm:flex-row flex-col">
-            {/* <div className="flex flex-row mb-1 sm:mb-0">
-              <div className="relative">
-                <select className="appearance-none h-full rounded-l border block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                  <option>5</option>
-                  <option>10</option>
-                  <option>20</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg
-                    className="fill-current h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </div>
-              </div>
-              <div className="relative">
-                <select className="appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                  <option>All</option>
-                  <option>Active</option>
-                  <option>Inactive</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg
-                    className="fill-current h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </div>
-              </div>
-            </div> */}
             <div className="w-full max-w-xs xl:max-w-lg 2xl:max-w-2xl bg-gray-100 rounded-md hidden lg:flex items-center">
               <input
                 className="border-l border-gray-300 bg-transparent font-semibold text-sm pl-4"
@@ -234,104 +220,114 @@ const EmployerApplications = ({ deviceType }) => {
               <Loading />
             </>
           ) : (
-            vacancies?.map((job, i) => {
-              return job ? (
-                <div
-                  className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3"
-                  key={i}
-                >
-                  <div className="bg-white px-2 py-2 flex my-2 rounded-lg shadow">
-                    <div className="flex-1">
-                      <div className="flex">
-                        <div className="w-24 pr-5">
-                          {vacancyType(job)?.vacancyImage}
-                        </div>
-                        <div className="flex-1">
-                          <div
-                            className="flex flex-column w-full flex-none text-xs text-blue-700 font-medium "
-                            style={{
-                              color: vacancyType(job)?.vacancyColor,
-                            }}
-                          >
-                            {vacancyType(job)?.vacancyType}{" "}
+            vacanciesData?.employerVacancies.edges
+              .map((edge) => edge.node)
+              ?.map((job, i) => {
+                return job ? (
+                  <div
+                    className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3"
+                    key={i}
+                  >
+                    <div className="bg-white px-2 py-2 flex my-2 rounded-lg shadow">
+                      <div className="flex-1">
+                        <div className="flex">
+                          <div className="w-24 pr-5">
+                            {vacancyType(job)?.vacancyImage}
                           </div>
-                          <h2 className="flex-auto text-lg font-medium">
-                            {job?.title}
-                          </h2>
-                          <small>({getClosingDate(job?.closingDate)})</small>
-                          <div className="flex py-1 text-sm text-gray-500">
-                            <div className="flex-1 inline-flex items-center">
-                              <span className="m-2 hover:text-green-500 rounded-lg">
-                                <i className="fa fa-map-marker" />
-                              </span>
-                              <p className>{job?.location}</p>
+                          <div className="flex-1">
+                            <div
+                              className="flex flex-column w-full flex-none text-xs text-blue-700 font-medium "
+                              style={{
+                                color: vacancyType(job)?.vacancyColor,
+                              }}
+                            >
+                              {vacancyType(job)?.vacancyType}{" "}
+                            </div>
+                            <h2 className="flex-auto text-lg font-medium">
+                              {job?.title}
+                            </h2>
+                            <small>({getClosingDate(job?.closingDate)})</small>
+                            <div className="flex py-1 text-sm text-gray-500">
+                              <div className="flex-1 inline-flex items-center">
+                                <span className="m-2 hover:text-green-500 rounded-lg">
+                                  <i className="fa fa-map-marker" />
+                                </span>
+                                <p className>{job?.location}</p>
+                              </div>
                             </div>
                           </div>
                         </div>
+                        <div className="flex p-2 pb-2 border-t border-gray-200 " />
+                        <div className="flex space-x-3 text-sm font-medium ml-auto">
+                          <div className="flex-auto flex space-x-3">
+                            <button
+                              onClick={() => {
+                                redirectToApplicationsPage(job);
+                              }}
+                              className="mb-2 md:mb-0 bg-white px-4 py-2 shadow-sm tracking-wider border text-gray-600 rounded-full hover:bg-gray-100 inline-flex items-center space-x-2 "
+                            >
+                              <span className="text-green-400 hover:text-green-500 rounded-lg">
+                                <i className="fa fa-user" />
+                              </span>
+                              <span>
+                                {job?.numberOfApplications} Applications{" "}
+                                <i className="fa fa-arrow-right" />
+                              </span>
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex p-2 pb-2 border-t border-gray-200 " />
-                      <div className="flex space-x-3 text-sm font-medium ml-auto">
-                        <div className="flex-auto flex space-x-3">
+                    </div>
+                  </div>
+                ) : (
+                  <section className="text-black">
+                    <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
+                      <div className="text-center lg:w-2/3 w-full">
+                        <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium	 text-black font-mono">
+                          You do not have any jobs posted at this time.
+                        </h1>
+                        <p className="leading-relaxed mb-8 font-normal">
+                          To start posting and get candidates fast, use the
+                          TheDatabase job posting services to get up and running
+                          fast.
+                        </p>
+                        <div className="flex justify-center">
                           <button
-                            onClick={() => {
-                              redirectToApplicationsPage(job);
-                            }}
-                            className="mb-2 md:mb-0 bg-white px-4 py-2 shadow-sm tracking-wider border text-gray-600 rounded-full hover:bg-gray-100 inline-flex items-center space-x-2 "
+                            onClick={() =>
+                              history.push(`/dashboard/vacancies/add-job`)
+                            }
+                            className="border-2 border-black  text-black block rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-gray-900 hover:text-pink-500 transition ease-in-out duration-700"
                           >
-                            <span className="text-green-400 hover:text-green-500 rounded-lg">
-                              <i className="fa fa-user" />
-                            </span>
-                            <span>
-                              {job?.numberOfApplications} Applications{" "}
-                              <i className="fa fa-arrow-right" />
-                            </span>
+                            Start Posting
                           </button>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ) : (
-                <section className="text-black">
-                  <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
-                    <div className="text-center lg:w-2/3 w-full">
-                      <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium	 text-black font-mono">
-                        You do not have any jobs posted at this time.
-                      </h1>
-                      <p className="leading-relaxed mb-8 font-normal">
-                        To start posting and get candidates fast, use the
-                        TheDatabase job posting services to get up and running
-                        fast.
-                      </p>
-                      <div className="flex justify-center">
-                        <button
-                          onClick={() =>
-                            history.push(`/dashboard/vacancies/add-job`)
-                          }
-                          className="border-2 border-black  text-black block rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-gray-900 hover:text-pink-500 transition ease-in-out duration-700"
-                        >
-                          Start Posting
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              );
-            })
+                  </section>
+                );
+              })
           )}
         </div>
         <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
           <span className="text-xs xs:text-sm text-gray-900">
-            Showing {vacanciesData?.employerVacancies?.edges?.length} of{" "}
-            {vacanciesData?.employerVacancies?.totalCount} Entries
+            Showing{" "}
+            {
+              vacanciesData?.employerVacancies?.edges?.map((edge) => edge.node)
+                .length
+            }{" "}
+            of {vacanciesData?.employerVacancies?.totalCount} Entries
           </span>
           <div className="inline-flex mt-2 xs:mt-0">
-            <button
-              onClick={handleLoadMore}
-              className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg"
-            >
-              Load More
-            </button>
+            {vacanciesData?.employerVacancies?.pageInfo?.hasNextPage ? (
+              <button
+                onClick={handleLoadMore}
+                className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg"
+              >
+                Load More
+              </button>
+            ) : (
+              <>Those are all the jobs we could find</>
+            )}
           </div>
         </div>
       </div>

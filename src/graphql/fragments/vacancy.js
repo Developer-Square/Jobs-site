@@ -21,6 +21,7 @@ export const vacancyFragment = gql`
     acceptedCount
     rejectedCount
     appliedCount
+    interviewingCount
     payRate
     closingDate
     location

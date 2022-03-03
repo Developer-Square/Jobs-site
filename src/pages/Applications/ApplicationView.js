@@ -1,6 +1,7 @@
 import React from "react";
+import gql from "graphql-tag";
 import Loader from "components/Loader/Loader";
-import { useQuery } from "react-apollo";
+import { useQuery, useMutation } from "react-apollo";
 import moment from "moment";
 import { useRouteMatch } from "react-router";
 import { getGraphqlIdFromDBId } from "utils";
@@ -9,6 +10,69 @@ import { getStatus } from "utils/vacancy";
 import NoResultFound from "components/NoResult/NoResult";
 import PDFViewer from "components/PDFViewer";
 import ResumeViewer from "pages/Resume/view";
+
+export const UPDATE_APPLICATION_STATUS = gql`
+  mutation PatchApplication(
+    $id: ID!
+    $status: ApplicationStatus
+    $employerComment: String
+  ) {
+    patchApplication(
+      id: $id
+      input: { status: $status, employerComment: $employerComment }
+    ) {
+      __typename
+      success
+      application {
+        id
+        inbuiltResume {
+          id
+        }
+        extraAttachment
+        applicant {
+          id
+          fullName
+          email
+          phone
+          progress
+          seeker {
+            status
+            title
+          }
+          avatar {
+            url
+            alt
+          }
+        }
+        job {
+          id
+          title
+          creator {
+            id
+            fullName
+            email
+            phone
+            avatar {
+              url
+              alt
+            }
+          }
+        }
+        appliedOn
+        resume
+        budget
+        comment
+        status
+        favourite
+        employerComment
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;
 
 const ApplicationView = () => {
   const match = useRouteMatch();
@@ -25,30 +89,61 @@ const ApplicationView = () => {
       },
     },
   );
+
+  const [updateStatus] = useMutation(UPDATE_APPLICATION_STATUS);
+
   const handleViewCV = () => {
     return null;
   };
+
   if (applictionLoading) {
     return <Loader />;
   }
   if (!applicationData) {
     return <NoResultFound />;
   }
+  const updateApplicationStatus = (status) => {
+    if (status === "Applied") {
+      updateStatus({ variables: { status: "SHORTLISTED" } });
+    }
+    if (status === "Shortlisted") {
+      updateStatus({ variables: { status: "INTERVIEWING" } });
+    }
+    if (status === "Interviewing") {
+      updateStatus({ variables: { status: "HIRED" } });
+    }
+    if (status === "Declined") {
+      updateStatus({ variables: { status: "DECLINED" } });
+    }
+  };
+
   console.log(applicationData);
 
   return (
     <div>
       <nav className="flex flex-col sm:flex-row border">
         <button
+          onClick={() =>
+            updateApplicationStatus(
+              getStatus(applicationData.jobApplication?.status)?.name,
+            )
+          }
           className={`relative text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none overflow-visible`}
         >
-          Shortlist
+          Change Status, Current -{" "}
+          {getStatus(applicationData.jobApplication?.status)?.name}
         </button>
         <button
+          onClick={() => updateApplicationStatus("DECLINED")}
+          className={`relative text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none overflow-visible`}
+        >
+          Decline
+        </button>
+        {/* <button
           className={`relative text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none overflow-visible`}
         >
           Message
-        </button>
+        </button> */}
       </nav>
       <div className="w-full mx-auto z-10">
         <div className="flex flex-col">

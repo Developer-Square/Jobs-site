@@ -5,32 +5,30 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 const PDFViewer = ({ file }) => {
   const [numPages, setNumPages] = React.useState(null);
-  const [pageNumber, setPageNumber] = React.useState(1);
+  const [pageNumber, setPageNumber] = React.useState(1); //setting 1 to show fisrt page
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
+    setPageNumber(1);
   }
 
-  const goToPrevPage = () => {
-    if (numPages !== pageNumber) {
-      setPageNumber((state) => ({ pageNumber: state.pageNumber - 1 }));
-    }
-  };
+  function changePage(offset) {
+    setPageNumber((prevPageNumber) => prevPageNumber + offset);
+  }
 
-  const goToNextPage = () => {
-    if (pageNumber !== 0 || pageNumber !== numPages) {
-      setPageNumber((state) => ({ pageNumber: state.pageNumber + 1 }));
-    }
-  };
+  function previousPage() {
+    if (pageNumber > 1) changePage(-1);
+  }
+
+  function nextPage() {
+    changePage(1);
+  }
   return (
     <div>
       <nav>
         <div className="w-full mx-auto">
-          <div
-            onClick={goToPrevPage}
-            className="sm:grid grid-cols-4 gap-5 mx-auto px-16"
-          >
-            <div className="col-start-1 col-end-3 my-2">
+          <div className="sm:grid grid-cols-4 gap-5 mx-auto px-16">
+            <div onClick={previousPage} className="col-start-1 col-end-3 my-2">
               <div className="h-full p-1 dark:bg-gray-800 bg-white hover:shadow-xl rounded border-b-4 border-red-500 shadow-md">
                 <h3 className="text-2xl mb-3 font-semibold inline-flex">
                   <svg
@@ -50,7 +48,7 @@ const PDFViewer = ({ file }) => {
                 </h3>
               </div>
             </div>
-            <div onClick={goToNextPage} className="col-end-5 col-span-2 my-2">
+            <div onClick={nextPage} className="col-end-5 col-span-2 my-2">
               <div className="h-full p-1 dark:bg-gray-800 bg-white hover:shadow-xl rounded border-b-4 border-red-500 shadow-md text-right">
                 <h3 className="text-2xl mb-3 font-semibold inline-flex ">
                   Next
@@ -85,7 +83,7 @@ const PDFViewer = ({ file }) => {
       >
         <Page pageNumber={pageNumber} />
         <p>
-          Page {pageNumber} of {numPages}
+          Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
         </p>
       </Document>
     </div>

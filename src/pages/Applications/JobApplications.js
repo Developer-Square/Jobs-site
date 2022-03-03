@@ -381,18 +381,24 @@ const JobApplications = () => {
                         </div>
 
                         <div class="lg:col-span-4 col-span-5 bg-gray-100 space-y-8">
+                          {activeTab}
                           {applications?.length > 0 ? (
-                            applications.map((application, i) => {
-                              return (
-                                <ApplicationCard
-                                  application={application}
-                                  job={data?.vacancy}
-                                  statusData={statusData}
-                                  patchApplication={patchApplication}
-                                  key={i}
-                                />
-                              );
-                            })
+                            applications
+                              .filter(
+                                (app) =>
+                                  getStatus(app.status).name === activeTab,
+                              )
+                              .map((application, i) => {
+                                return (
+                                  <ApplicationCard
+                                    application={application}
+                                    job={data?.vacancy}
+                                    statusData={statusData}
+                                    patchApplication={patchApplication}
+                                    key={i}
+                                  />
+                                );
+                              })
                           ) : (
                             <section className="text-black">
                               <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">

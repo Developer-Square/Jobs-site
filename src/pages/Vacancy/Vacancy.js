@@ -44,7 +44,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
   const alert = useAlert();
   const history = useHistory();
   const [updating, setUpdating] = React.useState(false);
-  const [publish, setPublish] = React.useState();
+  const [publish, setPublish] = React.useState(true);
   const initialData = {
     title: "",
     jobType: "",

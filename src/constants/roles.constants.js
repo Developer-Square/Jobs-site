@@ -33,7 +33,7 @@ const components = {
     module: 1,
     category: account,
     children: [],
-    dashboardItem: true,
+    dashboardItem: false,
   },
   bookmarks: {
     component: "Bookmarks",

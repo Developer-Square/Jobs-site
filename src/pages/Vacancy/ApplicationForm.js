@@ -244,9 +244,6 @@ const ApplicationSeekerForm = () => {
   const [vacancyID, setVacancyID] = React.useState(
     getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"),
   );
-  const {
-    authState: { profile },
-  } = React.useContext(AuthContext);
   React.useEffect(() => {
     if (!user) {
       getUser();
@@ -262,6 +259,7 @@ const ApplicationSeekerForm = () => {
     resume: "",
     budget: "",
     comment: "",
+    extraAttachment: null,
   };
 
   const schema = Yup.object().shape({
@@ -288,7 +286,7 @@ const ApplicationSeekerForm = () => {
           errors,
           null,
           errors,
-          "Application Updated",
+          "Application Created",
           null,
         )
       }
@@ -300,9 +298,9 @@ const ApplicationSeekerForm = () => {
             variables: {
               job: values.job,
               resume: values.resume[0],
+              extraAttachment: values?.extraAttachment[0],
               budget: values.budget,
               comment: values.comment,
-              applicant: profile.id,
               status: "APPLIED",
             },
           }).then(({ data }) => {
@@ -315,12 +313,13 @@ const ApplicationSeekerForm = () => {
                       maybe(() => data.createApplication.errors, []),
                     ),
                   );
+                } else {
+                  history.push(`/vacancies`);
                 }
               }
             }
           });
         }
-        console.log(resumeType);
         return (
           <Formik
             validateOnBlur
@@ -360,22 +359,22 @@ const ApplicationSeekerForm = () => {
                     />
                   </div>
                   <div className="form p-2 w-full shadow p-8 text-gray-700 ">
-                    <button
+                    <div
                       onClick={() => setResumeType("inbuilt")}
                       className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${
                         resumeType === "inbuilt" && " bg-blue-500"
                       }`}
                     >
                       Select Inbuilt Resume
-                    </button>
-                    <button
+                    </div>
+                    <div
                       onClick={() => setResumeType("file")}
                       className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${
                         resumeType === "file" && " bg-blue-500"
                       }`}
                     >
                       Upload File
-                    </button>
+                    </div>
                     {resumeType === "file" && (
                       <FormikControl
                         control="file"

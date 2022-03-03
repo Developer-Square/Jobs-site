@@ -19,6 +19,7 @@ import {
   WORK_ITEM_CREATE,
 } from "graphql/mutations";
 import { handleAvatarUpdate } from "utils";
+import moment from "moment";
 
 const personaTitles = [
   { label: "Student", value: "Student" },
@@ -92,9 +93,10 @@ const SeekerStepper = () => {
     console.log("inafika", values);
     values.industries = values.industries.map((industry) => industry.value);
     values.nationality = values.nationality.value;
-    // moment(values.dateOfBirth).format("YYYY-MM-DD");
+    values.dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
+    values.mobile = user.phone;
     // const g = new Date(values.dateOfBirth).getDate();
-    values.dateOfBirth = new Date(values.dateOfBirth).getDate();
+    // values.dateOfBirth = new Date(values.dateOfBirth).getDate();
 
     console.log("all the seeker values", values);
     if (IsNotEmpty(values.industries)) {
@@ -114,16 +116,16 @@ const SeekerStepper = () => {
     console.log("inafika", values);
     values.institution = values.institution.label;
     values.course = values.course.label;
-    values.schoolStart = new Date(values.schoolStart).getDate();
-    values.schoolEnd = new Date(values.schoolEnd).getDate();
+    // values.schoolStart = new Date(values.schoolStart).getDate();
+    // values.schoolEnd = new Date(values.schoolEnd).getDate();
     console.log("all the seeker values", values);
     createEducation({ variables: { ...values } });
   };
 
   const experienceCreateSubmit = (values) => {
     console.log("inafika", values);
-    values.workStart = new Date(values.workStart).getDate();
-    values.workEnd = new Date(values.workEnd).getDate();
+    // values.workStart = new Date(values.workStart).getDate();
+    // values.workEnd = new Date(values.workEnd).getDate();
     console.log("all the seeker values", values);
     createWork({ variables: { ...values } });
   };
@@ -216,6 +218,13 @@ const SeekerStepper = () => {
           placeholder: "https://www.linkedin.com/in/john-doe-112",
           control: "input",
           type: "text",
+        },
+        {
+          name: "description",
+          description: "About Yourself",
+          control: "textarea",
+          rte: true,
+          fullWidth: true,
         },
       ],
     },

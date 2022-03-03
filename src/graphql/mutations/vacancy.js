@@ -75,9 +75,9 @@ export const CREATE_APPLICATION = gql`
     $status: ApplicationStatus
     $isActive: Boolean
     $isDeleted: Boolean
-    $applicant: ID
     $job: ID!
     $resume: Upload
+    $extraAttachment: Upload
     $budget: String
     $comment: String
   ) {
@@ -86,11 +86,11 @@ export const CREATE_APPLICATION = gql`
         status: $status
         isActive: $isActive
         isDeleted: $isDeleted
-        applicant: $applicant
         job: $job
         resume: $resume
         budget: $budget
         comment: $comment
+        extraAttachment: $extraAttachment
       }
     ) {
       __typename
