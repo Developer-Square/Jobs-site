@@ -12,6 +12,13 @@ export const seekerFragment = gql`
     gender
     mobile
     status
+    profileCompletion {
+      id
+      settings
+      education
+      skills
+      experience
+    }
     course {
       id
       name

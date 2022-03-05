@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react";
 import { toast } from "react-toastify";
 import { useHistory, useRouteMatch } from "react-router-dom";
-
+import omitDeep from "omit-deep-lodash";
 import LoadingScreen from "components/LoadingScreen";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
 import { MetaWrapper } from "components/Meta";
@@ -66,7 +66,7 @@ const ResumeBuilder = () => {
                   }}
                 >
                   <ResumeBuilderView
-                    resume={resumeData.data.resume}
+                    resume={omitDeep(resumeData.data.resume, "__typename")}
                     resumeID={resumeID}
                   />
                 </MetaWrapper>

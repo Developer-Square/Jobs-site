@@ -121,8 +121,8 @@ const CoursesSearch = ({ label = "Course", name = "course", ...rest }) => {
   return (
     <FormikControl
       control="async-select"
-      label="Course"
-      name="course"
+      label={label}
+      name={name}
       loadOptions={loadOptions}
       style={{ margin: 0 }}
       placeholder="Search Course"

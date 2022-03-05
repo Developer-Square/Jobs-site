@@ -143,12 +143,14 @@ export const BASE_PROFILE_MUTATION = gql`
 
 export const SEEKER_PROFILE_COMPLETION = gql`
   mutation SeekerProfileCompletionPatch(
-    $settings: String
-    $education: String
-    $skills: String
-    $experience: String
+    $id: ID!
+    $settings: Boolean
+    $education: Boolean
+    $skills: Boolean
+    $experience: Boolean
   ) {
     seekerProfileCompletionPatch(
+      id: $id
       input: {
         settings: $settings
         education: $education
@@ -175,8 +177,8 @@ export const SEEKER_PROFILE_COMPLETION = gql`
   }
 `;
 export const EMPLOYER_PROFILE_COMPLETION = gql`
-  mutation EmployerProfileCompletionPatch($settings: String) {
-    employerProfileCompletionUpdate(input: { settings: $settings }) {
+  mutation EmployerProfileCompletionPatch($id: ID!, $settings: Boolean) {
+    employerProfileCompletionPatch(id: $id, input: { settings: $settings }) {
       success
       errors {
         field
@@ -243,7 +245,7 @@ export const SEEKER_UPDATE_MUTATION = gql`
     $gender: SeekerGender
     $mobile: String
     $status: SeekerStatus
-    $industries: [ID]!
+    $industries: [ID]
   ) {
     seekerPatch(
       id: $id

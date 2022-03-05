@@ -5,6 +5,7 @@ import {
   awardItemFragment,
   educationItemFragment,
   workItemFragment,
+  skillItemFragment,
 } from "graphql/fragments";
 
 export const DUPLICATE_RESUME = gql`
@@ -229,6 +230,7 @@ export const WORK_ITEM_CREATE = gql`
 export const WORK_ITEM_UPDATE = gql`
   ${workItemFragment}
   mutation WorkItemUpdate(
+    $id: ID!
     $descriptionPlaintext: String
     $company: String
     $position: String
@@ -238,6 +240,7 @@ export const WORK_ITEM_UPDATE = gql`
     $website: String
   ) {
     workItemPatch(
+      id: $id
       input: {
         descriptionPlaintext: $descriptionPlaintext
         company: $company
@@ -263,7 +266,7 @@ export const WORK_ITEM_UPDATE = gql`
 
 export const EDUCATION_ITEM_CREATE = gql`
   ${educationItemFragment}
-  mutation WorkItemCreate(
+  mutation EducationItemCreate(
     $descriptionPlaintext: String
     $owner: ID
     $institution: String
@@ -292,7 +295,7 @@ export const EDUCATION_ITEM_CREATE = gql`
         message
       }
       educationItem {
-        ...WorkItem
+        ...EducationItem
       }
     }
   }
@@ -301,6 +304,7 @@ export const EDUCATION_ITEM_CREATE = gql`
 export const EDUCATION_ITEM_UPDATE = gql`
   ${educationItemFragment}
   mutation EducationItemUpdate(
+    $id: ID!
     $descriptionPlaintext: String
     $institution: String
     $fieldOfStudy: String
@@ -310,6 +314,7 @@ export const EDUCATION_ITEM_UPDATE = gql`
     $schoolEnd: Date!
   ) {
     educationItemPatch(
+      id: $id
       input: {
         descriptionPlaintext: $descriptionPlaintext
         institution: $institution
@@ -327,7 +332,41 @@ export const EDUCATION_ITEM_UPDATE = gql`
         message
       }
       educationItem {
-        ...WorkItem
+        ...EducationItem
+      }
+    }
+  }
+`;
+
+export const SKILL_ITEM_CREATE = gql`
+  ${skillItemFragment}
+  mutation SkillItemCreate($owner: ID, $name: String, $level: String) {
+    skillItemCreate(input: { owner: $owner, name: $name, level: $level }) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      skillItem {
+        ...SkillItem
+      }
+    }
+  }
+`;
+
+export const SKILL_ITEM_UPDATE = gql`
+  ${skillItemFragment}
+  mutation SkillItemUpdate($id: ID!, $name: String, $level: String) {
+    skillItemPatch(id: $id, input: { name: $name, level: $level }) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      skillItem {
+        ...SkillItem
       }
     }
   }

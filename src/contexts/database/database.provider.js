@@ -1,5 +1,6 @@
-import { debounce } from "lodash";
 import React, { createContext, memo, useState } from "react";
+import { debounce } from "lodash";
+import omitDeep from "omit-deep-lodash";
 import { useLazyQuery, useMutation } from "react-apollo";
 import { toast } from "react-toastify";
 import {
@@ -42,7 +43,7 @@ const DatabaseProvider = ({ children }) => {
         },
       });
       console.log(resumeDataResponse);
-      return resumeDataResponse?.data?.resume;
+      return omitDeep(resumeDataResponse?.data?.resume, "__typename");
     } catch (error) {
       console.log("getResume error", error);
       return null;
@@ -68,7 +69,7 @@ const DatabaseProvider = ({ children }) => {
           ...resume,
         },
       }).then(({ data }) => {
-        return data?.resumePatch?.resume;
+        return omitDeep(data?.resumePatch?.resume, "__typename");
       });
       setUpdating(false);
     } catch (error) {

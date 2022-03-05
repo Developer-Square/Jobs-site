@@ -12,15 +12,8 @@ import PDFViewer from "components/PDFViewer";
 import ResumeViewer from "pages/Resume/view";
 
 export const UPDATE_APPLICATION_STATUS = gql`
-  mutation PatchApplication(
-    $id: ID!
-    $status: ApplicationStatus
-    $employerComment: String
-  ) {
-    patchApplication(
-      id: $id
-      input: { status: $status, employerComment: $employerComment }
-    ) {
+  mutation PatchApplication($id: ID!, $status: ApplicationStatus) {
+    patchApplication(id: $id, input: { status: $status }) {
       __typename
       success
       application {
@@ -104,16 +97,36 @@ const ApplicationView = () => {
   }
   const updateApplicationStatus = (status) => {
     if (status === "Applied") {
-      updateStatus({ variables: { status: "SHORTLISTED" } });
+      updateStatus({
+        variables: {
+          id: getGraphqlIdFromDBId(match.params.applicationID, "Application"),
+          status: "SHORTLISTED",
+        },
+      });
     }
     if (status === "Shortlisted") {
-      updateStatus({ variables: { status: "INTERVIEWING" } });
+      updateStatus({
+        variables: {
+          id: getGraphqlIdFromDBId(match.params.applicationID, "Application"),
+          status: "INTERVIEWING",
+        },
+      });
     }
     if (status === "Interviewing") {
-      updateStatus({ variables: { status: "HIRED" } });
+      updateStatus({
+        variables: {
+          id: getGraphqlIdFromDBId(match.params.applicationID, "Application"),
+          status: "HIRED",
+        },
+      });
     }
     if (status === "Declined") {
-      updateStatus({ variables: { status: "DECLINED" } });
+      updateStatus({
+        variables: {
+          id: getGraphqlIdFromDBId(match.params.applicationID, "Application"),
+          status: "DECLINED",
+        },
+      });
     }
   };
 

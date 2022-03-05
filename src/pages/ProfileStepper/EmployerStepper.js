@@ -205,7 +205,7 @@ const EmployerStepper = () => {
     });
   };
 
-  if (!industries || !workForce) return <div>To Load</div>;
+  if (!industries || !workForce || !user) return <div>To Load</div>;
 
   return (
     <TypedEmployerProfileMutation
@@ -226,18 +226,6 @@ const EmployerStepper = () => {
           }
         }
         return (
-          // <FurtherInformation
-          //   schoolOptions={schoolOptions}
-          //   industries={industries}
-          //   courses={courseOptions}
-          //   loading={loading}
-          //   onEmployerProfileSubmit={
-          //     onEmployerProfileSubmit
-          //   }
-          //   initialValues={schoolInterestsInitialValues}
-          //   alert={alert}
-          // />
-
           <ProfileStepper
             onProfileInitialSubmit={onEmployerProfileSubmit}
             onProfileSubmit={onEmployerProfileSubmit}
@@ -246,6 +234,7 @@ const EmployerStepper = () => {
             steps={employerSteps}
             initialValaues={initialValues}
             schemaValidation={null}
+            sets={user?.employer?.profileCompletion}
           />
         );
       }}

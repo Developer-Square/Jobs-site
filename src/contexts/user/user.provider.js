@@ -17,7 +17,9 @@ const defaultState = {
   loading: false,
   user: defaultUser,
   refetchUser: false,
+  userLoading: false,
   userType: null,
+  userData: null,
   logout: async () => {},
   loginWithGoogle: async () => {},
   loginAnonymously: async () => {},
@@ -41,12 +43,15 @@ const UserProvider = ({ children }) => {
     authDispatch,
   } = React.useContext(AuthContext);
   const navigate = useHistory();
-  const [fetchUser] = useLazyQuery(GET_USER_DETAILS, {
-    fetchPolicy: "no-cache",
-    onCompleted: (data) => {
-      setUser(data?.me);
+  const [fetchUser, { data: userData, loading: userLoading }] = useLazyQuery(
+    GET_USER_DETAILS,
+    {
+      fetchPolicy: "no-cache",
+      onCompleted: (data) => {
+        setUser(data?.me);
+      },
     },
-  });
+  );
   const [accountAddressDelete] = useMutation(DELETE_ADDRESS);
   const [accountAddressUpdate] = useMutation(UPDATE_ADDRESS);
 
@@ -148,6 +153,8 @@ const UserProvider = ({ children }) => {
         deleteAccount,
         setUserType,
         userType,
+        userData,
+        userLoading,
       }}
     >
       {children}

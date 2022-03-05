@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { Form, Formik, FieldArray } from "formik";
 import FormikControl from "containers/FormikContainer/FormikControl";
 import Button from "components/Button/Button";
@@ -16,14 +17,40 @@ import {
 const ProfileStepper = (props) => {
   const {
     steps,
+    sets,
     // onProfileInitialSubmit,
     // onProfileSubmit,
     // setRefetchUser,
     // isEdit,
   } = props;
+  const history = useHistory();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [activeSection, setActiveSection] = React.useState(steps[activeStep]);
+  const dbActiveStep = () => {
+    if (!sets) {
+      return 0;
+    }
+    if (!sets) {
+      return 0;
+    }
+    if (sets?.skills === true) return 3;
+    if (sets?.education === true) return 2;
+    if (sets?.settings === true) return 1;
+    if (sets?.settings === false) return 0;
+    if (sets?.education === false) return 0;
+    if (sets?.skills === false) return 0;
+    if (sets?.experience === false) return 0;
+
+    // if (sets?.experience === true) history.push(`/dashboard`);
+
+    history.push(`/dashboard`);
+  };
+  React.useEffect(() => {
+    setActiveStep(dbActiveStep());
+    setActiveSection(steps[dbActiveStep()]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isStepOptional = (step) => {
     return step === 6;
@@ -129,7 +156,7 @@ const ProfileStepper = (props) => {
         return (
           <div className="mt-20">
             <div className="grid grid-cols-3">
-              <div class="col-span-1 bg-white lg:block hidden">
+              <div className="col-span-1 bg-white lg:block hidden">
                 <nav className=" rounded-md flex-col justify-between">
                   <div className=" bg-white">
                     <div className="pl-10">
@@ -172,7 +199,7 @@ const ProfileStepper = (props) => {
                   </div>
                 </nav>{" "}
               </div>
-              <div class="lg:col-span-2 col-span-3 bg-gray-100 space-y-8">
+              <div className="lg:col-span-2 col-span-3 bg-gray-100 space-y-8">
                 <section className="container px-6 py-4 mx-auto">
                   {steps?.map((step, k) => {
                     return isActiveSection(steps[activeStep]) ? (

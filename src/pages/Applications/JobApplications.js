@@ -1,6 +1,8 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { findIndex } from "lodash";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 import Loader from "components/Loader/Loader";
 import NetworkStatus from "components/NetworkStatus";
 import OfflinePlaceholder from "components/OfflinePlaceholder";
@@ -22,9 +24,13 @@ import { VACANCY_DETAIL_QUERY } from "graphql/queries";
 import Slide from "containers/Slide/Slide";
 import { useDeviceType } from "helpers/useDeviceType";
 import { useSidebar } from "contexts/sidebar/use-sidebar";
+import ConstantsContext from "contexts/constants/constants.provider";
+// import CoursesSearch from "components/CoursesSearch/CoursesSearch";
 
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 export const TypedApplicationsQuery = TypedQuery(GET_JOB_APPLICATIONS);
+
+const animatedComponents = makeAnimated();
 
 const ApplicationCard = (props) => {
   const history = useHistory();
@@ -54,13 +60,13 @@ const ApplicationCard = (props) => {
   return (
     <div className="w-full mx-auto z-10">
       <div className="flex flex-col">
-        <div className="bg-white flex items-center p-4 m-4 rounded-xl shadow border">
+        <div className="bg-white flex items-center p-4 m-4 mb-0 rounded-xl shadow border">
           <div className="flex items-center space-x-4">
             {props?.application?.applicant?.avatar?.url ? (
               <img
                 src={props?.application?.applicant?.avatar?.url || UserImage}
                 alt="p"
-                className="w-32 object-cover rounded-2xl"
+                className="w-32 h-32 object-cover rounded-2xl"
               />
             ) : (
               <div className="w-32 object-cover rounded-2xl">
@@ -154,9 +160,23 @@ const JobApplications = () => {
 
   const { isOpen, toggleSidebar } = useSidebar();
   const userAgent = navigator.userAgent;
+  const {
+    seekerGender,
+    seekerStatus,
+    seekerNationality,
+    institutions,
+    skills,
+  } = React.useContext(ConstantsContext);
   const { mobile, tablet, desktop } = useDeviceType(userAgent);
   const [jobArray, setJobArray] = React.useState([]);
   const [activeTab, setActiveTab] = React.useState("Applied");
+
+  const [genderFilter, setGenderFilter] = React.useState();
+  const [statusFilter, setStatusFilter] = React.useState();
+  const [nationalityFilter, setNationalityFilter] = React.useState();
+  const [skillsFilter, setSkillsFilter] = React.useState();
+  const [institutionsFilter, setInstitutionsFilter] = React.useState();
+
   const { data, loading: vacancyLoading } = useQuery(VACANCY_DETAIL_QUERY, {
     variables: {
       id: match.params.jobID
@@ -172,6 +192,41 @@ const JobApplications = () => {
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  console.log(genderFilter, statusFilter, skillsFilter);
+
+  const selectedFilters = () => {
+    let selectedListFilter = [];
+    if (genderFilter) {
+      selectedListFilter.push(
+        ...genderFilter.map((sf) => sf.label + ":bg-gray-400"),
+      );
+    }
+    if (statusFilter) {
+      selectedListFilter.push(
+        ...statusFilter.map((sf) => sf.label + ":bg-blue-800"),
+      );
+    }
+    if (nationalityFilter) {
+      selectedListFilter.push(
+        ...nationalityFilter.map((sf) => sf.label + ":bg-yellow-400"),
+      );
+    }
+    if (skillsFilter) {
+      selectedListFilter.push(
+        ...skillsFilter.map((sf) => sf.label + ":bg-gray-800"),
+      );
+    }
+    if (institutionsFilter) {
+      selectedListFilter.push(
+        ...institutionsFilter.map((sf) => sf.label + ":bg-green-400"),
+      );
+    }
+    return selectedListFilter;
+  };
+
+  const handleApplyFilters = () => {
+    toggleSidebar();
+  };
 
   let statusData;
   let applications;
@@ -376,12 +431,101 @@ const JobApplications = () => {
                             </a>
                           </div>
                           <Slide deviceType={{ mobile, tablet, desktop }}>
-                            {isOpen && <div>the filter</div>}
+                            {isOpen && (
+                              <>
+                                <div className="px-4 sm:px-6">
+                                  <h2
+                                    className="text-lg font-medium text-gray-900"
+                                    id="slide-over-title"
+                                  >
+                                    <button
+                                      onClick={handleApplyFilters}
+                                      className="px-4 py-2 rounded-md text-sm font-medium border-b-2 focus:outline-none focus:ring transition text-white bg-blue-500 border-blue-800 hover:bg-blue-600 active:bg-blue-700 focus:ring-blue-300"
+                                    >
+                                      Apply Filters
+                                    </button>
+                                  </h2>
+                                </div>
+                                <div className="grid grid-cols-1">
+                                  <p className="p-2">
+                                    Filter by multiple skills{" "}
+                                  </p>
+                                  <Select
+                                    closeMenuOnSelect={false}
+                                    components={animatedComponents}
+                                    isMulti
+                                    options={skills}
+                                    onChange={(val) => setSkillsFilter(val)}
+                                  />
+                                  <p className="p-2">Filter by institution: </p>
+                                  <Select
+                                    closeMenuOnSelect={false}
+                                    components={animatedComponents}
+                                    options={institutions}
+                                    isMulti
+                                    onChange={(val) =>
+                                      setInstitutionsFilter(val)
+                                    }
+                                  />
+                                  <p className="p-2">
+                                    Filter by Specific Gender:{" "}
+                                  </p>
+                                  <Select
+                                    closeMenuOnSelect={false}
+                                    components={animatedComponents}
+                                    options={seekerGender}
+                                    isMulti
+                                    onChange={(val) => setGenderFilter(val)}
+                                  />
+                                  <p className="p-2">Filter by Nationality: </p>
+                                  <Select
+                                    closeMenuOnSelect={false}
+                                    components={animatedComponents}
+                                    options={seekerNationality}
+                                    isMulti
+                                    onChange={(val) =>
+                                      setNationalityFilter(val)
+                                    }
+                                  />
+                                  <p className="p-2">
+                                    Filter by Seeker Status:{" "}
+                                  </p>
+                                  <Select
+                                    closeMenuOnSelect={false}
+                                    components={animatedComponents}
+                                    options={seekerStatus}
+                                    isMulti
+                                    onChange={(val) => setStatusFilter(val)}
+                                  />
+                                </div>
+                                <div className="px-4 sm:px-6">
+                                  <h2
+                                    className="text-lg font-medium text-gray-900"
+                                    id="slide-over-title"
+                                  >
+                                    Selected Filters
+                                  </h2>
+                                </div>
+                                <div className="flex flex-wrap">
+                                  {selectedFilters().map((sf, k) => {
+                                    return (
+                                      <span
+                                        key={k}
+                                        className={`m-1 px-3 py-1 rounded-full text-xs font-medium text-white ${
+                                          sf.split(":")[1]
+                                        } `}
+                                      >
+                                        {sf.split(":")[0]}
+                                      </span>
+                                    );
+                                  })}
+                                </div>
+                              </>
+                            )}
                           </Slide>
                         </div>
 
                         <div class="lg:col-span-4 col-span-5 bg-gray-100 space-y-8">
-                          {activeTab}
                           {applications?.length > 0 ? (
                             applications
                               .filter(

@@ -240,6 +240,29 @@ export const _promiseToObservable = (promiseFunc) =>
     return subscriber; // this line can removed, as per next comment
   });
 
+// const inMemoryCacheOptions = {
+//   addTypename: true,
+//   typePolicies: {
+//     Repository: {
+//       fields: {
+//         releases: {
+//           keyArgs: false,
+//           merge(existing, incoming) {
+//             if (!incoming) return existing;
+//             if (!existing) return incoming;
+
+//             const { nodes, ...rest } = incoming;
+//             // We only need to merge the nodes array.
+//             // The rest of the fields (pagination) should always be overwritten by incoming
+//             let result = rest;
+//             result.nodes = [...existing.nodes, ...nodes];
+//             return result;
+//           },
+//         },
+//       },
+//     },
+//   },
+// };
 /**
  * Creates and configures the ApolloClient
  * @param  {Object} [initialState={}]

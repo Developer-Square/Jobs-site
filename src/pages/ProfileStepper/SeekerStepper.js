@@ -13,7 +13,7 @@ import CoursesSearch from "components/CoursesSearch/CoursesSearch";
 import {
   SEEKER_PROFILE_MUTATION,
   SEEKER_PROFILE_COMPLETION,
-  SEEKER_UPDATE_MUTATION,
+  SKILL_ITEM_CREATE,
   AVATAR_UPDATE_MUTATION,
   EDUCATION_ITEM_CREATE,
   WORK_ITEM_CREATE,
@@ -37,7 +37,8 @@ const SeekerStepper = () => {
   const history = useHistory();
   const alert = useAlert();
   const [initialValues, setInitialValues] = React.useState(initValues);
-  const { setRefetchUser, user, getUser } = React.useContext(UserContext);
+  const { setRefetchUser, userLoading, user, getUser } =
+    React.useContext(UserContext);
   const {
     seekerGender,
     seekerStatus,
@@ -54,6 +55,7 @@ const SeekerStepper = () => {
       setRefetchUser((prev) => !prev);
     },
   });
+
   const [
     createSeeker,
     { data: seekerData, loading: seekerLoading, error: seekerError },
@@ -61,31 +63,55 @@ const SeekerStepper = () => {
     onCompleted: (data) => {
       // after this I've to send another req
       updateSeekerProfile({
-        variables: { settings: true },
+        variables: {
+          id: user?.seeker?.profileCompletion?.id,
+          settings: true,
+          skills: false,
+          education: false,
+          experience: false,
+        },
       });
     },
   });
-  const [updateSeeker] = useMutation(SEEKER_UPDATE_MUTATION, {
+  const [createSkills] = useMutation(SKILL_ITEM_CREATE, {
     onCompleted: (data) => {
       // after this I've to send another req
       updateSeekerProfile({
-        variables: { skills: true },
+        variables: {
+          id: user?.seeker?.profileCompletion?.id,
+          skills: true,
+          education: true,
+          settings: true,
+          experience: false,
+        },
       });
     },
   });
-  const [createEducation] = useMutation(WORK_ITEM_CREATE, {
+  const [createEducation] = useMutation(EDUCATION_ITEM_CREATE, {
     onCompleted: (data) => {
       // after this I've to send another req
       updateSeekerProfile({
-        variables: { education: true },
+        variables: {
+          id: user?.seeker?.profileCompletion?.id,
+          education: true,
+          settings: true,
+          skills: false,
+          experience: false,
+        },
       });
     },
   });
-  const [createWork] = useMutation(EDUCATION_ITEM_CREATE, {
+  const [createWork] = useMutation(WORK_ITEM_CREATE, {
     onCompleted: (data) => {
       // after this I've to send another req
       updateSeekerProfile({
-        variables: { experience: true },
+        variables: {
+          id: user?.seeker?.profileCompletion?.id,
+          experience: true,
+          skills: true,
+          education: true,
+          settings: true,
+        },
       });
     },
   });
@@ -94,32 +120,50 @@ const SeekerStepper = () => {
     values.industries = values.industries.map((industry) => industry.value);
     values.nationality = values.nationality.value;
     values.dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
-    values.mobile = user.phone;
+    // values.mobile = user.phone;
     // const g = new Date(values.dateOfBirth).getDate();
     // values.dateOfBirth = new Date(values.dateOfBirth).getDate();
 
     console.log("all the seeker values", values);
     if (IsNotEmpty(values.industries)) {
-      createSeeker({ variables: { ...values } });
+      createSeeker({ variables: { ...values, mobile: user?.phone } });
     }
     return { seekerData, seekerLoading, seekerError };
   };
+
   const seekerUpdateSubmit = (values) => {
     console.log("inafika", values);
-    values.skills = values.skills.map((skill) => skill.value);
-    console.log("all the seeker values", values);
-    if (IsNotEmpty(values.industries)) {
-      updateSeeker({ variables: { ...values } });
+    if (IsNotEmpty(values.skills)) {
+      for (let i = 0; i < values.skills.length; i++) {
+        const element = values.skills[i];
+        createSkills({
+          variables: {
+            name: element.label,
+            proficiency: "Intermediate",
+            level: "Intermediate",
+            owner: user?.seeker?.id,
+          },
+        });
+      }
     }
   };
+
   const educationCreateSubmit = (values) => {
     console.log("inafika", values);
-    values.institution = values.institution.label;
-    values.course = values.course.label;
+    values.institution = values?.institution?.label || values?.institution;
+    values.course = values?.course?.label || values?.institution;
+
+    console.log(user);
     // values.schoolStart = new Date(values.schoolStart).getDate();
     // values.schoolEnd = new Date(values.schoolEnd).getDate();
     console.log("all the seeker values", values);
-    createEducation({ variables: { ...values } });
+    createEducation({
+      variables: {
+        ...values,
+        degree: "Bachelor's Degree",
+        owner: user?.seeker?.id,
+      },
+    });
   };
 
   const experienceCreateSubmit = (values) => {
@@ -127,7 +171,7 @@ const SeekerStepper = () => {
     // values.workStart = new Date(values.workStart).getDate();
     // values.workEnd = new Date(values.workEnd).getDate();
     console.log("all the seeker values", values);
-    createWork({ variables: { ...values } });
+    createWork({ variables: { ...values, owner: user?.seeker?.id } });
   };
   const handleAvatarChange = (file) => {
     for (let i = 0; i < file.length; i++) {
@@ -235,10 +279,12 @@ const SeekerStepper = () => {
       useFieldArray: false,
       blankValues: {
         institution: "",
-        course: "",
+        fieldOfStudy: "",
         level: "",
         schoolStart: "",
         schoolEnd: "",
+        gpa: 0,
+        degree: "Bachelor's Degree",
       },
       fields: [
         {
@@ -252,7 +298,7 @@ const SeekerStepper = () => {
           defaultValue: { value: "", label: "Select Institution" },
         },
         {
-          name: "course",
+          name: "fieldOfStudy",
           type: "custom",
           description: "Select the course studied",
           Component: (
@@ -264,6 +310,12 @@ const SeekerStepper = () => {
           description: "Selet EducationL Level",
           control: "mui-radio",
           options: educationLevel,
+        },
+        {
+          name: "gpa",
+          description: "Your GPA",
+          control: "input",
+          type: "text",
         },
         {
           name: "schoolStart",
@@ -305,6 +357,7 @@ const SeekerStepper = () => {
         position: "",
         workStart: "",
         workEnd: "",
+        achievements: "",
         descriptionPlaintext: "",
       },
       fields: [
@@ -338,6 +391,12 @@ const SeekerStepper = () => {
         {
           name: "descriptionPlaintext",
           description: "Description of the work",
+          control: "textarea",
+          rte: false,
+        },
+        {
+          name: "achievements",
+          description: "Acheivements During said period",
           control: "textarea",
           rte: false,
         },
@@ -393,6 +452,8 @@ const SeekerStepper = () => {
   )
     return <div>To Load</div>;
 
+  if (userLoading) return <>Loading...</>;
+
   return (
     <TypedSeekerProfileMutation
       onCompleted={(data, errors) =>
@@ -425,6 +486,7 @@ const SeekerStepper = () => {
             setRefetchUser={setRefetchUser}
             steps={seekerSteps}
             initialValaues={initialValues}
+            sets={user?.seeker?.profileCompletion}
           />
         );
       }}

@@ -176,7 +176,7 @@ const ManageVacancies = ({ deviceType }) => {
             id: "title",
             accessor: (d) => {
               return (
-                <div class="ml-3">
+                <div class="ml-3 text-bold">
                   <div class="">{d?.title}</div>
                   <div class="text-gray-500">({d?.industry?.name})</div>
                 </div>
