@@ -26,11 +26,31 @@ import { useDeviceType } from "helpers/useDeviceType";
 import { useSidebar } from "contexts/sidebar/use-sidebar";
 import ConstantsContext from "contexts/constants/constants.provider";
 // import CoursesSearch from "components/CoursesSearch/CoursesSearch";
+import { stringify as stringifyQs } from "query-string";
 
 export const TypedUpdateApplicationMutation = TypedMutation(UPDATE_APPLICATION);
 export const TypedApplicationsQuery = TypedQuery(GET_JOB_APPLICATIONS);
 
 const animatedComponents = makeAnimated();
+
+const progressColor = (y) => {
+  const x = ((y * 100) / 6).toFixed(0);
+
+  if (x > 50) {
+    return "green";
+  }
+  if (x >= 25 && x <= 50) {
+    return "yellow";
+  }
+  if (x < 25 && x > 10) {
+    return "gray";
+  }
+  if (x <= 10) {
+    return "red";
+  }
+
+  return "red";
+};
 
 const ApplicationCard = (props) => {
   const history = useHistory();
@@ -105,6 +125,19 @@ const ApplicationCard = (props) => {
               </div>
             </div>
           </div>
+          {props?.showProgress && (
+            <div className="p-2">
+              <div
+                className={`flex justify-center items-center content-center bg-gradient-to-br from-${progressColor(
+                  props?.application?.rank,
+                )}-300 to-${progressColor(
+                  props?.application?.rank,
+                )}-600 shadow-md hover:shadow-lg h-20 w-20 rounded-full fill-current text-white`}
+              >
+                {`${((props?.application?.rank * 100) / 6).toFixed(0)}% match`}
+              </div>
+            </div>
+          )}
           <div className="p-2">
             <button
               onClick={() => handleEdit(props?.application)}
@@ -170,12 +203,14 @@ const JobApplications = () => {
   const { mobile, tablet, desktop } = useDeviceType(userAgent);
   const [jobArray, setJobArray] = React.useState([]);
   const [activeTab, setActiveTab] = React.useState("Applied");
+  const [showProgress, setShowProgress] = React.useState(false);
 
-  const [genderFilter, setGenderFilter] = React.useState();
-  const [statusFilter, setStatusFilter] = React.useState();
-  const [nationalityFilter, setNationalityFilter] = React.useState();
-  const [skillsFilter, setSkillsFilter] = React.useState();
-  const [institutionsFilter, setInstitutionsFilter] = React.useState();
+  const [genderFilter, setGenderFilter] = React.useState(null);
+  const [statusFilter, setStatusFilter] = React.useState(null);
+  const [nationalityFilter, setNationalityFilter] = React.useState(null);
+  const [skillsFilter, setSkillsFilter] = React.useState(null);
+  const [institutionsFilter, setInstitutionsFilter] = React.useState(null);
+  const [searchString, setSearchString] = React.useState("");
 
   const { data, loading: vacancyLoading } = useQuery(VACANCY_DETAIL_QUERY, {
     variables: {
@@ -192,6 +227,31 @@ const JobApplications = () => {
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    const gender = genderFilter && genderFilter.map((a) => a.label);
+    const skills = skillsFilter && skillsFilter.map((a) => a.label);
+    const institutions =
+      institutionsFilter && institutionsFilter.map((a) => a.label);
+    const status = statusFilter && statusFilter.map((a) => a.label);
+    const nationality =
+      nationalityFilter && nationalityFilter.map((a) => a.label);
+
+    const shortlistObj = { gender, skills, institutions, status, nationality };
+
+    const qs = stringifyQs(shortlistObj);
+    setSearchString(qs);
+    console.log("red", qs);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    genderFilter,
+    skillsFilter,
+    institutionsFilter,
+    statusFilter,
+    nationalityFilter,
+  ]);
+
   console.log(genderFilter, statusFilter, skillsFilter);
 
   const selectedFilters = () => {
@@ -224,10 +284,6 @@ const JobApplications = () => {
     return selectedListFilter;
   };
 
-  const handleApplyFilters = () => {
-    toggleSidebar();
-  };
-
   let statusData;
   let applications;
 
@@ -258,9 +314,10 @@ const JobApplications = () => {
           }}
         >
           {(applicationsList) => {
-            if (applicationsList.loading) {
+            if (!applicationsList.data && applicationsList.loading) {
               return <Loader />;
             }
+            console.log(applicationsList);
             let applicationStatus = [];
             if (applicationsList.data) {
               applicationStatus = cleanSelectData(
@@ -275,6 +332,17 @@ const JobApplications = () => {
             if (!isOnline) {
               return <OfflinePlaceholder />;
             }
+            const handleApplyFilters = () => {
+              applicationsList.refetch({
+                first: 30,
+                filter: {
+                  jobs: jobArray,
+                  shortlist: searchString,
+                },
+              });
+              toggleSidebar();
+              setShowProgress(true);
+            };
             return (
               <MetaWrapper
                 meta={{
@@ -453,6 +521,7 @@ const JobApplications = () => {
                                   <Select
                                     closeMenuOnSelect={false}
                                     components={animatedComponents}
+                                    defaultValue={skillsFilter}
                                     isMulti
                                     options={skills}
                                     onChange={(val) => setSkillsFilter(val)}
@@ -462,6 +531,7 @@ const JobApplications = () => {
                                     closeMenuOnSelect={false}
                                     components={animatedComponents}
                                     options={institutions}
+                                    defaultValue={institutionsFilter}
                                     isMulti
                                     onChange={(val) =>
                                       setInstitutionsFilter(val)
@@ -474,6 +544,7 @@ const JobApplications = () => {
                                     closeMenuOnSelect={false}
                                     components={animatedComponents}
                                     options={seekerGender}
+                                    defaultValue={genderFilter}
                                     isMulti
                                     onChange={(val) => setGenderFilter(val)}
                                   />
@@ -482,6 +553,7 @@ const JobApplications = () => {
                                     closeMenuOnSelect={false}
                                     components={animatedComponents}
                                     options={seekerNationality}
+                                    defaultValue={nationalityFilter}
                                     isMulti
                                     onChange={(val) =>
                                       setNationalityFilter(val)
@@ -494,6 +566,7 @@ const JobApplications = () => {
                                     closeMenuOnSelect={false}
                                     components={animatedComponents}
                                     options={seekerStatus}
+                                    defaultValue={statusFilter}
                                     isMulti
                                     onChange={(val) => setStatusFilter(val)}
                                   />
@@ -527,22 +600,29 @@ const JobApplications = () => {
 
                         <div class="lg:col-span-4 col-span-5 bg-gray-100 space-y-8">
                           {applications?.length > 0 ? (
-                            applications
-                              .filter(
-                                (app) =>
-                                  getStatus(app.status).name === activeTab,
-                              )
-                              .map((application, i) => {
-                                return (
-                                  <ApplicationCard
-                                    application={application}
-                                    job={data?.vacancy}
-                                    statusData={statusData}
-                                    patchApplication={patchApplication}
-                                    key={i}
-                                  />
-                                );
-                              })
+                            <>
+                              {applications
+                                .filter(
+                                  (app) =>
+                                    getStatus(app.status).name === activeTab,
+                                )
+                                .map((application, i) => {
+                                  return (
+                                    <ApplicationCard
+                                      application={application}
+                                      job={data?.vacancy}
+                                      statusData={statusData}
+                                      patchApplication={patchApplication}
+                                      key={i}
+                                      showProgress={showProgress}
+                                    />
+                                  );
+                                })}
+                              {applicationsList.data &&
+                              applicationsList.loading ? (
+                                <Loader />
+                              ) : null}
+                            </>
                           ) : (
                             <section className="text-black">
                               <div className="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
