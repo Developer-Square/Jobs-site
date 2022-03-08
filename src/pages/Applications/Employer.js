@@ -118,7 +118,7 @@ const EmployerApplications = ({ deviceType }) => {
         </div>
 
         <div className="flex sm:justify-center space-x-6">
-          <a href className="text-gray-500 hover:text-gray-900">
+          {/* <a href className="text-gray-500 hover:text-gray-900">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -133,7 +133,7 @@ const EmployerApplications = ({ deviceType }) => {
                 d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
               />
             </svg>
-          </a>
+          </a> */}
         </div>
       </div>
       <div class="container my-6 mx-auto md:px-6">

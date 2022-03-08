@@ -53,6 +53,7 @@ const EmployerStepper = () => {
   });
   const employerCreateSubmit = (values) => {
     console.log("inafika", values);
+    delete values.avatar;
     values.industries = values.industries.map((industry) => industry.value);
 
     console.log("all the employer values", values);
@@ -93,7 +94,7 @@ const EmployerStepper = () => {
           control: "input",
           type: "text",
           description: "Company Name",
-          name: "company",
+          name: "name",
         },
         {
           control: "input",
@@ -106,7 +107,7 @@ const EmployerStepper = () => {
           type: "phone",
           description: "Company Phone No.",
           placeholder: "e.g. +254 722-123456",
-          name: "phone",
+          name: "mobile",
         },
         {
           control: "input",
