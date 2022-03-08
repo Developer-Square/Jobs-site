@@ -163,14 +163,13 @@ function LandingPage({ deviceType }) {
                   </h3>
                   <hr className="rounded border-b-2 border-white w-8 mx-auto" />
                   <p className="text-base text-body-color leading-relaxed mb-7">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    To provide a friendly and enabling work environment founded 
+                    on the principles of respect, dignity and equality. 
+                    To foster inclusion and singularity of purpose by encouraging 
+                    innovation and initiative. To provide the highest attainable 
+                    standards of service and professionalism. To benefit not 
+                    only our direct clients but the wider community and the 
+                    nation at large. 
                   </p>
                 </div>
               </div>
