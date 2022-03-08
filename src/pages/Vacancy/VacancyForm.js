@@ -363,12 +363,13 @@ const VacancyForm = ({
                                 Skip
                               </Button>
                             )}
-
-                            <Button onClick={handleNext}>
-                              {activeStep === steps.length - 1
-                                ? "Finish"
-                                : "Next"}
-                            </Button>
+                            {activeStep === steps.length - 1 ? null : (
+                              <Button onClick={handleNext}>
+                                {activeStep === steps.length - 1
+                                  ? "Finish"
+                                  : "Next"}
+                              </Button>
+                            )}
                           </Box>
                         </div>
                       </Form>
