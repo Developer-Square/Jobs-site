@@ -294,14 +294,19 @@ const ApplicationSeekerForm = () => {
       {(applicationCreate, { loading }) => {
         function onSubmit(values, { setErrors, setSubmitting }) {
           console.log(values);
+          const extraAttachment = values?.extraAttachment[0]
+            ? { extraAttachment: values?.extraAttachment[0] }
+            : {};
+          const resume = values?.resume[0] ? { resume: values?.resume[0] } : {};
+
           applicationCreate({
             variables: {
               job: values.job,
-              resume: values.resume[0],
-              extraAttachment: values?.extraAttachment[0],
               budget: values.budget,
               comment: values.comment,
               status: "APPLIED",
+              ...resume,
+              ...extraAttachment,
             },
           }).then(({ data }) => {
             if (data) {

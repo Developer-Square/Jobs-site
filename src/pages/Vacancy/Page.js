@@ -240,7 +240,7 @@ const Page = ({
                     </div>
                   </li>
                 </ul>
-                {userData?.me?.isSeeker && (
+                {!userData?.me?.isEmployer && (
                   <Button
                     // href="#small-dialog"
                     className="popup-with-zoom-anim button mt-8 ml-auto"
