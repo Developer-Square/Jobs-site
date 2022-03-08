@@ -37,7 +37,7 @@ const SeekerStepper = () => {
   const history = useHistory();
   const alert = useAlert();
   const [initialValues, setInitialValues] = React.useState(initValues);
-  const { setRefetchUser, userLoading, user, getUser } =
+  const { setRefetchUser, userLoading, user, getUser, userData } =
     React.useContext(UserContext);
   const {
     seekerGender,
@@ -62,15 +62,7 @@ const SeekerStepper = () => {
   ] = useMutation(SEEKER_PROFILE_MUTATION, {
     onCompleted: (data) => {
       // after this I've to send another req
-      updateSeekerProfile({
-        variables: {
-          id: user?.seeker?.profileCompletion?.id,
-          settings: true,
-          skills: false,
-          education: false,
-          experience: false,
-        },
-      });
+      setRefetchUser((prev) => !prev);
     },
   });
   const [createSkills] = useMutation(SKILL_ITEM_CREATE, {
@@ -482,11 +474,11 @@ const SeekerStepper = () => {
           <ProfileStepper
             onProfileInitialSubmit={onSeekerProfileSubmit}
             onProfileSubmit={onSeekerProfileSubmit}
-            isEdit={user?.isSeeker && user?.seeker}
+            isEdit={userData?.me?.isSeeker && user?.seeker}
             setRefetchUser={setRefetchUser}
             steps={seekerSteps}
             initialValaues={initialValues}
-            sets={user?.seeker?.profileCompletion}
+            sets={userData?.me?.seeker?.profileCompletion}
           />
         );
       }}

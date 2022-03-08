@@ -20,7 +20,8 @@ const EmployerStepper = () => {
   const history = useHistory();
   const alert = useAlert();
   const [initialValues, setInitialValues] = React.useState(initValues);
-  const { setRefetchUser, user, getUser } = React.useContext(UserContext);
+  const { setRefetchUser, user, getUser, userLoading, userData } =
+    React.useContext(UserContext);
   const { industries, workForce } = React.useContext(ConstantsContext);
   const [showButton, setShowButton] = React.useState(true);
 
@@ -34,6 +35,7 @@ const EmployerStepper = () => {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const [updateEmployerProfile] = useMutation(EMPLOYER_PROFILE_COMPLETION, {
     onCompleted: (data) => {
       setRefetchUser((prev) => !prev);
@@ -46,11 +48,7 @@ const EmployerStepper = () => {
   ] = useMutation(EMPLOYER_PROFILE_MUTATION, {
     onCompleted: (data) => {
       // after this I've to send another req
-      updateEmployerProfile({
-        variables: {
-          settings: true,
-        },
-      });
+      setRefetchUser((prev) => !prev);
     },
   });
   const employerCreateSubmit = (values) => {
@@ -207,6 +205,8 @@ const EmployerStepper = () => {
 
   if (!industries || !workForce || !user) return <div>To Load</div>;
 
+  if (userLoading) return <>Loading...</>;
+
   return (
     <TypedEmployerProfileMutation
       onCompleted={(data, errors) =>
@@ -229,12 +229,12 @@ const EmployerStepper = () => {
           <ProfileStepper
             onProfileInitialSubmit={onEmployerProfileSubmit}
             onProfileSubmit={onEmployerProfileSubmit}
-            isEdit={user?.isEmployer && user?.employer}
+            isEdit={userData?.me?.isEmployer && user?.employer}
             setRefetchUser={setRefetchUser}
             steps={employerSteps}
             initialValaues={initialValues}
             schemaValidation={null}
-            sets={user?.employer?.profileCompletion}
+            sets={userData?.me?.employer?.profileCompletion}
           />
         );
       }}
