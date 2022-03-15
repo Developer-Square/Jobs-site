@@ -2,11 +2,21 @@
 
 ![](https://thedatabase.co.ke/static/assets/img/brand/dblogo.png)
 
-TheDatabase is built on React library for virtualDOM loading and the vast capabilities to load a page. The documentation presented is a brief summary of the project as it progresses.
+This project is a jobs site where freelancers can find work and employers can manage their projects and freelancers with ease. It has some key features for freelancers like:  
+  - Helping freelancers create a portfolio that they can use to bid on jobs
+  - Unique badges on the jobs posted that allow a freelancer to understand more about the job 
+  - The ability to filter jobs using some set criteria like salary offered and much more
+
+On the employers's side it has the following key features:  
+  - A dashboard that shows the number of bids on a certain job and other analytics
+  - The ability to filter through job applications and much more.
+
+
+The project is built on React library for virtualDOM loading and the vast capabilities to load a page. The documentation presented is a brief summary of the project as it progresses.
 
 ** Installation **
 
-1. Clone the project from the repository
+1. Clone the project from the repository using `git clone https://github.com/ryann254/Jobs-site.git`.
 
 2. Make sure you have node installed in your working machine and if not installed, download [Node](https://nodejs.org/) from their site and install using the recommended package installer
 
