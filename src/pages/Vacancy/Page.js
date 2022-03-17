@@ -245,7 +245,7 @@ const Page = ({
                     // href="#small-dialog"
                     className="popup-with-zoom-anim button mt-8 ml-auto"
                     onClick={isAuthenticated ? handleClick : handleApplyJob}
-                    title={`Apply For This job`}
+                    title={`Apply`}
                   />
                 )}
               </div>

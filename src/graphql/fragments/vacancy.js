@@ -27,6 +27,13 @@ export const vacancyFragment = gql`
     location
     createdAt
     isActive
+    screeningQuestions {
+      id
+      questionType
+      question
+      required
+      idealAnswer
+    }
     amount {
       currency
       amount

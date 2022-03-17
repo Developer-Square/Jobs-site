@@ -154,7 +154,7 @@ const ProfileStepper = (props) => {
       {(formik) => {
         console.log("formik values", formik?.values);
         return (
-          <div className="mt-20">
+          <div className="mt-12">
             <div className="grid grid-cols-3">
               <div className="col-span-1 bg-white lg:block hidden">
                 <nav className=" rounded-md flex-col justify-between">

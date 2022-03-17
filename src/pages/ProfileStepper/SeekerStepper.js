@@ -32,6 +32,21 @@ const personaTitles = [
   { label: "Miss", value: "Miss" },
 ];
 
+// const socials = [
+//   { name: "facebook", url: "https://www.facebook.com/" },
+//   { name: "twitter", url: "https://www.twitter.com/" },
+//   { name: "instagram", url: "https://www.instagram.com/" },
+//   { name: "linkedin", url: "https://www.linkedin.com/" },
+//   { name: "github", url: "https://www.github.com/" },
+//   { name: "tiktok", url: "https://www.tiktok.com/" },
+// ];
+
+// owner
+
+// link
+// network
+// username
+
 const SeekerStepper = () => {
   const initValues = {};
   const history = useHistory();
@@ -75,6 +90,7 @@ const SeekerStepper = () => {
           education: true,
           settings: true,
           experience: false,
+          socials: false,
         },
       });
     },
@@ -89,6 +105,7 @@ const SeekerStepper = () => {
           settings: true,
           skills: false,
           experience: false,
+          socials: false,
         },
       });
     },
@@ -103,6 +120,7 @@ const SeekerStepper = () => {
           skills: true,
           education: true,
           settings: true,
+          socials: false,
         },
       });
     },

@@ -16,9 +16,9 @@ const InfoSection = () => {
         <div className="one-third column">
           <div className="icon-box rounded alt">
             <i className="ln ln-icon-Search-onCloud" />
-            <h4>Search For Jobs</h4>
+            <h4>Search For Listings</h4>
             <p>
-              Get instant access to thousands of job openings that match your
+              Get instant access to thousands of listings that match your
               interests and expertise.
             </p>
           </div>

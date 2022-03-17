@@ -30,7 +30,7 @@ const SplitScreen = ({ deviceType }) => {
             >
               <div class="caption">
                 <h1>I'm a candidate</h1>
-                <h5>Looking for a job</h5>
+                <h5>Looking for an internship</h5>
                 <a
                   onClick={() => {
                     localStorage.setItem("thedb_user", "Seeker");
@@ -67,7 +67,7 @@ const SplitScreen = ({ deviceType }) => {
                   className="button btn-right"
                   href
                 >
-                  Post a Job
+                  Post Internships
                 </a>
               </div>
             </div>
@@ -81,7 +81,7 @@ const SplitScreen = ({ deviceType }) => {
         <div class="image left-image"></div>
         <div class="caption">
           <h1>I'm a candidate</h1>
-          <h5>Looking for a job</h5>
+          <h5>Looking for an internship</h5>
           <a
             onClick={() => {
               localStorage.setItem("thedb_user", "Seeker");
@@ -108,7 +108,7 @@ const SplitScreen = ({ deviceType }) => {
             className="button btn-right"
             href
           >
-            Post a Job
+            Post Internships
           </a>
         </div>
       </div>

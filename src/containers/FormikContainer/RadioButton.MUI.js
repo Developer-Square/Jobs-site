@@ -41,10 +41,6 @@ function MUIRadioButton(props) {
                 return (
                   <FormControlLabel
                     onClick={() => {
-                      console.log(
-                        "gggggg",
-                        document.getElementById(option.value).value,
-                      );
                       form.setFieldValue(
                         name,
                         document.getElementById(option.value).value,

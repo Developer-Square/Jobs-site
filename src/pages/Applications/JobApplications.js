@@ -128,11 +128,9 @@ const ApplicationCard = (props) => {
           {props?.showProgress && (
             <div className="p-2">
               <div
-                className={`flex justify-center items-center content-center bg-gradient-to-br from-${progressColor(
+                className={`flex justify-center items-center content-center bg-${progressColor(
                   props?.application?.rank,
-                )}-300 to-${progressColor(
-                  props?.application?.rank,
-                )}-600 shadow-md hover:shadow-lg h-20 w-20 rounded-full fill-current text-white`}
+                )}-500 shadow-md hover:shadow-lg h-20 w-20 rounded-full fill-current text-white`}
               >
                 {`${((props?.application?.rank * 100) / 6).toFixed(0)}% match`}
               </div>
@@ -268,7 +266,7 @@ const JobApplications = () => {
     }
     if (nationalityFilter) {
       selectedListFilter.push(
-        ...nationalityFilter.map((sf) => sf.label + ":bg-yellow-400"),
+        ...nationalityFilter.map((sf) => sf.label + ":bg-yellow-500"),
       );
     }
     if (skillsFilter) {
@@ -417,7 +415,7 @@ const JobApplications = () => {
                           {statusData?.map((status, k) => {
                             const getCount = () => {
                               if (status?.label === "Applied") {
-                                return data?.vacancy?.appliedCount;
+                                return data?.vacancy?.numberOfApplications;
                               }
                               if (status?.label === "Shortlisted") {
                                 return data?.vacancy?.shortlistedCount;
@@ -479,9 +477,10 @@ const JobApplications = () => {
                           <div className="flex sm:justify-center space-x-6">
                             <a
                               href
-                              className="text-gray-500 hover:text-gray-900"
+                              className="flex text-gray-500 hover:text-gray-900"
                               onClick={() => toggleSidebar()}
                             >
+                              Shortlist Here
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-6 w-6"
@@ -602,10 +601,12 @@ const JobApplications = () => {
                           {applications?.length > 0 ? (
                             <>
                               {applications
-                                .filter(
-                                  (app) =>
-                                    getStatus(app.status).name === activeTab,
-                                )
+                                .filter((app) => {
+                                  if (activeTab === "Applied") return true;
+                                  return (
+                                    getStatus(app.status).name === activeTab
+                                  );
+                                })
                                 .map((application, i) => {
                                   return (
                                     <ApplicationCard

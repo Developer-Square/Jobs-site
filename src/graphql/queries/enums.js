@@ -117,3 +117,14 @@ export const EducationItemLevel = gql`
     }
   }
 `;
+
+export const ScreeningQuestionType = gql`
+  query ScreeningQuestionQuestionType {
+    __type(name: "ScreeningQuestionQuestionType") {
+      enumValues {
+        name
+        description
+      }
+    }
+  }
+`;

@@ -114,7 +114,7 @@ const Vacancies = () => {
       <div className="eleven columns">
         <div className="padding-right">
           <h3 className="font-bold text-2xl transition duration-500 my-2">
-            Recent Jobs
+            Most Recent
           </h3>
           <hr className="my-1 rounded border-b-2 border-blue-800 w-8" />
           <div className="listings-container">
@@ -205,7 +205,7 @@ const Vacancies = () => {
             }}
             title={
               <div style={{ color: "#FFFFFF" }}>
-                <i className="fa fa-plus-circle" /> Show More Jobs
+                <i className="fa fa-plus-circle" /> Show More
               </div>
             }
           />
@@ -329,7 +329,7 @@ const Vacancies = () => {
                           }
                           className="button"
                         >
-                          Apply For This Job
+                          Apply
                         </Link>
                       </div>
                     </li>

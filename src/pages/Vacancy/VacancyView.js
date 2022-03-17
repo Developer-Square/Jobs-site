@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useMutation } from "react-apollo";
 
@@ -21,6 +21,7 @@ import { VACANCY_VIEW_COUNT_MUTATION } from "graphql/mutations";
 import Page from "./Page";
 import { getGraphqlIdFromDBId } from "utils";
 import { SEO } from "components/seo";
+import { AuthContext } from "contexts/auth/auth.context";
 
 const TypedVacancyDetailQuery = TypedQuery(VACANCY_DETAIL_QUERY);
 const TypedJobYearsOfExpQuery = TypedQuery(JobYearsOfExp);
@@ -29,10 +30,15 @@ const TypedJobPayRateQuery = TypedQuery(JobPayRate);
 
 const VacancyView = () => {
   const match = useRouteMatch();
+  const history = useHistory();
   const [vacancyID, setVacancyID] = React.useState(
     getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"),
   );
   const [viewvacancyCount] = useMutation(VACANCY_VIEW_COUNT_MUTATION);
+
+  const {
+    authState: { isAuthenticated },
+  } = React.useContext(AuthContext);
 
   const viewJobMutation = () => {
     viewvacancyCount({ variables: { job: vacancyID } });
@@ -42,6 +48,9 @@ const VacancyView = () => {
     if (match.params.vacancyID) {
       setVacancyID(getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"));
       viewJobMutation();
+    }
+    if (!isAuthenticated) {
+      history.push(`/auth`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [match.params.vacancyID]);

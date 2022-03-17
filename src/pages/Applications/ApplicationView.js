@@ -2,7 +2,7 @@ import React from "react";
 import gql from "graphql-tag";
 import Loader from "components/Loader/Loader";
 import { useQuery, useMutation } from "react-apollo";
-import moment from "moment";
+import styled from "styled-components";
 import { useRouteMatch } from "react-router";
 import { getGraphqlIdFromDBId } from "utils";
 import { APPLICATION_DETAIL_QUERY } from "graphql/queries";
@@ -10,6 +10,11 @@ import { getStatus } from "utils/vacancy";
 import NoResultFound from "components/NoResult/NoResult";
 import PDFViewer from "components/PDFViewer";
 import ResumeViewer from "pages/Resume/view";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+import ConstantsContext from "contexts/constants/constants.provider";
+
+const animatedComponents = makeAnimated();
 
 export const UPDATE_APPLICATION_STATUS = gql`
   mutation PatchApplication($id: ID!, $status: ApplicationStatus) {
@@ -18,6 +23,18 @@ export const UPDATE_APPLICATION_STATUS = gql`
       success
       application {
         id
+        screeningAnswers {
+          id
+          isActive
+          isDeleted
+          question {
+            id
+            question
+            required
+            idealAnswer
+          }
+          answer
+        }
         inbuiltResume {
           id
         }
@@ -31,6 +48,12 @@ export const UPDATE_APPLICATION_STATUS = gql`
           seeker {
             status
             title
+          }
+          socials {
+            id
+            link
+            network
+            username
           }
           avatar {
             url
@@ -72,16 +95,19 @@ const ApplicationView = () => {
   const [viewPDF, setViewPDF] = React.useState(false);
   const [viewAttachment, setViewAttachment] = React.useState(false);
 
-  const { data: applicationData, loading: applictionLoading } = useQuery(
-    APPLICATION_DETAIL_QUERY,
-    {
-      variables: {
-        id: match.params.applicationID
-          ? getGraphqlIdFromDBId(match.params.applicationID, "Application")
-          : "",
-      },
+  const { applicationStatus } = React.useContext(ConstantsContext);
+
+  const {
+    data: applicationData,
+    loading: applictionLoading,
+    refetch: refetchApplication,
+  } = useQuery(APPLICATION_DETAIL_QUERY, {
+    variables: {
+      id: match.params.applicationID
+        ? getGraphqlIdFromDBId(match.params.applicationID, "Application")
+        : "",
     },
-  );
+  });
 
   const [updateStatus] = useMutation(UPDATE_APPLICATION_STATUS);
 
@@ -96,37 +122,21 @@ const ApplicationView = () => {
     return <NoResultFound />;
   }
   const updateApplicationStatus = (status) => {
-    if (status === "Applied") {
+    if (status) {
       updateStatus({
         variables: {
           id: getGraphqlIdFromDBId(match.params.applicationID, "Application"),
-          status: "SHORTLISTED",
+          status: status,
         },
-      });
-    }
-    if (status === "Shortlisted") {
-      updateStatus({
-        variables: {
-          id: getGraphqlIdFromDBId(match.params.applicationID, "Application"),
-          status: "INTERVIEWING",
-        },
-      });
-    }
-    if (status === "Interviewing") {
-      updateStatus({
-        variables: {
-          id: getGraphqlIdFromDBId(match.params.applicationID, "Application"),
-          status: "HIRED",
-        },
-      });
-    }
-    if (status === "Declined") {
-      updateStatus({
-        variables: {
-          id: getGraphqlIdFromDBId(match.params.applicationID, "Application"),
-          status: "DECLINED",
-        },
-      });
+      }).then(({ data }) =>
+        refetchApplication({
+          variables: {
+            id: match.params.applicationID
+              ? getGraphqlIdFromDBId(match.params.applicationID, "Application")
+              : "",
+          },
+        }),
+      );
     }
   };
 
@@ -135,38 +145,28 @@ const ApplicationView = () => {
   return (
     <div>
       <nav className="flex flex-col sm:flex-row border">
-        <button
-          onClick={() =>
-            updateApplicationStatus(
-              getStatus(applicationData.jobApplication?.status)?.name,
-            )
-          }
-          className={`relative text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none overflow-visible`}
-        >
-          Change Status, Current -{" "}
-          {getStatus(applicationData.jobApplication?.status)?.name}
-        </button>
-        <button
-          onClick={() => updateApplicationStatus("DECLINED")}
-          className={`relative text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none overflow-visible`}
-        >
-          Decline
-        </button>
-        {/* <button
-          className={`relative text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none overflow-visible`}
-        >
-          Message
-        </button> */}
+        <div className="flex flex-col text-center md:text-left">
+          <div className="font-medium text-lg text-gray-800">Change Status</div>
+        </div>
+        <Select
+          closeMenuOnSelect={true}
+          components={animatedComponents}
+          defaultValue={applicationStatus.find(
+            (a) => a.value === applicationData.jobApplication?.status,
+          )}
+          options={applicationStatus}
+          onChange={(val) => updateApplicationStatus(val?.value)}
+        />
       </nav>
       <div className="w-full mx-auto z-10">
         <div className="flex flex-col">
           <div className="bg-white flex items-center p-4 m-1 mt-0 mx-0 rounded-sm shadow border">
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
               {applicationData.jobApplication?.applicant?.avatar?.url ? (
                 <img
+                  alt="ppa"
+                  className="rounded-full border-4 border-gray-300 h-24 w-24 mx-auto"
                   src={applicationData.jobApplication?.applicant?.avatar?.url}
-                  alt="p"
-                  className="w-32 object-cover rounded-2xl"
                 />
               ) : (
                 <div className="w-32 object-cover rounded-2xl">
@@ -176,47 +176,39 @@ const ApplicationView = () => {
                   }
                 </div>
               )}
-            </div>
-            <div className="flex-grow p-3">
-              <div className="font-semibold text-gray-700">
-                {applicationData.jobApplication?.applicant?.fullName}
-              </div>
-              <div className="text-sm text-gray-500">
-                <span className="mr-3 text-lg font-bold leading-none text-gray-500">
+
+              <div className="flex flex-col text-center md:text-left">
+                <div className="font-medium text-lg text-gray-800">
+                  {applicationData.jobApplication?.applicant?.fullName}
+                </div>
+                <div className="text-gray-500 mb-3 whitespace-nowrap">
                   {applicationData.jobApplication?.applicant?.seeker?.title}
-                </span>
-              </div>
-              <div className="text-sm text-gray-500">
-                <div className="flex-1 inline-flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
-                  </svg>
-                  <p>
-                    Applied :{" "}
-                    {moment(
-                      applicationData.jobApplication?.createdAt,
-                    )?.fromNow()}
-                  </p>
-                  {applicationData.jobApplication?.applicant?.seeker
-                    .location && (
-                    <>
-                      <i className="fa fa-map-marker mx-2" />{" "}
-                      <p>
-                        {
-                          applicationData.jobApplication?.applicant?.seeker
-                            .location
-                        }
-                      </p>
-                    </>
-                  )}
+                </div>
+                <div className="flex text-gray-500 mb-3 whitespace-nowrap">
+                  {applicationData.jobApplication?.applicant?.socials?.length >
+                  0
+                    ? applicationData.jobApplication?.applicant?.socials?.map(
+                        (social) => {
+                          return (
+                            <Details key={social.id} type="socials">
+                              <Socials>
+                                <a href={`${social.link}${social.username}`}>
+                                  <span
+                                    className="iconify"
+                                    data-icon={`bi:${social.network?.toLowerCase()}`}
+                                  ></span>
+                                </a>
+                              </Socials>
+                            </Details>
+                          );
+                        },
+                      )
+                    : "No socials added"}
                 </div>
               </div>
             </div>
+
+            <div className="flex-grow p-3" />
             <div className="p-2">
               <button
                 onClick={() => {
@@ -227,6 +219,60 @@ const ApplicationView = () => {
               >
                 {viewPDF ? "View Cover Letter" : "View CV"}
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full mx-auto z-10">
+        <div className="flex flex-col">
+          <div
+            className={`bg-white flex items-center p-4 m-1 mx-0 rounded-sm shadow border`}
+          >
+            <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-gray-700">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                    <th className="px-4 py-3">Question</th>
+                    <th className="px-4 py-3">Ideal Answer</th>
+                    <th className="px-4 py-3">Answer</th>
+                    <th className="px-4 py-3">Required</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white">
+                  {applicationData.jobApplication?.screeningAnswers?.map(
+                    (a, i) => (
+                      <tr className="text-gray-700" key={i}>
+                        <td className="px-4 py-3 border">
+                          <div className="flex items-center text-sm">
+                            <p className="font-semibold text-black">
+                              {a?.question?.question}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-ms font-semibold border">
+                          {a?.question?.idealAnswer}
+                        </td>
+                        <td className="px-4 py-3 text-xs border">
+                          <span
+                            className={
+                              a?.question?.questionType === "LNG_TXT"
+                                ? "px-2 py-1 font-semibold leading-tight text-orange-700 bg-gray-100 rounded-sm"
+                                : a?.answer === a?.question?.idealAnswer
+                                ? "px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm"
+                                : "px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-sm"
+                            }
+                          >
+                            {a?.answer}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-sm border">
+                          {a?.question?.required ? "Yes " : "No "}
+                        </td>
+                      </tr>
+                    ),
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -308,4 +354,21 @@ const ApplicationView = () => {
   );
 };
 
+const Socials = styled.div`
+  display: flex;
+
+  svg {
+    margin-top: 1px;
+    margin-right: 10px;
+    font-size: 20px;
+  }
+`;
+const Details = styled.div`
+  display: flex;
+  justify-content: ${(props) =>
+    props.type === "socials" ? "space-between" : "auto"};
+  margin-bottom: 13px;
+  border-bottom: ${(props) =>
+    props.type === "socials" ? "none" : "1px solid #ccc"};
+`;
 export default ApplicationView;

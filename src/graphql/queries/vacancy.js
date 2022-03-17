@@ -304,6 +304,18 @@ export const APPLICATION_DETAIL_QUERY = gql`
       isDeleted
       isActive
       id
+      screeningAnswers {
+        id
+        isActive
+        isDeleted
+        question {
+          id
+          question
+          required
+          idealAnswer
+        }
+        answer
+      }
       inbuiltResume {
         id
       }
@@ -313,6 +325,12 @@ export const APPLICATION_DETAIL_QUERY = gql`
         fullName
         email
         phone
+        socials {
+          id
+          link
+          network
+          username
+        }
         seeker {
           id
           location

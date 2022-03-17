@@ -17,6 +17,7 @@ import {
   InstitutionStudentCount,
   SeekerNationality,
   EducationItemLevel,
+  ScreeningQuestionType,
 } from "graphql/queries";
 
 const defaultState = {
@@ -34,6 +35,7 @@ const defaultState = {
   seekerNationality: [],
   educationLevel: [],
   workForce: [],
+  screeningQuestionType: [],
   getIndustries: () => [],
   getInstitutions: () => [],
   getExperience: () => [],
@@ -46,6 +48,7 @@ const defaultState = {
   getInstitutionCount: () => [],
   getSeekerNationality: () => [],
   getEducationLevel: () => [],
+  getScreeningQuestionType: () => [],
   getWorkForce: () => [],
   getSkills: () => [],
   vacancyType: () => {},
@@ -78,6 +81,7 @@ const ConstantsProvider = ({ children }) => {
   const [seekerNationality, setSeekerNationality] = useState();
   const [educationLevel, setEducationLevel] = useState();
   const [workForce, setWorkForce] = useState();
+  const [screeningQuestionType, setScreeningQuestionType] = useState();
 
   const [fetchIndustriesData] = useLazyQuery(GET_INDUSTRIES, {
     onCompleted: (data) => setIndustries(cleanIndustries(data.allIndustries)),
@@ -142,6 +146,11 @@ const ConstantsProvider = ({ children }) => {
       setWorkForce(cleanSelectData(data?.__type?.enumValues)),
     fetchPolicy: "cahce-and-network",
   });
+  const [fetchScreeningQuestionTypeData] = useLazyQuery(ScreeningQuestionType, {
+    onCompleted: (data) =>
+      setScreeningQuestionType(cleanSelectData(data?.__type?.enumValues)),
+    fetchPolicy: "cahce-and-network",
+  });
   const [fetchInstitutionStudentCountData] = useLazyQuery(
     InstitutionStudentCount,
     {
@@ -166,6 +175,7 @@ const ConstantsProvider = ({ children }) => {
     fetchNationalityData();
     fetchEducationLevel();
     fetchSkillsData();
+    fetchScreeningQuestionTypeData();
   };
 
   useEffect(() => {
@@ -257,6 +267,12 @@ const ConstantsProvider = ({ children }) => {
     }
     return fetchEmployeeWorkForceData();
   };
+  const getScreeningQuestionType = () => {
+    if (screeningQuestionType) {
+      return screeningQuestionType;
+    }
+    return fetchScreeningQuestionTypeData();
+  };
 
   return (
     <ConstantsContext.Provider
@@ -276,6 +292,7 @@ const ConstantsProvider = ({ children }) => {
         vacancyType,
         seekerNationality,
         educationLevel,
+        screeningQuestionType,
         getSkills,
         getIndustries,
         getInstitutions,
@@ -290,6 +307,7 @@ const ConstantsProvider = ({ children }) => {
         getInstitutionCount,
         getEducationLevel,
         getWorkForce,
+        getScreeningQuestionType,
       }}
     >
       {children}

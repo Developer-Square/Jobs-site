@@ -111,7 +111,7 @@ export const EMPLOYER_PROFILE_MUTATION = gql`
     $country: String
     $location: String
     $mobile: String
-    $regNo: Int
+    $regNo: String
     $lookingFor: String
     $industries: [ID]
   ) {
@@ -159,7 +159,7 @@ export const EMPLOYER_UPDATE_MUTATION = gql`
     $country: String
     $location: String
     $mobile: String
-    $regNo: Int
+    $regNo: String
     $lookingFor: String
     $industries: [ID]
   ) {

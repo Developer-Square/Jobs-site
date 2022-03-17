@@ -6,8 +6,12 @@ import { numberWithCommas, formatCurrency } from "utils";
 import UserContext from "contexts/user/user.provider";
 
 const Dashboard = () => {
-  const { user } = React.useContext(UserContext);
+  const { user, setRefetchUser } = React.useContext(UserContext);
   const history = useHistory();
+
+  React.useEffect(() => {
+    setRefetchUser((prev) => !prev);
+  }, [setRefetchUser]);
 
   return (
     <div className="product_tour__step_1">

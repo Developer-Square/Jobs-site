@@ -9,6 +9,7 @@ import {
   UPDATE_RESUME,
 } from "graphql/mutations";
 import { FETCH_RESUME } from "graphql/queries";
+import UserContext from "contexts/user/user.provider";
 
 const DEBOUNCE_WAIT_TIME = 4000;
 
@@ -32,6 +33,7 @@ const DatabaseProvider = ({ children }) => {
   const [deleteResumeMutation] = useMutation(DELETE_RESUME);
   const [resume, resumeDataResponse] = useLazyQuery(FETCH_RESUME);
   const [resumePatch] = useMutation(UPDATE_RESUME);
+  const { setRefetchUser } = React.useContext(UserContext);
 
   const createResume = () => console.log("To Handle create resume");
 
@@ -77,6 +79,7 @@ const DatabaseProvider = ({ children }) => {
       setUpdating(false);
       return null;
     }
+    setRefetchUser((prev) => !prev);
   };
 
   const debouncedUpdateResume = debounce(updateResume, DEBOUNCE_WAIT_TIME);
