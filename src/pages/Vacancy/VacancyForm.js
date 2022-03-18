@@ -264,7 +264,7 @@ const VacancyForm = ({
                             />
                           )}
 
-                          <div className="m-4 ml-auto hold flex space-x-2 p-3 mt-3">
+                          <div className="m-4 ml-auto hold flex space-x-2 p-3 mt-1">
                             <button
                               type="button"
                               onClick={() => remove(index)} // remove a friend from the list
@@ -272,6 +272,13 @@ const VacancyForm = ({
                             >
                               Remove
                             </button>
+                            {/* <button
+                              type="button"
+                              onClick={() => remove(index)} // remove a friend from the list
+                              className="p-0 w-10 h-10 bg-red-600 text-white rounded-full hover:bg-red-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none"
+                            >
+                              X{" "}
+                            </button> */}
                           </div>
                         </div>
                         <div className="bottom"></div>

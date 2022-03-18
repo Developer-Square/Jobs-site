@@ -1,20 +1,11 @@
 import React from "react";
-import { Switch } from "formik-material-ui";
 import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
+import { Switch } from "@material-ui/core";
 
 function SwitchButton(props) {
-  const { label, name, value, icon, formik, ...rest } = props;
-  const [toggle, setToggle] = React.useState(value);
+  const { label, name, value, icon, ...rest } = props;
 
-  const handleToggle = () => {
-    if (toggle) {
-    } else {
-    }
-    toggle ? setToggle(false) : setToggle(true);
-    console.log("toggle State: ", toggle);
-    // formik.setFieldValue(name, toggle);
-  };
   return (
     <div className="form-control">
       <label
@@ -38,12 +29,18 @@ function SwitchButton(props) {
           label
         )}
       </label>
-      <Field
-        name={name}
-        component={Switch}
-        onChange={handleToggle}
-        checked={toggle}
-      />
+      <Field name={name}>
+        {({ field, form }) => {
+          return (
+            <Switch
+              checked={field.value}
+              onChange={(e) => form.setFieldValue(name, e.target.checked)}
+              inputProps={{ "aria-label": "controlled" }}
+              color={`primary`}
+            />
+          );
+        }}
+      </Field>
       <ErrorMessage component={TextError} name={name} />
     </div>
   );

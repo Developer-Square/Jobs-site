@@ -1,7 +1,8 @@
 import React from "react";
 import gql from "graphql-tag";
+// import { jsPDF } from "jspdf";
 import Loader from "components/Loader/Loader";
-import { useQuery, useMutation } from "react-apollo";
+import { useLazyQuery, useMutation } from "react-apollo";
 import styled from "styled-components";
 import { useRouteMatch } from "react-router";
 import { getGraphqlIdFromDBId } from "utils";
@@ -97,19 +98,26 @@ const ApplicationView = () => {
 
   const { applicationStatus } = React.useContext(ConstantsContext);
 
-  const {
-    data: applicationData,
-    loading: applictionLoading,
-    refetch: refetchApplication,
-  } = useQuery(APPLICATION_DETAIL_QUERY, {
-    variables: {
-      id: match.params.applicationID
-        ? getGraphqlIdFromDBId(match.params.applicationID, "Application")
-        : "",
+  const [
+    getApp,
+    {
+      data: applicationData,
+      loading: applictionLoading,
+      error: applicationError,
     },
-  });
+  ] = useLazyQuery(APPLICATION_DETAIL_QUERY);
 
   const [updateStatus] = useMutation(UPDATE_APPLICATION_STATUS);
+
+  React.useEffect(() => {
+    getApp({
+      variables: {
+        id: match.params.applicationID
+          ? getGraphqlIdFromDBId(match.params.applicationID, "Application")
+          : "",
+      },
+    });
+  }, [getApp, match.params.applicationID]);
 
   const handleViewCV = () => {
     return null;
@@ -129,7 +137,7 @@ const ApplicationView = () => {
           status: status,
         },
       }).then(({ data }) =>
-        refetchApplication({
+        getApp({
           variables: {
             id: match.params.applicationID
               ? getGraphqlIdFromDBId(match.params.applicationID, "Application")
@@ -141,6 +149,8 @@ const ApplicationView = () => {
   };
 
   console.log(applicationData);
+
+  if (applicationError) return `Error! ${applicationError}`;
 
   return (
     <div>
