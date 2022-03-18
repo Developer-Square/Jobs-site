@@ -1,4 +1,6 @@
 import React from "react";
+import * as Yup from "yup";
+import * as schema from "common/yupFieldValidation";
 import { useAlert } from "react-alert";
 import { useMutation } from "react-apollo";
 import ProfileStepper from "./ProfileStepper";
@@ -32,6 +34,20 @@ const personaTitles = [
   { label: "Miss", value: "Miss" },
 ];
 
+const GPA = [
+  { label: "A+    [% - 97-100,    scale - 4.0]", value: "A+" },
+  { label: "A     [% - 93-96,     scale - 4.0]", value: "A" },
+  { label: "A-    [% - 90-92,     scale - 3.7]", value: "A-" },
+  { label: "B+    [% - 87-89,     scale - 3.3]", value: "B+" },
+  { label: "B     [% - 83-86,     scale - 3.0]", value: "B" },
+  { label: "B-    [% - 80-82,     scale - 2.7]", value: "B-" },
+  { label: "C+    [% - 77-79,     scale - 2.3]", value: "C+" },
+  { label: "C     [% - 73-76,     scale - 2.0]", value: "C" },
+  { label: "C-    [% - 70-72,     scale - 1.7]", value: "C-" },
+  { label: "D+    [% - 67-69,     scale - 1.3]", value: "D+" },
+  { label: "D     [% - 65-66,     scale - 1.0]", value: "D" },
+  { label: "E/F   [% - Below 65,  scale - 0.0]", value: "E/F" },
+];
 // const socials = [
 //   { name: "facebook", url: "https://www.facebook.com/" },
 //   { name: "twitter", url: "https://www.twitter.com/" },
@@ -125,14 +141,12 @@ const SeekerStepper = () => {
       });
     },
   });
+
   const seekerCreateSubmit = (values) => {
     console.log("inafika", values);
     values.industries = values.industries.map((industry) => industry.value);
     values.nationality = values.nationality.value;
     values.dateOfBirth = moment(values.dateOfBirth).format("YYYY-MM-DD");
-    // values.mobile = user.phone;
-    // const g = new Date(values.dateOfBirth).getDate();
-    // values.dateOfBirth = new Date(values.dateOfBirth).getDate();
 
     console.log("all the seeker values", values);
     if (IsNotEmpty(values.industries)) {
@@ -160,28 +174,30 @@ const SeekerStepper = () => {
 
   const educationCreateSubmit = (values) => {
     console.log("inafika", values);
-    values.institution = values?.institution?.label || values?.institution;
-    values.course = values?.course?.label || values?.institution;
 
-    console.log(user);
-    // values.schoolStart = new Date(values.schoolStart).getDate();
-    // values.schoolEnd = new Date(values.schoolEnd).getDate();
-    console.log("all the seeker values", values);
-    createEducation({
-      variables: {
-        ...values,
-        degree: "Bachelor's Degree",
-        owner: user?.seeker?.id,
-      },
-    });
+    for (let k = 0; k < values.Education.length; k++) {
+      let e = values.Education[k];
+      e.institution = e?.institution?.label || e?.institution;
+      e.course = e?.course?.label || e?.institution;
+      e.gpa = e?.gpa?.label || e?.gpa;
+
+      console.log("all the edu values", e);
+      createEducation({
+        variables: {
+          ...e,
+          degree: "Bachelor's Degree",
+          owner: user?.seeker?.id,
+        },
+      });
+    }
   };
 
   const experienceCreateSubmit = (values) => {
-    console.log("inafika", values);
-    // values.workStart = new Date(values.workStart).getDate();
-    // values.workEnd = new Date(values.workEnd).getDate();
-    console.log("all the seeker values", values);
-    createWork({ variables: { ...values, owner: user?.seeker?.id } });
+    for (let j = 0; j < values?.Experience.length; j++) {
+      const val = values?.Experience[j];
+      console.log("all the seeker values", val);
+      createWork({ variables: { ...val, owner: user?.seeker?.id } });
+    }
   };
   const handleAvatarChange = (file) => {
     for (let i = 0; i < file.length; i++) {
@@ -201,6 +217,28 @@ const SeekerStepper = () => {
       label: "Account Settings",
       description: `Help Us understand more about you.`,
       mutation: seekerCreateSubmit,
+      blankValues: {
+        title: "",
+        location: "",
+        gender: "",
+        status: "",
+        industries: null,
+        nationality: null,
+        description: "",
+        idNumber: 0,
+        dateOfBirth: new Date(),
+      },
+      schema: Yup.object().shape({
+        title: schema.requiredString,
+        location: schema.requiredString,
+        gender: schema.requiredString,
+        status: schema.requiredString,
+        industries: schema.select,
+        nationality: schema.select,
+        description: schema.requiredString,
+        idNumber: schema.id_number,
+        dateOfBirth: schema.date_of_birth,
+      }),
       fields: [
         {
           type: "file",
@@ -267,13 +305,6 @@ const SeekerStepper = () => {
           description: "Choose your Industries",
         },
         {
-          name: "linkedin",
-          description: "Your LinkedIn Profile",
-          placeholder: "https://www.linkedin.com/in/john-doe-112",
-          control: "input",
-          type: "text",
-        },
-        {
           name: "description",
           description: "About Yourself",
           control: "textarea",
@@ -286,16 +317,25 @@ const SeekerStepper = () => {
       label: "Education",
       description: "Education",
       mutation: educationCreateSubmit,
-      useFieldArray: false,
+      useFieldArray: true,
       blankValues: {
         institution: "",
         fieldOfStudy: "",
         level: "",
         schoolStart: "",
         schoolEnd: "",
-        gpa: 0,
+        gpa: "",
         degree: "Bachelor's Degree",
       },
+      schema: Yup.object().shape({
+        institution: schema.select,
+        fieldOfStudy: schema.select,
+        level: schema.select,
+        schoolStart: schema.date,
+        schoolEnd: schema.date,
+        gpa: schema.select,
+      }),
+      headerField: "institution",
       fields: [
         {
           control: "select",
@@ -311,8 +351,8 @@ const SeekerStepper = () => {
           name: "fieldOfStudy",
           type: "custom",
           description: "Select the course studied",
-          Component: (
-            <CoursesSearch label="Field Of Study" name="fieldOfStudy" />
+          component: (name = "fieldOfStudy") => (
+            <CoursesSearch label="Field Of Study" name={name} />
           ),
         },
         {
@@ -322,10 +362,14 @@ const SeekerStepper = () => {
           options: educationLevel,
         },
         {
+          control: "select",
+          label: "GPA",
           name: "gpa",
-          description: "Your GPA",
-          control: "input",
-          type: "text",
+          hideButton: () => {},
+          style: { margin: 0 },
+          options: GPA,
+          description: "Choose your GPA",
+          defaultValue: { value: "", label: "Select Grade" },
         },
         {
           name: "schoolStart",
@@ -343,6 +387,14 @@ const SeekerStepper = () => {
       label: "Skills",
       description: `Skills.`,
       mutation: seekerUpdateSubmit,
+      blankValues: {
+        skills: [],
+      },
+      schema: Yup.object({
+        skills: Yup.array()
+          .of(schema.select)
+          .min(1, "Must have at least one entry"),
+      }),
       fields: [
         {
           control: "select",
@@ -360,7 +412,7 @@ const SeekerStepper = () => {
       label: "Experience",
       description: `Experience.`,
       mutation: experienceCreateSubmit,
-      useFieldArray: false,
+      useFieldArray: true,
       blankValues: {
         company: "",
         website: "",
@@ -370,6 +422,15 @@ const SeekerStepper = () => {
         achievements: "",
         descriptionPlaintext: "",
       },
+      schema: Yup.object().shape({
+        company: schema.requiredString,
+        website: schema.website,
+        position: schema.requiredString,
+        workStart: schema.date,
+        workEnd: schema.date,
+        achievements: schema.requiredString,
+        descriptionPlaintext: schema.requiredString,
+      }),
       fields: [
         {
           name: "company",

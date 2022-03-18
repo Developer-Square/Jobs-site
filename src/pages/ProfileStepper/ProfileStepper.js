@@ -1,4 +1,5 @@
 import React from "react";
+import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
 import { Form, Formik, FieldArray } from "formik";
 import FormikControl from "containers/FormikContainer/FormikControl";
@@ -27,6 +28,7 @@ const ProfileStepper = (props) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [activeSection, setActiveSection] = React.useState(steps[activeStep]);
+  const [activeSectionField, setActiveSectionField] = React.useState(0);
   const dbActiveStep = () => {
     if (!sets) {
       return 0;
@@ -82,7 +84,6 @@ const ProfileStepper = (props) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   console.log(typeof handleBack, typeof handleNext, typeof handleSkip);
-  const initialValues = {};
 
   const isAnswered = (formik, item) => {
     const val = formik.values[`${item.name}`];
@@ -97,6 +98,28 @@ const ProfileStepper = (props) => {
     if (item?.label === activeSection?.label) {
       return true;
     } else return false;
+  };
+  const getCardHeader = (f, s, i) => {
+    console.log(f.values);
+    console.log(f.values[`${steps[activeStep]?.label}`]);
+    console.log(f.values[`${steps[activeStep]?.label}`][i]);
+    console.log(
+      f.values[`${steps[activeStep]?.label}`][i][
+        `${steps[activeStep]?.headerField}`
+      ],
+    );
+
+    const val =
+      f.values[`${steps[activeStep]?.label}`][i][
+        `${steps[activeStep]?.headerField}`
+      ];
+    console.log("-------------", val);
+    if (!val) return `${i + 1}.`;
+    return val === ""
+      ? `${i + 1}.`
+      : typeof val === "object"
+      ? val?.label
+      : val;
   };
 
   const onFormSubmit = (props, { set }) => {
@@ -116,7 +139,7 @@ const ProfileStepper = (props) => {
             {stepField?.description}
           </p>
           {stepField?.type === "custom" ? (
-            stepField?.Component
+            stepField?.component()
           ) : (
             <FormikControl key={i} {...stepField} />
           )}
@@ -132,7 +155,7 @@ const ProfileStepper = (props) => {
             {stepField?.description}
           </p>
           {stepField?.type === "custom" ? (
-            stepField?.Component
+            stepField?.component(`${path}.${stepField.name}`)
           ) : (
             <FormikControl
               key={i}
@@ -144,15 +167,27 @@ const ProfileStepper = (props) => {
       );
     });
 
+  const getSchema = () => {
+    const singleSchema = steps[activeStep]?.schema;
+    if (!singleSchema) return null;
+    const schema = Yup.object({
+      [steps[activeStep].label]: Yup.array()
+        .of(singleSchema)
+        .min(1, "Must have at least one entry"),
+    });
+    return schema;
+  };
+
   return (
     <Formik
-      initialValues={initialValues}
-      //   validationSchema={vacancySchema}
+      initialValues={steps[activeStep]?.blankValues}
       onSubmit={onFormSubmit}
       enableReinitialize
+      validationSchema={getSchema()}
     >
       {(formik) => {
-        console.log("formik values", formik?.values);
+        // console.log("formik values", formik?.values);
+        console.log("formik values", formik);
         return (
           <div className="mt-12">
             <div className="grid grid-cols-3">
@@ -227,51 +262,66 @@ const ProfileStepper = (props) => {
                                   <div>
                                     {formik.values[
                                       `${steps[activeStep]?.label}`
-                                    ] &&
-                                    formik.values[`${steps[activeStep]?.label}`]
-                                      .length > 0 ? (
-                                      formik.values[
-                                        `${steps[activeStep]?.label}`
-                                      ].map((experience, index) => (
-                                        <div key={index}>
-                                          {mapArrayFields(
+                                    ]?.map((experience, index) => (
+                                      <div
+                                        key={index}
+                                        className="my-2 overflow-hidden shadow-md"
+                                      >
+                                        {/* card header */}
+                                        <div
+                                          className={`${
+                                            activeSectionField !== index
+                                              ? "cursor-pointer"
+                                              : ""
+                                          } flex p-2 bg-white border-b border-gray-200 font-bold uppercase`}
+                                          onClick={() =>
+                                            setActiveSectionField(index)
+                                          }
+                                        >
+                                          {getCardHeader(
                                             formik,
                                             steps[activeStep],
-                                            `${steps[activeStep]?.label}.${index}`,
+                                            index,
                                           )}
                                           <button
                                             type="button"
                                             onClick={() =>
                                               arrayHelpers.remove(index)
                                             } // remove a friend from the list
+                                            className="h-10 bg-red-400 hover:bg-red-500 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-300 hover:border-red-500 text-white rounded-full transition ease-in duration-300 ml-auto float-right"
                                           >
-                                            -
-                                          </button>
-                                          <button
-                                            type="button"
-                                            onClick={() =>
-                                              arrayHelpers.insert(index, "")
-                                            } // insert an empty string at a position
-                                          >
-                                            +
+                                            Remove x
                                           </button>
                                         </div>
-                                      ))
-                                    ) : (
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          arrayHelpers.push(
-                                            steps[activeStep]?.blankValues,
-                                          )
-                                        }
-                                      >
-                                        Add Another
-                                      </button>
-                                    )}
-                                    <div>
-                                      <button type="submit">Submit</button>
-                                    </div>
+                                        {activeSectionField === index && (
+                                          <div className="p-6 bg-white border-b border-gray-200">
+                                            {mapArrayFields(
+                                              formik,
+                                              steps[activeStep],
+                                              `${steps[activeStep]?.label}.${index}`,
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
+                                    <button
+                                      type="button"
+                                      className="flex-no-shrink bg-green-400 hover:bg-green-500 px-5 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-green-300 hover:border-green-500 text-white rounded-full transition ease-in duration-300"
+                                      onClick={() => {
+                                        arrayHelpers.push(
+                                          steps[activeStep]?.blankValues,
+                                        );
+                                        setActiveSectionField(
+                                          formik.values[
+                                            `${steps[activeStep]?.label}`
+                                          ]?.length > 0
+                                            ? activeSectionField + 1
+                                            : 0,
+                                        );
+                                      }}
+                                    >
+                                      Add {steps[activeStep]?.label}
+                                    </button>
                                   </div>
                                 )}
                               />
@@ -288,6 +338,7 @@ const ProfileStepper = (props) => {
                                 <Button
                                   variant="contained"
                                   type="submit"
+                                  disabled={formik.isValid}
                                   sx={{ borderRadius: 5, height: 30 }}
                                 >
                                   Save and Proceed
