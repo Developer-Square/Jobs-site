@@ -449,7 +449,7 @@ const JobApplications = () => {
                         <div className="bg-white md:flex md:items-center md:justify-between shadow rounded-t-lg p-2">
                           {/* search container  */}
 
-                          <div class="container mx-auto px-2 flex items-center">
+                          <div className="container mx-auto px-2 flex items-center">
                             <div className="w-full max-w-xs xl:max-w-lg 2xl:max-w-2xl bg-gray-100 rounded-md hidden lg:flex items-center">
                               <input
                                 className="border-l border-gray-300 bg-transparent font-semibold text-sm pl-4"
@@ -597,7 +597,7 @@ const JobApplications = () => {
                           </Slide>
                         </div>
 
-                        <div class="lg:col-span-4 col-span-5 bg-gray-100 space-y-8">
+                        <div className="lg:col-span-4 col-span-5 bg-gray-100 space-y-8">
                           {applications?.length > 0 ? (
                             <>
                               {applications

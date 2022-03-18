@@ -68,7 +68,7 @@ const EmployerApplications = ({ deviceType }) => {
     // after: vacanciesData?.data?.employerVacancies.pageInfo.endCursor,
   };
   return (
-    <div class="border rounded-t-lg bg-gray-100">
+    <div className="border rounded-t-lg bg-gray-100">
       <div className="bg-white md:flex md:items-center md:justify-between shadow rounded-t-lg p-2">
         {/* search container  */}
 
@@ -136,7 +136,7 @@ const EmployerApplications = ({ deviceType }) => {
           </a> */}
         </div>
       </div>
-      <div class="container my-6 mx-auto md:px-6">
+      <div className="container my-6 mx-auto md:px-6">
         <NetworkStatus>
           {(isOnline) => (
             <TypedVacanciesQuery
@@ -191,7 +191,7 @@ const EmployerApplications = ({ deviceType }) => {
 
                 return (
                   <>
-                    <div class="flex flex-wrap -mx-1 lg:-mx-4">
+                    <div className="flex flex-wrap -mx-1 lg:-mx-4">
                       {vacanciesData?.data?.employerVacancies.edges
                         .map((edge) => edge.node)
                         ?.map((job, i) => {

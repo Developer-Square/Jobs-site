@@ -341,7 +341,7 @@ const ApplicationView = () => {
                     className="apple bg-white shadow-md px-3 py-2 rounded-lg flex items-center space-x-4"
                   >
                     <div className="logo">
-                      <i class="fa fa-file"></i>
+                      <i className="fa fa-file"></i>
                     </div>
                     <div className="text">
                       <p

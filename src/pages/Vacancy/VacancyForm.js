@@ -420,7 +420,7 @@ const VacancyForm = ({
       {(formik) => {
         console.log(formik.values);
         return (
-          <div class="grid grid-cols-12 gap-6">
+          <div className="grid grid-cols-12 gap-6">
             <div className="col-span-12 sm:col-span-12 md:col-span-7 lg:col-span-8 xxl:col-span-8">
               <section className="py-1 bg-blueGray-50">
                 <div className="w-full px-4 mx-auto mt-6">
@@ -525,7 +525,7 @@ const VacancyForm = ({
             <div className="col-span-12 sm:col-span-12 md:col-span-5 lg:col-span-4 xxl:col-span-4">
               <div className="py-1 px-1 rounded-lg my-6 mx-1">
                 <i
-                  class="fa fa-lightbulb-o"
+                  className="fa fa-lightbulb-o"
                   style={{
                     fontSize: "48px",
                     color: "#1849B1",

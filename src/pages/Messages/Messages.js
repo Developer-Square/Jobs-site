@@ -6,7 +6,7 @@ const Messages = () => {
       <div className="messages-container margin-top-0">
         <div className="messages-headline">
           <h4>Inbox</h4>
-          {/* 						<a href="#" class="message-action"><i class="fa fa-delete"></i> Delete Conversation</a> */}
+          {/* 						<a href="#" className="message-action"><i className="fa fa-delete"></i> Delete Conversation</a> */}
         </div>
         <div className="messages-container-inner">
           {/* Messages */}
