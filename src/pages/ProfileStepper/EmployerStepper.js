@@ -1,4 +1,6 @@
 import React from "react";
+import * as Yup from "yup";
+import * as schema from "common/yupFieldValidation";
 import { useAlert } from "react-alert";
 import { useMutation } from "react-apollo";
 import ProfileStepper from "./ProfileStepper";
@@ -12,8 +14,60 @@ import {
   EMPLOYER_PROFILE_MUTATION,
   EMPLOYER_PROFILE_COMPLETION,
   AVATAR_UPDATE_MUTATION,
+  SOCIAL_ITEM_CREATE,
 } from "graphql/mutations";
 import { handleAvatarUpdate } from "utils";
+
+const socials = [
+  {
+    label: (
+      <div>
+        <i className="fa fa-facebook-square" /> facebook
+      </div>
+    ),
+    value: "https://www.facebook.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-twitter-square" /> twitter
+      </div>
+    ),
+    value: "https://www.twitter.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-instagram" /> instagram
+      </div>
+    ),
+    value: "https://www.instagram.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-linkedin-square" /> linkedin
+      </div>
+    ),
+    value: "https://www.linkedin.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-github-square" /> github
+      </div>
+    ),
+    value: "https://www.github.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-tiktok" /> tiktok
+      </div>
+    ),
+    value: "https://www.tiktok.com/",
+  },
+];
 
 const EmployerStepper = () => {
   const initValues = {};
@@ -24,8 +78,6 @@ const EmployerStepper = () => {
     React.useContext(UserContext);
   const { industries, workForce } = React.useContext(ConstantsContext);
   const [showButton, setShowButton] = React.useState(true);
-
-  console.log(workForce);
 
   const handleButton = (data) => {
     if (data === "focus") {
@@ -51,17 +103,56 @@ const EmployerStepper = () => {
       setRefetchUser((prev) => !prev);
     },
   });
+
+  const [createSocial] = useMutation(SOCIAL_ITEM_CREATE, {
+    onCompleted: (data) => {
+      updateEmployerProfile({
+        variables: {
+          id: user?.employer?.profileCompletion?.id,
+          settings: true,
+          socials: true,
+        },
+      });
+    },
+  });
+
   const employerCreateSubmit = (values) => {
-    console.log("inafika", values);
     delete values.avatar;
     values.industries = values.industries.map((industry) => industry.value);
 
-    console.log("all the employer values", values);
     if (IsNotEmpty(values.industries)) {
       createEmployer({ variables: { ...values } });
     }
     return { employerData, employerLoading, employerError };
   };
+
+  const socialCreateSubmit = (values) => {
+    function parseUsername(url) {
+      let output = url;
+      let matches;
+      matches = url.match(
+        /(?:https?:\/\/)?(?:www.)?(?:twitter|medium|facebook|vimeo|instagram|github|tiktok|linkedin)(?:.com\/)?([@a-zA-Z0-9-_]+)/im,
+      );
+      output = matches.length ? matches[1] : output;
+
+      return output;
+    }
+
+    for (let k = 0; k < values.Social.length; k++) {
+      let e = values.Social[k];
+      e.username = parseUsername(e.link);
+      e.link = e?.network?.value || e?.network;
+      e.network = e?.network?.value?.split(".")[1];
+
+      createSocial({
+        variables: {
+          ...e,
+          owner: user?.id,
+        },
+      });
+    }
+  };
+
   const handleAvatarChange = (file) => {
     for (let i = 0; i < file.length; i++) {
       const f = file[i];
@@ -80,6 +171,29 @@ const EmployerStepper = () => {
       label: "Account Settings",
       description: `Help Us understand more about your Company.`,
       mutation: employerCreateSubmit,
+      useFieldArray: false,
+      blankValues: {
+        workForce: null,
+        description: "",
+        name: "",
+        website: "https://",
+        country: "",
+        location: "",
+        mobile: "",
+        regNo: 0,
+        lookingFor: "",
+        industries: null,
+      },
+      schema: Yup.object().shape({
+        name: schema.requiredString,
+        location: schema.requiredString,
+        mobile: schema.mobile,
+        website: schema.website,
+        workForce: schema.select,
+        lookingFor: schema.requiredString,
+        country: schema.requiredString,
+        regNo: schema.requiredString,
+      }),
       fields: [
         {
           type: "file",
@@ -152,6 +266,40 @@ const EmployerStepper = () => {
           control: "textarea",
           rte: true,
           fullWidth: true,
+        },
+      ],
+    },
+    {
+      label: "Social",
+      description: "Social",
+      mutation: socialCreateSubmit,
+      useFieldArray: true,
+      blankValues: {
+        network: "",
+        link: null,
+      },
+      schema: Yup.object().shape({
+        network: schema.mixedSelect,
+        link: schema.website,
+      }),
+      headerField: "network",
+      fields: [
+        {
+          control: "select",
+          label: "Network",
+          name: "network",
+          hideButton: () => {},
+          style: { margin: 0 },
+          options: socials,
+          description: "Choose Network",
+          defaultValue: { value: "", label: "Select Network" },
+        },
+        {
+          name: "link",
+          description: "Your Social Media link",
+          placeholder: "https://www.linkedin.com/in/john-doe-123/",
+          control: "input",
+          type: "text",
         },
       ],
     },

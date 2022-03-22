@@ -36,6 +36,7 @@ export const employerFragment = gql`
     profileCompletion {
       id
       settings
+      socials
     }
     industries {
       name
@@ -65,6 +66,7 @@ export const seekerFragment = gql`
       education
       skills
       experience
+      socials
     }
 
     course {

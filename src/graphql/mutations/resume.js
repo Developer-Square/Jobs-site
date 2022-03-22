@@ -6,6 +6,7 @@ import {
   educationItemFragment,
   workItemFragment,
   skillItemFragment,
+  socialItemFragment,
 } from "graphql/fragments";
 
 export const DUPLICATE_RESUME = gql`
@@ -367,6 +368,60 @@ export const SKILL_ITEM_UPDATE = gql`
       }
       skillItem {
         ...SkillItem
+      }
+    }
+  }
+`;
+
+export const SOCIAL_ITEM_CREATE = gql`
+  ${socialItemFragment}
+  mutation SocialItemCreate(
+    $owner: ID
+    $link: String
+    $network: String
+    $username: String
+  ) {
+    socialItemCreate(
+      input: {
+        owner: $owner
+        link: $link
+        network: $network
+        username: $username
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      socialItem {
+        ...SocialItem
+      }
+    }
+  }
+`;
+
+export const SOCIAL_ITEM_UPDATE = gql`
+  ${socialItemFragment}
+  mutation SocialItemUpdate(
+    $id: ID!
+    $link: String
+    $network: String
+    $username: String
+  ) {
+    socialItemPatch(
+      id: $id
+      input: { link: $link, network: $network, username: $username }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      socialItem {
+        ...SocialItem
       }
     }
   }

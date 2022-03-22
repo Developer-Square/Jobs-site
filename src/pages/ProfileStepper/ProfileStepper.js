@@ -86,7 +86,7 @@ const ProfileStepper = (props) => {
   console.log(typeof handleBack, typeof handleNext, typeof handleSkip);
 
   const isAnswered = (formik, item) => {
-    const val = formik.values[`${item.name}`];
+    const val = formik.values[`${item?.name}`];
     if (val === undefined || val === null) {
       return false;
     } else {
@@ -338,7 +338,7 @@ const ProfileStepper = (props) => {
                                 <Button
                                   variant="contained"
                                   type="submit"
-                                  disabled={formik.isValid}
+                                  disabled={!formik.isValid}
                                   sx={{ borderRadius: 5, height: 30 }}
                                 >
                                   Save and Proceed

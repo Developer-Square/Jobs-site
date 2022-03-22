@@ -19,6 +19,7 @@ import {
   AVATAR_UPDATE_MUTATION,
   EDUCATION_ITEM_CREATE,
   WORK_ITEM_CREATE,
+  SOCIAL_ITEM_CREATE,
 } from "graphql/mutations";
 import { handleAvatarUpdate } from "utils";
 import moment from "moment";
@@ -48,20 +49,56 @@ const GPA = [
   { label: "D     [% - 65-66,     scale - 1.0]", value: "D" },
   { label: "E/F   [% - Below 65,  scale - 0.0]", value: "E/F" },
 ];
-// const socials = [
-//   { name: "facebook", url: "https://www.facebook.com/" },
-//   { name: "twitter", url: "https://www.twitter.com/" },
-//   { name: "instagram", url: "https://www.instagram.com/" },
-//   { name: "linkedin", url: "https://www.linkedin.com/" },
-//   { name: "github", url: "https://www.github.com/" },
-//   { name: "tiktok", url: "https://www.tiktok.com/" },
-// ];
-
-// owner
-
-// link
-// network
-// username
+const socials = [
+  {
+    label: (
+      <div>
+        <i className="fa fa-facebook-square" /> facebook
+      </div>
+    ),
+    value: "https://www.facebook.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-twitter-square" /> twitter
+      </div>
+    ),
+    value: "https://www.twitter.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-instagram" /> instagram
+      </div>
+    ),
+    value: "https://www.instagram.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-linkedin-square" /> linkedin
+      </div>
+    ),
+    value: "https://www.linkedin.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-github-square" /> github
+      </div>
+    ),
+    value: "https://www.github.com/",
+  },
+  {
+    label: (
+      <div>
+        <i className="fa fa-tiktok" /> tiktok
+      </div>
+    ),
+    value: "https://www.tiktok.com/",
+  },
+];
 
 const SeekerStepper = () => {
   const initValues = {};
@@ -122,6 +159,22 @@ const SeekerStepper = () => {
           skills: false,
           experience: false,
           socials: false,
+        },
+      });
+    },
+  });
+  const [createSocial] = useMutation(SOCIAL_ITEM_CREATE, {
+    onCompleted: (data) => {
+      // after this I've to send another req
+      console.log(data);
+      updateSeekerProfile({
+        variables: {
+          id: user?.seeker?.profileCompletion?.id,
+          education: true,
+          settings: true,
+          skills: true,
+          experience: true,
+          socials: true,
         },
       });
     },
@@ -191,6 +244,41 @@ const SeekerStepper = () => {
       });
     }
   };
+  const socialCreateSubmit = (values) => {
+    console.log("inafika", values);
+
+    function parseUsername(url) {
+      let output = url;
+      let matches;
+      console.log(url);
+
+      // Parse username
+      matches = url.match(
+        /(?:https?:\/\/)?(?:www.)?(?:twitter|medium|facebook|vimeo|instagram|github|tiktok|linkedin)(?:.com\/)?([@a-zA-Z0-9-_]+)/im,
+      );
+      console.log("matches, ", matches);
+
+      // Set output
+      output = matches.length ? matches[1] : output;
+
+      return output;
+    }
+
+    for (let k = 0; k < values.Social.length; k++) {
+      let e = values.Social[k];
+      e.username = parseUsername(e.link);
+      e.link = e?.network?.value || e?.network;
+      e.network = e?.network?.value?.split(".")[1];
+
+      console.log("all the social values", e);
+      createSocial({
+        variables: {
+          ...e,
+          owner: user?.id,
+        },
+      });
+    }
+  };
 
   const experienceCreateSubmit = (values) => {
     for (let j = 0; j < values?.Experience.length; j++) {
@@ -216,6 +304,7 @@ const SeekerStepper = () => {
     {
       label: "Account Settings",
       description: `Help Us understand more about you.`,
+      useFieldArray: false,
       mutation: seekerCreateSubmit,
       blankValues: {
         title: "",
@@ -470,6 +559,40 @@ const SeekerStepper = () => {
           description: "Acheivements During said period",
           control: "textarea",
           rte: false,
+        },
+      ],
+    },
+    {
+      label: "Social",
+      description: "Social",
+      mutation: socialCreateSubmit,
+      useFieldArray: true,
+      blankValues: {
+        network: "",
+        link: null,
+      },
+      schema: Yup.object().shape({
+        network: schema.mixedSelect,
+        link: schema.website,
+      }),
+      headerField: "network",
+      fields: [
+        {
+          control: "select",
+          label: "Network",
+          name: "network",
+          hideButton: () => {},
+          style: { margin: 0 },
+          options: socials,
+          description: "Choose Network",
+          defaultValue: { value: "", label: "Select Network" },
+        },
+        {
+          name: "link",
+          description: "Your Social Media link",
+          placeholder: "https://www.linkedin.com/in/john-doe-123/",
+          control: "input",
+          type: "text",
         },
       ],
     },

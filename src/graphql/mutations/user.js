@@ -148,6 +148,7 @@ export const SEEKER_PROFILE_COMPLETION = gql`
     $education: Boolean
     $skills: Boolean
     $experience: Boolean
+    $socials: Boolean
   ) {
     seekerProfileCompletionPatch(
       id: $id
@@ -156,6 +157,7 @@ export const SEEKER_PROFILE_COMPLETION = gql`
         education: $education
         skills: $skills
         experience: $experience
+        socials: $socials
       }
     ) {
       success
@@ -172,13 +174,21 @@ export const SEEKER_PROFILE_COMPLETION = gql`
         education
         skills
         experience
+        socials
       }
     }
   }
 `;
 export const EMPLOYER_PROFILE_COMPLETION = gql`
-  mutation EmployerProfileCompletionPatch($id: ID!, $settings: Boolean) {
-    employerProfileCompletionPatch(id: $id, input: { settings: $settings }) {
+  mutation EmployerProfileCompletionPatch(
+    $id: ID!
+    $settings: Boolean
+    $socials: Boolean
+  ) {
+    employerProfileCompletionPatch(
+      id: $id
+      input: { settings: $settings, socials: $socials }
+    ) {
       success
       errors {
         field
@@ -190,6 +200,7 @@ export const EMPLOYER_PROFILE_COMPLETION = gql`
           id
         }
         settings
+        socials
       }
     }
   }
