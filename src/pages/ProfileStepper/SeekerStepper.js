@@ -419,7 +419,7 @@ const SeekerStepper = () => {
       schema: Yup.object().shape({
         institution: schema.select,
         fieldOfStudy: schema.select,
-        level: schema.select,
+        level: schema.requiredString,
         schoolStart: schema.date,
         schoolEnd: schema.date,
         gpa: schema.select,
