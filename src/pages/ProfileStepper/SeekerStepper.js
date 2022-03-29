@@ -322,7 +322,9 @@ const SeekerStepper = () => {
         location: schema.requiredString,
         gender: schema.requiredString,
         status: schema.requiredString,
-        industries: schema.select,
+        industries: Yup.array()
+          .of(schema.select)
+          .min(1, "Must have at least one entry"),
         nationality: schema.select,
         description: schema.requiredString,
         idNumber: schema.id_number,
