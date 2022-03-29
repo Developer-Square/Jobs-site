@@ -189,7 +189,7 @@ const EmployerStepper = () => {
         location: schema.requiredString,
         mobile: schema.mobile,
         website: schema.website,
-        workForce: schema.select,
+        workForce: schema.requiredString,
         lookingFor: schema.requiredString,
         country: schema.requiredString,
         regNo: schema.requiredString,
