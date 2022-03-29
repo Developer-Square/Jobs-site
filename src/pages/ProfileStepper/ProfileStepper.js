@@ -170,11 +170,13 @@ const ProfileStepper = (props) => {
   const getSchema = () => {
     const singleSchema = steps[activeStep]?.schema;
     if (!singleSchema) return null;
-    const schema = Yup.object({
-      [steps[activeStep].label]: Yup.array()
-        .of(singleSchema)
-        .min(1, "Must have at least one entry"),
-    });
+    const schema = steps[activeStep]?.useFieldArray
+      ? Yup.object({
+          [steps[activeStep].label]: Yup.array()
+            .of(singleSchema)
+            .min(1, "Must have at least one entry"),
+        })
+      : singleSchema;
     return schema;
   };
 
