@@ -107,6 +107,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
 
   const cleanFormData = (data, oldData) => {
     delete oldData.screeningQuestions;
+    delete data.screeningQuestions;
     const jobType = data.jobType.value;
     const minQualification = data.minQualification.value;
     const industry = data.industry.value;
