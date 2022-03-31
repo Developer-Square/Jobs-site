@@ -32,7 +32,7 @@ const Banner = (props) => {
         backgroundImage: `url(${props?.bannerImage || bgImg})`,
         maxHeight: "90vh",
         height: "90vh",
-        marginBottom: "5px",
+        marginBottom: "40px",
       }}
       data-img-width={2000}
       data-img-height={1330}
@@ -46,7 +46,7 @@ const Banner = (props) => {
       >
         <div className="container h-screen relative z-20">
           <div className="h-full lg:full flex flex-col justify-end pb-4 lg:pb-0 lg:w-96 lg:justify-center">
-            <div className="h-1/2 flex flex-col justify-center items-center text-center lg:items-start lg:text-left">
+            <div className="h-1/2 flex flex-col justify-center items-center text-center lg:items-start lg:text-left mb-4">
               <Waypoint
                 onEnter={removeSticky}
                 onLeave={setSticky}

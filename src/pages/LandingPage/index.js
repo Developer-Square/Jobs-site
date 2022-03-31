@@ -39,7 +39,7 @@ function LandingPage({ deviceType }) {
           />
           <div className="section-background top-0 margin-bottom-0">
             <div className="container-x relative">
-              <div className="container relative max-w-4xl flex items-center h-auto flex-wrap mx-auto my-32 lg:my-0">
+              <div className="container relative max-w-4xl flex items-center h-auto flex-wrap mx-auto lg:my-0">
                 {/*Main Col*/}
                 <div className="container mx-auto my-1">
                   <h3 className="font-bold text-2xl transition duration-500 my-2">
@@ -49,7 +49,7 @@ function LandingPage({ deviceType }) {
                 </div>
                 <div className="container relative mx-auto my-1 z-10">
                   <div className="relative rounded-lg flex flex-col md:flex-row items-center mx-2">
-                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-80 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
+                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-40 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
                       <div className="md:hidden absolute inset-0 h-full p-6 pb-6 flex flex-col-reverse justify-start items-start bg-gradient-to-b from-transparent via-transparent to-gray-900">
                         <h3 className="w-full font-bold text-2xl text-white leading-tight mb-2">
                           Larger Workforce
@@ -79,7 +79,7 @@ function LandingPage({ deviceType }) {
                 </div>
                 <div className="container relative mx-auto my-1 z-10">
                   <div className="relative rounded-lg flex flex-col md:flex-row items-center mx-2">
-                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-80 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
+                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-40 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
                       <div className="md:hidden absolute inset-0 h-full p-6 pb-6 flex flex-col-reverse justify-start items-start bg-gradient-to-b from-transparent via-transparent to-gray-900">
                         <h3 className="w-full font-bold text-2xl text-white leading-tight mb-2">
                           New Perspective
@@ -109,7 +109,7 @@ function LandingPage({ deviceType }) {
                 </div>
                 <div className="container relative mx-auto my-1 z-10">
                   <div className="relative rounded-lg flex flex-col md:flex-row items-center mx-2">
-                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-80 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
+                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-40 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
                       <div className="md:hidden absolute inset-0 h-full p-6 pb-6 flex flex-col-reverse justify-start items-start bg-gradient-to-b from-transparent via-transparent to-gray-900">
                         <h3 className="w-full font-bold text-2xl text-white leading-tight mb-2">
                           Mentorship Opportunities

@@ -105,7 +105,9 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
     history.push(`/vacancies/${getDBIdFromGraphqlId(jobId, "Vacancy")}`);
   };
 
-  const cleanFormData = (data, oldData) => {
+  const cleanFormData = (a, b) => {
+    const data = a;
+    const oldData = b;
     delete oldData.screeningQuestions;
     delete data.screeningQuestions;
     const jobType = data.jobType.value;

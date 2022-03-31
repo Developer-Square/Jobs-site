@@ -348,7 +348,7 @@ const ApplicationSeekerForm = ({ vacancy }) => {
           data.createApplication,
           errors,
           null,
-          errors,
+          "errors",
           "Application Created",
           null,
         )

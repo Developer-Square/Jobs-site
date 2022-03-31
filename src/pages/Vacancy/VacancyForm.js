@@ -133,7 +133,10 @@ const VacancyForm = ({
             label="Years of Experience required"
             name="yearsOfExp"
             style={{ margin: 0 }}
-            options={experience}
+            options={[
+              { value: "ENTRY", label: "Entry Level" },
+              { value: "ONE_TWO", label: "1-2 years" },
+            ]}
             defaultValue={formik.values.experience}
           />
           <FormikControl
@@ -415,7 +418,6 @@ const VacancyForm = ({
       initialValues={initialValues}
       validationSchema={vacancySchema}
       onSubmit={onSubmit}
-      enableReinitialize
     >
       {(formik) => {
         console.log(formik.values);

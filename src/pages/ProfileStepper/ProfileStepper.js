@@ -33,9 +33,7 @@ const ProfileStepper = (props) => {
     if (!sets) {
       return 0;
     }
-    if (!sets) {
-      return 0;
-    }
+    if (sets?.experience === true) return 4;
     if (sets?.skills === true) return 3;
     if (sets?.education === true) return 2;
     if (sets?.settings === true) return 1;

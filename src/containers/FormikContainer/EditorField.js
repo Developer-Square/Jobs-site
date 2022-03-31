@@ -3,25 +3,27 @@ import { EditorState, ContentState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-// function uploadImageCallBack(file) {
-//   return new Promise((resolve, reject) => {
-//     const xhr = new XMLHttpRequest();
-//     xhr.open("POST", "https://api.imgur.com/3/image");
-//     xhr.setRequestHeader("Authorization", "Client-ID XXXXX");
-//     const data = new FormData();
-//     data.append("image", file);
-//     xhr.send(data);
-//     xhr.addEventListener("load", () => {
-//       const response = JSON.parse(xhr.responseText);
-//       resolve(response);
-//     });
-//     xhr.addEventListener("error", () => {
-//       const error = JSON.parse(xhr.responseText);
-//       reject(error);
-//     });
-//   });
-// }
+const getEditorValue = (form, field) => {
+  let editorVal = EditorState.createEmpty();
+  if (form.dirty) {
+    return;
+  }
+  if (!field.value) {
+    return;
+  }
+
+  const contentBlock = htmlToDraft(draftToHtml(JSON.parse(field.value)));
+  if (contentBlock) {
+    const contentState = ContentState.createFromBlockArray(
+      contentBlock.contentBlocks,
+    );
+    editorVal = EditorState.createWithContent(contentState);
+  }
+
+  return editorVal;
+};
 
 function EditorField({
   input,
@@ -32,12 +34,9 @@ function EditorField({
   placeholder,
   labelCss,
 }) {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(getEditorValue(form, field));
 
   useEffect(() => {
-    if (form.dirty) {
-      return;
-    }
     if (!field.value) {
       return;
     }
@@ -50,7 +49,8 @@ function EditorField({
       const editorState = EditorState.createWithContent(contentState);
       setEditorState(editorState);
     }
-  }, [field.value, form.dirty]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function onEditorStateChange(editorState) {
     setEditorState(editorState);
@@ -62,7 +62,7 @@ function EditorField({
     );
   }
 
-  // const { editorState } = editorState;
+  console.log(editorState);
   return (
     <>
       <Editor
@@ -72,29 +72,7 @@ function EditorField({
         editorClassName="editorClassName"
         placeholder={placeholder}
         onEditorStateChange={(val) => onEditorStateChange(val)}
-        // onFocus={(e) => field.onFocus(e)}
-        // onBlur={(e) => field.onBlur(e)}
-        // toolbar={{
-        //   options: [
-        //     "inline",
-        //     "blockType",
-        //     "fontSize",
-        //     "fontFamily",
-        //     "list",
-        //     "textAlign",
-        //     "link",
-        //     "embedded",
-        //     "remove",
-        //     "history",
-        //   ],
-        // }}
-        // toolbar={{
-        //     inline: { inDropdown: true },
-        //     list: { inDropdown: true },
-        //     textAlign: { inDropdown: true },
-        //     link: { inDropdown: true },
-        //     history: { inDropdown: true },
-        //
+        spellCheck
       />
     </>
   );
