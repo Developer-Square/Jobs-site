@@ -233,60 +233,62 @@ const ApplicationView = () => {
           </div>
         </div>
       </div>
-      <div className="w-full mx-auto z-10">
-        <div className="flex flex-col">
-          <div
-            className={`bg-white flex items-center p-4 m-1 mx-0 rounded-sm shadow border`}
-          >
-            <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-gray-700">
-              <table className="w-full">
-                <thead>
-                  <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-                    <th className="px-4 py-3">Question</th>
-                    <th className="px-4 py-3">Ideal Answer</th>
-                    <th className="px-4 py-3">Answer</th>
-                    <th className="px-4 py-3">Required</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
-                  {applicationData.jobApplication?.screeningAnswers?.map(
-                    (a, i) => (
-                      <tr className="text-gray-700" key={i}>
-                        <td className="px-4 py-3 border">
-                          <div className="flex items-center text-sm">
-                            <p className="font-semibold text-black">
-                              {a?.question?.question}
-                            </p>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 text-ms font-semibold border">
-                          {a?.question?.idealAnswer}
-                        </td>
-                        <td className="px-4 py-3 text-xs border">
-                          <span
-                            className={
-                              a?.question?.questionType === "LNG_TXT"
-                                ? "px-2 py-1 font-semibold leading-tight text-orange-700 bg-gray-100 rounded-sm"
-                                : a?.answer === a?.question?.idealAnswer
-                                ? "px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm"
-                                : "px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-sm"
-                            }
-                          >
-                            {a?.answer}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-sm border">
-                          {a?.question?.required ? "Yes " : "No "}
-                        </td>
-                      </tr>
-                    ),
-                  )}
-                </tbody>
-              </table>
+      {applicationData.jobApplication?.screeningAnswers && (
+        <div className="w-full mx-auto z-10">
+          <div className="flex flex-col">
+            <div
+              className={`bg-white flex items-center p-4 m-1 mx-0 rounded-sm shadow border`}
+            >
+              <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-gray-700">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
+                      <th className="px-4 py-3">Question</th>
+                      <th className="px-4 py-3">Ideal Answer</th>
+                      <th className="px-4 py-3">Answer</th>
+                      <th className="px-4 py-3">Required</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white">
+                    {applicationData.jobApplication?.screeningAnswers?.map(
+                      (a, i) => (
+                        <tr className="text-gray-700" key={i}>
+                          <td className="px-4 py-3 border">
+                            <div className="flex items-center text-sm">
+                              <p className="font-semibold text-black">
+                                {a?.question?.question}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-ms font-semibold border">
+                            {a?.question?.idealAnswer}
+                          </td>
+                          <td className="px-4 py-3 text-xs border">
+                            <span
+                              className={
+                                a?.question?.questionType === "LNG_TXT"
+                                  ? "px-2 py-1 font-semibold leading-tight text-orange-700 bg-gray-100 rounded-sm"
+                                  : a?.answer === a?.question?.idealAnswer
+                                  ? "px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm"
+                                  : "px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-sm"
+                              }
+                            >
+                              {a?.answer}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-sm border">
+                            {a?.question?.required ? "Yes " : "No "}
+                          </td>
+                        </tr>
+                      ),
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       <div className="w-full mx-auto z-10">
         <div className="flex flex-col">
           <div

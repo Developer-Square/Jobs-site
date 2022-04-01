@@ -80,6 +80,7 @@ export const CREATE_APPLICATION = gql`
     $resume: Upload
     $extraAttachment: Upload
     $comment: String
+    $inbuiltResume: ID
   ) {
     createApplication(
       input: {
@@ -90,6 +91,7 @@ export const CREATE_APPLICATION = gql`
         resume: $resume
         comment: $comment
         extraAttachment: $extraAttachment
+        inbuiltResume: $inbuiltResume
       }
     ) {
       __typename
