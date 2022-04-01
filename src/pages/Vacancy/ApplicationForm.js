@@ -318,9 +318,10 @@ const ApplicationSeekerForm = ({ vacancy }) => {
 
   const initialValues = {
     job: vacancyID,
-    resume: "",
+    resume: null,
     budget: "",
     comment: "",
+    inbuiltResume: null,
     extraAttachment: null,
   };
 
@@ -357,10 +358,13 @@ const ApplicationSeekerForm = ({ vacancy }) => {
       {(applicationCreate, { loading }) => {
         function onSubmit(values, { setErrors, setSubmitting }) {
           console.log(values);
-          const extraAttachment = values?.extraAttachment[0]
+          const extraAttachment = values?.extraAttachment
             ? { extraAttachment: values?.extraAttachment[0] }
             : {};
-          const resume = values?.resume[0] ? { resume: values?.resume[0] } : {};
+          const inbuiltResume = values?.inbuiltResume
+            ? { inbuiltResume: values?.inbuiltResume?.value }
+            : {};
+          const resume = values?.resume ? { resume: values?.resume[0] } : {};
 
           applicationCreate({
             variables: {
@@ -370,6 +374,7 @@ const ApplicationSeekerForm = ({ vacancy }) => {
               status: "APPLIED",
               ...resume,
               ...extraAttachment,
+              ...inbuiltResume,
             },
           }).then(({ data }) => {
             if (data) {
