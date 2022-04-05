@@ -23,6 +23,7 @@ import { ResumeProvider } from "contexts/resume/resume.provider";
 import { SettingsProvider } from "contexts/settings/settings.provider";
 import { StorageProvider } from "contexts/storage/storage.provider";
 import { UserProvider } from "contexts/user/user.provider";
+import { SidebarProvider } from "contexts/sidebar/use-sidebar";
 import BaseRouter from "routers/router";
 import { useRouterQuery } from "helpers/useRouterQuery";
 import { serviceWorkerTimeout } from "constants/constants";
@@ -33,12 +34,16 @@ import { SEO } from "components/seo";
 import ScrollToTop from "helpers/scrollToTop";
 
 // External CSS import here
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import "react-phone-input-2/lib/style.css";
 import "rc-drawer/assets/index.css";
 import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "swiper/css/scrollbar";
 
 const MUItheme = createTheme({
   typography: {
@@ -82,37 +87,39 @@ function App() {
         <OriginalThemeProvider theme={themeMode}>
           <MuiThemeProvider theme={MUItheme}>
             <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-              <SearchProvider query={query}>
-                <HeaderProvider>
-                  <AuthProvider>
-                    <VacancyProvider>
-                      <ConstantsProvider>
-                        <ModalProvider>
-                          <UserProvider>
-                            <DatabaseProvider>
-                              <ResumeProvider>
-                                <StickyProvider>
-                                  <AlertProvider
-                                    template={NotificationTemplate}
-                                    {...notificationConfig}
-                                  >
-                                    <StorageProvider>
-                                      <ScrollToTop>
-                                        <BaseRouter deviceType={deviceType} />
-                                      </ScrollToTop>
-                                    </StorageProvider>
-                                  </AlertProvider>
-                                </StickyProvider>
-                              </ResumeProvider>
-                            </DatabaseProvider>
-                          </UserProvider>
-                        </ModalProvider>
-                      </ConstantsProvider>
-                    </VacancyProvider>
-                  </AuthProvider>
-                </HeaderProvider>
-                <GlobalStyle />
-              </SearchProvider>
+              <SidebarProvider>
+                <ConstantsProvider>
+                  <SearchProvider query={query}>
+                    <HeaderProvider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <VacancyProvider>
+                            <ModalProvider>
+                              <DatabaseProvider>
+                                <ResumeProvider>
+                                  <StickyProvider>
+                                    <AlertProvider
+                                      template={NotificationTemplate}
+                                      {...notificationConfig}
+                                    >
+                                      <StorageProvider>
+                                        <ScrollToTop>
+                                          <BaseRouter deviceType={deviceType} />
+                                        </ScrollToTop>
+                                      </StorageProvider>
+                                    </AlertProvider>
+                                  </StickyProvider>
+                                </ResumeProvider>
+                              </DatabaseProvider>
+                            </ModalProvider>
+                          </VacancyProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </HeaderProvider>
+                    <GlobalStyle />
+                  </SearchProvider>
+                </ConstantsProvider>
+              </SidebarProvider>
               <ReactHooksWrapper />
             </ServiceWorkerProvider>
           </MuiThemeProvider>

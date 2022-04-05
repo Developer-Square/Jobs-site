@@ -313,7 +313,7 @@ const VacancyFilter = ({
       </div>
       {/* Job Type */}
       <div className="widget">
-        <h4>Job Type</h4>
+        <h4>Type</h4>
         <ul className="checkboxes">
           <li>
             <input

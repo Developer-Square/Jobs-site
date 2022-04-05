@@ -15,17 +15,25 @@ export const vacancyFragment = gql`
     yearsOfExp
     isActive
     salary
-    applicationEmail
+    applicationUrl
     numberOfApplications
     shortlistedCount
     acceptedCount
     rejectedCount
     appliedCount
+    interviewingCount
     payRate
     closingDate
     location
     createdAt
     isActive
+    screeningQuestions {
+      id
+      questionType
+      question
+      required
+      idealAnswer
+    }
     amount {
       currency
       amount

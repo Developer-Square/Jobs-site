@@ -87,12 +87,6 @@ const Login = () => {
             onSubmit={onSubmit}
           >
             {(formik) => {
-              // console.log(formik);
-              // if (!data?.tokenAuth?.success) {
-              //   formik.setErrors(
-              //     normalizeErrors(maybe(() => data.tokenAuth.errors, []))
-              //   );
-              // }
               return (
                 <Form className="login">
                   <FormikControl
@@ -110,6 +104,19 @@ const Login = () => {
                     icon="ln ln-icon-Lock-2"
                   />
 
+                  <div className="flex justify-end items-center text-sm font-bold mt-8 gap-4">
+                    <a
+                      className="text-blue-700 px-4 py-1 rounded"
+                      onClick={() =>
+                        authDispatch({
+                          type: "FORGOTPASS",
+                        })
+                      }
+                    >
+                      Forgot Password?
+                    </a>
+                  </div>
+
                   <Button
                     type="submit"
                     disabled={!formik.isValid}
@@ -120,17 +127,6 @@ const Login = () => {
                     //   {...(loading && { disabled: true })}
                   />
                   {/* <GoogleSocialAuth /> */}
-                  <p className=" lost_password">
-                    <a
-                      onClick={() =>
-                        authDispatch({
-                          type: "FORGOTPASS",
-                        })
-                      }
-                    >
-                      Lost Your Password?
-                    </a>
-                  </p>
                 </Form>
               );
             }}

@@ -1,8 +1,9 @@
 import React from "react";
-import DatePicker from "react-date-picker";
 import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 import styled from "styled-components";
+import moment from "moment";
+import Input from "components/shared/Input";
 
 function DateInput(props) {
   const { label, name, icon, ...rest } = props;
@@ -30,17 +31,15 @@ function DateInput(props) {
         )}
         <Field name={name}>
           {({ form, field }) => {
-            const { setFieldValue } = form;
-            const { value } = field;
             return (
-              <DatePicker
-                className="border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                dateFormat="y-MM-dd"
+              <Input
                 id={name}
-                {...field}
-                {...rest}
-                selected={typeof value === "string" ? new Date(value) : value}
-                onChange={(val) => setFieldValue(name, val)}
+                type="date"
+                placeholder="6th August 2008"
+                name={field.name}
+                value={moment(field.value).format("YYYY-MM-DD")}
+                onBlur={field.onBlur}
+                onChange={field.onChange}
               />
             );
           }}

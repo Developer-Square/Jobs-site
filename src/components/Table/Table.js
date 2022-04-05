@@ -58,7 +58,7 @@ function DefaultColumnFilter({
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
       placeholder={`Search ${count} records...`}
-      style={{ borderBottom: "1px solid", backgroundColor: "#575757" }}
+      style={{ borderBottom: "1px solid", backgroundColor: "#2d3542" }}
     />
   );
 }
@@ -309,13 +309,13 @@ function Table({
   );
 
   return (
-    <>
+    <div className="bg-white rounded-md w-full">
       <div className="tableWrap">
         {/* <div className=""> */}
         <table
           // className="manage-table resumes responsive-table"
           {...getTableProps()}
-          className="table text-gray-400 border-separate space-y-6 text-sm"
+          className="table text-sm"
           style={{
             width: "-webkit-fill-available",
           }}
@@ -337,7 +337,8 @@ function Table({
                           style: column.style,
                         },
                       ])}
-                      className="p-3 align-middle"
+                      // className="p-3 align-middle"
+                      className="px-5 py-3 border-b-2 bg-gray-800 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider"
                     >
                       <div>
                         {/* {column.canGroupBy ? (
@@ -397,7 +398,7 @@ function Table({
               prepareRow(row);
               return (
                 // Merge user row props in
-                <tr {...row.getRowProps()} className="bg-gray-800">
+                <tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
                       <td
@@ -409,7 +410,7 @@ function Table({
                           },
                           getCellProps(cell, row.cells),
                         ])}
-                        className="p-3 align-middle"
+                        className="p-1 align-middle text-gray-800"
                       >
                         {cell.isGrouped ? (
                           // If it's a grouped cell, add an expander and row count
@@ -552,7 +553,7 @@ function Table({
           )}
         </code>
       </pre> */}
-    </>
+    </div>
   );
 }
 

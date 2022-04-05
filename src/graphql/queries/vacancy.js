@@ -39,11 +39,20 @@ export const GET_APPLICATIONS = gql`
       isDeleted
       isActive
       id
+      rank
+      inbuiltResume {
+        id
+      }
+      extraAttachment
       applicant {
         id
         fullName
         email
         phone
+        seeker {
+          id
+          location
+        }
         avatar {
           url
           alt
@@ -115,6 +124,11 @@ export const GET_JOB_APPLICATIONS = gql`
           isDeleted
           isActive
           id
+          rank
+          inbuiltResume {
+            id
+          }
+          extraAttachment
           applicant {
             id
             fullName
@@ -122,6 +136,7 @@ export const GET_JOB_APPLICATIONS = gql`
             phone
             progress
             seeker {
+              location
               status
               title
             }
@@ -162,6 +177,7 @@ export const GET_JOB_APPLICATIONS = gql`
     }
   }
 `;
+
 export const VACANCIES_QUERY = gql`
   ${vacancyFragment}
   query VacanciesList(
@@ -247,6 +263,7 @@ export const EMPLOYER_VACANCIES_QUERY = gql`
     }
   }
 `;
+
 export const GET_MY_VACANCIES = gql`
   ${vacancyFragment}
   query MyVacancies {
@@ -273,6 +290,76 @@ export const VACANCY_DETAIL_QUERY = gql`
         name
         description
       }
+    }
+  }
+`;
+
+export const APPLICATION_DETAIL_QUERY = gql`
+  query ApplicationDetail($id: ID!) {
+    jobApplication(id: $id) {
+      slug
+      uuid
+      createdAt
+      updatedAt
+      isDeleted
+      isActive
+      id
+      screeningAnswers {
+        id
+        isActive
+        isDeleted
+        question {
+          id
+          question
+          required
+          idealAnswer
+        }
+        answer
+      }
+      inbuiltResume {
+        id
+      }
+      extraAttachment
+      applicant {
+        id
+        fullName
+        email
+        phone
+        socials {
+          id
+          link
+          network
+          username
+        }
+        seeker {
+          id
+          location
+        }
+        avatar {
+          url
+          alt
+        }
+      }
+      job {
+        id
+        title
+        creator {
+          id
+          fullName
+          email
+          phone
+          avatar {
+            url
+            alt
+          }
+        }
+      }
+      appliedOn
+      resume
+      budget
+      comment
+      status
+      favourite
     }
   }
 `;

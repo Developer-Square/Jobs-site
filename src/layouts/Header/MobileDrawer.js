@@ -16,7 +16,7 @@ import {
   LoginView,
   UserAvatar,
   UserDetails,
-  DrawerMenu,
+  // DrawerMenu,
   DrawerMenuItem,
   UesrOptionMenu,
 } from "./Header.style";
@@ -26,6 +26,7 @@ import { CONTACT, HELP_PAGE } from "constants/routes.constants";
 import { SDG } from "constants/routes.constants";
 import { isCategoryPage } from "../is-home-page";
 import { VACANCIES } from "constants/routes.constants";
+import UserContext from "contexts/user/user.provider";
 
 const DrawerMenuItems = [
   {
@@ -54,9 +55,11 @@ const MobileDrawer = () => {
   const history = useHistory();
   const { state, dispatch } = useContext(DrawerContext);
   const {
-    authState: { isAuthenticated, profile },
+    authState: { isAuthenticated },
     authDispatch,
   } = useContext(AuthContext);
+  const { userData } = React.useContext(UserContext);
+
   const location = useLocation();
   const path = location.pathname.replace(/\/+$/, "");
   const pathname = path[0] === "/" ? path.substr(1) : path;
@@ -146,11 +149,14 @@ const MobileDrawer = () => {
             {isAuthenticated ? (
               <LoginView>
                 <UserAvatar>
-                  <img src={profile.avatar || img} alt="user_avatar" />
+                  <img
+                    src={userData?.me?.avatar?.url || img}
+                    alt="user_avatar"
+                  />
                 </UserAvatar>
                 <UserDetails>
-                  <h3>{profile.fullName}</h3>
-                  <span>{profile.email}</span>
+                  <h3>{userData?.me.fullName}</h3>
+                  <span>{userData?.me.email}</span>
                 </UserDetails>
               </LoginView>
             ) : (
@@ -165,28 +171,6 @@ const MobileDrawer = () => {
               </LogoutView>
             )}
           </DrawerProfile>
-
-          <DrawerMenu>
-            {DrawerMenuItems.map((item) => (
-              <DrawerMenuItem key={item.id}>
-                <NavLink
-                  onClick={toggleHandler}
-                  href={item.href}
-                  label={item.label}
-                  className="drawer_menu_item"
-                />
-              </DrawerMenuItem>
-            ))}
-            <DrawerMenuItem>
-              <NavLink
-                onClick={toggleHandler}
-                href={SDG}
-                label={"Sustainable Development Goals"}
-                className="drawer_menu_item"
-              />
-            </DrawerMenuItem>
-          </DrawerMenu>
-
           {isAuthenticated && (
             <UesrOptionMenu>
               <DrawerMenuItem>
@@ -221,12 +205,32 @@ const MobileDrawer = () => {
                   className="drawer_menu_item"
                 />
               </DrawerMenuItem>
-              <DrawerMenuItem onClick={toggleHandler}>
-                <div onClick={handleLogout} className="drawer_menu_item">
-                  <span className="logoutBtn">Logout</span>
-                </div>
-              </DrawerMenuItem>
             </UesrOptionMenu>
+          )}
+          {DrawerMenuItems.map((item) => (
+            <DrawerMenuItem key={item.id}>
+              <NavLink
+                onClick={toggleHandler}
+                href={item.href}
+                label={item.label}
+                className="drawer_menu_item"
+              />
+            </DrawerMenuItem>
+          ))}
+          <DrawerMenuItem>
+            <NavLink
+              onClick={toggleHandler}
+              href={SDG}
+              label={"Sustainable Development Goals"}
+              className="drawer_menu_item"
+            />
+          </DrawerMenuItem>
+          {isAuthenticated && (
+            <DrawerMenuItem onClick={toggleHandler}>
+              <div onClick={handleLogout} className="drawer_menu_item">
+                <span className="logoutBtn">Logout</span>
+              </div>
+            </DrawerMenuItem>
           )}
         </DrawerContentWrapper>
       </Scrollbars>

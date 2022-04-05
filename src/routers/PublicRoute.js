@@ -17,7 +17,7 @@ const PublicRoute = ({ component: Component, restricted, ...rest }) => {
         restricted ? (
           isAuthenticated ? (
             <Suspense fallback={<Loader />}>
-              <Component {...props} />
+              <Component {...props} {...rest} />
             </Suspense>
           ) : (
             <Redirect
@@ -31,7 +31,7 @@ const PublicRoute = ({ component: Component, restricted, ...rest }) => {
           )
         ) : (
           <Suspense fallback={<Loader />}>
-            <Component {...props} />
+            <Component {...props} {...rest} />
           </Suspense>
         )
       }

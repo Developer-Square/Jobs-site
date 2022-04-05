@@ -30,8 +30,9 @@ const Banner = (props) => {
       className="with-transparent-header parallax background"
       style={{
         backgroundImage: `url(${props?.bannerImage || bgImg})`,
-        maxHeight: "80vh",
-        height: "80vh",
+        maxHeight: "90vh",
+        height: "90vh",
+        marginBottom: "40px",
       }}
       data-img-width={2000}
       data-img-height={1330}
@@ -43,51 +44,40 @@ const Banner = (props) => {
           height: "100%",
         }}
       >
-        <div className="sixteen columns" style={{ height: "100%" }}>
-          <div
-            className="search-container flex h-screen"
-            style={{ height: "100%" }}
-          >
-            <div className={"align-middle my-auto"}>
+        <div className="container h-screen relative z-20">
+          <div className="h-full lg:full flex flex-col justify-end pb-4 lg:pb-0 lg:w-96 lg:justify-center">
+            <div className="h-1/2 flex flex-col justify-center items-center text-center lg:items-start lg:text-left mb-4">
+              <Waypoint
+                onEnter={removeSticky}
+                onLeave={setSticky}
+                onPositionChange={onWaypointPositionChange}
+              />
+
               <Fade bottom>
-                <div className="announce text-lg">
+                <p className="text-xs lg:text-base leading-5 announce text-lg">
                   {props?.bannerSubHeading || (
                     <>
                       We’ve over <strong>15,000</strong> internship offers for
                       you!
                     </>
                   )}
-                </div>
+                </p>
                 <h2
                   style={{ borderLeft: "3px solid white" }}
-                  className={"px-4 my-4 font-semibold text-5xl tracking-wide"}
+                  className={
+                    "px-4 my-4 font-semibold text-5xl tracking-wide text-white"
+                  }
                 >
                   {props?.bannerHeading || "Great Careers Start Here"}
                 </h2>
-                <div>
-                  <GetStarted
-                    floatDirection="left"
-                    buttonStyles={{
-                      width: "auto",
-                      height: "36px",
-                      borderRadius: "50px",
-                    }}
-                  />
-                  <br />
-                </div>
-
-                {/* <SearchContainer /> */}
-                <Waypoint
-                  onEnter={removeSticky}
-                  onLeave={setSticky}
-                  onPositionChange={onWaypointPositionChange}
+                <GetStarted
+                  floatDirection="left"
+                  buttonStyles={{
+                    width: "auto",
+                    height: "36px",
+                    borderRadius: "50px",
+                  }}
                 />
-                {/* Browse Jobs */}
-                {/* <div className="browse-jobs">
-                Browse job by <a href="browse-categories.html"> category</a> or{" "}
-                <a href="/">titles</a>
-              </div> */}
-                {/* Announce */}
               </Fade>
             </div>
           </div>

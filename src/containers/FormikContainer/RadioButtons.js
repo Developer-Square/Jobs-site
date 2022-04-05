@@ -3,48 +3,66 @@ import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 import styled from "styled-components";
 
+import { Radio, RadioGroup, FormControlLabel } from "@material-ui/core";
+
 function RadioButtons(props) {
   const { label, name, options, icon, ...rest } = props;
   return (
-    <FormInput className="form-control">
-      {rest.iconPosition ? (
-        <>
-          {rest.iconPosition === "left" ? (
-            <>
-              <i className={icon} />
-              {label}
-            </>
-          ) : (
-            <>
-              {label} <i className={icon} />
-            </>
-          )}
-        </>
-      ) : (
-        label
-      )}
+    <FormInput className=" w-full mb-3">
+      <label
+        className="block text-blueGray-600 text-xs font-bold mb-2"
+        htmlFor={name}
+      >
+        {rest.iconPosition ? (
+          <>
+            {rest.iconPosition === "left" ? (
+              <>
+                <i className={icon} />
+                {label}
+              </>
+            ) : (
+              <>
+                {label} <i className={icon} />
+              </>
+            )}
+          </>
+        ) : (
+          label
+        )}
+      </label>
       <Field name={name}>
-        {({ field }) => {
-          return options.map((option) => {
-            return (
-              <Fragment key={option.value}>
-                <label>
-                  <input
-                    style={{
-                      marginTop: "3px",
+        {({ field, form }) => {
+          return (
+            <RadioGroup
+              name={name}
+              value={field.value}
+              row
+              style={{ flexFlow: "inherit" }}
+              onChange={(event) => {
+                form.setFieldValue(name, event.currentTarget.value);
+              }}
+            >
+              {options.map((option, i) => {
+                return (
+                  <FormControlLabel
+                    onClick={() => {
+                      form.setFieldValue(
+                        name,
+                        document.getElementById(option.value).value,
+                      );
                     }}
-                    type="radio"
-                    id={option.label}
-                    {...field}
-                    {...rest}
-                    value={Boolean(option.value)}
-                    checked={field.value === `${option.value}`}
+                    className={`flex items-center`}
+                    style={{ flexDirection: "inherit" }}
+                    value={option.value}
+                    control={<Radio id={option.value} color="primary" />}
+                    label={option.label}
+                    labelPlacement="end"
+                    key={i}
                   />
-                  {option.label}
-                </label>
-              </Fragment>
-            );
-          });
+                );
+              })}
+            </RadioGroup>
+          );
         }}
       </Field>
       <ErrorMessage component={TextError} name={name} />
@@ -54,49 +72,4 @@ function RadioButtons(props) {
 
 export default RadioButtons;
 
-const FormInput = styled.div`
-  width: 100%;
-  max-width: 400px;
-  margin: 10px;
-  display: flex;
-  /* padding: 20px; */
-
-  > label {
-    display: inherit;
-
-    margin-bottom: 5px;
-    font-size: 14px;
-    line-height: 28px;
-    color: #333;
-  }
-
-  input,
-  textarea,
-  select {
-    opacity: 0.9;
-    height: 10px;
-    width: 14px;
-  }
-`;
-const Fragment = styled.div`
-  margin: 0 auto;
-  display: flex;
-  /* padding: 20px; */
-
-  > label {
-    display: inherit;
-
-    margin-bottom: 5px;
-    font-size: 14px;
-    line-height: 28px;
-    color: #333;
-  }
-
-  input,
-  textarea,
-  select {
-    opacity: 0.9;
-    height: 20px;
-    width: 14px;
-  }
-`;
+const FormInput = styled.div``;

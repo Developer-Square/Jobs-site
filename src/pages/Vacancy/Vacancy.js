@@ -1,6 +1,7 @@
 import React from "react";
 import { useAlert } from "react-alert";
 import { toast } from "react-toastify";
+import { useMutation } from "react-apollo";
 import { useRouteMatch, useHistory } from "react-router-dom";
 import moment from "moment";
 
@@ -20,6 +21,7 @@ import { VACANCY_DETAIL_QUERY } from "graphql/queries";
 import {
   CREATE_VACANCY_MUTATION,
   UPDATE_VACANCY_MUTATION,
+  CREATE_SCREENING_QUESTION,
 } from "graphql/mutations";
 import {
   JobMinQualification,
@@ -28,6 +30,7 @@ import {
   GET_INDUSTRIES,
 } from "graphql/queries";
 import { JobPayRate } from "graphql/queries";
+import UserContext from "contexts/user/user.provider";
 
 const TypedVacancyDetailQuery = TypedQuery(VACANCY_DETAIL_QUERY);
 const TypedJobMinQualificationQuery = TypedQuery(JobMinQualification);
@@ -44,6 +47,17 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
   const alert = useAlert();
   const history = useHistory();
   const [updating, setUpdating] = React.useState(false);
+  const [publish, setPublish] = React.useState(true);
+  // eslint-disable-next-line no-unused-vars
+  const [screenQns, setScreenQns] = React.useState([]);
+  const { setRefetchUser } = React.useContext(UserContext);
+
+  const [createQn] = useMutation(CREATE_SCREENING_QUESTION, {
+    onCompleted: (data) => {
+      setRefetchUser((prev) => !prev);
+    },
+  });
+
   const initialData = {
     title: "",
     jobType: "",
@@ -55,7 +69,16 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
     description: "",
     positions: 0,
     closingDate: new Date(),
-    applicationEmail: "",
+    applicationUrl: "",
+    publish: publish,
+    screeningQuestions: [
+      {
+        questionType: null,
+        question: null,
+        required: true,
+        idealAnswer: null,
+      },
+    ],
   };
   const cleanIndustries = (data) => {
     return data.reduce((arr, b) => {
@@ -67,7 +90,26 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
     }, []);
   };
 
-  const cleanFormData = (data, oldData) => {
+  const updateScreeningQns = (jobId) => {
+    const qns = screenQns?.length ? screenQns : [];
+    console.log(qns, screenQns);
+    for (let i = 0; i < qns.length; i++) {
+      const element = qns[i];
+      element.questionType = element.questionType.value;
+      element.order = i;
+      element.required = true;
+      element.job = jobId;
+      element.idealAnswer = element.idealAnswer.toString();
+      createQn({ variables: { ...element } });
+    }
+    history.push(`/vacancies/${getDBIdFromGraphqlId(jobId, "Vacancy")}`);
+  };
+
+  const cleanFormData = (a, b) => {
+    const data = a;
+    const oldData = b;
+    delete oldData.screeningQuestions;
+    delete data.screeningQuestions;
     const jobType = data.jobType.value;
     const minQualification = data.minQualification.value;
     const industry = data.industry.value;
@@ -101,6 +143,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
       : {
           ...newObject,
           ...id,
+          isPublished: publish,
         };
 
     return formData;
@@ -129,7 +172,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
       description: data.description,
       positions: data.positions,
       closingDate: new Date(data.closingDate),
-      applicationEmail: data.applicationEmail,
+      applicationUrl: data.applicationUrl,
     };
     return obj;
   };
@@ -203,12 +246,10 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
                         "vacancyErrors",
                         "Job Created",
                       );
-                      history.push(
-                        `/vacancies/${getDBIdFromGraphqlId(
-                          data.createVacancy.job.id,
-                          "Vacancy",
-                        )}`,
-                      );
+                      if (data?.createVacancy?.job) {
+                        updateScreeningQns(data?.createVacancy?.job?.id);
+                        setRefetchUser((prev) => !prev);
+                      }
                     }}
                   >
                     {(vacancyCreate) => {
@@ -235,6 +276,8 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
                               values,
                               { setErrors, setSubmitting },
                             ) {
+                              setScreenQns(values.screeningQuestions);
+                              console.log(values.screeningQuestions);
                               const variables = {
                                 variables: cleanFormData(values, initialValues),
                               };
@@ -276,6 +319,7 @@ const SectionB = ({ isOnline, years, jobType, qualification, payRate }) => {
                                 qualification={qualification}
                                 jobType={jobType}
                                 rate={payRate}
+                                setPublish={setPublish}
                               />
                             );
                           }}

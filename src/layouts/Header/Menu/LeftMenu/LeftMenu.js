@@ -14,6 +14,7 @@ export const Logo = styled.div`
   // }
 `;
 export const LogoImage = styled.img`
+  padding: 5px;
   display: block;
   backface-visibility: hidden;
   max-width: 150px;
@@ -29,7 +30,7 @@ export const LeftMenu = ({ isSticky, logo }) => {
   const isHomePage = isCategoryPage(pathname);
   return (
     <ul style={{ display: "flex", margin: "0", width: "70%", color: "#fff" }}>
-      <Logo>
+      <Logo className={`flex items-center`}>
         {!isHomePage ? (
           <Link to="/">
             <LogoImage src={LogoimageInverted} alt="TheDB" />
@@ -47,12 +48,24 @@ export const LeftMenu = ({ isSticky, logo }) => {
             )}
           </>
         )}
+        <Link to="/">
+          <div
+            className={`flex items-center font-medium text-lg ${
+              isHomePage
+                ? isSticky
+                  ? "text-blue-800"
+                  : "text-white"
+                : "text-blue-800"
+            } `}
+          >
+            TheDatabase
+          </div>
+        </Link>
       </Logo>
-      <li>
+      <li style={{ paddingLeft: "20px" }}>
         <Link
-          style={{
-            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
-          }}
+          classame={"text-base text-white hover:text-white"}
+          style={{ color: "#fff" }}
           id={"current"}
           to={{
             pathname: "",
@@ -93,8 +106,19 @@ export const LeftMenu = ({ isSticky, logo }) => {
           Help
         </Link>
       </li>
-
       <li>
+        <Link
+          style={{
+            color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
+          }}
+          id={pathname === "vacancies" ? "current" : ""}
+          to="/vacancies"
+        >
+          Internships
+        </Link>
+      </li>
+
+      {/* <li>
         <Link
           style={{
             color: isHomePage ? (isSticky ? "#7b7b7b" : "#fff") : "#7b7b7b",
@@ -112,14 +136,11 @@ export const LeftMenu = ({ isSticky, logo }) => {
           <li>
             <Link to="/vacancies">All Jobs</Link>
           </li>
-          {/* <li>
-                        <Link href="browse-resumes.html">Browse Resumes</Link>
-                      </li> */}
           <li>
             <Link to="/categories">Job Categories</Link>
           </li>
         </ul>
-      </li>
+      </li> */}
     </ul>
   );
 };

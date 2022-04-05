@@ -5,14 +5,14 @@ import { useAlert } from "react-alert";
 import { toast } from "react-toastify";
 import { useHistory, Link } from "react-router-dom";
 
-import ModalContext from "contexts/modal/modal.provider";
+// import ModalContext from "contexts/modal/modal.provider";
 import { AuthContext } from "contexts/auth/auth.context";
 
 import DraftRenderer from "components/DraftRenderer/DraftRenderer";
 import Button from "components/Button/Button";
 
 import LogoImage from "image/job-list-logo-04.png";
-
+import got from "image/got.jpg";
 import Bookmark from "./Bookmark";
 import { checkJobType } from "utils";
 import {
@@ -24,6 +24,7 @@ import {
   jobStructuredData,
   structuredData,
 } from "core/SEO/Vacancy/structuredData";
+import UserContext from "contexts/user/user.provider";
 
 const Page = ({
   vacancyID,
@@ -38,6 +39,7 @@ const Page = ({
   const {
     authState: { profile, isAuthenticated },
   } = React.useContext(AuthContext);
+  const { userData } = React.useContext(UserContext);
 
   const handleLoginNotification = () => {
     toast.error("You must login to save this job");
@@ -45,11 +47,17 @@ const Page = ({
   const handleApplyJob = () => {
     toast.error("You must login to apply for this job");
   };
-  const { emitter, events } = React.useContext(ModalContext);
+  // const { emitter, events } = React.useContext(ModalContext);
 
   const handleClick = () => {
     if (data?.isActive) {
-      emitter.emit(events.APPLICATION_MODAL, data);
+      // emitter.emit(events.APPLICATION_MODAL, data);
+      history.push(
+        `/vacancies/${getDBIdFromGraphqlId(
+          data?.id,
+          data?.__typename,
+        )}/application`,
+      );
     } else {
       toast.info("Sorry 😔, Applications have been closed");
     }
@@ -74,15 +82,13 @@ const Page = ({
           id="titlebar"
           className="with-transparent-header parallax background"
           style={{
-            backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.1), rgb(33 39 127 / 0.79)), url("https://png.pngtree.com/thumb_back/fw800/back_our/20190621/ourmid/pngtree-flat-wind-cartoon-recruitment-banner-poster-image_195196.jpg")`,
+            backgroundImage: `linear-gradient(to right, rgb(33 39 127 / 0.80), rgb(33 39 127 / 0.80)), url(${got})`,
           }}
         >
           <div className="container-x">
             <div className="ten columns">
-              <span>
-                <Link to={{ pathname: "" }}>{data?.industry?.name}</Link>
-              </span>
-              <h2>
+              <p className={"text-base text-white"}>{data?.industry?.name}</p>
+              <h2 className={"text-base text-white"}>
                 {data?.title}{" "}
                 <span
                   className={`${checkJobType(
@@ -92,10 +98,12 @@ const Page = ({
                   {jobType?.description}
                 </span>
               </h2>
-              <span>
-                <i className="fa fa-eye" /> {data?.timesViewed}{" "}
-                {data?.timesViewed === 1 ? "View" : "Views"}
-              </span>
+              <p className={"text-base text-white"}>
+                <i className="fa fa-eye text-gray-200" /> {data?.timesViewed}{" "}
+                <span className={"text-base text-white"}>
+                  {data?.timesViewed === 1 ? "View" : "Views"}
+                </span>
+              </p>
             </div>
             <div className="six columns">
               {profile.isSeeker && (
@@ -159,7 +167,9 @@ const Page = ({
                 </div>
                 <div className="clearfix" />
               </div>
-              <DraftRenderer content={JSON.parse(data?.description)} />
+              <div className="text-base text-gray-900">
+                <DraftRenderer content={JSON.parse(data?.description)} />
+              </div>
               {!isAuthenticated && (
                 <Button
                   className="popup-with-zoom-anim button mt-8 ml-auto"
@@ -230,12 +240,12 @@ const Page = ({
                     </div>
                   </li>
                 </ul>
-                {profile.isSeeker && (
+                {!userData?.me?.isEmployer && (
                   <Button
                     // href="#small-dialog"
                     className="popup-with-zoom-anim button mt-8 ml-auto"
                     onClick={isAuthenticated ? handleClick : handleApplyJob}
-                    title={`Apply For This job`}
+                    title={`Apply`}
                   />
                 )}
               </div>

@@ -36,15 +36,15 @@ export const Grid = styled.div`
         }
       }
     }
-    tr td:last-child,
-    tr th:last-child {
-      border-radius: 0 .625rem .625rem 0;
-    }
+    // tr td:last-child,
+    // tr th:last-child {
+    //   border-radius: 0 .625rem .625rem 0;
+    // }
 
-    tr td:nth-child(1),
-    tr th:nth-child(1) {
-      border-radius: .625rem 0 0 .625rem;
-    }
+    // tr td:nth-child(1),
+    // tr th:nth-child(1) {
+    //   border-radius: .625rem 0 0 .625rem;
+    // }
     th{
       font-family:Lato: sans-serif;
       font-weight: 700;

@@ -46,7 +46,7 @@ const StepTwo = (props) => {
           step={props?.step}
           handleBack={props?.handleBack}
           handleNext={props?.handleNext}
-          class="col-span-1 lg:block"
+          className="col-span-1 lg:block"
         />
         <div className="col-span-1 lg:block space-y-8 px-12">
           <div className="w-sm">
@@ -120,8 +120,8 @@ const StepThree = (props) => {
       fetchPolicy: "no-cache",
       variables: requestId
         ? {
-          checkoutRequestId: requestId,
-        }
+            checkoutRequestId: requestId,
+          }
         : { id: props?.transactionId },
     },
   );
@@ -226,7 +226,7 @@ const StepThree = (props) => {
             }
             onClick={
               message === "Success. Request accepted for processing" ||
-                message === noData
+              message === noData
                 ? fetchResponse
                 : null
             }
@@ -236,10 +236,10 @@ const StepThree = (props) => {
               ? "Payment Successful"
               : message === "Success. Request accepted for processing" ||
                 message === noData
-                ? loading
-                  ? " Loading . . ."
-                  : "Confirm Payment"
-                : "Payment Failed"}
+              ? loading
+                ? " Loading . . ."
+                : "Confirm Payment"
+              : "Payment Failed"}
           </button>
         </div>
       </div>

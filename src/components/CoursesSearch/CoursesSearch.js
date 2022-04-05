@@ -109,7 +109,8 @@ const CoursesSearch = ({ label = "Course", name = "course", ...rest }) => {
   }, []);
 
   const loadOptions = async (newValue, loadedOptions, { after }) => {
-    await searchQuery(newValue);
+    const newVal = await searchQuery(newValue);
+    console.log("898946546565656546566", newVal);
     return {
       options: allCourses,
       hasMore: hasNext,
@@ -120,8 +121,8 @@ const CoursesSearch = ({ label = "Course", name = "course", ...rest }) => {
   return (
     <FormikControl
       control="async-select"
-      label="Course"
-      name="course"
+      label={label}
+      name={name}
       loadOptions={loadOptions}
       style={{ margin: 0 }}
       placeholder="Search Course"

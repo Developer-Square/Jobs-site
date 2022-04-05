@@ -15,6 +15,12 @@ const JobApplications = lazy(() =>
 const ManageVacancies = lazy(() =>
   import("pages/ManageVacancies/ManageVacancies"),
 );
+const ApplicationView = lazy(() =>
+  import("pages/Applications/ApplicationView"),
+);
+const Messages = lazy(() =>
+  import("pages/Messages/Messages"),
+);
 
 export {
   Admin,
@@ -28,4 +34,6 @@ export {
   Billing,
   JobApplications,
   ManageVacancies,
+  ApplicationView,
+  Messages
 };

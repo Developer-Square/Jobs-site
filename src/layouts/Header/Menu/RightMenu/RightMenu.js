@@ -2,9 +2,11 @@ import React from "react";
 import { AuthContext } from "contexts/auth/auth.context";
 import { Link, useHistory } from "react-router-dom";
 import Shake from "react-reveal/Shake";
+import UserContext from "contexts/user/user.provider";
 
 export const RightMenu = ({ isAuthenticated }) => {
   const { authDispatch } = React.useContext(AuthContext);
+  const { userType } = React.useContext(UserContext);
   const history = useHistory();
 
   const handleLogout = () => {
@@ -95,7 +97,14 @@ export const RightMenu = ({ isAuthenticated }) => {
                     type: "SIGNUP",
                   });
                 }}
-                to={`/auth`}
+                to={{
+                  pathname:
+                    userType === "Seeker"
+                      ? `/auth/p/business`
+                      : userType === "Employer"
+                      ? `/auth/p/business`
+                      : "/auth",
+                }}
               >
                 <i className="fa fa-user" /> Sign Up
               </Link>{" "}

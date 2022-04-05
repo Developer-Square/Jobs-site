@@ -1,5 +1,6 @@
-import { debounce } from "lodash";
 import React, { createContext, memo, useState } from "react";
+import { debounce } from "lodash";
+import omitDeep from "omit-deep-lodash";
 import { useLazyQuery, useMutation } from "react-apollo";
 import { toast } from "react-toastify";
 import {
@@ -8,6 +9,7 @@ import {
   UPDATE_RESUME,
 } from "graphql/mutations";
 import { FETCH_RESUME } from "graphql/queries";
+import UserContext from "contexts/user/user.provider";
 
 const DEBOUNCE_WAIT_TIME = 4000;
 
@@ -31,6 +33,7 @@ const DatabaseProvider = ({ children }) => {
   const [deleteResumeMutation] = useMutation(DELETE_RESUME);
   const [resume, resumeDataResponse] = useLazyQuery(FETCH_RESUME);
   const [resumePatch] = useMutation(UPDATE_RESUME);
+  const { setRefetchUser } = React.useContext(UserContext);
 
   const createResume = () => console.log("To Handle create resume");
 
@@ -42,7 +45,7 @@ const DatabaseProvider = ({ children }) => {
         },
       });
       console.log(resumeDataResponse);
-      return resumeDataResponse?.data?.resume;
+      return omitDeep(resumeDataResponse?.data?.resume, "__typename");
     } catch (error) {
       console.log("getResume error", error);
       return null;
@@ -68,7 +71,7 @@ const DatabaseProvider = ({ children }) => {
           ...resume,
         },
       }).then(({ data }) => {
-        return data?.resumePatch?.resume;
+        return omitDeep(data?.resumePatch?.resume, "__typename");
       });
       setUpdating(false);
     } catch (error) {
@@ -76,6 +79,7 @@ const DatabaseProvider = ({ children }) => {
       setUpdating(false);
       return null;
     }
+    setRefetchUser((prev) => !prev);
   };
 
   const debouncedUpdateResume = debounce(updateResume, DEBOUNCE_WAIT_TIME);
