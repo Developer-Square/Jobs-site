@@ -35,12 +35,15 @@ import ScrollToTop from "helpers/scrollToTop";
 
 // External CSS import here
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-phone-input-2/lib/style.css";
 import "rc-drawer/assets/index.css";
 import "rc-table/assets/index.css";
 import "rc-collapse/assets/index.css";
 import "@redq/reuse-modal/lib/index.css";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "swiper/css/scrollbar";
 
 const MUItheme = createTheme({
   typography: {
@@ -89,9 +92,9 @@ function App() {
                   <SearchProvider query={query}>
                     <HeaderProvider>
                       <AuthProvider>
-                        <VacancyProvider>
-                          <ModalProvider>
-                            <UserProvider>
+                        <UserProvider>
+                          <VacancyProvider>
+                            <ModalProvider>
                               <DatabaseProvider>
                                 <ResumeProvider>
                                   <StickyProvider>
@@ -108,9 +111,9 @@ function App() {
                                   </StickyProvider>
                                 </ResumeProvider>
                               </DatabaseProvider>
-                            </UserProvider>
-                          </ModalProvider>
-                        </VacancyProvider>
+                            </ModalProvider>
+                          </VacancyProvider>
+                        </UserProvider>
                       </AuthProvider>
                     </HeaderProvider>
                     <GlobalStyle />

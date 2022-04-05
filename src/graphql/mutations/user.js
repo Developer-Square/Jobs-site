@@ -141,6 +141,71 @@ export const BASE_PROFILE_MUTATION = gql`
   }
 `;
 
+export const SEEKER_PROFILE_COMPLETION = gql`
+  mutation SeekerProfileCompletionPatch(
+    $id: ID!
+    $settings: Boolean
+    $education: Boolean
+    $skills: Boolean
+    $experience: Boolean
+    $socials: Boolean
+  ) {
+    seekerProfileCompletionPatch(
+      id: $id
+      input: {
+        settings: $settings
+        education: $education
+        skills: $skills
+        experience: $experience
+        socials: $socials
+      }
+    ) {
+      success
+      errors {
+        field
+        message
+      }
+      seekerProfileCompletion {
+        id
+        seeker {
+          id
+        }
+        settings
+        education
+        skills
+        experience
+        socials
+      }
+    }
+  }
+`;
+export const EMPLOYER_PROFILE_COMPLETION = gql`
+  mutation EmployerProfileCompletionPatch(
+    $id: ID!
+    $settings: Boolean
+    $socials: Boolean
+  ) {
+    employerProfileCompletionPatch(
+      id: $id
+      input: { settings: $settings, socials: $socials }
+    ) {
+      success
+      errors {
+        field
+        message
+      }
+      employerProfileCompletion {
+        id
+        employer {
+          id
+        }
+        settings
+        socials
+      }
+    }
+  }
+`;
+
 export const SEEKER_PROFILE_MUTATION = gql`
   ${seekerFragment}
   mutation SeekerCreate(
@@ -181,7 +246,7 @@ export const SEEKER_PROFILE_MUTATION = gql`
 
 export const SEEKER_UPDATE_MUTATION = gql`
   ${seekerFragment}
-  mutation SeekerCreate(
+  mutation SeekerPatch(
     $id: ID!
     $title: String
     $idNumber: Int
@@ -191,7 +256,7 @@ export const SEEKER_UPDATE_MUTATION = gql`
     $gender: SeekerGender
     $mobile: String
     $status: SeekerStatus
-    $industries: [ID]!
+    $industries: [ID]
   ) {
     seekerPatch(
       id: $id
@@ -230,7 +295,7 @@ export const EMPLOYER_PROFILE_MUTATION = gql`
     $country: String
     $location: String
     $mobile: String
-    $regNo: Int
+    $regNo: String
     $lookingFor: String
     $industries: [ID]
   ) {
@@ -274,7 +339,7 @@ export const EMPLOYER_UPDATE_MUTATION = gql`
     $country: String
     $location: String
     $mobile: String
-    $regNo: Int
+    $regNo: String
     $lookingFor: String
     $industries: [ID]
   ) {

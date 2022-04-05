@@ -1,6 +1,15 @@
 import gql from "graphql-tag";
 import { TypedQuery } from "core/queries";
 
+export const GET_INSTITUTIONS = gql`
+  query Institutions {
+    allInstitutions {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_COURSES = gql`
   query AllCoursess {
     allCourses {

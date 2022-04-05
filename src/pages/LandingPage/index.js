@@ -1,13 +1,14 @@
 import React from "react";
 import Banner from "containers/Banner/Banner";
-import CategoriesSection from "./CategoriesSection";
+// import CategoriesSection from "./CategoriesSection";
 import Vacancies from "./VacanciesSection";
 import InfoSection from "./InfoSection";
 import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
 import seekerImg from "image/9.jpg";
-import employerImg from "image/3.jpg";
+import employerImg from "image/52.jpg";
+import cardsImg from "image/54.jpg";
 // import Users from "./UsersSection";
 import { Carousel } from "react-responsive-carousel";
 
@@ -38,7 +39,7 @@ function LandingPage({ deviceType }) {
           />
           <div className="section-background top-0 margin-bottom-0">
             <div className="container-x relative">
-              <div className="container relative max-w-4xl flex items-center h-auto flex-wrap mx-auto my-32 lg:my-0">
+              <div className="container relative max-w-4xl flex items-center h-auto flex-wrap mx-auto lg:my-0">
                 {/*Main Col*/}
                 <div className="container mx-auto my-1">
                   <h3 className="font-bold text-2xl transition duration-500 my-2">
@@ -48,7 +49,7 @@ function LandingPage({ deviceType }) {
                 </div>
                 <div className="container relative mx-auto my-1 z-10">
                   <div className="relative rounded-lg flex flex-col md:flex-row items-center mx-2">
-                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-80 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
+                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-40 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
                       <div className="md:hidden absolute inset-0 h-full p-6 pb-6 flex flex-col-reverse justify-start items-start bg-gradient-to-b from-transparent via-transparent to-gray-900">
                         <h3 className="w-full font-bold text-2xl text-white leading-tight mb-2">
                           Larger Workforce
@@ -78,7 +79,7 @@ function LandingPage({ deviceType }) {
                 </div>
                 <div className="container relative mx-auto my-1 z-10">
                   <div className="relative rounded-lg flex flex-col md:flex-row items-center mx-2">
-                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-80 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
+                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-40 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
                       <div className="md:hidden absolute inset-0 h-full p-6 pb-6 flex flex-col-reverse justify-start items-start bg-gradient-to-b from-transparent via-transparent to-gray-900">
                         <h3 className="w-full font-bold text-2xl text-white leading-tight mb-2">
                           New Perspective
@@ -108,7 +109,7 @@ function LandingPage({ deviceType }) {
                 </div>
                 <div className="container relative mx-auto my-1 z-10">
                   <div className="relative rounded-lg flex flex-col md:flex-row items-center mx-2">
-                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-80 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
+                    <div className="shadow-xl z-0 order-1 md:order-2 relative w-full md:w-2/5 h-40 md:h-full overflow-hidden rounded-lg md:rounded-none md:rounded-r-lg">
                       <div className="md:hidden absolute inset-0 h-full p-6 pb-6 flex flex-col-reverse justify-start items-start bg-gradient-to-b from-transparent via-transparent to-gray-900">
                         <h3 className="w-full font-bold text-2xl text-white leading-tight mb-2">
                           Mentorship Opportunities
@@ -138,11 +139,11 @@ function LandingPage({ deviceType }) {
                   </div>
                 </div>
                 {/*Img Col*/}
-                <div className="absolute flex w-2/5 lg:w-2/5 h-90 right-8">
+                <div className="absolute flex w-3/5 lg:w-3/5 h-90 right-8">
                   {/* Big profile image for side bar (desktop) */}
                   <img
                     alt="landing"
-                    src="https://source.unsplash.com/MP0IUfwrn0A"
+                    src={cardsImg}
                     className="rounded-none lg:rounded-lg shadow-2xl hidden lg:block"
                   />
                   {/* Image from: http://unsplash.com/photos/MP0IUfwrn0A */}
@@ -162,14 +163,13 @@ function LandingPage({ deviceType }) {
                   </h3>
                   <hr className="rounded border-b-2 border-white w-8 mx-auto" />
                   <p className="text-base text-body-color leading-relaxed mb-7">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
+                    To provide a friendly and enabling work environment founded
+                    on the principles of respect, dignity and equality. To
+                    foster inclusion and singularity of purpose by encouraging
+                    innovation and initiative. To provide the highest attainable
+                    standards of service and professionalism. To benefit not
+                    only our direct clients but the wider community and the
+                    nation at large.
                   </p>
                 </div>
               </div>
@@ -339,7 +339,7 @@ function LandingPage({ deviceType }) {
           <div className="infobox margin-bottom-0">
             <div className="container-x">
               <div className="sixteen columns">
-                Start Building Your Own Job Board Now{" "}
+                Start Building Your Own Career Now{" "}
                 <Link to={{ pathname: "" }} onClick={handleRedirect}>
                   {" "}
                   Get Started{" "}
@@ -350,7 +350,155 @@ function LandingPage({ deviceType }) {
           {/* <Loader /> */}
 
           {/* <CounterSection /> */}
-          <CategoriesSection />
+          {/* <CategoriesSection /> */}
+          <div className="section-background top-0 margin-bottom-0">
+            <div className="container-x">
+              <div className="flex flex-wrap -mx-4">
+                <div className="w-full md:w-full xl:w-1/4 px-4">
+                  <h3 className="font-bold text-2xl transition duration-500 my-2">
+                    Our Success
+                  </h3>
+                  <h3 className="font-bold text-2xl transition duration-500 my-2">
+                    Story
+                  </h3>
+                  <hr className="my-1 rounded border-b-2 border-blue-800 w-8" />
+                </div>
+                <div className="w-full md:w-full xl:w-3/4 px-4">
+                  <Carousel
+                    showarrows={false}
+                    autoPlay
+                    // onchange={onChange}
+                    // onclickitem={onClickItem}
+                    // onclickthumb={onClickThumb}
+
+                    showThumbs={true}
+                    showStatus={false}
+                    infiniteLoop
+                    // emulateTouch
+                    useKeyboardArrows
+                    transitionTime={1000}
+                    // axis="vertical"
+                    // selectedItem={1}
+                  >
+                    <div
+                      className="mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 pb-10 text-gray-800"
+                      style={{ maxWidth: 500 }}
+                    >
+                      <div className="w-full mb-10">
+                        <div className="font-nunito text-5xl font-bold text-indigo-500 text-left leading-tight h-3">
+                          “
+                        </div>
+                        <p className="text-sm text-gray-600 text-center px-5">
+                          Lorem, ipsum dolor sit amet consectetur adipisicing
+                          elit. Nam obcaecati laudantium recusandae, debitis eum
+                          voluptatem ad, illo voluptatibus temporibus odio
+                          provident.
+                        </p>
+                        <div className="font-nunito text-5xl font-bold text-indigo-500 text-right leading-tight h-3 -mt-3">
+                          ”
+                        </div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="w-10 h-10 bg-blue-600 flex rounded-full">
+                          <img
+                            alt="p"
+                            className="h-10 w-10 rounded-full mx-auto"
+                            src="https://randomuser.me/api/portraits/men/15.jpg"
+                          />
+                        </div>
+                        <div className="w-full flex text-left">
+                          <div className="w-full flex flex-col leading-none pl-4">
+                            <p className="text-md text-indigo-500 font-bold">
+                              Scott Windon
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              @scott.windon
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 pb-10 text-gray-800"
+                      style={{ maxWidth: 500 }}
+                    >
+                      <div className="w-full mb-10">
+                        <div className="font-nunito text-5xl font-bold text-indigo-500 text-left leading-tight h-3">
+                          “
+                        </div>
+                        <p className="text-sm text-gray-600 text-center px-5">
+                          Lorem, ipsum dolor sit amet consectetur adipisicing
+                          elit. Nam obcaecati laudantium recusandae, debitis eum
+                          voluptatem ad, illo voluptatibus temporibus odio
+                          provident.
+                        </p>
+                        <div className="font-nunito text-5xl font-bold text-indigo-500 text-right leading-tight h-3 -mt-3">
+                          ”
+                        </div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="w-10 h-10 bg-blue-600 flex rounded-full">
+                          <img
+                            alt="p"
+                            className="h-10 w-10 rounded-full mx-auto"
+                            src="https://randomuser.me/api/portraits/men/15.jpg"
+                          />
+                        </div>
+                        <div className="w-full flex text-left">
+                          <div className="w-full flex flex-col leading-none pl-4">
+                            <p className="text-md text-indigo-500 font-bold">
+                              Scott Windon
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              @scott.windon
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className="mx-auto rounded-lg bg-white shadow-lg px-5 pt-5 pb-10 text-gray-800"
+                      style={{ maxWidth: 500 }}
+                    >
+                      <div className="w-full mb-10">
+                        <div className="font-nunito text-5xl font-bold text-indigo-500 text-left leading-tight h-3">
+                          “
+                        </div>
+                        <p className="text-sm text-gray-600 text-center px-5">
+                          Lorem, ipsum dolor sit amet consectetur adipisicing
+                          elit. Nam obcaecati laudantium recusandae, debitis eum
+                          voluptatem ad, illo voluptatibus temporibus odio
+                          provident.
+                        </p>
+                        <div className="font-nunito text-5xl font-bold text-indigo-500 text-right leading-tight h-3 -mt-3">
+                          ”
+                        </div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="w-10 h-10 bg-blue-600 flex rounded-full">
+                          <img
+                            alt="p"
+                            className="h-10 w-10 rounded-full mx-auto"
+                            src="https://randomuser.me/api/portraits/men/15.jpg"
+                          />
+                        </div>
+                        <div className="w-full flex text-left">
+                          <div className="w-full flex flex-col leading-none pl-4">
+                            <p className="text-md text-indigo-500 font-bold">
+                              Scott Windon
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              @scott.windon
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Carousel>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </React.Fragment>

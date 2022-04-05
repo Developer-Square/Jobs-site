@@ -214,10 +214,7 @@ function Uploader(props) {
 
                 {files.length > 0 &&
                   files.map((file, i) => (
-                    <li
-                      className="block p-1 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/8 h-24"
-                      key={i}
-                    >
+                    <li className="block h-24" key={i}>
                       <article
                         tabIndex={0}
                         className="group hasImage w-full h-full rounded-md focus:outline-none focus:shadow-outline bg-gray-100 cursor-pointer relative text-transparent hover:text-white shadow-sm"
@@ -248,9 +245,9 @@ function Uploader(props) {
                             </button>
                           </div>
                         </section>
-                        <h1 className="flex-1">
+                        {/* <h1 className="flex-1">
                           {file?.name} {file.size / 1000} KB
-                        </h1>
+                        </h1> */}
                       </article>
                     </li>
                   ))}
@@ -306,7 +303,7 @@ function Uploader(props) {
           </Text>
         </Container>
       )}
-      {!rest?.version === "stepper" ?(
+      {!rest?.version === "stepper" ? (
         <>
           {preview ? (
             multiple ? (
@@ -318,7 +315,9 @@ function Uploader(props) {
             minimalThumbs
           )}
         </>
-      ) :minimalThumbs}
+      ) : (
+        minimalThumbs
+      )}
     </section>
   );
 }

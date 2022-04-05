@@ -34,6 +34,7 @@ export const VACANCY_VIEW_COUNT_MUTATION = gql`
     }
   }
 `;
+
 export const BOOKMARK_VACANCY = gql`
   mutation BookmarkJob($job: ID!) {
     bookmarkVacancy(input: { job: $job }) {
@@ -75,22 +76,22 @@ export const CREATE_APPLICATION = gql`
     $status: ApplicationStatus
     $isActive: Boolean
     $isDeleted: Boolean
-    $applicant: ID
     $job: ID!
     $resume: Upload
-    $budget: String
+    $extraAttachment: Upload
     $comment: String
+    $inbuiltResume: ID
   ) {
     createApplication(
       input: {
         status: $status
         isActive: $isActive
         isDeleted: $isDeleted
-        applicant: $applicant
         job: $job
         resume: $resume
-        budget: $budget
         comment: $comment
+        extraAttachment: $extraAttachment
+        inbuiltResume: $inbuiltResume
       }
     ) {
       __typename
@@ -130,7 +131,6 @@ export const UPDATE_APPLICATION = gql`
   mutation PatchApplication(
     $id: ID!
     $status: ApplicationStatus
-    $budget: String
     $comment: String
     $favourite: Boolean
     $employerComment: String
@@ -139,7 +139,6 @@ export const UPDATE_APPLICATION = gql`
       id: $id
       input: {
         status: $status
-        budget: $budget
         comment: $comment
         favourite: $favourite
         employerComment: $employerComment
@@ -217,6 +216,7 @@ export const CREATE_VACANCY_MUTATION = gql`
     $description: JSONString
     $positions: Int
     $closingDate: Date
+    $isPublished: Boolean
     $applicationUrl: String!
   ) {
     createVacancy(
@@ -233,6 +233,7 @@ export const CREATE_VACANCY_MUTATION = gql`
         positions: $positions
         closingDate: $closingDate
         applicationUrl: $applicationUrl
+        isPublished: $isPublished
       }
     ) {
       __typename
@@ -250,6 +251,7 @@ export const CREATE_VACANCY_MUTATION = gql`
         positions
         closingDate
         createdAt
+        isPublished
         applicationUrl
         postedBy {
           id
@@ -327,6 +329,91 @@ export const UPDATE_VACANCY_MUTATION = gql`
         message
         field
         code
+      }
+    }
+  }
+`;
+
+export const CREATE_SCREENING_QUESTION = gql`
+  mutation CreateQuestion(
+    $questionType: ScreeningQuestionQuestionType
+    $job: ID!
+    $question: String
+    $required: Boolean
+    $order: Int
+    $idealAnswer: String
+  ) {
+    createScreeningQuestion(
+      input: {
+        questionType: $questionType
+        job: $job
+        question: $question
+        required: $required
+        order: $order
+        idealAnswer: $idealAnswer
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      screeningQuestion {
+        id
+        isActive
+        isDeleted
+        job {
+          id
+          title
+        }
+        questionType
+        question
+        required
+        order
+        idealAnswer
+      }
+    }
+  }
+`;
+
+export const CREATE_SCREENING_ANSWER = gql`
+  mutation CreateAnswer(
+    $application: ID!
+    $applicant: ID
+    $question: ID!
+    $answer: String!
+  ) {
+    createScreeningAnswer(
+      input: {
+        application: $application
+        applicant: $applicant
+        question: $question
+        answer: $answer
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      screeningAnswer {
+        id
+        isActive
+        isDeleted
+        application {
+          id
+        }
+        applicant {
+          id
+          fullName
+        }
+        question {
+          id
+          question
+        }
+        answer
       }
     }
   }

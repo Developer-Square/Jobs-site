@@ -4,6 +4,8 @@ import { vacancyType } from "utils/vacancy";
 import { cleanSelectData } from "helpers";
 import {
   GET_INDUSTRIES,
+  GET_INSTITUTIONS,
+  GET_SKILLS,
   JobMinQualification,
   JobYearsOfExp,
   JobJobType,
@@ -14,10 +16,14 @@ import {
   EmployerWorkForce,
   InstitutionStudentCount,
   SeekerNationality,
+  EducationItemLevel,
+  ScreeningQuestionType,
 } from "graphql/queries";
 
 const defaultState = {
   industries: [],
+  institutions: [],
+  skills: [],
   experience: [],
   qualification: [],
   jobType: [],
@@ -26,8 +32,12 @@ const defaultState = {
   seekerStatus: [],
   seekerGender: [],
   institutionCount: [],
-  SseekerNationality: [],
+  seekerNationality: [],
+  educationLevel: [],
+  workForce: [],
+  screeningQuestionType: [],
   getIndustries: () => [],
+  getInstitutions: () => [],
   getExperience: () => [],
   getPayRate: () => [],
   getQualification: () => [],
@@ -37,6 +47,10 @@ const defaultState = {
   getSeekerGender: () => [],
   getInstitutionCount: () => [],
   getSeekerNationality: () => [],
+  getEducationLevel: () => [],
+  getScreeningQuestionType: () => [],
+  getWorkForce: () => [],
+  getSkills: () => [],
   vacancyType: () => {},
 };
 
@@ -54,6 +68,8 @@ const cleanIndustries = (data) => {
 
 const ConstantsProvider = ({ children }) => {
   const [industries, setIndustries] = useState();
+  const [institutions, setInstitutions] = useState();
+  const [skills, setSkills] = useState();
   const [experience, setExperience] = useState();
   const [payRate, setPayRate] = useState();
   const [qualification, setQualification] = useState();
@@ -62,11 +78,22 @@ const ConstantsProvider = ({ children }) => {
   const [seekerStatus, setSeekerStatus] = useState();
   const [seekerGender, setSeekerGender] = useState();
   const [institutionCount, setInstitutionCount] = useState();
-  // eslint-disable-next-line no-unused-vars
   const [seekerNationality, setSeekerNationality] = useState();
+  const [educationLevel, setEducationLevel] = useState();
+  const [workForce, setWorkForce] = useState();
+  const [screeningQuestionType, setScreeningQuestionType] = useState();
 
   const [fetchIndustriesData] = useLazyQuery(GET_INDUSTRIES, {
     onCompleted: (data) => setIndustries(cleanIndustries(data.allIndustries)),
+    fetchPolicy: "cahce-and-network",
+  });
+  const [fetchInstitutionsData] = useLazyQuery(GET_INSTITUTIONS, {
+    onCompleted: (data) =>
+      setInstitutions(cleanIndustries(data.allInstitutions)),
+    fetchPolicy: "cahce-and-network",
+  });
+  const [fetchSkillsData] = useLazyQuery(GET_SKILLS, {
+    onCompleted: (data) => setSkills(cleanIndustries(data.allSkills)),
     fetchPolicy: "cahce-and-network",
   });
   const [fetchQualificationData] = useLazyQuery(JobMinQualification, {
@@ -75,7 +102,13 @@ const ConstantsProvider = ({ children }) => {
     fetchPolicy: "cahce-and-network",
   });
   const [fetchNationalityData] = useLazyQuery(SeekerNationality, {
-    // onCompleted: (data) => setSeekerNationality(cleanSelectData(data?.__type?.enumValues)),
+    onCompleted: (data) =>
+      setSeekerNationality(cleanSelectData(data?.__type?.enumValues)),
+    fetchPolicy: "cahce-and-network",
+  });
+  const [fetchEducationLevel] = useLazyQuery(EducationItemLevel, {
+    onCompleted: (data) =>
+      setEducationLevel(cleanSelectData(data?.__type?.enumValues)),
     fetchPolicy: "cahce-and-network",
   });
   const [fetchYearsOfExpData] = useLazyQuery(JobYearsOfExp, {
@@ -110,7 +143,12 @@ const ConstantsProvider = ({ children }) => {
   });
   const [fetchEmployeeWorkForceData] = useLazyQuery(EmployerWorkForce, {
     onCompleted: (data) =>
-      setExperience(cleanSelectData(data?.__type?.enumValues)),
+      setWorkForce(cleanSelectData(data?.__type?.enumValues)),
+    fetchPolicy: "cahce-and-network",
+  });
+  const [fetchScreeningQuestionTypeData] = useLazyQuery(ScreeningQuestionType, {
+    onCompleted: (data) =>
+      setScreeningQuestionType(cleanSelectData(data?.__type?.enumValues)),
     fetchPolicy: "cahce-and-network",
   });
   const [fetchInstitutionStudentCountData] = useLazyQuery(
@@ -124,6 +162,7 @@ const ConstantsProvider = ({ children }) => {
 
   const getConstants = () => {
     fetchIndustriesData();
+    fetchInstitutionsData();
     fetchQualificationData();
     fetchYearsOfExpData();
     fetchJobTypeData();
@@ -134,6 +173,9 @@ const ConstantsProvider = ({ children }) => {
     fetchEmployeeWorkForceData();
     fetchInstitutionStudentCountData();
     fetchNationalityData();
+    fetchEducationLevel();
+    fetchSkillsData();
+    fetchScreeningQuestionTypeData();
   };
 
   useEffect(() => {
@@ -146,6 +188,18 @@ const ConstantsProvider = ({ children }) => {
       return industries;
     }
     return fetchIndustriesData();
+  };
+  const getSkills = () => {
+    if (skills) {
+      return skills;
+    }
+    return fetchSkillsData();
+  };
+  const getInstitutions = () => {
+    if (institutions) {
+      return institutions;
+    }
+    return fetchInstitutionsData();
   };
   const getExperience = () => {
     if (experience) {
@@ -195,17 +249,37 @@ const ConstantsProvider = ({ children }) => {
     }
     return fetchSeekerGendersData();
   };
+  const getEducationLevel = () => {
+    if (educationLevel) {
+      return educationLevel;
+    }
+    return fetchEducationLevel();
+  };
   const getInstitutionCount = () => {
     if (institutionCount) {
       return institutionCount;
     }
     return fetchInstitutionStudentCountData();
   };
+  const getWorkForce = () => {
+    if (workForce) {
+      return workForce;
+    }
+    return fetchEmployeeWorkForceData();
+  };
+  const getScreeningQuestionType = () => {
+    if (screeningQuestionType) {
+      return screeningQuestionType;
+    }
+    return fetchScreeningQuestionTypeData();
+  };
 
   return (
     <ConstantsContext.Provider
       value={{
         industries,
+        institutions,
+        skills,
         experience,
         qualification,
         jobType,
@@ -213,10 +287,15 @@ const ConstantsProvider = ({ children }) => {
         applicationStatus,
         seekerStatus,
         seekerGender,
+        workForce,
         institutionCount,
         vacancyType,
         seekerNationality,
+        educationLevel,
+        screeningQuestionType,
+        getSkills,
         getIndustries,
+        getInstitutions,
         getExperience,
         getPayRate,
         getQualification,
@@ -226,6 +305,9 @@ const ConstantsProvider = ({ children }) => {
         getSeekerGender,
         getSeekerNationality,
         getInstitutionCount,
+        getEducationLevel,
+        getWorkForce,
+        getScreeningQuestionType,
       }}
     >
       {children}

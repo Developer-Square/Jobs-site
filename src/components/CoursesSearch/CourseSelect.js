@@ -3,7 +3,7 @@ import React from "react";
 import { useLazyQuery } from "react-apollo";
 import { GET_FILTERED_COURSES } from "graphql/queries";
 
-import FormikControl from "containers/FormikContainer/FormikControl";
+import { AsyncPaginate } from "react-select-async-paginate";
 
 // const DEBOUNCE_WAIT_TIME = 500;
 const MAX_LIMIT = 10;
@@ -66,72 +66,42 @@ const CoursesSearch = ({ label = "Course", name = "course", ...rest }) => {
       });
     }
   };
-
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const debouncedSearch = React.useCallback(
-  //   debounce(async (newValue, loadedOptions, { after }) => {
-  //     await searchQuery(newValue);
-  //   return {
-  //     options: allCourses,
-  //     hasMore: hasNext,
-  //     after: afterValue,
-  //   };
-  //   }, DEBOUNCE_WAIT_TIME),
-  //   [],
-  // );
-
-  React.useEffect(() => {
-    const courseName = rest?.formik?.values?.course;
-
-    if (courseName) {
-      if (courseName && courseName !== "") {
-        fetchCourses({
-          variables: {
-            first: MAX_LIMIT,
-
-            filter: {
-              search: courseName?.label ? courseName?.label : courseName,
-            },
-          },
-        });
-      } else {
-        fetchCourses({
-          variables: { first: MAX_LIMIT },
-        });
-      }
-    } else {
-      fetchCourses({
-        variables: { first: MAX_LIMIT },
-      });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const loadOptions = async (newValue, loadedOptions, { after }) => {
-    const newVal = await searchQuery(newValue);
-    console.log("898946546565656546566", newVal);
-    return {
-      options: allCourses,
-      hasMore: hasNext,
-      after: afterValue,
-    };
+  const setValue = (v) => {
+    console.log("===========", v);
   };
 
+  async function loadOptions(d, loadedOptions) {
+    const filter = !d || d === "" ? {} : { filter: { search: d } };
+    const after = afterValue && afterValue !== "" ? { after: afterValue } : {};
+    let response = null;
+    if (d && d !== "") {
+      response = await fetchCourses({
+        variables: {
+          first: MAX_LIMIT,
+          ...filter,
+          ...after,
+        },
+      });
+    }
+    console.log("ppppppppppppppppp00000000", response.data);
+
+    return {
+      options: response.data,
+      hasMore: true,
+    };
+  }
   return (
-    <FormikControl
-      control="async-select"
-      label={label}
-      name={name}
+    <AsyncPaginate
+      isClearable={true}
       loadOptions={loadOptions}
-      style={{ margin: 0 }}
-      placeholder="Search Course"
-      getOptionValue={(option) => option.value}
-      getOptionLabel={(option) => option.label}
-      additional={{
-        after: afterValue,
-      }}
+      onChange={setValue}
     />
+
+    //     <AsyncPaginate
+    //     value={value}
+    //     loadOptions={loadOptions}
+    //     onChange={setValue}
+    //   />
   );
 };
 

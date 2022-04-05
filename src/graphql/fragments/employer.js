@@ -17,6 +17,10 @@ export const employerFragment = gql`
       name
       id
     }
+    profileCompletion {
+      id
+      settings
+    }
     logo {
       url
       alt

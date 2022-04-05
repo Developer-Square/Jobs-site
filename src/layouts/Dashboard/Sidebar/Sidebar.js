@@ -5,10 +5,10 @@ import {
   MenuWrapper,
   Svg,
   LogoutBtn,
-  LogoImage,
+  // LogoImage,
 } from "./Sidebar.style";
 import UserContext from "contexts/user/user.provider";
-import Logoimage from "image/thedb.png";
+// import Logoimage from "image/thedb.png";
 import { LogoutIcon } from "components/AllSvgIcon";
 import { groupBy } from "utils/groupBy";
 
@@ -91,11 +91,11 @@ export default withRouter(function Sidebar(props) {
   };
   return (
     <SidebarWrapper ref={props.refs} style={props.style}>
-      {props.isOpen ? (
+      {/* {props.isOpen ? (
         <Link to="/">
           <LogoImage src={Logoimage} alt="TheDB" />
         </Link>
-      ) : null}
+      ) : null} */}
 
       <MenuWrapper>
         <div className="dashboard-nav">
@@ -168,7 +168,7 @@ export default withRouter(function Sidebar(props) {
                     pathname: "/vacancies",
                   }}
                 >
-                  View Jobs
+                  View Listings
                 </Link>
               </li>
             </ul>

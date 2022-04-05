@@ -4,10 +4,10 @@ import BaseProfile from "./BaseProfile";
 import EmployerProfile from "./EmployerProfile";
 import InstitutionProfile from "./InstitutionProfile";
 import SeekerProfile from "./SeekerProfile";
-import CreateAddress from "containers/Address/AddressCreate";
-import AddressPreview from "containers/Address/AddressSummary";
-import { useQuery } from "react-apollo";
-import { GET_USER_DETAILS } from "graphql/queries";
+// import CreateAddress from "containers/Address/AddressCreate";
+// import AddressPreview from "containers/Address/AddressSummary";
+// import { useQuery } from "react-apollo";
+// import { GET_USER_DETAILS } from "graphql/queries";
 import Loader from "components/Loader/Loader";
 import Button from "components/Button/Button";
 import styled from "styled-components";
@@ -26,10 +26,10 @@ function Profile() {
   const [settings, setSettings] = React.useState(false);
   const handleDelete = () => emitter.emit(events.DELETE_MODAL);
 
-  const { data, loading } = useQuery(GET_USER_DETAILS);
-  if (loading) {
-    return <Loader />;
-  }
+  // const { data, loading } = useQuery(GET_USER_DETAILS);
+  // if (loading) {
+  //   return <Loader />;
+  // }
   const progressColor = (x) => {
     if (x > 50) {
       return "bg-green";
@@ -184,7 +184,7 @@ function Profile() {
                       <BaseProfile />
                     </div>
 
-                    <hr className="mt-6 border-b-1 border-blueGray-300" />
+                    {/* <hr className="mt-6 border-b-1 border-blueGray-300" />
 
                     <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                       Addresses
@@ -201,7 +201,7 @@ function Profile() {
                           </>
                         )}
                       </div>
-                    </div>
+                    </div> */}
 
                     <hr className="mt-6 border-b-1 border-blueGray-300" />
 

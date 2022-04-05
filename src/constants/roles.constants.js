@@ -33,12 +33,12 @@ const components = {
     module: 1,
     category: account,
     children: [],
-    dashboardItem: true,
+    dashboardItem: false,
   },
   bookmarks: {
     component: "Bookmarks",
     url: "/bookmarks",
-    title: "Saved Jobs",
+    title: "Saved Internships",
     icon: "Category",
     module: 1,
     category: management,
@@ -48,7 +48,7 @@ const components = {
   vacancies: {
     component: "Vacancy",
     url: "/vacancies",
-    title: "Jobs",
+    title: "Internships",
     icon: "Category",
     module: 1,
     category: management,
@@ -56,7 +56,7 @@ const components = {
       {
         component: "Vacancy",
         url: "/add-job",
-        title: "Add Job",
+        title: "Add Internship",
         icon: "Category",
         module: 1,
         category: management,
@@ -66,7 +66,7 @@ const components = {
       {
         component: "ManageVacancies",
         url: "/manage-jobs",
-        title: "Manage Jobs",
+        title: "Manage Internships",
         icon: "Category",
         module: 1,
         category: management,
@@ -89,7 +89,7 @@ const components = {
   addVacancy: {
     component: "Vacancy",
     url: "/vacancies/add-job",
-    title: "Add Job",
+    title: "Add Internship",
     icon: "Category",
     module: 1,
     category: management,
@@ -99,7 +99,7 @@ const components = {
   manageVacancies: {
     component: "ManageVacancies",
     url: "/vacancies/manage-jobs",
-    title: "Manage Jobs",
+    title: "Manage Internships",
     icon: "Category",
     module: 1,
     category: management,
@@ -109,7 +109,7 @@ const components = {
   updateVacancy: {
     component: "Vacancy",
     url: "/vacancies/edit-job/:vacancyUpdateID",
-    title: "Update Job",
+    title: "Update Listing",
     icon: "Category",
     module: 1,
     category: management,

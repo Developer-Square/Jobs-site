@@ -74,7 +74,15 @@ const Slide = ({ children, ...rest }) => {
       {mobile && isOpen ? (
         handleModal(children)
       ) : (
-        <SlidePopup className={sliderClass}>{children}</SlidePopup>
+        <SlidePopup className={sliderClass}>
+          <div className="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">
+            <div className="mt-6 relative flex-1 px-4 sm:px-6">
+              {/* Replace with your content */}
+              <div className="absolute inset-0 px-4 sm:px-6">{children}</div>
+              {/* /End replace */}
+            </div>
+          </div>
+        </SlidePopup>
       )}
     </div>
   );

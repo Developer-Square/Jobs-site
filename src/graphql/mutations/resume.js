@@ -1,6 +1,13 @@
 import gql from "graphql-tag";
 import { resumeFragment } from "graphql/fragments";
-import { simpleResumeFragment, awardItemFragment } from "graphql/fragments";
+import {
+  simpleResumeFragment,
+  awardItemFragment,
+  educationItemFragment,
+  workItemFragment,
+  skillItemFragment,
+  socialItemFragment,
+} from "graphql/fragments";
 
 export const DUPLICATE_RESUME = gql`
   ${simpleResumeFragment}
@@ -121,6 +128,7 @@ export const UPDATE_RESUME = gql`
     }
   }
 `;
+
 export const AWARD_MUTATION = gql`
   ${awardItemFragment}
   mutation AwardItemCreate(
@@ -178,6 +186,242 @@ export const AWARD_UPDATE_MUTATION = gql`
       }
       awardItem {
         ...AwardItem
+      }
+    }
+  }
+`;
+
+export const WORK_ITEM_CREATE = gql`
+  ${workItemFragment}
+  mutation WorkItemCreate(
+    $descriptionPlaintext: String
+    $owner: ID
+    $company: String
+    $position: String
+    $workStart: Date
+    $workEnd: Date
+    $achievements: String
+    $website: String
+  ) {
+    workItemCreate(
+      input: {
+        descriptionPlaintext: $descriptionPlaintext
+        owner: $owner
+        company: $company
+        position: $position
+        workStart: $workStart
+        workEnd: $workEnd
+        achievements: $achievements
+        website: $website
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      workItem {
+        ...WorkItem
+      }
+    }
+  }
+`;
+
+export const WORK_ITEM_UPDATE = gql`
+  ${workItemFragment}
+  mutation WorkItemUpdate(
+    $id: ID!
+    $descriptionPlaintext: String
+    $company: String
+    $position: String
+    $workStart: Date
+    $workEnd: Date
+    $achievements: String
+    $website: String
+  ) {
+    workItemPatch(
+      id: $id
+      input: {
+        descriptionPlaintext: $descriptionPlaintext
+        company: $company
+        position: $position
+        workStart: $workStart
+        workEnd: $workEnd
+        achievements: $achievements
+        website: $website
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      workItem {
+        ...WorkItem
+      }
+    }
+  }
+`;
+
+export const EDUCATION_ITEM_CREATE = gql`
+  ${educationItemFragment}
+  mutation EducationItemCreate(
+    $descriptionPlaintext: String
+    $owner: ID
+    $institution: String
+    $fieldOfStudy: String
+    $degree: String
+    $gpa: String
+    $schoolStart: Date!
+    $schoolEnd: Date!
+  ) {
+    educationItemCreate(
+      input: {
+        descriptionPlaintext: $descriptionPlaintext
+        owner: $owner
+        institution: $institution
+        fieldOfStudy: $fieldOfStudy
+        degree: $degree
+        gpa: $gpa
+        schoolStart: $schoolStart
+        schoolEnd: $schoolEnd
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      educationItem {
+        ...EducationItem
+      }
+    }
+  }
+`;
+
+export const EDUCATION_ITEM_UPDATE = gql`
+  ${educationItemFragment}
+  mutation EducationItemUpdate(
+    $id: ID!
+    $descriptionPlaintext: String
+    $institution: String
+    $fieldOfStudy: String
+    $degree: String
+    $gpa: String
+    $schoolStart: Date!
+    $schoolEnd: Date!
+  ) {
+    educationItemPatch(
+      id: $id
+      input: {
+        descriptionPlaintext: $descriptionPlaintext
+        institution: $institution
+        fieldOfStudy: $fieldOfStudy
+        degree: $degree
+        gpa: $gpa
+        schoolStart: $schoolStart
+        schoolEnd: $schoolEnd
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      educationItem {
+        ...EducationItem
+      }
+    }
+  }
+`;
+
+export const SKILL_ITEM_CREATE = gql`
+  ${skillItemFragment}
+  mutation SkillItemCreate($owner: ID, $name: String, $level: String) {
+    skillItemCreate(input: { owner: $owner, name: $name, level: $level }) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      skillItem {
+        ...SkillItem
+      }
+    }
+  }
+`;
+
+export const SKILL_ITEM_UPDATE = gql`
+  ${skillItemFragment}
+  mutation SkillItemUpdate($id: ID!, $name: String, $level: String) {
+    skillItemPatch(id: $id, input: { name: $name, level: $level }) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      skillItem {
+        ...SkillItem
+      }
+    }
+  }
+`;
+
+export const SOCIAL_ITEM_CREATE = gql`
+  ${socialItemFragment}
+  mutation SocialItemCreate(
+    $owner: ID
+    $link: String
+    $network: String
+    $username: String
+  ) {
+    socialItemCreate(
+      input: {
+        owner: $owner
+        link: $link
+        network: $network
+        username: $username
+      }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      socialItem {
+        ...SocialItem
+      }
+    }
+  }
+`;
+
+export const SOCIAL_ITEM_UPDATE = gql`
+  ${socialItemFragment}
+  mutation SocialItemUpdate(
+    $id: ID!
+    $link: String
+    $network: String
+    $username: String
+  ) {
+    socialItemPatch(
+      id: $id
+      input: { link: $link, network: $network, username: $username }
+    ) {
+      __typename
+      success
+      errors {
+        field
+        message
+      }
+      socialItem {
+        ...SocialItem
       }
     }
   }

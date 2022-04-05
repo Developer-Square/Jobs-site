@@ -285,7 +285,6 @@ const Vacancy = (props) => {
             />
           </div>
         </div>
-
         {desktop ? (
           <VacancyFilter
             rate={rate}

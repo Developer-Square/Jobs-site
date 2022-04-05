@@ -28,9 +28,9 @@ const SplitScreen = ({ deviceType }) => {
                 // position: "absolute"
               }}
             >
-              <div class="caption">
+              <div className="caption">
                 <h1>I'm a candidate</h1>
-                <h5>Looking for a job</h5>
+                <h5>Looking for an internship</h5>
                 <a
                   onClick={() => {
                     localStorage.setItem("thedb_user", "Seeker");
@@ -56,7 +56,7 @@ const SplitScreen = ({ deviceType }) => {
                 backgroundRepeat: "no-repeat",
               }}
             >
-              <div class="caption">
+              <div className="caption">
                 <h1>I'm an employer</h1>
                 <h5>Managing a workplace</h5>
                 <a
@@ -67,7 +67,7 @@ const SplitScreen = ({ deviceType }) => {
                   className="button btn-right"
                   href
                 >
-                  Post a Job
+                  Post Internships
                 </a>
               </div>
             </div>
@@ -77,11 +77,11 @@ const SplitScreen = ({ deviceType }) => {
     </SkewedPage>
   ) : (
     <Wrapper>
-      <div class="side left">
-        <div class="image left-image"></div>
-        <div class="caption">
+      <div className="side left">
+        <div className="image left-image"></div>
+        <div className="caption">
           <h1>I'm a candidate</h1>
-          <h5>Looking for a job</h5>
+          <h5>Looking for an internship</h5>
           <a
             onClick={() => {
               localStorage.setItem("thedb_user", "Seeker");
@@ -95,9 +95,9 @@ const SplitScreen = ({ deviceType }) => {
         </div>
       </div>
 
-      <div class="side right">
-        <div class="image right-image"></div>
-        <div class="caption">
+      <div className="side right">
+        <div className="image right-image"></div>
+        <div className="caption">
           <h1>I'm an employer</h1>
           <h5>Managing a workplace</h5>
           <a
@@ -108,7 +108,7 @@ const SplitScreen = ({ deviceType }) => {
             className="button btn-right"
             href
           >
-            Post a Job
+            Post Internships
           </a>
         </div>
       </div>

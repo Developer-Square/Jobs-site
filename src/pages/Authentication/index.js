@@ -18,7 +18,7 @@ const Authentication = () => {
   // const { userType } = React.useContext(UserContext);
 
   // Provides the step header for each step i.e. the first one is SignUp.
-  const steps = ["Sign Up", "Verify", "About You"];
+  const steps = ["Sign Up", "Verify"];
 
   let RenderForm;
 

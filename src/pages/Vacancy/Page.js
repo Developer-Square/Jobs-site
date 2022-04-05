@@ -24,6 +24,7 @@ import {
   jobStructuredData,
   structuredData,
 } from "core/SEO/Vacancy/structuredData";
+import UserContext from "contexts/user/user.provider";
 
 const Page = ({
   vacancyID,
@@ -38,6 +39,7 @@ const Page = ({
   const {
     authState: { profile, isAuthenticated },
   } = React.useContext(AuthContext);
+  const { userData } = React.useContext(UserContext);
 
   const handleLoginNotification = () => {
     toast.error("You must login to save this job");
@@ -238,12 +240,14 @@ const Page = ({
                     </div>
                   </li>
                 </ul>
-                <Button
-                  // href="#small-dialog"
-                  className="popup-with-zoom-anim button mt-8 ml-auto"
-                  onClick={isAuthenticated ? handleClick : handleApplyJob}
-                  title={`Apply For This job`}
-                />
+                {!userData?.me?.isEmployer && (
+                  <Button
+                    // href="#small-dialog"
+                    className="popup-with-zoom-anim button mt-8 ml-auto"
+                    onClick={isAuthenticated ? handleClick : handleApplyJob}
+                    title={`Apply`}
+                  />
+                )}
               </div>
             </div>
           </div>

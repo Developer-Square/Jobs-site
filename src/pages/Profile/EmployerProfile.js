@@ -55,8 +55,8 @@ const EmployerProfile = () => {
   };
 
   const cleanFormData = (data, oldData) => {
-    const workForce = data.workForce.value;
-    const industries = data.industries.reduce((arr, b) => {
+    const workForce = data?.workForce?.value;
+    const industries = data?.industries.reduce((arr, b) => {
       arr.push(b.value);
       return arr;
     }, []);
@@ -85,15 +85,15 @@ const EmployerProfile = () => {
   const cleanInitialValues = (data, industries, workForce) => {
     const obj = {
       workForce: workForce.find(({ value }) => value === data?.workForce),
-      description: data.description,
-      name: data.name,
-      website: data.website,
-      country: data.country,
-      location: data.location,
-      mobile: data.mobile,
-      regNo: data.regNo,
-      lookingFor: data.lookingFor,
-      industries: data.industries.reduce((acc, ind) => {
+      description: data?.description,
+      name: data?.name,
+      website: data?.website,
+      country: data?.country,
+      location: data?.location,
+      mobile: data?.mobile,
+      regNo: data?.regNo,
+      lookingFor: data?.lookingFor,
+      industries: data?.industries?.reduce((acc, ind) => {
         acc.push({ value: ind.id, label: ind.name });
         return acc;
       }, []),

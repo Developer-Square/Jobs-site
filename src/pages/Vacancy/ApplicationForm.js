@@ -5,6 +5,7 @@ import { useRouteMatch, useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useQuery } from "react-apollo";
 import { toast } from "react-toastify";
+import { useMutation } from "react-apollo";
 import { VACANCY_DETAIL_QUERY } from "graphql/queries";
 import Loader from "components/Loader/Loader";
 import NoResultFound from "components/NoResult/NoResult";
@@ -23,12 +24,18 @@ import FormikControl from "containers/FormikContainer/FormikControl";
 import { TypedMutation } from "core/mutations";
 import { AuthContext } from "contexts/auth/auth.context";
 import UserContext from "contexts/user/user.provider";
-import { CREATE_APPLICATION } from "graphql/mutations";
+import { CREATE_APPLICATION, CREATE_SCREENING_ANSWER } from "graphql/mutations";
 import { showNotification } from "helpers";
 import ConstantsContext from "contexts/constants/constants.provider";
 import { normalizeErrors } from "helpers";
 import { maybe } from "core/utils";
+import { Radio, RadioGroup, FormControlLabel } from "@material-ui/core";
+
 export const TypedCreateApplicationMutation = TypedMutation(CREATE_APPLICATION);
+const options = [
+  { label: "Yes", value: "Yes" },
+  { label: "No", value: "No" },
+];
 
 const ApplicationForm = () => {
   const match = useRouteMatch();
@@ -131,7 +138,7 @@ const ApplicationForm = () => {
       </div>
       <div className="pt-6 mt-10">
         <div className="max-w-2xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:pt-16 lg:pb-24 lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
-          <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+          <div className="lg:col-span-2 ">
             {/* This example requires Tailwind CSS v2.0+ */}
             <div className="lg:flex lg:items-center lg:justify-between">
               <div className="flex-1 min-w-0">
@@ -212,10 +219,7 @@ const ApplicationForm = () => {
             </div>
           </div>
           {/* Options */}
-          <div className="mt-4 lg:mt-0 lg:row-span-3">
-            <ApplicationSeekerForm />
-          </div>
-          <div className="py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+          <div className="py-10 lg:pt-6 lg:pb-16 col-start-1 lg:col-span-2">
             {/* Description and details */}
             <div>
               <h3 className="sr-only">Description</h3>
@@ -228,6 +232,9 @@ const ApplicationForm = () => {
               </div>
             </div>
           </div>
+          <div className="lg:border-l lg:border-gray-200 mt-4 lg:mt-0 lg:row-span-3 lg:pl-8">
+            <ApplicationSeekerForm vacancy={data?.vacancy} />
+          </div>
         </div>
       </div>
     </div>
@@ -236,32 +243,86 @@ const ApplicationForm = () => {
 
 export default ApplicationForm;
 
-const ApplicationSeekerForm = () => {
+const ApplicationSeekerForm = ({ vacancy }) => {
   const match = useRouteMatch();
   const history = useHistory();
   const [resumeType, setResumeType] = React.useState();
-  const { user, getUser } = React.useContext(UserContext);
+  const { user, userData, getUser, setRefetchUser } =
+    React.useContext(UserContext);
+  const [applicationID, setApplicationID] = React.useState(null);
+  const [ans, setAns] = React.useState();
   const [vacancyID, setVacancyID] = React.useState(
     getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"),
   );
-  const {
-    authState: { profile },
-  } = React.useContext(AuthContext);
+  const [createAns] = useMutation(CREATE_SCREENING_ANSWER, {
+    onCompleted: (data) => {
+      setRefetchUser((prev) => !prev);
+    },
+  });
+
   React.useEffect(() => {
     if (!user) {
       getUser();
     }
+    const answerList = vacancy?.screeningQuestions?.reduce((arr, q) => {
+      const obj = {
+        application: applicationID,
+        applicant: userData?.me?.id,
+        question: q.id,
+        answer: "",
+      };
+      arr.push(obj);
+      return arr;
+    }, []);
+    setAns(answerList);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   React.useEffect(() => {
     setVacancyID(getGraphqlIdFromDBId(match.params.vacancyID, "Vacancy"));
   }, [match.params.vacancyID]);
 
+  const changeAns = (qnID, answer) => {
+    const item = {
+      application: applicationID,
+      applicant: userData?.me?.id,
+      question: qnID,
+      answer: answer,
+    };
+    let newAns = ans;
+    console.log(qnID);
+    newAns.forEach((element, index) => {
+      if (element.question === item.question) {
+        newAns[index] = item;
+      }
+    });
+    // let arr2 = [];
+    // arr2.push({
+    //   application: applicationID,
+    //   applicant: userData?.me?.id,
+    //   question: qnID,
+    //   answer: answer,
+    // });
+    // const newAns = ans.map((obj) => arr2.find((o) => o.id === obj.id) || obj);
+    setAns(newAns);
+  };
+  const answerQns = (application) => {
+    for (let i = 0; i < ans.length; i++) {
+      const element = ans[i];
+      element.application = application;
+      element.answer = element.answer.toString();
+      element.applicant = userData?.me?.id;
+      createAns({ variables: { ...element } });
+    }
+    history.push(`/vacancies`);
+  };
+
   const initialValues = {
     job: vacancyID,
-    resume: "",
+    resume: null,
     budget: "",
     comment: "",
+    inbuiltResume: null,
+    extraAttachment: null,
   };
 
   const schema = Yup.object().shape({
@@ -278,7 +339,8 @@ const ApplicationSeekerForm = () => {
       return arr;
     }, []);
   };
-  console.log("ooooo", user);
+  console.log("ooooo", ans);
+  if (!vacancy) return;
 
   return (
     <TypedCreateApplicationMutation
@@ -287,8 +349,8 @@ const ApplicationSeekerForm = () => {
           data.createApplication,
           errors,
           null,
-          errors,
-          "Application Updated",
+          "errors",
+          "Application Created",
           null,
         )
       }
@@ -296,14 +358,23 @@ const ApplicationSeekerForm = () => {
       {(applicationCreate, { loading }) => {
         function onSubmit(values, { setErrors, setSubmitting }) {
           console.log(values);
+          const extraAttachment = values?.extraAttachment
+            ? { extraAttachment: values?.extraAttachment[0] }
+            : {};
+          const inbuiltResume = values?.inbuiltResume
+            ? { inbuiltResume: values?.inbuiltResume?.value }
+            : {};
+          const resume = values?.resume ? { resume: values?.resume[0] } : {};
+
           applicationCreate({
             variables: {
               job: values.job,
-              resume: values.resume[0],
               budget: values.budget,
               comment: values.comment,
-              applicant: profile.id,
               status: "APPLIED",
+              ...resume,
+              ...extraAttachment,
+              ...inbuiltResume,
             },
           }).then(({ data }) => {
             if (data) {
@@ -315,12 +386,15 @@ const ApplicationSeekerForm = () => {
                       maybe(() => data.createApplication.errors, []),
                     ),
                   );
+                } else {
+                  setApplicationID(data.createApplication?.application?.id);
+                  setRefetchUser((prev) => !prev);
+                  answerQns(data.createApplication?.application?.id);
                 }
               }
             }
           });
         }
-        console.log(resumeType);
         return (
           <Formik
             validateOnBlur
@@ -333,13 +407,85 @@ const ApplicationSeekerForm = () => {
               <Form>
                 <div className="dashboard-list-box-content text-base text-gray-900">
                   <div className="form">
-                    <FormikControl
-                      control="input"
-                      type="text"
-                      label="Budget"
-                      placeholder="starting at 1,000"
-                      name="budget"
-                    />
+                    <ul className="list-none m-0 p-0">
+                      {vacancy.screeningQuestions?.length > 0
+                        ? vacancy.screeningQuestions?.map((qn, i) => (
+                            <div className="rounded-sm bg-white shadow p-3 gap-2  hover:shadow-lg transition delay-150 duration-300 ease-in-out ">
+                              <li className="mb-2" key={i}>
+                                <div className="flex items-center mb-1">
+                                  <div className="h-4 w-4 z-10">{i + 1}.</div>
+                                  <div className="flex-1 ml-4 font-medium">
+                                    {qn.question}
+                                  </div>
+                                </div>
+                                <div className="ml-12">
+                                  {qn.questionType === "TXT" ||
+                                  qn.questionType === "LNG_TXT" ? (
+                                    <input
+                                      name={qn.id}
+                                      type="text"
+                                      onChange={(event) =>
+                                        changeAns(qn.id, event.target.value)
+                                      }
+                                    />
+                                  ) : null}
+                                  {qn.questionType === "INT" && (
+                                    <input
+                                      name={qn.id}
+                                      type="number"
+                                      pattern="[0-9]+"
+                                      onChange={(event) =>
+                                        changeAns(qn.id, event.target.value)
+                                      }
+                                    />
+                                  )}
+                                  {qn.questionType === "BINARY" && (
+                                    <RadioGroup
+                                      name={qn.id}
+                                      value={
+                                        ans?.find((a) => a.question === qn.id)
+                                          ?.answer
+                                      }
+                                      row
+                                      style={{ flexFlow: "inherit" }}
+                                      onChange={(event) =>
+                                        changeAns(qn.id, event.target.value)
+                                      }
+                                    >
+                                      {options.map((option, i) => {
+                                        return (
+                                          <FormControlLabel
+                                            onClick={() =>
+                                              changeAns(
+                                                qn.id,
+                                                document.getElementById(
+                                                  option.value,
+                                                ).value,
+                                              )
+                                            }
+                                            className={`flex items-center`}
+                                            style={{ flexDirection: "inherit" }}
+                                            value={option.value}
+                                            control={
+                                              <Radio
+                                                id={option.value}
+                                                color="primary"
+                                              />
+                                            }
+                                            label={option.label}
+                                            labelPlacement="end"
+                                            key={i}
+                                          />
+                                        );
+                                      })}
+                                    </RadioGroup>
+                                  )}
+                                </div>
+                              </li>
+                            </div>
+                          ))
+                        : null}
+                    </ul>
                   </div>
                   <div className="form" style={{ width: "100%" }}>
                     <FormikControl
@@ -360,22 +506,22 @@ const ApplicationSeekerForm = () => {
                     />
                   </div>
                   <div className="form p-2 w-full shadow p-8 text-gray-700 ">
-                    <button
+                    <div
                       onClick={() => setResumeType("inbuilt")}
                       className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${
                         resumeType === "inbuilt" && " bg-blue-500"
                       }`}
                     >
                       Select Inbuilt Resume
-                    </button>
-                    <button
+                    </div>
+                    <div
                       onClick={() => setResumeType("file")}
                       className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${
                         resumeType === "file" && " bg-blue-500"
                       }`}
                     >
                       Upload File
-                    </button>
+                    </div>
                     {resumeType === "file" && (
                       <FormikControl
                         control="file"
