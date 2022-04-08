@@ -31,21 +31,16 @@ import UserContext from "contexts/user/user.provider";
 const DrawerMenuItems = [
   {
     id: 1,
-    label: "Home",
-    href: "/",
-  },
-  {
-    id: 2,
     label: "Vacancies",
     href: VACANCIES,
   },
   {
-    id: 3,
+    id: 2,
     label: "Contact Us",
     href: CONTACT,
   },
   {
-    id: 4,
+    id: 3,
     label: "Help",
     href: HELP_PAGE,
   },
