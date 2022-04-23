@@ -338,7 +338,7 @@ const Register = ({ activeStep, setActiveStep, switchTab, setSwitchTab }) => {
 
               <Button
                 style={{ margin: "0 5px", width: "100%" }}
-                title={`Business`}
+                title={`Employer`}
                 onClick={() => switchTabs("business")}
               />
             </div>
