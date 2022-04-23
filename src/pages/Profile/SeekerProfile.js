@@ -64,7 +64,7 @@ const SeekerProfile = () => {
     const gender = data?.gender?.value;
     const course = data?.course?.value;
     // const institution = data.institution.value;
-    const industries = data.industries.reduce((arr, b) => {
+    const industries = data?.industries.reduce((arr, b) => {
       arr.push(b.value);
       return arr;
     }, []);
@@ -102,7 +102,7 @@ const SeekerProfile = () => {
     const obj = {
       status: statusOptions.find(({ value }) => value === data?.status),
       // institution: institutionOptions.find(({ value }) => value === data?.institution),
-      course: { value: data.course.id, label: data?.course?.name },
+      course: { value: data?.course?.id, label: data?.course?.name },
       // course: courseList.find(({ value }) => value === data?.course?.id),
       gender: genderOptions.find(({ value }) => value === data?.gender),
       description: data?.description,
@@ -133,7 +133,7 @@ const SeekerProfile = () => {
             let genderOptions = [];
             if (seekerGender.data) {
               genderOptions = cleanSelectData(
-                seekerGender.data.__type.enumValues,
+                seekerGender?.data?.__type.enumValues,
               );
             }
             return (
@@ -145,7 +145,7 @@ const SeekerProfile = () => {
                   let statusOptions = [];
                   if (seekerStatus.data) {
                     statusOptions = cleanSelectData(
-                      seekerStatus.data.__type.enumValues,
+                      seekerStatus?.data?.__type.enumValues,
                     );
                   }
                   if (!isOnline) {
@@ -160,7 +160,7 @@ const SeekerProfile = () => {
                         let industries = [];
                         if (industriesData.data) {
                           industries = cleanIndustries(
-                            industriesData.data.allIndustries,
+                            industriesData?.data?.allIndustries,
                           );
                         }
                         let initialValues = initialData;
@@ -234,8 +234,8 @@ const SeekerProfile = () => {
                                             if (data) {
                                               setFieldErrors(
                                                 updating
-                                                  ? data.seekerUpdate
-                                                  : data.seekerCreate,
+                                                  ? data?.seekerUpdate
+                                                  : data?.seekerCreate,
                                                 setErrors,
                                               );
                                               setRefetchUser((curr) => !curr);
