@@ -229,8 +229,12 @@ const ResumeProvider = ({ children }) => {
           return newState;
 
         case "on_input":
-          console.log("add on input");
-          let path = `${payload.path}Update`;
+          console.log("add on input", payload);
+          let path = `${payload.path}${
+            payload.path.split(".")[0] === "resumemetadata" || "objective"
+              ? ""
+              : "Update"
+          }`;
           let indexPath = parseInt(payload.path.split("[")[1]);
           if (indexPath) {
             let idx = parseInt(indexPath.charAt(0));

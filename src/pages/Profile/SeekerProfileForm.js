@@ -230,7 +230,6 @@ function SeekerProfileForm({ details }) {
                   </div>
                   <div className="my-4" />
 
-                  <div className="bg-white p-3 shadow-sm rounded-sm"></div>
                   <div className="my-4" />
                   {details?.socials?.length > 0 ||
                   details?.resumes?.length > 0 ? (
@@ -257,17 +256,11 @@ function SeekerProfileForm({ details }) {
                             <span className="tracking-wide">Socials</span>
                           </div>
                           <ul className="list-inside space-y-2">
-                            {details?.socials?.map((social) => {
+                            {details?.socials?.map((social, ii) => {
                               return (
-                                <li key={social.id}>
-                                  {/* <div className="grid grid-cols-2">
-                          <div className="px-4 py-2 font-semibold">
-                           
-                          </div>
-                          <div className="px-4 py-2"></div>
-                        </div> */}
+                                <li key={ii}>
                                   <p className="text-blue-800">
-                                    {social.network}
+                                    {social?.network}
                                   </p>
                                   <div className="text-gray-500 text-xs">
                                     {social?.username}
@@ -307,17 +300,17 @@ function SeekerProfileForm({ details }) {
                               <span className="tracking-wide">Resumes</span>
                             </div>
                             <ul className="list-inside space-y-2">
-                              {details?.resumes?.map((resume) => {
+                              {details?.resumes?.map((resume, jj) => {
                                 return isOwnAccount() ? (
-                                  <li key={resume.id}>
+                                  <li key={jj}>
                                     <Link
                                       onClick={() =>
-                                        history.push(`/r/${resume.id}`)
+                                        history.push(`/r/${resume?.id}`)
                                       }
                                       to={{ pathname: "" }}
                                     >
                                       <p className="text-blue-800">
-                                        {resume.name}
+                                        {resume?.name}
                                       </p>
                                     </Link>
                                     {/* <div className="grid grid-cols-2">
@@ -329,7 +322,7 @@ function SeekerProfileForm({ details }) {
                                   </li>
                                 ) : (
                                   resume.public && (
-                                    <li key={resume.id}>
+                                    <li key={jj}>
                                       <Link
                                         onClick={() =>
                                           history.push(`/r/${resume.id}`)
