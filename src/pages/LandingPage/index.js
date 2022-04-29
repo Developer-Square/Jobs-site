@@ -440,10 +440,9 @@ function LandingPage({ deviceType }) {
                         <div className="w-full flex text-left">
                           <div className="w-full flex flex-col leading-none pl-4">
                             <p className="text-md text-indigo-500 font-bold">
-                              Scott Windon
+                              Henry Ford
                             </p>
                             <p className="text-xs text-gray-500">
-                              Henry Ford
                             </p>
                           </div>
                         </div>
@@ -475,10 +474,9 @@ function LandingPage({ deviceType }) {
                         <div className="w-full flex text-left">
                           <div className="w-full flex flex-col leading-none pl-4">
                             <p className="text-md text-indigo-500 font-bold">
-                              Scott Windon
+                              Socrates
                             </p>
                             <p className="text-xs text-gray-500">
-                              Socrates
                             </p>
                           </div>
                         </div>
