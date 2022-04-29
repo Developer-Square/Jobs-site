@@ -389,10 +389,7 @@ function LandingPage({ deviceType }) {
                           “
                         </div>
                         <p className="text-sm text-gray-600 text-center px-5">
-                          Lorem, ipsum dolor sit amet consectetur adipisicing
-                          elit. Nam obcaecati laudantium recusandae, debitis eum
-                          voluptatem ad, illo voluptatibus temporibus odio
-                          provident.
+                          Life is like riding a bicycle. To keep your balance, you must keep moving.
                         </p>
                         <div className="font-nunito text-5xl font-bold text-indigo-500 text-right leading-tight h-3 -mt-3">
                           ”
@@ -409,10 +406,9 @@ function LandingPage({ deviceType }) {
                         <div className="w-full flex text-left">
                           <div className="w-full flex flex-col leading-none pl-4">
                             <p className="text-md text-indigo-500 font-bold">
-                              Scott Windon
+                              Albert Einstein.
                             </p>
                             <p className="text-xs text-gray-500">
-                              @scott.windon
                             </p>
                           </div>
                         </div>
@@ -427,10 +423,7 @@ function LandingPage({ deviceType }) {
                           “
                         </div>
                         <p className="text-sm text-gray-600 text-center px-5">
-                          Lorem, ipsum dolor sit amet consectetur adipisicing
-                          elit. Nam obcaecati laudantium recusandae, debitis eum
-                          voluptatem ad, illo voluptatibus temporibus odio
-                          provident.
+                          The whole secret of a successful life is to find out what is one’s destiny to do, and then do it.
                         </p>
                         <div className="font-nunito text-5xl font-bold text-indigo-500 text-right leading-tight h-3 -mt-3">
                           ”
@@ -447,10 +440,9 @@ function LandingPage({ deviceType }) {
                         <div className="w-full flex text-left">
                           <div className="w-full flex flex-col leading-none pl-4">
                             <p className="text-md text-indigo-500 font-bold">
-                              Scott Windon
+                              Henry Ford
                             </p>
                             <p className="text-xs text-gray-500">
-                              @scott.windon
                             </p>
                           </div>
                         </div>
@@ -465,10 +457,7 @@ function LandingPage({ deviceType }) {
                           “
                         </div>
                         <p className="text-sm text-gray-600 text-center px-5">
-                          Lorem, ipsum dolor sit amet consectetur adipisicing
-                          elit. Nam obcaecati laudantium recusandae, debitis eum
-                          voluptatem ad, illo voluptatibus temporibus odio
-                          provident.
+                          The unexamined life is not worth living.
                         </p>
                         <div className="font-nunito text-5xl font-bold text-indigo-500 text-right leading-tight h-3 -mt-3">
                           ”
@@ -485,10 +474,9 @@ function LandingPage({ deviceType }) {
                         <div className="w-full flex text-left">
                           <div className="w-full flex flex-col leading-none pl-4">
                             <p className="text-md text-indigo-500 font-bold">
-                              Scott Windon
+                              Socrates
                             </p>
                             <p className="text-xs text-gray-500">
-                              @scott.windon
                             </p>
                           </div>
                         </div>
