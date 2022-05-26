@@ -38,7 +38,7 @@ const StepOne = (props) => {
 const StepTwo = (props) => {
   return (
     <>
-      <div className="py-4 px-4 bg-gray-100 rounded-xl shadow-lg hover:shadow-xl  mx-auto md:mx-0 grid grid-cols-2">
+      <div className="py-4 px-4 bg-gray-100 rounded-xl shadow-lg hover:shadow-xl  mx-auto md:mx-0 grid grid-cols-1">
         <PlanCard
           selectPlan={props?.setSelectedPlan}
           plan={props?.selectedPlan}
@@ -120,8 +120,8 @@ const StepThree = (props) => {
       fetchPolicy: "no-cache",
       variables: requestId
         ? {
-            checkoutRequestId: requestId,
-          }
+          checkoutRequestId: requestId,
+        }
         : { id: props?.transactionId },
     },
   );
@@ -226,7 +226,7 @@ const StepThree = (props) => {
             }
             onClick={
               message === "Success. Request accepted for processing" ||
-              message === noData
+                message === noData
                 ? fetchResponse
                 : null
             }
@@ -236,10 +236,10 @@ const StepThree = (props) => {
               ? "Payment Successful"
               : message === "Success. Request accepted for processing" ||
                 message === noData
-              ? loading
-                ? " Loading . . ."
-                : "Confirm Payment"
-              : "Payment Failed"}
+                ? loading
+                  ? " Loading . . ."
+                  : "Confirm Payment"
+                : "Payment Failed"}
           </button>
         </div>
       </div>

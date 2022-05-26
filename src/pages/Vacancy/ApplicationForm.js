@@ -410,80 +410,80 @@ const ApplicationSeekerForm = ({ vacancy }) => {
                     <ul className="list-none m-0 p-0">
                       {vacancy.screeningQuestions?.length > 0
                         ? vacancy.screeningQuestions?.map((qn, i) => (
-                            <div className="rounded-sm bg-white shadow p-3 gap-2  hover:shadow-lg transition delay-150 duration-300 ease-in-out ">
-                              <li className="mb-2" key={i}>
-                                <div className="flex items-center mb-1">
-                                  <div className="h-4 w-4 z-10">{i + 1}.</div>
-                                  <div className="flex-1 ml-4 font-medium">
-                                    {qn.question}
-                                  </div>
+                          <div className="rounded-sm bg-white shadow p-3 gap-2  hover:shadow-lg transition delay-150 duration-300 ease-in-out ">
+                            <li className="mb-2" key={i}>
+                              <div className="flex items-center mb-1">
+                                <div className="h-4 w-4 z-10">{i + 1}.</div>
+                                <div className="flex-1 ml-4 font-medium">
+                                  {qn.question}
                                 </div>
-                                <div className="ml-12">
-                                  {qn.questionType === "TXT" ||
+                              </div>
+                              <div className="ml-12">
+                                {qn.questionType === "TXT" ||
                                   qn.questionType === "LNG_TXT" ? (
-                                    <input
-                                      name={qn.id}
-                                      type="text"
-                                      onChange={(event) =>
-                                        changeAns(qn.id, event.target.value)
-                                      }
-                                    />
-                                  ) : null}
-                                  {qn.questionType === "INT" && (
-                                    <input
-                                      name={qn.id}
-                                      type="number"
-                                      pattern="[0-9]+"
-                                      onChange={(event) =>
-                                        changeAns(qn.id, event.target.value)
-                                      }
-                                    />
-                                  )}
-                                  {qn.questionType === "BINARY" && (
-                                    <RadioGroup
-                                      name={qn.id}
-                                      value={
-                                        ans?.find((a) => a.question === qn.id)
-                                          ?.answer
-                                      }
-                                      row
-                                      style={{ flexFlow: "inherit" }}
-                                      onChange={(event) =>
-                                        changeAns(qn.id, event.target.value)
-                                      }
-                                    >
-                                      {options.map((option, i) => {
-                                        return (
-                                          <FormControlLabel
-                                            onClick={() =>
-                                              changeAns(
-                                                qn.id,
-                                                document.getElementById(
-                                                  option.value,
-                                                ).value,
-                                              )
-                                            }
-                                            className={`flex items-center`}
-                                            style={{ flexDirection: "inherit" }}
-                                            value={option.value}
-                                            control={
-                                              <Radio
-                                                id={option.value}
-                                                color="primary"
-                                              />
-                                            }
-                                            label={option.label}
-                                            labelPlacement="end"
-                                            key={i}
-                                          />
-                                        );
-                                      })}
-                                    </RadioGroup>
-                                  )}
-                                </div>
-                              </li>
-                            </div>
-                          ))
+                                  <input
+                                    name={qn.id}
+                                    type="text"
+                                    onChange={(event) =>
+                                      changeAns(qn.id, event.target.value)
+                                    }
+                                  />
+                                ) : null}
+                                {qn.questionType === "INT" && (
+                                  <input
+                                    name={qn.id}
+                                    type="number"
+                                    pattern="[0-9]+"
+                                    onChange={(event) =>
+                                      changeAns(qn.id, event.target.value)
+                                    }
+                                  />
+                                )}
+                                {qn.questionType === "BINARY" && (
+                                  <RadioGroup
+                                    name={qn.id}
+                                    value={
+                                      ans?.find((a) => a.question === qn.id)
+                                        ?.answer
+                                    }
+                                    row
+                                    style={{ flexFlow: "inherit" }}
+                                    onChange={(event) =>
+                                      changeAns(qn.id, event.target.value)
+                                    }
+                                  >
+                                    {options.map((option, i) => {
+                                      return (
+                                        <FormControlLabel
+                                          onClick={() =>
+                                            changeAns(
+                                              qn.id,
+                                              document.getElementById(
+                                                option.value,
+                                              ).value,
+                                            )
+                                          }
+                                          className={`flex items-center`}
+                                          style={{ flexDirection: "inherit" }}
+                                          value={option.value}
+                                          control={
+                                            <Radio
+                                              id={option.value}
+                                              color="primary"
+                                            />
+                                          }
+                                          label={option.label}
+                                          labelPlacement="end"
+                                          key={i}
+                                        />
+                                      );
+                                    })}
+                                  </RadioGroup>
+                                )}
+                              </div>
+                            </li>
+                          </div>
+                        ))
                         : null}
                     </ul>
                   </div>
@@ -508,19 +508,17 @@ const ApplicationSeekerForm = ({ vacancy }) => {
                   <div className="form p-2 w-full shadow p-8 text-gray-700 ">
                     <div
                       onClick={() => setResumeType("inbuilt")}
-                      className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${
-                        resumeType === "inbuilt" && " bg-blue-500"
-                      }`}
+                      className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${resumeType === "inbuilt" && " bg-blue-500"
+                        }`}
                     >
                       Select Inbuilt Resume
                     </div>
                     <div
                       onClick={() => setResumeType("file")}
-                      className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${
-                        resumeType === "file" && " bg-blue-500"
-                      }`}
+                      className={`flex-no-shrink bg-blue-800 hover:bg-blue-500 px-3 py-1 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-blue-300 hover:border-blue-500 text-white rounded-full transition ease-in duration-300 ${resumeType === "file" && " bg-blue-500"
+                        }`}
                     >
-                      Upload File
+                      Upload File (PDF Only)
                     </div>
                     {resumeType === "file" && (
                       <FormikControl
@@ -539,7 +537,7 @@ const ApplicationSeekerForm = ({ vacancy }) => {
                         {user?.resumes?.length > 0 ? (
                           <FormikControl
                             control="select"
-                            hideButton={() => {}}
+                            hideButton={() => { }}
                             label="Resume"
                             name="inbuiltResume"
                             style={{ margin: 0 }}
@@ -567,7 +565,7 @@ const ApplicationSeekerForm = ({ vacancy }) => {
                       doc={true}
                       restrict={`.pdf`}
                       setFieldValue={formik.setFieldValue}
-                      label="Extra Attachments"
+                      label="Extra Attachments (PDF Only)"
                       name="extraAttachment"
                     />
                   </div>

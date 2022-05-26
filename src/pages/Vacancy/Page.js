@@ -39,7 +39,7 @@ const Page = ({
   const {
     authState: { profile, isAuthenticated },
   } = React.useContext(AuthContext);
-  const { userData } = React.useContext(UserContext);
+  const { user, userData } = React.useContext(UserContext);
 
   const handleLoginNotification = () => {
     toast.error("You must login to save this job");
@@ -51,13 +51,20 @@ const Page = ({
 
   const handleClick = () => {
     if (data?.isActive) {
-      // emitter.emit(events.APPLICATION_MODAL, data);
-      history.push(
-        `/vacancies/${getDBIdFromGraphqlId(
-          data?.id,
-          data?.__typename,
-        )}/application`,
-      );
+      // check package
+      if (user?.subscriptions && user?.subscriptions?.length > 0) {
+        // emitter.emit(events.APPLICATION_MODAL, data);
+        history.push(
+          `/vacancies/${getDBIdFromGraphqlId(
+            data?.id,
+            data?.__typename,
+          )}/application`,
+        );
+      }
+      else {
+        toast.info("You need a package to apply for an internship.");
+        history.push(`/dashboard/billing/`);
+      }
     } else {
       toast.info("Sorry 😔, Applications have been closed");
     }
