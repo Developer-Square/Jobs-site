@@ -366,7 +366,7 @@ export const HamburgerIcon = styled.div`
   position: relative;
   > span {
     display: block;
-    background-color: ${themeGet("colors.darkColor", "#21277f")};
+    background-color: ${themeGet("colors.darkColor", "#1849B1")};
     border-radius: 6px;
     height: 2px;
     margin-bottom: 6px;
@@ -400,9 +400,7 @@ export const HamburgerIcon = styled.div`
   }
 `;
 
-export const DrawerContentWrapper = styled.div`
-  padding-top: 60px;
-`;
+export const DrawerContentWrapper = styled.div``;
 
 export const DrawerClose = styled.div`
   display: block;
@@ -527,7 +525,7 @@ export const DrawerMenuItem = styled.div`
 `;
 
 export const UesrOptionMenu = styled.div`
-  padding: 45px 0;
+  padding: 0 45px 0 0;
   border-top: 1px solid ${themeGet("colors.lightDarkColor", "#E6E6E6")};
 `;
 

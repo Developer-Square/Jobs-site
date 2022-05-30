@@ -6,6 +6,11 @@ import { IsNotEmpty } from "helpers/index";
 import { VacancyContext } from "contexts/vacancies/vacancies.context";
 import { vacancyLimit } from "constants/constants";
 import PayrateSlider from "components/Slider/Slider";
+import {
+  parse as parseQs,
+  // ParsedQuery,
+  stringify as stringifyQs,
+} from "query-string";
 
 const VacancyFilter = ({
   rate,
@@ -42,9 +47,19 @@ const VacancyFilter = ({
 
   useEffect(() => {
     // Set the default value.
+    console.log(stringifyQs(filterObj));
     getDefaultValues();
     // eslint-disable-next-line
   }, []);
+
+  React.useEffect(() => {
+    console.log("----------------", filterObj);
+    console.log("==================", stringifyQs(filterObj));
+
+    const searchStr = parseQs(stringifyQs(filterObj));
+    console.log("==================", parseQs(stringifyQs(filterObj)));
+    console.log("==================", searchStr);
+  }, [filterObj]);
 
   useEffect(() => {
     // Only fetch if context API is empty.
@@ -298,7 +313,7 @@ const VacancyFilter = ({
       </div>
       {/* Job Type */}
       <div className="widget">
-        <h4>Job Type</h4>
+        <h4>Type</h4>
         <ul className="checkboxes">
           <li>
             <input

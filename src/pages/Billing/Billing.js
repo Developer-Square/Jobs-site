@@ -38,7 +38,7 @@ const StepOne = (props) => {
 const StepTwo = (props) => {
   return (
     <>
-      <div className="py-4 px-4 bg-gray-100 rounded-xl shadow-lg hover:shadow-xl  mx-auto md:mx-0 grid grid-cols-2">
+      <div className="py-4 px-4 bg-gray-100 rounded-xl shadow-lg hover:shadow-xl  mx-auto md:mx-0 grid grid-cols-1">
         <PlanCard
           selectPlan={props?.setSelectedPlan}
           plan={props?.selectedPlan}
@@ -46,7 +46,7 @@ const StepTwo = (props) => {
           step={props?.step}
           handleBack={props?.handleBack}
           handleNext={props?.handleNext}
-          class="col-span-1 lg:block"
+          className="col-span-1 lg:block"
         />
         <div className="col-span-1 lg:block space-y-8 px-12">
           <div className="w-sm">

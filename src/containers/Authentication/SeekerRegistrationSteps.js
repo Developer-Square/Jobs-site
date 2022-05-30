@@ -14,9 +14,7 @@ import FormikControl from "../FormikContainer/FormikControl";
 import Button from "components/Button/Button";
 import { TOS } from "constants/routes.constants";
 // import { Typography } from "@material-ui/core";
-import {
-  TypedCreateSelectableInstitutionMutation,
-} from "./mutations";
+import { TypedCreateSelectableInstitutionMutation } from "./mutations";
 import { showSuccessNotification, IsNotEmpty } from "helpers";
 // import Loader from "components/Loader/Loader";
 import CoursesSearch from "components/CoursesSearch/CoursesSearch";
@@ -40,11 +38,11 @@ export const SignUp = ({
       {(formik) => {
         return (
           <Form className="register" noValidate>
-            <Spacer>
+            {/* <Spacer>
               <Link to={"/auth"} onClick={() => setSwitchTab("")}>
-                {`<`} Select Different Option{" "}
+                {`<`} Select Different Option ddd
               </Link>
-            </Spacer>
+            </Spacer> */}
 
             {/* Email validation not working */}
             <FormikControl
@@ -97,12 +95,10 @@ export const SignUp = ({
               <HelperText style={{ padding: "20px 0px 10px", width: "200px" }}>
                 I agree to the{"  "}
                 <Link
-                  style={{ color: "#21277f" }}
+                  style={{ color: "#1849B1" }}
                   onClick={() => history.push(`${TOS}`)}
                 >
-                  <strong>
-                    Terms &amp; Conditions
-                  </strong>
+                  <strong>Terms &amp; Conditions</strong>
                 </Link>
               </HelperText>
             </TermsSection>
@@ -329,7 +325,7 @@ export const FurtherInformation = ({
 
 const Resend = styled.div`
   display: inline-block;
-  color: ${(props) => (props.smsResend ? "rgba(0, 0, 0, 0.38)" : "#21277f")};
+  color: ${(props) => (props.smsResend ? "rgba(0, 0, 0, 0.38)" : "#1849B1")};
   font-weight: bold;
   pointer-events: ${(props) => (props.smsResend ? "none" : "all")};
   cursor: pointer;

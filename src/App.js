@@ -12,6 +12,7 @@ import { NotificationTemplate } from "components/NotificationTemplate";
 import { useDeviceType } from "helpers/useDeviceType";
 import { AuthProvider } from "contexts/auth/auth.provider";
 import { VacancyProvider } from "contexts/vacancies/vacancies.provider";
+import { ConstantsProvider } from "contexts/constants/constants.provider";
 import { StickyProvider } from "contexts/app/app.provider";
 import { SearchProvider } from "contexts/search/search.provider";
 import { HeaderProvider } from "contexts/header/header.provider";
@@ -22,22 +23,27 @@ import { ResumeProvider } from "contexts/resume/resume.provider";
 import { SettingsProvider } from "contexts/settings/settings.provider";
 import { StorageProvider } from "contexts/storage/storage.provider";
 import { UserProvider } from "contexts/user/user.provider";
+import { SidebarProvider } from "contexts/sidebar/use-sidebar";
 import BaseRouter from "routers/router";
 import { useRouterQuery } from "helpers/useRouterQuery";
 import { serviceWorkerTimeout } from "constants/constants";
-// External CSS import here
-
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "react-phone-input-2/lib/style.css";
-import "rc-drawer/assets/index.css";
-import "rc-table/assets/index.css";
-import "rc-collapse/assets/index.css";
-import "@redq/reuse-modal/lib/index.css";
 import { withApollo } from "helpers/apollo";
 import { MuiThemeProvider } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import { SEO } from "components/seo";
 import ScrollToTop from "helpers/scrollToTop";
+
+// External CSS import here
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import "react-phone-input-2/lib/style.css";
+import "rc-drawer/assets/index.css";
+import "rc-table/assets/index.css";
+import "rc-collapse/assets/index.css";
+import "@redq/reuse-modal/lib/index.css";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "swiper/css/scrollbar";
 
 const MUItheme = createTheme({
   typography: {
@@ -81,35 +87,39 @@ function App() {
         <OriginalThemeProvider theme={themeMode}>
           <MuiThemeProvider theme={MUItheme}>
             <ServiceWorkerProvider timeout={serviceWorkerTimeout}>
-              <SearchProvider query={query}>
-                <HeaderProvider>
-                  <AuthProvider>
-                    <VacancyProvider>
-                      <ModalProvider>
+              <SidebarProvider>
+                <ConstantsProvider>
+                  <SearchProvider query={query}>
+                    <HeaderProvider>
+                      <AuthProvider>
                         <UserProvider>
-                          <DatabaseProvider>
-                            <ResumeProvider>
-                              <StickyProvider>
-                                <AlertProvider
-                                  template={NotificationTemplate}
-                                  {...notificationConfig}
-                                >
-                                  <StorageProvider>
-                                    <ScrollToTop>
-                                      <BaseRouter deviceType={deviceType} />
-                                    </ScrollToTop>
-                                  </StorageProvider>
-                                </AlertProvider>
-                              </StickyProvider>
-                            </ResumeProvider>
-                          </DatabaseProvider>
+                          <VacancyProvider>
+                            <ModalProvider>
+                              <DatabaseProvider>
+                                <ResumeProvider>
+                                  <StickyProvider>
+                                    <AlertProvider
+                                      template={NotificationTemplate}
+                                      {...notificationConfig}
+                                    >
+                                      <StorageProvider>
+                                        <ScrollToTop>
+                                          <BaseRouter deviceType={deviceType} />
+                                        </ScrollToTop>
+                                      </StorageProvider>
+                                    </AlertProvider>
+                                  </StickyProvider>
+                                </ResumeProvider>
+                              </DatabaseProvider>
+                            </ModalProvider>
+                          </VacancyProvider>
                         </UserProvider>
-                      </ModalProvider>
-                    </VacancyProvider>
-                  </AuthProvider>
-                </HeaderProvider>
-                <GlobalStyle />
-              </SearchProvider>
+                      </AuthProvider>
+                    </HeaderProvider>
+                    <GlobalStyle />
+                  </SearchProvider>
+                </ConstantsProvider>
+              </SidebarProvider>
               <ReactHooksWrapper />
             </ServiceWorkerProvider>
           </MuiThemeProvider>

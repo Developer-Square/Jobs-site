@@ -1,6 +1,15 @@
 import gql from "graphql-tag";
 import { TypedQuery } from "core/queries";
 
+export const GET_INSTITUTIONS = gql`
+  query Institutions {
+    allInstitutions {
+      id
+      name
+    }
+  }
+`;
+
 export const GET_COURSES = gql`
   query AllCoursess {
     allCourses {
@@ -35,7 +44,12 @@ export const GET_FILTERED_COURSES = gql`
       first: $first
       last: $last
     ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+      }
       edges {
+        cursor
         node {
           name
           id

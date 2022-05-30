@@ -19,8 +19,8 @@ export const GET_INDUSTRIES = gql`
 // , sortBy: {  field: VACANCY_COUNT, direction: DESC }
 
 export const GET_COUNTED_INDUSTRIES = gql`
-  query Industries($first: Int) {
-    industries(first: $first) {
+  query Industries($first: Int, $sortBy: IndustrySortingInput) {
+    industries(first: $first, sortBy: $sortBy) {
       edges {
         node {
           name

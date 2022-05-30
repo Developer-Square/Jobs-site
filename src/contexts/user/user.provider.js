@@ -1,7 +1,5 @@
-// import { pick } from "lodash";
 import { toast } from "react-toastify";
 import React, { createContext, memo, useEffect, useState } from "react";
-// import useAuthState from "hooks/useAuthState";
 import { useHistory } from "react-router-dom";
 import { useLazyQuery, useMutation } from "react-apollo";
 import { GET_USER_DETAILS } from "graphql/queries";
@@ -18,28 +16,42 @@ const defaultUser = {
 const defaultState = {
   loading: false,
   user: defaultUser,
+  refetchUser: false,
+  userLoading: false,
+  userType: null,
+  userData: null,
   logout: async () => {},
   loginWithGoogle: async () => {},
   loginAnonymously: async () => {},
+  setRefetchUser: async () => {},
+  getUser: async () => {},
+  fetchUser: async () => {},
+  updateAddress: async () => {},
+  deleteAddress: async () => {},
   deleteAccount: async () => {},
+  setUserType: async () => {},
 };
 
 const UserContext = createContext(defaultState);
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userType, setUserType] = useState(localStorage.getItem("thedb_user"));
   const [refetchUser, setRefetchUser] = useState(false);
   const {
     authState: { isAuthenticated },
     authDispatch,
   } = React.useContext(AuthContext);
   const navigate = useHistory();
-  const [fetchUser] = useLazyQuery(GET_USER_DETAILS, {
-    fetchPolicy: "no-cache",
-    onCompleted: (data) => {
-      setUser(data?.me);
+  const [fetchUser, { data: userData, loading: userLoading }] = useLazyQuery(
+    GET_USER_DETAILS,
+    {
+      fetchPolicy: "no-cache",
+      onCompleted: (data) => {
+        setUser(data?.me);
+      },
     },
-  });
+  );
   const [accountAddressDelete] = useMutation(DELETE_ADDRESS);
   const [accountAddressUpdate] = useMutation(UPDATE_ADDRESS);
 
@@ -133,11 +145,16 @@ const UserProvider = ({ children }) => {
         user,
         getUser,
         logout,
+        fetchUser,
         refetchUser,
         setRefetchUser,
         updateAddress,
         deleteAddress,
         deleteAccount,
+        setUserType,
+        userType,
+        userData,
+        userLoading,
       }}
     >
       {children}

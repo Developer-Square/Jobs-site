@@ -10,7 +10,11 @@ import UploadInput from "./UploadInput";
 import PhoneNumberInput from "./PhoneInput";
 import SingleCheckbox from "./SingleCheckbox";
 import CreatableSelectInput from "./CreatableSelect";
+import MUIRadioButton from "./RadioButton.MUI";
 import Code from "./Code";
+import AsyncSelect from "./AsyncSelect";
+import LocationSearch from "./LocationSearch";
+import SwitchButton from "./SwitchButton";
 
 function FormikControl(props) {
   const { control, ...rest } = props;
@@ -21,10 +25,14 @@ function FormikControl(props) {
       return <Textarea {...rest} />;
     case "select":
       return <SelectInput {...rest} />;
+    case "async-select":
+      return <AsyncSelect {...rest} />;
     case "create-select":
       return <CreatableSelectInput {...rest} />;
     case "radio":
       return <RadioButtons {...rest} />;
+    case "mui-radio":
+      return <MUIRadioButton {...rest} />;
     case "checkbox":
       return <CheckboxGroup {...rest} />;
     case "single-checkbox":
@@ -37,6 +45,10 @@ function FormikControl(props) {
       return <PhoneNumberInput {...rest} />;
     case "code":
       return <Code {...rest} />;
+    case "location":
+      return <LocationSearch {...rest} />;
+    case "switch":
+      return <SwitchButton {...rest} />;
     default:
       return null;
   }

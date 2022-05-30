@@ -22,6 +22,7 @@ import demoState from "data/demoState.json";
 import DatabaseContext from "contexts/database/database.provider";
 import initialState from "data/initialState.json";
 import { objDiff } from "utils";
+import omitDeep from "omit-deep-lodash";
 
 const ResumeContext = createContext({});
 
@@ -124,17 +125,43 @@ const ResumeProvider = ({ children }) => {
           return newState;
 
         case "on_toggle_use_item":
-          console.log("calling on toggle use item");
           items = get(state, payload.path);
           index = findIndex(items, ["id", payload.value.id]);
+
           if ("isActive" in items[index]) {
             items[index].isActive = !items[index].isActive;
+            val.push({ id: items[index].id, isActive: !items[index].isActive });
           } else {
             items[index].isActive = false;
+            val.push({ id: items[index].id, isActive: false });
           }
-          newState = setWith(clone(state), payload.path, items, clone);
-          debouncedUpdateResume(newState);
-          return newState;
+          newState = setWith(clone(state), `${payload.path}Update`, val, clone);
+          returnState = setWith(
+            clone(state),
+            `${payload.path}[${index}]`,
+            payload.value,
+            clone,
+          );
+          diff = objDiff(state, newState, [
+            "id",
+            "name",
+            "public",
+            "title",
+            "heading",
+            "descriptionPlaintext",
+            "description",
+          ]);
+
+          delete diff[payload.path.split(".")[0]].id;
+          variables = setWith(
+            clone(diff),
+            `${payload.path}Update.id`,
+            payload.value.id,
+            clone,
+          );
+          variables.id = newState.id;
+          debouncedUpdateResume(variables);
+          return returnState;
 
         case "on_move_item_up":
           console.log("calling on move item up");
@@ -202,8 +229,12 @@ const ResumeProvider = ({ children }) => {
           return newState;
 
         case "on_input":
-          console.log("add on input");
-          let path = payload.path;
+          console.log("add on input", payload);
+          let path = `${payload.path}${
+            payload.path.split(".")[0] === "resumemetadata" || "objective"
+              ? ""
+              : "Update"
+          }`;
           let indexPath = parseInt(payload.path.split("[")[1]);
           if (indexPath) {
             let idx = parseInt(indexPath.charAt(0));
@@ -218,6 +249,8 @@ const ResumeProvider = ({ children }) => {
               ];
             }
           }
+
+          payload.value = omitDeep(payload.value, ["social"]);
 
           newState = setWith(clone(state), path, payload.value, clone);
           returnState = newState;
@@ -235,6 +268,12 @@ const ResumeProvider = ({ children }) => {
             "fontSize",
             "collection",
             "font",
+          ]);
+          variables = omitDeep(variables, [
+            "updatedAt",
+            "uuid",
+            "createdAt",
+            "slug",
           ]);
           if (variables[payload.path.split(".")[0]].id) {
             delete variables[payload.path.split(".")[0]].id;

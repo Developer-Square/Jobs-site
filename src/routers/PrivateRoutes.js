@@ -6,7 +6,7 @@ import * as Routes from "./PrivateRoutes.config";
 // import Navigation from "containers/Navigation/Navigation";
 import PrivateRoute from "./PrivateRoute";
 import { Modal } from "@redq/reuse-modal";
-import DashboardLayout from "layouts/DashboardLayout";
+import DashboardPages from "layouts/DashboardPages";
 import NotFound from "pages/NotFound";
 
 class PrivateRoutes extends Component {
@@ -62,7 +62,7 @@ class PrivateRoutes extends Component {
       });
     };
     return (
-      <DashboardLayout
+      <DashboardPages
         routes={this.state.allowedRoutes.filter(
           (filteredRoute) => filteredRoute.dashboardItem,
         )}
@@ -75,7 +75,7 @@ class PrivateRoutes extends Component {
             <Route component={NotFound} />
           </Switch>
         </Modal>
-      </DashboardLayout>
+      </DashboardPages>
     );
   }
 }

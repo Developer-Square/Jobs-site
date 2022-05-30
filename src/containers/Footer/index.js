@@ -8,7 +8,7 @@ import GetStarted from "components/GetStarted/GetStarted";
 const Footer = () => {
   return (
     <div style={{ marginTop: "auto" }}>
-      <div className="margin-top-15" />
+      <div className="" />
       <div
         id="footer"
         style={{

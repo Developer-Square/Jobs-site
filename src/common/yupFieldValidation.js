@@ -18,6 +18,7 @@ export const username = Yup.string()
   .required(msg.fieldRequired);
 
 export const requiredString = Yup.string().required(msg.fieldRequired);
+export const requiredObject = Yup.object().shape({});
 
 export const website = Yup.string().url(msg.validURL, { allowLocal: true });
 
@@ -38,7 +39,11 @@ export const number = Yup.number().required(msg.fieldRequired);
 
 export const select = Yup.object({
   value: requiredString,
-  label: requiredString,
+  label: requiredString || requiredObject,
+});
+export const mixedSelect = Yup.object({
+  value: requiredString,
+  label: Yup.mixed(),
 });
 
 export const mobile = Yup.string()

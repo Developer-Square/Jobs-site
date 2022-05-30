@@ -33,7 +33,7 @@ function Textarea(props) {
           name={name}
           value={value}
           component={EditorField}
-          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+          className="border-0 px-3 py-3 placeholder-blueGray-900 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
           {...rest}
         />
       ) : (

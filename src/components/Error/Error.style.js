@@ -44,7 +44,7 @@ export const Gear = styled.div`
   height: 70px;
   margin: 0 auto;
   border-radius: 50%;
-  background: #21277f;
+  background: #1849b1;
   &:before {
     position: absolute;
     left: 5px;
@@ -65,7 +65,7 @@ export const Gear = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 5px solid #21277f;
+    border: 5px solid #1849b1;
     box-sizing: border-box;
     background: white;
   }
@@ -93,7 +93,7 @@ export const Bar = styled.div`
   height: 22px;
   margin-top: -12px;
   border-radius: 5px;
-  background: #21277f;
+  background: #1849b1;
 
   &:before {
     position: absolute;

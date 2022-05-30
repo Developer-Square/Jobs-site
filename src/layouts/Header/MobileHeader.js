@@ -20,8 +20,8 @@ import { HeaderContext } from "contexts/header/header.context";
 // import LogoImage from "image/logo.svg";
 import { isCategoryPage } from "../is-home-page";
 import useDimensions from "helpers/useComponentSize";
-import Logoimage from "image/thedb.png";
-import InvertedLogoimage from "image/db.png";
+// import Logoimage from "image/thedb.png";
+// import InvertedLogoimage from "image/db.png";
 import styled from "styled-components";
 
 export const Logo = styled.div`
@@ -34,9 +34,9 @@ export const Logo = styled.div`
 export const LogoImage = styled.img`
   display: block;
   backface-visibility: hidden;
-  height: 100px;
+  height: inherit;
   max-width: 150px;
-  max-height: 50px;
+  max-height: 36px;
 `;
 
 // const SearchModal = ({ state, pathname, handleSearch }) => {
@@ -136,16 +136,27 @@ const MobileHeader = ({ className, pathname, isSticky }) => {
 
           <LogoWrapper>
             <Link to="/">
-              <LogoImage
-                src={
+              <div
+                className={`flex items-center font-medium text-lg ${
                   isHomePage
                     ? isSticky
-                      ? Logoimage
-                      : InvertedLogoimage
-                    : Logoimage
-                }
-                alt="TheDB"
-              />
+                      ? "text-blue-800"
+                      : "text-white"
+                    : "text-blue-800"
+                } `}
+              >
+                {/* <LogoImage
+                  src={
+                    isHomePage
+                      ? isSticky
+                        ? Logoimage
+                        : InvertedLogoimage
+                      : Logoimage
+                  }
+                  alt="TheDB"
+                /> */}
+                TheDatabase
+              </div>
             </Link>
           </LogoWrapper>
 

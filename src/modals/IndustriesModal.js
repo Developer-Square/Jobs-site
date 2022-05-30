@@ -188,7 +188,7 @@ const IndustriesModal = () => {
                                 fontSize: "36px",
                                 height: "42px",
                                 transition: "0.4s",
-                                color: "#21277f",
+                                color: "#1849B1",
                                 display: "inline-block",
                               }}
                               className={
