@@ -3,6 +3,7 @@
   "version": "0.2.8",
   "description": "The Database - Jobs Need People.",
   "private": true,
+  "homepage": "https://jobs.techive.org/",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
     "@apollo/react-ssr": "^4.0.0",
@@ -15,7 +16,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.13",
     "@material-ui/core": "^4.11.4",
-    "@react-pdf/renderer": "^2.0.18",
+    "@react-pdf/renderer": "2.1.0",
     "@redq/reuse-modal": "^1.2.4",
     "@styled-system/css": "^5.1.5",
     "@styled-system/theme-get": "^5.1.2",
@@ -91,6 +92,7 @@
     "react-multi-carousel": "^2.6.3",
     "react-papaparse": "^3.17.1",
     "react-pdf": "^5.7.1",
+    "@react-pdf/font": "2.2.0",
     "react-phone-input-2": "^2.14.0",
     "react-responsive-carousel": "^3.2.22",
     "react-reveal": "^1.2.2",
@@ -167,5 +169,8 @@
     "postcss": "^7.0.36",
     "source-map-explorer": "^2.5.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.16"
+  },
+  "resolutions": {
+    "@react-pdf/font": "2.2.0"
   }
 }
