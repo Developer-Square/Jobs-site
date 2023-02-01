@@ -4,7 +4,7 @@ import { Field, ErrorMessage } from "formik";
 import TextError from "./TextError";
 import styled from "styled-components";
 
-const GOOGLE_MAPS_API_KEY = "AIzaSyBl4fQc8fENnnRLnUQ18HFWQoMabJ7hKRY";
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
 
 function LocationSearch(props) {
   const { label, name, type, file, setFieldValue, icon, ...rest } = props;
